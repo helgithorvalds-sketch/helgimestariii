@@ -11,7 +11,9 @@ export type PreviewSubStatus =
   | "needed_website";
 
 export type FinishedSubStatus =
-  | "lokid"
+  | "not_contacted"
+  | "contacted"
+  | "website_changed"
   | "krafa";
 
 export type PaidSubStatus =
@@ -75,12 +77,16 @@ export const PREVIEW_SUB_ORDER: PreviewSubStatus[] = [
 ];
 
 export const FINISHED_SUB_LABELS: Record<FinishedSubStatus, string> = {
-  lokid: "Lokið",
+  not_contacted: "Ekki haft samband",
+  contacted: "Haft samband",
+  website_changed: "Vefsíða breytt",
   krafa: "Krafa",
 };
 
 export const FINISHED_SUB_ORDER: FinishedSubStatus[] = [
-  "lokid",
+  "not_contacted",
+  "contacted",
+  "website_changed",
   "krafa",
 ];
 
