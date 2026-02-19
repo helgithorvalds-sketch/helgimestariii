@@ -95,39 +95,48 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             </div>
           </div>
 
-          {/* Price */}
-          <div className="space-y-1.5">
-            <Label>Áætlað verð</Label>
-            <Input
-              type="number"
-              value={editedCompany.estimatedPrice}
-              onChange={(e) => updateField("estimatedPrice", Number(e.target.value))}
-            />
-            <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.estimatedPrice)}</p>
+          {/* Price & Projected Earnings */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Áætlað verð</Label>
+              <Input
+                type="number"
+                value={editedCompany.estimatedPrice}
+                onChange={(e) => updateField("estimatedPrice", Number(e.target.value))}
+              />
+              <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.estimatedPrice)}</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Áætlaður hagnaður</Label>
+              <Input
+                type="number"
+                value={editedCompany.projectedEarnings}
+                onChange={(e) => updateField("projectedEarnings", Number(e.target.value))}
+              />
+              <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.projectedEarnings)}</p>
+            </div>
           </div>
 
-          {/* Payment (for paid stage) */}
-          {editedCompany.stage === "paid" && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label>Greiðsla móttekin</Label>
-                <Input
-                  type="number"
-                  value={editedCompany.amountPaid || ""}
-                  onChange={(e) => updateField("amountPaid", Number(e.target.value))}
-                  placeholder="Upphæð..."
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Dagsetning greiðslu</Label>
-                <Input
-                  type="date"
-                  value={editedCompany.paidDate || ""}
-                  onChange={(e) => updateField("paidDate", e.target.value)}
-                />
-              </div>
+          {/* Payment */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Greitt (raunverulega)</Label>
+              <Input
+                type="number"
+                value={editedCompany.amountPaid || ""}
+                onChange={(e) => updateField("amountPaid", Number(e.target.value))}
+                placeholder="Upphæð..."
+              />
             </div>
-          )}
+            <div className="space-y-1.5">
+              <Label>Dagsetning greiðslu</Label>
+              <Input
+                type="date"
+                value={editedCompany.paidDate || ""}
+                onChange={(e) => updateField("paidDate", e.target.value)}
+              />
+            </div>
+          </div>
 
           {/* Checklist */}
           <div className="space-y-2">

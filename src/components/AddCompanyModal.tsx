@@ -107,6 +107,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       notes,
       personalityDescription: personality,
       previewSent: false,
+      projectedEarnings: price,
     });
     resetForm();
     onClose();
