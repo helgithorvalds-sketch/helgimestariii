@@ -20,6 +20,7 @@ function rowToCompany(row: any): Company {
     projectedEarnings: row.projected_earnings,
     amountPaid: row.amount_paid,
     paidDate: row.paid_date,
+    nextCallAt: row.next_call_at,
     createdAt: row.created_at,
   };
 }
@@ -42,6 +43,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     projected_earnings: company.projectedEarnings,
     amount_paid: company.amountPaid || null,
     paid_date: company.paidDate || null,
+    next_call_at: company.nextCallAt || null,
   };
 }
 

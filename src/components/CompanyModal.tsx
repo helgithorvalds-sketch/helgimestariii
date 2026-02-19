@@ -5,9 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save } from "lucide-react";
+import { Trash2, Save, CalendarIcon } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface CompanyModalProps {
   company: Company;
@@ -167,6 +171,57 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
               onChange={(e) => updateField("personalityDescription", e.target.value)}
               rows={2}
             />
+          </div>
+
+          {/* Next call */}
+          <div className="space-y-2">
+            <Label>Næsta símtal</Label>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "flex-1 justify-start text-left font-normal",
+                      !editedCompany.nextCallAt && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {editedCompany.nextCallAt
+                      ? format(parseISO(editedCompany.nextCallAt), "dd.MM.yyyy")
+                      : "Veldu dagsetningu"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editedCompany.nextCallAt ? parseISO(editedCompany.nextCallAt) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const existing = editedCompany.nextCallAt ? parseISO(editedCompany.nextCallAt) : new Date();
+                        date.setHours(existing.getHours(), existing.getMinutes());
+                        updateField("nextCallAt", date.toISOString());
+                      } else {
+                        updateField("nextCallAt", undefined);
+                      }
+                    }}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+              <Input
+                type="time"
+                value={editedCompany.nextCallAt ? format(parseISO(editedCompany.nextCallAt), "HH:mm") : ""}
+                onChange={(e) => {
+                  const [h, m] = e.target.value.split(":").map(Number);
+                  const dt = editedCompany.nextCallAt ? parseISO(editedCompany.nextCallAt) : new Date();
+                  dt.setHours(h, m, 0, 0);
+                  updateField("nextCallAt", dt.toISOString());
+                }}
+                className="w-28"
+              />
+            </div>
           </div>
 
           {/* Notes */}
