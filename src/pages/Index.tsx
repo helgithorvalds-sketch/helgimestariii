@@ -140,8 +140,8 @@ export default function Index() {
     </div>
   );
 
-  const mainStages: CompanyStage[] = ["email_sent", "registered", "finished", "paid"];
-  const rejectStages: CompanyStage[] = ["no", "no_but_maybe"];
+  const mainStages: CompanyStage[] = ["email_sent", "registered", "finished", "paid", "no"];
+  const secondaryStages: CompanyStage[] = ["no_but_maybe"];
 
   return (
     <div className="min-h-screen bg-background">
@@ -176,7 +176,7 @@ export default function Index() {
         ) : (
           <div className="space-y-5">
             {/* Main stage columns */}
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid grid-cols-5 gap-4">
               {mainStages.map((stage) => {
                 const count = companiesByStage(stage).length;
                 return (
@@ -185,7 +185,7 @@ export default function Index() {
                     onDragOver={(e) => onDragOver(e, stage)}
                     onDragLeave={onDragLeave}
                     onDrop={(e) => onDropStage(e, stage)}
-                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[280px] transition-all shadow-sm ${
+                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[260px] transition-all shadow-sm ${
                       dragOverStage === stage ? "drag-over" : ""
                     }`}
                   >
@@ -208,38 +208,36 @@ export default function Index() {
               })}
             </div>
 
-            {/* Nei / Nei en kannski row */}
-            <div className="grid grid-cols-2 gap-5">
-              {rejectStages.map((stage) => {
-                const count = companiesByStage(stage).length;
-                return (
-                  <div
-                    key={stage}
-                    onDragOver={(e) => onDragOver(e, stage)}
-                    onDragLeave={onDragLeave}
-                    onDrop={(e) => onDropStage(e, stage)}
-                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[140px] transition-all shadow-sm ${
-                      dragOverStage === stage ? "drag-over" : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <StageBadge stage={stage} size="md" />
-                      <span className="text-xs bg-muted text-muted-foreground font-semibold px-2.5 py-1 rounded-full">
-                        {count}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {companiesByStage(stage).map(renderCompanyCard)}
-                    </div>
-                    {count === 0 && (
-                      <div className="flex items-center justify-center h-12 text-muted-foreground/40">
-                        <p className="text-xs">Dragðu fyrirtæki hingað</p>
-                      </div>
-                    )}
+            {/* Nei, en kannski */}
+            {secondaryStages.map((stage) => {
+              const count = companiesByStage(stage).length;
+              return (
+                <div
+                  key={stage}
+                  onDragOver={(e) => onDragOver(e, stage)}
+                  onDragLeave={onDragLeave}
+                  onDrop={(e) => onDropStage(e, stage)}
+                  className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[100px] transition-all shadow-sm ${
+                    dragOverStage === stage ? "drag-over" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <StageBadge stage={stage} size="md" />
+                    <span className="text-xs bg-muted text-muted-foreground font-semibold px-2.5 py-1 rounded-full">
+                      {count}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
+                  <div className="flex flex-wrap gap-3">
+                    {companiesByStage(stage).map(renderCompanyCard)}
+                  </div>
+                  {count === 0 && (
+                    <div className="flex items-center justify-center h-8 text-muted-foreground/40">
+                      <p className="text-xs">Dragðu fyrirtæki hingað</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
 
             {/* Sýnishorn (Preview) section - expandable */}
             <div
