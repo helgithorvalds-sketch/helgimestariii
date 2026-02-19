@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Company } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2 } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CallScheduleProps {
   companies: Company[];
@@ -22,6 +23,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [finishNotes, setFinishNotes] = useState("");
   const [finishWebsiteUrl, setFinishWebsiteUrl] = useState("");
   const [savingFinish, setSavingFinish] = useState(false);
+  const [summarizing, setSummarizing] = useState(false);
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -85,6 +87,25 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setFinishWebsiteUrl("");
   };
 
+  const handleSummarize = async () => {
+    if (!finishNotes.trim()) return;
+    setSummarizing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("summarize-call", {
+        body: { notes: finishNotes.trim() },
+      });
+      if (error) throw error;
+      if (data?.summary) {
+        setFinishNotes(data.summary);
+        toast.success("Athugasemdir teknar saman!");
+      }
+    } catch (e) {
+      console.error("Summarize error:", e);
+      toast.error("Villa við samantekt");
+    }
+    setSummarizing(false);
+  };
+
   return (
     <>
     {/* Finish call full-screen overlay */}
@@ -114,7 +135,19 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSummarize}
+                disabled={!finishNotes.trim() || summarizing}
+                className="gap-1.5 text-xs h-7"
+              >
+                {summarizing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                {summarizing ? "Tek saman..." : "AI samantekt"}
+              </Button>
+            </div>
             <Textarea
               value={finishNotes}
               onChange={(e) => setFinishNotes(e.target.value)}
