@@ -43,9 +43,17 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     return format(parseISO(dateStr), "HH:mm");
   };
 
-  const getRowStyle = (dateStr: string) => {
+  const isOverdue = (dateStr: string) => {
     const date = parseISO(dateStr);
-    if (isPast(date)) return "border-l-4 border-l-destructive bg-destructive/5";
+    const now = new Date();
+    return date.getFullYear() < now.getFullYear() ||
+      (date.getFullYear() === now.getFullYear() && date.getMonth() < now.getMonth()) ||
+      (date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() < now.getDate());
+  };
+
+  const getRowStyle = (dateStr: string) => {
+    if (isOverdue(dateStr)) return "border-l-4 border-l-destructive bg-destructive/10 ring-1 ring-destructive/30";
+    const date = parseISO(dateStr);
     if (isToday(date)) return "border-l-4 border-l-primary bg-primary/5";
     if (isTomorrow(date)) return "border-l-4 border-l-amber-500 bg-amber-500/5";
     return "border-l-4 border-l-border";
@@ -259,8 +267,8 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                         )}
                       </div>
                       <div className="text-right">
-                        <p className={`text-sm font-semibold ${isPast(parseISO(company.nextCallAt!)) ? "text-destructive" : "text-foreground"}`}>
-                          {formatCallDate(company.nextCallAt!)}
+                        <p className={`text-sm font-semibold ${isOverdue(company.nextCallAt!) ? "text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" : "text-foreground"}`}>
+                          {isOverdue(company.nextCallAt!) ? "⚠️ " : ""}{formatCallDate(company.nextCallAt!)}
                         </p>
                         <p className="text-xs text-muted-foreground">{formatCallTime(company.nextCallAt!)}</p>
                       </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect, DragEvent, useRef } from "react";
+import { useState, useEffect, useMemo, DragEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import confetti from "canvas-confetti";
@@ -341,7 +341,34 @@ export default function Index() {
           </div>
         ) : (
           <div className="space-y-5">
-            {/* Main stage columns */}
+            {/* Overdue calls banner */}
+            {(() => {
+              const now = new Date();
+              const overdue = companies.filter((c) => {
+                if (!c.nextCallAt) return false;
+                const d = new Date(c.nextCallAt);
+                return d.getFullYear() < now.getFullYear() ||
+                  (d.getFullYear() === now.getFullYear() && d.getMonth() < now.getMonth()) ||
+                  (d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() < now.getDate());
+              });
+              if (overdue.length === 0) return null;
+              return (
+                <div className="rounded-xl border-2 border-destructive bg-destructive/10 p-4 flex items-center gap-4 animate-fade-in">
+                  <div className="w-12 h-12 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-6 h-6 text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-destructive text-lg">
+                      {overdue.length} {overdue.length === 1 ? "símtal" : "símtöl"} óafgreitt!
+                    </p>
+                    <p className="text-sm text-destructive/80">
+                      {overdue.map((c) => c.name).join(", ")}
+                    </p>
+                  </div>
+                  <AlertTriangle className="w-8 h-8 text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" />
+                </div>
+              );
+            })()}
             <div className="grid grid-cols-2 gap-4">
               {mainStages.map((stage) => {
                 const count = companiesByStage(stage).length;
