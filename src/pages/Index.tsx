@@ -1,6 +1,6 @@
 import { useState, useEffect, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER } from "@/types";
+import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, PaidSubStatus, PAID_SUB_LABELS, PAID_SUB_ORDER } from "@/types";
 import { fetchCompanies, addCompany, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { StageBadge } from "@/components/StageBadge";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
@@ -20,6 +20,9 @@ export default function Index() {
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [previewExpanded, setPreviewExpanded] = useState(false);
+  const [paidExpanded, setPaidExpanded] = useState(false);
+  const [pendingPaidDrop, setPendingPaidDrop] = useState<{ companyId: string; sub: PaidSubStatus } | null>(null);
+  const [paidAmountInput, setPaidAmountInput] = useState("");
 
   const loadData = async () => {
     const data = await fetchCompanies();
@@ -73,22 +76,55 @@ export default function Index() {
 
   const onDragLeave = () => setDragOverStage(null);
 
-  const onDropStage = async (e: DragEvent, stage: CompanyStage, subStatus?: PreviewSubStatus) => {
+  const onDropStage = async (e: DragEvent, stage: CompanyStage, subStatus?: PreviewSubStatus, paidSub?: PaidSubStatus) => {
     e.preventDefault();
     e.stopPropagation();
     setDragOverStage(null);
     if (!draggedId) return;
-    const ok = await updateCompanyStage(draggedId, stage, subStatus || null);
+
+    // If dropping into "partially_paid", prompt for amount
+    if (stage === "paid" && paidSub === "partially_paid") {
+      setPendingPaidDrop({ companyId: draggedId, sub: paidSub });
+      setPaidAmountInput("");
+      setDraggedId(null);
+      return;
+    }
+
+    const ok = await updateCompanyStage(draggedId, stage, subStatus || null, paidSub || null);
     if (ok) {
       setCompanies((prev) =>
         prev.map((c) =>
           c.id === draggedId
-            ? { ...c, stage, previewSubStatus: stage === "preview" ? subStatus : undefined }
+            ? { 
+                ...c, 
+                stage, 
+                previewSubStatus: stage === "preview" ? subStatus : undefined,
+                paidSubStatus: stage === "paid" ? paidSub : undefined,
+              }
             : c
         )
       );
     }
     setDraggedId(null);
+  };
+
+  const confirmPaidAmount = async () => {
+    if (!pendingPaidDrop) return;
+    const amount = Number(paidAmountInput);
+    if (!amount || amount <= 0) return;
+    const ok = await updateCompanyStage(pendingPaidDrop.companyId, "paid", null, "partially_paid", amount);
+    if (ok) {
+      setCompanies((prev) =>
+        prev.map((c) =>
+          c.id === pendingPaidDrop.companyId
+            ? { ...c, stage: "paid" as CompanyStage, paidSubStatus: "partially_paid" as PaidSubStatus, amountPaid: amount }
+            : c
+        )
+      );
+      toast.success("Greitt X skráð!");
+    }
+    setPendingPaidDrop(null);
+    setPaidAmountInput("");
   };
 
   const companiesByStage = (stage: CompanyStage) =>
@@ -99,6 +135,13 @@ export default function Index() {
 
   const previewUncategorized = companies.filter(
     (c) => c.stage === "preview" && !c.previewSubStatus
+  );
+
+  const companiesByPaidSub = (sub: PaidSubStatus) =>
+    companies.filter((c) => c.stage === "paid" && c.paidSubStatus === sub);
+
+  const paidUncategorized = companies.filter(
+    (c) => c.stage === "paid" && !c.paidSubStatus
   );
 
   const formatPrice = (n: number) => n.toLocaleString("is-IS") + " kr.";
@@ -140,7 +183,7 @@ export default function Index() {
     </div>
   );
 
-  const mainStages: CompanyStage[] = ["email_sent", "registered", "finished", "paid"];
+  const mainStages: CompanyStage[] = ["email_sent", "registered", "finished"];
 
   return (
     <div className="min-h-screen bg-background">
@@ -175,7 +218,7 @@ export default function Index() {
         ) : (
           <div className="space-y-5">
             {/* Main stage columns */}
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               {mainStages.map((stage) => {
                 const count = companiesByStage(stage).length;
                 return (
@@ -283,6 +326,101 @@ export default function Index() {
                 </div>
               )}
             </div>
+
+            {/* Greitt (Paid) section - expandable like preview */}
+            <div
+              className={`rounded-xl border bg-card transition-all shadow-sm ${
+                dragOverStage === "paid" && !paidExpanded ? "drag-over" : ""
+              }`}
+            >
+              <button
+                onClick={() => setPaidExpanded(!paidExpanded)}
+                onDragOver={(e) => {
+                  onDragOver(e, "paid");
+                  if (!paidExpanded) setPaidExpanded(true);
+                }}
+                onDragLeave={onDragLeave}
+                onDrop={(e) => onDropStage(e, "paid")}
+                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <StageBadge stage="paid" size="md" />
+                  <span className="text-sm text-muted-foreground">
+                    {companiesByStage("paid").length} fyrirtæki
+                  </span>
+                </div>
+                {paidExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                )}
+              </button>
+
+              {paidExpanded && (
+                <div className="px-4 pb-4">
+                  {paidUncategorized.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
+                      <div className="flex flex-wrap gap-2">
+                        {paidUncategorized.map(renderCompanyCard)}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {PAID_SUB_ORDER.map((sub) => {
+                      const dropId = `paid_${sub}`;
+                      return (
+                        <div
+                          key={sub}
+                          onDragOver={(e) => onDragOver(e, dropId)}
+                          onDragLeave={onDragLeave}
+                          onDrop={(e) => onDropStage(e, "paid", undefined, sub)}
+                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
+                            dragOverStage === dropId ? "drag-over" : "bg-muted/20"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-semibold text-foreground">
+                              {PAID_SUB_LABELS[sub]}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {companiesByPaidSub(sub).length}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {companiesByPaidSub(sub).map(renderCompanyCard)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Paid amount prompt dialog */}
+            {pendingPaidDrop && (
+              <div className="rounded-xl border-2 border-primary bg-card p-5 shadow-lg">
+                <p className="font-semibold text-foreground mb-3">Hversu mikið hefur verið greitt?</p>
+                <div className="flex gap-3">
+                  <input
+                    type="number"
+                    value={paidAmountInput}
+                    onChange={(e) => setPaidAmountInput(e.target.value)}
+                    placeholder="Upphæð í kr..."
+                    className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm"
+                    autoFocus
+                  />
+                  <Button onClick={confirmPaidAmount} disabled={!paidAmountInput || Number(paidAmountInput) <= 0}>
+                    Staðfesta
+                  </Button>
+                  <Button variant="ghost" onClick={() => { setPendingPaidDrop(null); setPaidAmountInput(""); }}>
+                    Hætta við
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {/* Call Schedule */}
             <CallSchedule companies={companies} onCompanyClick={setSelectedCompany} />

@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Company, CompanyStage, ChecklistItem, PreviewSubStatus } from "@/types";
+import { Company, CompanyStage, ChecklistItem, PreviewSubStatus, PaidSubStatus } from "@/types";
 
 // Convert DB row to Company type
 function rowToCompany(row: any): Company {
@@ -11,6 +11,7 @@ function rowToCompany(row: any): Company {
     logoUrl: row.logo_url,
     stage: row.stage as CompanyStage,
     previewSubStatus: row.preview_sub_status,
+    paidSubStatus: row.paid_sub_status,
     estimatedPrice: row.estimated_price,
     customPrice: row.custom_price,
     checklist: (row.checklist || []) as ChecklistItem[],
@@ -34,6 +35,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     logo_url: company.logoUrl || null,
     stage: company.stage,
     preview_sub_status: company.previewSubStatus || null,
+    paid_sub_status: company.paidSubStatus || null,
     estimated_price: company.estimatedPrice,
     custom_price: company.customPrice || null,
     checklist: company.checklist as any,
@@ -102,12 +104,26 @@ export async function deleteCompany(id: string): Promise<boolean> {
   return true;
 }
 
-export async function updateCompanyStage(id: string, stage: CompanyStage, previewSubStatus?: PreviewSubStatus | null): Promise<boolean> {
+export async function updateCompanyStage(
+  id: string, 
+  stage: CompanyStage, 
+  previewSubStatus?: PreviewSubStatus | null,
+  paidSubStatus?: PaidSubStatus | null,
+  amountPaid?: number | null
+): Promise<boolean> {
   const updateData: any = { stage };
   if (stage === "preview" && previewSubStatus) {
     updateData.preview_sub_status = previewSubStatus;
   } else if (stage !== "preview") {
     updateData.preview_sub_status = null;
+  }
+  if (stage === "paid" && paidSubStatus) {
+    updateData.paid_sub_status = paidSubStatus;
+    if (amountPaid !== undefined && amountPaid !== null) {
+      updateData.amount_paid = amountPaid;
+    }
+  } else if (stage !== "paid") {
+    updateData.paid_sub_status = null;
   }
   const { error } = await supabase
     .from("companies")
