@@ -110,16 +110,16 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
 
       {/* Links */}
       <div className="flex flex-wrap gap-2">
-        {company.finnaUrl && (
+        {company.logoUrl && (
           <a
-            href={company.finnaUrl}
+            href={company.logoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-purple-300 bg-purple-50 px-3 py-1.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 transition-colors dark:border-purple-700 dark:bg-purple-950 dark:text-purple-300 dark:hover:bg-purple-900"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
-            Finna.is
-            <ExternalLink className="w-3 h-3 text-muted-foreground" />
+            <Globe className="w-3.5 h-3.5" />
+            Meistaraverk
+            <ExternalLink className="w-3 h-3" />
           </a>
         )}
         {company.websiteUrl && (
@@ -127,11 +127,22 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             href={company.websiteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <Globe className="w-3.5 h-3.5" />
-            Vefsíða
-            <ExternalLink className="w-3 h-3 text-muted-foreground" />
+            Gamli vefur
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+        {company.finnaUrl && (
+          <a
+            href={company.finnaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Finna.is
           </a>
         )}
       </div>

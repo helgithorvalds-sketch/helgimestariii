@@ -303,19 +303,20 @@ export default function Index() {
               </div>
             )}
 
-            {/* Links - direct, no dropdown */}
-            {(company.websiteUrl || company.finnaUrl) && (
+            {/* Links - direct */}
+            {(company.logoUrl || company.websiteUrl || company.finnaUrl) && (
               <div className="flex flex-wrap gap-2">
-                {company.finnaUrl && (
+                {company.logoUrl && (
                   <a
-                    href={company.finnaUrl}
+                    href={company.logoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                    className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-1 text-xs font-semibold text-purple-700 hover:bg-purple-100 transition-colors dark:border-purple-700 dark:bg-purple-950 dark:text-purple-300 dark:hover:bg-purple-900"
                   >
+                    <Globe className="w-3 h-3" />
+                    Meistaraverk
                     <ExternalLink className="w-3 h-3" />
-                    Finna.is
                   </a>
                 )}
                 {company.websiteUrl && (
@@ -324,10 +325,23 @@ export default function Index() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                    className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Globe className="w-3 h-3" />
-                    Meistaraverk
+                    Gamli vefur
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+                {company.finnaUrl && (
+                  <a
+                    href={company.finnaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    Finna.is
                   </a>
                 )}
               </div>
