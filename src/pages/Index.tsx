@@ -140,7 +140,8 @@ export default function Index() {
     </div>
   );
 
-  const nonPreviewStages = STAGE_ORDER.filter((s) => s !== "preview");
+  const mainStages: CompanyStage[] = ["email_sent", "registered", "finished", "paid"];
+  const rejectStages: CompanyStage[] = ["no", "no_but_maybe"];
 
   return (
     <div className="min-h-screen bg-background">
@@ -174,15 +175,15 @@ export default function Index() {
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Main stage columns (without preview) */}
+            {/* Main stage columns */}
             <div className="grid grid-cols-4 gap-4">
-              {nonPreviewStages.map((stage) => (
+              {mainStages.map((stage) => (
                 <div
                   key={stage}
                   onDragOver={(e) => onDragOver(e, stage)}
                   onDragLeave={onDragLeave}
                   onDrop={(e) => onDropStage(e, stage)}
-                  className={`rounded-xl border bg-card p-3 min-h-[250px] transition-all ${
+                  className={`rounded-xl border bg-card p-3 min-h-[220px] transition-all ${
                     dragOverStage === stage ? "drag-over" : ""
                   }`}
                 >
@@ -193,6 +194,31 @@ export default function Index() {
                     </span>
                   </div>
                   <div className="space-y-2">
+                    {companiesByStage(stage).map(renderCompanyCard)}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Nei / Nei en kannski row */}
+            <div className="grid grid-cols-2 gap-4">
+              {rejectStages.map((stage) => (
+                <div
+                  key={stage}
+                  onDragOver={(e) => onDragOver(e, stage)}
+                  onDragLeave={onDragLeave}
+                  onDrop={(e) => onDropStage(e, stage)}
+                  className={`rounded-xl border bg-card p-3 min-h-[120px] transition-all ${
+                    dragOverStage === stage ? "drag-over" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <StageBadge stage={stage} size="md" />
+                    <span className="text-xs text-muted-foreground font-medium">
+                      {companiesByStage(stage).length}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
                     {companiesByStage(stage).map(renderCompanyCard)}
                   </div>
                 </div>

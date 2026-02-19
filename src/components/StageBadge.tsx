@@ -11,6 +11,8 @@ const stageClassMap: Record<CompanyStage, string> = {
   preview: "stage-badge-preview",
   finished: "stage-badge-finished",
   paid: "stage-badge-paid",
+  no: "stage-badge-no",
+  no_but_maybe: "stage-badge-maybe",
 };
 
 export function StageBadge({ stage, size = "sm" }: StageBadgeProps) {

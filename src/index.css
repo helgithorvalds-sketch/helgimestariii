@@ -49,6 +49,8 @@
     --stage-preview: 35 90% 55%;
     --stage-finished: 150 60% 45%;
     --stage-paid: 130 55% 42%;
+    --stage-no: 0 65% 52%;
+    --stage-maybe: 280 50% 55%;
     --success: 150 60% 45%;
     --success-foreground: 0 0% 100%;
     --warning: 35 90% 55%;
@@ -107,6 +109,14 @@
   }
   .stage-badge-paid {
     background-color: hsl(var(--stage-paid));
+    color: white;
+  }
+  .stage-badge-no {
+    background-color: hsl(var(--stage-no));
+    color: white;
+  }
+  .stage-badge-maybe {
+    background-color: hsl(var(--stage-maybe));
     color: white;
   }
   .drag-over {
