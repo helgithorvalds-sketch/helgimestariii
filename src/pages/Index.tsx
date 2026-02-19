@@ -115,11 +115,10 @@ export default function Index() {
     setDragOverStage(null);
     if (!draggedId) return;
 
-    // If dropping into "finished", check if company has website_url
+    // If dropping into "finished", check if company has logoUrl (meistaraverk)
     if (stage === "finished") {
       const company = companies.find((c) => c.id === draggedId);
-      if (company && !company.websiteUrl) {
-        // Store the finishedSub for after website prompt
+      if (company && !company.logoUrl) {
         setPendingFinishedSub(finishedSub || null);
         setWebsiteReminder({ companyId: draggedId, companyName: company.name });
         setWebsiteInput("");
@@ -163,18 +162,16 @@ export default function Index() {
     setDraggedId(null);
   };
 
-  const confirmWebsiteAndMove = async (skipUrl: boolean) => {
-    if (!websiteReminder) return;
+  const confirmWebsiteAndMove = async () => {
+    if (!websiteReminder || !websiteInput.trim()) return;
     const { companyId } = websiteReminder;
     
-    // Save the website URL if provided
-    if (!skipUrl && websiteInput.trim()) {
-      const company = companies.find((c) => c.id === companyId);
-      if (company) {
-        const updated = { ...company, websiteUrl: websiteInput.trim() };
-        await updateCompany(updated);
-        setCompanies((prev) => prev.map((c) => c.id === companyId ? updated : c));
-      }
+    // Save the logoUrl (meistaraverk link)
+    const company = companies.find((c) => c.id === companyId);
+    if (company) {
+      const updated = { ...company, logoUrl: websiteInput.trim() };
+      await updateCompany(updated);
+      setCompanies((prev) => prev.map((c) => c.id === companyId ? updated : c));
     }
 
     // Move to finished
@@ -183,7 +180,7 @@ export default function Index() {
       setCompanies((prev) =>
         prev.map((c) =>
           c.id === companyId
-            ? { ...c, stage: "finished" as CompanyStage, finishedSubStatus: pendingFinishedSub || undefined, websiteUrl: websiteInput.trim() || c.websiteUrl }
+            ? { ...c, stage: "finished" as CompanyStage, finishedSubStatus: pendingFinishedSub || undefined, logoUrl: websiteInput.trim() || c.logoUrl }
             : c
         )
       );
@@ -780,15 +777,15 @@ export default function Index() {
                     </div>
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Vefsíðutengil vantar!</h2>
+                    <h2 className="text-xl font-bold text-foreground mb-2">Meistaraverk tengil vantar!</h2>
                     <p className="text-muted-foreground">
-                      <span className="font-semibold text-foreground">{websiteReminder.companyName}</span> er að fara í „Lokið" en hefur engan vefsíðutengil.
+                      <span className="font-semibold text-foreground">{websiteReminder.companyName}</span> er að fara í „Lokið" en hefur engan meistaraverk tengil.
                     </p>
                   </div>
                   <div className="space-y-2 text-left">
                     <Label className="flex items-center gap-1.5">
                       <Globe className="w-4 h-4" />
-                      Tengill á verkefnið
+                      Tengill á meistaraverkið
                     </Label>
                     <Input
                       value={websiteInput}
@@ -801,7 +798,7 @@ export default function Index() {
                   </div>
                   <div className="flex gap-3">
                     <Button
-                      onClick={() => confirmWebsiteAndMove(false)}
+                      onClick={() => confirmWebsiteAndMove()}
                       disabled={!websiteInput.trim()}
                       className="flex-1 gap-2"
                     >
@@ -810,10 +807,10 @@ export default function Index() {
                     </Button>
                     <Button
                       variant="ghost"
-                      onClick={() => confirmWebsiteAndMove(true)}
+                      onClick={() => { setWebsiteReminder(null); setWebsiteInput(""); setPendingFinishedSub(null); }}
                       className="text-muted-foreground"
                     >
-                      Sleppa
+                      Hætta við
                     </Button>
                   </div>
                 </div>
