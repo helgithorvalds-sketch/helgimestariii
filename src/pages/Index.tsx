@@ -527,7 +527,16 @@ export default function Index() {
               </div>
             )}
 
-            <CallSchedule companies={companies} onCompanyClick={setSelectedCompany} />
+            <CallSchedule
+              companies={companies}
+              onCompanyClick={setSelectedCompany}
+              onCompanyUpdate={async (updated) => {
+                const result = await updateCompany(updated);
+                if (result) {
+                  setCompanies((prev) => prev.map((c) => c.id === result.id ? result : c));
+                }
+              }}
+            />
           </div>
         )}
       </main>

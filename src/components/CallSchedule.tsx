@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { Company } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle } from "lucide-react";
 import { StageBadge } from "./StageBadge";
-import { CallLog, fetchCallLogs } from "@/services/callLogService";
+import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 interface CallScheduleProps {
   companies: Company[];
   onCompanyClick: (company: Company) => void;
+  onCompanyUpdate?: (company: Company) => void;
 }
 
-export function CallSchedule({ companies, onCompanyClick }: CallScheduleProps) {
+export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: CallScheduleProps) {
   const [expandedLogs, setExpandedLogs] = useState<Record<string, CallLog[] | null>>({});
   const [loadingLogs, setLoadingLogs] = useState<string | null>(null);
+  const [finishingCall, setFinishingCall] = useState<Company | null>(null);
+  const [finishNotes, setFinishNotes] = useState("");
+  const [savingFinish, setSavingFinish] = useState(false);
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -55,7 +61,72 @@ export function CallSchedule({ companies, onCompanyClick }: CallScheduleProps) {
     setLoadingLogs(null);
   };
 
+  const handleFinishCall = async () => {
+    if (!finishingCall || !finishNotes.trim()) return;
+    setSavingFinish(true);
+    const log = await addCallLog(finishingCall.id, finishNotes.trim());
+    if (log) {
+      // Clear the nextCallAt so it moves out of scheduled
+      if (onCompanyUpdate) {
+        onCompanyUpdate({ ...finishingCall, nextCallAt: undefined });
+      }
+      toast.success("Símtal skráð!");
+    } else {
+      toast.error("Villa við skráningu");
+    }
+    setSavingFinish(false);
+    setFinishingCall(null);
+    setFinishNotes("");
+  };
+
   return (
+    <>
+    {/* Finish call full-screen overlay */}
+    {finishingCall && (
+      <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
+        <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6">
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-foreground">Símtali lokið</h2>
+            <p className="text-muted-foreground mt-1">
+              <span className="font-semibold text-foreground">{finishingCall.name}</span>
+              {finishingCall.phone && <span className="ml-2">· 📞 {finishingCall.phone}</span>}
+            </p>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
+            <Textarea
+              value={finishNotes}
+              onChange={(e) => setFinishNotes(e.target.value)}
+              placeholder="Skrifaðu athugasemdir frá símtalinu..."
+              rows={6}
+              autoFocus
+              className="text-base"
+            />
+          </div>
+          <div className="flex gap-3">
+            <Button
+              onClick={handleFinishCall}
+              disabled={!finishNotes.trim() || savingFinish}
+              className="flex-1 gap-2"
+            >
+              <CheckCircle className="w-4 h-4" />
+              {savingFinish ? "Vista..." : "Vista og ljúka"}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); }}
+              className="text-muted-foreground"
+            >
+              Hætta við
+            </Button>
+          </div>
+        </div>
+      </div>
+    )}
+
     <div className="grid grid-cols-3 gap-6">
       {/* Schedule - 2/3 */}
       <div className="col-span-2 rounded-xl border bg-card p-4">
@@ -121,8 +192,21 @@ export function CallSchedule({ companies, onCompanyClick }: CallScheduleProps) {
                     </div>
                   </div>
 
-                  {/* Previous calls toggle */}
-                  <div className="px-3 pb-2">
+                  {/* Actions */}
+                  <div className="px-3 pb-2 flex items-center gap-2">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFinishingCall(company);
+                        setFinishNotes("");
+                      }}
+                      className="gap-1.5 text-xs h-7 px-3"
+                    >
+                      <CheckCircle className="w-3.5 h-3.5" />
+                      Lokið
+                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -194,5 +278,6 @@ export function CallSchedule({ companies, onCompanyClick }: CallScheduleProps) {
         )}
       </div>
     </div>
+    </>
   );
 }
