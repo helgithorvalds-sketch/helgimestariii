@@ -158,24 +158,14 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
           </div>
 
           {/* Payment */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>Greitt (raunverulega)</Label>
-              <Input
-                type="number"
-                value={editedCompany.amountPaid || ""}
-                onChange={(e) => updateField("amountPaid", Number(e.target.value))}
-                placeholder="Upphæð..."
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Dagsetning greiðslu</Label>
-              <Input
-                type="date"
-                value={editedCompany.paidDate || ""}
-                onChange={(e) => updateField("paidDate", e.target.value)}
-              />
-            </div>
+          <div className="space-y-1.5">
+            <Label>Greitt (raunverulega)</Label>
+            <Input
+              type="number"
+              value={editedCompany.amountPaid || ""}
+              onChange={(e) => updateField("amountPaid", Number(e.target.value))}
+              placeholder="Upphæð..."
+            />
           </div>
 
           {/* Checklist */}
