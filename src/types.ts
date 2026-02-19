@@ -3,9 +3,7 @@ export type CompanyStage =
   | "registered" 
   | "preview" 
   | "finished" 
-  | "paid"
-  | "no"
-  | "no_but_maybe";
+  | "paid";
 
 export type PreviewSubStatus = 
   | "sold_preview" 
@@ -45,8 +43,6 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   preview: "Sýnishorn",
   finished: "Lokið",
   paid: "Greitt",
-  no: "Nei",
-  no_but_maybe: "Nei, en kannski",
 };
 
 export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
@@ -67,8 +63,6 @@ export const STAGE_ORDER: CompanyStage[] = [
   "preview",
   "finished",
   "paid",
-  "no",
-  "no_but_maybe",
 ];
 
 export const DEFAULT_CHECKLIST: Omit<ChecklistItem, "id">[] = [
