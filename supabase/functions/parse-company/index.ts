@@ -24,18 +24,22 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a data extraction assistant. Given raw text about a company, extract structured information.
-Return a JSON object using this tool call. Extract:
-- name: company name
-- owner: owner/contact person name (leave empty if not found)
-- companyId: kennitala or ID number (Icelandic format if possible)
-- phone: phone number (just digits, e.g. "4535170")
-- websiteUrl: the company website URL (e.g. "http://tborg.is")
-- finnaUrl: the finna.is link if present in the text (e.g. "https://www.finna.is/fyrirtaeki/emwwNY/tresmidjan-borg")
-- estimatedPrice: estimated price as number (default 160000 if not mentioned, valid range 160000-220000)
-- personalityDescription: brief description of the company personality/vibe
-- notes: any other relevant notes. IMPORTANT: Always include the finna.is link in the notes if one is found in the text.
-- stage: one of "email_sent", "registered", "preview", "finished", "paid" based on context (default "email_sent")
+            content: `You are a data extraction assistant. The user will paste text copied from finna.is (an Icelandic business directory). Extract structured information.
+
+The text is ALWAYS from a finna.is company page. The URL pattern is: https://www.finna.is/fyrirtaeki/<ID>/<company-slug>
+Example: "Finna - VPS Verkfræðiþjónusta" → the finna.is link is something like "https://www.finna.is/fyrirtaeki/XXXXX/vps-verkfraedithjonusta"
+
+Extract:
+- name: company name (e.g. "VPS Verkfræðiþjónusta")
+- owner: owner/contact person name (leave empty if not explicitly mentioned as a person's name)
+- companyId: kennitala / kt. number (e.g. "7012922439")
+- phone: primary phone number, digits only (e.g. "5671278")
+- websiteUrl: the company's OWN website (e.g. "http://www.vps.is"), NOT finna.is
+- finnaUrl: if a finna.is URL is present in the text, extract it exactly. If not present but you can see the company name, leave empty - the frontend will handle it.
+- email: email address if present (e.g. "tryggvi@vps.is")
+- estimatedPrice: default 160000 (valid range 160000-220000)
+- notes: Put the finna.is link here prominently at the top, then any other info like address, email, facebook link etc.
+- stage: default "email_sent"
 
 If you can't find a field, leave it as empty string or default value.`
           },
@@ -51,17 +55,17 @@ If you can't find a field, leave it as empty string or default value.`
                 type: "object",
                 properties: {
                   name: { type: "string", description: "Company name" },
-                  owner: { type: "string", description: "Owner or contact person" },
-                  companyId: { type: "string", description: "Kennitala or ID" },
-                  phone: { type: "string", description: "Phone number" },
-                  websiteUrl: { type: "string", description: "Company website URL" },
-                  finnaUrl: { type: "string", description: "Finna.is link" },
-                  estimatedPrice: { type: "number", description: "Estimated price in ISK" },
-                  personalityDescription: { type: "string", description: "Company personality" },
-                  notes: { type: "string", description: "Additional notes including finna.is link" },
+                  owner: { type: "string", description: "Owner or contact person name" },
+                  companyId: { type: "string", description: "Kennitala (kt.) number" },
+                  phone: { type: "string", description: "Phone number, digits only" },
+                  websiteUrl: { type: "string", description: "Company's own website URL, NOT finna.is" },
+                  finnaUrl: { type: "string", description: "The finna.is URL for this company" },
+                  email: { type: "string", description: "Email address" },
+                  estimatedPrice: { type: "number", description: "Estimated price in ISK, default 160000" },
+                  notes: { type: "string", description: "Finna.is link at top, then address, email, facebook, etc." },
                   stage: { type: "string", enum: ["email_sent", "registered", "preview", "finished", "paid"] }
                 },
-                required: ["name", "owner", "companyId", "phone", "websiteUrl", "finnaUrl", "estimatedPrice", "personalityDescription", "notes", "stage"],
+                required: ["name", "owner", "companyId", "phone", "websiteUrl", "finnaUrl", "email", "estimatedPrice", "notes", "stage"],
                 additionalProperties: false
               }
             }
