@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST } from "@/types";
+import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -19,9 +19,8 @@ interface AddCompanyModalProps {
 
 export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddCompanyModalProps) {
   const [name, setName] = useState("");
-  const [owner, setOwner] = useState("");
-  const [companyId, setCompanyId] = useState("");
   const [stage, setStage] = useState<CompanyStage>("email_sent");
+  const [previewSub, setPreviewSub] = useState<PreviewSubStatus | undefined>();
   const [selectedPrice, setSelectedPrice] = useState<number>(160000);
   const [useCustomPrice, setUseCustomPrice] = useState(false);
   const [customPrice, setCustomPrice] = useState("");
@@ -50,57 +49,35 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
         body: { text: aiText.trim() },
       });
 
-      if (error) {
-        toast.error("Villa við AI greiningu");
-        console.error(error);
-        return;
-      }
+      if (error) { toast.error("Villa við AI greiningu"); return; }
+      if (data.error) { toast.error(data.error); return; }
 
-      if (data.error) {
-        toast.error(data.error);
-        return;
-      }
-
-      // Fill form with AI results
       if (data.name) handleNameChange(data.name);
-      if (data.owner) setOwner(data.owner);
-      if (data.companyId) setCompanyId(data.companyId);
       if (data.stage) setStage(data.stage);
       if (data.estimatedPrice) {
         const price = Number(data.estimatedPrice);
         const match = PRICE_OPTIONS.find((p) => p.value === price);
-        if (match) {
-          setUseCustomPrice(false);
-          setSelectedPrice(match.value);
-        } else {
-          setUseCustomPrice(true);
-          setCustomPrice(String(price));
-        }
+        if (match) { setUseCustomPrice(false); setSelectedPrice(match.value); }
+        else { setUseCustomPrice(true); setCustomPrice(String(price)); }
       }
       if (data.personalityDescription) setPersonality(data.personalityDescription);
       if (data.notes) setNotes(data.notes);
-
       toast.success("AI greindi upplýsingarnar!");
-    } catch (err) {
-      toast.error("Villa við AI greiningu");
-      console.error(err);
-    } finally {
-      setAiLoading(false);
-    }
+    } catch { toast.error("Villa við AI greiningu"); }
+    finally { setAiLoading(false); }
   };
 
   const handleSubmit = () => {
     if (!name.trim() || duplicateWarning) return;
+    if (stage === "preview" && !previewSub) return;
     const price = useCustomPrice ? Number(customPrice) || 0 : selectedPrice;
-    const checklist = DEFAULT_CHECKLIST.map((item, i) => ({
-      ...item,
-      id: `new-${i}`,
-    }));
+    const checklist = DEFAULT_CHECKLIST.map((item, i) => ({ ...item, id: `new-${i}` }));
     onAdd({
       name: name.trim(),
-      owner: owner.trim(),
-      companyId: companyId.trim(),
+      owner: "",
+      companyId: "",
       stage,
+      previewSubStatus: stage === "preview" ? previewSub : undefined,
       estimatedPrice: price,
       customPrice: useCustomPrice ? price : undefined,
       checklist,
@@ -114,10 +91,13 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   };
 
   const resetForm = () => {
-    setName(""); setOwner(""); setCompanyId(""); setStage("email_sent");
+    setName(""); setStage("email_sent"); setPreviewSub(undefined);
     setSelectedPrice(160000); setUseCustomPrice(false); setCustomPrice("");
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
   };
+
+  // Filter out "registered" from stage options in the form
+  const formStages = STAGE_ORDER.filter((s) => s !== "registered");
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -136,7 +116,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             <Textarea
               value={aiText}
               onChange={(e) => setAiText(e.target.value)}
-              placeholder="Límdu hér allar upplýsingar um fyrirtækið (nafn, eigandi, kennitala, verð, lýsing o.fl.) og AI fyllir út formið..."
+              placeholder="Límdu hér allar upplýsingar um fyrirtækið og AI fyllir út formið..."
               rows={4}
               className="bg-background"
             />
@@ -158,42 +138,26 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          {/* Name */}
+          {/* Name only */}
           <div className="space-y-1.5">
             <Label>Nafn fyrirtækis *</Label>
             <Input value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="Nafn..." />
             {duplicateWarning && <p className="text-sm text-destructive">{duplicateWarning}</p>}
           </div>
 
-          {/* Owner & ID */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>Eigandi</Label>
-              <Input value={owner} onChange={(e) => setOwner(e.target.value)} placeholder="Nafn eiganda..." />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Kennitala / ID</Label>
-              <Input value={companyId} onChange={(e) => setCompanyId(e.target.value)} placeholder="000000-0000" />
-            </div>
-          </div>
-
-          {/* Stage checklist */}
+          {/* Stage selection */}
           <div className="space-y-2">
             <Label>Staða fyrirtækis</Label>
             <div className="grid grid-cols-1 gap-2">
-              {STAGE_ORDER.map((s) => (
+              {formStages.map((s) => (
                 <label
                   key={s}
                   className={`flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
                     stage === s ? "border-primary bg-accent" : "border-border hover:bg-muted"
                   }`}
-                  onClick={() => setStage(s)}
+                  onClick={() => { setStage(s); if (s !== "preview") setPreviewSub(undefined); }}
                 >
-                  <div
-                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                      stage === s ? "border-primary" : "border-muted-foreground"
-                    }`}
-                  >
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${stage === s ? "border-primary" : "border-muted-foreground"}`}>
                     {stage === s && <div className="w-2 h-2 rounded-full bg-primary" />}
                   </div>
                   <span className="text-sm font-medium">{STAGE_LABELS[s]}</span>
@@ -202,18 +166,37 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             </div>
           </div>
 
+          {/* Preview sub-options */}
+          {stage === "preview" && (
+            <div className="space-y-2 pl-4 border-l-2 border-primary/30">
+              <Label className="text-sm text-primary">Undirflokkur sýnishorns</Label>
+              <div className="grid grid-cols-1 gap-2">
+                {PREVIEW_SUB_ORDER.map((sub) => (
+                  <label
+                    key={sub}
+                    className={`flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+                      previewSub === sub ? "border-primary bg-accent" : "border-border hover:bg-muted"
+                    }`}
+                    onClick={() => setPreviewSub(sub)}
+                  >
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${previewSub === sub ? "border-primary" : "border-muted-foreground"}`}>
+                      {previewSub === sub && <div className="w-2 h-2 rounded-full bg-primary" />}
+                    </div>
+                    <span className="text-sm font-medium">{PREVIEW_SUB_LABELS[sub]}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Pricing */}
           <div className="space-y-2">
             <Label>Áætlað verð</Label>
             <RadioGroup
               value={useCustomPrice ? "custom" : String(selectedPrice)}
               onValueChange={(val) => {
-                if (val === "custom") {
-                  setUseCustomPrice(true);
-                } else {
-                  setUseCustomPrice(false);
-                  setSelectedPrice(Number(val));
-                }
+                if (val === "custom") { setUseCustomPrice(true); }
+                else { setUseCustomPrice(false); setSelectedPrice(Number(val)); }
               }}
             >
               <div className="grid grid-cols-2 gap-2">
@@ -221,9 +204,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
                   <label
                     key={opt.value}
                     className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${
-                      !useCustomPrice && selectedPrice === opt.value
-                        ? "border-primary bg-accent"
-                        : "border-border hover:bg-muted"
+                      !useCustomPrice && selectedPrice === opt.value ? "border-primary bg-accent" : "border-border hover:bg-muted"
                     }`}
                   >
                     <RadioGroupItem value={String(opt.value)} />
@@ -231,51 +212,25 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
                   </label>
                 ))}
               </div>
-              <label
-                className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${
-                  useCustomPrice ? "border-primary bg-accent" : "border-border hover:bg-muted"
-                }`}
-              >
+              <label className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${useCustomPrice ? "border-primary bg-accent" : "border-border hover:bg-muted"}`}>
                 <RadioGroupItem value="custom" />
                 <span className="text-sm font-medium">Sérsniðið verð</span>
               </label>
             </RadioGroup>
             {useCustomPrice && (
-              <Input
-                type="number"
-                placeholder="Sláðu inn verð..."
-                value={customPrice}
-                onChange={(e) => setCustomPrice(e.target.value)}
-                className="mt-2"
-              />
+              <Input type="number" placeholder="Sláðu inn verð..." value={customPrice} onChange={(e) => setCustomPrice(e.target.value)} className="mt-2" />
             )}
-          </div>
-
-          {/* Personality */}
-          <div className="space-y-1.5">
-            <Label>Lýsing á fyrirtæki</Label>
-            <Textarea
-              value={personality}
-              onChange={(e) => setPersonality(e.target.value)}
-              placeholder="Hvernig er fyrirtækið sem persóna..."
-              rows={2}
-            />
           </div>
 
           {/* Notes */}
           <div className="space-y-1.5">
             <Label>Athugasemdir</Label>
-            <Textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Athugasemdir..."
-              rows={2}
-            />
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Athugasemdir..." rows={2} />
           </div>
 
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !!duplicateWarning}
+            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub)}
             className="w-full"
           >
             Skrá fyrirtæki
