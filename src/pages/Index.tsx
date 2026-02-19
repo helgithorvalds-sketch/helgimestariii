@@ -1,9 +1,11 @@
-import { useState, useEffect, useMemo, DragEvent, useRef } from "react";
+import { useState, useEffect, useMemo, DragEvent, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER, PaidSubStatus, PAID_SUB_LABELS, PAID_SUB_ORDER } from "@/types";
 import { fetchCompanies, addCompany, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
+import { CallLog, fetchCallLogs } from "@/services/callLogService";
+import { format, parseISO, differenceInCalendarDays } from "date-fns";
 import { StageBadge } from "@/components/StageBadge";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
@@ -32,6 +34,24 @@ export default function Index() {
   const [pendingFinishedSub, setPendingFinishedSub] = useState<FinishedSubStatus | null>(null);
   const [finishedExpanded, setFinishedExpanded] = useState(false);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const [cardCallLogs, setCardCallLogs] = useState<Record<string, CallLog[]>>({});
+  const [loadingCardLogs, setLoadingCardLogs] = useState<string | null>(null);
+
+  const loadCardLogs = useCallback(async (companyId: string) => {
+    if (cardCallLogs[companyId]) return;
+    setLoadingCardLogs(companyId);
+    const logs = await fetchCallLogs(companyId);
+    setCardCallLogs((prev) => ({ ...prev, [companyId]: logs }));
+    setLoadingCardLogs(null);
+  }, [cardCallLogs]);
+
+  const getDaysLabel = (dateStr: string) => {
+    const days = differenceInCalendarDays(parseISO(dateStr), new Date());
+    if (days < 0) return `${Math.abs(days)} dögum síðan`;
+    if (days === 0) return "Í dag";
+    if (days === 1) return "Á morgun";
+    return `Eftir ${days} daga`;
+  };
 
   const fireConfetti = () => {
     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
@@ -226,8 +246,9 @@ export default function Index() {
         draggable={!isExpanded}
         onDragStart={(e) => { if (!isExpanded) onDragStart(e, company.id); }}
         onClick={() => {
-          if (!isExpanded) {
+        if (!isExpanded) {
             setExpandedCardId(company.id);
+            loadCardLogs(company.id);
           }
         }}
         className={`rounded-xl border bg-background shadow-sm transition-all duration-200 group ${
@@ -257,7 +278,7 @@ export default function Index() {
               </button>
             </div>
 
-            {/* Owner in primary color */}
+            {/* Owner */}
             {company.owner && (
               <p className="text-sm font-medium text-primary">{company.owner}</p>
             )}
@@ -276,59 +297,63 @@ export default function Index() {
             {company.email && (
               <div className="flex items-center gap-1.5 text-sm">
                 <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                <a href={`mailto:${company.email}`} className="font-medium text-muted-foreground hover:text-foreground transition-colors" onClick={(e) => e.stopPropagation()}>
+                <a href={`mailto:${company.email}`} className="font-medium text-muted-foreground hover:text-foreground transition-colors truncate" onClick={(e) => e.stopPropagation()}>
                   {company.email}
                 </a>
               </div>
             )}
 
-            {/* Vefsíður dropdown */}
+            {/* Links - direct, no dropdown */}
             {(company.websiteUrl || company.finnaUrl) && (
-              <div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenWebsitesId(openWebsitesId === company.id ? null : company.id);
-                  }}
-                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Globe className="w-3.5 h-3.5" />
-                  <span>Vefsíður</span>
-                  {openWebsitesId === company.id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                </button>
-                {openWebsitesId === company.id && (
-                  <div className="mt-1.5 pl-5 space-y-1.5">
-                    {company.websiteUrl && (
-                      <a
-                        href={company.websiteUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                      >
-                        <Globe className="w-3.5 h-3.5" />
-                        Meistaraverk
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                    {company.finnaUrl && (
-                      <a
-                        href={company.finnaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        Finna
-                      </a>
-                    )}
-                  </div>
+              <div className="flex flex-wrap gap-2">
+                {company.finnaUrl && (
+                  <a
+                    href={company.finnaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    Finna.is
+                  </a>
+                )}
+                {company.websiteUrl && (
+                  <a
+                    href={company.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    <Globe className="w-3 h-3" />
+                    Meistaraverk
+                  </a>
                 )}
               </div>
             )}
 
-            {/* Price: paid / estimated */}
+            {/* Next call with countdown */}
+            {company.nextCallAt && (
+              <div className="flex items-center justify-between rounded-md border p-2">
+                <div className="flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs text-muted-foreground">Næsta símtal:</span>
+                  <span className="text-xs font-medium text-foreground">
+                    {format(parseISO(company.nextCallAt), "dd.MM.yyyy · HH:mm")}
+                  </span>
+                </div>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  differenceInCalendarDays(parseISO(company.nextCallAt), new Date()) < 0
+                    ? "bg-destructive/10 text-destructive"
+                    : "bg-primary/10 text-primary"
+                }`}>
+                  {getDaysLabel(company.nextCallAt)}
+                </span>
+              </div>
+            )}
+
+            {/* Price */}
             <div className="pt-1">
               {company.amountPaid && company.amountPaid > 0 ? (
                 <p className="text-sm">
@@ -340,22 +365,38 @@ export default function Index() {
               )}
             </div>
 
-            {/* Notes */}
-            {company.notes && (
-              <p className="text-xs text-muted-foreground whitespace-pre-wrap pt-1">{company.notes}</p>
-            )}
-
-            {/* Checklist progress bar */}
-            {company.checklist.length > 0 && (
-              <div className="pt-1">
-                <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-primary transition-all"
-                    style={{ width: `${(company.checklist.filter(c => c.checked).length / company.checklist.length) * 100}%` }}
-                  />
-                </div>
+            {/* Monthly payment */}
+            {(company.monthlyPaymentAmount || company.monthlyPaymentActive) && (
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-muted-foreground">Mánaðarleg:</span>
+                <span className="font-semibold text-foreground">{formatPrice(company.monthlyPaymentAmount || 0)}</span>
+                <span className={`px-1.5 py-0.5 rounded-full font-semibold ${company.monthlyPaymentActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+                  {company.monthlyPaymentActive ? "Virkt" : "Óvirkt"}
+                </span>
               </div>
             )}
+
+            {/* Past call logs */}
+            {(() => {
+              const logs = cardCallLogs[company.id];
+              if (loadingCardLogs === company.id) {
+                return <p className="text-xs text-muted-foreground">Hleð símtölum...</p>;
+              }
+              if (!logs || logs.length === 0) return null;
+              return (
+                <div className="space-y-1.5 pt-1">
+                  <p className="text-xs font-semibold text-muted-foreground">Fyrri símtöl</p>
+                  <div className="space-y-1 max-h-[120px] overflow-y-auto">
+                    {logs.slice(0, 5).map((log) => (
+                      <div key={log.id} className="rounded-md border bg-muted/30 p-2">
+                        <p className="text-[10px] text-muted-foreground font-medium">{format(parseISO(log.calledAt), "dd.MM.yyyy · HH:mm")}</p>
+                        <p className="text-xs text-foreground whitespace-pre-wrap">{log.notes}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Breyta button */}
             <Button
