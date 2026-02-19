@@ -243,13 +243,13 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm px-6 py-5">
+      <header className="border-b bg-card shadow-sm px-6 py-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src={logo} alt="Logo" className="w-11 h-11 rounded-xl shadow-sm" />
+            <img src={logo} alt="Logo" className="w-14 h-14 rounded-xl shadow-sm" />
             <div>
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">Verkefnastjórnun</h1>
-              <p className="text-sm text-muted-foreground">Haldtu utan um fyrirtæki og verkefni</p>
+              <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
+              <p className="text-sm text-muted-foreground mt-0.5">{companies.length} fyrirtæki samtals</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -288,7 +288,7 @@ export default function Index() {
                   >
                     <div className="flex items-center justify-between mb-4">
                       <StageBadge stage={stage} size="md" />
-                      <span className="text-xs bg-muted text-muted-foreground font-semibold px-2.5 py-1 rounded-full">
+                      <span className="text-2xl font-extrabold text-foreground">
                         {count}
                       </span>
                     </div>
@@ -326,8 +326,11 @@ export default function Index() {
               >
                 <div className="flex items-center gap-3">
                   <StageBadge stage="preview" size="md" />
+                  <span className="text-xl font-extrabold text-foreground">
+                    {companiesByStage("preview").length}
+                  </span>
                   <span className="text-sm text-muted-foreground">
-                    {companiesByStage("preview").length} fyrirtæki
+                    fyrirtæki
                   </span>
                 </div>
                 {previewExpanded ? (
@@ -400,8 +403,11 @@ export default function Index() {
               >
                 <div className="flex items-center gap-3">
                   <StageBadge stage="paid" size="md" />
+                  <span className="text-xl font-extrabold text-foreground">
+                    {companiesByStage("paid").length}
+                  </span>
                   <span className="text-sm text-muted-foreground">
-                    {companiesByStage("paid").length} fyrirtæki
+                    fyrirtæki
                   </span>
                 </div>
                 {paidExpanded ? (
