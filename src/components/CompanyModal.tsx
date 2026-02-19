@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,9 +9,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
+import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
+import { toast } from "sonner";
 
 interface CompanyModalProps {
   company: Company;
@@ -23,6 +25,15 @@ interface CompanyModalProps {
 
 export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: CompanyModalProps) {
   const [editedCompany, setEditedCompany] = useState<Company>(company);
+  const [callLogs, setCallLogs] = useState<CallLog[]>([]);
+  const [newCallNote, setNewCallNote] = useState("");
+  const [addingCall, setAddingCall] = useState(false);
+
+  useEffect(() => {
+    if (open && company.id) {
+      fetchCallLogs(company.id).then(setCallLogs);
+    }
+  }, [open, company.id]);
 
   const updateField = <K extends keyof Company>(key: K, value: Company[K]) => {
     setEditedCompany((prev) => ({ ...prev, [key]: value }));
@@ -224,14 +235,98 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             </div>
           </div>
 
-          {/* Notes */}
-          <div className="space-y-1.5">
-            <Label>Athugasemdir</Label>
-            <Textarea
-              value={editedCompany.notes}
-              onChange={(e) => updateField("notes", e.target.value)}
-              rows={2}
-            />
+          {/* Call Log */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-primary" />
+                <Label className="text-sm font-semibold">Símtalaskrá</Label>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setAddingCall(true)}
+                className="gap-1.5 text-xs"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Nýtt símtal
+              </Button>
+            </div>
+
+            {addingCall && (
+              <div className="rounded-xl border border-primary/30 bg-accent/30 p-3 space-y-2">
+                <Textarea
+                  value={newCallNote}
+                  onChange={(e) => setNewCallNote(e.target.value)}
+                  placeholder="Skrifaðu athugasemdir frá símtalinu..."
+                  rows={3}
+                  autoFocus
+                  className="bg-background"
+                />
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => { setAddingCall(false); setNewCallNote(""); }}
+                  >
+                    Hætta við
+                  </Button>
+                  <Button
+                    size="sm"
+                    disabled={!newCallNote.trim()}
+                    onClick={async () => {
+                      const log = await addCallLog(company.id, newCallNote.trim());
+                      if (log) {
+                        setCallLogs((prev) => [log, ...prev]);
+                        setNewCallNote("");
+                        setAddingCall(false);
+                        toast.success("Símtal skráð!");
+                      } else {
+                        toast.error("Villa við skráningu");
+                      }
+                    }}
+                    className="gap-1.5"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    Vista símtal
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {callLogs.length === 0 && !addingCall ? (
+              <div className="rounded-xl border border-dashed p-6 text-center text-muted-foreground">
+                <Phone className="w-6 h-6 mx-auto mb-2 opacity-40" />
+                <p className="text-xs">Engin símtöl skráð ennþá</p>
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+                {callLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="rounded-lg border bg-background p-3 group relative"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-muted-foreground font-medium mb-1">
+                          {format(parseISO(log.calledAt), "dd.MM.yyyy · HH:mm")}
+                        </p>
+                        <p className="text-sm text-foreground whitespace-pre-wrap">{log.notes}</p>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          const ok = await deleteCallLog(log.id);
+                          if (ok) setCallLogs((prev) => prev.filter((l) => l.id !== log.id));
+                        }}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive p-1"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Actions */}
