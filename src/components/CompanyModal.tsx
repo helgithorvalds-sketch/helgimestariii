@@ -162,31 +162,20 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             </div>
           </div>
 
-          {/* Price & Projected Earnings */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>Áætlað verð</Label>
-              <Input
-                type="number"
-                value={editedCompany.estimatedPrice}
-                onChange={(e) => updateField("estimatedPrice", Number(e.target.value))}
-              />
-              <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.estimatedPrice)}</p>
-            </div>
-            <div className="space-y-1.5">
-              <Label>Áætlaður hagnaður</Label>
-              <Input
-                type="number"
-                value={editedCompany.projectedEarnings}
-                onChange={(e) => updateField("projectedEarnings", Number(e.target.value))}
-              />
-              <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.projectedEarnings)}</p>
-            </div>
+          {/* Price */}
+          <div className="space-y-1.5">
+            <Label>Áætlað verð</Label>
+            <Input
+              type="number"
+              value={editedCompany.estimatedPrice}
+              onChange={(e) => updateField("estimatedPrice", Number(e.target.value))}
+            />
+            <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.estimatedPrice)}</p>
           </div>
 
           {/* Payment */}
           <div className="space-y-1.5">
-            <Label>Greitt (raunverulega)</Label>
+            <Label>Borgað</Label>
             <Input
               type="number"
               value={editedCompany.amountPaid || ""}
