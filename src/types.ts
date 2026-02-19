@@ -89,7 +89,7 @@ export const DEFAULT_CHECKLIST: Omit<ChecklistItem, "id">[] = [
   { label: "Forskoðun tilbúin", checked: false },
   { label: "Forskoðun send", checked: false },
   { label: "Endanleg vefsíða tilbúin", checked: false },
-  { label: "Greiðsla móttekin", checked: false },
+  { label: "Greitt X", checked: false },
 ];
 
 export const PRICE_OPTIONS = [
