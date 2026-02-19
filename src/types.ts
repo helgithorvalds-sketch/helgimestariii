@@ -59,7 +59,7 @@ export interface Company {
 export const STAGE_LABELS: Record<CompanyStage, string> = {
   email_sent: "Tölvupóstur sendur",
   registered: "Skráð",
-  preview: "Sýnishorn",
+  preview: "Vill sýnishorn",
   finished: "Lokið",
   paid: "Greitt",
 };
