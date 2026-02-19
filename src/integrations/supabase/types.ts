@@ -63,11 +63,13 @@ export type Database = {
           paid_date: string | null
           paid_sub_status: string | null
           personality_description: string
+          phone: string | null
           preview_sent: boolean
           preview_sub_status: string | null
           projected_earnings: number
           stage: string
           updated_at: string
+          website_url: string | null
         }
         Insert: {
           amount_paid?: number | null
@@ -85,11 +87,13 @@ export type Database = {
           paid_date?: string | null
           paid_sub_status?: string | null
           personality_description?: string
+          phone?: string | null
           preview_sent?: boolean
           preview_sub_status?: string | null
           projected_earnings?: number
           stage?: string
           updated_at?: string
+          website_url?: string | null
         }
         Update: {
           amount_paid?: number | null
@@ -107,11 +111,13 @@ export type Database = {
           paid_date?: string | null
           paid_sub_status?: string | null
           personality_description?: string
+          phone?: string | null
           preview_sent?: boolean
           preview_sub_status?: string | null
           projected_earnings?: number
           stage?: string
           updated_at?: string
+          website_url?: string | null
         }
         Relationships: []
       }

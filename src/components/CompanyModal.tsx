@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
@@ -73,6 +73,20 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
 
         <div className="space-y-5 pt-2">
           {/* Basic info */}
+          {/* Website URL */}
+          <div className="space-y-1.5">
+            <Label className="flex items-center gap-1.5">
+              <Globe className="w-4 h-4" />
+              Vefsíða
+            </Label>
+            <Input
+              value={editedCompany.websiteUrl || ""}
+              onChange={(e) => updateField("websiteUrl", e.target.value)}
+              placeholder="https://..."
+              type="url"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Eigandi</Label>
@@ -82,12 +96,23 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
               />
             </div>
             <div className="space-y-1.5">
-              <Label>ID / Kennitala</Label>
+              <Label className="flex items-center gap-1.5">
+                <Phone className="w-4 h-4" />
+                Sími
+              </Label>
               <Input
-                value={editedCompany.companyId}
-                onChange={(e) => updateField("companyId", e.target.value)}
+                value={editedCompany.phone || ""}
+                onChange={(e) => updateField("phone", e.target.value)}
+                placeholder="Símanúmer..."
               />
             </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label>ID / Kennitala</Label>
+            <Input
+              value={editedCompany.companyId}
+              onChange={(e) => updateField("companyId", e.target.value)}
+            />
           </div>
 
           {/* Stage */}
