@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Company, CompanyStage, ChecklistItem, PreviewSubStatus, PaidSubStatus } from "@/types";
+import { Company, CompanyStage, ChecklistItem, PreviewSubStatus, FinishedSubStatus, PaidSubStatus } from "@/types";
 
 // Convert DB row to Company type
 function rowToCompany(row: any): Company {
@@ -14,6 +14,7 @@ function rowToCompany(row: any): Company {
     phone: row.phone,
     stage: row.stage as CompanyStage,
     previewSubStatus: row.preview_sub_status,
+    finishedSubStatus: row.finished_sub_status,
     paidSubStatus: row.paid_sub_status,
     estimatedPrice: row.estimated_price,
     customPrice: row.custom_price,
@@ -41,6 +42,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     phone: company.phone || null,
     stage: company.stage,
     preview_sub_status: company.previewSubStatus || null,
+    finished_sub_status: company.finishedSubStatus || null,
     paid_sub_status: company.paidSubStatus || null,
     estimated_price: company.estimatedPrice,
     custom_price: company.customPrice || null,
@@ -114,6 +116,7 @@ export async function updateCompanyStage(
   id: string, 
   stage: CompanyStage, 
   previewSubStatus?: PreviewSubStatus | null,
+  finishedSubStatus?: FinishedSubStatus | null,
   paidSubStatus?: PaidSubStatus | null,
   amountPaid?: number | null
 ): Promise<boolean> {
@@ -122,6 +125,11 @@ export async function updateCompanyStage(
     updateData.preview_sub_status = previewSubStatus;
   } else if (stage !== "preview") {
     updateData.preview_sub_status = null;
+  }
+  if (stage === "finished" && finishedSubStatus) {
+    updateData.finished_sub_status = finishedSubStatus;
+  } else if (stage !== "finished") {
+    updateData.finished_sub_status = null;
   }
   if (stage === "paid" && paidSubStatus) {
     updateData.paid_sub_status = paidSubStatus;
