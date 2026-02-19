@@ -86,8 +86,8 @@ export const PAID_SUB_LABELS: Record<PaidSubStatus, string> = {
 };
 
 export const PAID_SUB_ORDER: PaidSubStatus[] = [
-  "fully_paid",
   "partially_paid",
+  "fully_paid",
 ];
 
 export const STAGE_ORDER: CompanyStage[] = [
