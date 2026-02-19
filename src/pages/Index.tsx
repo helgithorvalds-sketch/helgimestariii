@@ -1,5 +1,7 @@
 import { useState, useEffect, DragEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, PaidSubStatus, PAID_SUB_LABELS, PAID_SUB_ORDER } from "@/types";
 import { fetchCompanies, addCompany, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { StageBadge } from "@/components/StageBadge";
@@ -7,7 +9,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
@@ -23,6 +25,8 @@ export default function Index() {
   const [paidExpanded, setPaidExpanded] = useState(false);
   const [pendingPaidDrop, setPendingPaidDrop] = useState<{ companyId: string; sub: PaidSubStatus } | null>(null);
   const [paidAmountInput, setPaidAmountInput] = useState("");
+  const [websiteReminder, setWebsiteReminder] = useState<{ companyId: string; companyName: string } | null>(null);
+  const [websiteInput, setWebsiteInput] = useState("");
 
   const loadData = async () => {
     const data = await fetchCompanies();
@@ -82,6 +86,17 @@ export default function Index() {
     setDragOverStage(null);
     if (!draggedId) return;
 
+    // If dropping into "finished", check if company has website_url
+    if (stage === "finished") {
+      const company = companies.find((c) => c.id === draggedId);
+      if (company && !company.websiteUrl) {
+        setWebsiteReminder({ companyId: draggedId, companyName: company.name });
+        setWebsiteInput("");
+        setDraggedId(null);
+        return;
+      }
+    }
+
     // If dropping into "partially_paid", prompt for amount
     if (stage === "paid" && paidSub === "partially_paid") {
       setPendingPaidDrop({ companyId: draggedId, sub: paidSub });
@@ -106,6 +121,35 @@ export default function Index() {
       );
     }
     setDraggedId(null);
+  };
+
+  const confirmWebsiteAndMove = async (skipUrl: boolean) => {
+    if (!websiteReminder) return;
+    const { companyId } = websiteReminder;
+    
+    // Save the website URL if provided
+    if (!skipUrl && websiteInput.trim()) {
+      const company = companies.find((c) => c.id === companyId);
+      if (company) {
+        const updated = { ...company, websiteUrl: websiteInput.trim() };
+        await updateCompany(updated);
+        setCompanies((prev) => prev.map((c) => c.id === companyId ? updated : c));
+      }
+    }
+
+    // Move to finished
+    const ok = await updateCompanyStage(companyId, "finished");
+    if (ok) {
+      setCompanies((prev) =>
+        prev.map((c) =>
+          c.id === companyId
+            ? { ...c, stage: "finished" as CompanyStage, websiteUrl: websiteInput.trim() || c.websiteUrl }
+            : c
+        )
+      );
+    }
+    setWebsiteReminder(null);
+    setWebsiteInput("");
   };
 
   const confirmPaidAmount = async () => {
@@ -422,7 +466,56 @@ export default function Index() {
               </div>
             )}
 
-            {/* Call Schedule */}
+            {/* Website URL reminder - full screen overlay */}
+            {websiteReminder && (
+              <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
+                <div className="max-w-md w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6 text-center">
+                  <div className="flex justify-center">
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                      <AlertTriangle className="w-8 h-8 text-primary" />
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-foreground mb-2">Vefsíðutengil vantar!</h2>
+                    <p className="text-muted-foreground">
+                      <span className="font-semibold text-foreground">{websiteReminder.companyName}</span> er að fara í „Lokið" en hefur engan vefsíðutengil.
+                    </p>
+                  </div>
+                  <div className="space-y-2 text-left">
+                    <Label className="flex items-center gap-1.5">
+                      <Globe className="w-4 h-4" />
+                      Tengill á verkefnið
+                    </Label>
+                    <Input
+                      value={websiteInput}
+                      onChange={(e) => setWebsiteInput(e.target.value)}
+                      placeholder="https://..."
+                      type="url"
+                      autoFocus
+                      className="text-base"
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => confirmWebsiteAndMove(false)}
+                      disabled={!websiteInput.trim()}
+                      className="flex-1 gap-2"
+                    >
+                      <Globe className="w-4 h-4" />
+                      Vista og færa
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => confirmWebsiteAndMove(true)}
+                      className="text-muted-foreground"
+                    >
+                      Sleppa
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <CallSchedule companies={companies} onCompanyClick={setSelectedCompany} />
           </div>
         )}

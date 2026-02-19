@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Loader2, CalendarIcon } from "lucide-react";
+import { Sparkles, Loader2, CalendarIcon, Globe, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -33,6 +33,10 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [duplicateWarning, setDuplicateWarning] = useState("");
   const [nextCallDate, setNextCallDate] = useState<Date | undefined>();
   const [nextCallTime, setNextCallTime] = useState("10:00");
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [phone, setPhone] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [companyId, setCompanyId] = useState("");
 
   // AI paste
   const [aiText, setAiText] = useState("");
@@ -60,6 +64,10 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
       if (data.name) handleNameChange(data.name);
       if (data.stage) setStage(data.stage);
+      if (data.owner) setOwnerName(data.owner);
+      if (data.companyId) setCompanyId(data.companyId);
+      if (data.phone) setPhone(data.phone);
+      if (data.websiteUrl) setWebsiteUrl(data.websiteUrl);
       if (data.estimatedPrice) {
         const price = Number(data.estimatedPrice);
         const match = PRICE_OPTIONS.find((p) => p.value === price);
@@ -89,8 +97,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     
     onAdd({
       name: name.trim(),
-      owner: "",
-      companyId: "",
+      owner: ownerName.trim(),
+      companyId: companyId.trim(),
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
       estimatedPrice: price,
@@ -101,6 +109,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       previewSent: false,
       projectedEarnings: price,
       nextCallAt,
+      websiteUrl: websiteUrl.trim() || undefined,
+      phone: phone.trim() || undefined,
     });
     resetForm();
     onClose();
@@ -111,6 +121,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setSelectedPrice(160000); setUseCustomPrice(false); setCustomPrice("");
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
+    setWebsiteUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
   };
 
   // Filter out "registered" from stage options in the form
@@ -155,11 +166,46 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          {/* Name only */}
+          {/* Name */}
           <div className="space-y-1.5">
             <Label>Nafn fyrirtækis *</Label>
             <Input value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="Nafn..." />
             {duplicateWarning && <p className="text-sm text-destructive">{duplicateWarning}</p>}
+          </div>
+
+          {/* Website URL */}
+          <div className="space-y-1.5">
+            <Label className="flex items-center gap-1.5">
+              <Globe className="w-4 h-4" />
+              Vefsíða
+            </Label>
+            <Input
+              value={websiteUrl}
+              onChange={(e) => setWebsiteUrl(e.target.value)}
+              placeholder="https://..."
+              type="url"
+            />
+          </div>
+
+          {/* Owner & Phone */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Tengiliður</Label>
+              <Input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="Nafn..." />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-1.5">
+                <Phone className="w-4 h-4" />
+                Sími
+              </Label>
+              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Símanúmer..." />
+            </div>
+          </div>
+
+          {/* Company ID */}
+          <div className="space-y-1.5">
+            <Label>Kennitala</Label>
+            <Input value={companyId} onChange={(e) => setCompanyId(e.target.value)} placeholder="Kennitala..." />
           </div>
 
           {/* Stage selection */}

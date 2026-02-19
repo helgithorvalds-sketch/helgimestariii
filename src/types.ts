@@ -26,6 +26,8 @@ export interface Company {
   owner: string;
   companyId: string;
   logoUrl?: string;
+  websiteUrl?: string;
+  phone?: string;
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;
   paidSubStatus?: PaidSubStatus;
