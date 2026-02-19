@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Loader2, CalendarIcon, Globe, Phone, ExternalLink } from "lucide-react";
+import { Sparkles, Loader2, CalendarIcon, Globe, Phone, ExternalLink, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -36,6 +36,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [nextCallTime, setNextCallTime] = useState("10:00");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [finnaUrl, setFinnaUrl] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [ownerUnknown, setOwnerUnknown] = useState(false);
@@ -72,6 +73,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       if (data.companyId) setCompanyId(data.companyId);
       if (data.websiteUrl) setWebsiteUrl(data.websiteUrl);
       if (data.finnaUrl) setFinnaUrl(data.finnaUrl);
+      if (data.email) setEmail(data.email);
       if (data.estimatedPrice) {
         const price = Number(data.estimatedPrice);
         const match = PRICE_OPTIONS.find((p) => p.value === price);
@@ -118,6 +120,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       websiteUrl: websiteUrl.trim() || undefined,
       finnaUrl: finnaUrl.trim() || undefined,
       phone: phone.trim() || undefined,
+      email: email.trim() || undefined,
     });
     resetForm();
     onClose();
@@ -129,7 +132,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setFinishedSub(undefined);
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
-    setWebsiteUrl(""); setFinnaUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
+    setWebsiteUrl(""); setFinnaUrl(""); setPhone(""); setEmail(""); setOwnerName(""); setCompanyId("");
     setOwnerUnknown(false); setPaidAmount("");
   };
 
@@ -253,6 +256,14 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
               Sími
             </Label>
             <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Símanúmer..." />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="flex items-center gap-1.5">
+              <Mail className="w-4 h-4" />
+              Netfang (mögulegt)
+            </Label>
+            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="netfang@fyrirtaeki.is" type="email" />
           </div>
 
           {/* Stage selection */}

@@ -33,6 +33,7 @@ export interface Company {
   websiteUrl?: string;
   finnaUrl?: string;
   phone?: string;
+  email?: string;
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;
   finishedSubStatus?: FinishedSubStatus;

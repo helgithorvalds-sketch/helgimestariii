@@ -53,6 +53,7 @@ export type Database = {
           company_id: string
           created_at: string
           custom_price: number | null
+          email: string | null
           estimated_price: number
           finished_sub_status: string | null
           finna_url: string | null
@@ -79,6 +80,7 @@ export type Database = {
           company_id?: string
           created_at?: string
           custom_price?: number | null
+          email?: string | null
           estimated_price?: number
           finished_sub_status?: string | null
           finna_url?: string | null
@@ -105,6 +107,7 @@ export type Database = {
           company_id?: string
           created_at?: string
           custom_price?: number | null
+          email?: string | null
           estimated_price?: number
           finished_sub_status?: string | null
           finna_url?: string | null
