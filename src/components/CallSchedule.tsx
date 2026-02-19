@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2 } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
@@ -289,6 +289,22 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                     >
                       <CheckCircle className="w-3.5 h-3.5" />
                       Lokið
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!company.nextCallAt || !onCompanyUpdate) return;
+                        const next = new Date(company.nextCallAt);
+                        next.setDate(next.getDate() + 1);
+                        onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
+                        toast("Símtal fært á morgun", { icon: "📞" });
+                      }}
+                      className="gap-1.5 text-xs h-7 px-3"
+                    >
+                      <PhoneMissed className="w-3.5 h-3.5" />
+                      Svaraði ekki
                     </Button>
                     <Button
                       variant="ghost"
