@@ -210,9 +210,17 @@ export default function Index() {
           {company.phone && (
             <p className="text-xs text-muted-foreground mt-0.5">📞 {company.phone}</p>
           )}
-          <p className="text-sm text-primary font-bold mt-2">
-            {formatPrice(company.estimatedPrice)}
-          </p>
+          {company.paidSubStatus === "partially_paid" && company.amountPaid ? (
+            <p className="text-sm font-bold mt-2">
+              <span className="text-green-600">{formatPrice(company.amountPaid)}</span>
+              <span className="text-muted-foreground mx-1">/</span>
+              <span className="text-foreground">{formatPrice(company.estimatedPrice)}</span>
+            </p>
+          ) : (
+            <p className="text-sm text-primary font-bold mt-2">
+              {formatPrice(company.estimatedPrice)}
+            </p>
+          )}
           {company.checklist.length > 0 && (
             <div className="mt-3">
               <div className="flex gap-1">
