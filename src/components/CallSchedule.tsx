@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Company } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [loadingLogs, setLoadingLogs] = useState<string | null>(null);
   const [finishingCall, setFinishingCall] = useState<Company | null>(null);
   const [finishNotes, setFinishNotes] = useState("");
+  const [finishWebsiteUrl, setFinishWebsiteUrl] = useState("");
   const [savingFinish, setSavingFinish] = useState(false);
 
   const scheduled = companies
@@ -66,9 +68,12 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setSavingFinish(true);
     const log = await addCallLog(finishingCall.id, finishNotes.trim());
     if (log) {
-      // Clear the nextCallAt so it moves out of scheduled
       if (onCompanyUpdate) {
-        onCompanyUpdate({ ...finishingCall, nextCallAt: undefined });
+        onCompanyUpdate({
+          ...finishingCall,
+          nextCallAt: undefined,
+          websiteUrl: finishWebsiteUrl.trim() || finishingCall.websiteUrl,
+        });
       }
       toast.success("Símtal skráð!");
     } else {
@@ -77,6 +82,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setSavingFinish(false);
     setFinishingCall(null);
     setFinishNotes("");
+    setFinishWebsiteUrl("");
   };
 
   return (
@@ -96,12 +102,24 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             </p>
           </div>
           <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              <Globe className="w-4 h-4" />
+              Tengill á meistaraverkið
+            </label>
+            <Input
+              value={finishWebsiteUrl}
+              onChange={(e) => setFinishWebsiteUrl(e.target.value)}
+              placeholder="https://..."
+              type="url"
+            />
+          </div>
+          <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
             <Textarea
               value={finishNotes}
               onChange={(e) => setFinishNotes(e.target.value)}
               placeholder="Skrifaðu athugasemdir frá símtalinu..."
-              rows={6}
+              rows={5}
               autoFocus
               className="text-base"
             />
@@ -117,7 +135,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             </Button>
             <Button
               variant="ghost"
-              onClick={() => { setFinishingCall(null); setFinishNotes(""); }}
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); }}
               className="text-muted-foreground"
             >
               Hætta við
