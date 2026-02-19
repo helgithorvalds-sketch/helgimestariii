@@ -1,4 +1,4 @@
-import { useState, useEffect, DragEvent } from "react";
+import { useState, useEffect, DragEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
@@ -27,6 +27,7 @@ export default function Index() {
   const [paidAmountInput, setPaidAmountInput] = useState("");
   const [websiteReminder, setWebsiteReminder] = useState<{ companyId: string; companyName: string } | null>(null);
   const [websiteInput, setWebsiteInput] = useState("");
+  const [openWebsitesId, setOpenWebsitesId] = useState<string | null>(null);
 
   const loadData = async () => {
     const data = await fetchCompanies();
@@ -209,6 +210,51 @@ export default function Index() {
           )}
           {company.phone && (
             <p className="text-xs text-muted-foreground mt-0.5">📞 {company.phone}</p>
+          )}
+          {(company.websiteUrl || company.finnaUrl) && (
+            <div className="relative mt-1.5">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenWebsitesId(openWebsitesId === company.id ? null : company.id);
+                }}
+                className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                Vefsíður
+                <ChevronDown className={`w-3 h-3 transition-transform ${openWebsitesId === company.id ? "rotate-180" : ""}`} />
+              </button>
+              {openWebsitesId === company.id && (
+                <div className="absolute left-0 top-full mt-1 z-50 bg-card border rounded-lg shadow-lg p-1.5 min-w-[180px] space-y-0.5">
+                  {company.websiteUrl && (
+                    <a
+                      href={company.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-semibold text-primary hover:bg-primary/10 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      Helgi vefsíða
+                      <ExternalLink className="w-3 h-3 ml-auto" />
+                    </a>
+                  )}
+                  {company.finnaUrl && (
+                    <a
+                      href={company.finnaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                    >
+                      <Globe className="w-3.5 h-3.5" />
+                      Upprunaleg vefsíða
+                      <ExternalLink className="w-3 h-3 ml-auto" />
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
           )}
           {company.paidSubStatus === "partially_paid" && company.amountPaid ? (
             <p className="text-sm font-bold mt-2">
