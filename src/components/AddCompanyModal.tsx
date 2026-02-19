@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER } from "@/types";
+import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Loader2, CalendarIcon, Globe, Phone, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [name, setName] = useState("");
   const [stage, setStage] = useState<CompanyStage>("email_sent");
   const [previewSub, setPreviewSub] = useState<PreviewSubStatus | undefined>();
+  const [finishedSub, setFinishedSub] = useState<FinishedSubStatus | undefined>();
   const [selectedPrice, setSelectedPrice] = useState<number>(160000);
   const [useCustomPrice, setUseCustomPrice] = useState(false);
   const [customPrice, setCustomPrice] = useState("");
@@ -86,6 +87,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     if (!name.trim() || duplicateWarning) return;
     if (!ownerUnknown && !ownerName.trim()) return;
     if (stage === "preview" && !previewSub) return;
+    if (stage === "finished" && !finishedSub) return;
     const price = stage === "paid" ? (Number(paidAmount) || 0) : (useCustomPrice ? Number(customPrice) || 0 : selectedPrice);
     const checklist = DEFAULT_CHECKLIST.map((item, i) => ({ ...item, id: `new-${i}` }));
     
@@ -103,6 +105,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       companyId: companyId.trim(),
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
+      finishedSubStatus: stage === "finished" ? finishedSub : undefined,
       estimatedPrice: stage === "paid" ? price : price,
       amountPaid: stage === "paid" ? (Number(paidAmount) || undefined) : undefined,
       customPrice: useCustomPrice ? price : undefined,
@@ -123,6 +126,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const resetForm = () => {
     setName(""); setStage("email_sent"); setPreviewSub(undefined);
     setSelectedPrice(160000); setUseCustomPrice(false); setCustomPrice("");
+    setFinishedSub(undefined);
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
     setWebsiteUrl(""); setFinnaUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
@@ -261,7 +265,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
                   className={`flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
                     stage === s ? "border-primary bg-accent" : "border-border hover:bg-muted"
                   }`}
-                  onClick={() => { setStage(s); if (s !== "preview") setPreviewSub(undefined); }}
+                  onClick={() => { setStage(s); if (s !== "preview") setPreviewSub(undefined); if (s !== "finished") setFinishedSub(undefined); }}
                 >
                   <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${stage === s ? "border-primary" : "border-muted-foreground"}`}>
                     {stage === s && <div className="w-2 h-2 rounded-full bg-primary" />}
@@ -289,6 +293,29 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
                       {previewSub === sub && <div className="w-2 h-2 rounded-full bg-primary" />}
                     </div>
                     <span className="text-sm font-medium">{PREVIEW_SUB_LABELS[sub]}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Finished sub-options */}
+          {stage === "finished" && (
+            <div className="space-y-2 pl-4 border-l-2 border-primary/30">
+              <Label className="text-sm text-primary">Undirflokkur</Label>
+              <div className="grid grid-cols-1 gap-2">
+                {FINISHED_SUB_ORDER.map((sub) => (
+                  <label
+                    key={sub}
+                    className={`flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+                      finishedSub === sub ? "border-primary bg-accent" : "border-border hover:bg-muted"
+                    }`}
+                    onClick={() => setFinishedSub(sub)}
+                  >
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${finishedSub === sub ? "border-primary" : "border-muted-foreground"}`}>
+                      {finishedSub === sub && <div className="w-2 h-2 rounded-full bg-primary" />}
+                    </div>
+                    <span className="text-sm font-medium">{FINISHED_SUB_LABELS[sub]}</span>
                   </label>
                 ))}
               </div>
@@ -403,7 +430,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (!ownerUnknown && !ownerName.trim())}
+            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && !ownerName.trim())}
             className="w-full"
           >
             Skrá fyrirtæki

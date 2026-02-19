@@ -2,7 +2,7 @@ import { useState, useEffect, DragEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, PaidSubStatus, PAID_SUB_LABELS, PAID_SUB_ORDER } from "@/types";
+import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER, PaidSubStatus, PAID_SUB_LABELS, PAID_SUB_ORDER } from "@/types";
 import { fetchCompanies, addCompany, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { StageBadge } from "@/components/StageBadge";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
+import confetti from "canvas-confetti";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -28,6 +29,12 @@ export default function Index() {
   const [websiteReminder, setWebsiteReminder] = useState<{ companyId: string; companyName: string } | null>(null);
   const [websiteInput, setWebsiteInput] = useState("");
   const [openWebsitesId, setOpenWebsitesId] = useState<string | null>(null);
+  const [pendingFinishedSub, setPendingFinishedSub] = useState<FinishedSubStatus | null>(null);
+  const [finishedExpanded, setFinishedExpanded] = useState(false);
+
+  const fireConfetti = () => {
+    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+  };
 
   const loadData = async () => {
     const data = await fetchCompanies();
@@ -81,7 +88,7 @@ export default function Index() {
 
   const onDragLeave = () => setDragOverStage(null);
 
-  const onDropStage = async (e: DragEvent, stage: CompanyStage, subStatus?: PreviewSubStatus, paidSub?: PaidSubStatus) => {
+  const onDropStage = async (e: DragEvent, stage: CompanyStage, subStatus?: PreviewSubStatus, finishedSub?: FinishedSubStatus, paidSub?: PaidSubStatus) => {
     e.preventDefault();
     e.stopPropagation();
     setDragOverStage(null);
@@ -91,6 +98,8 @@ export default function Index() {
     if (stage === "finished") {
       const company = companies.find((c) => c.id === draggedId);
       if (company && !company.websiteUrl) {
+        // Store the finishedSub for after website prompt
+        setPendingFinishedSub(finishedSub || null);
         setWebsiteReminder({ companyId: draggedId, companyName: company.name });
         setWebsiteInput("");
         setDraggedId(null);
@@ -106,7 +115,12 @@ export default function Index() {
       return;
     }
 
-    const ok = await updateCompanyStage(draggedId, stage, subStatus || null, paidSub || null);
+    // If dropping into "fully_paid", fire confetti
+    if (stage === "paid" && paidSub === "fully_paid") {
+      fireConfetti();
+    }
+
+    const ok = await updateCompanyStage(draggedId, stage, subStatus || null, finishedSub || null, paidSub || null);
     if (ok) {
       setCompanies((prev) =>
         prev.map((c) =>
@@ -115,6 +129,7 @@ export default function Index() {
                 ...c, 
                 stage, 
                 previewSubStatus: stage === "preview" ? subStatus : undefined,
+                finishedSubStatus: stage === "finished" ? finishedSub : undefined,
                 paidSubStatus: stage === "paid" ? paidSub : undefined,
               }
             : c
@@ -139,25 +154,26 @@ export default function Index() {
     }
 
     // Move to finished
-    const ok = await updateCompanyStage(companyId, "finished");
+    const ok = await updateCompanyStage(companyId, "finished", null, pendingFinishedSub);
     if (ok) {
       setCompanies((prev) =>
         prev.map((c) =>
           c.id === companyId
-            ? { ...c, stage: "finished" as CompanyStage, websiteUrl: websiteInput.trim() || c.websiteUrl }
+            ? { ...c, stage: "finished" as CompanyStage, finishedSubStatus: pendingFinishedSub || undefined, websiteUrl: websiteInput.trim() || c.websiteUrl }
             : c
         )
       );
     }
     setWebsiteReminder(null);
     setWebsiteInput("");
+    setPendingFinishedSub(null);
   };
 
   const confirmPaidAmount = async () => {
     if (!pendingPaidDrop) return;
     const amount = Number(paidAmountInput);
     if (!amount || amount <= 0) return;
-    const ok = await updateCompanyStage(pendingPaidDrop.companyId, "paid", null, "partially_paid", amount);
+    const ok = await updateCompanyStage(pendingPaidDrop.companyId, "paid", null, null, "partially_paid", amount);
     if (ok) {
       setCompanies((prev) =>
         prev.map((c) =>
@@ -180,6 +196,13 @@ export default function Index() {
 
   const previewUncategorized = companies.filter(
     (c) => c.stage === "preview" && !c.previewSubStatus
+  );
+
+  const companiesByFinishedSub = (sub: FinishedSubStatus) =>
+    companies.filter((c) => c.stage === "finished" && c.finishedSubStatus === sub);
+
+  const finishedUncategorized = companies.filter(
+    (c) => c.stage === "finished" && !c.finishedSubStatus
   );
 
   const companiesByPaidSub = (sub: PaidSubStatus) =>
@@ -284,7 +307,7 @@ export default function Index() {
     </div>
   );
 
-  const mainStages: CompanyStage[] = ["email_sent", "registered", "finished"];
+  const mainStages: CompanyStage[] = ["email_sent", "registered"];
 
   return (
     <div className="min-h-screen bg-background">
@@ -319,7 +342,7 @@ export default function Index() {
         ) : (
           <div className="space-y-5">
             {/* Main stage columns */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {mainStages.map((stage) => {
                 const count = companiesByStage(stage).length;
                 return (
@@ -351,8 +374,82 @@ export default function Index() {
               })}
             </div>
 
+            {/* Lokið (Finished) section - expandable */}
+            <div
+              className={`rounded-xl border bg-card transition-all shadow-sm ${
+                dragOverStage === "finished" && !finishedExpanded ? "drag-over" : ""
+              }`}
+            >
+              <button
+                onClick={() => setFinishedExpanded(!finishedExpanded)}
+                onDragOver={(e) => {
+                  onDragOver(e, "finished");
+                  if (!finishedExpanded) setFinishedExpanded(true);
+                }}
+                onDragLeave={onDragLeave}
+                onDrop={(e) => onDropStage(e, "finished")}
+                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <StageBadge stage="finished" size="md" />
+                  <span className="text-xl font-extrabold text-foreground">
+                    {companiesByStage("finished").length}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    fyrirtæki
+                  </span>
+                </div>
+                {finishedExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                )}
+              </button>
 
-            {/* Sýnishorn (Preview) section - expandable */}
+              {finishedExpanded && (
+                <div className="px-4 pb-4">
+                  {finishedUncategorized.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
+                      <div className="flex flex-wrap gap-2">
+                        {finishedUncategorized.map(renderCompanyCard)}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {FINISHED_SUB_ORDER.map((sub) => {
+                      const dropId = `finished_${sub}`;
+                      return (
+                        <div
+                          key={sub}
+                          onDragOver={(e) => onDragOver(e, dropId)}
+                          onDragLeave={onDragLeave}
+                          onDrop={(e) => onDropStage(e, "finished", undefined, sub)}
+                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
+                            dragOverStage === dropId ? "drag-over" : "bg-muted/20"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-semibold text-foreground">
+                              {FINISHED_SUB_LABELS[sub]}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {companiesByFinishedSub(sub).length}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {companiesByFinishedSub(sub).map(renderCompanyCard)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+
             <div
               className={`rounded-xl border bg-card transition-all ${
                 dragOverStage === "preview" && !previewExpanded ? "drag-over" : ""
@@ -482,7 +579,7 @@ export default function Index() {
                           key={sub}
                           onDragOver={(e) => onDragOver(e, dropId)}
                           onDragLeave={onDragLeave}
-                          onDrop={(e) => onDropStage(e, "paid", undefined, sub)}
+                          onDrop={(e) => onDropStage(e, "paid", undefined, undefined, sub)}
                           className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
                             dragOverStage === dropId ? "drag-over" : "bg-muted/20"
                           }`}
