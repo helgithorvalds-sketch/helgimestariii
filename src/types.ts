@@ -33,6 +33,7 @@ export interface Company {
   projectedEarnings: number;
   amountPaid?: number;
   paidDate?: string;
+  nextCallAt?: string;
   createdAt: string;
 }
 

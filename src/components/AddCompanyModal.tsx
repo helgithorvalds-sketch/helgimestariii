@@ -5,10 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface AddCompanyModalProps {
   open: boolean;
@@ -27,6 +31,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [notes, setNotes] = useState("");
   const [personality, setPersonality] = useState("");
   const [duplicateWarning, setDuplicateWarning] = useState("");
+  const [nextCallDate, setNextCallDate] = useState<Date | undefined>();
+  const [nextCallTime, setNextCallTime] = useState("10:00");
 
   // AI paste
   const [aiText, setAiText] = useState("");
@@ -72,6 +78,15 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     if (stage === "preview" && !previewSub) return;
     const price = useCustomPrice ? Number(customPrice) || 0 : selectedPrice;
     const checklist = DEFAULT_CHECKLIST.map((item, i) => ({ ...item, id: `new-${i}` }));
+    
+    let nextCallAt: string | undefined;
+    if (nextCallDate) {
+      const [hours, minutes] = nextCallTime.split(":").map(Number);
+      const dt = new Date(nextCallDate);
+      dt.setHours(hours, minutes, 0, 0);
+      nextCallAt = dt.toISOString();
+    }
+    
     onAdd({
       name: name.trim(),
       owner: "",
@@ -85,6 +100,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       personalityDescription: personality,
       previewSent: false,
       projectedEarnings: price,
+      nextCallAt,
     });
     resetForm();
     onClose();
@@ -94,6 +110,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setName(""); setStage("email_sent"); setPreviewSub(undefined);
     setSelectedPrice(160000); setUseCustomPrice(false); setCustomPrice("");
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
+    setNextCallDate(undefined); setNextCallTime("10:00");
   };
 
   // Filter out "registered" from stage options in the form
@@ -220,6 +237,42 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             {useCustomPrice && (
               <Input type="number" placeholder="Sláðu inn verð..." value={customPrice} onChange={(e) => setCustomPrice(e.target.value)} className="mt-2" />
             )}
+          </div>
+
+          {/* Next call date/time */}
+          <div className="space-y-2">
+            <Label>Næsta símtal</Label>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "flex-1 justify-start text-left font-normal",
+                      !nextCallDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {nextCallDate ? format(nextCallDate, "dd.MM.yyyy") : "Veldu dagsetningu"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={nextCallDate}
+                    onSelect={setNextCallDate}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+              <Input
+                type="time"
+                value={nextCallTime}
+                onChange={(e) => setNextCallTime(e.target.value)}
+                className="w-28"
+              />
+            </div>
           </div>
 
           {/* Notes */}

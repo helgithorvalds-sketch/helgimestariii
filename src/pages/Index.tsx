@@ -4,6 +4,7 @@ import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PRE
 import { fetchCompanies, addCompany, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { StageBadge } from "@/components/StageBadge";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
+import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
 import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
@@ -273,6 +274,9 @@ export default function Index() {
                 </div>
               )}
             </div>
+
+            {/* Call Schedule */}
+            <CallSchedule companies={companies} onCompanyClick={setSelectedCompany} />
           </div>
         )}
       </main>
