@@ -10,6 +10,10 @@ export type PreviewSubStatus =
   | "fifty_fifty" 
   | "needed_website";
 
+export type FinishedSubStatus =
+  | "lokid"
+  | "krafa";
+
 export type PaidSubStatus =
   | "fully_paid"
   | "partially_paid";
@@ -31,6 +35,7 @@ export interface Company {
   phone?: string;
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;
+  finishedSubStatus?: FinishedSubStatus;
   paidSubStatus?: PaidSubStatus;
   estimatedPrice: number;
   customPrice?: number;
@@ -63,6 +68,16 @@ export const PREVIEW_SUB_ORDER: PreviewSubStatus[] = [
   "sold_preview",
   "fifty_fifty",
   "needed_website",
+];
+
+export const FINISHED_SUB_LABELS: Record<FinishedSubStatus, string> = {
+  lokid: "Lokið",
+  krafa: "Krafa",
+};
+
+export const FINISHED_SUB_ORDER: FinishedSubStatus[] = [
+  "lokid",
+  "krafa",
 ];
 
 export const PAID_SUB_LABELS: Record<PaidSubStatus, string> = {
