@@ -64,6 +64,17 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   const formatPrice = (n: number) =>
     n.toLocaleString("is-IS") + " kr.";
 
+  const getDaysUntil = (dateStr: string) => {
+    const now = new Date();
+    const target = parseISO(dateStr);
+    const diffMs = target.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays < 0) return `${Math.abs(diffDays)} dögum síðan`;
+    if (diffDays === 0) return "Í dag";
+    if (diffDays === 1) return "Á morgun";
+    return `Eftir ${diffDays} daga`;
+  };
+
   // ─── VIEW MODE ───
   const renderViewMode = () => (
     <div className="space-y-4 pt-2">
@@ -95,41 +106,54 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             </a>
           </div>
         )}
-        {company.companyId && (
-          <div className="flex items-center gap-3">
-            <span className="text-muted-foreground text-sm w-24 flex-shrink-0">Kennitala</span>
-            <span className="text-sm font-medium text-foreground">{company.companyId}</span>
-          </div>
-        )}
       </div>
 
       {/* Links */}
-      {(company.websiteUrl || company.finnaUrl) && (
-        <div className="flex flex-wrap gap-2">
-          {company.websiteUrl && (
-            <a
-              href={company.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              Vefsíða
-              <ExternalLink className="w-3 h-3 text-muted-foreground" />
-            </a>
-          )}
-          {company.finnaUrl && (
-            <a
-              href={company.finnaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              Finna
-              <ExternalLink className="w-3 h-3 text-muted-foreground" />
-            </a>
-          )}
+      <div className="flex flex-wrap gap-2">
+        {company.finnaUrl && (
+          <a
+            href={company.finnaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Finna.is
+            <ExternalLink className="w-3 h-3 text-muted-foreground" />
+          </a>
+        )}
+        {company.websiteUrl && (
+          <a
+            href={company.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            Vefsíða
+            <ExternalLink className="w-3 h-3 text-muted-foreground" />
+          </a>
+        )}
+      </div>
+
+      {/* Next call with countdown */}
+      {company.nextCallAt && (
+        <div className="flex items-center gap-3 rounded-lg border p-3">
+          <CalendarIcon className="w-4 h-4 text-primary flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-xs text-muted-foreground">Næsta símtal</p>
+            <p className="text-sm font-medium text-foreground">
+              {format(parseISO(company.nextCallAt), "dd.MM.yyyy · HH:mm")}
+            </p>
+          </div>
+          <span className={cn(
+            "text-xs font-semibold px-2.5 py-1 rounded-full",
+            parseISO(company.nextCallAt).getTime() < Date.now()
+              ? "bg-destructive/10 text-destructive"
+              : "bg-primary/10 text-primary"
+          )}>
+            {getDaysUntil(company.nextCallAt)}
+          </span>
         </div>
       )}
 
@@ -175,19 +199,6 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         </div>
       )}
 
-      {/* Next call */}
-      {company.nextCallAt && (
-        <div className="flex items-center gap-3 rounded-lg border p-3">
-          <CalendarIcon className="w-4 h-4 text-primary flex-shrink-0" />
-          <div>
-            <p className="text-xs text-muted-foreground">Næsta símtal</p>
-            <p className="text-sm font-medium text-foreground">
-              {format(parseISO(company.nextCallAt), "dd.MM.yyyy · HH:mm")}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Checklist */}
       <div className="space-y-2">
         <Label className="text-sm font-semibold">Gátlisti</Label>
@@ -205,13 +216,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         </div>
       </div>
 
-      {/* Personality / Notes */}
-      {company.personalityDescription && (
-        <div className="space-y-1">
-          <Label className="text-sm font-semibold">Lýsing</Label>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap rounded-lg border p-3">{company.personalityDescription}</p>
-        </div>
-      )}
+      {/* Notes */}
       {company.notes && (
         <div className="space-y-1">
           <Label className="text-sm font-semibold">Athugasemdir</Label>
