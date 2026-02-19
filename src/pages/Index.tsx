@@ -272,6 +272,16 @@ export default function Index() {
               </div>
             )}
 
+            {/* Email */}
+            {company.email && (
+              <div className="flex items-center gap-1.5 text-sm">
+                <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                <a href={`mailto:${company.email}`} className="font-medium text-muted-foreground hover:text-foreground transition-colors" onClick={(e) => e.stopPropagation()}>
+                  {company.email}
+                </a>
+              </div>
+            )}
+
             {/* Vefsíður dropdown */}
             {(company.websiteUrl || company.finnaUrl) && (
               <div>
