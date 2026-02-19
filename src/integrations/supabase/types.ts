@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      call_logs: {
+        Row: {
+          called_at: string
+          company_id: string
+          created_at: string
+          id: string
+          notes: string
+        }
+        Insert: {
+          called_at?: string
+          company_id: string
+          created_at?: string
+          id?: string
+          notes?: string
+        }
+        Update: {
+          called_at?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          notes?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_logs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           amount_paid: number | null
