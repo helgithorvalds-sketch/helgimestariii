@@ -59,6 +59,9 @@ export type Database = {
           finna_url: string | null
           id: string
           logo_url: string | null
+          monthly_payment_active: boolean
+          monthly_payment_amount: number | null
+          monthly_payment_start_date: string | null
           name: string
           next_call_at: string | null
           notes: string
@@ -86,6 +89,9 @@ export type Database = {
           finna_url?: string | null
           id?: string
           logo_url?: string | null
+          monthly_payment_active?: boolean
+          monthly_payment_amount?: number | null
+          monthly_payment_start_date?: string | null
           name: string
           next_call_at?: string | null
           notes?: string
@@ -113,6 +119,9 @@ export type Database = {
           finna_url?: string | null
           id?: string
           logo_url?: string | null
+          monthly_payment_active?: boolean
+          monthly_payment_amount?: number | null
+          monthly_payment_start_date?: string | null
           name?: string
           next_call_at?: string | null
           notes?: string

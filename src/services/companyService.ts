@@ -26,6 +26,9 @@ function rowToCompany(row: any): Company {
     projectedEarnings: row.projected_earnings,
     amountPaid: row.amount_paid,
     paidDate: row.paid_date,
+    monthlyPaymentAmount: row.monthly_payment_amount,
+    monthlyPaymentStartDate: row.monthly_payment_start_date,
+    monthlyPaymentActive: row.monthly_payment_active ?? false,
     nextCallAt: row.next_call_at,
     createdAt: row.created_at,
   };
@@ -55,6 +58,9 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     projected_earnings: company.projectedEarnings,
     amount_paid: company.amountPaid || null,
     paid_date: company.paidDate || null,
+    monthly_payment_amount: company.monthlyPaymentAmount || null,
+    monthly_payment_start_date: company.monthlyPaymentStartDate || null,
+    monthly_payment_active: company.monthlyPaymentActive ?? false,
     next_call_at: company.nextCallAt || null,
   };
 }

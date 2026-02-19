@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
@@ -147,6 +147,34 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         )}
       </div>
 
+      {/* Monthly Payment */}
+      {(company.monthlyPaymentAmount || company.monthlyPaymentActive) && (
+        <div className="rounded-lg border p-3 space-y-2">
+          <div className="flex items-center gap-2 mb-1">
+            <Repeat className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Mánaðarleg greiðsla</span>
+          </div>
+          {company.monthlyPaymentAmount && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Upphæð</span>
+              <span className="text-sm font-bold text-foreground">{formatPrice(company.monthlyPaymentAmount)}</span>
+            </div>
+          )}
+          {company.monthlyPaymentStartDate && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Byrjunardagur</span>
+              <span className="text-sm font-medium text-foreground">{format(new Date(company.monthlyPaymentStartDate), "dd.MM.yyyy")}</span>
+            </div>
+          )}
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Staða</span>
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${company.monthlyPaymentActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+              {company.monthlyPaymentActive ? "Virkt" : "Óvirkt"}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Next call */}
       {company.nextCallAt && (
         <div className="flex items-center gap-3 rounded-lg border p-3">
@@ -278,6 +306,56 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
       <div className="space-y-1.5">
         <Label>Borgað</Label>
         <Input type="number" value={editedCompany.amountPaid || ""} onChange={(e) => updateField("amountPaid", Number(e.target.value))} placeholder="Upphæð..." />
+      </div>
+
+      {/* Monthly Payment */}
+      <div className="space-y-3 rounded-lg border p-3">
+        <div className="flex items-center gap-2">
+          <Repeat className="w-4 h-4 text-primary" />
+          <Label className="text-sm font-semibold">Mánaðarleg greiðsla</Label>
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-xs text-muted-foreground">Upphæð á mánuði</Label>
+          <Input
+            type="number"
+            value={editedCompany.monthlyPaymentAmount || ""}
+            onChange={(e) => updateField("monthlyPaymentAmount", Number(e.target.value) || undefined)}
+            placeholder="Upphæð í kr..."
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-xs text-muted-foreground">Byrjunardagur greiðslu</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !editedCompany.monthlyPaymentStartDate && "text-muted-foreground")}>
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {editedCompany.monthlyPaymentStartDate ? format(new Date(editedCompany.monthlyPaymentStartDate), "dd.MM.yyyy") : "Veldu dagsetningu"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={editedCompany.monthlyPaymentStartDate ? new Date(editedCompany.monthlyPaymentStartDate) : undefined}
+                onSelect={(date) => updateField("monthlyPaymentStartDate", date ? format(date, "yyyy-MM-dd") : undefined)}
+                initialFocus
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <Button
+          variant={editedCompany.monthlyPaymentActive ? "destructive" : "default"}
+          size="sm"
+          className="w-full gap-2"
+          disabled={!editedCompany.monthlyPaymentAmount}
+          onClick={() => updateField("monthlyPaymentActive", !editedCompany.monthlyPaymentActive)}
+        >
+          {editedCompany.monthlyPaymentActive ? (
+            <><Pause className="w-4 h-4" /> Stöðva mánaðarlega greiðslu</>
+          ) : (
+            <><Play className="w-4 h-4" /> Byrja að rekja mánaðarlega greiðslu</>
+          )}
+        </Button>
       </div>
 
       {/* Checklist */}

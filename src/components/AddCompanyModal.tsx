@@ -116,6 +116,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       personalityDescription: personality,
       previewSent: false,
       projectedEarnings: price,
+      monthlyPaymentActive: false,
       nextCallAt,
       websiteUrl: websiteUrl.trim() || undefined,
       finnaUrl: finnaUrl.trim() || undefined,
