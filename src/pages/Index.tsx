@@ -220,89 +220,16 @@ export default function Index() {
       draggable
       onDragStart={(e) => onDragStart(e, company.id)}
       onClick={() => setSelectedCompany(company)}
-      className={`rounded-xl border bg-background p-4 cursor-pointer shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group ${
+      className={`rounded-xl border bg-background px-3 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group ${
         draggedId === company.id ? "opacity-40 scale-95" : ""
       }`}
     >
-      <div className="flex items-start gap-3">
-        <GripVertical className="w-4 h-4 text-muted-foreground/40 opacity-0 group-hover:opacity-100 mt-1 flex-shrink-0 cursor-grab transition-opacity" />
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-sm text-foreground truncate">{company.name}</p>
-          {company.owner && (
-            <p className="text-xs text-muted-foreground truncate mt-0.5">{company.owner}</p>
-          )}
-          {company.phone && (
-            <p className="text-xs text-muted-foreground mt-0.5">📞 {company.phone}</p>
-          )}
-          {(company.websiteUrl || company.finnaUrl) && (
-            <div className="relative mt-1.5">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenWebsitesId(openWebsitesId === company.id ? null : company.id);
-                }}
-                className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                Vefsíður
-                <ChevronDown className={`w-3 h-3 transition-transform ${openWebsitesId === company.id ? "rotate-180" : ""}`} />
-              </button>
-              {openWebsitesId === company.id && (
-                <div className="absolute left-0 top-full mt-1 z-50 bg-card border rounded-lg shadow-lg p-1.5 min-w-[180px] space-y-0.5">
-                  {company.websiteUrl && (
-                    <a
-                      href={company.websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-semibold text-primary hover:bg-primary/10 transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      Helgi vefsíða
-                      <ExternalLink className="w-3 h-3 ml-auto" />
-                    </a>
-                  )}
-                  {company.finnaUrl && (
-                    <a
-                      href={company.finnaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
-                    >
-                      <Globe className="w-3.5 h-3.5" />
-                      Upprunaleg vefsíða
-                      <ExternalLink className="w-3 h-3 ml-auto" />
-                    </a>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-          {company.paidSubStatus === "partially_paid" && company.amountPaid ? (
-            <p className="text-sm font-bold mt-2">
-              <span className="text-green-600">{formatPrice(company.amountPaid)}</span>
-              <span className="text-muted-foreground mx-1">/</span>
-              <span className="text-foreground">{formatPrice(company.estimatedPrice)}</span>
-            </p>
-          ) : (
-            <p className="text-sm text-primary font-bold mt-2">
-              {formatPrice(company.estimatedPrice)}
-            </p>
-          )}
-          {company.checklist.length > 0 && (
-            <div className="mt-3">
-              <div className="flex gap-1">
-                {company.checklist.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`h-1.5 flex-1 rounded-full transition-colors ${item.checked ? "bg-primary" : "bg-border"}`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+      <div className="flex items-center gap-2">
+        <GripVertical className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 flex-shrink-0 cursor-grab transition-opacity" />
+        <p className="font-semibold text-sm text-foreground truncate flex-1">{company.name}</p>
+        <span className="text-xs text-muted-foreground font-medium flex-shrink-0">
+          {formatPrice(company.estimatedPrice)}
+        </span>
       </div>
     </div>
   );
