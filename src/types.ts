@@ -93,8 +93,6 @@ export const DEFAULT_CHECKLIST: Omit<ChecklistItem, "id">[] = [
 ];
 
 export const PRICE_OPTIONS = [
-  { label: "160.000 kr.", value: 160000 },
-  { label: "180.000 kr.", value: 180000 },
-  { label: "200.000 kr.", value: 200000 },
-  { label: "220.000 kr.", value: 220000 },
+  { label: "160 - 200.000 kr.", value: 160000 },
+  { label: "300.000+ kr.", value: 300000 },
 ];
