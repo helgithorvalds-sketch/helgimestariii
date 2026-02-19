@@ -26,18 +26,17 @@ serve(async (req) => {
             role: "system",
             content: `You are a data extraction assistant. The user will paste text copied from finna.is (an Icelandic business directory). Extract structured information.
 
-The text is ALWAYS from a finna.is company page. The URL pattern is: https://www.finna.is/fyrirtaeki/<ID>/<company-slug>
-
 Extract:
 - name: company name
 - owner: owner/contact person name (leave empty if not explicitly mentioned as a person's name)
 - companyId: kennitala / kt. number (e.g. "7012922439")
 - websiteUrl: the company's OWN website (NOT finna.is)
-- finnaUrl: the finna.is URL for this company. If you see one in the text, use it. Otherwise construct it from the company name.
+- finnaUrl: ONLY extract a finna.is URL if one appears VERBATIM in the pasted text. The finna.is internal ID is a short alphanumeric code (like "emwwNY"), NOT the kennitala. NEVER construct or guess a finna.is URL. If no finna.is URL is present in the text, return an empty string.
 - estimatedPrice: default 160000
 - stage: default "email_sent"
 
-IMPORTANT: Do NOT extract phone numbers. Do NOT fill in notes. Leave phone and notes empty.`
+IMPORTANT: Do NOT extract phone numbers. Do NOT fill in notes. Leave phone and notes empty.
+CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
           },
           { role: "user", content: text }
         ],
