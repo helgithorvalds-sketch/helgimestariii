@@ -480,7 +480,7 @@ export default function Index() {
                   if (!previewExpanded) setPreviewExpanded(true);
                 }}
                 onDragLeave={onDragLeave}
-                onDrop={(e) => onDropStage(e, "preview")}
+                onDrop={(e) => onDropStage(e, "preview", "sold_preview")}
                 className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
               >
                 <div className="flex items-center gap-3">
@@ -555,7 +555,7 @@ export default function Index() {
                   if (!finishedExpanded) setFinishedExpanded(true);
                 }}
                 onDragLeave={onDragLeave}
-                onDrop={(e) => onDropStage(e, "finished")}
+                onDrop={(e) => onDropStage(e, "finished", undefined, "not_contacted")}
                 className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
               >
                 <div className="flex items-center gap-3">
