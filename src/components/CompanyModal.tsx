@@ -238,10 +238,16 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
 
   // ─── EDIT MODE ───
   const renderEditMode = () => (
-    <div className="space-y-5 pt-2">
+    <div className="space-y-4 pt-2">
       <Button variant="ghost" size="sm" onClick={() => { setEditMode(false); setEditedCompany(company); }} className="gap-1.5 -ml-2 text-muted-foreground">
         <ArrowLeft className="w-4 h-4" /> Til baka
       </Button>
+
+      {/* Company name */}
+      <div className="space-y-1.5">
+        <Label>Nafn fyrirtækis <span className="text-destructive">*</span></Label>
+        <Input value={editedCompany.name} onChange={(e) => updateField("name", e.target.value)} placeholder="Nafn..." />
+      </div>
 
       {/* Finna URL */}
       <div className="space-y-1.5">
@@ -256,36 +262,33 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         </div>
       </div>
 
-      {/* Website URL */}
+      {/* Current website */}
       <div className="space-y-1.5">
         <Label className="flex items-center gap-1.5"><Globe className="w-4 h-4" /> Núverandi vefsíða</Label>
         <Input value={editedCompany.websiteUrl || ""} onChange={(e) => updateField("websiteUrl", e.target.value)} placeholder="https://..." type="url" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-1.5">
-          <Label>Eigandi</Label>
-          <Input value={editedCompany.owner} onChange={(e) => updateField("owner", e.target.value)} />
-        </div>
-        <div className="space-y-1.5">
-          <Label className="flex items-center gap-1.5"><Phone className="w-4 h-4" /> Sími</Label>
-          <Input value={editedCompany.phone || ""} onChange={(e) => updateField("phone", e.target.value)} placeholder="Símanúmer..." />
-        </div>
+      {/* Contact person */}
+      <div className="space-y-1.5">
+        <Label>Tengiliður <span className="text-destructive">*</span></Label>
+        <Input value={editedCompany.owner} onChange={(e) => updateField("owner", e.target.value)} placeholder="Nafn tengiliðs..." />
       </div>
 
+      {/* Phone */}
+      <div className="space-y-1.5">
+        <Label className="flex items-center gap-1.5"><Phone className="w-4 h-4" /> Sími</Label>
+        <Input value={editedCompany.phone || ""} onChange={(e) => updateField("phone", e.target.value)} placeholder="Símanúmer..." />
+      </div>
+
+      {/* Email */}
       <div className="space-y-1.5">
         <Label className="flex items-center gap-1.5"><Mail className="w-4 h-4" /> Netfang</Label>
         <Input value={editedCompany.email || ""} onChange={(e) => updateField("email", e.target.value)} placeholder="netfang@fyrirtaeki.is" type="email" />
       </div>
 
-      <div className="space-y-1.5">
-        <Label>ID / Kennitala</Label>
-        <Input value={editedCompany.companyId} onChange={(e) => updateField("companyId", e.target.value)} />
-      </div>
-
       {/* Stage */}
       <div className="space-y-2">
-        <Label>Staða</Label>
+        <Label>Staða fyrirtækis</Label>
         <div className="flex flex-wrap gap-2">
           {STAGE_ORDER.map((s) => (
             <button key={s} onClick={() => updateField("stage", s)} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${editedCompany.stage === s ? "ring-2 ring-primary ring-offset-1 scale-105" : "opacity-60 hover:opacity-100"}`}>
@@ -295,17 +298,16 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         </div>
       </div>
 
-      {/* Price */}
+      {/* Meistaraverk link */}
       <div className="space-y-1.5">
-        <Label>Áætlað verð</Label>
-        <Input type="number" value={editedCompany.estimatedPrice} onChange={(e) => updateField("estimatedPrice", Number(e.target.value))} />
-        <p className="text-xs text-muted-foreground">{formatPrice(editedCompany.estimatedPrice)}</p>
+        <Label className="flex items-center gap-1.5"><Globe className="w-4 h-4" /> Tengill á meistaraverkið</Label>
+        <Input value={editedCompany.logoUrl || ""} onChange={(e) => updateField("logoUrl", e.target.value)} placeholder="https://..." type="url" />
       </div>
 
-      {/* Payment */}
+      {/* Amount paid */}
       <div className="space-y-1.5">
         <Label>Borgað</Label>
-        <Input type="number" value={editedCompany.amountPaid || ""} onChange={(e) => updateField("amountPaid", Number(e.target.value))} placeholder="Upphæð..." />
+        <Input type="number" value={editedCompany.amountPaid || ""} onChange={(e) => updateField("amountPaid", Number(e.target.value))} placeholder="Upphæð í kr..." />
       </div>
 
       {/* Monthly Payment */}
@@ -358,31 +360,6 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         </Button>
       </div>
 
-      {/* Checklist */}
-      <div className="space-y-2">
-        <Label>Gátlisti</Label>
-        <div className="space-y-1.5 rounded-lg border p-3">
-          {editedCompany.checklist.map((item) => (
-            <label key={item.id} className="flex items-center gap-3 py-1 cursor-pointer hover:bg-muted/50 rounded px-1 -mx-1">
-              <Checkbox checked={item.checked} onCheckedChange={() => toggleChecklist(item.id)} />
-              <span className={`text-sm ${item.checked ? "line-through text-muted-foreground" : ""}`}>{item.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Personality */}
-      <div className="space-y-1.5">
-        <Label>Lýsing á fyrirtæki</Label>
-        <Textarea value={editedCompany.personalityDescription} onChange={(e) => updateField("personalityDescription", e.target.value)} rows={2} />
-      </div>
-
-      {/* Notes */}
-      <div className="space-y-1.5">
-        <Label>Athugasemdir</Label>
-        <Textarea value={editedCompany.notes} onChange={(e) => updateField("notes", e.target.value)} rows={2} />
-      </div>
-
       {/* Next call */}
       <div className="space-y-2">
         <Label>Næsta símtal</Label>
@@ -424,6 +401,12 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             className="w-28"
           />
         </div>
+      </div>
+
+      {/* Notes */}
+      <div className="space-y-1.5">
+        <Label>Athugasemdir</Label>
+        <Textarea value={editedCompany.notes} onChange={(e) => updateField("notes", e.target.value)} rows={3} />
       </div>
 
       {/* Save */}
