@@ -71,10 +71,13 @@ export default function Index() {
     companies.filter((c) => c.stage === stage);
 
   const totalEarned = companies
-    .filter((c) => c.stage === "paid" && c.amountPaid)
+    .filter((c) => c.amountPaid)
     .reduce((sum, c) => sum + (c.amountPaid || 0), 0);
 
-  const paidCompanies = companies.filter((c) => c.stage === "paid" && c.amountPaid);
+  const totalProjected = companies
+    .reduce((sum, c) => sum + (c.projectedEarnings || 0), 0);
+
+  const paidCompanies = companies.filter((c) => c.amountPaid);
 
   const formatPrice = (n: number) => n.toLocaleString("is-IS") + " kr.";
 
@@ -157,29 +160,51 @@ export default function Index() {
           ))}
         </div>
 
-        {/* Earnings Summary */}
-        {paidCompanies.length > 0 && (
+        {/* Earnings Dashboard */}
+        {companies.length > 0 && (
           <div className="rounded-xl border bg-card p-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-5">
               <DollarSign className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-bold text-foreground">Hagnaður</h2>
+              <h2 className="text-lg font-bold text-foreground">Fjárhagur</h2>
             </div>
-            <p className="text-3xl font-bold text-primary mb-4">{formatPrice(totalEarned)}</p>
-            <div className="space-y-2">
-              {paidCompanies.map((c) => (
+
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="rounded-lg bg-accent/50 p-4">
+                <p className="text-xs text-muted-foreground mb-1">Áætlaður hagnaður</p>
+                <p className="text-2xl font-bold text-primary">{formatPrice(totalProjected)}</p>
+              </div>
+              <div className="rounded-lg bg-accent/50 p-4">
+                <p className="text-xs text-muted-foreground mb-1">Innleyst</p>
+                <p className="text-2xl font-bold text-foreground">{formatPrice(totalEarned)}</p>
+              </div>
+              <div className="rounded-lg bg-accent/50 p-4">
+                <p className="text-xs text-muted-foreground mb-1">Eftir</p>
+                <p className="text-2xl font-bold text-muted-foreground">{formatPrice(totalProjected - totalEarned)}</p>
+              </div>
+            </div>
+
+            {/* Per-company breakdown */}
+            <div className="space-y-1">
+              <div className="grid grid-cols-4 text-xs font-medium text-muted-foreground px-2 pb-2">
+                <span>Fyrirtæki</span>
+                <span className="text-right">Áætlað</span>
+                <span className="text-right">Greitt</span>
+                <span className="text-right">Staða</span>
+              </div>
+              {companies.map((c) => (
                 <div
                   key={c.id}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
+                  className="grid grid-cols-4 items-center py-2 px-2 rounded-md hover:bg-muted/50 text-sm"
                 >
                   <div>
-                    <p className="font-medium text-sm">{c.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {c.owner} · {c.paidDate || "—"}
-                    </p>
+                    <p className="font-medium truncate">{c.name}</p>
+                    <p className="text-xs text-muted-foreground">{c.owner}</p>
                   </div>
-                  <p className="font-bold text-sm text-primary">
-                    {formatPrice(c.amountPaid || 0)}
-                  </p>
+                  <p className="text-right text-muted-foreground">{formatPrice(c.projectedEarnings || 0)}</p>
+                  <p className="text-right font-medium">{c.amountPaid ? formatPrice(c.amountPaid) : "—"}</p>
+                  <div className="flex justify-end">
+                    <StageBadge stage={c.stage} />
+                  </div>
                 </div>
               ))}
             </div>

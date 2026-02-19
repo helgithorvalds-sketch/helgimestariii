@@ -30,6 +30,7 @@ export interface Company {
   notes: string;
   personalityDescription: string;
   previewSent: boolean;
+  projectedEarnings: number;
   amountPaid?: number;
   paidDate?: string;
   createdAt: string;
