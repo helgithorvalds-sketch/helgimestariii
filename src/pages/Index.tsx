@@ -109,27 +109,27 @@ export default function Index() {
       draggable
       onDragStart={(e) => onDragStart(e, company.id)}
       onClick={() => setSelectedCompany(company)}
-      className={`rounded-lg border bg-background p-3 cursor-pointer hover:shadow-md transition-all group ${
-        draggedId === company.id ? "opacity-40" : ""
+      className={`rounded-xl border bg-background p-4 cursor-pointer shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group ${
+        draggedId === company.id ? "opacity-40 scale-95" : ""
       }`}
     >
-      <div className="flex items-start gap-2">
-        <GripVertical className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 mt-0.5 flex-shrink-0 cursor-grab" />
+      <div className="flex items-start gap-3">
+        <GripVertical className="w-4 h-4 text-muted-foreground/40 opacity-0 group-hover:opacity-100 mt-1 flex-shrink-0 cursor-grab transition-opacity" />
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-sm text-foreground truncate">{company.name}</p>
+          <p className="font-semibold text-sm text-foreground truncate">{company.name}</p>
           {company.owner && (
-            <p className="text-xs text-muted-foreground truncate">{company.owner}</p>
+            <p className="text-xs text-muted-foreground truncate mt-0.5">{company.owner}</p>
           )}
-          <p className="text-xs text-primary font-medium mt-1">
+          <p className="text-sm text-primary font-bold mt-2">
             {formatPrice(company.estimatedPrice)}
           </p>
           {company.checklist.length > 0 && (
-            <div className="mt-2">
-              <div className="flex gap-0.5">
+            <div className="mt-3">
+              <div className="flex gap-1">
                 {company.checklist.map((item) => (
                   <div
                     key={item.id}
-                    className={`h-1 flex-1 rounded-full ${item.checked ? "bg-primary" : "bg-border"}`}
+                    className={`h-1.5 flex-1 rounded-full transition-colors ${item.checked ? "bg-primary" : "bg-border"}`}
                   />
                 ))}
               </div>
@@ -146,21 +146,21 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card px-6 py-4">
+      <header className="border-b bg-card shadow-sm px-6 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={logo} alt="Logo" className="w-10 h-10 rounded-lg" />
+          <div className="flex items-center gap-4">
+            <img src={logo} alt="Logo" className="w-11 h-11 rounded-xl shadow-sm" />
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Verkefnastjórnun</h1>
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">Verkefnastjórnun</h1>
               <p className="text-sm text-muted-foreground">Haldtu utan um fyrirtæki og verkefni</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2">
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
             </Button>
-            <Button onClick={() => setAddOpen(true)} className="gap-2">
+            <Button onClick={() => setAddOpen(true)} className="gap-2 shadow-sm">
               <Plus className="w-4 h-4" />
               Nýtt fyrirtæki
             </Button>
@@ -174,55 +174,71 @@ export default function Index() {
             <p className="text-muted-foreground">Hleð...</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {/* Main stage columns */}
-            <div className="grid grid-cols-4 gap-4">
-              {mainStages.map((stage) => (
-                <div
-                  key={stage}
-                  onDragOver={(e) => onDragOver(e, stage)}
-                  onDragLeave={onDragLeave}
-                  onDrop={(e) => onDropStage(e, stage)}
-                  className={`rounded-xl border bg-card p-3 min-h-[220px] transition-all ${
-                    dragOverStage === stage ? "drag-over" : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <StageBadge stage={stage} size="md" />
-                    <span className="text-xs text-muted-foreground font-medium">
-                      {companiesByStage(stage).length}
-                    </span>
+            <div className="grid grid-cols-4 gap-5">
+              {mainStages.map((stage) => {
+                const count = companiesByStage(stage).length;
+                return (
+                  <div
+                    key={stage}
+                    onDragOver={(e) => onDragOver(e, stage)}
+                    onDragLeave={onDragLeave}
+                    onDrop={(e) => onDropStage(e, stage)}
+                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[280px] transition-all shadow-sm ${
+                      dragOverStage === stage ? "drag-over" : ""
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <StageBadge stage={stage} size="md" />
+                      <span className="text-xs bg-muted text-muted-foreground font-semibold px-2.5 py-1 rounded-full">
+                        {count}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {companiesByStage(stage).map(renderCompanyCard)}
+                    </div>
+                    {count === 0 && (
+                      <div className="flex items-center justify-center h-32 text-muted-foreground/40">
+                        <p className="text-xs">Dragðu fyrirtæki hingað</p>
+                      </div>
+                    )}
                   </div>
-                  <div className="space-y-2">
-                    {companiesByStage(stage).map(renderCompanyCard)}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Nei / Nei en kannski row */}
-            <div className="grid grid-cols-2 gap-4">
-              {rejectStages.map((stage) => (
-                <div
-                  key={stage}
-                  onDragOver={(e) => onDragOver(e, stage)}
-                  onDragLeave={onDragLeave}
-                  onDrop={(e) => onDropStage(e, stage)}
-                  className={`rounded-xl border bg-card p-3 min-h-[120px] transition-all ${
-                    dragOverStage === stage ? "drag-over" : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <StageBadge stage={stage} size="md" />
-                    <span className="text-xs text-muted-foreground font-medium">
-                      {companiesByStage(stage).length}
-                    </span>
+            <div className="grid grid-cols-2 gap-5">
+              {rejectStages.map((stage) => {
+                const count = companiesByStage(stage).length;
+                return (
+                  <div
+                    key={stage}
+                    onDragOver={(e) => onDragOver(e, stage)}
+                    onDragLeave={onDragLeave}
+                    onDrop={(e) => onDropStage(e, stage)}
+                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[140px] transition-all shadow-sm ${
+                      dragOverStage === stage ? "drag-over" : ""
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <StageBadge stage={stage} size="md" />
+                      <span className="text-xs bg-muted text-muted-foreground font-semibold px-2.5 py-1 rounded-full">
+                        {count}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      {companiesByStage(stage).map(renderCompanyCard)}
+                    </div>
+                    {count === 0 && (
+                      <div className="flex items-center justify-center h-12 text-muted-foreground/40">
+                        <p className="text-xs">Dragðu fyrirtæki hingað</p>
+                      </div>
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {companiesByStage(stage).map(renderCompanyCard)}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Sýnishorn (Preview) section - expandable */}
