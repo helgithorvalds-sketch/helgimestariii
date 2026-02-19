@@ -10,6 +10,10 @@ export type PreviewSubStatus =
   | "fifty_fifty" 
   | "needed_website";
 
+export type PaidSubStatus =
+  | "fully_paid"
+  | "partially_paid";
+
 export interface ChecklistItem {
   id: string;
   label: string;
@@ -24,6 +28,7 @@ export interface Company {
   logoUrl?: string;
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;
+  paidSubStatus?: PaidSubStatus;
   estimatedPrice: number;
   customPrice?: number;
   checklist: ChecklistItem[];
@@ -55,6 +60,16 @@ export const PREVIEW_SUB_ORDER: PreviewSubStatus[] = [
   "sold_preview",
   "fifty_fifty",
   "needed_website",
+];
+
+export const PAID_SUB_LABELS: Record<PaidSubStatus, string> = {
+  fully_paid: "Greitt að fullu",
+  partially_paid: "Greitt X",
+};
+
+export const PAID_SUB_ORDER: PaidSubStatus[] = [
+  "fully_paid",
+  "partially_paid",
 ];
 
 export const STAGE_ORDER: CompanyStage[] = [
