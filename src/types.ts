@@ -39,10 +39,22 @@ export interface Company {
 export const STAGE_LABELS: Record<CompanyStage, string> = {
   email_sent: "Tölvupóstur sendur",
   registered: "Skráð",
-  preview: "Forskoðun",
+  preview: "Sýnishorn",
   finished: "Lokið",
   paid: "Greitt",
 };
+
+export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
+  sold_preview: "Selt sýnishorn",
+  fifty_fifty: "50/50",
+  needed_website: "Þarf vefsíðu",
+};
+
+export const PREVIEW_SUB_ORDER: PreviewSubStatus[] = [
+  "sold_preview",
+  "fifty_fifty",
+  "needed_website",
+];
 
 export const STAGE_ORDER: CompanyStage[] = [
   "email_sent",

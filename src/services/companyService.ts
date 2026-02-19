@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Company, CompanyStage, ChecklistItem } from "@/types";
+import { Company, CompanyStage, ChecklistItem, PreviewSubStatus } from "@/types";
 
 // Convert DB row to Company type
 function rowToCompany(row: any): Company {
@@ -100,10 +100,16 @@ export async function deleteCompany(id: string): Promise<boolean> {
   return true;
 }
 
-export async function updateCompanyStage(id: string, stage: CompanyStage): Promise<boolean> {
+export async function updateCompanyStage(id: string, stage: CompanyStage, previewSubStatus?: PreviewSubStatus | null): Promise<boolean> {
+  const updateData: any = { stage };
+  if (stage === "preview" && previewSubStatus) {
+    updateData.preview_sub_status = previewSubStatus;
+  } else if (stage !== "preview") {
+    updateData.preview_sub_status = null;
+  }
   const { error } = await supabase
     .from("companies")
-    .update({ stage })
+    .update(updateData)
     .eq("id", id);
 
   if (error) {
