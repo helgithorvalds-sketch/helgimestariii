@@ -27,21 +27,17 @@ serve(async (req) => {
             content: `You are a data extraction assistant. The user will paste text copied from finna.is (an Icelandic business directory). Extract structured information.
 
 The text is ALWAYS from a finna.is company page. The URL pattern is: https://www.finna.is/fyrirtaeki/<ID>/<company-slug>
-Example: "Finna - VPS Verkfræðiþjónusta" → the finna.is link is something like "https://www.finna.is/fyrirtaeki/XXXXX/vps-verkfraedithjonusta"
 
 Extract:
-- name: company name (e.g. "VPS Verkfræðiþjónusta")
+- name: company name
 - owner: owner/contact person name (leave empty if not explicitly mentioned as a person's name)
 - companyId: kennitala / kt. number (e.g. "7012922439")
-- phone: primary phone number, digits only (e.g. "5671278")
-- websiteUrl: the company's OWN website (e.g. "http://www.vps.is"), NOT finna.is
-- finnaUrl: if a finna.is URL is present in the text, extract it exactly. If not present but you can see the company name, leave empty - the frontend will handle it.
-- email: email address if present (e.g. "tryggvi@vps.is")
-- estimatedPrice: default 160000 (valid range 160000-220000)
-- notes: Put the finna.is link here prominently at the top, then any other info like address, email, facebook link etc.
+- websiteUrl: the company's OWN website (NOT finna.is)
+- finnaUrl: the finna.is URL for this company. If you see one in the text, use it. Otherwise construct it from the company name.
+- estimatedPrice: default 160000
 - stage: default "email_sent"
 
-If you can't find a field, leave it as empty string or default value.`
+IMPORTANT: Do NOT extract phone numbers. Do NOT fill in notes. Leave phone and notes empty.`
           },
           { role: "user", content: text }
         ],
@@ -53,20 +49,17 @@ If you can't find a field, leave it as empty string or default value.`
               description: "Extract structured company data from text",
               parameters: {
                 type: "object",
-                properties: {
-                  name: { type: "string", description: "Company name" },
-                  owner: { type: "string", description: "Owner or contact person name" },
-                  companyId: { type: "string", description: "Kennitala (kt.) number" },
-                  phone: { type: "string", description: "Phone number, digits only" },
-                  websiteUrl: { type: "string", description: "Company's own website URL, NOT finna.is" },
-                  finnaUrl: { type: "string", description: "The finna.is URL for this company" },
-                  email: { type: "string", description: "Email address" },
-                  estimatedPrice: { type: "number", description: "Estimated price in ISK, default 160000" },
-                  notes: { type: "string", description: "Finna.is link at top, then address, email, facebook, etc." },
-                  stage: { type: "string", enum: ["email_sent", "registered", "preview", "finished", "paid"] }
-                },
-                required: ["name", "owner", "companyId", "phone", "websiteUrl", "finnaUrl", "email", "estimatedPrice", "notes", "stage"],
-                additionalProperties: false
+                  properties: {
+                    name: { type: "string", description: "Company name" },
+                    owner: { type: "string", description: "Owner or contact person name" },
+                    companyId: { type: "string", description: "Kennitala (kt.) number" },
+                    websiteUrl: { type: "string", description: "Company's own website URL, NOT finna.is" },
+                    finnaUrl: { type: "string", description: "The finna.is URL for this company" },
+                    estimatedPrice: { type: "number", description: "Estimated price in ISK, default 160000" },
+                    stage: { type: "string", enum: ["email_sent", "registered", "preview", "finished", "paid"] }
+                  },
+                  required: ["name", "owner", "companyId", "websiteUrl", "finnaUrl", "estimatedPrice", "stage"],
+                  additionalProperties: false
               }
             }
           }
