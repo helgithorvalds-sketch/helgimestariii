@@ -142,39 +142,6 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
               {finishingCall.phone && <span className="ml-2">· 📞 {finishingCall.phone}</span>}
             </p>
           </div>
-          {/* Stage selector */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Staða fyrirtækis</label>
-            <div className="flex gap-2">
-              {(["finished", "paid"] as CompanyStage[]).map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setFinishStage(s)}
-                  className={`flex-1 rounded-lg border p-2.5 text-sm font-medium transition-all ${
-                    finishStage === s
-                      ? "border-primary bg-accent text-foreground ring-2 ring-primary ring-offset-1"
-                      : "border-border text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {STAGE_LABELS[s]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Website link */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
-              <Globe className="w-4 h-4" />
-              Tengill á meistaraverkið
-            </label>
-            <Input
-              value={finishWebsiteUrl}
-              onChange={(e) => setFinishWebsiteUrl(e.target.value)}
-              placeholder="https://..."
-              type="url"
-            />
-          </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
