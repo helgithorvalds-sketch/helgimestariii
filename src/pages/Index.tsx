@@ -207,6 +207,9 @@ export default function Index() {
           {company.owner && (
             <p className="text-xs text-muted-foreground truncate mt-0.5">{company.owner}</p>
           )}
+          {company.phone && (
+            <p className="text-xs text-muted-foreground mt-0.5">📞 {company.phone}</p>
+          )}
           <p className="text-sm text-primary font-bold mt-2">
             {formatPrice(company.estimatedPrice)}
           </p>
