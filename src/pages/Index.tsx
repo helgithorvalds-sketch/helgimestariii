@@ -239,7 +239,7 @@ export default function Index() {
     </div>
   );
 
-  const mainStages: CompanyStage[] = ["email_sent", "registered"];
+  const mainStages: CompanyStage[] = ["email_sent"];
 
   return (
     <div className="min-h-screen bg-background">
@@ -301,7 +301,7 @@ export default function Index() {
                 </div>
               );
             })()}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {mainStages.map((stage) => {
                 const count = companiesByStage(stage).length;
                 return (
@@ -331,6 +331,81 @@ export default function Index() {
                   </div>
                 );
               })}
+            </div>
+
+            {/* Sýnishorn (Preview) section - expandable */}
+            <div
+              className={`rounded-xl border bg-card transition-all ${
+                dragOverStage === "preview" && !previewExpanded ? "drag-over" : ""
+              }`}
+            >
+              <button
+                onClick={() => setPreviewExpanded(!previewExpanded)}
+                onDragOver={(e) => {
+                  onDragOver(e, "preview");
+                  if (!previewExpanded) setPreviewExpanded(true);
+                }}
+                onDragLeave={onDragLeave}
+                onDrop={(e) => onDropStage(e, "preview")}
+                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <StageBadge stage="preview" size="md" />
+                  <span className="text-xl font-extrabold text-foreground">
+                    {companiesByStage("preview").length}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    fyrirtæki
+                  </span>
+                </div>
+                {previewExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                )}
+              </button>
+
+              {previewExpanded && (
+                <div className="px-4 pb-4">
+                  {previewUncategorized.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
+                      <div className="flex flex-wrap gap-2">
+                        {previewUncategorized.map(renderCompanyCard)}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-3 gap-4">
+                    {PREVIEW_SUB_ORDER.map((sub) => {
+                      const dropId = `preview_${sub}`;
+                      return (
+                        <div
+                          key={sub}
+                          onDragOver={(e) => onDragOver(e, dropId)}
+                          onDragLeave={onDragLeave}
+                          onDrop={(e) => onDropStage(e, "preview", sub)}
+                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
+                            dragOverStage === dropId ? "drag-over" : "bg-muted/20"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-semibold text-foreground">
+                              {PREVIEW_SUB_LABELS[sub]}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {companiesByPreviewSub(sub).length}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {companiesByPreviewSub(sub).map(renderCompanyCard)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Lokið (Finished) section - expandable */}
@@ -399,85 +474,6 @@ export default function Index() {
                           </div>
                           <div className="space-y-2">
                             {companiesByFinishedSub(sub).map(renderCompanyCard)}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-
-            <div
-              className={`rounded-xl border bg-card transition-all ${
-                dragOverStage === "preview" && !previewExpanded ? "drag-over" : ""
-              }`}
-            >
-              {/* Header - always visible, clickable to expand */}
-              <button
-                onClick={() => setPreviewExpanded(!previewExpanded)}
-                onDragOver={(e) => {
-                  onDragOver(e, "preview");
-                  // Auto-expand when dragging over
-                  if (!previewExpanded) setPreviewExpanded(true);
-                }}
-                onDragLeave={onDragLeave}
-                onDrop={(e) => onDropStage(e, "preview")}
-                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
-              >
-                <div className="flex items-center gap-3">
-                  <StageBadge stage="preview" size="md" />
-                  <span className="text-xl font-extrabold text-foreground">
-                    {companiesByStage("preview").length}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    fyrirtæki
-                  </span>
-                </div>
-                {previewExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                )}
-              </button>
-
-              {/* Expanded content - 3 sub-categories */}
-              {previewExpanded && (
-                <div className="px-4 pb-4">
-                  {/* Uncategorized preview companies */}
-                  {previewUncategorized.length > 0 && (
-                    <div className="mb-4">
-                      <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
-                      <div className="flex flex-wrap gap-2">
-                        {previewUncategorized.map(renderCompanyCard)}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-3 gap-4">
-                    {PREVIEW_SUB_ORDER.map((sub) => {
-                      const dropId = `preview_${sub}`;
-                      return (
-                        <div
-                          key={sub}
-                          onDragOver={(e) => onDragOver(e, dropId)}
-                          onDragLeave={onDragLeave}
-                          onDrop={(e) => onDropStage(e, "preview", sub)}
-                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
-                            dragOverStage === dropId ? "drag-over" : "bg-muted/20"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-semibold text-foreground">
-                              {PREVIEW_SUB_LABELS[sub]}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {companiesByPreviewSub(sub).length}
-                            </span>
-                          </div>
-                          <div className="space-y-2">
-                            {companiesByPreviewSub(sub).map(renderCompanyCard)}
                           </div>
                         </div>
                       );
