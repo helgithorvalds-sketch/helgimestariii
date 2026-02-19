@@ -36,6 +36,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [phone, setPhone] = useState("");
   const [ownerName, setOwnerName] = useState("");
+  const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
 
   // AI paste
@@ -83,6 +84,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
   const handleSubmit = () => {
     if (!name.trim() || duplicateWarning) return;
+    if (!ownerUnknown && !ownerName.trim()) return;
     if (stage === "preview" && !previewSub) return;
     const price = useCustomPrice ? Number(customPrice) || 0 : selectedPrice;
     const checklist = DEFAULT_CHECKLIST.map((item, i) => ({ ...item, id: `new-${i}` }));
@@ -97,7 +99,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     
     onAdd({
       name: name.trim(),
-      owner: ownerName.trim(),
+      owner: ownerUnknown ? "" : ownerName.trim(),
       companyId: companyId.trim(),
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
@@ -122,6 +124,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
     setWebsiteUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
+    setOwnerUnknown(false);
   };
 
   // Filter out "registered" from stage options in the form
@@ -188,24 +191,48 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
           </div>
 
           {/* Owner & Phone */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>Tengiliður</Label>
-              <Input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="Nafn..." />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="flex items-center gap-1.5">
-                <Phone className="w-4 h-4" />
-                Sími
-              </Label>
-              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Símanúmer..." />
-            </div>
+          <div className="space-y-1.5">
+            <Label>Tengiliður *</Label>
+            {!ownerUnknown ? (
+              <div className="flex gap-2">
+                <Input
+                  value={ownerName}
+                  onChange={(e) => setOwnerName(e.target.value)}
+                  placeholder="Nafn tengiliðs..."
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setOwnerUnknown(true); setOwnerName(""); }}
+                  className="whitespace-nowrap text-xs"
+                >
+                  Veit ekki
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 rounded-lg border border-dashed border-muted-foreground/40 p-3">
+                <span className="text-sm text-muted-foreground flex-1">Tengiliður óþekktur</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setOwnerUnknown(false)}
+                  className="text-xs"
+                >
+                  Breyta
+                </Button>
+              </div>
+            )}
           </div>
 
-          {/* Company ID */}
           <div className="space-y-1.5">
-            <Label>Kennitala</Label>
-            <Input value={companyId} onChange={(e) => setCompanyId(e.target.value)} placeholder="Kennitala..." />
+            <Label className="flex items-center gap-1.5">
+              <Phone className="w-4 h-4" />
+              Sími
+            </Label>
+            <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Símanúmer..." />
           </div>
 
           {/* Stage selection */}
@@ -329,7 +356,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub)}
+            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (!ownerUnknown && !ownerName.trim())}
             className="w-full"
           >
             Skrá fyrirtæki
