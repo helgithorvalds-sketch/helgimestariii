@@ -9,7 +9,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import confetti from "canvas-confetti";
@@ -31,6 +31,7 @@ export default function Index() {
   const [openWebsitesId, setOpenWebsitesId] = useState<string | null>(null);
   const [pendingFinishedSub, setPendingFinishedSub] = useState<FinishedSubStatus | null>(null);
   const [finishedExpanded, setFinishedExpanded] = useState(false);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
   const fireConfetti = () => {
     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
@@ -217,27 +218,127 @@ export default function Index() {
 
   const formatPrice = (n: number) => n.toLocaleString("is-IS") + " kr.";
 
-  const renderCompanyCard = (company: Company) => (
-    <div
-      key={company.id}
-      draggable
-      onDragStart={(e) => onDragStart(e, company.id)}
-      onClick={() => setSelectedCompany(company)}
-      className={`rounded-xl border bg-background px-3 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group ${
-        draggedId === company.id ? "opacity-40 scale-95" : ""
-      }`}
-    >
-      <div className="flex items-center gap-2">
-        <GripVertical className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 flex-shrink-0 cursor-grab transition-opacity" />
-        <p className="font-semibold text-sm text-foreground truncate flex-1">{company.name}</p>
-        <span className="text-xs text-muted-foreground font-medium flex-shrink-0">
-          {company.stage === "paid" && company.amountPaid
-            ? formatPrice(company.amountPaid)
-            : formatPrice(company.estimatedPrice)}
-        </span>
+  const renderCompanyCard = (company: Company) => {
+    const isExpanded = expandedCardId === company.id;
+    return (
+      <div
+        key={company.id}
+        draggable={!isExpanded}
+        onDragStart={(e) => { if (!isExpanded) onDragStart(e, company.id); }}
+        onClick={() => {
+          if (!isExpanded) {
+            setExpandedCardId(company.id);
+          }
+        }}
+        className={`rounded-xl border bg-background shadow-sm transition-all duration-200 group ${
+          isExpanded ? "shadow-lg ring-1 ring-primary/20" : "px-3 py-2.5 cursor-pointer hover:shadow-md hover:-translate-y-0.5"
+        } ${draggedId === company.id ? "opacity-40 scale-95" : ""}`}
+      >
+        {!isExpanded ? (
+          <div className="flex items-center gap-2">
+            <GripVertical className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 flex-shrink-0 cursor-grab transition-opacity" />
+            <p className="font-semibold text-sm text-foreground truncate flex-1">{company.name}</p>
+            <span className="text-xs text-muted-foreground font-medium flex-shrink-0">
+              {company.stage === "paid" && company.amountPaid
+                ? formatPrice(company.amountPaid)
+                : formatPrice(company.estimatedPrice)}
+            </span>
+          </div>
+        ) : (
+          <div className="p-4 space-y-3">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-base text-foreground">{company.name}</h3>
+              <button
+                onClick={(e) => { e.stopPropagation(); setExpandedCardId(null); }}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-muted"
+              >
+                <ChevronUp className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Contact info */}
+            <div className="space-y-1.5">
+              {company.owner && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground w-20 flex-shrink-0">Tengiliður</span>
+                  <span className="font-medium text-foreground">{company.owner}</span>
+                </div>
+              )}
+              {company.phone && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                  <a href={`tel:${company.phone}`} className="font-medium text-primary hover:underline">{company.phone}</a>
+                </div>
+              )}
+              {company.email && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Mail className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                  <a href={`mailto:${company.email}`} className="font-medium text-primary hover:underline truncate">{company.email}</a>
+                </div>
+              )}
+            </div>
+
+            {/* Links */}
+            {(company.websiteUrl || company.finnaUrl) && (
+              <div className="flex flex-wrap gap-2">
+                {company.websiteUrl && (
+                  <a
+                    href={company.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    Meistaraverk
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+                {company.finnaUrl && (
+                  <a
+                    href={company.finnaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    Finna
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Price */}
+            <div className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
+              <span className="text-xs text-muted-foreground">Verð</span>
+              <span className="text-sm font-bold text-foreground">{formatPrice(company.estimatedPrice)}</span>
+            </div>
+
+            {/* Notes */}
+            {company.notes && (
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-muted-foreground">Athugasemdir</span>
+                <p className="text-sm text-foreground whitespace-pre-wrap rounded-lg bg-muted/30 p-2">{company.notes}</p>
+              </div>
+            )}
+
+            {/* Breyta button */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full gap-2"
+              onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); }}
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              Breyta
+            </Button>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const mainStages: CompanyStage[] = ["email_sent"];
 
