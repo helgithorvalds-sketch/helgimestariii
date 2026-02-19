@@ -16,9 +16,9 @@ const stageClassMap: Record<CompanyStage, string> = {
 };
 
 export function StageBadge({ stage, size = "sm" }: StageBadgeProps) {
-  const sizeClass = size === "sm" ? "px-2.5 py-0.5 text-xs" : "px-3 py-1 text-sm";
+  const sizeClass = size === "sm" ? "px-2.5 py-0.5 text-xs" : "px-3.5 py-1.5 text-sm";
   return (
-    <span className={`inline-flex items-center rounded-full font-medium ${stageClassMap[stage]} ${sizeClass}`}>
+    <span className={`inline-flex items-center rounded-full font-semibold shadow-sm ${stageClassMap[stage]} ${sizeClass}`}>
       {STAGE_LABELS[stage]}
     </span>
   );
