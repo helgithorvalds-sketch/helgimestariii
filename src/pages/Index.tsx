@@ -245,8 +245,8 @@ export default function Index() {
             </span>
           </div>
         ) : (
-          <div className="p-4 space-y-3">
-            {/* Header */}
+          <div className="p-4 space-y-2">
+            {/* Name */}
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-base text-foreground">{company.name}</h3>
               <button
@@ -257,70 +257,93 @@ export default function Index() {
               </button>
             </div>
 
-            {/* Contact info */}
-            <div className="space-y-1.5">
-              {company.owner && (
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-muted-foreground w-20 flex-shrink-0">Tengiliður</span>
-                  <span className="font-medium text-foreground">{company.owner}</span>
-                </div>
-              )}
-              {company.phone && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Phone className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                  <a href={`tel:${company.phone}`} className="font-medium text-primary hover:underline">{company.phone}</a>
-                </div>
-              )}
-              {company.email && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Mail className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                  <a href={`mailto:${company.email}`} className="font-medium text-primary hover:underline truncate">{company.email}</a>
-                </div>
-              )}
-            </div>
+            {/* Owner in primary color */}
+            {company.owner && (
+              <p className="text-sm font-medium text-primary">{company.owner}</p>
+            )}
 
-            {/* Links */}
+            {/* Phone */}
+            {company.phone && (
+              <div className="flex items-center gap-1.5 text-sm">
+                <Phone className="w-3.5 h-3.5 text-destructive flex-shrink-0" />
+                <a href={`tel:${company.phone}`} className="font-medium text-muted-foreground hover:text-foreground transition-colors" onClick={(e) => e.stopPropagation()}>
+                  {company.phone}
+                </a>
+              </div>
+            )}
+
+            {/* Vefsíður dropdown */}
             {(company.websiteUrl || company.finnaUrl) && (
-              <div className="flex flex-wrap gap-2">
-                {company.websiteUrl && (
-                  <a
-                    href={company.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
-                  >
-                    <Globe className="w-3.5 h-3.5" />
-                    Meistaraverk
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                )}
-                {company.finnaUrl && (
-                  <a
-                    href={company.finnaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    Finna
-                  </a>
+              <div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenWebsitesId(openWebsitesId === company.id ? null : company.id);
+                  }}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Vefsíður</span>
+                  {openWebsitesId === company.id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                </button>
+                {openWebsitesId === company.id && (
+                  <div className="mt-1.5 pl-5 space-y-1.5">
+                    {company.websiteUrl && (
+                      <a
+                        href={company.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        Meistaraverk
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {company.finnaUrl && (
+                      <a
+                        href={company.finnaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Finna
+                      </a>
+                    )}
+                  </div>
                 )}
               </div>
             )}
 
-            {/* Price */}
-            <div className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
-              <span className="text-xs text-muted-foreground">Verð</span>
-              <span className="text-sm font-bold text-foreground">{formatPrice(company.estimatedPrice)}</span>
+            {/* Price: paid / estimated */}
+            <div className="pt-1">
+              {company.amountPaid && company.amountPaid > 0 ? (
+                <p className="text-sm">
+                  <span className="font-bold text-primary">{formatPrice(company.amountPaid)}</span>
+                  <span className="text-muted-foreground"> / {formatPrice(company.estimatedPrice)}</span>
+                </p>
+              ) : (
+                <p className="text-sm font-bold text-foreground">{formatPrice(company.estimatedPrice)}</p>
+              )}
             </div>
 
             {/* Notes */}
             {company.notes && (
-              <div className="space-y-1">
-                <span className="text-xs font-semibold text-muted-foreground">Athugasemdir</span>
-                <p className="text-sm text-foreground whitespace-pre-wrap rounded-lg bg-muted/30 p-2">{company.notes}</p>
+              <p className="text-xs text-muted-foreground whitespace-pre-wrap pt-1">{company.notes}</p>
+            )}
+
+            {/* Checklist progress bar */}
+            {company.checklist.length > 0 && (
+              <div className="pt-1">
+                <div className="w-full h-1.5 rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-primary transition-all"
+                    style={{ width: `${(company.checklist.filter(c => c.checked).length / company.checklist.length) * 100}%` }}
+                  />
+                </div>
               </div>
             )}
 
@@ -328,7 +351,7 @@ export default function Index() {
             <Button
               variant="outline"
               size="sm"
-              className="w-full gap-2"
+              className="w-full gap-2 mt-1"
               onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); }}
             >
               <Pencil className="w-3.5 h-3.5" />
