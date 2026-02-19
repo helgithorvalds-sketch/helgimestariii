@@ -47,6 +47,9 @@ export interface Company {
   projectedEarnings: number;
   amountPaid?: number;
   paidDate?: string;
+  monthlyPaymentAmount?: number;
+  monthlyPaymentStartDate?: string;
+  monthlyPaymentActive: boolean;
   nextCallAt?: string;
   createdAt: string;
 }
