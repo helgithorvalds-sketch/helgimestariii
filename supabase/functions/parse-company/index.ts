@@ -34,6 +34,7 @@ Extract:
 - finnaUrl: ONLY extract a finna.is URL if one appears VERBATIM in the pasted text. The finna.is internal ID is a short alphanumeric code (like "emwwNY"), NOT the kennitala. NEVER construct or guess a finna.is URL. If no finna.is URL is present in the text, return an empty string.
 - estimatedPrice: default 160000
 - stage: default "email_sent"
+- email: try to guess the company's email from their website domain or any email visible in the text. If the website is e.g. example.is, guess info@example.is. Mark it as a guess. If no website or email found, leave empty.
 
 IMPORTANT: Do NOT extract phone numbers. Do NOT fill in notes. Leave phone and notes empty.
 CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
@@ -55,9 +56,10 @@ CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
                     websiteUrl: { type: "string", description: "Company's own website URL, NOT finna.is" },
                     finnaUrl: { type: "string", description: "The finna.is URL for this company" },
                     estimatedPrice: { type: "number", description: "Estimated price in ISK, default 160000" },
-                    stage: { type: "string", enum: ["email_sent", "registered", "preview", "finished", "paid"] }
+                    stage: { type: "string", enum: ["email_sent", "registered", "preview", "finished", "paid"] },
+                    email: { type: "string", description: "Probable email address for the company, guessed from domain if needed" }
                   },
-                  required: ["name", "owner", "companyId", "websiteUrl", "finnaUrl", "estimatedPrice", "stage"],
+                  required: ["name", "owner", "companyId", "websiteUrl", "finnaUrl", "estimatedPrice", "stage", "email"],
                   additionalProperties: false
               }
             }

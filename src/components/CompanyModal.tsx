@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
@@ -133,6 +133,18 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
                 placeholder="Símanúmer..."
               />
             </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label className="flex items-center gap-1.5">
+              <Mail className="w-4 h-4" />
+              Netfang (mögulegt)
+            </Label>
+            <Input
+              value={editedCompany.email || ""}
+              onChange={(e) => updateField("email", e.target.value)}
+              placeholder="netfang@fyrirtaeki.is"
+              type="email"
+            />
           </div>
           <div className="space-y-1.5">
             <Label>ID / Kennitala</Label>
