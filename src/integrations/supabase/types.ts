@@ -61,6 +61,7 @@ export type Database = {
           notes: string
           owner: string
           paid_date: string | null
+          paid_sub_status: string | null
           personality_description: string
           preview_sent: boolean
           preview_sub_status: string | null
@@ -82,6 +83,7 @@ export type Database = {
           notes?: string
           owner?: string
           paid_date?: string | null
+          paid_sub_status?: string | null
           personality_description?: string
           preview_sent?: boolean
           preview_sub_status?: string | null
@@ -103,6 +105,7 @@ export type Database = {
           notes?: string
           owner?: string
           paid_date?: string | null
+          paid_sub_status?: string | null
           personality_description?: string
           preview_sent?: boolean
           preview_sub_status?: string | null
