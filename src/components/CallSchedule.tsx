@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Company } from "@/types";
+import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
 import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2 } from "lucide-react";
 import { StageBadge } from "./StageBadge";
@@ -24,6 +24,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [finishWebsiteUrl, setFinishWebsiteUrl] = useState("");
   const [savingFinish, setSavingFinish] = useState(false);
   const [summarizing, setSummarizing] = useState(false);
+  const [finishStage, setFinishStage] = useState<CompanyStage>("finished");
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -74,6 +75,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
         onCompanyUpdate({
           ...finishingCall,
           nextCallAt: undefined,
+          stage: finishStage,
           websiteUrl: finishWebsiteUrl.trim() || finishingCall.websiteUrl,
         });
       }
@@ -85,6 +87,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setFinishingCall(null);
     setFinishNotes("");
     setFinishWebsiteUrl("");
+    setFinishStage("finished");
   };
 
   const handleSummarize = async () => {
@@ -122,6 +125,27 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
               {finishingCall.phone && <span className="ml-2">· 📞 {finishingCall.phone}</span>}
             </p>
           </div>
+          {/* Stage selector */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Staða fyrirtækis</label>
+            <div className="flex gap-2">
+              {(["finished", "paid"] as CompanyStage[]).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setFinishStage(s)}
+                  className={`flex-1 rounded-lg border p-2.5 text-sm font-medium transition-all ${
+                    finishStage === s
+                      ? "border-primary bg-accent text-foreground ring-2 ring-primary ring-offset-1"
+                      : "border-border text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  {STAGE_LABELS[s]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Website link */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
               <Globe className="w-4 h-4" />
@@ -168,7 +192,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             </Button>
             <Button
               variant="ghost"
-              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); }}
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishStage("finished"); }}
               className="text-muted-foreground"
             >
               Hætta við
