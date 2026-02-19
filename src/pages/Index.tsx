@@ -107,12 +107,15 @@ export default function Index() {
       }
     }
 
-    // If dropping into "partially_paid", prompt for amount
+    // If dropping into "partially_paid", prompt for amount only if not already set
     if (stage === "paid" && paidSub === "partially_paid") {
-      setPendingPaidDrop({ companyId: draggedId, sub: paidSub });
-      setPaidAmountInput("");
-      setDraggedId(null);
-      return;
+      const company = companies.find((c) => c.id === draggedId);
+      if (!company?.amountPaid) {
+        setPendingPaidDrop({ companyId: draggedId, sub: paidSub });
+        setPaidAmountInput("");
+        setDraggedId(null);
+        return;
+      }
     }
 
     // If dropping into "fully_paid", fire confetti
@@ -228,7 +231,9 @@ export default function Index() {
         <GripVertical className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 flex-shrink-0 cursor-grab transition-opacity" />
         <p className="font-semibold text-sm text-foreground truncate flex-1">{company.name}</p>
         <span className="text-xs text-muted-foreground font-medium flex-shrink-0">
-          {formatPrice(company.estimatedPrice)}
+          {company.stage === "paid" && company.amountPaid
+            ? formatPrice(company.amountPaid)
+            : formatPrice(company.estimatedPrice)}
         </span>
       </div>
     </div>
