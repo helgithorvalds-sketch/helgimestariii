@@ -39,6 +39,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [ownerName, setOwnerName] = useState("");
   const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
+  const [paidAmount, setPaidAmount] = useState("");
 
   // AI paste
   const [aiText, setAiText] = useState("");
@@ -85,7 +86,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     if (!name.trim() || duplicateWarning) return;
     if (!ownerUnknown && !ownerName.trim()) return;
     if (stage === "preview" && !previewSub) return;
-    const price = useCustomPrice ? Number(customPrice) || 0 : selectedPrice;
+    const price = stage === "paid" ? (Number(paidAmount) || 0) : (useCustomPrice ? Number(customPrice) || 0 : selectedPrice);
     const checklist = DEFAULT_CHECKLIST.map((item, i) => ({ ...item, id: `new-${i}` }));
     
     let nextCallAt: string | undefined;
@@ -102,7 +103,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       companyId: companyId.trim(),
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
-      estimatedPrice: price,
+      estimatedPrice: stage === "paid" ? price : price,
+      amountPaid: stage === "paid" ? (Number(paidAmount) || undefined) : undefined,
       customPrice: useCustomPrice ? price : undefined,
       checklist,
       notes,
@@ -124,7 +126,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
     setWebsiteUrl(""); setFinnaUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
-    setOwnerUnknown(false);
+    setOwnerUnknown(false); setPaidAmount("");
   };
 
   // Filter out "registered" from stage options in the form
@@ -293,38 +295,69 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             </div>
           )}
 
-          {/* Pricing */}
-          <div className="space-y-2">
-            <Label>Áætlað verð</Label>
-            <RadioGroup
-              value={useCustomPrice ? "custom" : String(selectedPrice)}
-              onValueChange={(val) => {
-                if (val === "custom") { setUseCustomPrice(true); }
-                else { setUseCustomPrice(false); setSelectedPrice(Number(val)); }
-              }}
-            >
-              <div className="grid grid-cols-2 gap-2">
-                {PRICE_OPTIONS.map((opt) => (
-                  <label
-                    key={opt.value}
-                    className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${
-                      !useCustomPrice && selectedPrice === opt.value ? "border-primary bg-accent" : "border-border hover:bg-muted"
-                    }`}
-                  >
-                    <RadioGroupItem value={String(opt.value)} />
-                    <span className="text-sm font-medium">{opt.label}</span>
-                  </label>
-                ))}
-              </div>
-              <label className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${useCustomPrice ? "border-primary bg-accent" : "border-border hover:bg-muted"}`}>
-                <RadioGroupItem value="custom" />
-                <span className="text-sm font-medium">Sérsniðið verð</span>
-              </label>
-            </RadioGroup>
-            {useCustomPrice && (
-              <Input type="number" placeholder="Sláðu inn verð..." value={customPrice} onChange={(e) => setCustomPrice(e.target.value)} className="mt-2" />
-            )}
-          </div>
+          {/* Meistaraverk link - shown for lokið/greitt */}
+          {(stage === "finished" || stage === "paid") && (
+            <div className="space-y-1.5 pl-4 border-l-2 border-primary/30">
+              <Label className="flex items-center gap-1.5 text-sm text-primary">
+                <Globe className="w-4 h-4" />
+                Tengill á meistaraverkið
+              </Label>
+              <Input
+                value={websiteUrl}
+                onChange={(e) => setWebsiteUrl(e.target.value)}
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+          )}
+
+          {/* Paid amount - shown for greitt */}
+          {stage === "paid" && (
+            <div className="space-y-1.5 pl-4 border-l-2 border-primary/30">
+              <Label className="text-sm text-primary">Borgað</Label>
+              <Input
+                type="number"
+                value={paidAmount}
+                onChange={(e) => setPaidAmount(e.target.value)}
+                placeholder="Upphæð í kr..."
+              />
+            </div>
+          )}
+
+          {/* Pricing - hidden when paid */}
+          {stage !== "paid" && (
+            <div className="space-y-2">
+              <Label>Áætlað verð</Label>
+              <RadioGroup
+                value={useCustomPrice ? "custom" : String(selectedPrice)}
+                onValueChange={(val) => {
+                  if (val === "custom") { setUseCustomPrice(true); }
+                  else { setUseCustomPrice(false); setSelectedPrice(Number(val)); }
+                }}
+              >
+                <div className="grid grid-cols-2 gap-2">
+                  {PRICE_OPTIONS.map((opt) => (
+                    <label
+                      key={opt.value}
+                      className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${
+                        !useCustomPrice && selectedPrice === opt.value ? "border-primary bg-accent" : "border-border hover:bg-muted"
+                      }`}
+                    >
+                      <RadioGroupItem value={String(opt.value)} />
+                      <span className="text-sm font-medium">{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <label className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${useCustomPrice ? "border-primary bg-accent" : "border-border hover:bg-muted"}`}>
+                  <RadioGroupItem value="custom" />
+                  <span className="text-sm font-medium">Sérsniðið verð</span>
+                </label>
+              </RadioGroup>
+              {useCustomPrice && (
+                <Input type="number" placeholder="Sláðu inn verð..." value={customPrice} onChange={(e) => setCustomPrice(e.target.value)} className="mt-2" />
+              )}
+            </div>
+          )}
 
           {/* Next call date/time */}
           <div className="space-y-2">
