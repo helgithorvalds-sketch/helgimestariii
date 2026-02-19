@@ -23,6 +23,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [finishingCall, setFinishingCall] = useState<Company | null>(null);
   const [finishNotes, setFinishNotes] = useState("");
   const [finishWebsiteUrl, setFinishWebsiteUrl] = useState("");
+  const [finishOwnerName, setFinishOwnerName] = useState("");
   const [savingFinish, setSavingFinish] = useState(false);
   const [summarizing, setSummarizing] = useState(false);
   const [finishStage, setFinishStage] = useState<CompanyStage>("finished");
@@ -94,6 +95,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
           nextCallAt: undefined,
           stage: finishStage,
           websiteUrl: finishWebsiteUrl.trim() || finishingCall.websiteUrl,
+          owner: finishOwnerName.trim() || finishingCall.owner,
         });
       }
       toast.success("Símtal skráð!");
@@ -104,6 +106,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setFinishingCall(null);
     setFinishNotes("");
     setFinishWebsiteUrl("");
+    setFinishOwnerName("");
     setFinishStage("finished");
   };
 
@@ -142,6 +145,17 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
               {finishingCall.phone && <span className="ml-2">· 📞 {finishingCall.phone}</span>}
             </p>
           </div>
+          {/* Contact name prompt if missing */}
+          {!finishingCall.owner && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Manstu nafnið á tengiliðnum?</label>
+              <Input
+                value={finishOwnerName}
+                onChange={(e) => setFinishOwnerName(e.target.value)}
+                placeholder="Nafn tengiliðs..."
+              />
+            </div>
+          )}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
@@ -176,7 +190,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             </Button>
             <Button
               variant="ghost"
-              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishStage("finished"); }}
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); }}
               className="text-muted-foreground"
             >
               Hætta við
