@@ -42,6 +42,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
+  const [emailConfidence, setEmailConfidence] = useState<"sure" | "unsure">("unsure");
 
   // AI paste
   const [aiText, setAiText] = useState("");
@@ -262,9 +263,33 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
           <div className="space-y-1.5">
             <Label className="flex items-center gap-1.5">
               <Mail className="w-4 h-4" />
-              Netfang (mögulegt)
+              Netfang
             </Label>
             <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="netfang@fyrirtaeki.is" type="email" />
+            <div className="flex gap-2 mt-1.5">
+              <button
+                type="button"
+                onClick={() => setEmailConfidence("sure")}
+                className={`px-3 py-1 rounded-md text-sm font-bold transition-colors ${
+                  emailConfidence === "sure"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                100%
+              </button>
+              <button
+                type="button"
+                onClick={() => setEmailConfidence("unsure")}
+                className={`px-3 py-1 rounded-md text-sm font-bold transition-colors ${
+                  emailConfidence === "unsure"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                Ekki viss
+              </button>
+            </div>
           </div>
 
           {/* Stage selection */}
