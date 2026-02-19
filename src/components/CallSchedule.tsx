@@ -18,6 +18,7 @@ interface CallScheduleProps {
 
 export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: CallScheduleProps) {
   const [expandedLogs, setExpandedLogs] = useState<Record<string, CallLog[] | null>>({});
+  const [confirmNoAnswer, setConfirmNoAnswer] = useState<string | null>(null);
   const [loadingLogs, setLoadingLogs] = useState<string | null>(null);
   const [finishingCall, setFinishingCall] = useState<Company | null>(null);
   const [finishNotes, setFinishNotes] = useState("");
@@ -290,22 +291,45 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                       <CheckCircle className="w-3.5 h-3.5" />
                       Lokið
                     </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!company.nextCallAt || !onCompanyUpdate) return;
-                        const next = new Date(company.nextCallAt);
-                        next.setDate(next.getDate() + 1);
-                        onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
-                        toast("Símtal fært á morgun", { icon: "📞" });
-                      }}
-                      className="gap-1.5 text-xs h-7 px-3"
-                    >
-                      <PhoneMissed className="w-3.5 h-3.5" />
-                      Svaraði ekki
-                    </Button>
+                    {confirmNoAnswer === company.id ? (
+                      <>
+                        <span className="text-xs text-destructive font-medium">Ertu viss?</span>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!company.nextCallAt || !onCompanyUpdate) return;
+                            const next = new Date(company.nextCallAt);
+                            next.setDate(next.getDate() + 1);
+                            onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
+                            toast("Símtal fært á morgun", { icon: "📞" });
+                            setConfirmNoAnswer(null);
+                          }}
+                          className="gap-1.5 text-xs h-7 px-3"
+                        >
+                          Já
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => { e.stopPropagation(); setConfirmNoAnswer(null); }}
+                          className="text-xs h-7 px-2"
+                        >
+                          Hætta við
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={(e) => { e.stopPropagation(); setConfirmNoAnswer(company.id); }}
+                        className="gap-1.5 text-xs h-7 px-3"
+                      >
+                        <PhoneMissed className="w-3.5 h-3.5" />
+                        Svaraði ekki
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="sm"
