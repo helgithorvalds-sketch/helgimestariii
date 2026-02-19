@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Loader2, CalendarIcon, Globe, Phone } from "lucide-react";
+import { Sparkles, Loader2, CalendarIcon, Globe, Phone, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [nextCallTime, setNextCallTime] = useState("10:00");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [phone, setPhone] = useState("");
+  const [finnaUrl, setFinnaUrl] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
@@ -67,16 +68,14 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       if (data.stage) setStage(data.stage);
       if (data.owner) setOwnerName(data.owner);
       if (data.companyId) setCompanyId(data.companyId);
-      if (data.phone) setPhone(data.phone);
       if (data.websiteUrl) setWebsiteUrl(data.websiteUrl);
+      if (data.finnaUrl) setFinnaUrl(data.finnaUrl);
       if (data.estimatedPrice) {
         const price = Number(data.estimatedPrice);
         const match = PRICE_OPTIONS.find((p) => p.value === price);
         if (match) { setUseCustomPrice(false); setSelectedPrice(match.value); }
         else { setUseCustomPrice(true); setCustomPrice(String(price)); }
       }
-      if (data.personalityDescription) setPersonality(data.personalityDescription);
-      if (data.notes) setNotes(data.notes);
       toast.success("AI greindi upplýsingarnar!");
     } catch { toast.error("Villa við AI greiningu"); }
     finally { setAiLoading(false); }
@@ -112,6 +111,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       projectedEarnings: price,
       nextCallAt,
       websiteUrl: websiteUrl.trim() || undefined,
+      finnaUrl: finnaUrl.trim() || undefined,
       phone: phone.trim() || undefined,
     });
     resetForm();
@@ -123,7 +123,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setSelectedPrice(160000); setUseCustomPrice(false); setCustomPrice("");
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
-    setWebsiteUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
+    setWebsiteUrl(""); setFinnaUrl(""); setPhone(""); setOwnerName(""); setCompanyId("");
     setOwnerUnknown(false);
   };
 
@@ -176,11 +176,25 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             {duplicateWarning && <p className="text-sm text-destructive">{duplicateWarning}</p>}
           </div>
 
+          {/* Finna URL */}
+          <div className="space-y-1.5">
+            <Label className="flex items-center gap-1.5">
+              <ExternalLink className="w-4 h-4" />
+              Finna tengill
+            </Label>
+            <Input
+              value={finnaUrl}
+              onChange={(e) => setFinnaUrl(e.target.value)}
+              placeholder="https://www.finna.is/fyrirtaeki/..."
+              type="url"
+            />
+          </div>
+
           {/* Website URL */}
           <div className="space-y-1.5">
             <Label className="flex items-center gap-1.5">
               <Globe className="w-4 h-4" />
-              Vefsíða
+              Núverandi vefsíða
             </Label>
             <Input
               value={websiteUrl}

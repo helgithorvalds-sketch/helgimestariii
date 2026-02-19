@@ -27,6 +27,7 @@ export interface Company {
   companyId: string;
   logoUrl?: string;
   websiteUrl?: string;
+  finnaUrl?: string;
   phone?: string;
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;

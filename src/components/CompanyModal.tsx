@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
@@ -73,11 +73,38 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
 
         <div className="space-y-5 pt-2">
           {/* Basic info */}
+          {/* Finna URL */}
+          <div className="space-y-1.5">
+            <Label className="flex items-center gap-1.5">
+              <ExternalLink className="w-4 h-4" />
+              Finna tengill
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                value={editedCompany.finnaUrl || ""}
+                onChange={(e) => updateField("finnaUrl", e.target.value)}
+                placeholder="https://www.finna.is/fyrirtaeki/..."
+                type="url"
+                className="flex-1"
+              />
+              {editedCompany.finnaUrl && (
+                <a
+                  href={editedCompany.finnaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 hover:bg-accent transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
+          </div>
+
           {/* Website URL */}
           <div className="space-y-1.5">
             <Label className="flex items-center gap-1.5">
               <Globe className="w-4 h-4" />
-              Vefsíða
+              Núverandi vefsíða
             </Label>
             <Input
               value={editedCompany.websiteUrl || ""}
