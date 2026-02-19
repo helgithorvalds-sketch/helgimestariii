@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
-import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed } from "lucide-react";
+import { format, isToday, isTomorrow, isPast, parseISO, differenceInCalendarDays } from "date-fns";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,14 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
 
   const formatCallTime = (dateStr: string) => {
     return format(parseISO(dateStr), "HH:mm");
+  };
+
+  const getDaysLabel = (dateStr: string) => {
+    const days = differenceInCalendarDays(parseISO(dateStr), new Date());
+    if (days < 0) return `${Math.abs(days)} dögum síðan`;
+    if (days === 0) return "Í dag";
+    if (days === 1) return "Á morgun";
+    return `Eftir ${days} daga`;
   };
 
   const isOverdue = (dateStr: string) => {
@@ -248,30 +256,55 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                             {company.estimatedPrice.toLocaleString("is-IS")} kr.
                           </span>
                         </div>
-                        {/* Phone number */}
-                        {company.phone && (
-                          <div className="flex items-center gap-1.5 mt-1.5">
-                            <Phone className="w-3.5 h-3.5 text-muted-foreground" />
+                        {/* Contact details row */}
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
+                          {company.phone && (
                             <a
                               href={`tel:${company.phone}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-xs text-primary font-medium hover:underline"
+                              className="inline-flex items-center gap-1 text-xs text-primary font-medium hover:underline"
                             >
+                              <Phone className="w-3 h-3" />
                               {company.phone}
                             </a>
-                          </div>
-                        )}
+                          )}
+                          {company.email && (
+                            <a
+                              href={`mailto:${company.email}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex items-center gap-1 text-xs text-primary font-medium hover:underline"
+                            >
+                              <Mail className="w-3 h-3" />
+                              {company.email}
+                            </a>
+                          )}
+                          {company.finnaUrl && (
+                            <a
+                              href={company.finnaUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex items-center gap-1 text-xs text-primary font-medium hover:underline"
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                              Finna.is
+                            </a>
+                          )}
+                        </div>
                         {company.owner && (
                           <p className="text-xs text-muted-foreground mt-0.5">
                             Tengiliður: {company.owner}
                           </p>
                         )}
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0">
                         <p className={`text-sm font-semibold ${isOverdue(company.nextCallAt!) ? "text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" : "text-foreground"}`}>
                           {isOverdue(company.nextCallAt!) ? "⚠️ " : ""}{formatCallDate(company.nextCallAt!)}
                         </p>
                         <p className="text-xs text-muted-foreground">{formatCallTime(company.nextCallAt!)}</p>
+                        <p className={`text-xs font-medium mt-0.5 ${isOverdue(company.nextCallAt!) ? "text-destructive" : "text-primary"}`}>
+                          {getDaysLabel(company.nextCallAt!)}
+                        </p>
                       </div>
                     </div>
                   </div>
