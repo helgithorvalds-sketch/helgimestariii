@@ -12,6 +12,7 @@ import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
 import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail } from "lucide-react";
+import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import confetti from "canvas-confetti";
@@ -847,6 +848,11 @@ export default function Index() {
           onDelete={handleDelete}
         />
       )}
+
+      <AIAssistant
+        companies={companies}
+        onCompaniesChange={(updater) => setCompanies(updater)}
+      />
     </div>
   );
 }
