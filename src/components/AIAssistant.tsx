@@ -6,7 +6,7 @@ import { addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Bot, Mic, MicOff, Send, X, ChevronDown, Loader2, Sparkles } from "lucide-react";
+import { Mic, MicOff, Send, ChevronDown, Loader2, Sparkles, Bot } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -39,48 +39,44 @@ export function AIAssistant({ companies, onCompaniesChange }: AIAssistantProps) 
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => textareaRef.current?.focus(), 100);
+    }
+  }, [open]);
+
   const executeActions = async (actions: AIAction[]) => {
     for (const action of actions) {
       const company = companies.find((c) => c.id === action.companyId);
       if (!company) continue;
-
       if (action.type === "add_note") {
         await addCallLog(company.id, action.note || "");
       } else if (action.type === "update_price") {
         const updated = { ...company, estimatedPrice: action.price! };
         const result = await updateCompany(updated);
-        if (result) {
-          onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
-        }
+        if (result) onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
       } else if (action.type === "update_stage") {
         const updated = { ...company, stage: action.stage as Company["stage"] };
         const result = await updateCompany(updated);
-        if (result) {
-          onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
-        }
+        if (result) onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
       } else if (action.type === "schedule_call") {
         const updated = { ...company, nextCallAt: action.nextCallAt };
         const result = await updateCompany(updated);
-        if (result) {
-          onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
-        }
+        if (result) onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
       } else if (action.type === "update_owner") {
         const updated = { ...company, owner: action.owner || "" };
         const result = await updateCompany(updated);
-        if (result) {
-          onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
-        }
+        if (result) onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
       } else if (action.type === "update_phone") {
         const updated = { ...company, phone: action.phone };
         const result = await updateCompany(updated);
-        if (result) {
-          onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
-        }
+        if (result) onCompaniesChange((prev) => prev.map((c) => c.id === result.id ? result : c));
       }
     }
   };
@@ -91,32 +87,23 @@ export function AIAssistant({ companies, onCompaniesChange }: AIAssistantProps) 
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
-
     try {
       const companySummary = companies.map((c) => ({
-        id: c.id,
-        name: c.name,
-        stage: c.stage,
-        estimatedPrice: c.estimatedPrice,
-        nextCallAt: c.nextCallAt,
+        id: c.id, name: c.name, stage: c.stage,
+        estimatedPrice: c.estimatedPrice, nextCallAt: c.nextCallAt,
       }));
-
       const { data, error } = await supabase.functions.invoke("ai-assistant", {
         body: { message: text, companies: companySummary },
       });
-
       if (error) throw error;
-
       if (data?.reply) {
         setMessages((prev) => [...prev, { role: "assistant", text: data.reply }]);
       }
-
-      if (data?.actions && data.actions.length > 0) {
+      if (data?.actions?.length > 0) {
         await executeActions(data.actions);
         toast.success(`${data.actions.length} aðgerð${data.actions.length > 1 ? "ir" : ""} framkvæmdar`);
       }
-    } catch (e: any) {
-      console.error("AI assistant error:", e);
+    } catch (e) {
       setMessages((prev) => [...prev, { role: "assistant", text: "Eitthvað fór úrskeiðis. Reyndu aftur!" }]);
       toast.error("Villa í AI aðstoðarmanni");
     }
@@ -126,152 +113,125 @@ export function AIAssistant({ companies, onCompaniesChange }: AIAssistantProps) 
   const handleVoiceInput = () => {
     const SpeechRecognitionAPI =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognitionAPI) {
-      toast.error("Vafrinn þinn styður ekki talgreiningu");
-      return;
-    }
-    if (isRecording) {
-      recognitionRef.current?.stop();
-      setIsRecording(false);
-      return;
-    }
+    if (!SpeechRecognitionAPI) { toast.error("Vafrinn þinn styður ekki talgreiningu"); return; }
+    if (isRecording) { recognitionRef.current?.stop(); setIsRecording(false); return; }
     const recognition = new SpeechRecognitionAPI();
     recognition.lang = "en-US";
     recognition.continuous = false;
     recognition.interimResults = false;
     recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results)
-        .map((r: any) => r[0].transcript)
-        .join(" ");
+      const transcript = Array.from(event.results).map((r: any) => r[0].transcript).join(" ");
       sendMessage(transcript);
     };
     recognition.onend = () => setIsRecording(false);
-    recognition.onerror = () => {
-      setIsRecording(false);
-      toast.error("Villa við talgreiningu");
-    };
+    recognition.onerror = () => { setIsRecording(false); toast.error("Villa við talgreiningu"); };
     recognitionRef.current = recognition;
     recognition.start();
     setIsRecording(true);
   };
 
   return (
-    <>
-      {/* Floating button */}
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center group"
-          title="AI Aðstoðarmaður"
-        >
-          <Bot className="w-6 h-6" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-background animate-pulse" />
-        </button>
-      )}
-
-      {/* Panel */}
+    <div className="fixed bottom-0 left-0 z-50 flex flex-col" style={{ width: open ? 360 : "auto" }}>
+      {/* Expanded panel */}
       {open && (
-        <div className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] rounded-2xl border-2 border-primary/20 bg-card shadow-2xl flex flex-col overflow-hidden"
-          style={{ height: "520px" }}>
-          {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3 bg-primary text-primary-foreground flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-              <Bot className="w-4 h-4" />
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold text-sm">AI Aðstoðarmaður</p>
-              <p className="text-xs opacity-70">Talaðu á ensku · {companies.length} fyrirtæki</p>
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="w-7 h-7 rounded-full hover:bg-primary-foreground/20 flex items-center justify-center transition-colors"
-            >
-              <ChevronDown className="w-4 h-4" />
-            </button>
-          </div>
-
+        <div className="flex flex-col bg-card border border-border border-b-0 rounded-tr-2xl shadow-2xl overflow-hidden"
+          style={{ height: 520 }}>
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2 space-y-3">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div key={i} className={`flex gap-2 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
                 {msg.role === "assistant" && (
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
-                    <Sparkles className="w-3.5 h-3.5 text-primary" />
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Sparkles className="w-3 h-3 text-primary-foreground" />
                   </div>
                 )}
-                <div
-                  className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                    msg.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-br-sm"
-                      : "bg-muted text-foreground rounded-bl-sm"
-                  }`}
-                >
+                <div className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                  msg.role === "user"
+                    ? "bg-primary text-primary-foreground rounded-br-none ml-auto"
+                    : "bg-muted text-foreground rounded-bl-none"
+                }`}>
                   {msg.text}
                 </div>
               </div>
             ))}
             {loading && (
-              <div className="flex justify-start">
-                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
-                  <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <div className="flex gap-2">
+                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Sparkles className="w-3 h-3 text-primary-foreground" />
                 </div>
-                <div className="bg-muted rounded-2xl rounded-bl-sm px-4 py-3">
-                  <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                <div className="bg-muted rounded-2xl rounded-bl-none px-4 py-3 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             )}
             <div ref={bottomRef} />
           </div>
 
-          {/* Input */}
-          <div className="flex-shrink-0 border-t p-3 bg-background/50 backdrop-blur-sm">
+          {/* Input area */}
+          <div className="border-t border-border p-3 bg-background/60 backdrop-blur-sm space-y-2">
             {isRecording && (
-              <div className="flex items-center gap-2 mb-2 px-1">
-                <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
+              <div className="flex items-center gap-2 px-1">
+                <span className="w-2 h-2 rounded-full bg-destructive animate-pulse flex-shrink-0" />
                 <p className="text-xs text-destructive font-medium">Hlusta... (talaðu á ensku)</p>
               </div>
             )}
             <div className="flex gap-2 items-end">
               <Textarea
+                ref={textareaRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage(input);
-                  }
+                  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
                 }}
                 placeholder="Skrifaðu eða talaðu á ensku..."
                 rows={2}
-                className="flex-1 text-sm resize-none min-h-0"
+                className="flex-1 text-sm resize-none min-h-0 border-0 bg-muted/50 focus-visible:ring-1 rounded-xl"
                 disabled={loading}
               />
               <div className="flex flex-col gap-1.5">
-                <Button
-                  size="icon"
-                  variant={isRecording ? "destructive" : "outline"}
+                <Button size="icon"
+                  variant={isRecording ? "destructive" : "ghost"}
                   onClick={handleVoiceInput}
-                  className="w-9 h-9 flex-shrink-0"
+                  className="w-8 h-8 rounded-xl flex-shrink-0"
                   title={isRecording ? "Stöðva" : "Tala"}
                 >
-                  {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  {isRecording ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
                 </Button>
-                <Button
-                  size="icon"
+                <Button size="icon"
                   onClick={() => sendMessage(input)}
                   disabled={!input.trim() || loading}
-                  className="w-9 h-9 flex-shrink-0"
+                  className="w-8 h-8 rounded-xl flex-shrink-0"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-3.5 h-3.5" />
                 </Button>
               </div>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2 px-1">
-              Dæmi: "Add a note for [company] that they want a redesign" · "Change [company] price to 300000" · "Schedule a call with [company] tomorrow at 10am"
-            </p>
           </div>
         </div>
       )}
-    </>
+
+      {/* Tab / trigger */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className={`flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-all
+          ${open
+            ? "bg-primary text-primary-foreground w-full justify-between"
+            : "bg-card border border-border border-b-0 rounded-tr-xl text-foreground hover:bg-muted shadow-lg"
+          }`}
+      >
+        <div className="flex items-center gap-2">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${open ? "bg-primary-foreground/20" : "bg-primary"}`}>
+            <Bot className={`w-3 h-3 ${open ? "text-primary-foreground" : "text-primary-foreground"}`} />
+          </div>
+          <span>AI Aðstoðarmaður</span>
+          {!open && (
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          )}
+        </div>
+        {open && <ChevronDown className="w-4 h-4 opacity-70" />}
+      </button>
+    </div>
   );
 }
