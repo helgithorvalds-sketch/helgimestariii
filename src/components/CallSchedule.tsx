@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO, differenceInCalendarDays } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,10 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [originalNotes, setOriginalNotes] = useState<string | null>(null);
   const [nextCallDate, setNextCallDate] = useState("");
   const [nextCallTime, setNextCallTime] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [translating, setTranslating] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -151,6 +155,59 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     }
   };
 
+  const handleVoiceInput = () => {
+    const SpeechRecognitionAPI =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognitionAPI) {
+      toast.error("Vafrinn þinn styður ekki talgreining");
+      return;
+    }
+    if (isRecording) {
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+      return;
+    }
+    const recognition = new SpeechRecognitionAPI();
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((r: any) => r[0].transcript)
+        .join(" ");
+      setFinishNotes((prev) => (prev ? prev + " " + transcript : transcript));
+    };
+    recognition.onend = () => setIsRecording(false);
+    recognition.onerror = () => {
+      setIsRecording(false);
+      toast.error("Villa við talgreiningu");
+    };
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsRecording(true);
+  };
+
+  const handleTranslate = async () => {
+    if (!finishNotes.trim()) return;
+    setTranslating(true);
+    setOriginalNotes(finishNotes);
+    try {
+      const { data, error } = await supabase.functions.invoke("translate-notes", {
+        body: { notes: finishNotes.trim() },
+      });
+      if (error) throw error;
+      if (data?.translated) {
+        setFinishNotes(data.translated);
+        toast.success("Þýtt á íslensku!");
+      }
+    } catch (e) {
+      console.error("Translate error:", e);
+      toast.error("Villa við þýðingu");
+      setOriginalNotes(null);
+    }
+    setTranslating(false);
+  };
+
   return (
     <>
     {/* Finish call full-screen overlay */}
@@ -181,7 +238,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap justify-end">
                 {originalNotes !== null && (
                   <Button
                     variant="outline"
@@ -195,6 +252,16 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                 <Button
                   variant="outline"
                   size="sm"
+                  onClick={handleTranslate}
+                  disabled={!finishNotes.trim() || translating}
+                  className="gap-1.5 text-xs h-7"
+                >
+                  {translating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Languages className="w-3.5 h-3.5" />}
+                  {translating ? "Þýði..." : "Þýða á íslensku"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={handleSummarize}
                   disabled={!finishNotes.trim() || summarizing}
                   className="gap-1.5 text-xs h-7"
@@ -204,14 +271,32 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                 </Button>
               </div>
             </div>
-            <Textarea
-              value={finishNotes}
-              onChange={(e) => { setFinishNotes(e.target.value); setOriginalNotes(null); }}
-              placeholder="Skrifaðu athugasemdir frá símtalinu..."
-              rows={5}
-              autoFocus
-              className="text-base"
-            />
+            <div className="relative">
+              <Textarea
+                value={finishNotes}
+                onChange={(e) => { setFinishNotes(e.target.value); setOriginalNotes(null); }}
+                placeholder="Skrifaðu athugasemdir frá símtalinu eða notaðu hljóðnemann..."
+                rows={5}
+                autoFocus
+                className="text-base pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={handleVoiceInput}
+                className={`absolute bottom-2 right-2 h-7 w-7 ${isRecording ? "text-destructive animate-pulse" : "text-muted-foreground hover:text-foreground"}`}
+                title={isRecording ? "Stöðva talgreiningu" : "Tala (enska → texti)"}
+              >
+                {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </Button>
+            </div>
+            {isRecording && (
+              <p className="text-xs text-destructive font-medium animate-pulse flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-destructive inline-block" />
+                Hlusta... (talaðu á ensku)
+              </p>
+            )}
           </div>
 
           {/* Next call scheduler */}
