@@ -463,6 +463,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                             const next = new Date(company.nextCallAt);
                             next.setDate(next.getDate() + 1);
                             onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
+                            addCallLog(company.id, "Svaraði ekki");
                             toast("Símtal fært á morgun", { icon: "📞" });
                             setConfirmNoAnswer(null);
                           }}
