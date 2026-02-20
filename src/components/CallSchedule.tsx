@@ -27,6 +27,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [savingFinish, setSavingFinish] = useState(false);
   const [summarizing, setSummarizing] = useState(false);
   const [finishStage, setFinishStage] = useState<CompanyStage>("finished");
+  const [originalNotes, setOriginalNotes] = useState<string | null>(null);
+  const [nextCallDate, setNextCallDate] = useState("");
+  const [nextCallTime, setNextCallTime] = useState("");
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -89,11 +92,17 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setSavingFinish(true);
     const log = await addCallLog(finishingCall.id, finishNotes.trim());
     if (log) {
+      let nextCallAt: string | undefined = undefined;
+      if (nextCallDate && nextCallTime) {
+        nextCallAt = new Date(`${nextCallDate}T${nextCallTime}`).toISOString();
+      } else if (nextCallDate) {
+        nextCallAt = new Date(`${nextCallDate}T09:00`).toISOString();
+      }
       if (onCompanyUpdate) {
         onCompanyUpdate({
           ...finishingCall,
-          nextCallAt: undefined,
-          stage: finishStage,
+          nextCallAt,
+          stage: nextCallAt ? finishingCall.stage : finishStage,
           websiteUrl: finishWebsiteUrl.trim() || finishingCall.websiteUrl,
           owner: finishOwnerName.trim() || finishingCall.owner,
         });
@@ -108,11 +117,15 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     setFinishWebsiteUrl("");
     setFinishOwnerName("");
     setFinishStage("finished");
+    setOriginalNotes(null);
+    setNextCallDate("");
+    setNextCallTime("");
   };
 
   const handleSummarize = async () => {
     if (!finishNotes.trim()) return;
     setSummarizing(true);
+    setOriginalNotes(finishNotes); // save original before summarizing
     try {
       const { data, error } = await supabase.functions.invoke("summarize-call", {
         body: { notes: finishNotes.trim() },
@@ -125,8 +138,17 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     } catch (e) {
       console.error("Summarize error:", e);
       toast.error("Villa við samantekt");
+      setOriginalNotes(null);
     }
     setSummarizing(false);
+  };
+
+  const handleRevertNotes = () => {
+    if (originalNotes !== null) {
+      setFinishNotes(originalNotes);
+      setOriginalNotes(null);
+      toast("Upprunalegar athugasemdir endurheimtar", { icon: "↩️" });
+    }
   };
 
   return (
@@ -159,26 +181,65 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSummarize}
-                disabled={!finishNotes.trim() || summarizing}
-                className="gap-1.5 text-xs h-7"
-              >
-                {summarizing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-                {summarizing ? "Tek saman..." : "AI samantekt"}
-              </Button>
+              <div className="flex items-center gap-1.5">
+                {originalNotes !== null && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleRevertNotes}
+                    className="gap-1.5 text-xs h-7 text-muted-foreground"
+                  >
+                    ↩️ Til baka
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSummarize}
+                  disabled={!finishNotes.trim() || summarizing}
+                  className="gap-1.5 text-xs h-7"
+                >
+                  {summarizing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                  {summarizing ? "Tek saman..." : "AI samantekt"}
+                </Button>
+              </div>
             </div>
             <Textarea
               value={finishNotes}
-              onChange={(e) => setFinishNotes(e.target.value)}
+              onChange={(e) => { setFinishNotes(e.target.value); setOriginalNotes(null); }}
               placeholder="Skrifaðu athugasemdir frá símtalinu..."
               rows={5}
               autoFocus
               className="text-base"
             />
           </div>
+
+          {/* Next call scheduler */}
+          <div className="space-y-2 rounded-lg border border-dashed border-border p-3 bg-muted/30">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-primary" />
+              Hvenær er næsta símtal?
+            </label>
+            <div className="flex gap-2">
+              <Input
+                type="date"
+                value={nextCallDate}
+                onChange={(e) => setNextCallDate(e.target.value)}
+                className="flex-1 text-sm h-9"
+              />
+              <Input
+                type="time"
+                value={nextCallTime}
+                onChange={(e) => setNextCallTime(e.target.value)}
+                className="w-28 text-sm h-9"
+                placeholder="09:00"
+              />
+            </div>
+            {!nextCallDate && (
+              <p className="text-xs text-muted-foreground">Ef þú skilur þetta eftir tómt verður fyrirtækið sett sem lokið.</p>
+            )}
+          </div>
+
           <div className="flex gap-3">
             <Button
               onClick={handleFinishCall}
@@ -190,7 +251,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             </Button>
             <Button
               variant="ghost"
-              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); }}
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); setOriginalNotes(null); setNextCallDate(""); setNextCallTime(""); }}
               className="text-muted-foreground"
             >
               Hætta við
