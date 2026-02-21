@@ -451,9 +451,20 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                       <CheckCircle className="w-3.5 h-3.5" />
                       Lokið
                     </Button>
-                    {confirmNoAnswer === company.id ? (
+                    {confirmNoAnswer === company.id ? (() => {
+                      const callDate = company.nextCallAt ? new Date(company.nextCallAt) : new Date();
+                      const isFriday = callDate.getDay() === 5;
+                      const isSaturday = callDate.getDay() === 6;
+                      const isSunday = callDate.getDay() === 0;
+                      const isWeekend = isSaturday || isSunday;
+                      const daysToMonday = isFriday ? 3 : isSaturday ? 2 : isSunday ? 1 : 1;
+                      const showMondayPrompt = isFriday || isWeekend;
+
+                      return (
                       <>
-                        <span className="text-xs text-destructive font-medium">Ertu viss?</span>
+                        <span className="text-xs text-destructive font-medium">
+                          {showMondayPrompt ? "Færa á mánudag?" : "Ertu viss?"}
+                        </span>
                         <Button
                           variant="destructive"
                           size="sm"
@@ -461,16 +472,35 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                             e.stopPropagation();
                             if (!company.nextCallAt || !onCompanyUpdate) return;
                             const next = new Date(company.nextCallAt);
-                            next.setDate(next.getDate() + 1);
+                            next.setDate(next.getDate() + daysToMonday);
                             onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
                             addCallLog(company.id, "Svaraði ekki");
-                            toast("Símtal fært á morgun", { icon: "📞" });
+                            toast(showMondayPrompt ? "Símtal fært á mánudag" : "Símtal fært á morgun", { icon: "📞" });
                             setConfirmNoAnswer(null);
                           }}
                           className="gap-1.5 text-xs h-7 px-3"
                         >
-                          Já
+                          {showMondayPrompt ? "Já, mánudagur" : "Já"}
                         </Button>
+                        {showMondayPrompt && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!company.nextCallAt || !onCompanyUpdate) return;
+                              const next = new Date(company.nextCallAt);
+                              next.setDate(next.getDate() + 1);
+                              onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
+                              addCallLog(company.id, "Svaraði ekki");
+                              toast("Símtal fært á morgun", { icon: "📞" });
+                              setConfirmNoAnswer(null);
+                            }}
+                            className="text-xs h-7 px-2"
+                          >
+                            Nei, á morgun
+                          </Button>
+                        )}
                         <Button
                           variant="ghost"
                           size="sm"
@@ -480,7 +510,8 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                           Hætta við
                         </Button>
                       </>
-                    ) : (
+                      );
+                    })() : (
                       <Button
                         variant="destructive"
                         size="sm"
