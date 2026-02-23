@@ -1,0 +1,1 @@
+UPDATE companies SET next_call_at = '2026-02-23T10:00:00+00' WHERE next_call_at = '2025-05-24 10:00:00+00';
