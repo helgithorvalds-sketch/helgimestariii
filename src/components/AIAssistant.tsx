@@ -110,22 +110,78 @@ export function AIAssistant({ companies, onCompaniesChange }: AIAssistantProps) 
     setLoading(false);
   };
 
+  const isListeningRef = useRef(false);
+
   const handleVoiceInput = () => {
     const SpeechRecognitionAPI =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognitionAPI) { toast.error("Vafrinn þinn styður ekki talgreiningu"); return; }
-    if (isRecording) { recognitionRef.current?.stop(); setIsRecording(false); return; }
+
+    // Stop if already recording
+    if (isRecording) {
+      isListeningRef.current = false;
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+      return;
+    }
+
+    // Clean up any previous instance
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch (_) {}
+      recognitionRef.current = null;
+    }
+
     const recognition = new SpeechRecognitionAPI();
     recognition.lang = "en-US";
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    let finalTranscript = "";
+
     recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results).map((r: any) => r[0].transcript).join(" ");
-      sendMessage(transcript);
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          finalTranscript += result[0].transcript + " ";
+        } else {
+          interim += result[0].transcript;
+        }
+      }
+      // Show interim in input field
+      setInput(finalTranscript + interim);
     };
-    recognition.onend = () => setIsRecording(false);
-    recognition.onerror = () => { setIsRecording(false); toast.error("Villa við talgreiningu"); };
+
+    recognition.onend = () => {
+      if (isListeningRef.current) {
+        // Auto-restart on silence timeout
+        try { recognition.start(); } catch (_) {}
+      } else {
+        setIsRecording(false);
+        // Send the final transcript
+        if (finalTranscript.trim()) {
+          sendMessage(finalTranscript.trim());
+          setInput("");
+        }
+      }
+    };
+
+    recognition.onerror = (event: any) => {
+      if (event.error === "not-allowed") {
+        toast.error("Hljóðnemi ekki leyfður. Athugaðu stillingar vafrans.");
+        isListeningRef.current = false;
+        setIsRecording(false);
+      } else if (event.error === "no-speech") {
+        // Normal silence timeout, will auto-restart via onend
+      } else {
+        console.error("Speech recognition error:", event.error);
+        isListeningRef.current = false;
+        setIsRecording(false);
+      }
+    };
+
     recognitionRef.current = recognition;
+    isListeningRef.current = true;
     recognition.start();
     setIsRecording(true);
   };
@@ -195,7 +251,7 @@ export function AIAssistant({ companies, onCompaniesChange }: AIAssistantProps) 
                   variant={isRecording ? "destructive" : "ghost"}
                   onClick={handleVoiceInput}
                   className="w-8 h-8 rounded-xl flex-shrink-0"
-                  title={isRecording ? "Stöðva" : "Tala"}
+                  title={isRecording ? "Stöðva og senda" : "Tala"}
                 >
                   {isRecording ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
                 </Button>
