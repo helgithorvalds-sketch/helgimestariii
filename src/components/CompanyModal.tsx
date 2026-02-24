@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
@@ -386,15 +386,20 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         </div>
       </div>
 
-      {/* Notes */}
+      {/* Company Notes - Yellow */}
       {company.notes && (
         <div className="space-y-1">
-          <Label className="text-sm font-semibold">Athugasemdir</Label>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap rounded-lg border p-3">{company.notes}</p>
+          <Label className="text-sm font-semibold flex items-center gap-1.5">
+            <MessageSquare className="w-3.5 h-3.5 text-amber-500" />
+            Athugasemdir
+          </Label>
+          <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 dark:border-amber-700 dark:bg-amber-950/30">
+            <p className="text-sm text-foreground whitespace-pre-wrap">{company.notes}</p>
+          </div>
         </div>
       )}
 
-      {/* Call Log */}
+      {/* Call Log - Blue */}
       {renderCallLog()}
 
       {/* Actions */}
@@ -641,7 +646,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Phone className="w-4 h-4 text-primary" />
+          <Phone className="w-4 h-4 text-blue-500" />
           <Label className="text-sm font-semibold">Símtalaskrá</Label>
         </div>
         <Button variant="outline" size="sm" onClick={() => setFinishingCall(true)} className="gap-1.5 text-xs">
@@ -658,7 +663,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
       ) : (
         <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
           {callLogs.map((log) => (
-            <div key={log.id} className="rounded-lg border bg-background p-3 group relative">
+            <div key={log.id} className="rounded-lg border border-blue-200 bg-blue-50 p-3 group relative dark:border-blue-800 dark:bg-blue-950/30">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-muted-foreground font-medium mb-1">{format(parseISO(log.calledAt), "dd.MM.yyyy · HH:mm")}</p>
