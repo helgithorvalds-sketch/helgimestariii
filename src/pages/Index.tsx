@@ -11,7 +11,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
@@ -37,6 +37,7 @@ export default function Index() {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [cardCallLogs, setCardCallLogs] = useState<Record<string, CallLog[]>>({});
   const [loadingCardLogs, setLoadingCardLogs] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const loadCardLogs = useCallback(async (companyId: string) => {
     if (cardCallLogs[companyId]) return;
@@ -210,27 +211,39 @@ export default function Index() {
     setPaidAmountInput("");
   };
 
+  const filteredCompanies = useMemo(() => {
+    if (!searchQuery.trim()) return companies;
+    const q = searchQuery.toLowerCase();
+    return companies.filter((c) =>
+      c.name.toLowerCase().includes(q) ||
+      c.owner.toLowerCase().includes(q) ||
+      c.companyId.toLowerCase().includes(q) ||
+      (c.email && c.email.toLowerCase().includes(q)) ||
+      (c.phone && c.phone.includes(q))
+    );
+  }, [companies, searchQuery]);
+
   const companiesByStage = (stage: CompanyStage) =>
-    companies.filter((c) => c.stage === stage);
+    filteredCompanies.filter((c) => c.stage === stage);
 
   const companiesByPreviewSub = (sub: PreviewSubStatus) =>
-    companies.filter((c) => c.stage === "preview" && c.previewSubStatus === sub);
+    filteredCompanies.filter((c) => c.stage === "preview" && c.previewSubStatus === sub);
 
-  const previewUncategorized = companies.filter(
+  const previewUncategorized = filteredCompanies.filter(
     (c) => c.stage === "preview" && !c.previewSubStatus
   );
 
   const companiesByFinishedSub = (sub: FinishedSubStatus) =>
-    companies.filter((c) => c.stage === "finished" && c.finishedSubStatus === sub);
+    filteredCompanies.filter((c) => c.stage === "finished" && c.finishedSubStatus === sub);
 
-  const finishedUncategorized = companies.filter(
+  const finishedUncategorized = filteredCompanies.filter(
     (c) => c.stage === "finished" && !c.finishedSubStatus
   );
 
   const companiesByPaidSub = (sub: PaidSubStatus) =>
-    companies.filter((c) => c.stage === "paid" && c.paidSubStatus === sub);
+    filteredCompanies.filter((c) => c.stage === "paid" && c.paidSubStatus === sub);
 
-  const paidUncategorized = companies.filter(
+  const paidUncategorized = filteredCompanies.filter(
     (c) => c.stage === "paid" && !c.paidSubStatus
   );
 
@@ -441,6 +454,23 @@ export default function Index() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Leita að fyrirtæki..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-8 w-56 h-9 text-sm"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
