@@ -1,9 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, parseISO, differenceInCalendarDays } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
 import { StageBadge } from "./StageBadge";
-import { CallLog, fetchCallLogs, addCallLog } from "@/services/callLogService";
+import { CallLog, fetchCallLogs, addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,7 +33,15 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [isRecording, setIsRecording] = useState(false);
   const [translating, setTranslating] = useState(false);
   const recognitionRef = useRef<any>(null);
+  const [recentNotes, setRecentNotes] = useState<CallLog[]>([]);
+  const [loadingNotes, setLoadingNotes] = useState(true);
 
+  useEffect(() => {
+    fetchRecentCallLogs(40).then((logs) => {
+      setRecentNotes(logs);
+      setLoadingNotes(false);
+    });
+  }, []);
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -592,6 +600,77 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
           </div>
         )}
       </div>
+    </div>
+
+    {/* Recent Notes Section */}
+    <div className="rounded-xl border bg-card p-4 mt-6">
+      <div className="flex items-center gap-2 mb-4">
+        <MessageSquare className="w-5 h-5 text-primary" />
+        <h2 className="text-lg font-bold text-foreground">Nýlegar athugasemdir</h2>
+        <span className="text-sm text-muted-foreground ml-auto">{recentNotes.length} skráðar</span>
+      </div>
+
+      {loadingNotes ? (
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : recentNotes.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+          <MessageSquare className="w-8 h-8 mb-2 opacity-50" />
+          <p className="text-sm">Engar athugasemdir ennþá</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {recentNotes
+            .sort((a, b) => {
+              // "Svaraði ekki" notes are less important, push them to the end
+              const aIsAutoNote = a.notes.trim() === "Svaraði ekki";
+              const bIsAutoNote = b.notes.trim() === "Svaraði ekki";
+              if (aIsAutoNote && !bIsAutoNote) return 1;
+              if (!aIsAutoNote && bIsAutoNote) return -1;
+              // Longer notes are more important
+              const aLen = a.notes.length;
+              const bLen = b.notes.length;
+              if (aLen !== bLen) return bLen - aLen;
+              // Then by date (newest first)
+              return new Date(b.calledAt).getTime() - new Date(a.calledAt).getTime();
+            })
+            .map((log) => {
+              const isAutoNote = log.notes.trim() === "Svaraði ekki";
+              const companyName = companies.find((c) => c.id === log.companyId)?.name || "Óþekkt";
+              const noteLength = log.notes.length;
+              // Visual importance: longer notes get more prominence
+              const isImportant = noteLength > 50 && !isAutoNote;
+
+              return (
+                <div
+                  key={log.id}
+                  className={`rounded-lg border p-3 transition-all ${
+                    isAutoNote
+                      ? "opacity-50 border-dashed bg-muted/20"
+                      : isImportant
+                        ? "border-primary/30 bg-primary/5 shadow-sm"
+                        : "bg-background hover:shadow-sm"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <p className={`text-xs font-semibold truncate ${isAutoNote ? "text-muted-foreground" : "text-foreground"}`}>
+                      {companyName}
+                    </p>
+                    <span className="text-[10px] text-muted-foreground flex-shrink-0 ml-2">
+                      {format(parseISO(log.calledAt), "dd.MM · HH:mm")}
+                    </span>
+                  </div>
+                  <p className={`text-sm whitespace-pre-wrap line-clamp-3 ${
+                    isAutoNote ? "text-muted-foreground italic" : "text-foreground"
+                  }`}>
+                    {log.notes}
+                  </p>
+                </div>
+              );
+            })}
+        </div>
+      )}
     </div>
     </>
   );
