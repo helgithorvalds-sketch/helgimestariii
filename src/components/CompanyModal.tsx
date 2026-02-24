@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,11 +9,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CompanyModalProps {
   company: Company;
@@ -29,6 +30,25 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
   const [newCallNote, setNewCallNote] = useState("");
   const [addingCall, setAddingCall] = useState(false);
+  
+  // Full call overlay state (same as CallSchedule)
+  const [finishingCall, setFinishingCall] = useState(false);
+  const [finishNotes, setFinishNotes] = useState("");
+  const [finishOwnerName, setFinishOwnerName] = useState("");
+  const [savingFinish, setSavingFinish] = useState(false);
+  const [summarizing, setSummarizing] = useState(false);
+  const [translating, setTranslating] = useState(false);
+  const [originalNotes, setOriginalNotes] = useState<string | null>(null);
+  const [nextCallDate, setNextCallDate] = useState("");
+  const [nextCallTime, setNextCallTime] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const isListeningRef = useRef(false);
+  
+  // Quick schedule state
+  const [showScheduler, setShowScheduler] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("09:00");
 
   useEffect(() => {
     if (open && company.id) {
@@ -59,6 +79,145 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   const handleDelete = () => {
     onDelete(company.id);
     onClose();
+  };
+
+  // ─── FULL CALL OVERLAY FUNCTIONS ───
+  const handleFinishCall = async () => {
+    if (!finishNotes.trim()) return;
+    setSavingFinish(true);
+    const log = await addCallLog(company.id, finishNotes.trim());
+    if (log) {
+      setCallLogs((prev) => [log, ...prev]);
+      let nextCallAt: string | undefined = undefined;
+      if (nextCallDate && nextCallTime) {
+        nextCallAt = new Date(`${nextCallDate}T${nextCallTime}`).toISOString();
+      } else if (nextCallDate) {
+        nextCallAt = new Date(`${nextCallDate}T09:00`).toISOString();
+      }
+      const updated = {
+        ...company,
+        nextCallAt,
+        owner: finishOwnerName.trim() || company.owner,
+      };
+      onUpdate(updated);
+      toast.success("Símtal skráð!");
+    } else {
+      toast.error("Villa við skráningu");
+    }
+    setSavingFinish(false);
+    setFinishingCall(false);
+    setFinishNotes("");
+    setFinishOwnerName("");
+    setOriginalNotes(null);
+    setNextCallDate("");
+    setNextCallTime("");
+  };
+
+  const handleSummarize = async () => {
+    if (!finishNotes.trim()) return;
+    setSummarizing(true);
+    setOriginalNotes(finishNotes);
+    try {
+      const { data, error } = await supabase.functions.invoke("summarize-call", {
+        body: { notes: finishNotes.trim() },
+      });
+      if (error) throw error;
+      if (data?.summary) {
+        setFinishNotes(data.summary);
+        toast.success("Athugasemdir teknar saman!");
+      }
+    } catch (e) {
+      toast.error("Villa við samantekt");
+      setOriginalNotes(null);
+    }
+    setSummarizing(false);
+  };
+
+  const handleTranslate = async () => {
+    if (!finishNotes.trim()) return;
+    setTranslating(true);
+    setOriginalNotes(finishNotes);
+    try {
+      const { data, error } = await supabase.functions.invoke("translate-notes", {
+        body: { notes: finishNotes.trim() },
+      });
+      if (error) throw error;
+      if (data?.translated) {
+        setFinishNotes(data.translated);
+        toast.success("Þýtt á íslensku!");
+      }
+    } catch (e) {
+      toast.error("Villa við þýðingu");
+      setOriginalNotes(null);
+    }
+    setTranslating(false);
+  };
+
+  const handleRevertNotes = () => {
+    if (originalNotes !== null) {
+      setFinishNotes(originalNotes);
+      setOriginalNotes(null);
+      toast("Upprunalegar athugasemdir endurheimtar", { icon: "↩️" });
+    }
+  };
+
+  const handleVoiceInput = () => {
+    const SpeechRecognitionAPI =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognitionAPI) { toast.error("Vafrinn þinn styður ekki talgreiningu"); return; }
+    if (isRecording) {
+      isListeningRef.current = false;
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+      return;
+    }
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch (_) {}
+      recognitionRef.current = null;
+    }
+    const recognition = new SpeechRecognitionAPI();
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((r: any) => r[0].transcript)
+        .join(" ");
+      setFinishNotes((prev) => (prev ? prev + " " + transcript : transcript));
+    };
+    recognition.onend = () => {
+      if (isListeningRef.current) {
+        try { recognition.start(); } catch (_) {}
+      } else {
+        setIsRecording(false);
+      }
+    };
+    recognition.onerror = (event: any) => {
+      if (event.error === "not-allowed") {
+        toast.error("Hljóðnemi ekki leyfður");
+        isListeningRef.current = false;
+        setIsRecording(false);
+      } else if (event.error !== "no-speech") {
+        isListeningRef.current = false;
+        setIsRecording(false);
+      }
+    };
+    recognitionRef.current = recognition;
+    isListeningRef.current = true;
+    recognition.start();
+    setIsRecording(true);
+  };
+
+  const handleQuickSchedule = () => {
+    if (!scheduleDate) return;
+    const nextCallAt = scheduleTime
+      ? new Date(`${scheduleDate}T${scheduleTime}`).toISOString()
+      : new Date(`${scheduleDate}T09:00`).toISOString();
+    onUpdate({ ...editedCompany, nextCallAt });
+    setShowScheduler(false);
+    setScheduleDate("");
+    setScheduleTime("09:00");
+    toast.success("Símtal skipulagt!");
   };
 
   const formatPrice = (n: number) =>
@@ -425,6 +584,50 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         <Textarea value={editedCompany.notes} onChange={(e) => updateField("notes", e.target.value)} rows={3} />
       </div>
 
+      {/* Schedule a call button */}
+      <div className="rounded-lg border border-dashed border-primary/30 p-3 space-y-2">
+        <Button
+          variant="outline"
+          className="w-full gap-2"
+          onClick={() => setShowScheduler(!showScheduler)}
+        >
+          <Phone className="w-4 h-4" />
+          Skipuleggja símtal
+        </Button>
+        {showScheduler && (
+          <div className="space-y-2 pt-1">
+            <div className="flex gap-2">
+              <Input
+                type="date"
+                value={scheduleDate}
+                onChange={(e) => setScheduleDate(e.target.value)}
+                className="flex-1 text-sm h-9"
+              />
+              <Input
+                type="time"
+                value={scheduleTime}
+                onChange={(e) => setScheduleTime(e.target.value)}
+                className="w-28 text-sm h-9"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                disabled={!scheduleDate}
+                onClick={handleQuickSchedule}
+                className="flex-1 gap-1.5"
+              >
+                <CalendarIcon className="w-3.5 h-3.5" />
+                Vista
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => { setShowScheduler(false); setScheduleDate(""); setScheduleTime("09:00"); }}>
+                Hætta við
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Save */}
       <Button onClick={handleSave} className="w-full gap-2">
         <Save className="w-4 h-4" />
@@ -441,28 +644,13 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
           <Phone className="w-4 h-4 text-primary" />
           <Label className="text-sm font-semibold">Símtalaskrá</Label>
         </div>
-        <Button variant="outline" size="sm" onClick={() => setAddingCall(true)} className="gap-1.5 text-xs">
+        <Button variant="outline" size="sm" onClick={() => setFinishingCall(true)} className="gap-1.5 text-xs">
           <Plus className="w-3.5 h-3.5" /> Nýtt símtal
         </Button>
       </div>
 
-      {addingCall && (
-        <div className="rounded-xl border border-primary/30 bg-accent/30 p-3 space-y-2">
-          <Textarea value={newCallNote} onChange={(e) => setNewCallNote(e.target.value)} placeholder="Skrifaðu athugasemdir frá símtalinu..." rows={3} autoFocus className="bg-background" />
-          <div className="flex gap-2 justify-end">
-            <Button variant="ghost" size="sm" onClick={() => { setAddingCall(false); setNewCallNote(""); }}>Hætta við</Button>
-            <Button size="sm" disabled={!newCallNote.trim()} onClick={async () => {
-              const log = await addCallLog(company.id, newCallNote.trim());
-              if (log) { setCallLogs((prev) => [log, ...prev]); setNewCallNote(""); setAddingCall(false); toast.success("Símtal skráð!"); }
-              else { toast.error("Villa við skráningu"); }
-            }} className="gap-1.5">
-              <Phone className="w-3.5 h-3.5" /> Vista símtal
-            </Button>
-          </div>
-        </div>
-      )}
 
-      {callLogs.length === 0 && !addingCall ? (
+      {callLogs.length === 0 ? (
         <div className="rounded-xl border border-dashed p-6 text-center text-muted-foreground">
           <Phone className="w-6 h-6 mx-auto mb-2 opacity-40" />
           <p className="text-xs">Engin símtöl skráð ennþá</p>
@@ -488,17 +676,129 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   );
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { if (!v) { onClose(); setEditMode(false); } }}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-bold text-foreground">{company.name}</DialogTitle>
-            <StageBadge stage={company.stage} size="md" />
-          </div>
-        </DialogHeader>
+    <>
+      {/* Full call overlay */}
+      {finishingCall && (
+        <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
+          <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6">
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-foreground">Nýtt símtal</h2>
+              <p className="text-muted-foreground mt-1">
+                <span className="font-semibold text-foreground">{company.name}</span>
+                {company.phone && <span className="ml-2">· 📞 {company.phone}</span>}
+              </p>
+            </div>
+            {/* Contact name prompt if missing */}
+            {!company.owner && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Manstu nafnið á tengiliðnum?</label>
+                <Input
+                  value={finishOwnerName}
+                  onChange={(e) => setFinishOwnerName(e.target.value)}
+                  placeholder="Nafn tengiliðs..."
+                />
+              </div>
+            )}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
+                <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                  {originalNotes !== null && (
+                    <Button variant="outline" size="sm" onClick={handleRevertNotes} className="gap-1.5 text-xs h-7 text-muted-foreground">
+                      ↩️ Til baka
+                    </Button>
+                  )}
+                  <Button variant="outline" size="sm" onClick={handleTranslate} disabled={!finishNotes.trim() || translating} className="gap-1.5 text-xs h-7">
+                    {translating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Languages className="w-3.5 h-3.5" />}
+                    {translating ? "Þýði..." : "Þýða á íslensku"}
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleSummarize} disabled={!finishNotes.trim() || summarizing} className="gap-1.5 text-xs h-7">
+                    {summarizing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                    {summarizing ? "Tek saman..." : "AI samantekt"}
+                  </Button>
+                </div>
+              </div>
+              <div className="relative">
+                <Textarea
+                  value={finishNotes}
+                  onChange={(e) => { setFinishNotes(e.target.value); setOriginalNotes(null); }}
+                  placeholder="Skrifaðu athugasemdir frá símtalinu eða notaðu hljóðnemann..."
+                  rows={5}
+                  autoFocus
+                  className="text-base pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleVoiceInput}
+                  className={`absolute bottom-2 right-2 h-7 w-7 ${isRecording ? "text-destructive animate-pulse" : "text-muted-foreground hover:text-foreground"}`}
+                  title={isRecording ? "Stöðva talgreiningu" : "Tala (enska → texti)"}
+                >
+                  {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </Button>
+              </div>
+              {isRecording && (
+                <p className="text-xs text-destructive font-medium animate-pulse flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-destructive inline-block" />
+                  Hlusta... (talaðu á ensku)
+                </p>
+              )}
+            </div>
 
-        {editMode ? renderEditMode() : renderViewMode()}
-      </DialogContent>
-    </Dialog>
+            {/* Next call scheduler */}
+            <div className="space-y-2 rounded-lg border border-dashed border-border p-3 bg-muted/30">
+              <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-primary" />
+                Hvenær er næsta símtal?
+              </label>
+              <div className="flex gap-2">
+                <Input type="date" value={nextCallDate} onChange={(e) => setNextCallDate(e.target.value)} className="flex-1 text-sm h-9" />
+                <Input type="time" value={nextCallTime} onChange={(e) => setNextCallTime(e.target.value)} className="w-28 text-sm h-9" placeholder="09:00" />
+              </div>
+              {!nextCallDate && (
+                <p className="text-xs text-muted-foreground">Ef þú skilur þetta eftir tómt verður ekkert símtal skipulagt.</p>
+              )}
+            </div>
+
+            <div className="flex gap-3">
+              <Button onClick={handleFinishCall} disabled={!finishNotes.trim() || savingFinish} className="flex-1 gap-2">
+                <CheckCircle className="w-4 h-4" />
+                {savingFinish ? "Vista..." : "Vista og ljúka"}
+              </Button>
+              <Button variant="ghost" onClick={() => {
+                isListeningRef.current = false;
+                recognitionRef.current?.stop();
+                setFinishingCall(false);
+                setFinishNotes("");
+                setFinishOwnerName("");
+                setOriginalNotes(null);
+                setNextCallDate("");
+                setNextCallTime("");
+                setIsRecording(false);
+              }} className="text-muted-foreground">
+                Hætta við
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Dialog open={open} onOpenChange={(v) => { if (!v) { onClose(); setEditMode(false); } }}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-xl font-bold text-foreground">{company.name}</DialogTitle>
+              <StageBadge stage={company.stage} size="md" />
+            </div>
+          </DialogHeader>
+
+          {editMode ? renderEditMode() : renderViewMode()}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
