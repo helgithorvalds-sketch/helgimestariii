@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -683,7 +684,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   return (
     <>
       {/* Full call overlay */}
-      {finishingCall && (
+      {finishingCall && createPortal(
         <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
           <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6">
             <div className="text-center">
@@ -790,7 +791,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
 
       <Dialog open={open} onOpenChange={(v) => { if (!v) { onClose(); setEditMode(false); } }}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
