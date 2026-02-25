@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
 import { StageBadge } from "./StageBadge";
 import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
 import { toast } from "sonner";
@@ -91,9 +91,14 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
       setCallLogs((prev) => [log, ...prev]);
       let nextCallAt: string | undefined = undefined;
       if (nextCallDate && nextCallTime) {
-        nextCallAt = new Date(`${nextCallDate}T${nextCallTime}`).toISOString();
+        const [h, m] = nextCallTime.split(":").map(Number);
+        const d = parseLocalDate(nextCallDate);
+        d.setHours(h, m, 0, 0);
+        nextCallAt = formatLocalISO(d);
       } else if (nextCallDate) {
-        nextCallAt = new Date(`${nextCallDate}T09:00`).toISOString();
+        const d = parseLocalDate(nextCallDate);
+        d.setHours(9, 0, 0, 0);
+        nextCallAt = formatLocalISO(d);
       }
       const updated = {
         ...company,
@@ -211,9 +216,10 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
 
   const handleQuickSchedule = () => {
     if (!scheduleDate) return;
-    const nextCallAt = scheduleTime
-      ? new Date(`${scheduleDate}T${scheduleTime}`).toISOString()
-      : new Date(`${scheduleDate}T09:00`).toISOString();
+    const d = parseLocalDate(scheduleDate);
+    const [h, m] = (scheduleTime || "09:00").split(":").map(Number);
+    d.setHours(h, m, 0, 0);
+    const nextCallAt = formatLocalISO(d);
     onUpdate({ ...editedCompany, nextCallAt });
     setShowScheduler(false);
     setScheduleDate("");
@@ -224,9 +230,29 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   const formatPrice = (n: number) =>
     n.toLocaleString("is-IS") + " kr.";
 
+  // Local timezone helpers
+  const formatLocalDate = (date: Date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+  const formatLocalISO = (date: Date) => {
+    const y = date.getFullYear();
+    const mo = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    const h = String(date.getHours()).padStart(2, "0");
+    const mi = String(date.getMinutes()).padStart(2, "0");
+    return `${y}-${mo}-${d}T${h}:${mi}:00`;
+  };
+  const parseLocalDate = (dateStr: string): Date => {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+
   const getDaysUntil = (dateStr: string) => {
     const now = new Date();
-    const target = parseISO(dateStr);
+    const target = new Date(dateStr);
     const diffMs = target.getTime() - now.getTime();
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
     if (diffDays < 0) return `${Math.abs(diffDays)} dögum síðan`;
@@ -314,12 +340,12 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
           <div className="flex-1">
             <p className="text-xs text-muted-foreground">Næsta símtal</p>
             <p className="text-sm font-medium text-foreground">
-              {format(parseISO(company.nextCallAt), "dd.MM.yyyy · HH:mm")}
+              {format(new Date(company.nextCallAt), "dd.MM.yyyy · HH:mm")}
             </p>
           </div>
           <span className={cn(
             "text-xs font-semibold px-2.5 py-1 rounded-full",
-            parseISO(company.nextCallAt).getTime() < Date.now()
+            new Date(company.nextCallAt).getTime() < Date.now()
               ? "bg-destructive/10 text-destructive"
               : "bg-primary/10 text-primary"
           )}>
@@ -549,18 +575,18 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             <PopoverTrigger asChild>
               <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !editedCompany.nextCallAt && "text-muted-foreground")}>
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {editedCompany.nextCallAt ? format(parseISO(editedCompany.nextCallAt), "dd.MM.yyyy") : "Veldu dagsetningu"}
+                {editedCompany.nextCallAt ? format(new Date(editedCompany.nextCallAt), "dd.MM.yyyy") : "Veldu dagsetningu"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
-                selected={editedCompany.nextCallAt ? parseISO(editedCompany.nextCallAt) : undefined}
+                selected={editedCompany.nextCallAt ? new Date(editedCompany.nextCallAt) : undefined}
                 onSelect={(date) => {
                   if (date) {
-                    const existing = editedCompany.nextCallAt ? parseISO(editedCompany.nextCallAt) : new Date();
-                    date.setHours(existing.getHours(), existing.getMinutes());
-                    updateField("nextCallAt", date.toISOString());
+                    const existing = editedCompany.nextCallAt ? new Date(editedCompany.nextCallAt) : new Date();
+                    date.setHours(existing.getHours(), existing.getMinutes(), 0, 0);
+                    updateField("nextCallAt", formatLocalISO(date));
                   } else {
                     updateField("nextCallAt", undefined);
                   }
@@ -572,12 +598,12 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
           </Popover>
           <Input
             type="time"
-            value={editedCompany.nextCallAt ? format(parseISO(editedCompany.nextCallAt), "HH:mm") : ""}
+            value={editedCompany.nextCallAt ? format(new Date(editedCompany.nextCallAt), "HH:mm") : ""}
             onChange={(e) => {
               const [h, m] = e.target.value.split(":").map(Number);
-              const dt = editedCompany.nextCallAt ? parseISO(editedCompany.nextCallAt) : new Date();
+              const dt = editedCompany.nextCallAt ? new Date(editedCompany.nextCallAt) : new Date();
               dt.setHours(h, m, 0, 0);
-              updateField("nextCallAt", dt.toISOString());
+              updateField("nextCallAt", formatLocalISO(dt));
             }}
             className="w-28"
           />
@@ -667,7 +693,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             <div key={log.id} className="rounded-lg border border-blue-200 bg-blue-50 p-3 group relative dark:border-blue-800 dark:bg-blue-950/30">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-muted-foreground font-medium mb-1">{format(parseISO(log.calledAt), "dd.MM.yyyy · HH:mm")}</p>
+                  <p className="text-xs text-muted-foreground font-medium mb-1">{format(new Date(log.calledAt), "dd.MM.yyyy · HH:mm")}</p>
                   <p className="text-sm text-foreground whitespace-pre-wrap">{log.notes}</p>
                 </div>
                 <button onClick={async () => { const ok = await deleteCallLog(log.id); if (ok) setCallLogs((prev) => prev.filter((l) => l.id !== log.id)); }} className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive p-1">

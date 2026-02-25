@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
-import { format, isToday, isTomorrow, isPast, parseISO, differenceInCalendarDays } from "date-fns";
+import { format, isToday, isTomorrow, isPast, differenceInCalendarDays } from "date-fns";
 import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
@@ -49,19 +49,27 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
 
   const unscheduled = companies.filter((c) => !c.nextCallAt);
 
+  const toLocalISO = (d: Date) => {
+    const y = d.getFullYear();
+    const mo = String(d.getMonth() + 1).padStart(2, "0");
+    const da = String(d.getDate()).padStart(2, "0");
+    const h = String(d.getHours()).padStart(2, "0");
+    const mi = String(d.getMinutes()).padStart(2, "0");
+    return `${y}-${mo}-${da}T${h}:${mi}:00`;
+  };
   const formatCallDate = (dateStr: string) => {
-    const date = parseISO(dateStr);
+    const date = new Date(dateStr);
     if (isToday(date)) return "Í dag";
     if (isTomorrow(date)) return "Á morgun";
     return format(date, "dd.MM.yyyy");
   };
 
   const formatCallTime = (dateStr: string) => {
-    return format(parseISO(dateStr), "HH:mm");
+    return format(new Date(dateStr), "HH:mm");
   };
 
   const getDaysLabel = (dateStr: string) => {
-    const days = differenceInCalendarDays(parseISO(dateStr), new Date());
+    const days = differenceInCalendarDays(new Date(dateStr), new Date());
     if (days < 0) return `${Math.abs(days)} dögum síðan`;
     if (days === 0) return "Í dag";
     if (days === 1) return "Á morgun";
@@ -69,7 +77,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   };
 
   const isOverdue = (dateStr: string) => {
-    const date = parseISO(dateStr);
+    const date = new Date(dateStr);
     const now = new Date();
     return date.getFullYear() < now.getFullYear() ||
       (date.getFullYear() === now.getFullYear() && date.getMonth() < now.getMonth()) ||
@@ -78,7 +86,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
 
   const getRowStyle = (dateStr: string) => {
     if (isOverdue(dateStr)) return "border-l-4 border-l-destructive bg-destructive/10 ring-1 ring-destructive/30";
-    const date = parseISO(dateStr);
+    const date = new Date(dateStr);
     if (isToday(date)) return "border-l-4 border-l-primary bg-primary/5";
     if (isTomorrow(date)) return "border-l-4 border-l-amber-500 bg-amber-500/5";
     return "border-l-4 border-l-border";
@@ -105,10 +113,11 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
     const log = await addCallLog(finishingCall.id, finishNotes.trim());
     if (log) {
       let nextCallAt: string | undefined = undefined;
-      if (nextCallDate && nextCallTime) {
-        nextCallAt = new Date(`${nextCallDate}T${nextCallTime}`).toISOString();
-      } else if (nextCallDate) {
-        nextCallAt = new Date(`${nextCallDate}T09:00`).toISOString();
+      if (nextCallDate) {
+        const [y, mo, d] = nextCallDate.split("-").map(Number);
+        const [h, m] = (nextCallTime || "09:00").split(":").map(Number);
+        const dt = new Date(y, mo - 1, d, h, m, 0);
+        nextCallAt = `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}T${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:00`;
       }
       if (onCompanyUpdate) {
         onCompanyUpdate({
@@ -481,7 +490,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                             if (!company.nextCallAt || !onCompanyUpdate) return;
                             const next = new Date(company.nextCallAt);
                             next.setDate(next.getDate() + daysToMonday);
-                            onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
+                             onCompanyUpdate({ ...company, nextCallAt: toLocalISO(next) });
                             addCallLog(company.id, "Svaraði ekki");
                             toast(showMondayPrompt ? "Símtal fært á mánudag" : "Símtal fært á morgun", { icon: "📞" });
                             setConfirmNoAnswer(null);
@@ -499,7 +508,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                               if (!company.nextCallAt || !onCompanyUpdate) return;
                               const next = new Date(company.nextCallAt);
                               next.setDate(next.getDate() + 1);
-                              onCompanyUpdate({ ...company, nextCallAt: next.toISOString() });
+                              onCompanyUpdate({ ...company, nextCallAt: toLocalISO(next) });
                               addCallLog(company.id, "Svaraði ekki");
                               toast("Símtal fært á morgun", { icon: "📞" });
                               setConfirmNoAnswer(null);
@@ -552,7 +561,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                           logs.map((log) => (
                             <div key={log.id} className="rounded-md bg-background p-2.5 border">
                               <p className="text-xs text-muted-foreground font-medium mb-0.5">
-                                {format(parseISO(log.calledAt), "dd.MM.yyyy · HH:mm")}
+                                {format(new Date(log.calledAt), "dd.MM.yyyy · HH:mm")}
                               </p>
                               <p className="text-sm text-foreground whitespace-pre-wrap">{log.notes}</p>
                             </div>
@@ -658,7 +667,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                       {companyName}
                     </p>
                     <span className="text-[10px] text-muted-foreground flex-shrink-0 ml-2">
-                      {format(parseISO(log.calledAt), "dd.MM · HH:mm")}
+                      {format(new Date(log.calledAt), "dd.MM · HH:mm")}
                     </span>
                   </div>
                   <p className={`text-sm whitespace-pre-wrap line-clamp-3 ${
