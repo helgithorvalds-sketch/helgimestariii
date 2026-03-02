@@ -10,10 +10,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem, ContactPerson } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare, ClipboardList, Clock, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
+import { Task, fetchTasksByCompany, addTask, toggleTaskCompleted, deleteTask } from "@/services/taskService";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -51,11 +52,20 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("09:00");
 
+  // Tasks state
+  const [showTasks, setShowTasks] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTaskDesc, setNewTaskDesc] = useState("");
+  const [newTaskDeadline, setNewTaskDeadline] = useState("");
+  const [newTaskTime, setNewTaskTime] = useState("");
+
   useEffect(() => {
     if (open && company.id) {
       fetchCallLogs(company.id).then(setCallLogs);
+      fetchTasksByCompany(company.id).then(setTasks);
       setEditMode(false);
       setEditedCompany(company);
+      setShowTasks(false);
     }
   }, [open, company.id]);
 
@@ -452,6 +462,137 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
 
       {/* Call Log - Blue */}
       {renderCallLog()}
+
+      {/* Tasks Section */}
+      <div className="space-y-2">
+        <Button
+          variant="outline"
+          className="w-full gap-2 relative"
+          onClick={() => setShowTasks(!showTasks)}
+        >
+          <ClipboardList className="w-4 h-4" />
+          Verkefni
+          {tasks.filter(t => !t.completed).length > 0 && (
+            <span className={cn(
+              "ml-1 min-w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white",
+              tasks.some(t => !t.completed && t.deadline && new Date(t.deadline) < new Date()) ? "bg-destructive" : "bg-primary"
+            )}>
+              {tasks.filter(t => !t.completed).length}
+            </span>
+          )}
+        </Button>
+
+        {showTasks && (
+          <div className="rounded-lg border p-3 space-y-3">
+            {/* Add new task */}
+            <div className="space-y-2">
+              <Input
+                value={newTaskDesc}
+                onChange={(e) => setNewTaskDesc(e.target.value)}
+                placeholder="Hvað þarf að gera..."
+              />
+              <div className="flex gap-2">
+                <Input
+                  type="date"
+                  value={newTaskDeadline}
+                  onChange={(e) => setNewTaskDeadline(e.target.value)}
+                  className="flex-1"
+                />
+                <Input
+                  type="time"
+                  value={newTaskTime}
+                  onChange={(e) => setNewTaskTime(e.target.value)}
+                  className="w-24"
+                />
+                <Button
+                  size="sm"
+                  disabled={!newTaskDesc.trim()}
+                  onClick={async () => {
+                    let deadline: string | null = null;
+                    if (newTaskDeadline) {
+                      const [y, m, d] = newTaskDeadline.split("-").map(Number);
+                      const dt = new Date(y, m - 1, d);
+                      if (newTaskTime) {
+                        const [h, mi] = newTaskTime.split(":").map(Number);
+                        dt.setHours(h, mi, 0, 0);
+                      } else {
+                        dt.setHours(23, 59, 0, 0);
+                      }
+                      deadline = dt.toISOString();
+                    }
+                    const task = await addTask(company.id, newTaskDesc.trim(), deadline);
+                    if (task) {
+                      setTasks(prev => [task, ...prev]);
+                      setNewTaskDesc("");
+                      setNewTaskDeadline("");
+                      setNewTaskTime("");
+                      toast.success("Verkefni bætt við!");
+                    }
+                  }}
+                  className="gap-1"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Task list */}
+            {tasks.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-2">Engin verkefni</p>
+            ) : (
+              <div className="space-y-1.5">
+                {tasks.map((task) => {
+                  const overdue = !task.completed && task.deadline && new Date(task.deadline) < new Date();
+                  return (
+                    <div key={task.id} className={cn(
+                      "flex items-start gap-2 rounded-md border p-2 transition-colors",
+                      task.completed && "opacity-60",
+                      overdue && "border-destructive/50 bg-destructive/5"
+                    )}>
+                      <Checkbox
+                        checked={task.completed}
+                        onCheckedChange={async () => {
+                          const newVal = !task.completed;
+                          const ok = await toggleTaskCompleted(task.id, newVal);
+                          if (ok) {
+                            setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: newVal, completedAt: newVal ? new Date().toISOString() : null } : t));
+                          }
+                        }}
+                        className="mt-0.5"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className={cn("text-sm", task.completed && "line-through text-muted-foreground")}>
+                          {task.description}
+                        </p>
+                        {task.deadline && (
+                          <span className={cn(
+                            "text-xs flex items-center gap-1 mt-0.5",
+                            overdue ? "text-destructive font-semibold" : "text-muted-foreground"
+                          )}>
+                            {overdue ? <AlertTriangle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                            {format(new Date(task.deadline), "dd.MM.yyyy HH:mm")}
+                          </span>
+                        )}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          const ok = await deleteTask(task.id);
+                          if (ok) setTasks(prev => prev.filter(t => t.id !== task.id));
+                        }}
+                        className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Actions */}
       <div className="flex gap-2">
