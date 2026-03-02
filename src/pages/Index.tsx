@@ -5,15 +5,17 @@ import { Label } from "@/components/ui/label";
 import { Company, CompanyStage, STAGE_ORDER, STAGE_LABELS, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER, PaidSubStatus, PAID_SUB_LABELS, PAID_SUB_ORDER } from "@/types";
 import { fetchCompanies, addCompany, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { CallLog, fetchCallLogs } from "@/services/callLogService";
+import { fetchAllTasks, Task } from "@/services/taskService";
 import { format, parseISO, differenceInCalendarDays } from "date-fns";
 import { StageBadge } from "@/components/StageBadge";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import confetti from "canvas-confetti";
 
@@ -38,6 +40,7 @@ export default function Index() {
   const [cardCallLogs, setCardCallLogs] = useState<Record<string, CallLog[]>>({});
   const [loadingCardLogs, setLoadingCardLogs] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [allTasks, setAllTasks] = useState<Task[]>([]);
 
   const loadCardLogs = useCallback(async (companyId: string) => {
     if (cardCallLogs[companyId]) return;
@@ -60,12 +63,16 @@ export default function Index() {
   };
 
   const loadData = async () => {
-    const data = await fetchCompanies();
+    const [data, tasks] = await Promise.all([fetchCompanies(), fetchAllTasks()]);
     setCompanies(data);
+    setAllTasks(tasks);
     setLoading(false);
   };
 
   useEffect(() => { loadData(); }, []);
+
+  const pendingTaskCount = allTasks.filter((t) => !t.completed).length;
+  const hasOverdueTasks = allTasks.some((t) => !t.completed && t.deadline && new Date(t.deadline) < new Date());
 
   const handleAdd = async (data: Omit<Company, "id" | "createdAt">) => {
     const result = await addCompany(data);
@@ -471,6 +478,18 @@ export default function Index() {
                 </button>
               )}
             </div>
+            <Button variant="outline" onClick={() => navigate("/tasks")} className="gap-2 shadow-sm relative">
+              <ClipboardList className="w-4 h-4" />
+              Verkefni
+              {pendingTaskCount > 0 && (
+                <span className={cn(
+                  "absolute -top-2 -right-2 min-w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white",
+                  hasOverdueTasks ? "bg-destructive" : "bg-primary"
+                )}>
+                  {pendingTaskCount}
+                </span>
+              )}
+            </Button>
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
