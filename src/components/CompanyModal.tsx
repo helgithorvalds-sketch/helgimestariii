@@ -25,9 +25,10 @@ interface CompanyModalProps {
   onUpdate: (company: Company) => void;
   onDelete: (id: string) => void;
   initialShowTasks?: boolean;
+  initialShowCall?: boolean;
 }
 
-export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initialShowTasks }: CompanyModalProps) {
+export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initialShowTasks, initialShowCall }: CompanyModalProps) {
   const [editMode, setEditMode] = useState(false);
   const [editedCompany, setEditedCompany] = useState<Company>(company);
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
@@ -67,6 +68,9 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
       setEditMode(false);
       setEditedCompany(company);
       setShowTasks(!!initialShowTasks);
+      if (initialShowCall) {
+        setFinishingCall(true);
+      }
     }
   }, [open, company.id]);
 
@@ -1013,11 +1017,37 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
                 <Phone className="w-3.5 h-3.5 text-primary" />
                 Hvenær er næsta símtal?
               </label>
+              {/* Show existing scheduled call warning */}
+              {company.nextCallAt && (
+                <div className="rounded-md border border-amber-300 bg-amber-50 p-2.5 dark:border-amber-700 dark:bg-amber-950/30">
+                  <p className="text-xs font-medium text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    Símtal er þegar skipulagt:
+                  </p>
+                  <p className="text-sm font-semibold text-foreground mt-1">
+                    {format(new Date(company.nextCallAt), "dd.MM.yyyy · HH:mm")}
+                  </p>
+                  {/* Show last call log as context for why it was scheduled */}
+                  {callLogs.length > 0 && (
+                    <div className="mt-2 pt-2 border-t border-amber-200 dark:border-amber-800">
+                      <p className="text-[10px] text-muted-foreground font-medium">
+                        Síðasta athugasemd ({format(new Date(callLogs[0].calledAt), "dd.MM")}):
+                      </p>
+                      <p className="text-xs text-foreground mt-0.5 line-clamp-2">{callLogs[0].notes}</p>
+                    </div>
+                  )}
+                  {nextCallDate && (
+                    <p className="text-xs text-amber-700 dark:text-amber-400 font-medium mt-2 flex items-center gap-1">
+                      ⚠️ Þú ert að færa símtalið á nýjan tíma
+                    </p>
+                  )}
+                </div>
+              )}
               <div className="flex gap-2">
                 <Input type="date" value={nextCallDate} onChange={(e) => setNextCallDate(e.target.value)} className="flex-1 text-sm h-9" />
                 <Input type="time" value={nextCallTime} onChange={(e) => setNextCallTime(e.target.value)} className="w-28 text-sm h-9" placeholder="09:00" />
               </div>
-              {!nextCallDate && (
+              {!nextCallDate && !company.nextCallAt && (
                 <p className="text-xs text-muted-foreground">Ef þú skilur þetta eftir tómt verður ekkert símtal skipulagt.</p>
               )}
             </div>

@@ -41,7 +41,7 @@ export default function Index() {
   const [loadingCardLogs, setLoadingCardLogs] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [allTasks, setAllTasks] = useState<Task[]>([]);
-  const [initialTab, setInitialTab] = useState<"default" | "tasks">("default");
+  const [initialTab, setInitialTab] = useState<"default" | "tasks" | "call">("default");
 
   const loadCardLogs = useCallback(async (companyId: string) => {
     if (cardCallLogs[companyId]) return;
@@ -433,6 +433,15 @@ export default function Index() {
 
             {/* Action buttons */}
             <div className="flex gap-2 mt-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 gap-2"
+                onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); setInitialTab("call"); }}
+              >
+                <Phone className="w-3.5 h-3.5" />
+                Nýtt símtal
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -908,6 +917,7 @@ export default function Index() {
           onUpdate={handleUpdate}
           onDelete={handleDelete}
           initialShowTasks={initialTab === "tasks"}
+          initialShowCall={initialTab === "call"}
         />
       )}
 

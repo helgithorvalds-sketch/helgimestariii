@@ -322,6 +322,23 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
               <Phone className="w-3.5 h-3.5 text-primary" />
               Hvenær er næsta símtal?
             </label>
+            {/* Show existing scheduled call warning */}
+            {finishingCall?.nextCallAt && (
+              <div className="rounded-md border border-amber-300 bg-amber-50 p-2.5 dark:border-amber-700 dark:bg-amber-950/30">
+                <p className="text-xs font-medium text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  Símtal er þegar skipulagt:
+                </p>
+                <p className="text-sm font-semibold text-foreground mt-1">
+                  {format(new Date(finishingCall.nextCallAt), "dd.MM.yyyy · HH:mm")}
+                </p>
+                {nextCallDate && (
+                  <p className="text-xs text-amber-700 dark:text-amber-400 font-medium mt-2 flex items-center gap-1">
+                    ⚠️ Þú ert að færa símtalið á nýjan tíma
+                  </p>
+                )}
+              </div>
+            )}
             <div className="flex gap-2">
               <Input
                 type="date"
@@ -337,7 +354,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                 placeholder="09:00"
               />
             </div>
-            {!nextCallDate && (
+            {!nextCallDate && !finishingCall?.nextCallAt && (
               <p className="text-xs text-muted-foreground">Ef þú skilur þetta eftir tómt verður fyrirtækið sett sem lokið.</p>
             )}
           </div>
@@ -594,16 +611,32 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
             {unscheduled.map((company) => (
               <div
                 key={company.id}
-                onClick={() => onCompanyClick(company)}
-                className="rounded-lg border p-3 cursor-pointer hover:shadow-md transition-all hover:bg-muted/30"
+                className="rounded-lg border p-3 hover:shadow-md transition-all hover:bg-muted/30"
               >
-                <p className="font-medium text-sm text-foreground">{company.name}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <StageBadge stage={company.stage} size="sm" />
-                  <span className="text-xs text-muted-foreground">
-                    {company.estimatedPrice.toLocaleString("is-IS")} kr.
-                  </span>
+                <div className="cursor-pointer" onClick={() => onCompanyClick(company)}>
+                  <p className="font-medium text-sm text-foreground">{company.name}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <StageBadge stage={company.stage} size="sm" />
+                    <span className="text-xs text-muted-foreground">
+                      {company.estimatedPrice.toLocaleString("is-IS")} kr.
+                    </span>
+                  </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-2 gap-1.5 text-xs"
+                  onClick={() => {
+                    setFinishingCall(company);
+                    setFinishNotes("");
+                    setFinishOwnerName(company.owner || "");
+                    setNextCallDate("");
+                    setNextCallTime("");
+                  }}
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  Nýtt símtal
+                </Button>
               </div>
             ))}
           </div>
