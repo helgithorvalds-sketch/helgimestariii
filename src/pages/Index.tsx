@@ -137,20 +137,16 @@ export default function Index() {
       }
     }
 
-    // If dropping into "partially_paid", prompt for amount only if not already set
-    if (stage === "paid" && paidSub === "partially_paid") {
+    // If dropping into paid sub-statuses, prompt for amount
+    if (stage === "paid" && (paidSub === "partially_paid" || paidSub === "fully_paid")) {
       const company = companies.find((c) => c.id === draggedId);
-      if (!company?.amountPaid) {
+      if (!company?.amountPaid || paidSub === "fully_paid") {
         setPendingPaidDrop({ companyId: draggedId, sub: paidSub });
-        setPaidAmountInput("");
+        // Pre-fill with projected earnings for fully_paid
+        setPaidAmountInput(paidSub === "fully_paid" && company ? String(company.projectedEarnings || company.estimatedPrice) : "");
         setDraggedId(null);
         return;
       }
-    }
-
-    // If dropping into "fully_paid", fire confetti
-    if (stage === "paid" && paidSub === "fully_paid") {
-      fireConfetti();
     }
 
     const ok = await updateCompanyStage(draggedId, stage, subStatus || null, finishedSub || null, paidSub || null);
@@ -204,16 +200,22 @@ export default function Index() {
     if (!pendingPaidDrop) return;
     const amount = Number(paidAmountInput);
     if (!amount || amount <= 0) return;
-    const ok = await updateCompanyStage(pendingPaidDrop.companyId, "paid", null, null, "partially_paid", amount);
+    const sub = pendingPaidDrop.sub;
+    const ok = await updateCompanyStage(pendingPaidDrop.companyId, "paid", null, null, sub, amount);
     if (ok) {
       setCompanies((prev) =>
         prev.map((c) =>
           c.id === pendingPaidDrop.companyId
-            ? { ...c, stage: "paid" as CompanyStage, paidSubStatus: "partially_paid" as PaidSubStatus, amountPaid: amount }
+            ? { ...c, stage: "paid" as CompanyStage, paidSubStatus: sub, amountPaid: amount }
             : c
         )
       );
-      toast.success("Greitt X skráð!");
+      if (sub === "fully_paid") {
+        fireConfetti();
+        toast.success("Greitt að fullu! 🎉");
+      } else {
+        toast.success("Greitt X skráð!");
+      }
     }
     setPendingPaidDrop(null);
     setPaidAmountInput("");
@@ -818,7 +820,9 @@ export default function Index() {
             {/* Paid amount prompt dialog */}
             {pendingPaidDrop && (
               <div className="rounded-xl border-2 border-primary bg-card p-5 shadow-lg">
-                <p className="font-semibold text-foreground mb-3">Hversu mikið hefur verið greitt?</p>
+                <p className="font-semibold text-foreground mb-3">
+                  {pendingPaidDrop.sub === "fully_paid" ? "Hversu mikið var borgað samtals?" : "Hversu mikið hefur verið greitt?"}
+                </p>
                 <div className="flex gap-3">
                   <input
                     type="number"
