@@ -557,6 +557,22 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                       </Button>
                     )}
                     <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFinishingCall(company);
+                        setFinishNotes("");
+                        setFinishOwnerName(company.owner || "");
+                        setNextCallDate("");
+                        setNextCallTime("");
+                      }}
+                      className="gap-1.5 text-xs h-7 px-3"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                      Nýtt símtal
+                    </Button>
+                    <Button
                       variant="ghost"
                       size="sm"
                       onClick={(e) => {
