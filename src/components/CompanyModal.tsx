@@ -649,7 +649,10 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
             variant="ghost"
             size="sm"
             onClick={() => {
-              const newContacts = [...(editedCompany.contacts || []), { id: `c-${Date.now()}`, name: "", phone: "" }];
+              const existing = editedCompany.contacts && editedCompany.contacts.length > 0
+                ? editedCompany.contacts
+                : [{ id: "legacy", name: editedCompany.owner, phone: editedCompany.phone || "" }];
+              const newContacts = [...existing, { id: `c-${Date.now()}`, name: "", phone: "" }];
               updateField("contacts", newContacts);
             }}
             className="gap-1 text-xs h-7"
