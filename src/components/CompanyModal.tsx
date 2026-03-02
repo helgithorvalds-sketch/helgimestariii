@@ -24,9 +24,10 @@ interface CompanyModalProps {
   onClose: () => void;
   onUpdate: (company: Company) => void;
   onDelete: (id: string) => void;
+  initialShowTasks?: boolean;
 }
 
-export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: CompanyModalProps) {
+export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initialShowTasks }: CompanyModalProps) {
   const [editMode, setEditMode] = useState(false);
   const [editedCompany, setEditedCompany] = useState<Company>(company);
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
@@ -65,7 +66,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
       fetchTasksByCompany(company.id).then(setTasks);
       setEditMode(false);
       setEditedCompany(company);
-      setShowTasks(false);
+      setShowTasks(!!initialShowTasks);
     }
   }, [open, company.id]);
 

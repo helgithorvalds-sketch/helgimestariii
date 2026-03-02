@@ -41,6 +41,7 @@ export default function Index() {
   const [loadingCardLogs, setLoadingCardLogs] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [allTasks, setAllTasks] = useState<Task[]>([]);
+  const [initialTab, setInitialTab] = useState<"default" | "tasks">("default");
 
   const loadCardLogs = useCallback(async (companyId: string) => {
     if (cardCallLogs[companyId]) return;
@@ -430,16 +431,27 @@ export default function Index() {
               );
             })()}
 
-            {/* Breyta button */}
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full gap-2 mt-1"
-              onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); }}
-            >
-              <Pencil className="w-3.5 h-3.5" />
-              Breyta
-            </Button>
+            {/* Action buttons */}
+            <div className="flex gap-2 mt-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 gap-2"
+                onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); setInitialTab("tasks"); }}
+              >
+                <ClipboardList className="w-3.5 h-3.5" />
+                Verkefni
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 gap-2"
+                onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); }}
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                Breyta
+              </Button>
+            </div>
           </div>
         )}
       </div>
@@ -892,9 +904,10 @@ export default function Index() {
         <CompanyModal
           company={selectedCompany}
           open={!!selectedCompany}
-          onClose={() => setSelectedCompany(null)}
+          onClose={() => { setSelectedCompany(null); setInitialTab("default"); }}
           onUpdate={handleUpdate}
           onDelete={handleDelete}
+          initialShowTasks={initialTab === "tasks"}
         />
       )}
 
