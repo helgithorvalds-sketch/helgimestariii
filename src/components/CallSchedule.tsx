@@ -471,7 +471,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                   </div>
 
                   {/* Actions */}
-                  <div className="px-3 pb-2 flex items-center gap-2">
+                  <div className="px-3 pb-2 flex items-center gap-1.5 flex-wrap">
                     <Button
                       variant="default"
                       size="sm"
@@ -480,9 +480,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                         setFinishingCall(company);
                         setFinishNotes("");
                       }}
-                      className="gap-1.5 text-xs h-7 px-3"
+                      className="gap-1 text-xs h-6 px-2 rounded-full"
                     >
-                      <CheckCircle className="w-3.5 h-3.5" />
+                      <CheckCircle className="w-3 h-3" />
                       Lokið
                     </Button>
                     {confirmNoAnswer === company.id ? (() => {
@@ -550,9 +550,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                         variant="destructive"
                         size="sm"
                         onClick={(e) => { e.stopPropagation(); setConfirmNoAnswer(company.id); }}
-                        className="gap-1.5 text-xs h-7 px-3"
+                        className="gap-1 text-xs h-6 px-2 rounded-full"
                       >
-                        <PhoneMissed className="w-3.5 h-3.5" />
+                        <PhoneMissed className="w-3 h-3" />
                         Svaraði ekki
                       </Button>
                     )}
@@ -567,9 +567,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                         setNextCallDate("");
                         setNextCallTime("");
                       }}
-                      className="gap-1.5 text-xs h-7 px-3"
+                      className="gap-1 text-xs h-6 px-2 rounded-full"
                     >
-                      <Phone className="w-3.5 h-3.5" />
+                      <Phone className="w-3 h-3" />
                       Nýtt símtal
                     </Button>
                     <Button
@@ -579,11 +579,11 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                         e.stopPropagation();
                         toggleCallLogs(company.id);
                       }}
-                      className="gap-1.5 text-xs text-muted-foreground h-7 px-2"
+                      className="gap-1 text-xs text-muted-foreground h-6 px-2 rounded-full"
                     >
-                      <FileText className="w-3.5 h-3.5" />
+                      <FileText className="w-3 h-3" />
                       {loadingLogs === company.id ? "Hleð..." : "Fyrri símtöl"}
-                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                      {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                     </Button>
 
                     {isExpanded && logs && (
