@@ -20,6 +20,12 @@ export type PaidSubStatus =
   | "fully_paid"
   | "partially_paid";
 
+export interface ContactPerson {
+  id: string;
+  name: string;
+  phone: string;
+}
+
 export interface ChecklistItem {
   id: string;
   label: string;
@@ -42,6 +48,7 @@ export interface Company {
   paidSubStatus?: PaidSubStatus;
   estimatedPrice: number;
   customPrice?: number;
+  contacts: ContactPerson[];
   checklist: ChecklistItem[];
   notes: string;
   personalityDescription: string;

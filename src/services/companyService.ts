@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Company, CompanyStage, ChecklistItem, PreviewSubStatus, FinishedSubStatus, PaidSubStatus } from "@/types";
+import { Company, CompanyStage, ChecklistItem, ContactPerson, PreviewSubStatus, FinishedSubStatus, PaidSubStatus } from "@/types";
 
 // Convert DB row to Company type
 function rowToCompany(row: any): Company {
@@ -20,6 +20,7 @@ function rowToCompany(row: any): Company {
     estimatedPrice: row.estimated_price,
     customPrice: row.custom_price,
     checklist: (row.checklist || []) as ChecklistItem[],
+    contacts: (row.contacts || []) as ContactPerson[],
     notes: row.notes,
     personalityDescription: row.personality_description,
     previewSent: row.preview_sent,
@@ -52,6 +53,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     estimated_price: company.estimatedPrice,
     custom_price: company.customPrice || null,
     checklist: company.checklist as any,
+    contacts: company.contacts as any,
     notes: company.notes,
     personality_description: company.personalityDescription,
     preview_sent: company.previewSent,
