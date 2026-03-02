@@ -51,6 +51,7 @@ export type Database = {
           amount_paid: number | null
           checklist: Json
           company_id: string
+          contacts: Json
           created_at: string
           custom_price: number | null
           email: string | null
@@ -81,6 +82,7 @@ export type Database = {
           amount_paid?: number | null
           checklist?: Json
           company_id?: string
+          contacts?: Json
           created_at?: string
           custom_price?: number | null
           email?: string | null
@@ -111,6 +113,7 @@ export type Database = {
           amount_paid?: number | null
           checklist?: Json
           company_id?: string
+          contacts?: Json
           created_at?: string
           custom_price?: number | null
           email?: string | null

@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem } from "@/types";
+import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem, ContactPerson } from "@/types";
 import { StageBadge } from "./StageBadge";
 import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
@@ -266,21 +266,45 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
     <div className="space-y-4 pt-2">
       {/* Contact info */}
       <div className="space-y-2.5">
-        {company.owner && (
-          <div className="flex items-center gap-3">
-            <span className="text-muted-foreground text-sm w-24 flex-shrink-0">Tengiliður</span>
-            <span className="text-sm font-medium text-foreground">{company.owner}</span>
-          </div>
-        )}
-        {company.phone && (
-          <div className="flex items-center gap-3">
-            <span className="text-muted-foreground text-sm w-24 flex-shrink-0 flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5" /> Sími
-            </span>
-            <a href={`tel:${company.phone}`} className="text-sm font-medium text-primary hover:underline">
-              {company.phone}
-            </a>
-          </div>
+        {/* Show contacts array if available, fallback to legacy owner/phone */}
+        {company.contacts && company.contacts.length > 0 ? (
+          company.contacts.map((contact, idx) => (
+            <div key={contact.id} className="rounded-lg border p-2.5 space-y-1">
+              <div className="flex items-center gap-3">
+                <span className="text-muted-foreground text-sm w-24 flex-shrink-0">Tengiliður {company.contacts.length > 1 ? idx + 1 : ""}</span>
+                <span className="text-sm font-medium text-foreground">{contact.name || "—"}</span>
+              </div>
+              {contact.phone && (
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground text-sm w-24 flex-shrink-0 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5" /> Sími
+                  </span>
+                  <a href={`tel:${contact.phone}`} className="text-sm font-medium text-primary hover:underline">
+                    {contact.phone}
+                  </a>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <>
+            {company.owner && (
+              <div className="flex items-center gap-3">
+                <span className="text-muted-foreground text-sm w-24 flex-shrink-0">Tengiliður</span>
+                <span className="text-sm font-medium text-foreground">{company.owner}</span>
+              </div>
+            )}
+            {company.phone && (
+              <div className="flex items-center gap-3">
+                <span className="text-muted-foreground text-sm w-24 flex-shrink-0 flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5" /> Sími
+                </span>
+                <a href={`tel:${company.phone}`} className="text-sm font-medium text-primary hover:underline">
+                  {company.phone}
+                </a>
+              </div>
+            )}
+          </>
         )}
         {company.email && (
           <div className="flex items-center gap-3">
@@ -475,16 +499,73 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete }: Com
         <Input value={editedCompany.websiteUrl || ""} onChange={(e) => updateField("websiteUrl", e.target.value)} placeholder="https://..." type="url" />
       </div>
 
-      {/* Contact person */}
-      <div className="space-y-1.5">
-        <Label>Tengiliður <span className="text-destructive">*</span></Label>
-        <Input value={editedCompany.owner} onChange={(e) => updateField("owner", e.target.value)} placeholder="Nafn tengiliðs..." />
-      </div>
-
-      {/* Phone */}
-      <div className="space-y-1.5">
-        <Label className="flex items-center gap-1.5"><Phone className="w-4 h-4" /> Sími</Label>
-        <Input value={editedCompany.phone || ""} onChange={(e) => updateField("phone", e.target.value)} placeholder="Símanúmer..." />
+      {/* Contacts */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label>Tengiliðir</Label>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const newContacts = [...(editedCompany.contacts || []), { id: `c-${Date.now()}`, name: "", phone: "" }];
+              updateField("contacts", newContacts);
+            }}
+            className="gap-1 text-xs h-7"
+          >
+            <Plus className="w-3.5 h-3.5" /> Bæta við
+          </Button>
+        </div>
+        {(editedCompany.contacts && editedCompany.contacts.length > 0 ? editedCompany.contacts : [{ id: "legacy", name: editedCompany.owner, phone: editedCompany.phone || "" }]).map((contact, idx) => (
+          <div key={contact.id} className="flex gap-2 items-start">
+            <div className="flex-1 space-y-1">
+              <Input
+                value={contact.name}
+                onChange={(e) => {
+                  const updated = [...(editedCompany.contacts || [])];
+                  if (updated.length === 0) updated.push({ id: "legacy", name: "", phone: editedCompany.phone || "" });
+                  updated[idx] = { ...updated[idx], name: e.target.value };
+                  updateField("contacts", updated);
+                  if (idx === 0) updateField("owner", e.target.value);
+                }}
+                placeholder="Nafn..."
+              />
+              <div className="flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                <Input
+                  value={contact.phone}
+                  onChange={(e) => {
+                    const updated = [...(editedCompany.contacts || [])];
+                    if (updated.length === 0) updated.push({ id: "legacy", name: editedCompany.owner, phone: "" });
+                    updated[idx] = { ...updated[idx], phone: e.target.value };
+                    updateField("contacts", updated);
+                    if (idx === 0) updateField("phone", e.target.value);
+                  }}
+                  placeholder="Símanúmer..."
+                  className="h-8 text-sm"
+                />
+              </div>
+            </div>
+            {(editedCompany.contacts || []).length > 1 && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const updated = (editedCompany.contacts || []).filter((_, i) => i !== idx);
+                  updateField("contacts", updated);
+                  if (idx === 0 && updated.length > 0) {
+                    updateField("owner", updated[0].name);
+                    updateField("phone", updated[0].phone);
+                  }
+                }}
+                className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Email */}

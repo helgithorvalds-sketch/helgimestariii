@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER } from "@/types";
+import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, PRICE_OPTIONS, DEFAULT_CHECKLIST, PreviewSubStatus, PREVIEW_SUB_LABELS, PREVIEW_SUB_ORDER, FinishedSubStatus, FINISHED_SUB_LABELS, FINISHED_SUB_ORDER, ContactPerson } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Loader2, CalendarIcon, Globe, Phone, ExternalLink, Mail } from "lucide-react";
+import { Sparkles, Loader2, CalendarIcon, Globe, Phone, ExternalLink, Mail, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -35,10 +35,9 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [nextCallDate, setNextCallDate] = useState<Date | undefined>();
   const [nextCallTime, setNextCallTime] = useState("10:00");
   const [websiteUrl, setWebsiteUrl] = useState("");
-  const [phone, setPhone] = useState("");
+  const [contacts, setContacts] = useState<ContactPerson[]>([{ id: "new-c-0", name: "", phone: "" }]);
   const [email, setEmail] = useState("");
   const [finnaUrl, setFinnaUrl] = useState("");
-  const [ownerName, setOwnerName] = useState("");
   const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
@@ -70,7 +69,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
       if (data.name) handleNameChange(data.name);
       if (data.stage) setStage(data.stage);
-      if (data.owner) setOwnerName(data.owner);
+      if (data.owner) setContacts([{ id: "new-c-0", name: data.owner, phone: "" }]);
       if (data.companyId) setCompanyId(data.companyId);
       if (data.websiteUrl) setWebsiteUrl(data.websiteUrl);
       if (data.finnaUrl) setFinnaUrl(data.finnaUrl);
@@ -88,7 +87,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
   const handleSubmit = () => {
     if (!name.trim() || duplicateWarning) return;
-    if (!ownerUnknown && !ownerName.trim()) return;
+    const validContacts = contacts.filter(c => c.name.trim() || c.phone.trim());
+    if (!ownerUnknown && validContacts.length === 0) return;
     if (stage === "preview" && !previewSub) return;
     if (stage === "finished" && !finishedSub) return;
     const price = stage === "paid" ? (Number(paidAmount) || 0) : (useCustomPrice ? Number(customPrice) || 0 : selectedPrice);
@@ -104,7 +104,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     
     onAdd({
       name: name.trim(),
-      owner: ownerUnknown ? "" : ownerName.trim(),
+      owner: ownerUnknown ? "" : (validContacts[0]?.name.trim() || ""),
       companyId: companyId.trim(),
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
@@ -113,6 +113,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       amountPaid: stage === "paid" ? (Number(paidAmount) || undefined) : undefined,
       customPrice: useCustomPrice ? price : undefined,
       checklist,
+      contacts: validContacts,
       notes,
       personalityDescription: personality,
       previewSent: false,
@@ -121,7 +122,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       nextCallAt,
       websiteUrl: websiteUrl.trim() || undefined,
       finnaUrl: finnaUrl.trim() || undefined,
-      phone: phone.trim() || undefined,
+      phone: validContacts[0]?.phone.trim() || undefined,
       email: email.trim() || undefined,
     });
     resetForm();
@@ -134,7 +135,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setFinishedSub(undefined);
     setNotes(""); setPersonality(""); setDuplicateWarning(""); setAiText("");
     setNextCallDate(undefined); setNextCallTime("10:00");
-    setWebsiteUrl(""); setFinnaUrl(""); setPhone(""); setEmail(""); setOwnerName(""); setCompanyId("");
+    setWebsiteUrl(""); setFinnaUrl(""); setEmail(""); setCompanyId("");
+    setContacts([{ id: "new-c-0", name: "", phone: "" }]);
     setOwnerUnknown(false); setPaidAmount("");
   };
 
@@ -215,22 +217,68 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             />
           </div>
 
-          {/* Owner & Phone */}
-          <div className="space-y-1.5">
-            <Label>Tengiliður *</Label>
+          {/* Contacts */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Tengiliðir *</Label>
+              {!ownerUnknown && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setContacts([...contacts, { id: `new-c-${Date.now()}`, name: "", phone: "" }])}
+                  className="gap-1 text-xs h-7"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Bæta við
+                </Button>
+              )}
+            </div>
             {!ownerUnknown ? (
-              <div className="flex gap-2">
-                <Input
-                  value={ownerName}
-                  onChange={(e) => setOwnerName(e.target.value)}
-                  placeholder="Nafn tengiliðs..."
-                  className="flex-1"
-                />
+              <div className="space-y-2">
+                {contacts.map((contact, idx) => (
+                  <div key={contact.id} className="flex gap-2 items-start">
+                    <div className="flex-1 space-y-1">
+                      <Input
+                        value={contact.name}
+                        onChange={(e) => {
+                          const updated = [...contacts];
+                          updated[idx] = { ...updated[idx], name: e.target.value };
+                          setContacts(updated);
+                        }}
+                        placeholder="Nafn..."
+                      />
+                      <div className="flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                        <Input
+                          value={contact.phone}
+                          onChange={(e) => {
+                            const updated = [...contacts];
+                            updated[idx] = { ...updated[idx], phone: e.target.value };
+                            setContacts(updated);
+                          }}
+                          placeholder="Símanúmer..."
+                          className="h-8 text-sm"
+                        />
+                      </div>
+                    </div>
+                    {contacts.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setContacts(contacts.filter((_, i) => i !== idx))}
+                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => { setOwnerUnknown(true); setOwnerName(""); }}
+                  onClick={() => { setOwnerUnknown(true); setContacts([{ id: "new-c-0", name: "", phone: "" }]); }}
                   className="whitespace-nowrap text-xs"
                 >
                   Veit ekki
@@ -250,14 +298,6 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
                 </Button>
               </div>
             )}
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="flex items-center gap-1.5">
-              <Phone className="w-4 h-4" />
-              Sími
-            </Label>
-            <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Símanúmer..." />
           </div>
 
           <div className="space-y-1.5">
@@ -467,7 +507,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && !ownerName.trim())}
+            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && contacts.every(c => !c.name.trim()))}
             className="w-full"
           >
             Skrá fyrirtæki
