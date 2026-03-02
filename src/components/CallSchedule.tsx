@@ -35,6 +35,8 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const recognitionRef = useRef<any>(null);
   const [recentNotes, setRecentNotes] = useState<CallLog[]>([]);
   const [loadingNotes, setLoadingNotes] = useState(true);
+  const [finishCallLogs, setFinishCallLogs] = useState<CallLog[]>([]);
+  const [loadingFinishLogs, setLoadingFinishLogs] = useState(false);
 
   useEffect(() => {
     fetchRecentCallLogs(40).then((logs) => {
@@ -42,6 +44,19 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
       setLoadingNotes(false);
     });
   }, []);
+
+  // Fetch call logs when finishing overlay opens
+  useEffect(() => {
+    if (finishingCall) {
+      setLoadingFinishLogs(true);
+      fetchCallLogs(finishingCall.id).then((logs) => {
+        setFinishCallLogs(logs);
+        setLoadingFinishLogs(false);
+      });
+    } else {
+      setFinishCallLogs([]);
+    }
+  }, [finishingCall?.id]);
 
   const scheduled = companies
     .filter((c) => c.nextCallAt)
@@ -252,6 +267,27 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
               />
             </div>
           )}
+
+          {/* Previous call logs */}
+          {loadingFinishLogs ? (
+            <div className="text-xs text-muted-foreground text-center py-2">Hleð fyrri símtölum...</div>
+          ) : finishCallLogs.length > 0 && (
+            <div className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-3 max-h-40 overflow-y-auto">
+              <p className="text-xs font-medium text-muted-foreground flex items-center gap-1.5 mb-1">
+                <FileText className="w-3 h-3" />
+                Fyrri símtöl ({finishCallLogs.length})
+              </p>
+              {finishCallLogs.slice(0, 5).map((log) => (
+                <div key={log.id} className="rounded-md bg-accent/40 p-2 border border-border/50">
+                  <p className="text-xs text-muted-foreground font-medium">
+                    {format(new Date(log.calledAt), "dd.MM.yyyy · HH:mm")}
+                  </p>
+                  <p className="text-sm text-foreground whitespace-pre-wrap mt-0.5">{log.notes}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
