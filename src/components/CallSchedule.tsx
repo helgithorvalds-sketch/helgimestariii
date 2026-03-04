@@ -541,7 +541,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!company.nextCallAt || !onCompanyUpdate) return;
-                            const next = new Date(company.nextCallAt);
+                            const next = new Date();
                             next.setDate(next.getDate() + daysToMonday);
                              onCompanyUpdate({ ...company, nextCallAt: toLocalISO(next) });
                             addCallLog(company.id, "Svaraði ekki");
@@ -559,7 +559,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                             onClick={(e) => {
                               e.stopPropagation();
                               if (!company.nextCallAt || !onCompanyUpdate) return;
-                              const next = new Date(company.nextCallAt);
+                              const next = new Date();
                               next.setDate(next.getDate() + 1);
                               onCompanyUpdate({ ...company, nextCallAt: toLocalISO(next) });
                               addCallLog(company.id, "Svaraði ekki");
