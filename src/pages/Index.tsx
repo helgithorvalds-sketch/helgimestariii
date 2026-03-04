@@ -434,32 +434,32 @@ export default function Index() {
             })()}
 
             {/* Action buttons */}
-            <div className="flex gap-2 mt-1">
+            <div className="flex gap-1.5 mt-1">
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 gap-2"
+                className="flex-1 gap-1.5 text-xs h-7 px-2"
                 onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); setInitialTab("call"); }}
               >
-                <Phone className="w-3.5 h-3.5" />
+                <Phone className="w-3 h-3" />
                 Nýtt símtal
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 gap-2"
+                className="flex-1 gap-1.5 text-xs h-7 px-2"
                 onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); setInitialTab("tasks"); }}
               >
-                <ClipboardList className="w-3.5 h-3.5" />
+                <ClipboardList className="w-3 h-3" />
                 Verkefni
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 gap-2"
+                className="flex-1 gap-1.5 text-xs h-7 px-2"
                 onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); }}
               >
-                <Pencil className="w-3.5 h-3.5" />
+                <Pencil className="w-3 h-3" />
                 Breyta
               </Button>
             </div>
