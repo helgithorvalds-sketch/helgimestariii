@@ -615,50 +615,59 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                       Nýtt símtal
                     </Button>
                     {callbackCompany === company.id ? (
-                      <div className="flex items-center gap-1.5 flex-wrap" onClick={(e) => e.stopPropagation()}>
-                        <Input
-                          type="date"
-                          value={callbackDate}
-                          onChange={(e) => setCallbackDate(e.target.value)}
-                          className="h-6 text-xs w-28 px-1"
-                        />
-                        <Input
-                          type="time"
-                          value={callbackTime}
-                          onChange={(e) => setCallbackTime(e.target.value)}
-                          className="h-6 text-xs w-20 px-1"
-                        />
-                        <Button
-                          variant="default"
-                          size="sm"
-                          disabled={!callbackTime}
-                          onClick={() => {
-                            if (!callbackTime || !onCompanyUpdate) return;
-                            const [y, mo, d] = callbackDate.split("-").map(Number);
-                            const [h, m] = callbackTime.split(":").map(Number);
-                            const dt = new Date(y, mo - 1, d, h, m, 0);
-                            const iso = toLocalISO(dt);
-                            onCompanyUpdate({ ...company, nextCallAt: iso });
-                            addCallLog(company.id, `Ætla að hringja aftur: ${format(dt, "dd.MM.yyyy · HH:mm")}`);
-                            setCallbackConfirmed(prev => new Set(prev).add(company.id));
-                            toast.success("Símtal endurskipulagt!");
-                            setCallbackCompany(null);
-                            setCallbackDate("");
-                            setCallbackTime("");
-                          }}
-                          className="gap-1 text-xs h-6 px-2 rounded-full"
-                        >
-                          <CheckCircle className="w-3 h-3" />
-                          Staðfesta
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => { setCallbackCompany(null); setCallbackDate(""); setCallbackTime(""); }}
-                          className="text-xs h-6 px-2"
-                        >
-                          Hætta við
-                        </Button>
+                      <div className="w-full mt-2 rounded-lg border border-border bg-muted/40 p-3 space-y-2" onClick={(e) => e.stopPropagation()}>
+                        <p className="text-xs font-medium text-foreground flex items-center gap-1.5">
+                          <CalendarClock className="w-3.5 h-3.5 text-primary" />
+                          Hvenær viltu hringja aftur?
+                        </p>
+                        <div className="flex gap-2">
+                          <Input
+                            type="date"
+                            value={callbackDate}
+                            onChange={(e) => setCallbackDate(e.target.value)}
+                            className="flex-1 text-sm h-9"
+                          />
+                          <Input
+                            type="time"
+                            value={callbackTime}
+                            onChange={(e) => setCallbackTime(e.target.value)}
+                            className="w-28 text-sm h-9"
+                            placeholder="00:00"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            disabled={!callbackTime}
+                            onClick={() => {
+                              if (!callbackTime || !onCompanyUpdate) return;
+                              const [y, mo, d] = callbackDate.split("-").map(Number);
+                              const [h, m] = callbackTime.split(":").map(Number);
+                              const dt = new Date(y, mo - 1, d, h, m, 0);
+                              const iso = toLocalISO(dt);
+                              onCompanyUpdate({ ...company, nextCallAt: iso });
+                              addCallLog(company.id, `Ætla að hringja aftur: ${format(dt, "dd.MM.yyyy · HH:mm")}`);
+                              setCallbackConfirmed(prev => new Set(prev).add(company.id));
+                              toast.success("Símtal endurskipulagt!");
+                              setCallbackCompany(null);
+                              setCallbackDate("");
+                              setCallbackTime("");
+                            }}
+                            className="gap-1.5 text-xs"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            Staðfesta
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => { setCallbackCompany(null); setCallbackDate(""); setCallbackTime(""); }}
+                            className="text-xs text-muted-foreground"
+                          >
+                            Hætta við
+                          </Button>
+                        </div>
                       </div>
                     ) : (
                       <Button
