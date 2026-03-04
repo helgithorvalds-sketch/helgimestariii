@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, differenceInCalendarDays } from "date-fns";
-import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare } from "lucide-react";
+import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare, CalendarClock } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,10 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [loadingNotes, setLoadingNotes] = useState(true);
   const [finishCallLogs, setFinishCallLogs] = useState<CallLog[]>([]);
   const [loadingFinishLogs, setLoadingFinishLogs] = useState(false);
+  const [callbackCompany, setCallbackCompany] = useState<string | null>(null);
+  const [callbackDate, setCallbackDate] = useState("");
+  const [callbackTime, setCallbackTime] = useState("");
+  const [callbackConfirmed, setCallbackConfirmed] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchRecentCallLogs(40).then((logs) => {
@@ -99,7 +103,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
       (date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() < now.getDate());
   };
 
-  const getRowStyle = (dateStr: string) => {
+  const getRowStyle = (company: Company) => {
+    const dateStr = company.nextCallAt!;
+    if (callbackConfirmed.has(company.id)) return "border-l-4 border-l-emerald-500 bg-emerald-500/15 ring-1 ring-emerald-500/30";
     if (isOverdue(dateStr)) return "border-l-4 border-l-destructive bg-destructive/10 ring-1 ring-destructive/30";
     const date = new Date(dateStr);
     if (isToday(date)) return "border-l-4 border-l-primary bg-primary/5";
@@ -438,7 +444,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
               return (
                 <div
                   key={company.id}
-                  className={`rounded-lg overflow-hidden transition-all ${getRowStyle(company.nextCallAt!)}`}
+                  className={`rounded-lg overflow-hidden transition-all ${getRowStyle(company)}`}
                 >
                   <div
                     onClick={() => onCompanyClick(company)}
@@ -608,6 +614,69 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
                       <Phone className="w-3 h-3" />
                       Nýtt símtal
                     </Button>
+                    {callbackCompany === company.id ? (
+                      <div className="flex items-center gap-1.5 flex-wrap" onClick={(e) => e.stopPropagation()}>
+                        <Input
+                          type="date"
+                          value={callbackDate}
+                          onChange={(e) => setCallbackDate(e.target.value)}
+                          className="h-6 text-xs w-28 px-1"
+                        />
+                        <Input
+                          type="time"
+                          value={callbackTime}
+                          onChange={(e) => setCallbackTime(e.target.value)}
+                          className="h-6 text-xs w-20 px-1"
+                        />
+                        <Button
+                          variant="default"
+                          size="sm"
+                          disabled={!callbackTime}
+                          onClick={() => {
+                            if (!callbackTime || !onCompanyUpdate) return;
+                            const [y, mo, d] = callbackDate.split("-").map(Number);
+                            const [h, m] = callbackTime.split(":").map(Number);
+                            const dt = new Date(y, mo - 1, d, h, m, 0);
+                            const iso = toLocalISO(dt);
+                            onCompanyUpdate({ ...company, nextCallAt: iso });
+                            addCallLog(company.id, `Ætla að hringja aftur: ${format(dt, "dd.MM.yyyy · HH:mm")}`);
+                            setCallbackConfirmed(prev => new Set(prev).add(company.id));
+                            toast.success("Símtal endurskipulagt!");
+                            setCallbackCompany(null);
+                            setCallbackDate("");
+                            setCallbackTime("");
+                          }}
+                          className="gap-1 text-xs h-6 px-2 rounded-full"
+                        >
+                          <CheckCircle className="w-3 h-3" />
+                          Staðfesta
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => { setCallbackCompany(null); setCallbackDate(""); setCallbackTime(""); }}
+                          className="text-xs h-6 px-2"
+                        >
+                          Hætta við
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const today = new Date();
+                          setCallbackDate(toLocalISO(today).slice(0, 10));
+                          setCallbackTime("");
+                          setCallbackCompany(company.id);
+                        }}
+                        className="gap-1 text-xs h-6 px-2 rounded-full"
+                      >
+                        <CalendarClock className="w-3 h-3" />
+                        Hringja aftur
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="sm"
