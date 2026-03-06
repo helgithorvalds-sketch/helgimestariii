@@ -1075,7 +1075,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
         </div>
       , document.body)}
 
-      <Dialog open={open} onOpenChange={(v) => { if (!v) { onClose(); setEditMode(false); } }}>
+      <Dialog open={open && !finishingCall} onOpenChange={(v) => { if (!v) { onClose(); setEditMode(false); } }} modal={!finishingCall}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <div className="flex items-center justify-between">
