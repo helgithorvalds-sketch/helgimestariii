@@ -19,9 +19,10 @@ interface AddCompanyModalProps {
   onClose: () => void;
   onAdd: (company: Omit<Company, "id" | "createdAt">) => void;
   existingNames: string[];
+  existingCompanyIds?: string[];
 }
 
-export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddCompanyModalProps) {
+export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingCompanyIds = [] }: AddCompanyModalProps) {
   const [name, setName] = useState("");
   const [stage, setStage] = useState<CompanyStage>("email_sent");
   const [previewSub, setPreviewSub] = useState<PreviewSubStatus | undefined>();
@@ -40,6 +41,9 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [finnaUrl, setFinnaUrl] = useState("");
   const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
+  const [address, setAddress] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [kennitalaWarning, setKennitalaWarning] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
   const [emailConfidence, setEmailConfidence] = useState<"sure" | "unsure">("unsure");
 
@@ -53,6 +57,16 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       setDuplicateWarning("Fyrirtæki með þessu nafni er þegar til!");
     } else {
       setDuplicateWarning("");
+    }
+  };
+
+  const handleCompanyIdChange = (val: string) => {
+    setCompanyId(val);
+    const trimmed = val.trim();
+    if (trimmed && existingCompanyIds.some((k) => k === trimmed)) {
+      setKennitalaWarning("Fyrirtæki með þessari kennitölu er þegar til!");
+    } else {
+      setKennitalaWarning("");
     }
   };
 
@@ -86,7 +100,11 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   };
 
   const handleSubmit = () => {
-    if (!name.trim() || duplicateWarning) return;
+    if (!name.trim() || duplicateWarning || kennitalaWarning) return;
+    if (companyId.trim() && existingCompanyIds.includes(companyId.trim())) {
+      setKennitalaWarning("Fyrirtæki með þessari kennitölu er þegar til!");
+      return;
+    }
     const validContacts = contacts.filter(c => c.name.trim() || c.phone.trim());
     if (!ownerUnknown && validContacts.length === 0) return;
     if (stage === "preview" && !previewSub) return;
@@ -106,6 +124,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       name: name.trim(),
       owner: ownerUnknown ? "" : (validContacts[0]?.name.trim() || ""),
       companyId: companyId.trim(),
+      address: address.trim() || undefined,
+      industry: industry.trim() || undefined,
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
       finishedSubStatus: stage === "finished" ? finishedSub : undefined,
@@ -138,6 +158,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
     setWebsiteUrl(""); setFinnaUrl(""); setEmail(""); setCompanyId("");
     setContacts([{ id: "new-c-0", name: "", phone: "" }]);
     setOwnerUnknown(false); setPaidAmount("");
+    setAddress(""); setIndustry(""); setKennitalaWarning("");
   };
 
   // Filter out "registered" from stage options in the form
@@ -187,6 +208,37 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
             <Label>Nafn fyrirtækis *</Label>
             <Input value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="Nafn..." />
             {duplicateWarning && <p className="text-sm text-destructive">{duplicateWarning}</p>}
+          </div>
+
+          {/* Kennitala */}
+          <div className="space-y-1.5">
+            <Label>Kennitala</Label>
+            <Input
+              value={companyId}
+              onChange={(e) => handleCompanyIdChange(e.target.value)}
+              placeholder="000000-0000"
+            />
+            {kennitalaWarning && <p className="text-sm text-destructive">{kennitalaWarning}</p>}
+          </div>
+
+          {/* Heimilisfang */}
+          <div className="space-y-1.5">
+            <Label>Heimilisfang</Label>
+            <Input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Gata, póstnúmer, bær"
+            />
+          </div>
+
+          {/* Geiri */}
+          <div className="space-y-1.5">
+            <Label>Geiri</Label>
+            <Input
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              placeholder="Veitingar, verslun, þjónusta..."
+            />
           </div>
 
           {/* Finna URL */}
@@ -507,7 +559,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
 
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && contacts.every(c => !c.name.trim()))}
+            disabled={!name.trim() || !!duplicateWarning || !!kennitalaWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && contacts.every(c => !c.name.trim()))}
             className="w-full"
           >
             Skrá fyrirtæki

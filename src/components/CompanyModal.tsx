@@ -134,6 +134,89 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
     setNextCallTime("");
   };
 
+  // ─── CALL OUTCOME HANDLER ───
+  const handleSaveOutcome = async (outcome: "answered" | "no_answer" | "rejected" | "interested") => {
+    if (!finishNotes.trim()) {
+      toast.error("Skrifaðu athugasemd fyrst");
+      return;
+    }
+    if (outcome === "answered" && !nextCallDate) {
+      toast.error("Veldu dagsetningu fyrir næsta símtal");
+      return;
+    }
+    setSavingFinish(true);
+    const log = await addCallLog(company.id, finishNotes.trim());
+    if (!log) {
+      toast.error("Villa við skráningu");
+      setSavingFinish(false);
+      return;
+    }
+    setCallLogs((prev) => [log, ...prev]);
+
+    let nextCallAt: string | undefined = undefined;
+    if (outcome === "answered") {
+      const [h, m] = (nextCallTime || "10:00").split(":").map(Number);
+      const d = parseLocalDate(nextCallDate);
+      d.setHours(h, m, 0, 0);
+      nextCallAt = formatLocalISO(d);
+    } else if (outcome === "no_answer") {
+      if (nextCallDate) {
+        const [h, m] = (nextCallTime || "10:00").split(":").map(Number);
+        const d = parseLocalDate(nextCallDate);
+        d.setHours(h, m, 0, 0);
+        nextCallAt = formatLocalISO(d);
+      } else {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(10, 0, 0, 0);
+        nextCallAt = formatLocalISO(tomorrow);
+      }
+    }
+
+    const updated: Company = {
+      ...company,
+      owner: finishOwnerName.trim() || company.owner,
+      lastCallOutcome: outcome,
+      nextCallAt:
+        outcome === "rejected"
+          ? undefined
+          : outcome === "interested"
+          ? (nextCallDate
+              ? (() => {
+                  const [h, m] = (nextCallTime || "10:00").split(":").map(Number);
+                  const d = parseLocalDate(nextCallDate);
+                  d.setHours(h, m, 0, 0);
+                  return formatLocalISO(d);
+                })()
+              : company.nextCallAt)
+          : nextCallAt,
+      rejected: outcome === "rejected" ? true : false,
+      rejectedAt: outcome === "rejected" ? new Date().toISOString() : undefined,
+      stage: outcome === "interested" ? "preview" : company.stage,
+      previewSubStatus:
+        outcome === "interested"
+          ? (company.previewSubStatus || "wanted_preview")
+          : company.previewSubStatus,
+    };
+    onUpdate(updated);
+
+    const msg: Record<typeof outcome, string> = {
+      answered: "Símtal skráð · næsta símtal sett",
+      no_answer: "Skráð · eftirfylgni sett á morgun",
+      rejected: "Fyrirtæki fært í Hafnað/Lokað",
+      interested: "Fært í Forskoðun",
+    };
+    toast.success(msg[outcome]);
+
+    setSavingFinish(false);
+    setFinishingCall(false);
+    setFinishNotes("");
+    setFinishOwnerName("");
+    setOriginalNotes(null);
+    setNextCallDate("");
+    setNextCallTime("");
+  };
+
   const handleSummarize = async () => {
     if (!finishNotes.trim()) return;
     setSummarizing(true);
@@ -1052,12 +1135,49 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
               )}
             </div>
 
-            <div className="flex gap-3">
-              <Button onClick={handleFinishCall} disabled={!finishNotes.trim() || savingFinish} className="flex-1 gap-2">
-                <CheckCircle className="w-4 h-4" />
-                {savingFinish ? "Vista..." : "Vista og ljúka"}
-              </Button>
-              <Button variant="ghost" onClick={() => {
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Hvernig fór símtalið?
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  onClick={() => handleSaveOutcome("answered")}
+                  disabled={!finishNotes.trim() || savingFinish || !nextCallDate}
+                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                  title={!nextCallDate ? "Veldu dagsetningu fyrir næsta símtal" : ""}
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Svaraði
+                </Button>
+                <Button
+                  onClick={() => handleSaveOutcome("no_answer")}
+                  disabled={!finishNotes.trim() || savingFinish}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <Phone className="w-4 h-4" />
+                  Svaraði ekki
+                </Button>
+                <Button
+                  onClick={() => handleSaveOutcome("interested")}
+                  disabled={!finishNotes.trim() || savingFinish}
+                  variant="outline"
+                  className="gap-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Áhugasamur
+                </Button>
+                <Button
+                  onClick={() => handleSaveOutcome("rejected")}
+                  disabled={!finishNotes.trim() || savingFinish}
+                  variant="outline"
+                  className="gap-2 border-destructive text-destructive hover:bg-destructive/10"
+                >
+                  <X className="w-4 h-4" />
+                  Hafnað / ekki áhuga
+                </Button>
+              </div>
+              <Button variant="ghost" size="sm" className="w-full text-muted-foreground" onClick={() => {
                 isListeningRef.current = false;
                 recognitionRef.current?.stop();
                 setFinishingCall(false);
@@ -1067,7 +1187,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
                 setNextCallDate("");
                 setNextCallTime("");
                 setIsRecording(false);
-              }} className="text-muted-foreground">
+              }}>
                 Hætta við
               </Button>
             </div>

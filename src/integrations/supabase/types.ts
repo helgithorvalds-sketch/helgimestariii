@@ -48,7 +48,9 @@ export type Database = {
       }
       companies: {
         Row: {
+          address: string | null
           amount_paid: number | null
+          category: string | null
           checklist: Json
           company_id: string
           contacts: Json
@@ -56,9 +58,15 @@ export type Database = {
           custom_price: number | null
           email: string | null
           estimated_price: number
+          facebook_url: string | null
           finished_sub_status: string | null
           finna_url: string | null
+          google_url: string | null
           id: string
+          industry: string | null
+          ja_url: string | null
+          last_call_outcome: string | null
+          lead_source: string | null
           logo_url: string | null
           monthly_payment_active: boolean
           monthly_payment_amount: number | null
@@ -71,15 +79,21 @@ export type Database = {
           paid_sub_status: string | null
           personality_description: string
           phone: string | null
+          pitch: string | null
           preview_sent: boolean
           preview_sub_status: string | null
           projected_earnings: number
+          registered_date: string | null
+          rejected: boolean
+          rejected_at: string | null
           stage: string
           updated_at: string
           website_url: string | null
         }
         Insert: {
+          address?: string | null
           amount_paid?: number | null
+          category?: string | null
           checklist?: Json
           company_id?: string
           contacts?: Json
@@ -87,9 +101,15 @@ export type Database = {
           custom_price?: number | null
           email?: string | null
           estimated_price?: number
+          facebook_url?: string | null
           finished_sub_status?: string | null
           finna_url?: string | null
+          google_url?: string | null
           id?: string
+          industry?: string | null
+          ja_url?: string | null
+          last_call_outcome?: string | null
+          lead_source?: string | null
           logo_url?: string | null
           monthly_payment_active?: boolean
           monthly_payment_amount?: number | null
@@ -102,15 +122,21 @@ export type Database = {
           paid_sub_status?: string | null
           personality_description?: string
           phone?: string | null
+          pitch?: string | null
           preview_sent?: boolean
           preview_sub_status?: string | null
           projected_earnings?: number
+          registered_date?: string | null
+          rejected?: boolean
+          rejected_at?: string | null
           stage?: string
           updated_at?: string
           website_url?: string | null
         }
         Update: {
+          address?: string | null
           amount_paid?: number | null
+          category?: string | null
           checklist?: Json
           company_id?: string
           contacts?: Json
@@ -118,9 +144,15 @@ export type Database = {
           custom_price?: number | null
           email?: string | null
           estimated_price?: number
+          facebook_url?: string | null
           finished_sub_status?: string | null
           finna_url?: string | null
+          google_url?: string | null
           id?: string
+          industry?: string | null
+          ja_url?: string | null
+          last_call_outcome?: string | null
+          lead_source?: string | null
           logo_url?: string | null
           monthly_payment_active?: boolean
           monthly_payment_amount?: number | null
@@ -133,9 +165,13 @@ export type Database = {
           paid_sub_status?: string | null
           personality_description?: string
           phone?: string | null
+          pitch?: string | null
           preview_sent?: boolean
           preview_sub_status?: string | null
           projected_earnings?: number
+          registered_date?: string | null
+          rejected?: boolean
+          rejected_at?: string | null
           stage?: string
           updated_at?: string
           website_url?: string | null
