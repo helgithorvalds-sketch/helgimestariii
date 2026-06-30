@@ -6,6 +6,7 @@ export type CompanyStage =
   | "paid";
 
 export type PreviewSubStatus = 
+  | "wanted_preview"
   | "sold_preview" 
   | "fifty_fifty" 
   | "needed_website";
@@ -42,6 +43,11 @@ export interface Company {
   finnaUrl?: string;
   phone?: string;
   email?: string;
+  address?: string;
+  industry?: string;
+  rejected?: boolean;
+  rejectedAt?: string;
+  lastCallOutcome?: "answered" | "no_answer" | "rejected" | "interested";
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;
   finishedSubStatus?: FinishedSubStatus;
@@ -72,12 +78,14 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
 };
 
 export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
+  wanted_preview: "Vildi forskoðun",
   sold_preview: "Selt sýnishorn",
   fifty_fifty: "50/50",
   needed_website: "Þarf vefsíðu",
 };
 
 export const PREVIEW_SUB_ORDER: PreviewSubStatus[] = [
+  "wanted_preview",
   "sold_preview",
   "fifty_fifty",
   "needed_website",
