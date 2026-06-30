@@ -85,6 +85,7 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   preview: "Vill sýnishorn",
   finished: "Lokið",
   paid: "Greitt",
+  lead: "Til að hringja",
 };
 
 export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
