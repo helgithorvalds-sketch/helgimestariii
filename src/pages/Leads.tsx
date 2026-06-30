@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ChevronDown, Pencil, Facebook, User } from "lucide-react";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ChevronDown, Pencil, Facebook, User, Building } from "lucide-react";
 import { Company, LeadSource } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
