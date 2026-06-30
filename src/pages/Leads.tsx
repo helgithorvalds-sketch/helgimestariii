@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, Ban, StickyNote, UserPlus, Plus, Trash2, RotateCcw } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, Ban, Trash2, RotateCcw } from "lucide-react";
 import { Company, LeadSource, ContactPerson } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
+import { addCallLog } from "@/services/callLogService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -48,10 +51,12 @@ export default function Leads() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Company | null>(null);
-  const [noteOpen, setNoteOpen] = useState<Record<string, boolean>>({});
-  const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
-  const [contactOpen, setContactOpen] = useState<Record<string, boolean>>({});
-  const [contactDraft, setContactDraft] = useState<Record<string, { name: string; phone: string; email: string }>>({});
+  const [callTarget, setCallTarget] = useState<Company | null>(null);
+  const [callName, setCallName] = useState("");
+  const [callPhone, setCallPhone] = useState("");
+  const [callEmail, setCallEmail] = useState("");
+  const [callNote, setCallNote] = useState("");
+  const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
     const all = await fetchCompanies();
@@ -86,39 +91,65 @@ export default function Leads() {
     return null;
   };
 
-  const handleSaveNote = async (c: Company) => {
-    const extra = (noteDraft[c.id] || "").trim();
-    if (!extra) return;
-    const stamp = new Date().toLocaleDateString("is-IS");
-    const merged = c.notes ? `${c.notes}\n\n[${stamp}] ${extra}` : `[${stamp}] ${extra}`;
-    const ok = await persist({ ...c, notes: merged }, "Glósu bætt við");
-    if (ok) {
-      setNoteDraft((p) => ({ ...p, [c.id]: "" }));
-      setNoteOpen((p) => ({ ...p, [c.id]: false }));
-    }
+  const openCall = (c: Company) => {
+    const first = (c.contacts || [])[0];
+    setCallTarget(c);
+    setCallName(first?.name || c.owner || "");
+    setCallPhone(first?.phone || c.phone || "");
+    setCallEmail(first?.email || c.email || "");
+    setCallNote("");
   };
 
-  const handleAddContact = async (c: Company) => {
-    const draft = contactDraft[c.id] || { name: "", phone: "", email: "" };
-    if (!draft.name.trim() && !draft.phone.trim() && !draft.email.trim()) return;
-    const newContact: ContactPerson = {
-      id: crypto.randomUUID(),
-      name: draft.name.trim(),
-      phone: draft.phone.trim(),
-      email: draft.email.trim() || undefined,
-    };
-    const updated: Company = {
-      ...c,
-      contacts: [...(c.contacts || []), newContact],
-      // also fill legacy top-level fields if empty
-      owner: c.owner || newContact.name,
-      phone: c.phone || newContact.phone,
-      email: c.email || newContact.email,
-    };
-    const ok = await persist(updated, "Tengilið bætt við");
-    if (ok) {
-      setContactDraft((p) => ({ ...p, [c.id]: { name: "", phone: "", email: "" } }));
-      setContactOpen((p) => ({ ...p, [c.id]: false }));
+  const closeCall = () => {
+    setCallTarget(null);
+    setCallName(""); setCallPhone(""); setCallEmail(""); setCallNote("");
+  };
+
+  const handleSaveCall = async () => {
+    if (!callTarget) return;
+    const name = callName.trim();
+    const phone = callPhone.trim();
+    const email = callEmail.trim();
+    const note = callNote.trim();
+    if (!name && !phone && !email && !note) {
+      toast.error("Skrifaðu eitthvað fyrst");
+      return;
+    }
+    setSavingCall(true);
+    try {
+      // Update / add contact on company
+      const c = callTarget;
+      let contacts = c.contacts ? [...c.contacts] : [];
+      if (name || phone || email) {
+        const idx = contacts.findIndex((x) => (phone && x.phone === phone) || (name && x.name === name));
+        if (idx >= 0) {
+          contacts[idx] = { ...contacts[idx], name: name || contacts[idx].name, phone: phone || contacts[idx].phone, email: email || contacts[idx].email };
+        } else {
+          contacts.push({ id: crypto.randomUUID(), name, phone, email: email || undefined });
+        }
+      }
+      const stamp = new Date().toLocaleDateString("is-IS");
+      const mergedNotes = note
+        ? (c.notes ? `${c.notes}\n\n[${stamp}] ${note}` : `[${stamp}] ${note}`)
+        : c.notes;
+      const updated: Company = {
+        ...c,
+        contacts,
+        owner: c.owner || name,
+        phone: c.phone || phone,
+        email: c.email || email || undefined,
+        notes: mergedNotes,
+      };
+      const saved = await persist(updated);
+      if (saved && note) {
+        await addCallLog(c.id, note);
+      }
+      if (saved) {
+        toast.success("Símtal skráð");
+        closeCall();
+      }
+    } finally {
+      setSavingCall(false);
     }
   };
 
@@ -298,53 +329,11 @@ export default function Leads() {
         </div>
       )}
 
-      {noteOpen[c.id] && (
-        <div className="space-y-1.5 rounded-md border bg-muted/30 p-2">
-          <Textarea
-            value={noteDraft[c.id] || ""}
-            onChange={(e) => setNoteDraft((p) => ({ ...p, [c.id]: e.target.value }))}
-            placeholder="Skrifa glósu..."
-            className="text-sm min-h-[60px]"
-          />
-          <div className="flex gap-1.5 justify-end">
-            <Button size="sm" variant="ghost" onClick={() => setNoteOpen((p) => ({ ...p, [c.id]: false }))}>Hætta við</Button>
-            <Button size="sm" onClick={() => handleSaveNote(c)}>Vista glósu</Button>
-          </div>
-        </div>
-      )}
-
-      {contactOpen[c.id] && (
-        <div className="space-y-1.5 rounded-md border bg-muted/30 p-2">
-          <Input
-            value={contactDraft[c.id]?.name || ""}
-            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), name: e.target.value } }))}
-            placeholder="Nafn"
-            className="h-8 text-sm"
-          />
-          <Input
-            value={contactDraft[c.id]?.phone || ""}
-            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), phone: e.target.value } }))}
-            placeholder="Símanúmer"
-            className="h-8 text-sm"
-          />
-          <Input
-            value={contactDraft[c.id]?.email || ""}
-            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), email: e.target.value } }))}
-            placeholder="Netfang"
-            className="h-8 text-sm"
-          />
-          <div className="flex gap-1.5 justify-end">
-            <Button size="sm" variant="ghost" onClick={() => setContactOpen((p) => ({ ...p, [c.id]: false }))}>Hætta við</Button>
-            <Button size="sm" onClick={() => handleAddContact(c)}>Vista tengilið</Button>
-          </div>
-        </div>
-      )}
-
       <div className="flex flex-wrap gap-1.5 pt-2 border-t">
         <Button
           size="sm"
           className="gap-1 flex-1 min-w-[100px]"
-          onClick={() => setSelected(c)}
+          onClick={() => openCall(c)}
         >
           <PhoneCall className="w-3.5 h-3.5" />
           Hringja
@@ -470,6 +459,39 @@ export default function Leads() {
           onDelete={handleDelete}
         />
       )}
+
+      <Dialog open={!!callTarget} onOpenChange={(o) => { if (!o) closeCall(); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <PhoneCall className="w-5 h-5 text-primary" />
+              Hringja — {callTarget?.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <Label htmlFor="call-name">Nafn</Label>
+              <Input id="call-name" value={callName} onChange={(e) => setCallName(e.target.value)} placeholder="Nafn tengiliðar" maxLength={100} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="call-phone">Símanúmer</Label>
+              <Input id="call-phone" value={callPhone} onChange={(e) => setCallPhone(e.target.value)} placeholder="Símanúmer" maxLength={40} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="call-email">Netfang</Label>
+              <Input id="call-email" type="email" value={callEmail} onChange={(e) => setCallEmail(e.target.value)} placeholder="netfang@example.is" maxLength={255} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="call-note">Glósa</Label>
+              <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={closeCall} disabled={savingCall}>Hætta við</Button>
+            <Button onClick={handleSaveCall} disabled={savingCall}>{savingCall ? "Vista..." : "Vista símtal"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
