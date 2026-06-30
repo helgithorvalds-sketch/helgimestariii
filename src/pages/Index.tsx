@@ -234,27 +234,27 @@ export default function Index() {
   }, [companies, searchQuery]);
 
   const companiesByStage = (stage: CompanyStage) =>
-    filteredCompanies.filter((c) => c.stage === stage);
+    filteredCompanies.filter((c) => c.stage === stage && !c.rejected);
 
   const companiesByPreviewSub = (sub: PreviewSubStatus) =>
-    filteredCompanies.filter((c) => c.stage === "preview" && c.previewSubStatus === sub);
+    filteredCompanies.filter((c) => c.stage === "preview" && c.previewSubStatus === sub && !c.rejected);
 
   const previewUncategorized = filteredCompanies.filter(
-    (c) => c.stage === "preview" && !c.previewSubStatus
+    (c) => c.stage === "preview" && !c.previewSubStatus && !c.rejected
   );
 
   const companiesByFinishedSub = (sub: FinishedSubStatus) =>
-    filteredCompanies.filter((c) => c.stage === "finished" && c.finishedSubStatus === sub);
+    filteredCompanies.filter((c) => c.stage === "finished" && c.finishedSubStatus === sub && !c.rejected);
 
   const finishedUncategorized = filteredCompanies.filter(
-    (c) => c.stage === "finished" && !c.finishedSubStatus
+    (c) => c.stage === "finished" && !c.finishedSubStatus && !c.rejected
   );
 
   const companiesByPaidSub = (sub: PaidSubStatus) =>
-    filteredCompanies.filter((c) => c.stage === "paid" && c.paidSubStatus === sub);
+    filteredCompanies.filter((c) => c.stage === "paid" && c.paidSubStatus === sub && !c.rejected);
 
   const paidUncategorized = filteredCompanies.filter(
-    (c) => c.stage === "paid" && !c.paidSubStatus
+    (c) => c.stage === "paid" && !c.paidSubStatus && !c.rejected
   );
 
   const formatPrice = (n: number) => n.toLocaleString("is-IS") + " kr.";
