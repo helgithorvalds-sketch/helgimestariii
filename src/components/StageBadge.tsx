@@ -11,6 +11,7 @@ const stageClassMap: Record<CompanyStage, string> = {
   preview: "stage-badge-preview",
   finished: "stage-badge-finished",
   paid: "stage-badge-paid",
+  lead: "stage-badge-email",
 };
 
 export function StageBadge({ stage, size = "sm" }: StageBadgeProps) {
