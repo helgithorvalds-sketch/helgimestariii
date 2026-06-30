@@ -281,10 +281,35 @@ export default function Leads() {
           <div className="flex items-center justify-center py-20"><p className="text-muted-foreground">Hleð...</p></div>
         ) : (
           <div className="space-y-8">
-            {SECTIONS.map((s) => {
-              const list = bySource(s.source);
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {SECTIONS.filter((s) => s.source !== "restaurant").map((s) => {
+                const list = bySource(s.source);
+                return (
+                  <section key={s.source}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
+                        <span>{s.emoji}</span>
+                        {s.title}
+                        <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{list.length}</span>
+                      </span>
+                    </div>
+                    {list.length === 0 ? (
+                      <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki.</p>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {list.map((c) => renderCard(c, s.ring))}
+                      </div>
+                    )}
+                  </section>
+                );
+              })}
+            </div>
+
+            {(() => {
+              const s = SECTIONS.find((x) => x.source === "restaurant")!;
+              const list = bySource("restaurant");
               return (
-                <section key={s.source}>
+                <section>
                   <div className="flex items-center gap-3 mb-3">
                     <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
                       <span>{s.emoji}</span>
@@ -301,7 +326,7 @@ export default function Leads() {
                   )}
                 </section>
               );
-            })}
+            })()}
 
             {filtered.some((c) => !c.leadSource) && (
               <section>
