@@ -3,7 +3,10 @@ export type CompanyStage =
   | "registered" 
   | "preview" 
   | "finished" 
-  | "paid";
+  | "paid"
+  | "lead";
+
+export type LeadSource = "facebook" | "new_company" | "restaurant";
 
 export type PreviewSubStatus = 
   | "wanted_preview"
@@ -45,6 +48,13 @@ export interface Company {
   email?: string;
   address?: string;
   industry?: string;
+  leadSource?: LeadSource;
+  facebookUrl?: string;
+  jaUrl?: string;
+  googleUrl?: string;
+  category?: string;
+  registeredDate?: string;
+  pitch?: string;
   rejected?: boolean;
   rejectedAt?: string;
   lastCallOutcome?: "answered" | "no_answer" | "rejected" | "interested";
@@ -75,6 +85,7 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   preview: "Vill sýnishorn",
   finished: "Lokið",
   paid: "Greitt",
+  lead: "Til að hringja",
 };
 
 export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
