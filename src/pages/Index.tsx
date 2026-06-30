@@ -911,6 +911,7 @@ export default function Index() {
         onClose={() => setAddOpen(false)}
         onAdd={handleAdd}
         existingNames={companies.map((c) => c.name)}
+        existingCompanyIds={companies.map((c) => c.companyId).filter(Boolean)}
       />
 
       {selectedCompany && (
