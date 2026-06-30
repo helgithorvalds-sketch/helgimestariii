@@ -158,6 +158,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
     setWebsiteUrl(""); setFinnaUrl(""); setEmail(""); setCompanyId("");
     setContacts([{ id: "new-c-0", name: "", phone: "" }]);
     setOwnerUnknown(false); setPaidAmount("");
+    setAddress(""); setIndustry(""); setKennitalaWarning("");
   };
 
   // Filter out "registered" from stage options in the form
