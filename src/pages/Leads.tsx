@@ -2,17 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ChevronDown, Pencil, Facebook, User, Building } from "lucide-react";
-import { Company, LeadSource } from "@/types";
-import { fetchCompanies, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, Ban, StickyNote, UserPlus, Plus, Trash2, RotateCcw } from "lucide-react";
+import { Company, LeadSource, ContactPerson } from "@/types";
+import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -55,6 +48,10 @@ export default function Leads() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Company | null>(null);
+  const [noteOpen, setNoteOpen] = useState<Record<string, boolean>>({});
+  const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
+  const [contactOpen, setContactOpen] = useState<Record<string, boolean>>({});
+  const [contactDraft, setContactDraft] = useState<Record<string, { name: string; phone: string; email: string }>>({});
 
   const load = async () => {
     const all = await fetchCompanies();
@@ -78,24 +75,68 @@ export default function Leads() {
 
   const bySource = (s: LeadSource) => filtered.filter((c) => c.leadSource === s);
 
-  const handleMoveStage = async (
-    c: Company,
-    stage: "email_sent" | "preview",
-    previewSub?: "sold_preview" | "fifty_fifty" | "needed_website",
-  ) => {
-    const ok = await updateCompanyStage(c.id, stage, previewSub ?? null);
-    if (ok) {
-      setCompanies((prev) =>
-        prev.map((x) =>
-          x.id === c.id
-            ? { ...x, stage, previewSubStatus: stage === "preview" ? previewSub : undefined }
-            : x,
-        ),
-      );
-      toast.success(`${c.name} fært í söluferli`);
-    } else {
-      toast.error("Villa við að færa fyrirtæki");
+  const persist = async (updated: Company, successMsg?: string) => {
+    const res = await updateCompany(updated);
+    if (res) {
+      setCompanies((prev) => prev.map((c) => (c.id === res.id ? res : c)));
+      if (successMsg) toast.success(successMsg);
+      return res;
     }
+    toast.error("Villa við vistun");
+    return null;
+  };
+
+  const handleSaveNote = async (c: Company) => {
+    const extra = (noteDraft[c.id] || "").trim();
+    if (!extra) return;
+    const stamp = new Date().toLocaleDateString("is-IS");
+    const merged = c.notes ? `${c.notes}\n\n[${stamp}] ${extra}` : `[${stamp}] ${extra}`;
+    const ok = await persist({ ...c, notes: merged }, "Glósu bætt við");
+    if (ok) {
+      setNoteDraft((p) => ({ ...p, [c.id]: "" }));
+      setNoteOpen((p) => ({ ...p, [c.id]: false }));
+    }
+  };
+
+  const handleAddContact = async (c: Company) => {
+    const draft = contactDraft[c.id] || { name: "", phone: "", email: "" };
+    if (!draft.name.trim() && !draft.phone.trim() && !draft.email.trim()) return;
+    const newContact: ContactPerson = {
+      id: crypto.randomUUID(),
+      name: draft.name.trim(),
+      phone: draft.phone.trim(),
+      email: draft.email.trim() || undefined,
+    };
+    const updated: Company = {
+      ...c,
+      contacts: [...(c.contacts || []), newContact],
+      // also fill legacy top-level fields if empty
+      owner: c.owner || newContact.name,
+      phone: c.phone || newContact.phone,
+      email: c.email || newContact.email,
+    };
+    const ok = await persist(updated, "Tengilið bætt við");
+    if (ok) {
+      setContactDraft((p) => ({ ...p, [c.id]: { name: "", phone: "", email: "" } }));
+      setContactOpen((p) => ({ ...p, [c.id]: false }));
+    }
+  };
+
+  const handleRemoveContact = async (c: Company, contactId: string) => {
+    const updated: Company = {
+      ...c,
+      contacts: (c.contacts || []).filter((x) => x.id !== contactId),
+    };
+    await persist(updated, "Tengilið fjarlægður");
+  };
+
+  const handleToggleOff = async (c: Company) => {
+    const updated: Company = {
+      ...c,
+      rejected: !c.rejected,
+      rejectedAt: !c.rejected ? new Date().toISOString() : undefined,
+    };
+    await persist(updated, !c.rejected ? "Merkt sem off" : "Endurvirkjað");
   };
 
   const handleUpdate = async (updated: Company) => {
@@ -125,12 +166,17 @@ export default function Leads() {
       key={c.id}
       className={cn(
         "rounded-xl border-2 shadow-sm hover:shadow-md transition-all p-4 space-y-2 bg-card",
-        accentRing
+        c.rejected
+          ? "border-red-400 bg-red-50/70 dark:bg-red-950/30 dark:border-red-800"
+          : accentRing
       )}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="font-bold text-base text-foreground truncate">{c.name}</h3>
+          <h3 className={cn("font-bold text-base truncate", c.rejected ? "text-red-700 dark:text-red-300" : "text-foreground")}>
+            {c.name}
+            {c.rejected && <span className="ml-2 text-xs font-bold uppercase tracking-wide rounded px-1.5 py-0.5 bg-red-600 text-white align-middle">OFF</span>}
+          </h3>
           {c.owner && <p className="text-sm font-medium text-primary truncate">{c.owner}</p>}
         </div>
         <button
@@ -169,6 +215,27 @@ export default function Leads() {
         <div className="flex items-center gap-1.5 text-sm">
           <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
           <a href={`mailto:${c.email}`} className="font-medium hover:underline truncate">{c.email}</a>
+        </div>
+      )}
+
+      {(c.contacts || []).length > 0 && (
+        <div className="space-y-1 pt-1 border-t border-dashed">
+          {(c.contacts || []).map((p) => (
+            <div key={p.id} className="flex items-center justify-between gap-2 text-xs bg-muted/40 rounded-md px-2 py-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 min-w-0">
+                {p.name && <span className="font-semibold truncate">{p.name}</span>}
+                {p.phone && <a href={`tel:${p.phone}`} className="text-foreground hover:underline">{p.phone}</a>}
+                {p.email && <a href={`mailto:${p.email}`} className="text-primary hover:underline truncate">{p.email}</a>}
+              </div>
+              <button
+                onClick={() => handleRemoveContact(c, p.id)}
+                className="text-muted-foreground hover:text-destructive p-0.5"
+                aria-label="Fjarlægja"
+              >
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
@@ -224,31 +291,90 @@ export default function Leads() {
         </div>
       )}
 
-      <div className="flex gap-2 pt-1">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="sm" className="gap-1 flex-1">
-              Færa í söluferli
-              <ChevronDown className="w-3.5 h-3.5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-60">
-            <DropdownMenuItem onClick={() => handleMoveStage(c, "email_sent")}>
-              Tölvupóstur sendur
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Vill sýnishorn</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleMoveStage(c, "preview", "sold_preview")}>
-              Selt sýnishorn
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleMoveStage(c, "preview", "fifty_fifty")}>
-              50/50
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleMoveStage(c, "preview", "needed_website")}>
-              Þarf vefsíðu
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {c.notes && (
+        <div className="rounded-md bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-xs text-foreground p-2 whitespace-pre-wrap">
+          <span className="font-semibold text-amber-700 dark:text-amber-300 block mb-0.5">Glósur</span>
+          {c.notes}
+        </div>
+      )}
+
+      {noteOpen[c.id] && (
+        <div className="space-y-1.5 rounded-md border bg-muted/30 p-2">
+          <Textarea
+            value={noteDraft[c.id] || ""}
+            onChange={(e) => setNoteDraft((p) => ({ ...p, [c.id]: e.target.value }))}
+            placeholder="Skrifa glósu..."
+            className="text-sm min-h-[60px]"
+          />
+          <div className="flex gap-1.5 justify-end">
+            <Button size="sm" variant="ghost" onClick={() => setNoteOpen((p) => ({ ...p, [c.id]: false }))}>Hætta við</Button>
+            <Button size="sm" onClick={() => handleSaveNote(c)}>Vista glósu</Button>
+          </div>
+        </div>
+      )}
+
+      {contactOpen[c.id] && (
+        <div className="space-y-1.5 rounded-md border bg-muted/30 p-2">
+          <Input
+            value={contactDraft[c.id]?.name || ""}
+            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), name: e.target.value } }))}
+            placeholder="Nafn"
+            className="h-8 text-sm"
+          />
+          <Input
+            value={contactDraft[c.id]?.phone || ""}
+            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), phone: e.target.value } }))}
+            placeholder="Símanúmer"
+            className="h-8 text-sm"
+          />
+          <Input
+            value={contactDraft[c.id]?.email || ""}
+            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), email: e.target.value } }))}
+            placeholder="Netfang"
+            className="h-8 text-sm"
+          />
+          <div className="flex gap-1.5 justify-end">
+            <Button size="sm" variant="ghost" onClick={() => setContactOpen((p) => ({ ...p, [c.id]: false }))}>Hætta við</Button>
+            <Button size="sm" onClick={() => handleAddContact(c)}>Vista tengilið</Button>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-1.5 pt-2 border-t">
+        <Button
+          size="sm"
+          className="gap-1 flex-1 min-w-[100px]"
+          onClick={() => setSelected(c)}
+        >
+          <PhoneCall className="w-3.5 h-3.5" />
+          Hringing
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1"
+          onClick={() => setNoteOpen((p) => ({ ...p, [c.id]: !p[c.id] }))}
+        >
+          <StickyNote className="w-3.5 h-3.5" />
+          Glósa
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1"
+          onClick={() => setContactOpen((p) => ({ ...p, [c.id]: !p[c.id] }))}
+        >
+          <UserPlus className="w-3.5 h-3.5" />
+          Tengiliður
+        </Button>
+        <Button
+          size="sm"
+          variant={c.rejected ? "default" : "destructive"}
+          className="gap-1"
+          onClick={() => handleToggleOff(c)}
+        >
+          {c.rejected ? <><RotateCcw className="w-3.5 h-3.5" />Endurvirkja</> : <><Ban className="w-3.5 h-3.5" />Off</>}
+        </Button>
       </div>
     </div>
   );
