@@ -56,6 +56,8 @@ export default function Leads() {
   const [callPhone, setCallPhone] = useState("");
   const [callEmail, setCallEmail] = useState("");
   const [callNote, setCallNote] = useState("");
+  const [callNextDate, setCallNextDate] = useState("");
+  const [callNextTime, setCallNextTime] = useState("");
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
@@ -98,11 +100,21 @@ export default function Leads() {
     setCallPhone(first?.phone || c.phone || "");
     setCallEmail(first?.email || c.email || "");
     setCallNote("");
+    if (c.nextCallAt) {
+      const d = new Date(c.nextCallAt);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      setCallNextDate(`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`);
+      setCallNextTime(`${pad(d.getHours())}:${pad(d.getMinutes())}`);
+    } else {
+      setCallNextDate("");
+      setCallNextTime("09:00");
+    }
   };
 
   const closeCall = () => {
     setCallTarget(null);
     setCallName(""); setCallPhone(""); setCallEmail(""); setCallNote("");
+    setCallNextDate(""); setCallNextTime("");
   };
 
   const handleSaveCall = async () => {
@@ -132,6 +144,12 @@ export default function Leads() {
       const mergedNotes = note
         ? (c.notes ? `${c.notes}\n\n[${stamp}] ${note}` : `[${stamp}] ${note}`)
         : c.notes;
+      let nextCallAt = c.nextCallAt;
+      if (callNextDate) {
+        const [y, m, d] = callNextDate.split("-").map(Number);
+        const [hh, mm] = (callNextTime || "09:00").split(":").map(Number);
+        nextCallAt = new Date(y, (m || 1) - 1, d || 1, hh || 9, mm || 0).toISOString();
+      }
       const updated: Company = {
         ...c,
         contacts,
@@ -139,6 +157,7 @@ export default function Leads() {
         phone: c.phone || phone,
         email: c.email || email || undefined,
         notes: mergedNotes,
+        nextCallAt,
       };
       const saved = await persist(updated);
       if (saved && note) {
@@ -484,6 +503,16 @@ export default function Leads() {
             <div className="space-y-1">
               <Label htmlFor="call-note">Glósa</Label>
               <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="call-next-date">Næsta símtal</Label>
+                <Input id="call-next-date" type="date" value={callNextDate} onChange={(e) => setCallNextDate(e.target.value)} />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="call-next-time">Tími</Label>
+                <Input id="call-next-time" type="time" value={callNextTime} onChange={(e) => setCallNextTime(e.target.value)} />
+              </div>
             </div>
           </div>
           <DialogFooter>
