@@ -63,7 +63,9 @@ export type Database = {
           finna_url: string | null
           google_url: string | null
           id: string
+          industry: string | null
           ja_url: string | null
+          last_call_outcome: string | null
           lead_source: string | null
           logo_url: string | null
           monthly_payment_active: boolean
@@ -82,6 +84,8 @@ export type Database = {
           preview_sub_status: string | null
           projected_earnings: number
           registered_date: string | null
+          rejected: boolean
+          rejected_at: string | null
           stage: string
           updated_at: string
           website_url: string | null
@@ -102,7 +106,9 @@ export type Database = {
           finna_url?: string | null
           google_url?: string | null
           id?: string
+          industry?: string | null
           ja_url?: string | null
+          last_call_outcome?: string | null
           lead_source?: string | null
           logo_url?: string | null
           monthly_payment_active?: boolean
@@ -121,6 +127,8 @@ export type Database = {
           preview_sub_status?: string | null
           projected_earnings?: number
           registered_date?: string | null
+          rejected?: boolean
+          rejected_at?: string | null
           stage?: string
           updated_at?: string
           website_url?: string | null
@@ -141,7 +149,9 @@ export type Database = {
           finna_url?: string | null
           google_url?: string | null
           id?: string
+          industry?: string | null
           ja_url?: string | null
+          last_call_outcome?: string | null
           lead_source?: string | null
           logo_url?: string | null
           monthly_payment_active?: boolean
@@ -160,6 +170,8 @@ export type Database = {
           preview_sub_status?: string | null
           projected_earnings?: number
           registered_date?: string | null
+          rejected?: boolean
+          rejected_at?: string | null
           stage?: string
           updated_at?: string
           website_url?: string | null
