@@ -1027,6 +1027,57 @@ export default function Index() {
                 }
               }}
             />
+
+            {/* Hafnað / Lokað */}
+            {(() => {
+              const rejected = filteredCompanies.filter((c) => c.rejected);
+              if (rejected.length === 0) return null;
+              return (
+                <details className="rounded-xl border bg-card">
+                  <summary className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/30 transition-colors rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <X className="w-4 h-4 text-destructive" />
+                      <span className="text-base font-bold text-foreground">Hafnað / Lokað</span>
+                      <span className="text-sm text-muted-foreground">{rejected.length}</span>
+                    </div>
+                    <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                  </summary>
+                  <div className="px-4 pb-4 space-y-2">
+                    {rejected.map((c) => (
+                      <div key={c.id} className="flex items-center justify-between rounded-lg border bg-background px-3 py-2">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-sm truncate">{c.name}</p>
+                          {c.rejectedAt && (
+                            <p className="text-xs text-muted-foreground">
+                              Hafnað {format(parseISO(c.rejectedAt), "dd.MM.yyyy")}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setSelectedCompany(c)}>
+                            Skoða
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={async () => {
+                              const updated = { ...c, rejected: false, rejectedAt: undefined };
+                              const result = await updateCompany(updated);
+                              if (result) {
+                                setCompanies((prev) => prev.map((x) => x.id === result.id ? result : x));
+                                toast.success("Endurvirkjað");
+                              }
+                            }}
+                          >
+                            Endurvirkja
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              );
+            })()}
           </div>
         )}
       </main>
