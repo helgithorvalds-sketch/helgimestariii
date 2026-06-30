@@ -347,30 +347,12 @@ export default function Leads() {
           onClick={() => setSelected(c)}
         >
           <PhoneCall className="w-3.5 h-3.5" />
-          Hringing
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="gap-1"
-          onClick={() => setNoteOpen((p) => ({ ...p, [c.id]: !p[c.id] }))}
-        >
-          <StickyNote className="w-3.5 h-3.5" />
-          Glósa
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="gap-1"
-          onClick={() => setContactOpen((p) => ({ ...p, [c.id]: !p[c.id] }))}
-        >
-          <UserPlus className="w-3.5 h-3.5" />
-          Tengiliður
+          Hringja
         </Button>
         <Button
           size="sm"
           variant={c.rejected ? "default" : "destructive"}
-          className="gap-1"
+          className="gap-1 flex-1 min-w-[100px]"
           onClick={() => handleToggleOff(c)}
         >
           {c.rejected ? <><RotateCcw className="w-3.5 h-3.5" />Endurvirkja</> : <><Ban className="w-3.5 h-3.5" />Off</>}
