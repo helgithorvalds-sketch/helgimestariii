@@ -481,7 +481,7 @@ export default function Index() {
             <img src={logo} alt="Logo" className="w-14 h-14 rounded-xl shadow-sm" />
             <div>
               <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{companies.length} fyrirtæki samtals</p>
+              <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead").length} fyrirtæki samtals</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -511,6 +511,15 @@ export default function Index() {
                   hasOverdueTasks ? "bg-destructive" : "bg-primary"
                 )}>
                   {pendingTaskCount}
+                </span>
+              )}
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/leads")} className="gap-2 shadow-sm relative">
+              <PhoneCall className="w-4 h-4" />
+              Til að hringja
+              {companies.filter(c => c.stage === "lead").length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {companies.filter(c => c.stage === "lead").length}
                 </span>
               )}
             </Button>
