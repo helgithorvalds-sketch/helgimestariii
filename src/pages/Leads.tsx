@@ -329,48 +329,6 @@ export default function Leads() {
         </div>
       )}
 
-      {noteOpen[c.id] && (
-        <div className="space-y-1.5 rounded-md border bg-muted/30 p-2">
-          <Textarea
-            value={noteDraft[c.id] || ""}
-            onChange={(e) => setNoteDraft((p) => ({ ...p, [c.id]: e.target.value }))}
-            placeholder="Skrifa glósu..."
-            className="text-sm min-h-[60px]"
-          />
-          <div className="flex gap-1.5 justify-end">
-            <Button size="sm" variant="ghost" onClick={() => setNoteOpen((p) => ({ ...p, [c.id]: false }))}>Hætta við</Button>
-            <Button size="sm" onClick={() => handleSaveNote(c)}>Vista glósu</Button>
-          </div>
-        </div>
-      )}
-
-      {contactOpen[c.id] && (
-        <div className="space-y-1.5 rounded-md border bg-muted/30 p-2">
-          <Input
-            value={contactDraft[c.id]?.name || ""}
-            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), name: e.target.value } }))}
-            placeholder="Nafn"
-            className="h-8 text-sm"
-          />
-          <Input
-            value={contactDraft[c.id]?.phone || ""}
-            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), phone: e.target.value } }))}
-            placeholder="Símanúmer"
-            className="h-8 text-sm"
-          />
-          <Input
-            value={contactDraft[c.id]?.email || ""}
-            onChange={(e) => setContactDraft((p) => ({ ...p, [c.id]: { ...(p[c.id] || { name: "", phone: "", email: "" }), email: e.target.value } }))}
-            placeholder="Netfang"
-            className="h-8 text-sm"
-          />
-          <div className="flex gap-1.5 justify-end">
-            <Button size="sm" variant="ghost" onClick={() => setContactOpen((p) => ({ ...p, [c.id]: false }))}>Hætta við</Button>
-            <Button size="sm" onClick={() => handleAddContact(c)}>Vista tengilið</Button>
-          </div>
-        </div>
-      )}
-
       <div className="flex flex-wrap gap-1.5 pt-2 border-t">
         <Button
           size="sm"
