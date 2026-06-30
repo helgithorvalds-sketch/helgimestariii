@@ -459,6 +459,39 @@ export default function Leads() {
           onDelete={handleDelete}
         />
       )}
+
+      <Dialog open={!!callTarget} onOpenChange={(o) => { if (!o) closeCall(); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <PhoneCall className="w-5 h-5 text-primary" />
+              Hringja — {callTarget?.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <Label htmlFor="call-name">Nafn</Label>
+              <Input id="call-name" value={callName} onChange={(e) => setCallName(e.target.value)} placeholder="Nafn tengiliðar" maxLength={100} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="call-phone">Símanúmer</Label>
+              <Input id="call-phone" value={callPhone} onChange={(e) => setCallPhone(e.target.value)} placeholder="Símanúmer" maxLength={40} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="call-email">Netfang</Label>
+              <Input id="call-email" type="email" value={callEmail} onChange={(e) => setCallEmail(e.target.value)} placeholder="netfang@example.is" maxLength={255} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="call-note">Glósa</Label>
+              <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={closeCall} disabled={savingCall}>Hætta við</Button>
+            <Button onClick={handleSaveCall} disabled={savingCall}>{savingCall ? "Vista..." : "Vista símtal"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
