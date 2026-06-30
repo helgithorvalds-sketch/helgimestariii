@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ChevronDown, Pencil, Facebook, User } from "lucide-react";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ChevronDown, Pencil, Facebook, User, Building } from "lucide-react";
 import { Company, LeadSource } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
@@ -172,42 +172,50 @@ export default function Leads() {
         </div>
       )}
 
-      {(c.facebookUrl || c.finnaUrl || c.jaUrl || c.googleUrl || c.websiteUrl) && (
-        <div className="flex flex-wrap gap-1.5 pt-1">
-          {c.facebookUrl && !c.facebookUrl.toLowerCase().includes("search") && (
-            <a href={c.facebookUrl} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300">
-              <Facebook className="w-3 h-3" />Facebook<ExternalLink className="w-3 h-3" />
-            </a>
-          )}
-          {c.finnaUrl && (
-            <a href={c.finnaUrl} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
-              finna.is<ExternalLink className="w-3 h-3" />
-            </a>
-          )}
-          <a
-            href={c.jaUrl || `https://ja.is/leit/?q=${encodeURIComponent(c.name)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-300"
-          >
-            <User className="w-3 h-3" />Eigandi / uppl. (já.is)<ExternalLink className="w-3 h-3" />
+      <div className="flex flex-wrap gap-1.5 pt-1">
+        {c.companyId && (
+          <a href={`https://www.skatturinn.is/fyrirtaekjaskra/leit/kennitala/${c.companyId}`} target="_blank" rel="noopener noreferrer"
+             className="inline-flex items-center gap-1 rounded-md border border-teal-300 bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-700 hover:bg-teal-100 dark:bg-teal-950 dark:border-teal-800 dark:text-teal-300">
+            <Building className="w-3 h-3" />Fyrirtækjaskrá (eigendur)<ExternalLink className="w-3 h-3" />
           </a>
-          {c.googleUrl && (
-            <a href={c.googleUrl} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
-              Google<ExternalLink className="w-3 h-3" />
-            </a>
-          )}
-          {c.websiteUrl && (
-            <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
-              <Globe className="w-3 h-3" />Vefur<ExternalLink className="w-3 h-3" />
-            </a>
-          )}
-        </div>
-      )}
+        )}
+        {c.finnaUrl && (
+          <a href={c.finnaUrl} target="_blank" rel="noopener noreferrer"
+             className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
+            finna.is<ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+        <a
+          href={c.jaUrl || `https://ja.is/leit/?q=${encodeURIComponent(c.name)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-300"
+        >
+          <User className="w-3 h-3" />Eigandi / uppl. (já.is)<ExternalLink className="w-3 h-3" />
+        </a>
+        <a href="https://1819.is" target="_blank" rel="noopener noreferrer"
+           className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
+          1819.is<ExternalLink className="w-3 h-3" />
+        </a>
+        {c.googleUrl && (
+          <a href={c.googleUrl} target="_blank" rel="noopener noreferrer"
+             className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
+            Google<ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+        {c.facebookUrl && !c.facebookUrl.toLowerCase().includes("search") && (
+          <a href={c.facebookUrl} target="_blank" rel="noopener noreferrer"
+             className="inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300">
+            <Facebook className="w-3 h-3" />Facebook<ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+        {c.websiteUrl && (
+          <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer"
+             className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
+            <Globe className="w-3 h-3" />Vefur<ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+      </div>
 
       {c.pitch && (
         <div className="rounded-md bg-muted/60 border text-xs text-foreground p-2 whitespace-pre-wrap">
