@@ -560,6 +560,131 @@ export default function Index() {
                 </div>
               );
             })()}
+            {/* ─── DAILY CALL WORKFLOW ─── */}
+            {(() => {
+              const startOfDay = (d: Date) => { const x = new Date(d); x.setHours(0,0,0,0); return x; };
+              const today = startOfDay(new Date());
+              const tomorrow = startOfDay(new Date(today.getTime() + 24 * 3600 * 1000));
+              const dayAfter = startOfDay(new Date(today.getTime() + 48 * 3600 * 1000));
+
+              const active = filteredCompanies.filter(
+                (c) => !c.rejected && c.stage !== "paid" && c.stage !== "finished"
+              );
+              const toCall = active.filter((c) => !c.nextCallAt);
+              const scheduled = active
+                .filter((c) => !!c.nextCallAt)
+                .sort((a, b) => new Date(a.nextCallAt!).getTime() - new Date(b.nextCallAt!).getTime());
+
+              const todayList = scheduled.filter((c) => {
+                const d = startOfDay(new Date(c.nextCallAt!));
+                return d.getTime() <= today.getTime();
+              });
+              const tomorrowList = scheduled.filter((c) => {
+                const d = startOfDay(new Date(c.nextCallAt!));
+                return d.getTime() === tomorrow.getTime();
+              });
+              const laterList = scheduled.filter((c) => {
+                const d = startOfDay(new Date(c.nextCallAt!));
+                return d.getTime() >= dayAfter.getTime();
+              });
+
+              const Section = ({ title, list, accent }: { title: string; list: Company[]; accent?: string }) => (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className={cn("text-sm font-bold", accent || "text-foreground")}>{title}</h3>
+                    <span className="text-xs text-muted-foreground">{list.length}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {list.length === 0 ? (
+                      <p className="text-xs text-muted-foreground/60 italic px-1">Ekkert</p>
+                    ) : (
+                      list.map((c) => {
+                        const overdue = c.nextCallAt && new Date(c.nextCallAt) < new Date(today.getTime());
+                        return (
+                          <button
+                            key={c.id}
+                            onClick={() => { setSelectedCompany(c); setInitialTab("call"); }}
+                            className={cn(
+                              "w-full text-left rounded-lg border bg-background px-3 py-2 hover:shadow-md hover:-translate-y-0.5 transition-all",
+                              overdue && "border-destructive bg-destructive/5"
+                            )}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="font-semibold text-sm truncate">{c.name}</p>
+                              {c.nextCallAt && (
+                                <span className={cn(
+                                  "text-[10px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap",
+                                  overdue ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"
+                                )}>
+                                  {format(parseISO(c.nextCallAt), "dd.MM HH:mm")}
+                                </span>
+                              )}
+                            </div>
+                            {(c.owner || c.phone) && (
+                              <p className="text-xs text-muted-foreground truncate">
+                                {c.owner}{c.owner && c.phone ? " · " : ""}{c.phone}
+                              </p>
+                            )}
+                          </button>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              );
+
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* LEFT: Á eftir að hringja */}
+                  <div className="rounded-2xl border bg-card/80 backdrop-blur-sm p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-4 h-4 text-muted-foreground" />
+                        <h2 className="text-base font-bold text-foreground">Á eftir að hringja</h2>
+                      </div>
+                      <span className="text-lg font-extrabold text-foreground">{toCall.length}</span>
+                    </div>
+                    <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+                      {toCall.length === 0 ? (
+                        <p className="text-xs text-muted-foreground/60 italic px-1">Engin fyrirtæki bíða eftir símtali</p>
+                      ) : (
+                        toCall.map((c) => (
+                          <button
+                            key={c.id}
+                            onClick={() => { setSelectedCompany(c); setInitialTab("call"); }}
+                            className="w-full text-left rounded-lg border bg-background px-3 py-2 hover:shadow-md hover:-translate-y-0.5 transition-all"
+                          >
+                            <p className="font-semibold text-sm truncate">{c.name}</p>
+                            {(c.owner || c.phone) && (
+                              <p className="text-xs text-muted-foreground truncate">
+                                {c.owner}{c.owner && c.phone ? " · " : ""}{c.phone}
+                              </p>
+                            )}
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* RIGHT: Áætluð símtöl, grouped */}
+                  <div className="rounded-2xl border-2 border-primary/30 bg-card p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-4 h-4 text-primary" />
+                        <h2 className="text-base font-bold text-foreground">Áætluð símtöl</h2>
+                      </div>
+                      <span className="text-lg font-extrabold text-primary">{scheduled.length}</span>
+                    </div>
+                    <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1">
+                      <Section title="Í dag" list={todayList} accent="text-destructive" />
+                      <Section title="Á morgun" list={tomorrowList} />
+                      <Section title="Síðar" list={laterList} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             <div className="grid grid-cols-1 gap-4">
               {mainStages.map((stage) => {
                 const count = companiesByStage(stage).length;
