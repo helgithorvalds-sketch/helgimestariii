@@ -19,9 +19,10 @@ interface AddCompanyModalProps {
   onClose: () => void;
   onAdd: (company: Omit<Company, "id" | "createdAt">) => void;
   existingNames: string[];
+  existingCompanyIds?: string[];
 }
 
-export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddCompanyModalProps) {
+export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingCompanyIds = [] }: AddCompanyModalProps) {
   const [name, setName] = useState("");
   const [stage, setStage] = useState<CompanyStage>("email_sent");
   const [previewSub, setPreviewSub] = useState<PreviewSubStatus | undefined>();
@@ -40,6 +41,9 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   const [finnaUrl, setFinnaUrl] = useState("");
   const [ownerUnknown, setOwnerUnknown] = useState(false);
   const [companyId, setCompanyId] = useState("");
+  const [address, setAddress] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [kennitalaWarning, setKennitalaWarning] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
   const [emailConfidence, setEmailConfidence] = useState<"sure" | "unsure">("unsure");
 
@@ -53,6 +57,16 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       setDuplicateWarning("Fyrirtæki með þessu nafni er þegar til!");
     } else {
       setDuplicateWarning("");
+    }
+  };
+
+  const handleCompanyIdChange = (val: string) => {
+    setCompanyId(val);
+    const trimmed = val.trim();
+    if (trimmed && existingCompanyIds.some((k) => k === trimmed)) {
+      setKennitalaWarning("Fyrirtæki með þessari kennitölu er þegar til!");
+    } else {
+      setKennitalaWarning("");
     }
   };
 
@@ -86,7 +100,11 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
   };
 
   const handleSubmit = () => {
-    if (!name.trim() || duplicateWarning) return;
+    if (!name.trim() || duplicateWarning || kennitalaWarning) return;
+    if (companyId.trim() && existingCompanyIds.includes(companyId.trim())) {
+      setKennitalaWarning("Fyrirtæki með þessari kennitölu er þegar til!");
+      return;
+    }
     const validContacts = contacts.filter(c => c.name.trim() || c.phone.trim());
     if (!ownerUnknown && validContacts.length === 0) return;
     if (stage === "preview" && !previewSub) return;
@@ -106,6 +124,8 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames }: AddComp
       name: name.trim(),
       owner: ownerUnknown ? "" : (validContacts[0]?.name.trim() || ""),
       companyId: companyId.trim(),
+      address: address.trim() || undefined,
+      industry: industry.trim() || undefined,
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
       finishedSubStatus: stage === "finished" ? finishedSub : undefined,
