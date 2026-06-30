@@ -209,6 +209,37 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
             {duplicateWarning && <p className="text-sm text-destructive">{duplicateWarning}</p>}
           </div>
 
+          {/* Kennitala */}
+          <div className="space-y-1.5">
+            <Label>Kennitala</Label>
+            <Input
+              value={companyId}
+              onChange={(e) => handleCompanyIdChange(e.target.value)}
+              placeholder="000000-0000"
+            />
+            {kennitalaWarning && <p className="text-sm text-destructive">{kennitalaWarning}</p>}
+          </div>
+
+          {/* Heimilisfang */}
+          <div className="space-y-1.5">
+            <Label>Heimilisfang</Label>
+            <Input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Gata, póstnúmer, bær"
+            />
+          </div>
+
+          {/* Geiri */}
+          <div className="space-y-1.5">
+            <Label>Geiri</Label>
+            <Input
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              placeholder="Veitingar, verslun, þjónusta..."
+            />
+          </div>
+
           {/* Finna URL */}
           <div className="space-y-1.5">
             <Label className="flex items-center gap-1.5">
@@ -527,7 +558,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
 
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !!duplicateWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && contacts.every(c => !c.name.trim()))}
+            disabled={!name.trim() || !!duplicateWarning || !!kennitalaWarning || (stage === "preview" && !previewSub) || (stage === "finished" && !finishedSub) || (!ownerUnknown && contacts.every(c => !c.name.trim()))}
             className="w-full"
           >
             Skrá fyrirtæki
