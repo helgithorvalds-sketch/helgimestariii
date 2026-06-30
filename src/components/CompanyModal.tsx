@@ -134,6 +134,89 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
     setNextCallTime("");
   };
 
+  // ─── CALL OUTCOME HANDLER ───
+  const handleSaveOutcome = async (outcome: "answered" | "no_answer" | "rejected" | "interested") => {
+    if (!finishNotes.trim()) {
+      toast.error("Skrifaðu athugasemd fyrst");
+      return;
+    }
+    if (outcome === "answered" && !nextCallDate) {
+      toast.error("Veldu dagsetningu fyrir næsta símtal");
+      return;
+    }
+    setSavingFinish(true);
+    const log = await addCallLog(company.id, finishNotes.trim());
+    if (!log) {
+      toast.error("Villa við skráningu");
+      setSavingFinish(false);
+      return;
+    }
+    setCallLogs((prev) => [log, ...prev]);
+
+    let nextCallAt: string | undefined = undefined;
+    if (outcome === "answered") {
+      const [h, m] = (nextCallTime || "10:00").split(":").map(Number);
+      const d = parseLocalDate(nextCallDate);
+      d.setHours(h, m, 0, 0);
+      nextCallAt = formatLocalISO(d);
+    } else if (outcome === "no_answer") {
+      if (nextCallDate) {
+        const [h, m] = (nextCallTime || "10:00").split(":").map(Number);
+        const d = parseLocalDate(nextCallDate);
+        d.setHours(h, m, 0, 0);
+        nextCallAt = formatLocalISO(d);
+      } else {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(10, 0, 0, 0);
+        nextCallAt = formatLocalISO(tomorrow);
+      }
+    }
+
+    const updated: Company = {
+      ...company,
+      owner: finishOwnerName.trim() || company.owner,
+      lastCallOutcome: outcome,
+      nextCallAt:
+        outcome === "rejected"
+          ? undefined
+          : outcome === "interested"
+          ? (nextCallDate
+              ? (() => {
+                  const [h, m] = (nextCallTime || "10:00").split(":").map(Number);
+                  const d = parseLocalDate(nextCallDate);
+                  d.setHours(h, m, 0, 0);
+                  return formatLocalISO(d);
+                })()
+              : company.nextCallAt)
+          : nextCallAt,
+      rejected: outcome === "rejected" ? true : false,
+      rejectedAt: outcome === "rejected" ? new Date().toISOString() : undefined,
+      stage: outcome === "interested" ? "preview" : company.stage,
+      previewSubStatus:
+        outcome === "interested"
+          ? (company.previewSubStatus || "wanted_preview")
+          : company.previewSubStatus,
+    };
+    onUpdate(updated);
+
+    const msg: Record<typeof outcome, string> = {
+      answered: "Símtal skráð · næsta símtal sett",
+      no_answer: "Skráð · eftirfylgni sett á morgun",
+      rejected: "Fyrirtæki fært í Hafnað/Lokað",
+      interested: "Fært í Forskoðun",
+    };
+    toast.success(msg[outcome]);
+
+    setSavingFinish(false);
+    setFinishingCall(false);
+    setFinishNotes("");
+    setFinishOwnerName("");
+    setOriginalNotes(null);
+    setNextCallDate("");
+    setNextCallTime("");
+  };
+
   const handleSummarize = async () => {
     if (!finishNotes.trim()) return;
     setSummarizing(true);
