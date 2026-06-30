@@ -2,9 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ArrowRight, Pencil, Facebook } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, ChevronDown, Pencil, Facebook, User } from "lucide-react";
 import { Company, LeadSource } from "@/types";
-import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
+import { fetchCompanies, updateCompany, deleteCompany, updateCompanyStage } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -70,11 +78,20 @@ export default function Leads() {
 
   const bySource = (s: LeadSource) => filtered.filter((c) => c.leadSource === s);
 
-  const handleMoveToPipeline = async (c: Company) => {
-    const updated = { ...c, stage: "email_sent" as const };
-    const res = await updateCompany(updated);
-    if (res) {
-      setCompanies((prev) => prev.map((x) => (x.id === res.id ? res : x)));
+  const handleMoveStage = async (
+    c: Company,
+    stage: "email_sent" | "preview",
+    previewSub?: "sold_preview" | "fifty_fifty" | "needed_website",
+  ) => {
+    const ok = await updateCompanyStage(c.id, stage, previewSub ?? null);
+    if (ok) {
+      setCompanies((prev) =>
+        prev.map((x) =>
+          x.id === c.id
+            ? { ...x, stage, previewSubStatus: stage === "preview" ? previewSub : undefined }
+            : x,
+        ),
+      );
       toast.success(`${c.name} fært í söluferli`);
     } else {
       toast.error("Villa við að færa fyrirtæki");
@@ -157,7 +174,7 @@ export default function Leads() {
 
       {(c.facebookUrl || c.finnaUrl || c.jaUrl || c.googleUrl || c.websiteUrl) && (
         <div className="flex flex-wrap gap-1.5 pt-1">
-          {c.facebookUrl && (
+          {c.facebookUrl && !c.facebookUrl.toLowerCase().includes("search") && (
             <a href={c.facebookUrl} target="_blank" rel="noopener noreferrer"
                className="inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300">
               <Facebook className="w-3 h-3" />Facebook<ExternalLink className="w-3 h-3" />
@@ -169,12 +186,14 @@ export default function Leads() {
               finna.is<ExternalLink className="w-3 h-3" />
             </a>
           )}
-          {c.jaUrl && (
-            <a href={c.jaUrl} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
-              já.is<ExternalLink className="w-3 h-3" />
-            </a>
-          )}
+          <a
+            href={c.jaUrl || `https://ja.is/leit/?q=${encodeURIComponent(c.name)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-300"
+          >
+            <User className="w-3 h-3" />Eigandi / uppl. (já.is)<ExternalLink className="w-3 h-3" />
+          </a>
           {c.googleUrl && (
             <a href={c.googleUrl} target="_blank" rel="noopener noreferrer"
                className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
@@ -198,10 +217,30 @@ export default function Leads() {
       )}
 
       <div className="flex gap-2 pt-1">
-        <Button size="sm" className="gap-1 flex-1" onClick={() => handleMoveToPipeline(c)}>
-          <ArrowRight className="w-3.5 h-3.5" />
-          Færa í söluferli
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="sm" className="gap-1 flex-1">
+              Færa í söluferli
+              <ChevronDown className="w-3.5 h-3.5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-60">
+            <DropdownMenuItem onClick={() => handleMoveStage(c, "email_sent")}>
+              Tölvupóstur sendur
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="text-xs text-muted-foreground">Vill sýnishorn</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => handleMoveStage(c, "preview", "sold_preview")}>
+              Selt sýnishorn
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleMoveStage(c, "preview", "fifty_fifty")}>
+              50/50
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleMoveStage(c, "preview", "needed_website")}>
+              Þarf vefsíðu
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
@@ -242,10 +281,35 @@ export default function Leads() {
           <div className="flex items-center justify-center py-20"><p className="text-muted-foreground">Hleð...</p></div>
         ) : (
           <div className="space-y-8">
-            {SECTIONS.map((s) => {
-              const list = bySource(s.source);
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {SECTIONS.filter((s) => s.source !== "restaurant").map((s) => {
+                const list = bySource(s.source);
+                return (
+                  <section key={s.source}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
+                        <span>{s.emoji}</span>
+                        {s.title}
+                        <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{list.length}</span>
+                      </span>
+                    </div>
+                    {list.length === 0 ? (
+                      <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki.</p>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {list.map((c) => renderCard(c, s.ring))}
+                      </div>
+                    )}
+                  </section>
+                );
+              })}
+            </div>
+
+            {(() => {
+              const s = SECTIONS.find((x) => x.source === "restaurant")!;
+              const list = bySource("restaurant");
               return (
-                <section key={s.source}>
+                <section>
                   <div className="flex items-center gap-3 mb-3">
                     <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
                       <span>{s.emoji}</span>
@@ -262,7 +326,7 @@ export default function Leads() {
                   )}
                 </section>
               );
-            })}
+            })()}
 
             {filtered.some((c) => !c.leadSource) && (
               <section>
