@@ -290,30 +290,30 @@ export default function Leads() {
       )}
 
       <div className="flex flex-wrap gap-1.5 pt-1">
-        {c.companyId && (
-          <a href={`https://www.skatturinn.is/fyrirtaekjaskra/leit/kennitala/${c.companyId}`} target="_blank" rel="noopener noreferrer"
-             className="inline-flex items-center gap-1 rounded-md border border-teal-300 bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-700 hover:bg-teal-100 dark:bg-teal-950 dark:border-teal-800 dark:text-teal-300">
-            <Building className="w-3 h-3" />Fyrirtækjaskrá (eigendur)<ExternalLink className="w-3 h-3" />
-          </a>
-        )}
+        <a
+          href={c.companyId
+            ? `https://www.skatturinn.is/fyrirtaekjaskra/leit/kennitala/${c.companyId}`
+            : `https://www.rsk.is/fyrirtaekjaskra/leit/?nafn=${encodeURIComponent(c.name)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 rounded-md border border-teal-300 bg-teal-50 px-2 py-0.5 text-xs font-semibold text-teal-700 hover:bg-teal-100 dark:bg-teal-950 dark:border-teal-800 dark:text-teal-300"
+        >
+          <Building className="w-3 h-3" />Fyrirtækjaskrá (eigendur)<ExternalLink className="w-3 h-3" />
+        </a>
+        <a
+          href={`https://1819.is/?q=${encodeURIComponent(c.owner || c.name)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-300"
+        >
+          <Phone className="w-3 h-3" />1819 — sími eiganda<ExternalLink className="w-3 h-3" />
+        </a>
         {c.finnaUrl && (
           <a href={c.finnaUrl} target="_blank" rel="noopener noreferrer"
              className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
             finna.is<ExternalLink className="w-3 h-3" />
           </a>
         )}
-        <a
-          href={c.googleUrl || `https://www.google.com/search?q=${encodeURIComponent(((c.owner ? c.owner + " " : "") + c.name) + " sími")}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-300"
-        >
-          <Search className="w-3 h-3" />Sími eiganda (Google)<ExternalLink className="w-3 h-3" />
-        </a>
-        <a href="https://1819.is" target="_blank" rel="noopener noreferrer"
-           className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
-          1819.is<ExternalLink className="w-3 h-3" />
-        </a>
         {c.facebookUrl && !c.facebookUrl.toLowerCase().includes("search") && (
           <a href={c.facebookUrl} target="_blank" rel="noopener noreferrer"
              className="inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300">
