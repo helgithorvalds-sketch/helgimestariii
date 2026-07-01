@@ -303,23 +303,17 @@ export default function Leads() {
           </a>
         )}
         <a
-          href={c.jaUrl || `https://ja.is/leit/?q=${encodeURIComponent(c.name)}`}
+          href={c.googleUrl || `https://www.google.com/search?q=${encodeURIComponent(((c.owner ? c.owner + " " : "") + c.name) + " sími")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 rounded-md border border-purple-300 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-300"
         >
-          <User className="w-3 h-3" />Eigandi / uppl. (já.is)<ExternalLink className="w-3 h-3" />
+          <Search className="w-3 h-3" />Sími eiganda (Google)<ExternalLink className="w-3 h-3" />
         </a>
         <a href="https://1819.is" target="_blank" rel="noopener noreferrer"
            className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
           1819.is<ExternalLink className="w-3 h-3" />
         </a>
-        {c.googleUrl && (
-          <a href={c.googleUrl} target="_blank" rel="noopener noreferrer"
-             className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
-            Google<ExternalLink className="w-3 h-3" />
-          </a>
-        )}
         {c.facebookUrl && !c.facebookUrl.toLowerCase().includes("search") && (
           <a href={c.facebookUrl} target="_blank" rel="noopener noreferrer"
              className="inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300">
