@@ -119,9 +119,14 @@ export async function addCompany(company: Omit<Company, "id" | "createdAt">): Pr
 }
 
 export async function updateCompany(company: Company): Promise<Company | null> {
+  // Auto-stamp email_sent_at the first time a company enters email_sent stage
+  const row: any = companyToRow(company);
+  if (company.stage === "email_sent") {
+    row.email_sent_at = (company as any).emailSentAt || new Date().toISOString();
+  }
   const { data, error } = await supabase
     .from("companies")
-    .update(companyToRow(company))
+    .update(row)
     .eq("id", company.id)
     .select()
     .single();
@@ -155,6 +160,9 @@ export async function updateCompanyStage(
   amountPaid?: number | null
 ): Promise<boolean> {
   const updateData: any = { stage };
+  if (stage === "email_sent") {
+    updateData.email_sent_at = new Date().toISOString();
+  }
   if (stage === "preview" && previewSubStatus) {
     updateData.preview_sub_status = previewSubStatus;
   } else if (stage !== "preview") {

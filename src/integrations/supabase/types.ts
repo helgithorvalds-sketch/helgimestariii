@@ -21,6 +21,7 @@ export type Database = {
           created_at: string
           id: string
           notes: string
+          outcome: string | null
         }
         Insert: {
           called_at?: string
@@ -28,6 +29,7 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string
+          outcome?: string | null
         }
         Update: {
           called_at?: string
@@ -35,6 +37,7 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string
+          outcome?: string | null
         }
         Relationships: [
           {
@@ -57,6 +60,7 @@ export type Database = {
           created_at: string
           custom_price: number | null
           email: string | null
+          email_sent_at: string | null
           estimated_price: number
           facebook_url: string | null
           finished_sub_status: string | null
@@ -100,6 +104,7 @@ export type Database = {
           created_at?: string
           custom_price?: number | null
           email?: string | null
+          email_sent_at?: string | null
           estimated_price?: number
           facebook_url?: string | null
           finished_sub_status?: string | null
@@ -143,6 +148,7 @@ export type Database = {
           created_at?: string
           custom_price?: number | null
           email?: string | null
+          email_sent_at?: string | null
           estimated_price?: number
           facebook_url?: string | null
           finished_sub_status?: string | null
@@ -235,6 +241,9 @@ export type Database = {
           max_calls: number
           updated_at: string
           vacation_mode: boolean
+          weekly_goal_calls: number
+          weekly_goal_offers: number
+          weekly_goal_paid: number
           work_end: string
           work_start: string
         }
@@ -244,6 +253,9 @@ export type Database = {
           max_calls?: number
           updated_at?: string
           vacation_mode?: boolean
+          weekly_goal_calls?: number
+          weekly_goal_offers?: number
+          weekly_goal_paid?: number
           work_end?: string
           work_start?: string
         }
@@ -253,6 +265,9 @@ export type Database = {
           max_calls?: number
           updated_at?: string
           vacation_mode?: boolean
+          weekly_goal_calls?: number
+          weekly_goal_offers?: number
+          weekly_goal_paid?: number
           work_end?: string
           work_start?: string
         }

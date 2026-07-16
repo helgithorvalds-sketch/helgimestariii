@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings2, PhoneCall, Coffee, Sunrise, Mail, Check, X, RefreshCw, Bell } from "lucide-react";
+import { Settings2, PhoneCall, Coffee, Sunrise, Mail, Check, X, RefreshCw, Bell, Clock, PhoneOff, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { GlassCard } from "@/components/molten/GlassCard";
 import { RingProgress } from "@/components/molten/RingProgress";
 import { CountUp } from "@/components/molten/CountUp";
 import { StatusPill } from "@/components/molten/StatusPill";
+import { MicButton } from "@/components/molten/MicButton";
 import { NotificationBell } from "@/components/NotificationBell";
 import { LataVitaButton } from "@/components/LataVitaButton";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import {
   DailySettings,
@@ -26,8 +28,13 @@ import {
   updateDailySettings,
   yesterdaySummary,
   deleteBlock,
+  fetchWeeklyStats,
+  WeeklyStats,
+  nextWorkingDay,
 } from "@/services/scheduleService";
 import { fetchCompanies } from "@/services/companyService";
+import { addCallLog, fetchHourStats, HourStats } from "@/services/callLogService";
+import { updateCompany } from "@/services/companyService";
 import type { Company } from "@/types";
 import logo from "@/assets/logo.png";
 import { NavLink } from "react-router-dom";
@@ -64,6 +71,9 @@ export default function Dagurinn() {
   const [loading, setLoading] = useState(true);
   const [regenerating, setRegenerating] = useState(false);
   const [summary, setSummary] = useState<{ callsDone: number; streak: number }>({ callsDone: 0, streak: 0 });
+  const [weekly, setWeekly] = useState<WeeklyStats>({ callsMade: 0, offersSent: 0, krPaid: 0 });
+  const [hourStats, setHourStats] = useState<HourStats>({ totalCalls: 0, perHour: {}, bestHour: null });
+  const [retry, setRetry] = useState<{ company: Company; block?: ScheduleBlock; date: string; time: string } | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -76,6 +86,8 @@ export default function Dagurinn() {
     cs.forEach((c) => (map[c.id] = c));
     setCompanies(map);
     yesterdaySummary().then(setSummary);
+    fetchWeeklyStats().then(setWeekly);
+    fetchHourStats().then(setHourStats);
     setLoading(false);
   };
 
@@ -100,6 +112,45 @@ export default function Dagurinn() {
     await updateBlock(id, { notes });
   };
 
+  const openRetry = (company: Company, block?: ScheduleBlock) => {
+    const base = block ? new Date(`${block.scheduleDate}T${block.blockTime}:00`) : new Date();
+    const next = nextWorkingDay(base, 2);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    setRetry({
+      company,
+      block,
+      date: `${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}`,
+      time: `${pad(next.getHours())}:${pad(next.getMinutes())}`,
+    });
+  };
+
+  const confirmRetry = async () => {
+    if (!retry) return;
+    const { company, date, time } = retry;
+    const [y, m, d] = date.split("-").map(Number);
+    const [hh, mm] = time.split(":").map(Number);
+    const nextAt = new Date(y, (m || 1) - 1, d || 1, hh || 9, mm || 0).toISOString();
+    const updated = await updateCompany({ ...company, nextCallAt: nextAt });
+    if (updated) {
+      setCompanies((prev) => ({ ...prev, [updated.id]: updated }));
+      toast.success("Reyna aftur skráð");
+    }
+    setRetry(null);
+  };
+
+  const logCallOutcome = async (block: ScheduleBlock, outcome: "answered" | "no_answer") => {
+    if (!block.companyId) return;
+    await addCallLog(block.companyId, block.notes || "", outcome);
+    // update local company for retry defaults
+    const company = companies[block.companyId];
+    // mark block done
+    setBlocks((prev) => prev.map((b) => (b.id === block.id ? { ...b, status: "done" } : b)));
+    await updateBlock(block.id, { status: "done" });
+    if (outcome === "no_answer" && company) {
+      openRetry(company, block);
+    }
+  };
+
   const regenerate = async () => {
     if (!settings) return;
     if (!confirm("Endurgera dagsins áætlun? Núverandi blokkir tapast.")) return;
@@ -121,6 +172,12 @@ export default function Dagurinn() {
 
   const today = useMemo(() => new Date(), []);
 
+  const bestHourLabel = hourStats.bestHour != null && hourStats.totalCalls >= 20
+    ? `${String(hourStats.bestHour).padStart(2, "0")}–${String(hourStats.bestHour + 1).padStart(2, "0")}`
+    : null;
+
+  const kr = (n: number) => new Intl.NumberFormat("is-IS").format(Math.round(n)) + " kr.";
+
   return (
     <div className="min-h-screen pb-24 md:pb-8">
       {/* Header */}
@@ -141,6 +198,15 @@ export default function Dagurinn() {
             <NotificationBell />
           </div>
         </div>
+        {bestHourLabel && (
+          <div className="max-w-5xl mx-auto mt-3 flex justify-center md:justify-start">
+            <div className="inline-flex items-center gap-2 glass border-white/10 rounded-full px-3 py-1.5 text-xs">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span className="text-muted-foreground">Besti tími til að hringja:</span>
+              <span className="ember-text font-semibold numbers-float">{bestHourLabel}</span>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="max-w-5xl mx-auto px-4 md:px-8 space-y-6">
@@ -176,6 +242,36 @@ export default function Dagurinn() {
           </div>
         </GlassCard>
 
+        {/* Weekly goal rings */}
+        {settings && (
+          <GlassCard className="p-5 md:p-6 animate-fade-in">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <div className="text-[11px] uppercase tracking-widest text-muted-foreground">Vikan</div>
+                <div className="font-display text-xl">Markmið vikunnar</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <WeeklyRing
+                label="Símtöl"
+                value={weekly.callsMade}
+                goal={settings.weeklyGoalCalls}
+              />
+              <WeeklyRing
+                label="Tilboð send"
+                value={weekly.offersSent}
+                goal={settings.weeklyGoalOffers}
+              />
+              <WeeklyRing
+                label="Greitt"
+                value={weekly.krPaid}
+                goal={settings.weeklyGoalPaid}
+                formatValue={kr}
+              />
+            </div>
+          </GlassCard>
+        )}
+
         {/* Timeline */}
         {loading ? (
           <GlassCard className="p-8 text-center text-muted-foreground">Hleð…</GlassCard>
@@ -204,6 +300,8 @@ export default function Dagurinn() {
                 onStatus={(s) => setBlockStatus(b.id, s)}
                 onNotesChange={(n) => setBlockNotes(b.id, n)}
                 onNotesBlur={(n) => saveNotes(b.id, n)}
+                onOutcome={(o) => logCallOutcome(b, o)}
+                onFollowup={() => b.companyId && companies[b.companyId] && openRetry(companies[b.companyId], b)}
               />
             ))}
           </div>
@@ -231,6 +329,51 @@ export default function Dagurinn() {
         </GlassCard>
       </main>
 
+      {/* Retry dialog */}
+      <Dialog open={!!retry} onOpenChange={(o) => { if (!o) setRetry(null); }}>
+        <DialogContent className="max-w-md glass-strong border-white/10">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <PhoneCall className="w-5 h-5 text-orange-300" />
+              Reyna aftur — {retry?.company.name}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Uppástunga: 2 virkir dagar síðar á sama tíma. Þú getur breytt.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-xs">Dagsetning</Label>
+              <Input type="date" value={retry?.date || ""} onChange={(e) => setRetry(r => r && { ...r, date: e.target.value })} />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Tími</Label>
+              <Input type="time" value={retry?.time || ""} onChange={(e) => setRetry(r => r && { ...r, time: e.target.value })} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setRetry(null)}>Hætta við</Button>
+            <Button className="bg-ember text-primary-foreground" onClick={confirmRetry}>Skrá</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+    </div>
+  );
+}
+
+function WeeklyRing({ label, value, goal, formatValue }: { label: string; value: number; goal: number; formatValue?: (n: number) => string }) {
+  const pct = goal > 0 ? Math.min(1, value / goal) : 0;
+  const fmt = formatValue || ((n: number) => new Intl.NumberFormat("is-IS").format(Math.round(n)));
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <RingProgress value={pct} size={120} stroke={10} showPercent={false}>
+        <div className="numbers-float text-lg ember-text leading-tight">
+          <CountUp to={value} format={fmt} />
+        </div>
+        <div className="text-[10px] text-muted-foreground mt-0.5">af {fmt(goal)}</div>
+      </RingProgress>
+      <div className="text-[11px] uppercase tracking-widest text-muted-foreground">{label}</div>
     </div>
   );
 }
@@ -273,6 +416,8 @@ function ScheduleBlockRow({
   onStatus,
   onNotesChange,
   onNotesBlur,
+  onOutcome,
+  onFollowup,
 }: {
   block: ScheduleBlock;
   index: number;
@@ -280,11 +425,18 @@ function ScheduleBlockRow({
   onStatus: (s: ScheduleBlock["status"]) => void;
   onNotesChange: (n: string) => void;
   onNotesBlur: (n: string) => void;
+  onOutcome?: (o: "answered" | "no_answer") => void;
+  onFollowup?: () => void;
 }) {
   const meta = KIND_META[block.kind] || KIND_META.custom;
   const Icon = meta.Icon;
   const isCall = block.kind === "call" || block.kind === "followup";
   const phone = company?.contacts?.[0]?.phone || company?.phone;
+  const appendNote = (t: string) => {
+    const next = block.notes ? `${block.notes} ${t}` : t;
+    onNotesChange(next);
+    onNotesBlur(next);
+  };
 
   return (
     <GlassCard
@@ -334,14 +486,35 @@ function ScheduleBlockRow({
           </div>
         )}
 
+        <div className="relative">
         <Textarea
           value={block.notes}
           onChange={(e) => onNotesChange(e.target.value)}
           onBlur={(e) => onNotesBlur(e.target.value)}
           placeholder="Glósur…"
           rows={2}
-          className="glass border-white/10 resize-none text-sm"
+          className="glass border-white/10 resize-none text-sm pr-12"
         />
+        <div className="absolute right-2 top-2">
+          <MicButton size="sm" onAppend={appendNote} />
+        </div>
+        </div>
+
+        {isCall && onOutcome && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            <Button size="sm" variant="outline" className="glass border-white/10 gap-1 text-xs h-7" onClick={() => onOutcome("answered")}>
+              <PhoneCall className="w-3 h-3" /> Svaraði
+            </Button>
+            <Button size="sm" variant="outline" className="glass border-white/10 gap-1 text-xs h-7 text-amber-300 border-amber-400/30" onClick={() => onOutcome("no_answer")}>
+              <PhoneOff className="w-3 h-3" /> Svaraði ekki
+            </Button>
+            {onFollowup && (
+              <Button size="sm" variant="outline" className="glass border-white/10 gap-1 text-xs h-7" onClick={onFollowup}>
+                <Clock className="w-3 h-3" /> Reyna aftur
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Actions */}
@@ -384,18 +557,32 @@ function SettingsSheet({
   const [ws, setWs] = useState(settings?.workStart || "09:00");
   const [we, setWe] = useState(settings?.workEnd || "17:00");
   const [mc, setMc] = useState<number>(settings?.maxCalls || 10);
+  const [gc, setGc] = useState<number>(settings?.weeklyGoalCalls || 25);
+  const [go, setGo] = useState<number>(settings?.weeklyGoalOffers || 10);
+  const [gp, setGp] = useState<number>(settings?.weeklyGoalPaid || 300000);
 
   useEffect(() => {
     if (settings) {
       setWs(settings.workStart);
       setWe(settings.workEnd);
       setMc(settings.maxCalls);
+      setGc(settings.weeklyGoalCalls);
+      setGo(settings.weeklyGoalOffers);
+      setGp(settings.weeklyGoalPaid);
     }
   }, [settings]);
 
   const save = async () => {
     if (!settings) return;
-    const s = await updateDailySettings({ id: settings.id, workStart: ws, workEnd: we, maxCalls: mc });
+    const s = await updateDailySettings({
+      id: settings.id,
+      workStart: ws,
+      workEnd: we,
+      maxCalls: mc,
+      weeklyGoalCalls: gc,
+      weeklyGoalOffers: go,
+      weeklyGoalPaid: gp,
+    });
     if (s) {
       onSaved(s);
       toast.success("Stillingar vistaðar");
@@ -427,6 +614,23 @@ function SettingsSheet({
         <div>
           <Label className="text-xs">Hámark símtala á dag</Label>
           <Input type="number" min={1} max={30} value={mc} onChange={(e) => setMc(Number(e.target.value) || 1)} />
+        </div>
+        <div className="space-y-2">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Markmið vikunnar</div>
+          <div className="grid grid-cols-3 gap-2">
+            <div>
+              <Label className="text-xs">Símtöl</Label>
+              <Input type="number" min={0} value={gc} onChange={(e) => setGc(Number(e.target.value) || 0)} />
+            </div>
+            <div>
+              <Label className="text-xs">Tilboð</Label>
+              <Input type="number" min={0} value={go} onChange={(e) => setGo(Number(e.target.value) || 0)} />
+            </div>
+            <div>
+              <Label className="text-xs">Greitt (kr.)</Label>
+              <Input type="number" min={0} step={10000} value={gp} onChange={(e) => setGp(Number(e.target.value) || 0)} />
+            </div>
+          </div>
         </div>
         <div className="flex items-center justify-between glass p-3 rounded-lg border-white/10">
           <div>

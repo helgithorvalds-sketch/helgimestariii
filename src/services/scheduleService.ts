@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCompanies } from "./companyService";
+import { fetchHourStats, fetchCompanyAnswerRates } from "./callLogService";
 import type { Company } from "@/types";
 
 export type BlockKind = "prep" | "call" | "break" | "followup" | "email" | "custom";
@@ -23,6 +24,9 @@ export interface DailySettings {
   workEnd: string;
   maxCalls: number;
   vacationMode: boolean;
+  weeklyGoalCalls: number;
+  weeklyGoalOffers: number;
+  weeklyGoalPaid: number;
 }
 
 function rowToBlock(r: any): ScheduleBlock {
@@ -46,6 +50,9 @@ function rowToSettings(r: any): DailySettings {
     workEnd: (r.work_end || "17:00").slice(0, 5),
     maxCalls: r.max_calls,
     vacationMode: r.vacation_mode,
+    weeklyGoalCalls: r.weekly_goal_calls ?? 25,
+    weeklyGoalOffers: r.weekly_goal_offers ?? 10,
+    weeklyGoalPaid: r.weekly_goal_paid ?? 300000,
   };
 }
 
@@ -84,6 +91,9 @@ export async function updateDailySettings(patch: Partial<DailySettings> & { id: 
   if (patch.workEnd !== undefined) row.work_end = patch.workEnd;
   if (patch.maxCalls !== undefined) row.max_calls = patch.maxCalls;
   if (patch.vacationMode !== undefined) row.vacation_mode = patch.vacationMode;
+  if (patch.weeklyGoalCalls !== undefined) row.weekly_goal_calls = patch.weeklyGoalCalls;
+  if (patch.weeklyGoalOffers !== undefined) row.weekly_goal_offers = patch.weeklyGoalOffers;
+  if (patch.weeklyGoalPaid !== undefined) row.weekly_goal_paid = patch.weeklyGoalPaid;
   const { data, error } = await supabase.from("daily_settings").update(row).eq("id", patch.id).select().single();
   if (error) return null;
   return rowToSettings(data);
@@ -148,6 +158,13 @@ export async function ensureSchedule(dateISO: string, settings: DailySettings): 
 
   const companies = await fetchCompanies();
 
+  // Best-time-to-call intelligence
+  const [hourStats, companyRates] = await Promise.all([
+    fetchHourStats(),
+    fetchCompanyAnswerRates(),
+  ]);
+  const enoughData = hourStats.totalCalls >= 20;
+
   // Prioritize: rollover companies first, then next_call_at <= today, then stage 'lead' with source
   const now = new Date();
   const isCallable = (c: Company) =>
@@ -159,6 +176,14 @@ export async function ensureSchedule(dateISO: string, settings: DailySettings): 
     const ar = rolloverCompanyIds.has(a.id) ? 0 : 1;
     const br = rolloverCompanyIds.has(b.id) ? 0 : 1;
     if (ar !== br) return ar - br;
+    if (enoughData) {
+      const ra = companyRates[a.id];
+      const rb = companyRates[b.id];
+      // per-lead history wins
+      if (ra !== undefined || rb !== undefined) {
+        if ((rb ?? -1) !== (ra ?? -1)) return (rb ?? -1) - (ra ?? -1);
+      }
+    }
     const at = a.nextCallAt ? new Date(a.nextCallAt).getTime() : Infinity;
     const bt = b.nextCallAt ? new Date(b.nextCallAt).getTime() : Infinity;
     if (at !== bt) return at - bt;
@@ -285,4 +310,53 @@ export async function yesterdaySummary(): Promise<{ callsDone: number; streak: n
     streak++;
   }
   return { callsDone, streak };
+}
+
+/** Start of current week (Monday) in local time as YYYY-MM-DD */
+export function weekStartISO(base: Date = new Date()): string {
+  const d = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+  const day = (d.getDay() + 6) % 7; // Mon=0..Sun=6
+  d.setDate(d.getDate() - day);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export interface WeeklyStats {
+  callsMade: number;
+  offersSent: number;
+  krPaid: number;
+}
+
+export async function fetchWeeklyStats(): Promise<WeeklyStats> {
+  const startISO = weekStartISO();
+  const [y, m, d] = startISO.split("-").map(Number);
+  const startLocal = new Date(y, m - 1, d, 0, 0, 0);
+  const startIsoTs = startLocal.toISOString();
+
+  const [callsRes, offersRes, paidRes] = await Promise.all([
+    supabase.from("call_logs").select("id", { count: "exact", head: true }).gte("called_at", startIsoTs),
+    supabase.from("companies").select("id", { count: "exact", head: true }).eq("stage", "email_sent").gte("email_sent_at", startIsoTs),
+    supabase.from("companies").select("amount_paid, custom_price, estimated_price, paid_date").eq("stage", "paid").gte("paid_date", startISO),
+  ]);
+
+  const callsMade = callsRes.count || 0;
+  const offersSent = offersRes.count || 0;
+  let krPaid = 0;
+  for (const r of (paidRes.data as any[]) || []) {
+    krPaid += Number(r.amount_paid ?? r.custom_price ?? r.estimated_price ?? 0);
+  }
+  return { callsMade, offersSent, krPaid };
+}
+
+/**
+ * Compute follow-up datetime: +N working days at same clock time (skip Sat/Sun).
+ */
+export function nextWorkingDay(from: Date, workingDays: number = 2): Date {
+  const d = new Date(from.getTime());
+  let added = 0;
+  while (added < workingDays) {
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay();
+    if (dow !== 0 && dow !== 6) added++;
+  }
+  return d;
 }
