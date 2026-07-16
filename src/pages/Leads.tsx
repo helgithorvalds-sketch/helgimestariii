@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, PhoneOff, Clock, Ban, Trash2, RotateCcw } from "lucide-react";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, PhoneOff, Clock, Ban, Trash2, RotateCcw, AlertTriangle } from "lucide-react";
 import { Company, LeadSource, ContactPerson } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
@@ -20,7 +20,8 @@ import { cn } from "@/lib/utils";
 type SectionDef = {
   source: LeadSource;
   title: string;
-  emoji: string;
+  emoji?: string;
+  icon?: ComponentType<{ className?: string }>;
   accent: string; // tailwind classes for accent bar / badge
   ring: string;
 };
@@ -46,6 +47,13 @@ const SECTIONS: SectionDef[] = [
     emoji: "🟠",
     accent: "bg-orange-500 text-white",
     ring: "border-orange-300 bg-orange-50/40 dark:bg-orange-950/20 dark:border-orange-800",
+  },
+  {
+    source: "outdated_website",
+    title: "Úreltir vefir",
+    icon: AlertTriangle,
+    accent: "bg-amber-500 text-white",
+    ring: "border-amber-300 bg-amber-50/40 dark:bg-amber-950/20 dark:border-amber-800",
   },
 ];
 
@@ -444,11 +452,11 @@ export default function Leads() {
                 return (
                   <section key={s.source}>
                     <div className="flex items-center gap-3 mb-3">
-                      <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
-                        <span>{s.emoji}</span>
-                        {s.title}
-                        <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{list.length}</span>
-                      </span>
+                    <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
+                      {s.icon ? <s.icon className="w-4 h-4" /> : <span>{s.emoji}</span>}
+                      {s.title}
+                      <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{list.length}</span>
+                    </span>
                     </div>
                     {list.length === 0 ? (
                       <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki.</p>
