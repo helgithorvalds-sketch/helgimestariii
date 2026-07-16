@@ -49,6 +49,88 @@ export type Database = {
           },
         ]
       }
+      comm_status: {
+        Row: {
+          company_id: string
+          last_comm_at: string | null
+          needs_reply: boolean
+          needs_reply_reason: string | null
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          last_comm_at?: string | null
+          needs_reply?: boolean
+          needs_reply_reason?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          last_comm_at?: string | null
+          needs_reply?: boolean
+          needs_reply_reason?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comm_status_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communications: {
+        Row: {
+          body: string
+          channel: string
+          company_id: string
+          created_at: string
+          direction: string | null
+          id: string
+          occurred_at: string
+          processed: boolean
+          source_ref: string | null
+          subject: string | null
+        }
+        Insert: {
+          body: string
+          channel?: string
+          company_id: string
+          created_at?: string
+          direction?: string | null
+          id?: string
+          occurred_at?: string
+          processed?: boolean
+          source_ref?: string | null
+          subject?: string | null
+        }
+        Update: {
+          body?: string
+          channel?: string
+          company_id?: string
+          created_at?: string
+          direction?: string | null
+          id?: string
+          occurred_at?: string
+          processed?: boolean
+          source_ref?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           address: string | null
