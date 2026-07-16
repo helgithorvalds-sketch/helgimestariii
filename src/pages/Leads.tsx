@@ -10,6 +10,8 @@ import { Company, LeadSource, ContactPerson } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { addCallLog } from "@/services/callLogService";
+import { LataVitaButton } from "@/components/LataVitaButton";
+import { NotificationBell } from "@/components/NotificationBell";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -351,6 +353,9 @@ export default function Leads() {
           <PhoneCall className="w-3.5 h-3.5" />
           Hringja
         </Button>
+        <div className="flex-1 min-w-[120px] flex items-center justify-center">
+          <LataVitaButton company={c} />
+        </div>
         <Button
           size="sm"
           variant={c.rejected ? "default" : "destructive"}
@@ -364,7 +369,7 @@ export default function Leads() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen pb-24 md:pb-8">
       <header className="border-b bg-card shadow-sm px-6 py-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -377,7 +382,9 @@ export default function Leads() {
               <p className="text-sm text-muted-foreground mt-0.5">{leads.length} fyrirtæki bíða símtals</p>
             </div>
           </div>
-          <div className="relative">
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Leita..."
@@ -390,6 +397,7 @@ export default function Leads() {
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
+            </div>
           </div>
         </div>
       </header>
