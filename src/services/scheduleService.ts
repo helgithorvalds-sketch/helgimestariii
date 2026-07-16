@@ -311,3 +311,52 @@ export async function yesterdaySummary(): Promise<{ callsDone: number; streak: n
   }
   return { callsDone, streak };
 }
+
+/** Start of current week (Monday) in local time as YYYY-MM-DD */
+export function weekStartISO(base: Date = new Date()): string {
+  const d = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+  const day = (d.getDay() + 6) % 7; // Mon=0..Sun=6
+  d.setDate(d.getDate() - day);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export interface WeeklyStats {
+  callsMade: number;
+  offersSent: number;
+  krPaid: number;
+}
+
+export async function fetchWeeklyStats(): Promise<WeeklyStats> {
+  const startISO = weekStartISO();
+  const [y, m, d] = startISO.split("-").map(Number);
+  const startLocal = new Date(y, m - 1, d, 0, 0, 0);
+  const startIsoTs = startLocal.toISOString();
+
+  const [callsRes, offersRes, paidRes] = await Promise.all([
+    supabase.from("call_logs").select("id", { count: "exact", head: true }).gte("called_at", startIsoTs),
+    supabase.from("companies").select("id", { count: "exact", head: true }).eq("stage", "email_sent").gte("email_sent_at", startIsoTs),
+    supabase.from("companies").select("amount_paid, custom_price, estimated_price, paid_date").eq("stage", "paid").gte("paid_date", startISO),
+  ]);
+
+  const callsMade = callsRes.count || 0;
+  const offersSent = offersRes.count || 0;
+  let krPaid = 0;
+  for (const r of (paidRes.data as any[]) || []) {
+    krPaid += Number(r.amount_paid ?? r.custom_price ?? r.estimated_price ?? 0);
+  }
+  return { callsMade, offersSent, krPaid };
+}
+
+/**
+ * Compute follow-up datetime: +N working days at same clock time (skip Sat/Sun).
+ */
+export function nextWorkingDay(from: Date, workingDays: number = 2): Date {
+  const d = new Date(from.getTime());
+  let added = 0;
+  while (added < workingDays) {
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay();
+    if (dow !== 0 && dow !== 6) added++;
+  }
+  return d;
+}
