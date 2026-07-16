@@ -1,27 +1,22 @@
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, PhoneOff, Clock, Ban, Trash2, RotateCcw, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, Ban, Trash2, RotateCcw } from "lucide-react";
 import { Company, LeadSource, ContactPerson } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { addCallLog } from "@/services/callLogService";
-import { LataVitaButton } from "@/components/LataVitaButton";
-import { NotificationBell } from "@/components/NotificationBell";
-import { MicButton } from "@/components/molten/MicButton";
-import { nextWorkingDay } from "@/services/scheduleService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 type SectionDef = {
   source: LeadSource;
   title: string;
-  emoji?: string;
-  icon?: ComponentType<{ className?: string }>;
+  emoji: string;
   accent: string; // tailwind classes for accent bar / badge
   ring: string;
 };
@@ -48,13 +43,6 @@ const SECTIONS: SectionDef[] = [
     accent: "bg-orange-500 text-white",
     ring: "border-orange-300 bg-orange-50/40 dark:bg-orange-950/20 dark:border-orange-800",
   },
-  {
-    source: "outdated_website",
-    title: "Úreltir vefir",
-    icon: AlertTriangle,
-    accent: "bg-amber-500 text-white",
-    ring: "border-amber-300 bg-amber-50/40 dark:bg-amber-950/20 dark:border-amber-800",
-  },
 ];
 
 export default function Leads() {
@@ -70,8 +58,6 @@ export default function Leads() {
   const [callNote, setCallNote] = useState("");
   const [callNextDate, setCallNextDate] = useState("");
   const [callNextTime, setCallNextTime] = useState("");
-  const [callOutcome, setCallOutcome] = useState<"answered" | "no_answer" | "completed" | "">("");
-  const [retry, setRetry] = useState<{ company: Company; date: string; time: string } | null>(null);
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
@@ -114,7 +100,6 @@ export default function Leads() {
     setCallPhone(first?.phone || c.phone || "");
     setCallEmail(first?.email || c.email || "");
     setCallNote("");
-    setCallOutcome("");
     if (c.nextCallAt) {
       const d = new Date(c.nextCallAt);
       const pad = (n: number) => String(n).padStart(2, "0");
@@ -130,7 +115,6 @@ export default function Leads() {
     setCallTarget(null);
     setCallName(""); setCallPhone(""); setCallEmail(""); setCallNote("");
     setCallNextDate(""); setCallNextTime("");
-    setCallOutcome("");
   };
 
   const handleSaveCall = async () => {
@@ -177,40 +161,15 @@ export default function Leads() {
       };
       const saved = await persist(updated);
       if (saved && note) {
-        await addCallLog(c.id, note, callOutcome || null);
-      } else if (saved && callOutcome) {
-        await addCallLog(c.id, "", callOutcome);
+        await addCallLog(c.id, note);
       }
       if (saved) {
         toast.success("Símtal skráð");
         closeCall();
-        if (callOutcome === "no_answer" || callOutcome === "completed") {
-          openRetry(saved);
-        }
       }
     } finally {
       setSavingCall(false);
     }
-  };
-
-  const openRetry = (c: Company) => {
-    const next = nextWorkingDay(new Date(), 2);
-    const pad = (n: number) => String(n).padStart(2, "0");
-    setRetry({
-      company: c,
-      date: `${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}`,
-      time: `${pad(next.getHours())}:${pad(next.getMinutes())}`,
-    });
-  };
-
-  const confirmRetry = async () => {
-    if (!retry) return;
-    const { company, date, time } = retry;
-    const [y, m, d] = date.split("-").map(Number);
-    const [hh, mm] = time.split(":").map(Number);
-    const nextAt = new Date(y, (m || 1) - 1, d || 1, hh || 9, mm || 0).toISOString();
-    await persist({ ...company, nextCallAt: nextAt }, "Reyna aftur skráð");
-    setRetry(null);
   };
 
   const handleRemoveContact = async (c: Company, contactId: string) => {
@@ -392,9 +351,6 @@ export default function Leads() {
           <PhoneCall className="w-3.5 h-3.5" />
           Hringja
         </Button>
-        <div className="flex-1 min-w-[120px] flex items-center justify-center">
-          <LataVitaButton company={c} />
-        </div>
         <Button
           size="sm"
           variant={c.rejected ? "default" : "destructive"}
@@ -408,7 +364,7 @@ export default function Leads() {
   );
 
   return (
-    <div className="min-h-screen pb-24 md:pb-8">
+    <div className="min-h-screen bg-background">
       <header className="border-b bg-card shadow-sm px-6 py-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -421,9 +377,7 @@ export default function Leads() {
               <p className="text-sm text-muted-foreground mt-0.5">{leads.length} fyrirtæki bíða símtals</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <NotificationBell />
-            <div className="relative">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Leita..."
@@ -436,7 +390,6 @@ export default function Leads() {
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
-            </div>
           </div>
         </div>
       </header>
@@ -452,11 +405,11 @@ export default function Leads() {
                 return (
                   <section key={s.source}>
                     <div className="flex items-center gap-3 mb-3">
-                    <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
-                      {s.icon ? <s.icon className="w-4 h-4" /> : <span>{s.emoji}</span>}
-                      {s.title}
-                      <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{list.length}</span>
-                    </span>
+                      <span className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm", s.accent)}>
+                        <span>{s.emoji}</span>
+                        {s.title}
+                        <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{list.length}</span>
+                      </span>
                     </div>
                     {list.length === 0 ? (
                       <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki.</p>
@@ -543,26 +496,7 @@ export default function Leads() {
             </div>
             <div className="space-y-1">
               <Label htmlFor="call-note">Glósa</Label>
-              <div className="relative">
-                <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} className="pr-12" />
-                <div className="absolute right-2 top-2">
-                  <MicButton size="sm" onAppend={(t) => setCallNote((prev) => (prev ? `${prev} ${t}` : t))} />
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label>Útkoma símtals</Label>
-              <div className="flex flex-wrap gap-1.5">
-                <Button type="button" size="sm" variant={callOutcome === "answered" ? "default" : "outline"} className="gap-1" onClick={() => setCallOutcome("answered")}>
-                  <PhoneCall className="w-3.5 h-3.5" /> Svaraði
-                </Button>
-                <Button type="button" size="sm" variant={callOutcome === "no_answer" ? "default" : "outline"} className="gap-1" onClick={() => setCallOutcome("no_answer")}>
-                  <PhoneOff className="w-3.5 h-3.5" /> Svaraði ekki
-                </Button>
-                <Button type="button" size="sm" variant={callOutcome === "completed" ? "default" : "outline"} className="gap-1" onClick={() => setCallOutcome("completed")}>
-                  <Clock className="w-3.5 h-3.5" /> Lokið — þarf eftirfylgni
-                </Button>
-              </div>
+              <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
@@ -578,34 +512,6 @@ export default function Leads() {
           <DialogFooter>
             <Button variant="ghost" onClick={closeCall} disabled={savingCall}>Hætta við</Button>
             <Button onClick={handleSaveCall} disabled={savingCall}>{savingCall ? "Vista..." : "Vista símtal"}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={!!retry} onOpenChange={(o) => { if (!o) setRetry(null); }}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <PhoneCall className="w-5 h-5 text-primary" />
-              Reyna aftur — {retry?.company.name}
-            </DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            Uppástunga: 2 virkir dagar síðar á sama tíma. Þú getur breytt.
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <Label>Dagsetning</Label>
-              <Input type="date" value={retry?.date || ""} onChange={(e) => setRetry(r => r && { ...r, date: e.target.value })} />
-            </div>
-            <div className="space-y-1">
-              <Label>Tími</Label>
-              <Input type="time" value={retry?.time || ""} onChange={(e) => setRetry(r => r && { ...r, time: e.target.value })} />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setRetry(null)}>Hætta við</Button>
-            <Button onClick={confirmRetry}>Skrá</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
