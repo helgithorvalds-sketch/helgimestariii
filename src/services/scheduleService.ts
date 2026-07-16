@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCompanies } from "./companyService";
+import { fetchHourStats, fetchCompanyAnswerRates } from "./callLogService";
 import type { Company } from "@/types";
 
 export type BlockKind = "prep" | "call" | "break" | "followup" | "email" | "custom";
@@ -157,6 +158,13 @@ export async function ensureSchedule(dateISO: string, settings: DailySettings): 
 
   const companies = await fetchCompanies();
 
+  // Best-time-to-call intelligence
+  const [hourStats, companyRates] = await Promise.all([
+    fetchHourStats(),
+    fetchCompanyAnswerRates(),
+  ]);
+  const enoughData = hourStats.totalCalls >= 20;
+
   // Prioritize: rollover companies first, then next_call_at <= today, then stage 'lead' with source
   const now = new Date();
   const isCallable = (c: Company) =>
@@ -168,6 +176,14 @@ export async function ensureSchedule(dateISO: string, settings: DailySettings): 
     const ar = rolloverCompanyIds.has(a.id) ? 0 : 1;
     const br = rolloverCompanyIds.has(b.id) ? 0 : 1;
     if (ar !== br) return ar - br;
+    if (enoughData) {
+      const ra = companyRates[a.id];
+      const rb = companyRates[b.id];
+      // per-lead history wins
+      if (ra !== undefined || rb !== undefined) {
+        if ((rb ?? -1) !== (ra ?? -1)) return (rb ?? -1) - (ra ?? -1);
+      }
+    }
     const at = a.nextCallAt ? new Date(a.nextCallAt).getTime() : Infinity;
     const bt = b.nextCallAt ? new Date(b.nextCallAt).getTime() : Infinity;
     if (at !== bt) return at - bt;
