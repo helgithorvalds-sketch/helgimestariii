@@ -311,6 +311,67 @@ export default function Dagurinn() {
           </GlassCard>
         )}
 
+        {/* Svara þarf */}
+        <GlassCard className="p-5 md:p-6 animate-fade-in">
+          <div className="flex items-center gap-2 mb-3">
+            <MessagesSquare className="w-4 h-4 text-orange-300" />
+            <div className="text-[11px] uppercase tracking-widest text-muted-foreground">Svara þarf</div>
+            {needsReply.length > 0 && (
+              <span className="ml-auto text-xs text-muted-foreground">{needsReply.length}</span>
+            )}
+          </div>
+          {needsReply.length === 0 ? (
+            <div className="text-center py-6 space-y-1">
+              <div className="text-2xl">✨</div>
+              <p className="text-sm text-muted-foreground">Engin svör í bið — vel gert</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {needsReply.map((s) => {
+                const c = companies[s.companyId];
+                if (!c) return null;
+                const ch = lastChannel[s.companyId];
+                const Icon = ch ? CHANNEL_ICON_MAP[ch] : MessagesSquare;
+                return (
+                  <div
+                    key={s.companyId}
+                    className="flex items-center gap-3 rounded-xl border border-orange-400/20 bg-orange-500/5 backdrop-blur-md p-3 hover:bg-orange-500/10 transition-colors cursor-pointer"
+                    onClick={() => setSamskiptiCompany(c)}
+                  >
+                    <div className="w-9 h-9 rounded-full ember-bg flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-sm truncate">{c.name}</div>
+                      <div className="text-xs text-muted-foreground truncate">
+                        {s.needsReplyReason || s.summary || "Bíður svars"}
+                      </div>
+                      {s.lastCommAt && (
+                        <div className="text-[11px] text-muted-foreground/70 mt-0.5">{timeSince(s.lastCommAt)}</div>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1 border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/20"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        const upd = await markReplied(s.companyId);
+                        if (upd) {
+                          setNeedsReply((prev) => prev.filter((x) => x.companyId !== s.companyId));
+                          toast.success("Merkt sem svarað");
+                        }
+                      }}
+                    >
+                      <CheckCircle className="w-3.5 h-3.5" /> Búið
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </GlassCard>
+
         {/* Timeline */}
         {loading ? (
           <GlassCard className="p-8 text-center text-muted-foreground">Hleð…</GlassCard>
