@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings2, PhoneCall, Coffee, Sunrise, Mail, Check, X, RefreshCw, Bell, Clock, PhoneOff, Sparkles } from "lucide-react";
+import { Settings2, PhoneCall, Coffee, Sunrise, Mail, Check, X, RefreshCw, Bell, Clock, PhoneOff, Sparkles, MessageCircle, Smartphone, StickyNote, MessagesSquare, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { GlassCard } from "@/components/molten/GlassCard";
 import { RingProgress } from "@/components/molten/RingProgress";
@@ -35,6 +35,8 @@ import {
 import { fetchCompanies } from "@/services/companyService";
 import { addCallLog, fetchHourStats, HourStats } from "@/services/callLogService";
 import { updateCompany } from "@/services/companyService";
+import { fetchAllNeedsReply, markReplied, fetchCommunications, CommStatus } from "@/services/communicationService";
+import { CompanyModal } from "@/components/CompanyModal";
 import type { Company } from "@/types";
 import logo from "@/assets/logo.png";
 import { NavLink } from "react-router-dom";
@@ -74,6 +76,9 @@ export default function Dagurinn() {
   const [weekly, setWeekly] = useState<WeeklyStats>({ callsMade: 0, offersSent: 0, krPaid: 0 });
   const [hourStats, setHourStats] = useState<HourStats>({ totalCalls: 0, perHour: {}, bestHour: null });
   const [retry, setRetry] = useState<{ company: Company; block?: ScheduleBlock; date: string; time: string } | null>(null);
+  const [needsReply, setNeedsReply] = useState<CommStatus[]>([]);
+  const [lastChannel, setLastChannel] = useState<Record<string, string>>({});
+  const [samskiptiCompany, setSamskiptiCompany] = useState<Company | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -88,6 +93,17 @@ export default function Dagurinn() {
     yesterdaySummary().then(setSummary);
     fetchWeeklyStats().then(setWeekly);
     fetchHourStats().then(setHourStats);
+    const nr = await fetchAllNeedsReply();
+    setNeedsReply(nr);
+    // fetch latest channel per company (best-effort)
+    const chMap: Record<string, string> = {};
+    await Promise.all(
+      nr.map(async (s) => {
+        const list = await fetchCommunications(s.companyId);
+        if (list[0]) chMap[s.companyId] = list[0].channel;
+      }),
+    );
+    setLastChannel(chMap);
     setLoading(false);
   };
 
