@@ -10,6 +10,8 @@ import { Company, LeadSource, ContactPerson } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { addCallLog } from "@/services/callLogService";
+import { LataVitaButton } from "@/components/LataVitaButton";
+import { NotificationBell } from "@/components/NotificationBell";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -351,6 +353,9 @@ export default function Leads() {
           <PhoneCall className="w-3.5 h-3.5" />
           Hringja
         </Button>
+        <div className="flex-1 min-w-[120px] flex items-center justify-center">
+          <LataVitaButton company={c} />
+        </div>
         <Button
           size="sm"
           variant={c.rejected ? "default" : "destructive"}
