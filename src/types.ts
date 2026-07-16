@@ -6,7 +6,7 @@ export type CompanyStage =
   | "paid"
   | "lead";
 
-export type LeadSource = "facebook" | "new_company" | "restaurant";
+export type LeadSource = "facebook" | "new_company" | "restaurant" | "outdated_website";
 
 export type PreviewSubStatus = 
   | "wanted_preview"
