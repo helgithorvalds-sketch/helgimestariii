@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, Ban, Trash2, RotateCcw } from "lucide-react";
+import { ArrowLeft, Search, X, Phone, Mail, ExternalLink, Globe, MapPin, Tag, Calendar, Pencil, Facebook, User, Building, PhoneCall, PhoneOff, Clock, Ban, Trash2, RotateCcw } from "lucide-react";
 import { Company, LeadSource, ContactPerson } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { addCallLog } from "@/services/callLogService";
 import { LataVitaButton } from "@/components/LataVitaButton";
 import { NotificationBell } from "@/components/NotificationBell";
+import { MicButton } from "@/components/molten/MicButton";
+import { nextWorkingDay } from "@/services/scheduleService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -60,6 +62,8 @@ export default function Leads() {
   const [callNote, setCallNote] = useState("");
   const [callNextDate, setCallNextDate] = useState("");
   const [callNextTime, setCallNextTime] = useState("");
+  const [callOutcome, setCallOutcome] = useState<"answered" | "no_answer" | "completed" | "">("");
+  const [retry, setRetry] = useState<{ company: Company; date: string; time: string } | null>(null);
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
@@ -102,6 +106,7 @@ export default function Leads() {
     setCallPhone(first?.phone || c.phone || "");
     setCallEmail(first?.email || c.email || "");
     setCallNote("");
+    setCallOutcome("");
     if (c.nextCallAt) {
       const d = new Date(c.nextCallAt);
       const pad = (n: number) => String(n).padStart(2, "0");
@@ -117,6 +122,7 @@ export default function Leads() {
     setCallTarget(null);
     setCallName(""); setCallPhone(""); setCallEmail(""); setCallNote("");
     setCallNextDate(""); setCallNextTime("");
+    setCallOutcome("");
   };
 
   const handleSaveCall = async () => {
@@ -163,15 +169,40 @@ export default function Leads() {
       };
       const saved = await persist(updated);
       if (saved && note) {
-        await addCallLog(c.id, note);
+        await addCallLog(c.id, note, callOutcome || null);
+      } else if (saved && callOutcome) {
+        await addCallLog(c.id, "", callOutcome);
       }
       if (saved) {
         toast.success("Símtal skráð");
         closeCall();
+        if (callOutcome === "no_answer" || callOutcome === "completed") {
+          openRetry(saved);
+        }
       }
     } finally {
       setSavingCall(false);
     }
+  };
+
+  const openRetry = (c: Company) => {
+    const next = nextWorkingDay(new Date(), 2);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    setRetry({
+      company: c,
+      date: `${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}`,
+      time: `${pad(next.getHours())}:${pad(next.getMinutes())}`,
+    });
+  };
+
+  const confirmRetry = async () => {
+    if (!retry) return;
+    const { company, date, time } = retry;
+    const [y, m, d] = date.split("-").map(Number);
+    const [hh, mm] = time.split(":").map(Number);
+    const nextAt = new Date(y, (m || 1) - 1, d || 1, hh || 9, mm || 0).toISOString();
+    await persist({ ...company, nextCallAt: nextAt }, "Reyna aftur skráð");
+    setRetry(null);
   };
 
   const handleRemoveContact = async (c: Company, contactId: string) => {
