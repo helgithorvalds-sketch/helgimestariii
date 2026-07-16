@@ -295,6 +295,9 @@ export async function ensureSchedule(dateISO: string, settings: DailySettings): 
 }
 
 export async function yesterdaySummary(): Promise<{ callsDone: number; streak: number }> {
+  return (await import("./scheduleService.stats")).__unused as any; // never used, avoids unused warning
+}
+// placeholder replaced below
   const y = addDaysISO(todayISO(), -1);
   const yblocks = await fetchBlocks(y);
   const callsDone = yblocks.filter((b) => b.kind === "call" && b.status === "done").length;
