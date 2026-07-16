@@ -557,18 +557,32 @@ function SettingsSheet({
   const [ws, setWs] = useState(settings?.workStart || "09:00");
   const [we, setWe] = useState(settings?.workEnd || "17:00");
   const [mc, setMc] = useState<number>(settings?.maxCalls || 10);
+  const [gc, setGc] = useState<number>(settings?.weeklyGoalCalls || 25);
+  const [go, setGo] = useState<number>(settings?.weeklyGoalOffers || 10);
+  const [gp, setGp] = useState<number>(settings?.weeklyGoalPaid || 300000);
 
   useEffect(() => {
     if (settings) {
       setWs(settings.workStart);
       setWe(settings.workEnd);
       setMc(settings.maxCalls);
+      setGc(settings.weeklyGoalCalls);
+      setGo(settings.weeklyGoalOffers);
+      setGp(settings.weeklyGoalPaid);
     }
   }, [settings]);
 
   const save = async () => {
     if (!settings) return;
-    const s = await updateDailySettings({ id: settings.id, workStart: ws, workEnd: we, maxCalls: mc });
+    const s = await updateDailySettings({
+      id: settings.id,
+      workStart: ws,
+      workEnd: we,
+      maxCalls: mc,
+      weeklyGoalCalls: gc,
+      weeklyGoalOffers: go,
+      weeklyGoalPaid: gp,
+    });
     if (s) {
       onSaved(s);
       toast.success("Stillingar vistaðar");
@@ -600,6 +614,23 @@ function SettingsSheet({
         <div>
           <Label className="text-xs">Hámark símtala á dag</Label>
           <Input type="number" min={1} max={30} value={mc} onChange={(e) => setMc(Number(e.target.value) || 1)} />
+        </div>
+        <div className="space-y-2">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Markmið vikunnar</div>
+          <div className="grid grid-cols-3 gap-2">
+            <div>
+              <Label className="text-xs">Símtöl</Label>
+              <Input type="number" min={0} value={gc} onChange={(e) => setGc(Number(e.target.value) || 0)} />
+            </div>
+            <div>
+              <Label className="text-xs">Tilboð</Label>
+              <Input type="number" min={0} value={go} onChange={(e) => setGo(Number(e.target.value) || 0)} />
+            </div>
+            <div>
+              <Label className="text-xs">Greitt (kr.)</Label>
+              <Input type="number" min={0} step={10000} value={gp} onChange={(e) => setGp(Number(e.target.value) || 0)} />
+            </div>
+          </div>
         </div>
         <div className="flex items-center justify-between glass p-3 rounded-lg border-white/10">
           <div>
