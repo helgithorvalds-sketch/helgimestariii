@@ -473,7 +473,7 @@ export default function Index() {
   const mainStages: CompanyStage[] = ["email_sent"];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen pb-24 md:pb-8">
       {/* Header */}
       <header className="border-b bg-card shadow-sm px-6 py-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

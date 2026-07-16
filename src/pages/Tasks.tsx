@@ -55,7 +55,7 @@ export default function Tasks() {
   const overdueCount = tasks.filter((t) => isOverdue(t)).length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen pb-24 md:pb-8">
       <header className="border-b bg-card shadow-sm px-6 py-6">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
