@@ -10,6 +10,7 @@ import Leads from "./pages/Leads";
 import NotFound from "./pages/NotFound";
 import Dagurinn from "./pages/Dagurinn";
 import { AuroraBackground } from "./components/molten/AuroraBackground";
+import { MobileNav } from "./components/MobileNav";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <MobileNav />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
