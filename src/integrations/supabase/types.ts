@@ -178,6 +178,136 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_schedules: {
+        Row: {
+          block_time: string
+          company_id: string | null
+          created_at: string
+          duration_min: number
+          id: string
+          kind: string
+          notes: string
+          schedule_date: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          block_time: string
+          company_id?: string | null
+          created_at?: string
+          duration_min?: number
+          id?: string
+          kind?: string
+          notes?: string
+          schedule_date: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          block_time?: string
+          company_id?: string | null
+          created_at?: string
+          duration_min?: number
+          id?: string
+          kind?: string
+          notes?: string
+          schedule_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_settings: {
+        Row: {
+          created_at: string
+          id: string
+          max_calls: number
+          updated_at: string
+          vacation_mode: boolean
+          work_end: string
+          work_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_calls?: number
+          updated_at?: string
+          vacation_mode?: boolean
+          work_end?: string
+          work_start?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_calls?: number
+          updated_at?: string
+          vacation_mode?: boolean
+          work_end?: string
+          work_start?: string
+        }
+        Relationships: []
+      }
+      notifications_outbox: {
+        Row: {
+          channel: string
+          company_id: string
+          created_at: string
+          error: string | null
+          id: string
+          message: string
+          recipient: string
+          scheduled_date: string
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string
+          company_id: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message?: string
+          recipient?: string
+          scheduled_date?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          company_id?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message?: string
+          recipient?: string
+          scheduled_date?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_outbox_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           company_id: string
