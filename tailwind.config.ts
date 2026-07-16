@@ -64,8 +64,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['"Inter Tight"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Fraunces', '"Plus Jakarta Sans"', 'Inter', 'system-ui', 'serif'],
       },
       boxShadow: {
         xs: 'var(--shadow-xs)',
@@ -74,6 +74,10 @@ export default {
         md: 'var(--shadow-md)',
         lg: 'var(--shadow-lg)',
         glow: 'var(--shadow-glow)',
+        ember: 'var(--shadow-ember)',
+      },
+      backgroundImage: {
+        ember: 'var(--gradient-ember)',
       },
       keyframes: {
         "accordion-down": {
