@@ -23,6 +23,9 @@ export interface DailySettings {
   workEnd: string;
   maxCalls: number;
   vacationMode: boolean;
+  weeklyGoalCalls: number;
+  weeklyGoalOffers: number;
+  weeklyGoalPaid: number;
 }
 
 function rowToBlock(r: any): ScheduleBlock {
@@ -46,6 +49,9 @@ function rowToSettings(r: any): DailySettings {
     workEnd: (r.work_end || "17:00").slice(0, 5),
     maxCalls: r.max_calls,
     vacationMode: r.vacation_mode,
+    weeklyGoalCalls: r.weekly_goal_calls ?? 25,
+    weeklyGoalOffers: r.weekly_goal_offers ?? 10,
+    weeklyGoalPaid: r.weekly_goal_paid ?? 300000,
   };
 }
 
@@ -84,6 +90,9 @@ export async function updateDailySettings(patch: Partial<DailySettings> & { id: 
   if (patch.workEnd !== undefined) row.work_end = patch.workEnd;
   if (patch.maxCalls !== undefined) row.max_calls = patch.maxCalls;
   if (patch.vacationMode !== undefined) row.vacation_mode = patch.vacationMode;
+  if (patch.weeklyGoalCalls !== undefined) row.weekly_goal_calls = patch.weeklyGoalCalls;
+  if (patch.weeklyGoalOffers !== undefined) row.weekly_goal_offers = patch.weeklyGoalOffers;
+  if (patch.weeklyGoalPaid !== undefined) row.weekly_goal_paid = patch.weeklyGoalPaid;
   const { data, error } = await supabase.from("daily_settings").update(row).eq("id", patch.id).select().single();
   if (error) return null;
   return rowToSettings(data);
