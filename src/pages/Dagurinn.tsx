@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings2, PhoneCall, Coffee, Sunrise, Mail, Check, X, RefreshCw, Bell, Clock, PhoneOff, Sparkles } from "lucide-react";
+import { Settings2, PhoneCall, Coffee, Sunrise, Mail, Check, X, RefreshCw, Bell, Clock, PhoneOff, Sparkles, MessageCircle, Smartphone, StickyNote, MessagesSquare, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { GlassCard } from "@/components/molten/GlassCard";
 import { RingProgress } from "@/components/molten/RingProgress";
@@ -35,6 +35,8 @@ import {
 import { fetchCompanies } from "@/services/companyService";
 import { addCallLog, fetchHourStats, HourStats } from "@/services/callLogService";
 import { updateCompany } from "@/services/companyService";
+import { fetchAllNeedsReply, markReplied, fetchCommunications, CommStatus } from "@/services/communicationService";
+import { CompanyModal } from "@/components/CompanyModal";
 import type { Company } from "@/types";
 import logo from "@/assets/logo.png";
 import { NavLink } from "react-router-dom";
@@ -55,6 +57,29 @@ function formatIcelandicDate(d: Date) {
   return `${ICELANDIC_DAYS[d.getDay()]}, ${d.getDate()}. ${ICELANDIC_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+function timeSince(iso: string): string {
+  const then = new Date(iso).getTime();
+  const diffMs = Date.now() - then;
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "rétt í þessu";
+  if (mins < 60) return `${mins} mín síðan`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} klst síðan`;
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return "1 degi síðan";
+  if (days < 7) return `${days} dögum síðan`;
+  const weeks = Math.floor(days / 7);
+  if (weeks === 1) return "1 viku síðan";
+  return `${weeks} vikum síðan`;
+}
+
+const CHANNEL_ICON_MAP: Record<string, any> = {
+  email: Mail,
+  messenger: MessageCircle,
+  sms: Smartphone,
+  note: StickyNote,
+};
+
 function greeting(): string {
   const h = new Date().getHours();
   if (h < 5) return "Góða nótt";
@@ -74,6 +99,9 @@ export default function Dagurinn() {
   const [weekly, setWeekly] = useState<WeeklyStats>({ callsMade: 0, offersSent: 0, krPaid: 0 });
   const [hourStats, setHourStats] = useState<HourStats>({ totalCalls: 0, perHour: {}, bestHour: null });
   const [retry, setRetry] = useState<{ company: Company; block?: ScheduleBlock; date: string; time: string } | null>(null);
+  const [needsReply, setNeedsReply] = useState<CommStatus[]>([]);
+  const [lastChannel, setLastChannel] = useState<Record<string, string>>({});
+  const [samskiptiCompany, setSamskiptiCompany] = useState<Company | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -88,6 +116,17 @@ export default function Dagurinn() {
     yesterdaySummary().then(setSummary);
     fetchWeeklyStats().then(setWeekly);
     fetchHourStats().then(setHourStats);
+    const nr = await fetchAllNeedsReply();
+    setNeedsReply(nr);
+    // fetch latest channel per company (best-effort)
+    const chMap: Record<string, string> = {};
+    await Promise.all(
+      nr.map(async (s) => {
+        const list = await fetchCommunications(s.companyId);
+        if (list[0]) chMap[s.companyId] = list[0].channel;
+      }),
+    );
+    setLastChannel(chMap);
     setLoading(false);
   };
 
@@ -272,6 +311,67 @@ export default function Dagurinn() {
           </GlassCard>
         )}
 
+        {/* Svara þarf */}
+        <GlassCard className="p-5 md:p-6 animate-fade-in">
+          <div className="flex items-center gap-2 mb-3">
+            <MessagesSquare className="w-4 h-4 text-orange-300" />
+            <div className="text-[11px] uppercase tracking-widest text-muted-foreground">Svara þarf</div>
+            {needsReply.length > 0 && (
+              <span className="ml-auto text-xs text-muted-foreground">{needsReply.length}</span>
+            )}
+          </div>
+          {needsReply.length === 0 ? (
+            <div className="text-center py-6 space-y-1">
+              <div className="text-2xl">✨</div>
+              <p className="text-sm text-muted-foreground">Engin svör í bið — vel gert</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {needsReply.map((s) => {
+                const c = companies[s.companyId];
+                if (!c) return null;
+                const ch = lastChannel[s.companyId];
+                const Icon = ch ? CHANNEL_ICON_MAP[ch] : MessagesSquare;
+                return (
+                  <div
+                    key={s.companyId}
+                    className="flex items-center gap-3 rounded-xl border border-orange-400/20 bg-orange-500/5 backdrop-blur-md p-3 hover:bg-orange-500/10 transition-colors cursor-pointer"
+                    onClick={() => setSamskiptiCompany(c)}
+                  >
+                    <div className="w-9 h-9 rounded-full ember-bg flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-sm truncate">{c.name}</div>
+                      <div className="text-xs text-muted-foreground truncate">
+                        {s.needsReplyReason || s.summary || "Bíður svars"}
+                      </div>
+                      {s.lastCommAt && (
+                        <div className="text-[11px] text-muted-foreground/70 mt-0.5">{timeSince(s.lastCommAt)}</div>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1 border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/20"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        const upd = await markReplied(s.companyId);
+                        if (upd) {
+                          setNeedsReply((prev) => prev.filter((x) => x.companyId !== s.companyId));
+                          toast.success("Merkt sem svarað");
+                        }
+                      }}
+                    >
+                      <CheckCircle className="w-3.5 h-3.5" /> Búið
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </GlassCard>
+
         {/* Timeline */}
         {loading ? (
           <GlassCard className="p-8 text-center text-muted-foreground">Hleð…</GlassCard>
@@ -357,6 +457,20 @@ export default function Dagurinn() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {samskiptiCompany && (
+        <CompanyModal
+          company={samskiptiCompany}
+          open={!!samskiptiCompany}
+          onClose={() => { setSamskiptiCompany(null); load(); }}
+          onUpdate={async (updated) => {
+            const saved = await updateCompany(updated);
+            if (saved) setCompanies((prev) => ({ ...prev, [saved.id]: saved }));
+          }}
+          onDelete={() => { setSamskiptiCompany(null); }}
+          initialShowSamskipti
+        />
+      )}
 
     </div>
   );

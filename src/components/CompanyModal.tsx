@@ -10,11 +10,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Company, CompanyStage, STAGE_LABELS, STAGE_ORDER, ChecklistItem, ContactPerson } from "@/types";
 import { StageBadge } from "./StageBadge";
-import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare, ClipboardList, Clock, AlertTriangle } from "lucide-react";
+import { Trash2, Save, CalendarIcon, Phone, Plus, X, Globe, ExternalLink, Mail, Pencil, ArrowLeft, Repeat, Play, Pause, CheckCircle, Sparkles, Loader2, Mic, MicOff, Languages, MessageSquare, ClipboardList, Clock, AlertTriangle, MessagesSquare } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CallLog, fetchCallLogs, addCallLog, deleteCallLog } from "@/services/callLogService";
 import { Task, fetchTasksByCompany, addTask, toggleTaskCompleted, deleteTask } from "@/services/taskService";
+import { CommunicationsSection } from "@/components/CommunicationsSection";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -26,9 +27,10 @@ interface CompanyModalProps {
   onDelete: (id: string) => void;
   initialShowTasks?: boolean;
   initialShowCall?: boolean;
+  initialShowSamskipti?: boolean;
 }
 
-export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initialShowTasks, initialShowCall }: CompanyModalProps) {
+export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initialShowTasks, initialShowCall, initialShowSamskipti }: CompanyModalProps) {
   const [editMode, setEditMode] = useState(false);
   const [editedCompany, setEditedCompany] = useState<Company>(company);
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
@@ -56,6 +58,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
 
   // Tasks state
   const [showTasks, setShowTasks] = useState(false);
+  const [showSamskipti, setShowSamskipti] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskDesc, setNewTaskDesc] = useState("");
   const [newTaskDeadline, setNewTaskDeadline] = useState("");
@@ -68,6 +71,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
       setEditMode(false);
       setEditedCompany(company);
       setShowTasks(!!initialShowTasks);
+      setShowSamskipti(!!initialShowSamskipti);
       if (initialShowCall) {
         setFinishingCall(true);
       }
@@ -550,6 +554,23 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
 
       {/* Call Log - Blue */}
       {renderCallLog()}
+
+      {/* Samskipti Section */}
+      <div className="space-y-2">
+        <Button
+          variant="outline"
+          className="w-full gap-2"
+          onClick={() => setShowSamskipti(!showSamskipti)}
+        >
+          <MessagesSquare className="w-4 h-4" />
+          Samskipti
+        </Button>
+        {showSamskipti && (
+          <div className="rounded-lg border p-3">
+            <CommunicationsSection companyId={company.id} />
+          </div>
+        )}
+      </div>
 
       {/* Tasks Section */}
       <div className="space-y-2">
