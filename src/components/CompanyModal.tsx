@@ -555,6 +555,23 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
       {/* Call Log - Blue */}
       {renderCallLog()}
 
+      {/* Samskipti Section */}
+      <div className="space-y-2">
+        <Button
+          variant="outline"
+          className="w-full gap-2"
+          onClick={() => setShowSamskipti(!showSamskipti)}
+        >
+          <MessagesSquare className="w-4 h-4" />
+          Samskipti
+        </Button>
+        {showSamskipti && (
+          <div className="rounded-lg border p-3">
+            <CommunicationsSection companyId={company.id} />
+          </div>
+        )}
+      </div>
+
       {/* Tasks Section */}
       <div className="space-y-2">
         <Button
