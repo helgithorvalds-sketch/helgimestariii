@@ -380,9 +380,9 @@ function WeeklyRing({ label, value, goal, formatValue }: { label: string; value:
 
 function DesktopNav() {
   const items = [
-    { to: "/", label: "Dagurinn", end: true },
+    { to: "/", label: "Söluferli", end: true },
+    { to: "/dagurinn", label: "Dagurinn" },
     { to: "/leads", label: "Hringja" },
-    { to: "/kanban", label: "Söluferli" },
     { to: "/tasks", label: "Verkefni" },
     { to: "/finances", label: "Fjármál" },
   ];

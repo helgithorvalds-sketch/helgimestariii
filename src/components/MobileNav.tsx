@@ -3,9 +3,9 @@ import { Sun, PhoneCall, KanbanSquare, Coins, ClipboardList } from "lucide-react
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { to: "/", label: "Dagurinn", Icon: Sun },
+  { to: "/", label: "Söluferli", Icon: KanbanSquare },
+  { to: "/dagurinn", label: "Dagurinn", Icon: Sun },
   { to: "/leads", label: "Hringja", Icon: PhoneCall },
-  { to: "/kanban", label: "Söluferli", Icon: KanbanSquare },
   { to: "/tasks", label: "Verkefni", Icon: ClipboardList },
   { to: "/finances", label: "Fjármál", Icon: Coins },
 ];

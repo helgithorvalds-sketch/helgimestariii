@@ -22,8 +22,8 @@ const App = () => (
       <BrowserRouter>
         <AuroraBackground />
         <Routes>
-          <Route path="/" element={<Dagurinn />} />
-          <Route path="/kanban" element={<Index />} />
+          <Route path="/" element={<Index />} />
+          <Route path="/dagurinn" element={<Dagurinn />} />
           <Route path="/finances" element={<FinancesWrapper />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/leads" element={<Leads />} />
