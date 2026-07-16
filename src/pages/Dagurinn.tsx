@@ -57,6 +57,29 @@ function formatIcelandicDate(d: Date) {
   return `${ICELANDIC_DAYS[d.getDay()]}, ${d.getDate()}. ${ICELANDIC_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+function timeSince(iso: string): string {
+  const then = new Date(iso).getTime();
+  const diffMs = Date.now() - then;
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "rétt í þessu";
+  if (mins < 60) return `${mins} mín síðan`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} klst síðan`;
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return "1 degi síðan";
+  if (days < 7) return `${days} dögum síðan`;
+  const weeks = Math.floor(days / 7);
+  if (weeks === 1) return "1 viku síðan";
+  return `${weeks} vikum síðan`;
+}
+
+const CHANNEL_ICON_MAP: Record<string, any> = {
+  email: Mail,
+  messenger: MessageCircle,
+  sms: Smartphone,
+  note: StickyNote,
+};
+
 function greeting(): string {
   const h = new Date().getHours();
   if (h < 5) return "Góða nótt";
