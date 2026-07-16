@@ -458,6 +458,20 @@ export default function Dagurinn() {
         </DialogContent>
       </Dialog>
 
+      {samskiptiCompany && (
+        <CompanyModal
+          company={samskiptiCompany}
+          open={!!samskiptiCompany}
+          onClose={() => { setSamskiptiCompany(null); load(); }}
+          onUpdate={async (updated) => {
+            const saved = await updateCompany(updated);
+            if (saved) setCompanies((prev) => ({ ...prev, [saved.id]: saved }));
+          }}
+          onDelete={() => { setSamskiptiCompany(null); }}
+          initialShowSamskipti
+        />
+      )}
+
     </div>
   );
 }
