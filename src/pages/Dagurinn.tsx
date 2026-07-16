@@ -30,7 +30,6 @@ import {
 import { fetchCompanies } from "@/services/companyService";
 import type { Company } from "@/types";
 import logo from "@/assets/logo.png";
-import { MobileNav } from "@/components/MobileNav";
 import { NavLink } from "react-router-dom";
 
 const KIND_META: Record<string, { label: string; Icon: any; tone: string }> = {
@@ -232,7 +231,6 @@ export default function Dagurinn() {
         </GlassCard>
       </main>
 
-      <MobileNav />
     </div>
   );
 }
