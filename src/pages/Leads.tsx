@@ -535,7 +535,26 @@ export default function Leads() {
             </div>
             <div className="space-y-1">
               <Label htmlFor="call-note">Glósa</Label>
-              <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} />
+              <div className="relative">
+                <Textarea id="call-note" value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var rætt..." rows={4} maxLength={2000} className="pr-12" />
+                <div className="absolute right-2 top-2">
+                  <MicButton size="sm" onAppend={(t) => setCallNote((prev) => (prev ? `${prev} ${t}` : t))} />
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label>Útkoma símtals</Label>
+              <div className="flex flex-wrap gap-1.5">
+                <Button type="button" size="sm" variant={callOutcome === "answered" ? "default" : "outline"} className="gap-1" onClick={() => setCallOutcome("answered")}>
+                  <PhoneCall className="w-3.5 h-3.5" /> Svaraði
+                </Button>
+                <Button type="button" size="sm" variant={callOutcome === "no_answer" ? "default" : "outline"} className="gap-1" onClick={() => setCallOutcome("no_answer")}>
+                  <PhoneOff className="w-3.5 h-3.5" /> Svaraði ekki
+                </Button>
+                <Button type="button" size="sm" variant={callOutcome === "completed" ? "default" : "outline"} className="gap-1" onClick={() => setCallOutcome("completed")}>
+                  <Clock className="w-3.5 h-3.5" /> Lokið — þarf eftirfylgni
+                </Button>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
@@ -551,6 +570,34 @@ export default function Leads() {
           <DialogFooter>
             <Button variant="ghost" onClick={closeCall} disabled={savingCall}>Hætta við</Button>
             <Button onClick={handleSaveCall} disabled={savingCall}>{savingCall ? "Vista..." : "Vista símtal"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!retry} onOpenChange={(o) => { if (!o) setRetry(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <PhoneCall className="w-5 h-5 text-primary" />
+              Reyna aftur — {retry?.company.name}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Uppástunga: 2 virkir dagar síðar á sama tíma. Þú getur breytt.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label>Dagsetning</Label>
+              <Input type="date" value={retry?.date || ""} onChange={(e) => setRetry(r => r && { ...r, date: e.target.value })} />
+            </div>
+            <div className="space-y-1">
+              <Label>Tími</Label>
+              <Input type="time" value={retry?.time || ""} onChange={(e) => setRetry(r => r && { ...r, time: e.target.value })} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setRetry(null)}>Hætta við</Button>
+            <Button onClick={confirmRetry}>Skrá</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
