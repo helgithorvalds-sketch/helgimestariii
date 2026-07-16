@@ -8,6 +8,8 @@ import FinancesWrapper from "./pages/FinancesWrapper";
 import Tasks from "./pages/Tasks";
 import Leads from "./pages/Leads";
 import NotFound from "./pages/NotFound";
+import Dagurinn from "./pages/Dagurinn";
+import { AuroraBackground } from "./components/molten/AuroraBackground";
 
 const queryClient = new QueryClient();
 
@@ -17,8 +19,10 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AuroraBackground />
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Dagurinn />} />
+          <Route path="/kanban" element={<Index />} />
           <Route path="/finances" element={<FinancesWrapper />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/leads" element={<Leads />} />
