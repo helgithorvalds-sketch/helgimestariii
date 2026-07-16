@@ -416,6 +416,8 @@ function ScheduleBlockRow({
   onStatus,
   onNotesChange,
   onNotesBlur,
+  onOutcome,
+  onFollowup,
 }: {
   block: ScheduleBlock;
   index: number;
@@ -423,11 +425,18 @@ function ScheduleBlockRow({
   onStatus: (s: ScheduleBlock["status"]) => void;
   onNotesChange: (n: string) => void;
   onNotesBlur: (n: string) => void;
+  onOutcome?: (o: "answered" | "no_answer") => void;
+  onFollowup?: () => void;
 }) {
   const meta = KIND_META[block.kind] || KIND_META.custom;
   const Icon = meta.Icon;
   const isCall = block.kind === "call" || block.kind === "followup";
   const phone = company?.contacts?.[0]?.phone || company?.phone;
+  const appendNote = (t: string) => {
+    const next = block.notes ? `${block.notes} ${t}` : t;
+    onNotesChange(next);
+    onNotesBlur(next);
+  };
 
   return (
     <GlassCard
@@ -477,14 +486,35 @@ function ScheduleBlockRow({
           </div>
         )}
 
+        <div className="relative">
         <Textarea
           value={block.notes}
           onChange={(e) => onNotesChange(e.target.value)}
           onBlur={(e) => onNotesBlur(e.target.value)}
           placeholder="Glósur…"
           rows={2}
-          className="glass border-white/10 resize-none text-sm"
+          className="glass border-white/10 resize-none text-sm pr-12"
         />
+        <div className="absolute right-2 top-2">
+          <MicButton size="sm" onAppend={appendNote} />
+        </div>
+        </div>
+
+        {isCall && onOutcome && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            <Button size="sm" variant="outline" className="glass border-white/10 gap-1 text-xs h-7" onClick={() => onOutcome("answered")}>
+              <PhoneCall className="w-3 h-3" /> Svaraði
+            </Button>
+            <Button size="sm" variant="outline" className="glass border-white/10 gap-1 text-xs h-7 text-amber-300 border-amber-400/30" onClick={() => onOutcome("no_answer")}>
+              <PhoneOff className="w-3 h-3" /> Svaraði ekki
+            </Button>
+            {onFollowup && (
+              <Button size="sm" variant="outline" className="glass border-white/10 gap-1 text-xs h-7" onClick={onFollowup}>
+                <Clock className="w-3 h-3" /> Reyna aftur
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Actions */}
