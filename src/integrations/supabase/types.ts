@@ -21,6 +21,7 @@ export type Database = {
           created_at: string
           id: string
           notes: string
+          outcome: string | null
         }
         Insert: {
           called_at?: string
@@ -28,6 +29,7 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string
+          outcome?: string | null
         }
         Update: {
           called_at?: string
@@ -35,10 +37,93 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string
+          outcome?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "call_logs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comm_status: {
+        Row: {
+          company_id: string
+          last_comm_at: string | null
+          needs_reply: boolean
+          needs_reply_reason: string | null
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          last_comm_at?: string | null
+          needs_reply?: boolean
+          needs_reply_reason?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          last_comm_at?: string | null
+          needs_reply?: boolean
+          needs_reply_reason?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comm_status_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      communications: {
+        Row: {
+          body: string
+          channel: string
+          company_id: string
+          created_at: string
+          direction: string | null
+          id: string
+          occurred_at: string
+          processed: boolean
+          source_ref: string | null
+          subject: string | null
+        }
+        Insert: {
+          body: string
+          channel?: string
+          company_id: string
+          created_at?: string
+          direction?: string | null
+          id?: string
+          occurred_at?: string
+          processed?: boolean
+          source_ref?: string | null
+          subject?: string | null
+        }
+        Update: {
+          body?: string
+          channel?: string
+          company_id?: string
+          created_at?: string
+          direction?: string | null
+          id?: string
+          occurred_at?: string
+          processed?: boolean
+          source_ref?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communications_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -57,6 +142,7 @@ export type Database = {
           created_at: string
           custom_price: number | null
           email: string | null
+          email_sent_at: string | null
           estimated_price: number
           facebook_url: string | null
           finished_sub_status: string | null
@@ -100,6 +186,7 @@ export type Database = {
           created_at?: string
           custom_price?: number | null
           email?: string | null
+          email_sent_at?: string | null
           estimated_price?: number
           facebook_url?: string | null
           finished_sub_status?: string | null
@@ -143,6 +230,7 @@ export type Database = {
           created_at?: string
           custom_price?: number | null
           email?: string | null
+          email_sent_at?: string | null
           estimated_price?: number
           facebook_url?: string | null
           finished_sub_status?: string | null
@@ -177,6 +265,145 @@ export type Database = {
           website_url?: string | null
         }
         Relationships: []
+      }
+      daily_schedules: {
+        Row: {
+          block_time: string
+          company_id: string | null
+          created_at: string
+          duration_min: number
+          id: string
+          kind: string
+          notes: string
+          schedule_date: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          block_time: string
+          company_id?: string | null
+          created_at?: string
+          duration_min?: number
+          id?: string
+          kind?: string
+          notes?: string
+          schedule_date: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          block_time?: string
+          company_id?: string | null
+          created_at?: string
+          duration_min?: number
+          id?: string
+          kind?: string
+          notes?: string
+          schedule_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_settings: {
+        Row: {
+          created_at: string
+          id: string
+          max_calls: number
+          updated_at: string
+          vacation_mode: boolean
+          weekly_goal_calls: number
+          weekly_goal_offers: number
+          weekly_goal_paid: number
+          work_end: string
+          work_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_calls?: number
+          updated_at?: string
+          vacation_mode?: boolean
+          weekly_goal_calls?: number
+          weekly_goal_offers?: number
+          weekly_goal_paid?: number
+          work_end?: string
+          work_start?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_calls?: number
+          updated_at?: string
+          vacation_mode?: boolean
+          weekly_goal_calls?: number
+          weekly_goal_offers?: number
+          weekly_goal_paid?: number
+          work_end?: string
+          work_start?: string
+        }
+        Relationships: []
+      }
+      notifications_outbox: {
+        Row: {
+          channel: string
+          company_id: string
+          created_at: string
+          error: string | null
+          id: string
+          message: string
+          recipient: string
+          scheduled_date: string
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string
+          company_id: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message?: string
+          recipient?: string
+          scheduled_date?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          company_id?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message?: string
+          recipient?: string
+          scheduled_date?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_outbox_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tasks: {
         Row: {
