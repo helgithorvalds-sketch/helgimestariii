@@ -4,7 +4,8 @@ export type CompanyStage =
   | "preview" 
   | "finished" 
   | "paid"
-  | "lead";
+  | "lead"
+  | "svif";
 
 export type LeadSource = "facebook" | "new_company" | "restaurant";
 
@@ -87,6 +88,7 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   finished: "Lokið",
   paid: "Greitt",
   lead: "Til að hringja",
+  svif: "Svif",
 };
 
 export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
