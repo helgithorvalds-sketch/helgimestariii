@@ -523,9 +523,16 @@ export default function Index() {
                 </span>
               )}
             </Button>
-            <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
+            <Button variant="outline" onClick={() => navigate("/svif")} className="gap-2 shadow-sm relative">
               <Plane className="w-4 h-4" />
+              Svif
+              {companies.filter(c => c.stage === "svif").length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {companies.filter(c => c.stage === "svif").length}
+                </span>
+              )}
             </Button>
+            <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
             </Button>
