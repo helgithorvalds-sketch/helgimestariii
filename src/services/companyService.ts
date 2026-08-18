@@ -92,16 +92,23 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
 }
 
 export async function fetchCompanies(): Promise<Company[]> {
-  const { data, error } = await supabase
-    .from("companies")
-    .select("*")
-    .order("created_at", { ascending: true });
+  const PAGE = 1000;
+  const rows: any[] = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from("companies")
+      .select("*")
+      .order("created_at", { ascending: true })
+      .range(from, from + PAGE - 1);
 
-  if (error) {
-    console.error("Error fetching companies:", error);
-    return [];
+    if (error) {
+      console.error("Error fetching companies:", error);
+      return rows.map(rowToCompany);
+    }
+    rows.push(...(data || []));
+    if (!data || data.length < PAGE) break;
   }
-  return (data || []).map(rowToCompany);
+  return rows.map(rowToCompany);
 }
 
 export async function addCompany(company: Omit<Company, "id" | "createdAt">): Promise<Company | null> {
