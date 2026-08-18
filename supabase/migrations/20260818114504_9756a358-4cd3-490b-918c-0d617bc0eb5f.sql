@@ -1,0 +1,2 @@
+ALTER TABLE public.companies DROP CONSTRAINT IF EXISTS companies_stage_check;
+ALTER TABLE public.companies ADD CONSTRAINT companies_stage_check CHECK (stage IN ('email_sent','registered','preview','finished','paid','lead','svif'));
