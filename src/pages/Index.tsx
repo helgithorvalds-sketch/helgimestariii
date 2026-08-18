@@ -222,7 +222,7 @@ export default function Index() {
   };
 
   const filteredCompanies = useMemo(() => {
-    const base = companies.filter((c) => c.stage !== "lead");
+    const base = companies.filter((c) => c.stage !== "lead" && c.stage !== "svif");
     if (!searchQuery.trim()) return base;
     const q = searchQuery.toLowerCase();
     return base.filter((c) =>
@@ -481,7 +481,7 @@ export default function Index() {
             <img src={logo} alt="Logo" className="w-14 h-14 rounded-xl shadow-sm" />
             <div>
               <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead").length} fyrirtæki samtals</p>
+              <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead" && c.stage !== "svif").length} fyrirtæki samtals</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
