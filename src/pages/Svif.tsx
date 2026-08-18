@@ -55,7 +55,9 @@ export default function Svif() {
   }, [svif, search]);
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected);
-  const rest = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected));
+  const notChosen = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected));
+  const called = notChosen.filter((c) => !!(c.notes && c.notes.trim()) || !!c.nextCallAt);
+  const rest = notChosen.filter((c) => !(!!(c.notes && c.notes.trim()) || !!c.nextCallAt));
 
   const persist = async (updated: Company, msg?: string) => {
     const res = await updateCompany(updated);
