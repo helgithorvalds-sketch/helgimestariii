@@ -13,7 +13,7 @@ import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
-import { addCallLog } from "@/services/callLogService";
+import { addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +24,7 @@ export default function Svif() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Company | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
@@ -36,7 +37,9 @@ export default function Svif() {
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
-    setCompanies(await fetchCompanies());
+    const [list, logs] = await Promise.all([fetchCompanies(), fetchRecentCallLogs(2000)]);
+    setCompanies(list);
+    setLoggedIds(new Set(logs.map((l) => l.companyId)));
     setLoading(false);
   };
   useEffect(() => { load(); }, []);
@@ -56,8 +59,8 @@ export default function Svif() {
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected);
   const notChosen = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected));
-  const called = notChosen.filter((c) => !!(c.notes && c.notes.trim()) || !!c.nextCallAt);
-  const rest = notChosen.filter((c) => !(!!(c.notes && c.notes.trim()) || !!c.nextCallAt));
+  const called = notChosen.filter((c) => loggedIds.has(c.id));
+  const rest = notChosen.filter((c) => !loggedIds.has(c.id));
 
   const persist = async (updated: Company, msg?: string) => {
     const res = await updateCompany(updated);
@@ -186,7 +189,10 @@ export default function Svif() {
         notes: mergedNotes,
         nextCallAt,
       });
-      if (saved && note) await addCallLog(c.id, note);
+      if (saved && note) {
+        await addCallLog(c.id, note);
+        setLoggedIds((prev) => new Set(prev).add(c.id));
+      }
       if (saved) {
         toast.success("Símtal skráð");
         closeCall();
