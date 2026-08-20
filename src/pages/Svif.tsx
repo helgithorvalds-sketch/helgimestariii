@@ -59,10 +59,15 @@ export default function Svif() {
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
-  const notChosen = filtered.filter((c) => !c.rejected && !c.specialOffer && !(c.lastCallOutcome === "interested"));
-  const hasCall = (c: Company) => loggedIds.has(c.id) || !!c.nextCallAt;
-  const called = notChosen.filter(hasCall);
-  const rest = notChosen.filter((c) => !hasCall(c));
+  const active = filtered.filter((c) => !c.rejected);
+  const hasCall = (c: Company) =>
+    loggedIds.has(c.id) ||
+    !!c.nextCallAt ||
+    /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
+  const called = active.filter(hasCall);
+  const rest = active.filter(
+    (c) => !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+  );
 
   const persist = async (updated: Company, msg?: string) => {
     const res = await updateCompany(updated);
@@ -199,7 +204,11 @@ export default function Svif() {
         nextCallAt,
       });
       if (saved) {
-        await addCallLog(c.id, note || "Símtal skráð");
+        const callLog = await addCallLog(c.id, note || "Símtal skráð");
+        if (!callLog && !note && !callNextDate) {
+          toast.error("Ekki tókst að vista símtalaskrá");
+          return;
+        }
         setLoggedIds((prev) => new Set(prev).add(c.id));
       }
       if (saved) {
