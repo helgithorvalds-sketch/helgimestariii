@@ -464,7 +464,7 @@ export default function Svif() {
             </section>
 
             <CallSchedule
-              companies={selectedForSchedule}
+              companies={scheduleCompanies}
               onCompanyClick={setSelected}
               onCompanyUpdate={async (updated) => {
                 await persist(updated);
