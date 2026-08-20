@@ -219,9 +219,11 @@ export default function Svif() {
           "rounded-xl border-2 bg-card shadow-sm hover:shadow-md transition-all p-4 space-y-2",
           c.rejected
             ? "border-red-400 bg-red-50/70 dark:bg-red-950/30 dark:border-red-800"
-            : isChosen
-              ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800"
-              : "border-border"
+            : c.specialOffer
+              ? "border-purple-400 bg-purple-50/50 dark:bg-purple-950/20 dark:border-purple-800"
+              : isChosen
+                ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800"
+                : "border-border"
         )}
       >
         <div className="flex items-start justify-between gap-2">
