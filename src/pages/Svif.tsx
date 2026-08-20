@@ -116,6 +116,13 @@ export default function Svif() {
     );
   };
 
+  const handleToggleSpecialOffer = async (c: Company) => {
+    await persist(
+      { ...c, specialOffer: !c.specialOffer },
+      !c.specialOffer ? "Sett í sértilboð" : "Fjarlægt úr sértilboði"
+    );
+  };
+
   const handleRemoveContact = async (c: Company, contactId: string) => {
     await persist({ ...c, contacts: (c.contacts || []).filter((x) => x.id !== contactId) }, "Tengilið fjarlægður");
   };
