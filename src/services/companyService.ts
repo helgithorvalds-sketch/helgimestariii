@@ -43,6 +43,7 @@ function rowToCompany(row: any): Company {
     monthlyPaymentStartDate: row.monthly_payment_start_date,
     monthlyPaymentActive: row.monthly_payment_active ?? false,
     nextCallAt: row.next_call_at,
+    specialOffer: row.special_offer ?? false,
     createdAt: row.created_at,
   };
 }
@@ -88,6 +89,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     monthly_payment_start_date: company.monthlyPaymentStartDate || null,
     monthly_payment_active: company.monthlyPaymentActive ?? false,
     next_call_at: company.nextCallAt || null,
+    special_offer: company.specialOffer ?? false,
   };
 }
 

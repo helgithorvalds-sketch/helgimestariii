@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
@@ -57,8 +57,9 @@ export default function Svif() {
     );
   }, [svif, search]);
 
-  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected);
-  const notChosen = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected));
+  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
+  const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
+  const notChosen = filtered.filter((c) => !c.rejected && !c.specialOffer && !(c.lastCallOutcome === "interested"));
   const called = notChosen.filter((c) => loggedIds.has(c.id));
   const rest = notChosen.filter((c) => !loggedIds.has(c.id));
 
@@ -112,6 +113,13 @@ export default function Svif() {
     await persist(
       { ...c, rejected: !c.rejected, rejectedAt: !c.rejected ? new Date().toISOString() : undefined },
       !c.rejected ? "Merkt sem off" : "Endurvirkjað"
+    );
+  };
+
+  const handleToggleSpecialOffer = async (c: Company) => {
+    await persist(
+      { ...c, specialOffer: !c.specialOffer },
+      !c.specialOffer ? "Sett í sértilboð" : "Fjarlægt úr sértilboði"
     );
   };
 
@@ -211,9 +219,11 @@ export default function Svif() {
           "rounded-xl border-2 bg-card shadow-sm hover:shadow-md transition-all p-4 space-y-2",
           c.rejected
             ? "border-red-400 bg-red-50/70 dark:bg-red-950/30 dark:border-red-800"
-            : isChosen
-              ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800"
-              : "border-border"
+            : c.specialOffer
+              ? "border-purple-400 bg-purple-50/50 dark:bg-purple-950/20 dark:border-purple-800"
+              : isChosen
+                ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800"
+                : "border-border"
         )}
       >
         <div className="flex items-start justify-between gap-2">
@@ -221,6 +231,7 @@ export default function Svif() {
             <h3 className={cn("font-bold text-base truncate", c.rejected && "text-red-700 dark:text-red-300")}>
               {c.name}
               {c.rejected && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-red-600 text-white align-middle">OFF</span>}
+              {c.specialOffer && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-purple-600 text-white align-middle">SÉRTILBOÐ</span>}
               {isChosen && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-emerald-600 text-white align-middle">VALIN</span>}
             </h3>
             {c.owner && <p className="text-sm font-medium text-primary truncate">{c.owner}</p>}
@@ -323,21 +334,29 @@ export default function Svif() {
         )}
 
         <div className="flex flex-wrap gap-1.5 pt-2 border-t">
-          <Button size="sm" className="gap-1 flex-1 min-w-[90px]" onClick={() => openCall(c)}>
+          <Button size="sm" className="gap-1 flex-1 min-w-[80px]" onClick={() => openCall(c)}>
             <PhoneCall className="w-3.5 h-3.5" />Hringja
           </Button>
           <Button
             size="sm"
             variant={isChosen ? "secondary" : "outline"}
-            className="gap-1 flex-1 min-w-[90px]"
+            className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleChosen(c)}
           >
             {isChosen ? <><StarOff className="w-3.5 h-3.5" />Úr Valin</> : <><Star className="w-3.5 h-3.5" />Velja</>}
           </Button>
           <Button
             size="sm"
+            variant={c.specialOffer ? "default" : "outline"}
+            className="gap-1 flex-1 min-w-[80px]"
+            onClick={() => handleToggleSpecialOffer(c)}
+          >
+            {c.specialOffer ? <><Sparkles className="w-3.5 h-3.5" />Í boði</> : <><Sparkles className="w-3.5 h-3.5" />Sértilboð</>}
+          </Button>
+          <Button
+            size="sm"
             variant={c.rejected ? "default" : "destructive"}
-            className="gap-1 flex-1 min-w-[90px]"
+            className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleOff(c)}
           >
             {c.rejected ? <><RotateCcw className="w-3.5 h-3.5" />Endurvirkja</> : <><Ban className="w-3.5 h-3.5" />Off</>}
@@ -361,7 +380,7 @@ export default function Svif() {
                 <Plane className="w-7 h-7 text-primary" />
                 Svif
               </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{svif.length} fyrirtæki · {chosen.length} valin</p>
+              <p className="text-sm text-muted-foreground mt-0.5">{svif.length} fyrirtæki · {chosen.length} valin · {specialOffers.length} í sértilboði</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -398,6 +417,23 @@ export default function Svif() {
           </div>
         ) : (
           <>
+            <section>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-purple-500 text-white">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Sértilboð
+                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{specialOffers.length}</span>
+                </span>
+              </div>
+              {specialOffers.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki í sértilboði — ýttu á „Sértilboð“ á korti.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {specialOffers.map(renderCard)}
+                </div>
+              )}
+            </section>
+
             <section>
               <div className="flex items-center gap-3 mb-3">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">

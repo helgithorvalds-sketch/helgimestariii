@@ -172,6 +172,7 @@ export type Database = {
           registered_date: string | null
           rejected: boolean
           rejected_at: string | null
+          special_offer: boolean
           stage: string
           updated_at: string
           website_url: string | null
@@ -216,6 +217,7 @@ export type Database = {
           registered_date?: string | null
           rejected?: boolean
           rejected_at?: string | null
+          special_offer?: boolean
           stage?: string
           updated_at?: string
           website_url?: string | null
@@ -260,6 +262,7 @@ export type Database = {
           registered_date?: string | null
           rejected?: boolean
           rejected_at?: string | null
+          special_offer?: boolean
           stage?: string
           updated_at?: string
           website_url?: string | null
