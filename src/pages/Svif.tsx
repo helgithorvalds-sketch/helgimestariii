@@ -14,7 +14,7 @@ import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/serv
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
-import { addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
+import { addCallLog, fetchCompaniesWithCallLogs } from "@/services/callLogService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -38,9 +38,9 @@ export default function Svif() {
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
-    const [list, logs] = await Promise.all([fetchCompanies(), fetchRecentCallLogs(2000)]);
+    const [list, logged] = await Promise.all([fetchCompanies(), fetchCompaniesWithCallLogs()]);
     setCompanies(list);
-    setLoggedIds(new Set(logs.map((l) => l.companyId)));
+    setLoggedIds(new Set(logged));
     setLoading(false);
   };
   useEffect(() => { load(); }, []);

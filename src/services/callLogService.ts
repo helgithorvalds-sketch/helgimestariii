@@ -46,6 +46,15 @@ export async function fetchRecentCallLogs(limit: number = 30): Promise<CallLog[]
   return (data || []).map(rowToCallLog);
 }
 
+export async function fetchCompaniesWithCallLogs(): Promise<string[]> {
+  const { data, error } = await supabase.from("call_logs").select("company_id");
+  if (error) {
+    console.error("Error fetching call log company IDs:", error);
+    return [];
+  }
+  return [...new Set((data || []).map((row) => row.company_id))];
+}
+
 export async function addCallLog(companyId: string, notes: string): Promise<CallLog | null> {
   const { data, error } = await supabase
     .from("call_logs")
