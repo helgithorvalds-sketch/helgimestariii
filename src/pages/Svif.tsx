@@ -380,7 +380,7 @@ export default function Svif() {
                 <Plane className="w-7 h-7 text-primary" />
                 Svif
               </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{svif.length} fyrirtæki · {chosen.length} valin</p>
+              <p className="text-sm text-muted-foreground mt-0.5">{svif.length} fyrirtæki · {chosen.length} valin · {specialOffers.length} í sértilboði</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
