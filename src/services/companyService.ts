@@ -43,6 +43,7 @@ function rowToCompany(row: any): Company {
     monthlyPaymentStartDate: row.monthly_payment_start_date,
     monthlyPaymentActive: row.monthly_payment_active ?? false,
     nextCallAt: row.next_call_at,
+    specialOffer: row.special_offer ?? false,
     createdAt: row.created_at,
   };
 }
