@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
