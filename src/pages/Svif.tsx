@@ -57,9 +57,9 @@ export default function Svif() {
     );
   }, [svif, search]);
 
-  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected);
+  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
-  const notChosen = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected) && !c.specialOffer);
+  const notChosen = filtered.filter((c) => !c.rejected && !c.specialOffer && !(c.lastCallOutcome === "interested"));
   const called = notChosen.filter((c) => loggedIds.has(c.id));
   const rest = notChosen.filter((c) => !loggedIds.has(c.id));
 
