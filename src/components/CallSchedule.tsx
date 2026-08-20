@@ -14,9 +14,10 @@ interface CallScheduleProps {
   companies: Company[];
   onCompanyClick: (company: Company) => void;
   onCompanyUpdate?: (company: Company) => void;
+  refreshKey?: number;
 }
 
-export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: CallScheduleProps) {
+export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refreshKey = 0 }: CallScheduleProps) {
   const [expandedLogs, setExpandedLogs] = useState<Record<string, CallLog[] | null>>({});
   const [confirmNoAnswer, setConfirmNoAnswer] = useState<string | null>(null);
   const [loadingLogs, setLoadingLogs] = useState<string | null>(null);
@@ -43,11 +44,12 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate }: Cal
   const [callbackConfirmed, setCallbackConfirmed] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    setLoadingNotes(true);
     fetchRecentCallLogs(40).then((logs) => {
       setRecentNotes(logs);
       setLoadingNotes(false);
     });
-  }, []);
+  }, [refreshKey]);
 
   // Fetch call logs when finishing overlay opens
   useEffect(() => {
