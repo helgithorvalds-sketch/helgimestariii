@@ -60,8 +60,9 @@ export default function Svif() {
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
   const notChosen = filtered.filter((c) => !c.rejected && !c.specialOffer && !(c.lastCallOutcome === "interested"));
-  const called = notChosen.filter((c) => loggedIds.has(c.id));
-  const rest = notChosen.filter((c) => !loggedIds.has(c.id));
+  const hasCall = (c: Company) => loggedIds.has(c.id) || !!c.nextCallAt;
+  const called = notChosen.filter(hasCall);
+  const rest = notChosen.filter((c) => !hasCall(c));
 
   const persist = async (updated: Company, msg?: string) => {
     const res = await updateCompany(updated);
@@ -197,8 +198,8 @@ export default function Svif() {
         notes: mergedNotes,
         nextCallAt,
       });
-      if (saved && note) {
-        await addCallLog(c.id, note);
+      if (saved) {
+        await addCallLog(c.id, note || "Símtal skráð");
         setLoggedIds((prev) => new Set(prev).add(c.id));
       }
       if (saved) {
