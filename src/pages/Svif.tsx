@@ -26,6 +26,7 @@ export default function Svif() {
   const [selected, setSelected] = useState<Company | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
+  const [callRefresh, setCallRefresh] = useState(0);
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
@@ -212,6 +213,7 @@ export default function Svif() {
           return;
         }
         setLoggedIds((prev) => new Set(prev).add(c.id));
+        setCallRefresh((n) => n + 1);
       }
       if (saved) {
         toast.success("Símtal skráð");
@@ -465,10 +467,12 @@ export default function Svif() {
 
             <CallSchedule
               companies={scheduleCompanies}
+              refreshKey={callRefresh}
               onCompanyClick={setSelected}
               onCompanyUpdate={async (updated) => {
                 await persist(updated);
                 setLoggedIds((prev) => new Set(prev).add(updated.id));
+                setCallRefresh((n) => n + 1);
               }}
             />
 
