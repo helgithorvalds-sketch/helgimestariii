@@ -13,6 +13,7 @@ import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
+import { CallSchedule } from "@/components/CallSchedule";
 import { addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -427,6 +428,15 @@ export default function Svif() {
           </div>
         ) : (
           <>
+            <CallSchedule
+              companies={svif}
+              onCompanyClick={setSelected}
+              onCompanyUpdate={async (updated) => {
+                await persist(updated);
+                setLoggedIds((prev) => new Set(prev).add(updated.id));
+              }}
+            />
+
             <section>
               <div className="flex items-center gap-3 mb-3">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-purple-500 text-white">
