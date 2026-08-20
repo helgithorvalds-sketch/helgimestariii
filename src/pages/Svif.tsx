@@ -419,6 +419,23 @@ export default function Svif() {
           <>
             <section>
               <div className="flex items-center gap-3 mb-3">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-purple-500 text-white">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Sértilboð
+                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{specialOffers.length}</span>
+                </span>
+              </div>
+              {specialOffers.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki í sértilboði — ýttu á „Sértilboð“ á korti.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {specialOffers.map(renderCard)}
+                </div>
+              )}
+            </section>
+
+            <section>
+              <div className="flex items-center gap-3 mb-3">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
                   <Star className="w-3.5 h-3.5" />
                   Valin
