@@ -14,7 +14,7 @@ import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/serv
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
-import { addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
+import { addCallLog, fetchCompaniesWithCallLogs } from "@/services/callLogService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
