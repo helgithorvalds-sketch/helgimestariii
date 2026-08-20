@@ -58,7 +58,8 @@ export default function Svif() {
   }, [svif, search]);
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected);
-  const notChosen = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected));
+  const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
+  const notChosen = filtered.filter((c) => !(c.lastCallOutcome === "interested" && !c.rejected) && !c.specialOffer);
   const called = notChosen.filter((c) => loggedIds.has(c.id));
   const rest = notChosen.filter((c) => !loggedIds.has(c.id));
 
