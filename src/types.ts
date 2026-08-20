@@ -78,6 +78,7 @@ export interface Company {
   monthlyPaymentStartDate?: string;
   monthlyPaymentActive: boolean;
   nextCallAt?: string;
+  specialOffer?: boolean;
   createdAt: string;
 }
 
