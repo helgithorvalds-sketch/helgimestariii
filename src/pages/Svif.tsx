@@ -60,14 +60,9 @@ export default function Svif() {
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
-  const active = filtered.filter((c) => !c.rejected);
-  const hasCall = (c: Company) =>
-    loggedIds.has(c.id) ||
-    !!c.nextCallAt ||
-    /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
-  const called = active.filter(hasCall);
-  const rest = active.filter(
-    (c) => !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+  const selectedForSchedule = filtered.filter((c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer));
+  const rest = filtered.filter(
+    (c) => !c.rejected && !c.specialOffer && c.lastCallOutcome !== "interested"
   );
 
   const persist = async (updated: Company, msg?: string) => {
