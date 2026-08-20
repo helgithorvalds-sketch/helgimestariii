@@ -89,6 +89,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     monthly_payment_start_date: company.monthlyPaymentStartDate || null,
     monthly_payment_active: company.monthlyPaymentActive ?? false,
     next_call_at: company.nextCallAt || null,
+    special_offer: company.specialOffer ?? false,
   };
 }
 
