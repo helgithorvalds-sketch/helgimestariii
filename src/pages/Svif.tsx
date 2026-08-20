@@ -423,32 +423,6 @@ export default function Svif() {
           </div>
         ) : (
           <>
-            <CallSchedule
-              companies={svif}
-              onCompanyClick={setSelected}
-              onCompanyUpdate={async (updated) => {
-                await persist(updated);
-                setLoggedIds((prev) => new Set(prev).add(updated.id));
-              }}
-            />
-
-            <section>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-purple-500 text-white">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Sértilboð
-                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{specialOffers.length}</span>
-                </span>
-              </div>
-              {specialOffers.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki í sértilboði — ýttu á „Sértilboð“ á korti.</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {specialOffers.map(renderCard)}
-                </div>
-              )}
-            </section>
-
             <section>
               <div className="flex items-center gap-3 mb-3">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
@@ -468,20 +442,29 @@ export default function Svif() {
 
             <section>
               <div className="flex items-center gap-3 mb-3">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-primary text-primary-foreground">
-                  <PhoneCall className="w-3.5 h-3.5" />
-                  Símhringingar
-                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{called.length}</span>
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-purple-500 text-white">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Sértilboð
+                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{specialOffers.length}</span>
                 </span>
               </div>
-              {called.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic px-1">Engar skráðar símhringingar eða glósur enn.</p>
+              {specialOffers.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki í sértilboði — ýttu á „Sértilboð“ á korti.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {called.map(renderCard)}
+                  {specialOffers.map(renderCard)}
                 </div>
               )}
             </section>
+
+            <CallSchedule
+              companies={selectedForSchedule}
+              onCompanyClick={setSelected}
+              onCompanyUpdate={async (updated) => {
+                await persist(updated);
+                setLoggedIds((prev) => new Set(prev).add(updated.id));
+              }}
+            />
 
             <section>
               <div className="flex items-center gap-3 mb-3">
