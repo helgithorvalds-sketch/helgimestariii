@@ -334,21 +334,29 @@ export default function Svif() {
         )}
 
         <div className="flex flex-wrap gap-1.5 pt-2 border-t">
-          <Button size="sm" className="gap-1 flex-1 min-w-[90px]" onClick={() => openCall(c)}>
+          <Button size="sm" className="gap-1 flex-1 min-w-[80px]" onClick={() => openCall(c)}>
             <PhoneCall className="w-3.5 h-3.5" />Hringja
           </Button>
           <Button
             size="sm"
             variant={isChosen ? "secondary" : "outline"}
-            className="gap-1 flex-1 min-w-[90px]"
+            className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleChosen(c)}
           >
             {isChosen ? <><StarOff className="w-3.5 h-3.5" />Úr Valin</> : <><Star className="w-3.5 h-3.5" />Velja</>}
           </Button>
           <Button
             size="sm"
+            variant={c.specialOffer ? "default" : "outline"}
+            className="gap-1 flex-1 min-w-[80px]"
+            onClick={() => handleToggleSpecialOffer(c)}
+          >
+            {c.specialOffer ? <><Sparkles className="w-3.5 h-3.5" />Í boði</> : <><Sparkles className="w-3.5 h-3.5" />Sértilboð</>}
+          </Button>
+          <Button
+            size="sm"
             variant={c.rejected ? "default" : "destructive"}
-            className="gap-1 flex-1 min-w-[90px]"
+            className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleOff(c)}
           >
             {c.rejected ? <><RotateCcw className="w-3.5 h-3.5" />Endurvirkja</> : <><Ban className="w-3.5 h-3.5" />Off</>}
