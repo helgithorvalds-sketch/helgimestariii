@@ -640,6 +640,31 @@ export default function Svif() {
                 <Input type="time" value={callNextTime} onChange={(e) => setCallNextTime(e.target.value)} />
               </div>
             </div>
+            <div className="rounded-lg border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800 p-3 space-y-3">
+              <div className="space-y-1.5">
+                <Label className="flex items-center gap-1.5">
+                  <ListChecks className="w-3.5 h-3.5 text-blue-600" />
+                  Verkefni á eftir <span className="text-xs font-normal text-muted-foreground">(valfrjálst)</span>
+                </Label>
+                <Textarea
+                  rows={2}
+                  value={callTaskDesc}
+                  onChange={(e) => setCallTaskDesc(e.target.value)}
+                  placeholder="Hvað þarf að gera fyrir fyrirtækið?"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label>Skiladagur</Label>
+                  <Input type="date" value={callTaskDate} onChange={(e) => setCallTaskDate(e.target.value)} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Tími</Label>
+                  <Input type="time" value={callTaskTime} onChange={(e) => setCallTaskTime(e.target.value)} />
+                </div>
+              </div>
+            </div>
+
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={closeCall}>Hætta</Button>
