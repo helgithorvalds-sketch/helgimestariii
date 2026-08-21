@@ -73,6 +73,30 @@ export default function Svif() {
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
+  const chosenTasks = useMemo(() => {
+    const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
+    return tasks
+      .filter((t) => ids.has(t.companyId))
+      .sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        if (!a.deadline) return 1;
+        if (!b.deadline) return -1;
+        return a.deadline.localeCompare(b.deadline);
+      });
+  }, [tasks, chosen, specialOffers]);
+
+  const handleToggleTask = async (t: Task) => {
+    const ok = await toggleTaskCompleted(t.id, !t.completed);
+    if (!ok) return toast.error("Villa við vistun");
+    setTasks((prev) => prev.map((x) => (x.id === t.id ? { ...x, completed: !t.completed } : x)));
+  };
+
+  const handleDeleteTask = async (t: Task) => {
+    const ok = await deleteTask(t.id);
+    if (!ok) return toast.error("Villa við eyðingu");
+    setTasks((prev) => prev.filter((x) => x.id !== t.id));
+  };
+
   const hasCall = (c: Company) =>
     loggedIds.has(c.id) ||
     !!c.nextCallAt ||
