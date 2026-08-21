@@ -29,6 +29,7 @@ export default function Svif() {
   const [addOpen, setAddOpen] = useState(false);
   const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
   const [callRefresh, setCallRefresh] = useState(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
@@ -38,15 +39,24 @@ export default function Svif() {
   const [callNote, setCallNote] = useState("");
   const [callNextDate, setCallNextDate] = useState("");
   const [callNextTime, setCallNextTime] = useState("");
+  const [callTaskDesc, setCallTaskDesc] = useState("");
+  const [callTaskDate, setCallTaskDate] = useState("");
+  const [callTaskTime, setCallTaskTime] = useState("");
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
-    const [list, logged] = await Promise.all([fetchCompanies(), fetchCompaniesWithCallLogs()]);
+    const [list, logged, taskList] = await Promise.all([
+      fetchCompanies(),
+      fetchCompaniesWithCallLogs(),
+      fetchAllTasks(),
+    ]);
     setCompanies(list);
     setLoggedIds(new Set(logged));
+    setTasks(taskList);
     setLoading(false);
   };
   useEffect(() => { load(); }, []);
+
 
   const svif = useMemo(() => companies.filter((c) => c.stage === "svif"), [companies]);
 
