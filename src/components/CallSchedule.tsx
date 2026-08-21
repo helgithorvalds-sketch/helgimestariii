@@ -31,6 +31,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
   const [originalNotes, setOriginalNotes] = useState<string | null>(null);
   const [nextCallDate, setNextCallDate] = useState("");
   const [nextCallTime, setNextCallTime] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskDate, setTaskDate] = useState("");
+  const [taskTime, setTaskTime] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [translating, setTranslating] = useState(false);
   const recognitionRef = useRef<any>(null);
