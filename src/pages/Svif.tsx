@@ -622,7 +622,7 @@ export default function Svif() {
       />
 
       <Dialog open={!!callTarget} onOpenChange={(o) => { if (!o) closeCall(); }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Nýtt símtal — {callTarget?.name}</DialogTitle>
           </DialogHeader>
