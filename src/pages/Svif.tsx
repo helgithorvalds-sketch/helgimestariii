@@ -202,7 +202,7 @@ export default function Svif() {
     const phone = callPhone.trim();
     const email = callEmail.trim();
     const note = callNote.trim();
-    if (!name && !phone && !email && !note) {
+    if (!name && !phone && !email && !note && !callTaskDesc.trim()) {
       toast.error("Skrifaðu eitthvað fyrst");
       return;
     }
