@@ -253,10 +253,23 @@ export default function Svif() {
         setLoggedIds((prev) => new Set(prev).add(c.id));
         setCallRefresh((n) => n + 1);
       }
+      const taskDesc = callTaskDesc.trim();
+      if (saved && taskDesc) {
+        let deadline: string | null = null;
+        if (callTaskDate) {
+          const [y, m, d] = callTaskDate.split("-").map(Number);
+          const [hh, mm] = (callTaskTime || "09:00").split(":").map(Number);
+          deadline = new Date(y, (m || 1) - 1, d || 1, hh || 9, mm || 0).toISOString();
+        }
+        const created = await addTask(c.id, taskDesc, deadline);
+        if (created) setTasks((prev) => [created, ...prev]);
+        else toast.error("Ekki tókst að vista verkefni");
+      }
       if (saved) {
-        toast.success("Símtal skráð");
+        toast.success(taskDesc ? "Símtal og verkefni skráð" : "Símtal skráð");
         closeCall();
       }
+
     } finally {
       setSavingCall(false);
     }
