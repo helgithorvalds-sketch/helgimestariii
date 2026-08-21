@@ -4,6 +4,7 @@ import { format, isToday, isTomorrow, isPast, differenceInCalendarDays } from "d
 import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare, CalendarClock } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
+import { addTask } from "@/services/taskService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -177,6 +178,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
     setOriginalNotes(null);
     setNextCallDate("");
     setNextCallTime("");
+    setTaskDescription("");
+    setTaskDate("");
+    setTaskTime("");
   };
 
   const handleSummarize = async () => {
@@ -456,7 +460,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
             </Button>
             <Button
               variant="ghost"
-              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); setOriginalNotes(null); setNextCallDate(""); setNextCallTime(""); }}
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); setOriginalNotes(null); setNextCallDate(""); setNextCallTime(""); setTaskDescription(""); setTaskDate(""); setTaskTime(""); }}
               className="text-muted-foreground"
             >
               Hætta við
