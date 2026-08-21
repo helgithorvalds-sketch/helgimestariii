@@ -403,6 +403,35 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
             )}
           </div>
 
+          {/* Task after call */}
+          <div className="space-y-2 rounded-lg border border-dashed border-border p-3 bg-muted/30">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              <CheckCircle className="w-3.5 h-3.5 text-primary" />
+              Verkefni á eftir (valfrjálst)
+            </label>
+            <Input
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              placeholder="T.d. senda tilboð, gera forskoðun..."
+              className="text-sm h-9"
+            />
+            <div className="flex gap-2">
+              <Input
+                type="date"
+                value={taskDate}
+                onChange={(e) => setTaskDate(e.target.value)}
+                className="flex-1 text-sm h-9"
+              />
+              <Input
+                type="time"
+                value={taskTime}
+                onChange={(e) => setTaskTime(e.target.value)}
+                className="w-28 text-sm h-9"
+              />
+            </div>
+          </div>
+
+
           <div className="flex gap-3">
             <Button
               onClick={handleFinishCall}
