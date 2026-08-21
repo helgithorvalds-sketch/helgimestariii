@@ -154,7 +154,17 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
           owner: finishOwnerName.trim() || finishingCall.owner,
         });
       }
+      if (taskDescription.trim()) {
+        let deadline: string | null = null;
+        if (taskDate) {
+          const [ty, tmo, td] = taskDate.split("-").map(Number);
+          const [th, tm] = (taskTime || "09:00").split(":").map(Number);
+          deadline = new Date(ty, tmo - 1, td, th, tm, 0).toISOString();
+        }
+        await addTask(finishingCall.id, taskDescription.trim(), deadline);
+      }
       toast.success("Símtal skráð!");
+
     } else {
       toast.error("Villa við skráningu");
     }
