@@ -4,6 +4,7 @@ import { format, isToday, isTomorrow, isPast, differenceInCalendarDays } from "d
 import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare, CalendarClock } from "lucide-react";
 import { StageBadge } from "./StageBadge";
 import { CallLog, fetchCallLogs, addCallLog, fetchRecentCallLogs } from "@/services/callLogService";
+import { addTask } from "@/services/taskService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,6 +32,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
   const [originalNotes, setOriginalNotes] = useState<string | null>(null);
   const [nextCallDate, setNextCallDate] = useState("");
   const [nextCallTime, setNextCallTime] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskDate, setTaskDate] = useState("");
+  const [taskTime, setTaskTime] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [translating, setTranslating] = useState(false);
   const recognitionRef = useRef<any>(null);
@@ -151,7 +155,17 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
           owner: finishOwnerName.trim() || finishingCall.owner,
         });
       }
+      if (taskDescription.trim()) {
+        let deadline: string | null = null;
+        if (taskDate) {
+          const [ty, tmo, td] = taskDate.split("-").map(Number);
+          const [th, tm] = (taskTime || "09:00").split(":").map(Number);
+          deadline = new Date(ty, tmo - 1, td, th, tm, 0).toISOString();
+        }
+        await addTask(finishingCall.id, taskDescription.trim(), deadline);
+      }
       toast.success("Símtal skráð!");
+
     } else {
       toast.error("Villa við skráningu");
     }
@@ -164,6 +178,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
     setOriginalNotes(null);
     setNextCallDate("");
     setNextCallTime("");
+    setTaskDescription("");
+    setTaskDate("");
+    setTaskTime("");
   };
 
   const handleSummarize = async () => {
@@ -403,6 +420,35 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
             )}
           </div>
 
+          {/* Task after call */}
+          <div className="space-y-2 rounded-lg border border-dashed border-border p-3 bg-muted/30">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              <CheckCircle className="w-3.5 h-3.5 text-primary" />
+              Verkefni á eftir (valfrjálst)
+            </label>
+            <Input
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              placeholder="T.d. senda tilboð, gera forskoðun..."
+              className="text-sm h-9"
+            />
+            <div className="flex gap-2">
+              <Input
+                type="date"
+                value={taskDate}
+                onChange={(e) => setTaskDate(e.target.value)}
+                className="flex-1 text-sm h-9"
+              />
+              <Input
+                type="time"
+                value={taskTime}
+                onChange={(e) => setTaskTime(e.target.value)}
+                className="w-28 text-sm h-9"
+              />
+            </div>
+          </div>
+
+
           <div className="flex gap-3">
             <Button
               onClick={handleFinishCall}
@@ -414,7 +460,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
             </Button>
             <Button
               variant="ghost"
-              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); setOriginalNotes(null); setNextCallDate(""); setNextCallTime(""); }}
+              onClick={() => { setFinishingCall(null); setFinishNotes(""); setFinishWebsiteUrl(""); setFinishOwnerName(""); setFinishStage("finished"); setOriginalNotes(null); setNextCallDate(""); setNextCallTime(""); setTaskDescription(""); setTaskDate(""); setTaskTime(""); }}
               className="text-muted-foreground"
             >
               Hætta við
