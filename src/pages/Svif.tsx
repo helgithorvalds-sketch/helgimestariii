@@ -431,22 +431,83 @@ export default function Svif() {
           </div>
         ) : (
           <>
-            <section>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
-                  <Star className="w-3.5 h-3.5" />
-                  Valin
-                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
-                </span>
-              </div>
-              {chosen.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {chosen.map(renderCard)}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+              <section className="lg:col-span-2">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
+                    <Star className="w-3.5 h-3.5" />
+                    Valin
+                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
+                  </span>
                 </div>
-              )}
-            </section>
+                {chosen.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
+                ) : (
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                    {chosen.map(renderCard)}
+                  </div>
+                )}
+              </section>
+
+              <section>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-blue-500 text-white">
+                    <ListChecks className="w-3.5 h-3.5" />
+                    Verkefni
+                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosenTasks.filter((t) => !t.completed).length}</span>
+                  </span>
+                </div>
+                <div className="rounded-xl border-2 bg-card shadow-sm p-4 space-y-2">
+                  {chosenTasks.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">
+                      Engin verkefni fyrir valin fyrirtæki — skráðu verkefni þegar þú vistar símtal.
+                    </p>
+                  ) : (
+                    chosenTasks.map((t) => {
+                      const company = companies.find((c) => c.id === t.companyId);
+                      const overdue = !t.completed && t.deadline && new Date(t.deadline) < new Date();
+                      return (
+                        <div
+                          key={t.id}
+                          className={cn(
+                            "flex items-start gap-2 rounded-lg border p-2 text-sm",
+                            t.completed
+                              ? "opacity-60 border-border"
+                              : overdue
+                                ? "border-red-300 bg-red-50/60 dark:bg-red-950/20 dark:border-red-800"
+                                : "border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800"
+                          )}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={t.completed}
+                            onChange={() => handleToggleTask(t)}
+                            className="mt-1 h-4 w-4 accent-emerald-600 flex-shrink-0"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className={cn("font-semibold break-words", t.completed && "line-through")}>{t.description}</p>
+                            {company && <p className="text-xs text-primary font-medium truncate">{company.name}</p>}
+                            {t.deadline && (
+                              <p className={cn("text-xs", overdue ? "text-red-600 font-semibold" : "text-muted-foreground")}>
+                                {new Date(t.deadline).toLocaleString("is-IS", { dateStyle: "short", timeStyle: "short" })}
+                              </p>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleDeleteTask(t)}
+                            className="text-muted-foreground hover:text-destructive p-0.5"
+                            aria-label="Eyða verkefni"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </section>
+            </div>
+
 
             <section>
               <div className="flex items-center gap-3 mb-3">
