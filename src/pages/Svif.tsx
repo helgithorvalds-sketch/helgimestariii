@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
@@ -15,8 +15,10 @@ import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { addCallLog, fetchCompaniesWithCallLogs } from "@/services/callLogService";
+import { Task, fetchAllTasks, addTask, toggleTaskCompleted, deleteTask } from "@/services/taskService";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+
 
 export default function Svif() {
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ export default function Svif() {
   const [addOpen, setAddOpen] = useState(false);
   const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
   const [callRefresh, setCallRefresh] = useState(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
@@ -36,15 +39,24 @@ export default function Svif() {
   const [callNote, setCallNote] = useState("");
   const [callNextDate, setCallNextDate] = useState("");
   const [callNextTime, setCallNextTime] = useState("");
+  const [callTaskDesc, setCallTaskDesc] = useState("");
+  const [callTaskDate, setCallTaskDate] = useState("");
+  const [callTaskTime, setCallTaskTime] = useState("");
   const [savingCall, setSavingCall] = useState(false);
 
   const load = async () => {
-    const [list, logged] = await Promise.all([fetchCompanies(), fetchCompaniesWithCallLogs()]);
+    const [list, logged, taskList] = await Promise.all([
+      fetchCompanies(),
+      fetchCompaniesWithCallLogs(),
+      fetchAllTasks(),
+    ]);
     setCompanies(list);
     setLoggedIds(new Set(logged));
+    setTasks(taskList);
     setLoading(false);
   };
   useEffect(() => { load(); }, []);
+
 
   const svif = useMemo(() => companies.filter((c) => c.stage === "svif"), [companies]);
 
@@ -61,6 +73,30 @@ export default function Svif() {
 
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
+  const chosenTasks = useMemo(() => {
+    const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
+    return tasks
+      .filter((t) => ids.has(t.companyId))
+      .sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        if (!a.deadline) return 1;
+        if (!b.deadline) return -1;
+        return a.deadline.localeCompare(b.deadline);
+      });
+  }, [tasks, chosen, specialOffers]);
+
+  const handleToggleTask = async (t: Task) => {
+    const ok = await toggleTaskCompleted(t.id, !t.completed);
+    if (!ok) return toast.error("Villa við vistun");
+    setTasks((prev) => prev.map((x) => (x.id === t.id ? { ...x, completed: !t.completed } : x)));
+  };
+
+  const handleDeleteTask = async (t: Task) => {
+    const ok = await deleteTask(t.id);
+    if (!ok) return toast.error("Villa við eyðingu");
+    setTasks((prev) => prev.filter((x) => x.id !== t.id));
+  };
+
   const hasCall = (c: Company) =>
     loggedIds.has(c.id) ||
     !!c.nextCallAt ||
@@ -158,7 +194,9 @@ export default function Svif() {
     setCallTarget(null);
     setCallName(""); setCallPhone(""); setCallEmail(""); setCallNote("");
     setCallNextDate(""); setCallNextTime("");
+    setCallTaskDesc(""); setCallTaskDate(""); setCallTaskTime("");
   };
+
 
   const handleSaveCall = async () => {
     if (!callTarget) return;
@@ -166,7 +204,7 @@ export default function Svif() {
     const phone = callPhone.trim();
     const email = callEmail.trim();
     const note = callNote.trim();
-    if (!name && !phone && !email && !note) {
+    if (!name && !phone && !email && !note && !callTaskDesc.trim()) {
       toast.error("Skrifaðu eitthvað fyrst");
       return;
     }
@@ -215,10 +253,23 @@ export default function Svif() {
         setLoggedIds((prev) => new Set(prev).add(c.id));
         setCallRefresh((n) => n + 1);
       }
+      const taskDesc = callTaskDesc.trim();
+      if (saved && taskDesc) {
+        let deadline: string | null = null;
+        if (callTaskDate) {
+          const [y, m, d] = callTaskDate.split("-").map(Number);
+          const [hh, mm] = (callTaskTime || "09:00").split(":").map(Number);
+          deadline = new Date(y, (m || 1) - 1, d || 1, hh || 9, mm || 0).toISOString();
+        }
+        const created = await addTask(c.id, taskDesc, deadline);
+        if (created) setTasks((prev) => [created, ...prev]);
+        else toast.error("Ekki tókst að vista verkefni");
+      }
       if (saved) {
-        toast.success("Símtal skráð");
+        toast.success(taskDesc ? "Símtal og verkefni skráð" : "Símtal skráð");
         closeCall();
       }
+
     } finally {
       setSavingCall(false);
     }
@@ -431,22 +482,83 @@ export default function Svif() {
           </div>
         ) : (
           <>
-            <section>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
-                  <Star className="w-3.5 h-3.5" />
-                  Valin
-                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
-                </span>
-              </div>
-              {chosen.length === 0 ? (
-                <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {chosen.map(renderCard)}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+              <section className="lg:col-span-2">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
+                    <Star className="w-3.5 h-3.5" />
+                    Valin
+                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
+                  </span>
                 </div>
-              )}
-            </section>
+                {chosen.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
+                ) : (
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                    {chosen.map(renderCard)}
+                  </div>
+                )}
+              </section>
+
+              <section>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-blue-500 text-white">
+                    <ListChecks className="w-3.5 h-3.5" />
+                    Verkefni
+                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosenTasks.filter((t) => !t.completed).length}</span>
+                  </span>
+                </div>
+                <div className="rounded-xl border-2 bg-card shadow-sm p-4 space-y-2">
+                  {chosenTasks.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">
+                      Engin verkefni fyrir valin fyrirtæki — skráðu verkefni þegar þú vistar símtal.
+                    </p>
+                  ) : (
+                    chosenTasks.map((t) => {
+                      const company = companies.find((c) => c.id === t.companyId);
+                      const overdue = !t.completed && t.deadline && new Date(t.deadline) < new Date();
+                      return (
+                        <div
+                          key={t.id}
+                          className={cn(
+                            "flex items-start gap-2 rounded-lg border p-2 text-sm",
+                            t.completed
+                              ? "opacity-60 border-border"
+                              : overdue
+                                ? "border-red-300 bg-red-50/60 dark:bg-red-950/20 dark:border-red-800"
+                                : "border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800"
+                          )}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={t.completed}
+                            onChange={() => handleToggleTask(t)}
+                            className="mt-1 h-4 w-4 accent-emerald-600 flex-shrink-0"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className={cn("font-semibold break-words", t.completed && "line-through")}>{t.description}</p>
+                            {company && <p className="text-xs text-primary font-medium truncate">{company.name}</p>}
+                            {t.deadline && (
+                              <p className={cn("text-xs", overdue ? "text-red-600 font-semibold" : "text-muted-foreground")}>
+                                {new Date(t.deadline).toLocaleString("is-IS", { dateStyle: "short", timeStyle: "short" })}
+                              </p>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleDeleteTask(t)}
+                            className="text-muted-foreground hover:text-destructive p-0.5"
+                            aria-label="Eyða verkefni"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </section>
+            </div>
+
 
             <section>
               <div className="flex items-center gap-3 mb-3">
@@ -510,7 +622,7 @@ export default function Svif() {
       />
 
       <Dialog open={!!callTarget} onOpenChange={(o) => { if (!o) closeCall(); }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Nýtt símtal — {callTarget?.name}</DialogTitle>
           </DialogHeader>
@@ -543,6 +655,31 @@ export default function Svif() {
                 <Input type="time" value={callNextTime} onChange={(e) => setCallNextTime(e.target.value)} />
               </div>
             </div>
+            <div className="rounded-lg border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800 p-3 space-y-3">
+              <div className="space-y-1.5">
+                <Label className="flex items-center gap-1.5">
+                  <ListChecks className="w-3.5 h-3.5 text-blue-600" />
+                  Verkefni á eftir <span className="text-xs font-normal text-muted-foreground">(valfrjálst)</span>
+                </Label>
+                <Textarea
+                  rows={2}
+                  value={callTaskDesc}
+                  onChange={(e) => setCallTaskDesc(e.target.value)}
+                  placeholder="Hvað þarf að gera fyrir fyrirtækið?"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label>Skiladagur</Label>
+                  <Input type="date" value={callTaskDate} onChange={(e) => setCallTaskDate(e.target.value)} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Tími</Label>
+                  <Input type="time" value={callTaskTime} onChange={(e) => setCallTaskTime(e.target.value)} />
+                </div>
+              </div>
+            </div>
+
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={closeCall}>Hætta</Button>
