@@ -194,7 +194,9 @@ export default function Svif() {
     setCallTarget(null);
     setCallName(""); setCallPhone(""); setCallEmail(""); setCallNote("");
     setCallNextDate(""); setCallNextTime("");
+    setCallTaskDesc(""); setCallTaskDate(""); setCallTaskTime("");
   };
+
 
   const handleSaveCall = async () => {
     if (!callTarget) return;
