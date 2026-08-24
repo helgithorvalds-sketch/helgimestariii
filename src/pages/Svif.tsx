@@ -305,6 +305,7 @@ export default function Svif() {
           <div className="min-w-0">
             <h3 className={cn("font-bold text-base truncate", c.rejected && "text-red-700 dark:text-red-300")}>
               {c.name}
+              {c.isDone && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-emerald-600 text-white align-middle">KLÁRT</span>}
               {c.rejected && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-red-600 text-white align-middle">OFF</span>}
               {c.specialOffer && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-purple-600 text-white align-middle">SÉRTILBOÐ</span>}
               {isChosen && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-emerald-600 text-white align-middle">VALIN</span>}
