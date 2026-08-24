@@ -103,10 +103,10 @@ export default function Svif() {
     !!c.nextCallAt ||
     /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
   const scheduleCompanies = filtered.filter(
-    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
+    (c) => !c.rejected && !c.isDone && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
   );
   const rest = filtered.filter(
-    (c) => !c.rejected && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+    (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
   );
 
   const persist = async (updated: Company, msg?: string) => {
@@ -166,6 +166,13 @@ export default function Svif() {
     await persist(
       { ...c, specialOffer: !c.specialOffer },
       !c.specialOffer ? "Sett í sértilboð" : "Fjarlægt úr sértilboði"
+    );
+  };
+
+  const handleToggleDone = async (c: Company) => {
+    await persist(
+      { ...c, isDone: !c.isDone },
+      !c.isDone ? "Merkt sem klárt" : "Fjarlægt úr Klárt"
     );
   };
 
