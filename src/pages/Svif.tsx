@@ -72,8 +72,7 @@ export default function Svif() {
   }, [svif, search]);
 
   const doneCompanies = filtered.filter((c) => c.isDone && !c.rejected);
-  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer && !c.isDone);
-  const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected && !c.isDone);
+  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const chosenTasks = useMemo(() => {
     const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
     return tasks
