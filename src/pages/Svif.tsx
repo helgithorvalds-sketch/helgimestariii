@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks, CheckCircle2,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
@@ -425,6 +425,14 @@ export default function Svif() {
             onClick={() => handleToggleSpecialOffer(c)}
           >
             {c.specialOffer ? <><Sparkles className="w-3.5 h-3.5" />Í boði</> : <><Sparkles className="w-3.5 h-3.5" />Sértilboð</>}
+          </Button>
+          <Button
+            size="sm"
+            variant={c.isDone ? "default" : "outline"}
+            className={cn("gap-1 flex-1 min-w-[80px]", c.isDone && "bg-emerald-600 hover:bg-emerald-700 text-white")}
+            onClick={() => handleToggleDone(c)}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5" />{c.isDone ? "Klárt ✓" : "Klárt"}
           </Button>
           <Button
             size="sm"
