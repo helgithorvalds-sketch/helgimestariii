@@ -72,7 +72,7 @@ export default function Svif() {
   }, [svif, search]);
 
   const doneCompanies = filtered.filter((c) => c.isDone && !c.rejected);
-  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer && !c.isDone);
+  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected && !c.isDone);
   const chosenTasks = useMemo(() => {
     const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
@@ -103,7 +103,7 @@ export default function Svif() {
     !!c.nextCallAt ||
     /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
   const scheduleCompanies = filtered.filter(
-    (c) => !c.rejected && !c.isDone && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
+    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
   );
   const rest = filtered.filter(
     (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
@@ -292,17 +292,20 @@ export default function Svif() {
           "rounded-xl border-2 bg-card shadow-sm hover:shadow-md transition-all p-4 space-y-2",
           c.rejected
             ? "border-red-400 bg-red-50/70 dark:bg-red-950/30 dark:border-red-800"
-            : c.specialOffer
-              ? "border-purple-400 bg-purple-50/50 dark:bg-purple-950/20 dark:border-purple-800"
-              : isChosen
-                ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800"
-                : "border-border"
+            : c.isDone
+              ? "border-emerald-500 bg-emerald-50/40 ring-2 ring-emerald-300/50 dark:bg-emerald-950/15 dark:border-emerald-600 dark:ring-emerald-800/60"
+              : c.specialOffer
+                ? "border-purple-400 bg-purple-50/50 dark:bg-purple-950/20 dark:border-purple-800"
+                : isChosen
+                  ? "border-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800"
+                  : "border-border"
         )}
       >
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <h3 className={cn("font-bold text-base truncate", c.rejected && "text-red-700 dark:text-red-300")}>
               {c.name}
+              {c.isDone && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-emerald-600 text-white align-middle">KLÁRT</span>}
               {c.rejected && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-red-600 text-white align-middle">OFF</span>}
               {c.specialOffer && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-purple-600 text-white align-middle">SÉRTILBOÐ</span>}
               {isChosen && <span className="ml-2 text-xs font-bold uppercase rounded px-1.5 py-0.5 bg-emerald-600 text-white align-middle">VALIN</span>}
