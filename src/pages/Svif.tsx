@@ -429,14 +429,14 @@ export default function Svif() {
           <Button
             size="sm"
             variant={c.isDone ? "default" : "outline"}
-            className={cn("gap-1 flex-1 min-w-[80px]", c.isDone && "bg-emerald-600 hover:bg-emerald-700 text-white")}
+            className={cn("gap-1 flex-1 min-w-[80px]", c.isDone ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "text-emerald-600 border-emerald-500/60 hover:bg-emerald-50 hover:text-emerald-700 dark:text-emerald-400 dark:border-emerald-500/40 dark:hover:bg-emerald-950/40")}
             onClick={() => handleToggleDone(c)}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />{c.isDone ? "Klárt ✓" : "Klárt"}
           </Button>
           <Button
             size="sm"
-            variant={c.rejected ? "default" : "destructive"}
+            variant={c.rejected ? "default" : "outline"}
             className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleOff(c)}
           >
