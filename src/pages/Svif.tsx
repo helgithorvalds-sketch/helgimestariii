@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks, CheckCircle2,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
@@ -71,8 +71,9 @@ export default function Svif() {
     );
   }, [svif, search]);
 
-  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
-  const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected);
+  const doneCompanies = filtered.filter((c) => c.isDone && !c.rejected);
+  const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer && !c.isDone);
+  const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected && !c.isDone);
   const chosenTasks = useMemo(() => {
     const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
     return tasks
@@ -102,10 +103,10 @@ export default function Svif() {
     !!c.nextCallAt ||
     /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
   const scheduleCompanies = filtered.filter(
-    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
+    (c) => !c.rejected && !c.isDone && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
   );
   const rest = filtered.filter(
-    (c) => !c.rejected && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+    (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
   );
 
   const persist = async (updated: Company, msg?: string) => {
@@ -165,6 +166,13 @@ export default function Svif() {
     await persist(
       { ...c, specialOffer: !c.specialOffer },
       !c.specialOffer ? "Sett í sértilboð" : "Fjarlægt úr sértilboði"
+    );
+  };
+
+  const handleToggleDone = async (c: Company) => {
+    await persist(
+      { ...c, isDone: !c.isDone },
+      !c.isDone ? "Merkt sem klárt" : "Fjarlægt úr Klárt"
     );
   };
 
@@ -420,6 +428,14 @@ export default function Svif() {
           </Button>
           <Button
             size="sm"
+            variant={c.isDone ? "default" : "outline"}
+            className={cn("gap-1 flex-1 min-w-[80px]", c.isDone && "bg-emerald-600 hover:bg-emerald-700 text-white")}
+            onClick={() => handleToggleDone(c)}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5" />{c.isDone ? "Klárt ✓" : "Klárt"}
+          </Button>
+          <Button
+            size="sm"
             variant={c.rejected ? "default" : "destructive"}
             className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleOff(c)}
@@ -587,6 +603,24 @@ export default function Svif() {
                 setCallRefresh((n) => n + 1);
               }}
             />
+
+            <section>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-600 text-white">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Klárt
+                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{doneCompanies.length}</span>
+                </span>
+              </div>
+              {doneCompanies.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki merkt klár — ýttu á „Klárt“ á korti.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {doneCompanies.map(renderCard)}
+                </div>
+              )}
+            </section>
+
 
             <section>
               <div className="flex items-center gap-3 mb-3">

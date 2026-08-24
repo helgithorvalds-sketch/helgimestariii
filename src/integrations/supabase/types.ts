@@ -150,6 +150,7 @@ export type Database = {
           google_url: string | null
           id: string
           industry: string | null
+          is_done: boolean
           ja_url: string | null
           last_call_outcome: string | null
           lead_source: string | null
@@ -195,6 +196,7 @@ export type Database = {
           google_url?: string | null
           id?: string
           industry?: string | null
+          is_done?: boolean
           ja_url?: string | null
           last_call_outcome?: string | null
           lead_source?: string | null
@@ -240,6 +242,7 @@ export type Database = {
           google_url?: string | null
           id?: string
           industry?: string | null
+          is_done?: boolean
           ja_url?: string | null
           last_call_outcome?: string | null
           lead_source?: string | null

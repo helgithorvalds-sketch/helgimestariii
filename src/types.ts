@@ -79,6 +79,7 @@ export interface Company {
   monthlyPaymentActive: boolean;
   nextCallAt?: string;
   specialOffer?: boolean;
+  isDone?: boolean;
   createdAt: string;
 }
 
