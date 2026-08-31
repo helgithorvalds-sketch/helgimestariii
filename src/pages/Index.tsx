@@ -1037,7 +1037,7 @@ export default function Index() {
             )}
 
             <CallSchedule
-              companies={companies}
+              companies={companies.filter((c) => c.stage !== "lead" && c.stage !== "svif")}
               onCompanyClick={setSelectedCompany}
               onCompanyUpdate={async (updated) => {
                 const result = await updateCompany(updated);
