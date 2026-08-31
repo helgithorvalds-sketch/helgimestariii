@@ -8,7 +8,9 @@ export default function FinancesWrapper() {
   const [companies, setCompanies] = useState<Company[]>([]);
 
   useEffect(() => {
-    fetchCompanies().then(setCompanies);
+    fetchCompanies().then((list) =>
+      setCompanies(list.filter((c) => c.stage !== "lead" && c.stage !== "svif"))
+    );
   }, []);
 
   return <Finances companies={companies} />;
