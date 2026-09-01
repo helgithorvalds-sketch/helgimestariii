@@ -521,17 +521,17 @@ export default function Svif() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
               <section className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-sky-600 text-white">
                     <Star className="w-3.5 h-3.5" />
-                    Valin
-                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
+                    Valin v2
+                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosenV2.length}</span>
                   </span>
                 </div>
-                {chosen.length === 0 ? (
-                  <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
+                {chosenV2.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki í Valin v2 — ýttu á „Valin v2“ á korti.</p>
                 ) : (
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-                    {chosen.map(renderCard)}
+                    {chosenV2.map(renderCard)}
                   </div>
                 )}
               </section>
