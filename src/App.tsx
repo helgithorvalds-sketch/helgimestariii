@@ -8,7 +8,9 @@ import FinancesWrapper from "./pages/FinancesWrapper";
 import Tasks from "./pages/Tasks";
 import Leads from "./pages/Leads";
 import Svif from "./pages/Svif";
+import SvifFyrirtæki from "./pages/SvifFyrirtæki";
 import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/leads" element={<Leads />} />
           <Route path="/svif" element={<Svif />} />
+          <Route path="/svif-fyrirtæki" element={<SvifFyrirtæki />} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

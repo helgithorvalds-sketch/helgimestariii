@@ -5,7 +5,9 @@ export type CompanyStage =
   | "finished" 
   | "paid"
   | "lead"
-  | "svif";
+  | "svif"
+  | "svif_fyrirtæki";
+
 
 export type LeadSource = "facebook" | "new_company" | "restaurant";
 
@@ -91,7 +93,9 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   paid: "Greitt",
   lead: "Til að hringja",
   svif: "Svif",
+  svif_fyrirtæki: "Svif - fyrirtæki",
 };
+
 
 export const PREVIEW_SUB_LABELS: Record<PreviewSubStatus, string> = {
   wanted_preview: "Vildi forskoðun",
@@ -138,6 +142,7 @@ export const STAGE_ORDER: CompanyStage[] = [
   "finished",
   "paid",
 ];
+
 
 export const DEFAULT_CHECKLIST: Omit<ChecklistItem, "id">[] = [
   { label: "Haft samband", checked: false },

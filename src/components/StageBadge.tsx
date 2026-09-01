@@ -13,7 +13,9 @@ const stageClassMap: Record<CompanyStage, string> = {
   paid: "stage-badge-paid",
   lead: "stage-badge-email",
   svif: "stage-badge-email",
+  svif_fyrirtæki: "stage-badge-email",
 };
+
 
 export function StageBadge({ stage, size = "sm" }: StageBadgeProps) {
   const sizeClass = size === "sm" ? "px-2.5 py-0.5 text-[11px]" : "px-3.5 py-1.5 text-sm";
