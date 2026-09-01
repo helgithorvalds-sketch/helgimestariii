@@ -9,9 +9,10 @@ export default function FinancesWrapper() {
 
   useEffect(() => {
     fetchCompanies().then((list) =>
-      setCompanies(list.filter((c) => c.stage !== "lead" && c.stage !== "svif"))
+      setCompanies(list.filter((c) => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki"))
     );
   }, []);
+
 
   return <Finances companies={companies} />;
 }
