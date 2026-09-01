@@ -105,10 +105,10 @@ export default function Svif() {
     !!c.nextCallAt ||
     /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
   const scheduleCompanies = filtered.filter(
-    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
+    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.chosenV2 || c.specialOffer || hasCall(c))
   );
   const rest = filtered.filter(
-    (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+    (c) => !c.rejected && !c.isDone && !c.specialOffer && !c.chosenV2 && c.lastCallOutcome !== "interested" && !hasCall(c)
   );
 
   const persist = async (updated: Company, msg?: string) => {
