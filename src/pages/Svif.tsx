@@ -156,6 +156,14 @@ export default function Svif() {
     );
   };
 
+  const handleToggleChosenV2 = async (c: Company) => {
+    await persist(
+      { ...c, chosenV2: !c.chosenV2 },
+      !c.chosenV2 ? "Sett í Valin v2" : "Fjarlægt úr Valin v2"
+    );
+  };
+
+
   const handleToggleOff = async (c: Company) => {
     await persist(
       { ...c, rejected: !c.rejected, rejectedAt: !c.rejected ? new Date().toISOString() : undefined },
