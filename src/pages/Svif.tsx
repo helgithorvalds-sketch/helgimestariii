@@ -73,9 +73,10 @@ export default function Svif() {
 
   const doneCompanies = filtered.filter((c) => c.isDone && !c.rejected);
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
+  const chosenV2 = filtered.filter((c) => c.chosenV2 && !c.rejected);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected && !c.isDone);
   const chosenTasks = useMemo(() => {
-    const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
+    const ids = new Set([...chosen, ...chosenV2, ...specialOffers].map((c) => c.id));
     return tasks
       .filter((t) => ids.has(t.companyId))
       .sort((a, b) => {
@@ -84,7 +85,7 @@ export default function Svif() {
         if (!b.deadline) return -1;
         return a.deadline.localeCompare(b.deadline);
       });
-  }, [tasks, chosen, specialOffers]);
+  }, [tasks, chosen, chosenV2, specialOffers]);
 
   const handleToggleTask = async (t: Task) => {
     const ok = await toggleTaskCompleted(t.id, !t.completed);
