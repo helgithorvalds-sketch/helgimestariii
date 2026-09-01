@@ -595,6 +595,33 @@ export default function Svif() {
               </section>
             </div>
 
+            <section>
+              <button
+                onClick={() => setChosenOpen((v) => !v)}
+                className="flex items-center gap-3 mb-3 group"
+              >
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
+                  <Star className="w-3.5 h-3.5" />
+                  Valin
+                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
+                  <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", chosenOpen && "rotate-180")} />
+                </span>
+                <span className="text-xs text-muted-foreground group-hover:text-foreground">
+                  {chosenOpen ? "Fela" : "Sýna"}
+                </span>
+              </button>
+              {chosenOpen && (
+                chosen.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {chosen.map(renderCard)}
+                  </div>
+                )
+              )}
+            </section>
+
+
 
             <section>
               <div className="flex items-center gap-3 mb-3">
