@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks, CheckCircle2,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks, CheckCircle2, ChevronDown,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
@@ -30,6 +30,7 @@ export default function Svif() {
   const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
   const [callRefresh, setCallRefresh] = useState(0);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [chosenOpen, setChosenOpen] = useState(false);
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
