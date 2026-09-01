@@ -31,6 +31,7 @@ export default function Svif() {
   const [callRefresh, setCallRefresh] = useState(0);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [chosenOpen, setChosenOpen] = useState(false);
+  const [chosenOpen, setChosenOpen] = useState(false);
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
