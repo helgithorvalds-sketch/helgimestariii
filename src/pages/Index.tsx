@@ -222,7 +222,7 @@ export default function Index() {
   };
 
   const filteredCompanies = useMemo(() => {
-    const base = companies.filter((c) => c.stage !== "lead" && c.stage !== "svif");
+    const base = companies.filter((c) => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki");
     if (!searchQuery.trim()) return base;
     const q = searchQuery.toLowerCase();
     return base.filter((c) =>
@@ -233,6 +233,7 @@ export default function Index() {
       (c.phone && c.phone.includes(q))
     );
   }, [companies, searchQuery]);
+
 
   const companiesByStage = (stage: CompanyStage) =>
     filteredCompanies.filter((c) => c.stage === stage && !c.rejected);
@@ -481,7 +482,7 @@ export default function Index() {
             <img src={logo} alt="Logo" className="w-14 h-14 rounded-xl shadow-sm" />
             <div>
               <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead" && c.stage !== "svif").length} fyrirtæki samtals</p>
+              <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki").length} fyrirtæki samtals</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -532,6 +533,15 @@ export default function Index() {
                 </span>
               )}
             </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-fyrirtæki")} className="gap-2 shadow-sm relative">
+              <Plane className="w-4 h-4" />
+              Svif - fyrirtæki
+              {companies.filter(c => c.stage === "svif_fyrirtæki").length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {companies.filter(c => c.stage === "svif_fyrirtæki").length}
+                </span>
+              )}
+            </Button>
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
@@ -541,6 +551,7 @@ export default function Index() {
               Nýtt fyrirtæki
             </Button>
           </div>
+
         </div>
       </header>
 
@@ -1037,7 +1048,7 @@ export default function Index() {
             )}
 
             <CallSchedule
-              companies={companies.filter((c) => c.stage !== "lead" && c.stage !== "svif")}
+              companies={companies.filter((c) => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki")}
               onCompanyClick={setSelectedCompany}
               onCompanyUpdate={async (updated) => {
                 const result = await updateCompany(updated);
@@ -1046,6 +1057,7 @@ export default function Index() {
                 }
               }}
             />
+
 
             {/* Hafnað / Lokað */}
             {(() => {
