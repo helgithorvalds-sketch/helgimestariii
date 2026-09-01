@@ -137,6 +137,7 @@ export type Database = {
           amount_paid: number | null
           category: string | null
           checklist: Json
+          chosen_v2: boolean
           company_id: string
           contacts: Json
           created_at: string
@@ -183,6 +184,7 @@ export type Database = {
           amount_paid?: number | null
           category?: string | null
           checklist?: Json
+          chosen_v2?: boolean
           company_id?: string
           contacts?: Json
           created_at?: string
@@ -229,6 +231,7 @@ export type Database = {
           amount_paid?: number | null
           category?: string | null
           checklist?: Json
+          chosen_v2?: boolean
           company_id?: string
           contacts?: Json
           created_at?: string

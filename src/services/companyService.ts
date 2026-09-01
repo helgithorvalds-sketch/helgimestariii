@@ -45,6 +45,7 @@ function rowToCompany(row: any): Company {
     nextCallAt: row.next_call_at,
     specialOffer: row.special_offer ?? false,
     isDone: row.is_done ?? false,
+    chosenV2: row.chosen_v2 ?? false,
     createdAt: row.created_at,
   };
 }
@@ -92,6 +93,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     next_call_at: company.nextCallAt || null,
     special_offer: company.specialOffer ?? false,
     is_done: company.isDone ?? false,
+    chosen_v2: company.chosenV2 ?? false,
   };
 }
 

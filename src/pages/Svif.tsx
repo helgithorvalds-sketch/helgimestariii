@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks, CheckCircle2,
+  PhoneCall, Ban, RotateCcw, Trash2, Star, StarOff, Building, Facebook, Tag, Sparkles, ListChecks, CheckCircle2, ChevronDown,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
@@ -30,6 +30,7 @@ export default function Svif() {
   const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
   const [callRefresh, setCallRefresh] = useState(0);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [chosenOpen, setChosenOpen] = useState(false);
 
   // Call dialog state
   const [callTarget, setCallTarget] = useState<Company | null>(null);
@@ -73,9 +74,10 @@ export default function Svif() {
 
   const doneCompanies = filtered.filter((c) => c.isDone && !c.rejected);
   const chosen = filtered.filter((c) => c.lastCallOutcome === "interested" && !c.rejected && !c.specialOffer);
+  const chosenV2 = filtered.filter((c) => c.chosenV2 && !c.rejected);
   const specialOffers = filtered.filter((c) => c.specialOffer && !c.rejected && !c.isDone);
   const chosenTasks = useMemo(() => {
-    const ids = new Set([...chosen, ...specialOffers].map((c) => c.id));
+    const ids = new Set([...chosen, ...chosenV2, ...specialOffers].map((c) => c.id));
     return tasks
       .filter((t) => ids.has(t.companyId))
       .sort((a, b) => {
@@ -84,7 +86,7 @@ export default function Svif() {
         if (!b.deadline) return -1;
         return a.deadline.localeCompare(b.deadline);
       });
-  }, [tasks, chosen, specialOffers]);
+  }, [tasks, chosen, chosenV2, specialOffers]);
 
   const handleToggleTask = async (t: Task) => {
     const ok = await toggleTaskCompleted(t.id, !t.completed);
@@ -103,10 +105,10 @@ export default function Svif() {
     !!c.nextCallAt ||
     /(?:^|\n)\[\d{1,2}\.\d{1,2}\.\d{4}\]/.test(c.notes || "");
   const scheduleCompanies = filtered.filter(
-    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
+    (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.chosenV2 || c.specialOffer || hasCall(c))
   );
   const rest = filtered.filter(
-    (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+    (c) => !c.rejected && !c.isDone && !c.specialOffer && !c.chosenV2 && c.lastCallOutcome !== "interested" && !hasCall(c)
   );
 
   const persist = async (updated: Company, msg?: string) => {
@@ -154,6 +156,14 @@ export default function Svif() {
       isChosen ? "Fjarlægt úr Valin" : "Sett í Valin"
     );
   };
+
+  const handleToggleChosenV2 = async (c: Company) => {
+    await persist(
+      { ...c, chosenV2: !c.chosenV2 },
+      !c.chosenV2 ? "Sett í Valin v2" : "Fjarlægt úr Valin v2"
+    );
+  };
+
 
   const handleToggleOff = async (c: Company) => {
     await persist(
@@ -423,6 +433,14 @@ export default function Svif() {
           </Button>
           <Button
             size="sm"
+            variant={c.chosenV2 ? "default" : "outline"}
+            className={cn("gap-1 flex-1 min-w-[80px]", c.chosenV2 ? "bg-sky-600 hover:bg-sky-700 text-white" : "text-sky-600 border-sky-500/60 hover:bg-sky-50 hover:text-sky-700 dark:text-sky-400 dark:border-sky-500/40 dark:hover:bg-sky-950/40")}
+            onClick={() => handleToggleChosenV2(c)}
+          >
+            <Star className="w-3.5 h-3.5" />{c.chosenV2 ? "Valin v2 ✓" : "Valin v2"}
+          </Button>
+          <Button
+            size="sm"
             variant={c.specialOffer ? "default" : "outline"}
             className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleSpecialOffer(c)}
@@ -504,17 +522,17 @@ export default function Svif() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
               <section className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-sky-600 text-white">
                     <Star className="w-3.5 h-3.5" />
-                    Valin
-                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
+                    Valin v2
+                    <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosenV2.length}</span>
                   </span>
                 </div>
-                {chosen.length === 0 ? (
-                  <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
+                {chosenV2.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic px-1">Engin fyrirtæki í Valin v2 — ýttu á „Valin v2“ á korti.</p>
                 ) : (
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-                    {chosen.map(renderCard)}
+                    {chosenV2.map(renderCard)}
                   </div>
                 )}
               </section>
@@ -577,6 +595,33 @@ export default function Svif() {
                 </div>
               </section>
             </div>
+
+            <section>
+              <button
+                onClick={() => setChosenOpen((v) => !v)}
+                className="flex items-center gap-3 mb-3 group"
+              >
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-500 text-white">
+                  <Star className="w-3.5 h-3.5" />
+                  Valin
+                  <span className="ml-1 bg-white/25 rounded-full px-2 text-xs">{chosen.length}</span>
+                  <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", chosenOpen && "rotate-180")} />
+                </span>
+                <span className="text-xs text-muted-foreground group-hover:text-foreground">
+                  {chosenOpen ? "Fela" : "Sýna"}
+                </span>
+              </button>
+              {chosenOpen && (
+                chosen.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic px-1">Engin valin fyrirtæki — ýttu á „Velja“ á korti.</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {chosen.map(renderCard)}
+                  </div>
+                )
+              )}
+            </section>
+
 
 
             <section>

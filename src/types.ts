@@ -82,6 +82,7 @@ export interface Company {
   nextCallAt?: string;
   specialOffer?: boolean;
   isDone?: boolean;
+  chosenV2?: boolean;
   createdAt: string;
 }
 
