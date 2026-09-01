@@ -123,10 +123,10 @@ export default function Svif() {
   };
 
   const handleAdd = async (company: Omit<Company, "id" | "createdAt">) => {
-    const created = await addCompany({ ...company, stage: "svif" });
+    const created = await addCompany({ ...company, stage: "svif", chosenV2: true });
     if (created) {
       setCompanies((prev) => [...prev, created]);
-      toast.success("Fyrirtæki skráð í Svif");
+      toast.success("Fyrirtæki skráð í Valin v2");
     } else {
       toast.error("Villa við vistun");
     }
