@@ -432,6 +432,14 @@ export default function Svif() {
           </Button>
           <Button
             size="sm"
+            variant={c.chosenV2 ? "default" : "outline"}
+            className={cn("gap-1 flex-1 min-w-[80px]", c.chosenV2 ? "bg-sky-600 hover:bg-sky-700 text-white" : "text-sky-600 border-sky-500/60 hover:bg-sky-50 hover:text-sky-700 dark:text-sky-400 dark:border-sky-500/40 dark:hover:bg-sky-950/40")}
+            onClick={() => handleToggleChosenV2(c)}
+          >
+            <Star className="w-3.5 h-3.5" />{c.chosenV2 ? "Valin v2 ✓" : "Valin v2"}
+          </Button>
+          <Button
+            size="sm"
             variant={c.specialOffer ? "default" : "outline"}
             className="gap-1 flex-1 min-w-[80px]"
             onClick={() => handleToggleSpecialOffer(c)}
