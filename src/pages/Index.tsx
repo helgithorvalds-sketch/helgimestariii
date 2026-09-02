@@ -542,6 +542,11 @@ export default function Index() {
                 </span>
               )}
             </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-listi")} className="gap-2 shadow-sm relative">
+              <BookOpen className="w-4 h-4" />
+              SVIF
+            </Button>
+
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur

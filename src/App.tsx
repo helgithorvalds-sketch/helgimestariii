@@ -9,6 +9,7 @@ import Tasks from "./pages/Tasks";
 import Leads from "./pages/Leads";
 import Svif from "./pages/Svif";
 import SvifFyrirtæki from "./pages/SvifFyrirtæki";
+import SvifListi from "./pages/SvifListi";
 import NotFound from "./pages/NotFound";
 
 
@@ -27,6 +28,8 @@ const App = () => (
           <Route path="/leads" element={<Leads />} />
           <Route path="/svif" element={<Svif />} />
           <Route path="/svif-fyrirtæki" element={<SvifFyrirtæki />} />
+          <Route path="/svif-listi" element={<SvifListi />} />
+
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
