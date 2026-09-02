@@ -176,6 +176,7 @@ export type Database = {
           rejected_at: string | null
           special_offer: boolean
           stage: string
+          svif_valid: boolean
           updated_at: string
           website_url: string | null
         }
@@ -223,6 +224,7 @@ export type Database = {
           rejected_at?: string | null
           special_offer?: boolean
           stage?: string
+          svif_valid?: boolean
           updated_at?: string
           website_url?: string | null
         }
@@ -270,6 +272,7 @@ export type Database = {
           rejected_at?: string | null
           special_offer?: boolean
           stage?: string
+          svif_valid?: boolean
           updated_at?: string
           website_url?: string | null
         }
