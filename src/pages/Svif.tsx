@@ -644,6 +644,9 @@ export default function Svif() {
 
             <CallSchedule
               companies={scheduleCompanies}
+              unscheduledCompanies={unscheduledV2}
+              unscheduledTitle="Óskipulögð v2"
+              unscheduledFirst
               refreshKey={callRefresh}
               onCompanyClick={setSelected}
               onCompanyUpdate={async (updated) => {
