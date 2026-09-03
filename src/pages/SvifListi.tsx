@@ -100,12 +100,22 @@ export default function SvifListi() {
   const toggleValid = async (r: SvifRow) => {
     const next = !r.svif_valid;
     patch(r.id, { svif_valid: next });
-    const { error } = await supabase.from("companies").update({ svif_valid: next }).eq("id", r.id);
+    const { error } = await supabase
+      .from("companies")
+      .update(
+        next
+          ? { svif_valid: true, chosen_v2: true, stage: "svif" }
+          : { svif_valid: false, chosen_v2: false }
+      )
+      .eq("id", r.id);
     if (error) {
       patch(r.id, { svif_valid: r.svif_valid });
       toast.error("Villa við vistun");
+    } else if (next) {
+      toast.success("Sett í Valin v2 (Svif)");
     }
   };
+
 
   const setOutcome = async (r: SvifRow, outcome: string) => {
     const next = r.last_call_outcome === outcome ? null : outcome;
