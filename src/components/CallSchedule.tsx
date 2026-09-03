@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, differenceInCalendarDays } from "date-fns";
 import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare, CalendarClock } from "lucide-react";
@@ -16,9 +17,12 @@ interface CallScheduleProps {
   onCompanyClick: (company: Company) => void;
   onCompanyUpdate?: (company: Company) => void;
   refreshKey?: number;
+  unscheduledCompanies?: Company[];
+  unscheduledTitle?: string;
+  unscheduledFirst?: boolean;
 }
 
-export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refreshKey = 0 }: CallScheduleProps) {
+export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refreshKey = 0, unscheduledCompanies, unscheduledTitle = "Óskipulögð", unscheduledFirst = false }: CallScheduleProps) {
   const [expandedLogs, setExpandedLogs] = useState<Record<string, CallLog[] | null>>({});
   const [confirmNoAnswer, setConfirmNoAnswer] = useState<string | null>(null);
   const [loadingLogs, setLoadingLogs] = useState<string | null>(null);
@@ -72,7 +76,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
     .filter((c) => c.nextCallAt)
     .sort((a, b) => new Date(a.nextCallAt!).getTime() - new Date(b.nextCallAt!).getTime());
 
-  const unscheduled = companies.filter((c) => !c.nextCallAt);
+  const unscheduled = (unscheduledCompanies ?? companies).filter((c) => !c.nextCallAt);
 
   const toLocalISO = (d: Date) => {
     const y = d.getFullYear();
@@ -472,7 +476,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
 
     <div className="grid grid-cols-3 gap-6">
       {/* Schedule - 2/3 */}
-      <div className="col-span-2 rounded-xl border bg-card p-4">
+      <div className={cn("col-span-2 rounded-xl border bg-card p-4", unscheduledFirst ? "order-2" : "order-1")}>
         <div className="flex items-center gap-2 mb-4">
           <Phone className="w-5 h-5 text-primary" />
           <h2 className="text-lg font-bold text-foreground">Áætlun símtala</h2>
@@ -773,10 +777,10 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
       </div>
 
       {/* Unscheduled - 1/3 */}
-      <div className="col-span-1 rounded-xl border bg-card p-4">
+      <div className={cn("col-span-1 rounded-xl border bg-card p-4", unscheduledFirst ? "order-1" : "order-2")}>
         <div className="flex items-center gap-2 mb-4">
           <AlertCircle className="w-5 h-5 text-amber-500" />
-          <h2 className="text-lg font-bold text-foreground">Óskipulögð</h2>
+          <h2 className="text-lg font-bold text-foreground">{unscheduledTitle}</h2>
           <span className="text-sm text-muted-foreground ml-auto">{unscheduled.length}</span>
         </div>
 
