@@ -238,7 +238,7 @@ export default function SvifListi() {
                           <div className="flex items-start gap-3">
                             <Checkbox
                               checked={r.svif_valid}
-                              onCheckedChange={() => toggleValid(r)}
+                              onCheckedChange={() => handleCheck(r)}
                               className="mt-1"
                               aria-label="Velja fyrirtæki"
                             />
