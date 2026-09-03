@@ -48,6 +48,8 @@ export default function SvifListi() {
   const [search, setSearch] = useState("");
   const [openNotes, setOpenNotes] = useState<Set<string>>(new Set());
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [selectRow, setSelectRow] = useState<SvifRow | null>(null);
+  const [selectNotes, setSelectNotes] = useState("");
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const load = async () => {
