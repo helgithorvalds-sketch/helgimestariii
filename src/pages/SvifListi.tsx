@@ -97,17 +97,14 @@ export default function SvifListi() {
   const patch = (id: string, changes: Partial<SvifRow>) =>
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...changes } : r)));
 
-  const toggleValid = async (r: SvifRow) => {
+  const toggleValid = async (r: SvifRow, notesValue?: string) => {
     const next = !r.svif_valid;
-    patch(r.id, { svif_valid: next });
-    const { error } = await supabase
-      .from("companies")
-      .update(
-        next
-          ? { svif_valid: true, chosen_v2: true, stage: "svif" }
-          : { svif_valid: false, chosen_v2: false }
-      )
-      .eq("id", r.id);
+    patch(r.id, { svif_valid: next, ...(notesValue !== undefined ? { notes: notesValue } : {}) });
+    const payload: Record<string, unknown> = next
+      ? { svif_valid: true, chosen_v2: true, stage: "svif" }
+      : { svif_valid: false, chosen_v2: false };
+    if (notesValue !== undefined) payload.notes = notesValue;
+    const { error } = await supabase.from("companies").update(payload).eq("id", r.id);
     if (error) {
       patch(r.id, { svif_valid: r.svif_valid });
       toast.error("Villa við vistun");
@@ -115,6 +112,17 @@ export default function SvifListi() {
       toast.success("Sett í Valin v2 (Svif)");
     }
   };
+
+  const handleCheck = (r: SvifRow) => {
+    if (!r.svif_valid) {
+      setSelectRow(r);
+      setSelectNotes(r.notes || "");
+    } else {
+      toggleValid(r);
+    }
+  };
+
+
 
 
   const setOutcome = async (r: SvifRow, outcome: string) => {
