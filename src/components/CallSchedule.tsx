@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { Company, CompanyStage, STAGE_LABELS } from "@/types";
 import { format, isToday, isTomorrow, isPast, differenceInCalendarDays } from "date-fns";
 import { Phone, Clock, AlertCircle, ChevronDown, ChevronUp, FileText, CheckCircle, Globe, Sparkles, Loader2, PhoneMissed, ExternalLink, Mail, Mic, MicOff, Languages, MessageSquare, CalendarClock } from "lucide-react";
