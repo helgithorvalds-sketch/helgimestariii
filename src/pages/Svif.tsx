@@ -658,6 +658,18 @@ export default function Svif() {
 
             <section>
               <div className="flex items-center gap-3 mb-3">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-muted text-foreground">
+                  Öll fyrirtæki
+                  <span className="ml-1 bg-background rounded-full px-2 text-xs">{rest.length}</span>
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {rest.map(renderCard)}
+              </div>
+            </section>
+
+            <section>
+              <div className="flex items-center gap-3 mb-3">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-emerald-600 text-white">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Klárt
@@ -671,19 +683,6 @@ export default function Svif() {
                   {doneCompanies.map(renderCard)}
                 </div>
               )}
-            </section>
-
-
-            <section>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-muted text-foreground">
-                  Öll fyrirtæki
-                  <span className="ml-1 bg-background rounded-full px-2 text-xs">{rest.length}</span>
-                </span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {rest.map(renderCard)}
-              </div>
             </section>
           </>
         )}
