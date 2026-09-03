@@ -321,6 +321,40 @@ export default function SvifListi() {
           })
         )}
       </main>
+
+      <Dialog open={!!selectRow} onOpenChange={(o) => !o && setSelectRow(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-extrabold">
+              Glósa – {selectRow?.name}
+            </DialogTitle>
+            <DialogDescription>
+              Skrifaðu glósu um fyrirtækið áður en þú byrjar. Fyrirtækið fer í Valin v2 (Svif).
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={selectNotes}
+            onChange={(e) => setSelectNotes(e.target.value)}
+            rows={8}
+            placeholder="Glósa um fyrirtækið…"
+            className="text-sm"
+            autoFocus
+          />
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setSelectRow(null)}>
+              Hætta við
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectRow) toggleValid(selectRow, selectNotes);
+                setSelectRow(null);
+              }}
+            >
+              <Check className="w-4 h-4 mr-1" /> Vista og velja
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
