@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
+import {
   ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, BookOpen, Check,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -48,6 +51,8 @@ export default function SvifListi() {
   const [search, setSearch] = useState("");
   const [openNotes, setOpenNotes] = useState<Set<string>>(new Set());
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [selectRow, setSelectRow] = useState<SvifRow | null>(null);
+  const [selectNotes, setSelectNotes] = useState("");
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const load = async () => {
@@ -97,17 +102,14 @@ export default function SvifListi() {
   const patch = (id: string, changes: Partial<SvifRow>) =>
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...changes } : r)));
 
-  const toggleValid = async (r: SvifRow) => {
+  const toggleValid = async (r: SvifRow, notesValue?: string) => {
     const next = !r.svif_valid;
-    patch(r.id, { svif_valid: next });
-    const { error } = await supabase
-      .from("companies")
-      .update(
-        next
-          ? { svif_valid: true, chosen_v2: true, stage: "svif" }
-          : { svif_valid: false, chosen_v2: false }
-      )
-      .eq("id", r.id);
+    patch(r.id, { svif_valid: next, ...(notesValue !== undefined ? { notes: notesValue } : {}) });
+    const payload: Record<string, unknown> = next
+      ? { svif_valid: true, chosen_v2: true, stage: "svif" }
+      : { svif_valid: false, chosen_v2: false };
+    if (notesValue !== undefined) payload.notes = notesValue;
+    const { error } = await supabase.from("companies").update(payload).eq("id", r.id);
     if (error) {
       patch(r.id, { svif_valid: r.svif_valid });
       toast.error("Villa við vistun");
@@ -115,6 +117,17 @@ export default function SvifListi() {
       toast.success("Sett í Valin v2 (Svif)");
     }
   };
+
+  const handleCheck = (r: SvifRow) => {
+    if (!r.svif_valid) {
+      setSelectRow(r);
+      setSelectNotes(r.notes || "");
+    } else {
+      toggleValid(r);
+    }
+  };
+
+
 
 
   const setOutcome = async (r: SvifRow, outcome: string) => {
@@ -228,7 +241,7 @@ export default function SvifListi() {
                           <div className="flex items-start gap-3">
                             <Checkbox
                               checked={r.svif_valid}
-                              onCheckedChange={() => toggleValid(r)}
+                              onCheckedChange={() => handleCheck(r)}
                               className="mt-1"
                               aria-label="Velja fyrirtæki"
                             />
@@ -311,6 +324,40 @@ export default function SvifListi() {
           })
         )}
       </main>
+
+      <Dialog open={!!selectRow} onOpenChange={(o) => !o && setSelectRow(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-extrabold">
+              Glósa – {selectRow?.name}
+            </DialogTitle>
+            <DialogDescription>
+              Skrifaðu glósu um fyrirtækið áður en þú byrjar. Fyrirtækið fer í Valin v2 (Svif).
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={selectNotes}
+            onChange={(e) => setSelectNotes(e.target.value)}
+            rows={8}
+            placeholder="Glósa um fyrirtækið…"
+            className="text-sm"
+            autoFocus
+          />
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setSelectRow(null)}>
+              Hætta við
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectRow) toggleValid(selectRow, selectNotes);
+                setSelectRow(null);
+              }}
+            >
+              <Check className="w-4 h-4 mr-1" /> Vista og velja
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
