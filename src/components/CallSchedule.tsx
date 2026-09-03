@@ -16,9 +16,12 @@ interface CallScheduleProps {
   onCompanyClick: (company: Company) => void;
   onCompanyUpdate?: (company: Company) => void;
   refreshKey?: number;
+  unscheduledCompanies?: Company[];
+  unscheduledTitle?: string;
+  unscheduledFirst?: boolean;
 }
 
-export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refreshKey = 0 }: CallScheduleProps) {
+export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refreshKey = 0, unscheduledCompanies, unscheduledTitle = "Óskipulögð", unscheduledFirst = false }: CallScheduleProps) {
   const [expandedLogs, setExpandedLogs] = useState<Record<string, CallLog[] | null>>({});
   const [confirmNoAnswer, setConfirmNoAnswer] = useState<string | null>(null);
   const [loadingLogs, setLoadingLogs] = useState<string | null>(null);
@@ -72,7 +75,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
     .filter((c) => c.nextCallAt)
     .sort((a, b) => new Date(a.nextCallAt!).getTime() - new Date(b.nextCallAt!).getTime());
 
-  const unscheduled = companies.filter((c) => !c.nextCallAt);
+  const unscheduled = (unscheduledCompanies ?? companies).filter((c) => !c.nextCallAt);
 
   const toLocalISO = (d: Date) => {
     const y = d.getFullYear();
