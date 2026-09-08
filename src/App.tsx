@@ -13,6 +13,7 @@ import SvifListi from "./pages/SvifListi";
 import Fyrirtaekjabok from "./pages/Fyrirtaekjabok";
 import NotFound from "./pages/NotFound";
 
+const queryClient = new QueryClient();
 
 
 const App = () => (
