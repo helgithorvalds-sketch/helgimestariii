@@ -12,7 +12,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2 } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -545,6 +545,15 @@ export default function Index() {
             <Button variant="outline" onClick={() => navigate("/svif-listi")} className="gap-2 shadow-sm relative">
               <BookOpen className="w-4 h-4" />
               SVIF
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
+              <MapPin className="w-4 h-4" />
+              Svif Akureyri
+              {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri").length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri").length}
+                </span>
+              )}
             </Button>
             <Button variant="outline" onClick={() => navigate("/fyrirtaekjabok")} className="gap-2 shadow-sm relative">
               <Building2 className="w-4 h-4" />
