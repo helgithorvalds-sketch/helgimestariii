@@ -6,8 +6,8 @@ Script v1 · ~70 seconds · 16:9 · no dialogue (ambient sound + music only)
 **Logline:** A shy guy on a Strætó falls for the girl who sits opposite him, face-plants getting off the bus, wins her anyway, and years later the two of them, stuck in an empty house they can't agree how to fix, get the one thing that finally gets them moving: the SVIF book through the letterbox.
 
 **Cast**
-- **SÓLEY** (25) — blonde, natural, real. Cream knit sweater, olive rain jacket, jeans, white sneakers, tote bag.
-- **BJARKI** (27) — okay-looking, doesn't take care of himself. Messy hair, patchy stubble, faded hoodie under an oversized black puffer, worn jeans, headphones round his neck.
+- **SÓLEY** (24) — the pretty one. Blonde Icelandic model type: symmetrical face, high cheekbones, clear skin, tall and lean. Fitted knit, open jacket, jeans, white sneakers, tote bag.
+- **BJARKI** (25) — young, shy, good-looking without knowing it. Dark brown curly hair, a few freckles, kind eyes, shy half-smile. Corduroy or overshirt over a plain tee, dark jeans, canvas sneakers, small backpack.
 - **PÓSTURINN** (50s) — postman, red rain jacket, mail bag. One shot.
 
 **Tone:** quiet, dry, warm. Nordic light, muted colours, one big laugh (the fall), one lump in the throat (the sofa). Think a Scandinavian bank ad, not a Hollywood rom-com.

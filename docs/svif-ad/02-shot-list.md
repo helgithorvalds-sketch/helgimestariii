@@ -27,7 +27,7 @@ Format: **Shot · duration · camera** then the prompt. "Start image" = generate
 
 **6 · 4s · 85mm, f/2, static.** Location: Strætó interior. Close-up of Sóley, she has noticed him staring, a small kind giggle behind her hand, then she looks back out of the window, soft grey daylight on her face, natural skin, no beauty filter.
 
-**7 · 3s · 50mm, f/2.8, static.** Location: Strætó interior. Bjarki drops his eyes back to the SVIF book too fast, ears going red, pretends to read, tiny embarrassed shift in his seat.
+**7 · 3s · 50mm, f/2.8, static.** Location: Strætó interior. Bjarki drops his eyes back to the SVIF book too fast, a shy blush under the freckles, ears going red, pretends to read, tiny embarrassed shift in his seat.
 
 **8 · 5s · 35mm, f/4, static.** Location: Strætó interior. The bus brakes. Bjarki stands up, Sóley stands a half second after him, he glances back at her over his shoulder and immediately faces forward again, shy, both holding the yellow grab pole, soft daylight.
 
@@ -41,7 +41,7 @@ Format: **Shot · duration · camera** then the prompt. "Start image" = generate
 
 **12 · 4s · 35mm, f/4, static, low.** Location: Klambratún. Picnic blanket on green grass in a Reykjavik park, bread and skyr, Sóley and Bjarki lying on their elbows talking, the SVIF book open on the blanket corner with its pages lifting in the wind, bright overcast light, wide trees behind.
 
-**13 · 5s · 50mm, f/4, slow lateral track.** Location: Sæbraut. Sóley and Bjarki walk along the seafront path past the steel Sun Voyager sculpture, Esja mountain across the bay, evening blue-grey light, the lavender corner of the SVIF book sticking out of her tote bag, he wears a clean navy jacket now, they bump shoulders.
+**13 · 5s · 50mm, f/4, slow lateral track.** Location: Sæbraut. Sóley and Bjarki walk along the seafront path past the steel Sun Voyager sculpture, Esja mountain across the bay, evening blue-grey light, the lavender corner of the SVIF book sticking out of her tote bag, he has finally combed his curls, they bump shoulders.
 
 **14 · 4s · 35mm, f/5.6, static.** Location: House exterior. Sóley and Bjarki stand in front of a small faded green corrugated-iron house in Reykjavik holding one set of keys between them, nervous smiles, overcast daylight.
 
