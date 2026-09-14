@@ -4,7 +4,7 @@ Build these *before* shooting a single clip (Academy pipeline: script → assets
 ## Already generated (14 Sep 2026, 11 images, Higgsfield)
 Project: https://higgsfield.ai/generate/@sustainable_anglerfish_1057/svif
 
-Pick one Sóley (A1–A3) and one Bjarki (B1–B3), rename the chosen sheets to plain **Sóley** / **Bjarki** in Elements and run Soul Cast on those two only.
+Pick one Sóley (A1–A5; A4 and A5 re-run with the blonde pinned down and positive-only prompts) and one Bjarki (B1–B3), rename the chosen sheets to plain **Sóley** / **Bjarki** in Elements and run Soul Cast on those two only.
 Open them in Higgsfield → Generations, or by job id. Load each into the project as an Element (Cast / Location / Prop) and, for the two leads, run **Soul Cast** on the sheet so the face is locked across shots.
 
 | # | Element | Model | Job id |
@@ -13,6 +13,8 @@ Open them in Higgsfield → Generations, or by job id. Load each into the projec
 | A1 | **Sóley** option 1 — platinum straight hair, centre parting, cream ribbed knit + olive field jacket | Cinema Studio Image 2.5, 2K, 16:9 | `e219ab57-510c-4eba-9fc4-b49d4c7677af` |
 | A2 | **Sóley** option 2 — honey-blonde soft waves, black turtleneck + beige overcoat | Cinema Studio Image 2.5, 2K, 16:9 | `edae0ff3-46ec-4eff-aa86-4c55258d31f0` |
 | A3 | **Sóley** option 3 — pale blonde low ponytail, white shirt + grey trousers + navy peacoat | Cinema Studio Image 2.5, 2K, 16:9 | `6a6eb50d-83ff-41b5-9983-350d1ede3668` |
+| A4 | **Sóley** option 4 — very light platinum blonde, straight, centre parting (blonde pinned explicitly), cream knit + olive field jacket | Cinema Studio Image 2.5, 2K, 16:9 | `c968e486-2525-4db5-aa80-5e0923866f9d` |
+| A5 | **Sóley** option 5 — bright golden blonde, loose waves, black turtleneck + beige overcoat | Cinema Studio Image 2.5, 2K, 16:9 | `ce0ced1d-5ec0-4461-b11c-bd36b71727df` |
 | B0 | **Bjarki** v1 (superseded: too scruffy) | Cinema Studio Image 2.5, 2K, 16:9 | `1db51cce-3f52-4eef-90ed-5ecc83f3ab9a` |
 | B1 | **Bjarki** option 1 — dark brown loose curls over the forehead, freckles, rust corduroy jacket | Cinema Studio Image 2.5, 2K, 16:9 | `5131cb98-5a45-4adc-89ac-666fb8c839cb` |
 | B2 | **Bjarki** option 2 — chestnut curls, freckles, light stubble, green knit + black rain shell | Cinema Studio Image 2.5, 2K, 16:9 | `a8ffc600-59bf-4530-9459-3a577e0458df` |

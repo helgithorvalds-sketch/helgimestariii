@@ -6,7 +6,7 @@ Script v1 · ~70 seconds · 16:9 · no dialogue (ambient sound + music only)
 **Logline:** A shy guy on a Strætó falls for the girl who sits opposite him, face-plants getting off the bus, wins her anyway, and years later the two of them, stuck in an empty house they can't agree how to fix, get the one thing that finally gets them moving: the SVIF book through the letterbox.
 
 **Cast**
-- **SÓLEY** (24) — the pretty one. Blonde Icelandic model type: symmetrical face, high cheekbones, clear skin, tall and lean. Fitted knit, open jacket, jeans, white sneakers, tote bag.
+- **SÓLEY** (24) — the pretty one. Unmistakably blonde, Icelandic model type: symmetrical face, high cheekbones, clear skin, tall and lean. Fitted knit, open jacket, jeans, white sneakers, tote bag.
 - **BJARKI** (25) — young, shy, good-looking without knowing it. Dark brown curly hair, a few freckles, kind eyes, shy half-smile. Corduroy or overshirt over a plain tee, dark jeans, canvas sneakers, small backpack.
 - **PÓSTURINN** (50s) — postman, red rain jacket, mail bag. One shot.
 
@@ -16,15 +16,15 @@ Script v1 · ~70 seconds · 16:9 · no dialogue (ambient sound + music only)
 
 ## ACT 1 — STRÆTÓ (0:00–0:28)
 
-**1. EXT. ICELAND, ROAD — DAY.** Wide. Moss, black lava, a flat-topped ridge like Esja under low cloud. A single yellow Strætó bus crosses the frame, tiny in the landscape. Wind. Title on black frame after: *VELKOMIN HEIM*.
+**1. EXT. ICELAND, ROAD — DAY.** Wide. Moss, black lava, a flat-topped ridge like Esja under low cloud. A single yellow Strætó bus crosses the frame, tiny in the landscape. Wind. Title on black after: **SVIF**.
 
-**2. EXT. BUS STOP, RESIDENTIAL REYKJAVÍK — DAY.** The bus hisses to a stop at a small shelter. Doors fold open. SÓLEY steps up, tote on her shoulder, hair blown across her face; she pushes it back.
+**2. EXT. BUS STOP, RESIDENTIAL REYKJAVÍK — DAY.** The bus pulls in at a small shelter. Doors fold open. SÓLEY gets on. That's the whole shot: a bus stop, and her getting on the bus.
 
-**3. INT. BUS — CONTINUOUS.** BJARKI, slumped by the window in the facing-seats section, reads a square lavender booklet — the SVIF book. We see the cover clearly. He's actually reading it, not scrolling.
+**3. INT. BUS — CONTINUOUS.** Close on BJARKI's face, by the window in the facing-seats section, reading the square lavender SVIF book. We stay on his face, eyes on the page. Then he looks up.
 
-**4. INT. BUS.** Sóley walks up the aisle, scans, and sits directly opposite him. Knees almost touching. She looks out the window.
+**4. INT. BUS.** Sóley walks up the aisle and sits directly opposite him. Knees almost touching. She looks out the window.
 
-**5. INT. BUS — BJARKI CU.** He glances up over the book. Stops. Slow push-in on his face, then into his eyes: his pupils widen, slowly, unmistakably. The bus noise drops under the music. *(The "starstruck" device — we reuse it in Act 2.)*
+**5. INT. BUS — BJARKI CU.** He has seen her. Slow push-in on his face, then into his eyes: his pupils widen, slowly, unmistakably. The bus noise drops under the music. *(The "starstruck" device — we reuse it in Act 2.)*
 
 **6. INT. BUS — SÓLEY CU.** She's caught him. A small, kind giggle behind her hand. Looks back out the window.
 

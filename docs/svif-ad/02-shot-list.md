@@ -1,5 +1,5 @@
 # Shot list + Cinema Studio prompts
-Paste-ready. Every prompt assumes the Elements below already exist in the Cinema Studio project (see 03-assets.md): cast **Sóley**, **Bjarki**, **Pósturinn**; locations **Strætó exterior**, **Strætó interior**, **Café**, **Klambratún**, **Sæbraut**, **House exterior**, **Living room (empty)**, **Living room (done)**; prop **SVIF book**.
+Paste-ready. Prompt rule for this project: describe only what is in the frame. Never write "no X", "without X" or "he does not X"; leave it out instead. Every prompt assumes the Elements below already exist in the Cinema Studio project (see 03-assets.md): cast **Sóley**, **Bjarki**, **Pósturinn**; locations **Strætó exterior**, **Strætó interior**, **Café**, **Klambratún**, **Sæbraut**, **House exterior**, **Living room (empty)**, **Living room (done)**; prop **SVIF book**.
 
 ## Global project settings (set once)
 | Setting | Value | Why |
@@ -15,17 +15,17 @@ Paste-ready. Every prompt assumes the Elements below already exist in the Cinema
 ## Per-shot camera + prompt
 Format: **Shot · duration · camera** then the prompt. "Start image" = generate a still first (Cinema Studio Image 2.5, same prompt, 16:9) and feed it as `start_image` so composition is locked before you spend on video.
 
-**1 · 6s · 24mm, f/8, static → slow push.** Wide Icelandic landscape, moss-covered black lava field, a flat-topped mountain ridge under low grey cloud, a single yellow Strætó city bus crossing the frame on a two-lane road, tiny in the landscape, wind moving the grass, soft flat overcast daylight, muted cool palette, cinematic 35mm film still, slow subtle push-in.
+**1 · 6s · 24mm, f/8, static → slow push.** *(Title card after this shot: SVIF, on black.)* Wide Icelandic landscape, moss-covered black lava field, a flat-topped mountain ridge under low grey cloud, a single yellow Strætó city bus crossing the frame on a two-lane road, tiny in the landscape, wind moving the grass, soft flat overcast daylight, muted cool palette, cinematic 35mm film still, slow subtle push-in.
 
-**2 · 5s · 35mm, f/4, static.** Location: Strætó exterior. The yellow bus pulls up at a small bus shelter on a quiet residential street in Reykjavik, doors fold open, Sóley steps up into the bus with her tote bag, wind pushes her blonde hair across her face and she brushes it back, soft overcast daylight, no direct sun.
+**2 · 4s · 35mm, f/4, static.** Location: Strætó exterior. The yellow bus pulls in at a small bus shelter on a quiet residential street in Reykjavik, doors fold open, Sóley steps up into the bus with her tote bag, soft overcast daylight.
 
-**3 · 4s · 50mm, f/2.8, static, eye level.** Location: Strætó interior. Bjarki slumped in the window seat of the facing-seats section, holding the SVIF book, a square pale lavender booklet, reading it, cover fully visible to camera, soft grey window light on his face, bus vibration, shallow depth of field.
+**3 · 5s · 85mm, f/2, static, eye level.** Location: Strætó interior. Close-up on Bjarki's face by the window in the facing-seats section, reading the SVIF book, a square pale lavender booklet held up in frame, eyes moving over the page, soft grey window light on his face, bus vibration, shallow depth of field, then he looks up from the book.
 
-**4 · 5s · 35mm, f/4, slow track following.** Location: Strætó interior. Sóley walks up the bus aisle, looks around, and sits down directly opposite Bjarki in the facing seats, their knees almost touching, she turns to look out the window, he does not look up yet, soft daylight, handheld micro-movement.
+**4 · 5s · 35mm, f/4, slow track following.** Location: Strætó interior. Sóley walks up the bus aisle and sits down directly opposite Bjarki in the facing seats, their knees almost touching, she turns to look out the window, soft daylight, handheld micro-movement.
 
-**5 · 6s · 85mm, f/2, slow push-in.** Location: Strætó interior. Close-up of Bjarki. He glances up over the book at her and freezes. Slow continuous push-in from his face to an extreme close-up of his eyes, his pupils dilate slowly and visibly, soft window light, shallow focus, the background falls away. *(Take note: ask for "pupils widen slowly"; if the model blinks the moment away, cut the push into two clips: face push, then a macro of the eye.)*
+**5 · 6s · 85mm, f/2, slow push-in.** Location: Strætó interior. Close-up of Bjarki looking at her over the book, frozen. Slow continuous push-in from his face to an extreme close-up of his eyes, his pupils dilate slowly and visibly, soft window light, shallow focus, the background falls away. *(Take note: ask for "pupils widen slowly"; if the model blinks the moment away, cut the push into two clips: face push, then a macro of the eye.)*
 
-**6 · 4s · 85mm, f/2, static.** Location: Strætó interior. Close-up of Sóley, she has noticed him staring, a small kind giggle behind her hand, then she looks back out of the window, soft grey daylight on her face, natural skin, no beauty filter.
+**6 · 4s · 85mm, f/2, static.** Location: Strætó interior. Close-up of Sóley, she has noticed him staring, a small kind giggle behind her hand, then she looks back out of the window, soft grey daylight on her face, natural skin.
 
 **7 · 3s · 50mm, f/2.8, static.** Location: Strætó interior. Bjarki drops his eyes back to the SVIF book too fast, a shy blush under the freckles, ears going red, pretends to read, tiny embarrassed shift in his seat.
 
@@ -55,7 +55,7 @@ Format: **Shot · duration · camera** then the prompt. "Start image" = generate
 
 **19 · 5s · 50mm, f/2.8, slow push.** Location: Living room (empty). Sóley and Bjarki sit shoulder to shoulder on the floor flipping through the SVIF book, pages showing a plumber ad, a fire-safety ad, curtains, a cleaning company, she points at a page, he nods, they smile at each other, soft daylight.
 
-**20 · 12s · 24mm, f/5.6, one continuous drift.** Location: Living room (empty) → Living room (done). One continuous slow camera drift through the house with no cut, and the house transforms around the camera as it moves: painters rolling a wall warm white, a plumber under the kitchen sink, new curtains going up, floorboards being sanded, a sofa carried in, a floor lamp switched on, ending on the finished warm living room, time-lapse energy, warm tungsten light growing as the room finishes. *(Multi-shot mode, custom, 4 sub-prompts in order: bare → trades working → furniture in → finished. Highest-value clip in the film; spend takes here.)*
+**20 · 12s · 24mm, f/5.6, one continuous drift.** Location: Living room (empty) → Living room (done). One continuous slow camera drift through the house in a single unbroken take, and the house transforms around the camera as it moves: painters rolling a wall warm white, a plumber under the kitchen sink, new curtains going up, floorboards being sanded, a sofa carried in, a floor lamp switched on, ending on the finished warm living room, time-lapse energy, warm tungsten light growing as the room finishes. *(Multi-shot mode, custom, 4 sub-prompts in order: bare → trades working → furniture in → finished. Highest-value clip in the film; spend takes here.)*
 
 **21 · 7s · 35mm, f/2.8, slow crane up and back.** Location: Living room (done). Night. The finished living room lit by the TV glow and one warm floor lamp, Sóley and Bjarki on the sofa, she rests her head on his shoulder, he looks down at her the way he looked at her on the bus, the camera cranes slowly up and back through the window out into the blue evening over the corrugated-iron roofs of Reykjavik.
 
@@ -63,8 +63,8 @@ Format: **Shot · duration · camera** then the prompt. "Start image" = generate
 
 ## Continuity checklist (Academy "spot the slop" pass, per clip)
 - Same face, same hair parting, same jacket colour as the reference sheet.
-- Book: lavender, square, no invented text on the cover.
-- Bus: yellow outside, blue-grey seats inside, yellow poles. No route numbers.
+- Book: lavender, square, the real cover.
+- Bus: yellow outside, blue-grey seats inside, yellow poles, plain sides.
 - Sóley's tote on the same shoulder within a scene.
 - Act 3 interior gets warmer shot by shot; nothing in Act 1–2 is warm.
 - Inspect the exact crop you'll use at 100%, name the defect, then decide.
