@@ -4,7 +4,7 @@ Build these *before* shooting a single clip (Academy pipeline: script → assets
 ## Already generated (14 Sep 2026, 11 images, Higgsfield)
 Project: https://higgsfield.ai/generate/@sustainable_anglerfish_1057/svif
 
-Pick one Sóley (A1–A6; A5 and A6 are the clean, well-exposed blonde takes, A1 and A4 rendered too dark) and one Bjarki (B1–B3), rename the chosen sheets to plain **Sóley** / **Bjarki** in Elements and run Soul Cast on those two only.
+**Chosen (in the project as Elements):** Sóley = option A2 → `@s-leey_1`; Bjarki = option B2 → `@bjarki_1`; bus stop → `@loc_bus-stop_2`; inside bus → `@inside-bus`; book → `@prop_b-klingur`. Handles for the Elements still to create are listed in 02-shot-list.md; use them exactly.
 Open them in Higgsfield → Generations, or by job id. Load each into the project as an Element (Cast / Location / Prop) and, for the two leads, run **Soul Cast** on the sheet so the face is locked across shots.
 
 | # | Element | Model | Job id |
@@ -48,25 +48,25 @@ The real cover files are also in your Higgsfield media library (imported from th
 
 ## Still to build (prompts ready, ~9 images)
 
-**F — Pósturinn (postman).** Same sheet scaffold, one figure, front + close-up only. Man in his fifties, weathered friendly face, grey beard trimmed short, red waterproof postal jacket with reflective strips, dark trousers, canvas mail bag across the chest, no readable logos.
+**F — Pósturinn (postman) → create as `@posturinn`.** Same sheet scaffold, one figure, front + close-up only. Man in his fifties, weathered friendly face, grey beard trimmed short, red waterproof postal jacket with reflective strips, dark trousers, canvas mail bag across the chest, no readable logos.
 
-**G — Café.** Location turnaround, 3 images: (1) wide from the door, (2) the corner table at 50mm, (3) detail of the tabletop. Small Reykjavik café, pale wood tables, one window with grey daylight, warm pendant bulbs, a plant, chalkboard with no readable text, soft mixed light, cinematic 35mm still.
+**G — Café → `@loc_cafe`.** Location turnaround, 3 images: (1) wide from the door, (2) the corner table at 50mm, (3) detail of the tabletop. Small Reykjavik café, pale wood tables, one window with grey daylight, warm pendant bulbs, a plant, chalkboard with no readable text, soft mixed light, cinematic 35mm still.
 
-**H — Klambratún.** One wide: green lawn in a Reykjavik city park, a few birch trees, low apartment blocks far behind, bright overcast sky, 16:9.
+**H — Klambratún → `@loc_klambratun`.** One wide: green lawn in a Reykjavik city park, a few birch trees, low apartment blocks far behind, bright overcast sky, 16:9.
 
-**I — Sæbraut / Sólfarið.** One wide, evening: the steel Sun Voyager sculpture on the seafront path, Esja across the bay, blue-grey dusk, wet path, no people.
+**I — Sæbraut / Sólfarið → `@loc_saebraut`.** One wide, evening: the steel Sun Voyager sculpture on the seafront path, Esja across the bay, blue-grey dusk, wet path, no people.
 
-**J — House exterior.** One wide: small two-storey Reykjavik house clad in faded green corrugated iron, white window frames, small front garden, overcast light, corrugated-iron neighbours either side.
+**J — House exterior + front door → `@loc_hus`.** One wide: small two-storey Reykjavik house clad in faded green corrugated iron, white window frames, small front garden, overcast light, corrugated-iron neighbours either side.
 
-**K — Living room (empty).** Location turnaround, 3 images: bare floorboards, peeling patterned wallpaper, one hanging bulb, one window with grey light, radiator under the window. (1) wide from the doorway, (2) toward the window, (3) low angle across the floor.
+**K — Living room (empty) → `@loc_stofa_tom`.** Location turnaround, 3 images: bare floorboards, peeling patterned wallpaper, one hanging bulb, one window with grey light, radiator under the window. (1) wide from the doorway, (2) toward the window, (3) low angle across the floor.
 
-**L — Living room (done).** Same room, same window and radiator position, renovated: warm white walls, sanded oiled floor, linen curtains, a grey sofa facing a TV, floor lamp, night, warm tungsten light. Two images: wide from the same doorway as K1, and the sofa at 50mm. *(Shoot K and L from the same angles; shot 20 depends on it.)*
+**L — Living room (done) → `@loc_stofa_klar`.** Same room, same window and radiator position, renovated: warm white walls, sanded oiled floor, linen curtains, a grey sofa facing a TV, floor lamp, night, warm tungsten light. Two images: wide from the same doorway as K1, and the sofa at 50mm. *(Shoot K and L from the same angles; shot 20 depends on it.)*
 
 **M — Book pages (optional).** If shot 19 needs readable pages, import the flip-book pages 4, 5, 7, 8 (plumber, fire safety, curtains, cleaning) from the same Supabase folder as the cover and use them as references. Do not let the model invent ads.
 
 ## Loading into Cinema Studio
 1. New project → Global settings (see 02-shot-list.md).
-2. Elements → Cast: upload A and B, run Soul Cast on each, name them **Sóley** and **Bjarki**. Add F as **Pósturinn** without Soul Cast.
-3. Elements → Locations: C, D, G, H, I, J, K, L.
-4. Elements → Props: E as **SVIF book**.
-5. For every shot: generate the still first, then video with `start_image`. Tag the elements in the prompt by name.
+2. Cast `@s-leey_1` and `@bjarki_1` exist; add `@posturinn` from sheet F.
+3. Locations: `@loc_bus-stop_2` and `@inside-bus` exist; create `@loc_cafe`, `@loc_klambratun`, `@loc_saebraut`, `@loc_hus`, `@loc_stofa_tom`, `@loc_stofa_klar` from sheets G–L.
+4. Prop `@prop_b-klingur` exists.
+5. For every shot: generate the still first, then video with the still as start image. Tag Elements by @handle exactly as in 02-shot-list.md.

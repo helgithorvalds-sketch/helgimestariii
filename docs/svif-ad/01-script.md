@@ -6,9 +6,9 @@ Script v1 · ~70 seconds · 16:9 · no dialogue (ambient sound + music only)
 **Logline:** A shy guy on a Strætó falls for the girl who sits opposite him, face-plants getting off the bus, wins her anyway, and years later the two of them, stuck in an empty house they can't agree how to fix, get the one thing that finally gets them moving: the SVIF book through the letterbox.
 
 **Cast**
-- **SÓLEY** (24) — the pretty one. Unmistakably blonde, Icelandic model type: symmetrical face, high cheekbones, clear skin, tall and lean. Fitted knit, open jacket, jeans, white sneakers, tote bag.
-- **BJARKI** (25) — young, shy, good-looking without knowing it. Dark brown curly hair, a few freckles, kind eyes, shy half-smile. Corduroy or overshirt over a plain tee, dark jeans, canvas sneakers, small backpack.
-- **PÓSTURINN** (50s) — postman, red rain jacket, mail bag. One shot.
+- **SÓLEY** (24) — the pretty one. Unmistakably blonde, Icelandic model type: symmetrical face, high cheekbones, clear skin, tall and lean. Honey-blonde soft waves, black turtleneck, beige wool overcoat, dark jeans, white sneakers, leather tote. Element `@s-leey_1`.
+- **BJARKI** (25) — young, shy, good-looking without knowing it. Dark brown curly hair, a few freckles, kind eyes, shy half-smile. Chestnut curls, light stubble, dark green knit under a black rain shell, black jeans, suede sneakers, black backpack. Element `@bjarki_1`.
+- **PÓSTURINN** (50s) — postman, red rain jacket, mail bag. One shot. Element `@posturinn` (to create).
 
 **Tone:** quiet, dry, warm. Nordic light, muted colours, one big laugh (the fall), one lump in the throat (the sofa). Think a Scandinavian bank ad, not a Hollywood rom-com.
 
