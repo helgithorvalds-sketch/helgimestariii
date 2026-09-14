@@ -53,3 +53,8 @@ Project: https://higgsfield.ai/generate/@sustainable_anglerfish_1057/svif — fi
 | 22 end card | — | build in your editor | 4 |
 
 Cost: about 18 credits per 480p clip, 2 per 1K still, 3 per 2K sheet. Balance after the full run: about 2,440 credits, so roughly two more full takes of every clip are affordable.
+
+## Assembled cut v1
+`velkomin-heim-v1.mp4` — all 23 clips in script order with a 2.5 s SVIF title card after the landscape shot and a 4.5 s end card (SVIF / Velkomin í nýja heimilið þitt. / svif.is). 1344×768, 24 fps, H.264, silent, 2:08. Uploaded to your Higgsfield media library as media id `51244233-b791-4cd2-bc71-9b808c14f97d`; direct URL https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/51244233-b791-4cd2-bc71-9b808c14f97d.mp4
+
+This is a straight assembly, hard cuts, no trims. Cut it down to ~70 s in your editor by trimming heads and tails; the clips are 4 to 12 s each on purpose so there is handle on both ends.
