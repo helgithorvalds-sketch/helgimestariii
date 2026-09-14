@@ -14,6 +14,7 @@ higgsfield.ai is blocked from this sandbox, so this is assembled from the course
 - **Props on grey**, referenced from real product images when you have them (we have the real cover).
 - **Soul ID locks who is in the shot; Cinema Studio locks how the shot moves.** Run Soul Cast on the leads.
 - **One shot = characters + environment + camera movement + lighting + action + continuity.** Write every prompt with those six things in that order; leave nothing implied.
+- **Prompt only what is in frame.** Never "no X" or "he does not X"; leave it out. Every prompt in 02-shot-list.md follows this.
 - **Reference photos must share lighting** so the model's lighting inference is consistent, which is why every sheet uses the same soft grey setup.
 - **Spot the slop:** slop hides in stills and multiplies in motion. Inspect the exact crop you plan to use, name the visible defect, then decide whether that crop is safe to pass. Do this on the still *before* paying for the video.
 - **Iteration is the skill.** Expect 2–4 takes on physical beats (the fall, the pupils, the transformation) and 1–2 on the quiet ones.
