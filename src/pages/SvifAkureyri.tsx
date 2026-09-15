@@ -255,12 +255,6 @@ export default function SvifAkureyri() {
           </>
         )}
       </main>
-                          className={cn(
-                            "px-4 py-3 space-y-2 transition-colors",
-                            r.svif_valid && "bg-emerald-50/60 dark:bg-emerald-950/20"
-                          )}
-                        >
-                          <div className="flex items-start gap-3">
                             <Checkbox
                               checked={r.svif_valid}
                               onCheckedChange={() => handleCheck(r)}
