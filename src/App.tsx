@@ -32,6 +32,10 @@ const App = () => (
           <Route path="/svif-fyrirtæki" element={<SvifFyrirtæki />} />
           <Route path="/svif-listi" element={<SvifListi />} />
           <Route path="/svif-akureyri" element={<SvifAkureyri />} />
+          <Route
+            path="/svif-akureyri-v2"
+            element={<SvifAkureyri source="svif_akureyri_v2" title="Svif Akureyri v2" subtitle="Viðbót 15.9.2026 – iðnaðarmenn, þjónusta og verslanir" />}
+          />
           <Route path="/fyrirtaekjabok" element={<Fyrirtaekjabok />} />
 
 

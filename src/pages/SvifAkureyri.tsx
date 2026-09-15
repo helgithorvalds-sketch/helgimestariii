@@ -45,7 +45,17 @@ function titleFromNotes(notes: string): string | null {
   return null;
 }
 
-export default function SvifAkureyri() {
+interface SvifAkureyriProps {
+  source?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+export default function SvifAkureyri({
+  source = "svif_akureyri",
+  title = "Svif Akureyri",
+  subtitle = "Hringilisti – velkomstbók Akureyri",
+}: SvifAkureyriProps = {}) {
   const navigate = useNavigate();
   const [rows, setRows] = useState<AkureyriRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +70,7 @@ export default function SvifAkureyri() {
     const { data, error } = await supabase
       .from("companies")
       .select("id,name,owner,phone,email,category,company_id,address,website_url,notes,svif_valid,last_call_outcome")
-      .eq("lead_source", "svif_akureyri")
+      .eq("lead_source", source)
       .order("category", { ascending: true })
       .order("name", { ascending: true });
     if (error) {
@@ -70,7 +80,7 @@ export default function SvifAkureyri() {
     setRows((data as AkureyriRow[]) || []);
     setLoading(false);
   };
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [source]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -173,9 +183,9 @@ export default function SvifAkureyri() {
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center gap-2">
                 <BookOpen className="w-6 h-6 text-primary" />
-                Svif Akureyri
+                {title}
               </h1>
-              <p className="text-sm text-muted-foreground">Hringilisti – velkomstbók Akureyri</p>
+              <p className="text-sm text-muted-foreground">{subtitle}</p>
             </div>
           </div>
 
