@@ -36,6 +36,10 @@ const App = () => (
             path="/svif-akureyri-v2"
             element={<SvifAkureyri source="svif_akureyri_v2" title="Svif Akureyri v2" subtitle="Viðbót 15.9.2026 – iðnaðarmenn, þjónusta og verslanir" />}
           />
+          <Route
+            path="/svif-akureyri-v3"
+            element={<SvifAkureyri source="svif_akureyri_v3" title="Svif Akureyri v3" subtitle="Meistarafélög – félagar í Samtökum iðnaðarins, MBN og SART" />}
+          />
           <Route path="/fyrirtaekjabok" element={<Fyrirtaekjabok />} />
 
 
