@@ -89,12 +89,15 @@ export default function SvifAkureyri() {
   const groups = useMemo(() => {
     const map = new Map<string, AkureyriRow[]>();
     for (const r of filtered) {
+      if (r.svif_valid) continue; // valin fara í Valin v2 efst
       const key = r.category?.trim() || "Óflokkað";
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(r);
     }
     return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0], "is"));
   }, [filtered]);
+
+  const valinV2 = useMemo(() => filtered.filter((r) => r.svif_valid), [filtered]);
 
   const total = rows.length;
   const selectedCount = rows.filter((r) => r.svif_valid).length;
@@ -162,6 +165,107 @@ export default function SvifAkureyri() {
     setter(next);
   };
 
+  const renderRow = (r: AkureyriRow) => {
+    const titill = titleFromNotes(r.notes || "");
+    const notesOpen = openNotes.has(r.id);
+    return (
+      <li
+        key={r.id}
+        className={cn(
+          "px-4 py-3 space-y-2 transition-colors",
+          r.svif_valid && "bg-emerald-50/60 dark:bg-emerald-950/20"
+        )}
+      >
+        <div className="flex items-start gap-3">
+          <Checkbox
+            checked={r.svif_valid}
+            onCheckedChange={() => handleCheck(r)}
+            className="mt-1"
+            aria-label="Velja fyrirtæki"
+          />
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className={cn("font-bold truncate", r.svif_valid && "line-through text-muted-foreground")}>
+                {r.name}
+              </span>
+              {r.last_call_outcome && (
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-muted flex items-center gap-1">
+                  <Check className="w-3 h-3" />
+                  {outcomeLabel(r.last_call_outcome)}
+                </span>
+              )}
+            </div>
+            {(r.owner || titill) && (
+              <p className="text-sm text-muted-foreground">
+                {r.owner}
+                {titill && <span className="italic"> · {titill}</span>}
+              </p>
+            )}
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
+              {r.phone && (
+                <a href={`tel:${r.phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-1 text-primary font-semibold hover:underline">
+                  <Phone className="w-3.5 h-3.5" /> {r.phone}
+                </a>
+              )}
+              {r.email && (
+                <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 text-primary hover:underline break-all">
+                  <Mail className="w-3.5 h-3.5" /> {r.email}
+                </a>
+              )}
+              {r.website_url && (
+                <a
+                  href={r.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-primary hover:underline break-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" /> Vefsíða
+                </a>
+              )}
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => toggleSet(openNotes, r.id, setOpenNotes)}
+            aria-label="Glósa"
+          >
+            <StickyNote className="w-4 h-4" />
+          </Button>
+        </div>
+
+        <div className="flex flex-wrap gap-1.5 pl-8">
+          {OUTCOMES.map((o) => (
+            <button
+              key={o.value}
+              onClick={() => setOutcome(r, o.value)}
+              className={cn(
+                "text-xs font-bold px-2.5 py-1 rounded-full border-2 transition-all hover:scale-[1.03]",
+                o.cls,
+                r.last_call_outcome === o.value ? "bg-muted" : "bg-transparent"
+              )}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+
+        {notesOpen && (
+          <div className="pl-8">
+            <Textarea
+              value={r.notes || ""}
+              onChange={(e) => saveNotes(r, e.target.value)}
+              rows={5}
+              placeholder="Glósa…"
+              className="text-sm"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Vistast sjálfkrafa</p>
+          </div>
+        )}
+      </li>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-20 border-b bg-card/80 backdrop-blur-xl">
@@ -203,10 +307,30 @@ export default function SvifAkureyri() {
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {loading ? (
           <p className="text-muted-foreground">Hleð…</p>
-        ) : groups.length === 0 ? (
+        ) : groups.length === 0 && valinV2.length === 0 ? (
           <p className="text-muted-foreground">Engin fyrirtæki fundust.</p>
         ) : (
-          groups.map(([category, items]) => {
+          <>
+          {valinV2.length > 0 && (
+            <section className="rounded-2xl border-2 border-sky-400 bg-sky-50/50 dark:bg-sky-950/20 shadow-sm overflow-hidden">
+              <button
+                onClick={() => toggleSet(collapsed, "__v2__", setCollapsed)}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-sky-100/60 dark:bg-sky-900/30 hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors text-left"
+              >
+                {collapsed.has("__v2__") ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <h2 className="font-bold text-lg flex-1">Valin v2</h2>
+                <span className="text-sm font-bold px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300">
+                  {valinV2.length}
+                </span>
+              </button>
+              {!collapsed.has("__v2__") && (
+                <ul className="divide-y">
+                  {valinV2.map((r) => renderRow(r))}
+                </ul>
+              )}
+            </section>
+          )}
+          {groups.map(([category, items]) => {
             const isCollapsed = collapsed.has(category);
             return (
               <section key={category} className="rounded-2xl border-2 bg-card shadow-sm overflow-hidden">
@@ -223,111 +347,13 @@ export default function SvifAkureyri() {
 
                 {!isCollapsed && (
                   <ul className="divide-y">
-                    {items.map((r) => {
-                      const titill = titleFromNotes(r.notes || "");
-                      const notesOpen = openNotes.has(r.id);
-                      return (
-                        <li
-                          key={r.id}
-                          className={cn(
-                            "px-4 py-3 space-y-2 transition-colors",
-                            r.svif_valid && "bg-emerald-50/60 dark:bg-emerald-950/20"
-                          )}
-                        >
-                          <div className="flex items-start gap-3">
-                            <Checkbox
-                              checked={r.svif_valid}
-                              onCheckedChange={() => handleCheck(r)}
-                              className="mt-1"
-                              aria-label="Velja fyrirtæki"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className={cn("font-bold truncate", r.svif_valid && "line-through text-muted-foreground")}>
-                                  {r.name}
-                                </span>
-                                {r.last_call_outcome && (
-                                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-muted flex items-center gap-1">
-                                    <Check className="w-3 h-3" />
-                                    {outcomeLabel(r.last_call_outcome)}
-                                  </span>
-                                )}
-                              </div>
-                              {(r.owner || titill) && (
-                                <p className="text-sm text-muted-foreground">
-                                  {r.owner}
-                                  {titill && <span className="italic"> · {titill}</span>}
-                                </p>
-                              )}
-                              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-                                {r.phone && (
-                                  <a href={`tel:${r.phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-1 text-primary font-semibold hover:underline">
-                                    <Phone className="w-3.5 h-3.5" /> {r.phone}
-                                  </a>
-                                )}
-                                {r.email && (
-                                  <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 text-primary hover:underline break-all">
-                                    <Mail className="w-3.5 h-3.5" /> {r.email}
-                                  </a>
-                                )}
-                                {r.website_url && (
-                                  <a
-                                    href={r.website_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-primary hover:underline break-all"
-                                  >
-                                    <ExternalLink className="w-3.5 h-3.5" /> Vefsíða
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => toggleSet(openNotes, r.id, setOpenNotes)}
-                              aria-label="Glósa"
-                            >
-                              <StickyNote className="w-4 h-4" />
-                            </Button>
-                          </div>
-
-                          <div className="flex flex-wrap gap-1.5 pl-8">
-                            {OUTCOMES.map((o) => (
-                              <button
-                                key={o.value}
-                                onClick={() => setOutcome(r, o.value)}
-                                className={cn(
-                                  "text-xs font-bold px-2.5 py-1 rounded-full border-2 transition-all hover:scale-[1.03]",
-                                  o.cls,
-                                  r.last_call_outcome === o.value ? "bg-muted" : "bg-transparent"
-                                )}
-                              >
-                                {o.label}
-                              </button>
-                            ))}
-                          </div>
-
-                          {notesOpen && (
-                            <div className="pl-8">
-                              <Textarea
-                                value={r.notes || ""}
-                                onChange={(e) => saveNotes(r, e.target.value)}
-                                rows={5}
-                                placeholder="Glósa…"
-                                className="text-sm"
-                              />
-                              <p className="text-xs text-muted-foreground mt-1">Vistast sjálfkrafa</p>
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })}
+                    {items.map((r) => renderRow(r))}
                   </ul>
                 )}
               </section>
             );
-          })
+          })}
+          </>
         )}
       </main>
 
