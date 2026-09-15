@@ -367,6 +367,57 @@ export type Database = {
         }
         Relationships: []
       }
+      finna_scan: {
+        Row: {
+          address: string | null
+          categories: string | null
+          description: string | null
+          detail_req_id: number | null
+          email: string | null
+          fetched_at: string | null
+          kt: string | null
+          name: string | null
+          owner: string | null
+          owner_title: string | null
+          page: number | null
+          phone: string | null
+          slug: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          categories?: string | null
+          description?: string | null
+          detail_req_id?: number | null
+          email?: string | null
+          fetched_at?: string | null
+          kt?: string | null
+          name?: string | null
+          owner?: string | null
+          owner_title?: string | null
+          page?: number | null
+          phone?: string | null
+          slug: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          categories?: string | null
+          description?: string | null
+          detail_req_id?: number | null
+          email?: string | null
+          fetched_at?: string | null
+          kt?: string | null
+          name?: string | null
+          owner?: string | null
+          owner_title?: string | null
+          page?: number | null
+          phone?: string | null
+          slug?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       notifications_outbox: {
         Row: {
           channel: string
@@ -457,7 +508,22 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      finna_candidates: {
+        Row: {
+          address: string | null
+          already: boolean | null
+          descr: string | null
+          email: string | null
+          kt: string | null
+          name: string | null
+          owner: string | null
+          owner_title: string | null
+          phone: string | null
+          slug: string | null
+          website: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
