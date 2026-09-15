@@ -206,10 +206,30 @@ export default function SvifAkureyri() {
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {loading ? (
           <p className="text-muted-foreground">Hleð…</p>
-        ) : groups.length === 0 ? (
+        ) : groups.length === 0 && valinV2.length === 0 ? (
           <p className="text-muted-foreground">Engin fyrirtæki fundust.</p>
         ) : (
-          groups.map(([category, items]) => {
+          <>
+          {valinV2.length > 0 && (
+            <section className="rounded-2xl border-2 border-sky-400 bg-sky-50/50 dark:bg-sky-950/20 shadow-sm overflow-hidden">
+              <button
+                onClick={() => toggleSet(collapsed, "__v2__", setCollapsed)}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-sky-100/60 dark:bg-sky-900/30 hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors text-left"
+              >
+                {collapsed.has("__v2__") ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <h2 className="font-bold text-lg flex-1">Valin v2</h2>
+                <span className="text-sm font-bold px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300">
+                  {valinV2.length}
+                </span>
+              </button>
+              {!collapsed.has("__v2__") && (
+                <ul className="divide-y">
+                  {valinV2.map((r) => renderRow(r))}
+                </ul>
+              )}
+            </section>
+          )}
+          {groups.map(([category, items]) => {
             const isCollapsed = collapsed.has(category);
             return (
               <section key={category} className="rounded-2xl border-2 bg-card shadow-sm overflow-hidden">
