@@ -246,12 +246,15 @@ export default function SvifAkureyri() {
 
                 {!isCollapsed && (
                   <ul className="divide-y">
-                    {items.map((r) => {
-                      const titill = titleFromNotes(r.notes || "");
-                      const notesOpen = openNotes.has(r.id);
-                      return (
-                        <li
-                          key={r.id}
+                    {items.map((r) => renderRow(r))}
+                  </ul>
+                )}
+              </section>
+            );
+          })}
+          </>
+        )}
+      </main>
                           className={cn(
                             "px-4 py-3 space-y-2 transition-colors",
                             r.svif_valid && "bg-emerald-50/60 dark:bg-emerald-950/20"
