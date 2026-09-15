@@ -89,12 +89,15 @@ export default function SvifAkureyri() {
   const groups = useMemo(() => {
     const map = new Map<string, AkureyriRow[]>();
     for (const r of filtered) {
+      if (r.svif_valid) continue; // valin fara í Valin v2 efst
       const key = r.category?.trim() || "Óflokkað";
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(r);
     }
     return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0], "is"));
   }, [filtered]);
+
+  const valinV2 = useMemo(() => filtered.filter((r) => r.svif_valid), [filtered]);
 
   const total = rows.length;
   const selectedCount = rows.filter((r) => r.svif_valid).length;
