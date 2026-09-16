@@ -1,0 +1,2 @@
+ALTER TABLE public.companies DROP CONSTRAINT companies_stage_check;
+ALTER TABLE public.companies ADD CONSTRAINT companies_stage_check CHECK (stage = ANY (ARRAY['email_sent'::text,'registered'::text,'preview'::text,'finished'::text,'paid'::text,'lead'::text,'svif'::text,'svif_fyrirtæki'::text]));
