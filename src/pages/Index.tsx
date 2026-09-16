@@ -549,27 +549,36 @@ export default function Index() {
             <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
               Svif Akureyri
-              {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri").length > 0 && (
+              {companies.filter((c) => c.leadSource === "svif_akureyri").length > 0 && (
                 <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri").length}
+                  {companies.filter((c) => c.leadSource === "svif_akureyri").length}
                 </span>
               )}
             </Button>
             <Button variant="outline" onClick={() => navigate("/svif-akureyri-v2")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
               Svif Akureyri v2
-              {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri_v2").length > 0 && (
+              {companies.filter((c) => c.leadSource === "svif_akureyri_v2").length > 0 && (
                 <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri_v2").length}
+                  {companies.filter((c) => c.leadSource === "svif_akureyri_v2").length}
                 </span>
               )}
             </Button>
             <Button variant="outline" onClick={() => navigate("/svif-akureyri-v3")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
               Svif Akureyri v3
-              {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri_v3").length > 0 && (
+              {companies.filter((c) => c.leadSource === "svif_akureyri_v3").length > 0 && (
                 <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri_v3").length}
+                  {companies.filter((c) => c.leadSource === "svif_akureyri_v3").length}
+                </span>
+              )}
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-badi-svaedi")} className="gap-2 shadow-sm relative">
+              <MapPin className="w-4 h-4" />
+              Bæði svæði
+              {companies.filter((c) => c.bothRegions).length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {companies.filter((c) => c.bothRegions).length}
                 </span>
               )}
             </Button>

@@ -177,6 +177,7 @@ export type Database = {
           special_offer: boolean
           stage: string
           svif_valid: boolean
+          both_regions: boolean
           updated_at: string
           website_url: string | null
         }
@@ -225,6 +226,7 @@ export type Database = {
           special_offer?: boolean
           stage?: string
           svif_valid?: boolean
+          both_regions?: boolean
           updated_at?: string
           website_url?: string | null
         }
@@ -273,6 +275,7 @@ export type Database = {
           special_offer?: boolean
           stage?: string
           svif_valid?: boolean
+          both_regions?: boolean
           updated_at?: string
           website_url?: string | null
         }

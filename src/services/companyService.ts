@@ -16,6 +16,7 @@ function rowToCompany(row: any): Company {
     address: row.address || undefined,
     industry: row.industry || undefined,
     leadSource: row.lead_source || undefined,
+    bothRegions: row.both_regions ?? false,
     facebookUrl: row.facebook_url || undefined,
     jaUrl: row.ja_url || undefined,
     googleUrl: row.google_url || undefined,

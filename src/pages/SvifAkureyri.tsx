@@ -49,12 +49,15 @@ interface SvifAkureyriProps {
   source?: string;
   title?: string;
   subtitle?: string;
+  /** Show companies flagged as present in both the capital area and the north, across all Akureyri lists. */
+  bothRegions?: boolean;
 }
 
 export default function SvifAkureyri({
   source = "svif_akureyri",
   title = "Svif Akureyri",
   subtitle = "Hringilisti – velkomstbók Akureyri",
+  bothRegions = false,
 }: SvifAkureyriProps = {}) {
   const navigate = useNavigate();
   const [rows, setRows] = useState<AkureyriRow[]>([]);
@@ -67,10 +70,13 @@ export default function SvifAkureyri({
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const load = async () => {
-    const { data, error } = await supabase
+    let query = supabase
       .from("companies")
-      .select("id,name,owner,phone,email,category,company_id,address,website_url,notes,svif_valid,last_call_outcome")
-      .eq("lead_source", source)
+      .select("id,name,owner,phone,email,category,company_id,address,website_url,notes,svif_valid,last_call_outcome");
+    query = bothRegions
+      ? query.eq("both_regions", true).like("lead_source", "svif_akureyri%")
+      : query.eq("lead_source", source);
+    const { data, error } = await query
       .order("category", { ascending: true })
       .order("name", { ascending: true });
     if (error) {
@@ -80,7 +86,7 @@ export default function SvifAkureyri({
     setRows((data as AkureyriRow[]) || []);
     setLoading(false);
   };
-  useEffect(() => { load(); }, [source]);
+  useEffect(() => { load(); }, [source, bothRegions]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();

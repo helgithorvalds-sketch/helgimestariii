@@ -9,7 +9,7 @@ export type CompanyStage =
   | "svif_fyrirtæki";
 
 
-export type LeadSource = "facebook" | "new_company" | "restaurant";
+export type LeadSource = "facebook" | "new_company" | "restaurant" | (string & {});
 
 export type PreviewSubStatus = 
   | "wanted_preview"
@@ -53,6 +53,7 @@ export interface Company {
   address?: string;
   industry?: string;
   leadSource?: LeadSource;
+  bothRegions?: boolean;
   facebookUrl?: string;
   jaUrl?: string;
   googleUrl?: string;
