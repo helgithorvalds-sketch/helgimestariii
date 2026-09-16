@@ -468,6 +468,33 @@ export type Database = {
           },
         ]
       }
+      si_members: {
+        Row: {
+          address: string | null
+          email: string | null
+          kt: string | null
+          name: string | null
+          tags: string | null
+          tel: string | null
+        }
+        Insert: {
+          address?: string | null
+          email?: string | null
+          kt?: string | null
+          name?: string | null
+          tags?: string | null
+          tel?: string | null
+        }
+        Update: {
+          address?: string | null
+          email?: string | null
+          kt?: string | null
+          name?: string | null
+          tags?: string | null
+          tel?: string | null
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           company_id: string
