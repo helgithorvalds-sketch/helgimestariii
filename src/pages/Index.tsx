@@ -573,6 +573,15 @@ export default function Index() {
                 </span>
               )}
             </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-akureyri-v4")} className="gap-2 shadow-sm relative">
+              <MapPin className="w-4 h-4" />
+              Svif Akureyri v4
+              {companies.filter((c) => c.leadSource === "svif_akureyri_v4").length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {companies.filter((c) => c.leadSource === "svif_akureyri_v4").length}
+                </span>
+              )}
+            </Button>
             <Button variant="outline" onClick={() => navigate("/svif-badi-svaedi")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
               Bæði svæði

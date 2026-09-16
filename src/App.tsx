@@ -44,6 +44,10 @@ const App = () => (
             path="/svif-badi-svaedi"
             element={<SvifAkureyri bothRegions title="Svif – bæði svæði" subtitle="Keðjur og fyrirtæki með starfsstöð bæði á höfuðborgarsvæðinu og á Akureyri" />}
           />
+          <Route
+            path="/svif-akureyri-v4"
+            element={<SvifAkureyri source="svif_akureyri_v4" title="Svif Akureyri v4" subtitle="Tengingar – fyrirtæki með óbeina tengingu við nýja húseigendur, rök í glósum" />}
+          />
           <Route path="/fyrirtaekjabok" element={<Fyrirtaekjabok />} />
 
 
