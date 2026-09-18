@@ -9,7 +9,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, BookOpen, Check, ExternalLink,
+  ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, BookOpen, Check, ExternalLink, Building2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -27,6 +27,7 @@ interface AkureyriRow {
   notes: string;
   svif_valid: boolean;
   last_call_outcome: string | null;
+  registered_in_svif: boolean;
 }
 
 const OUTCOMES: { value: string; label: string; cls: string }[] = [
@@ -38,6 +39,13 @@ const OUTCOMES: { value: string; label: string; cls: string }[] = [
 ];
 
 const outcomeLabel = (v?: string | null) => OUTCOMES.find((o) => o.value === v)?.label || null;
+
+/** First line of the notes when it carries the höfuðborgar-Svif contact ("Svif HBS: …"). */
+function svifHbsFromNotes(notes: string): string | null {
+  const first = (notes || "").split("\n")[0]?.trim() || "";
+  if (/^svif hbs\s*:/i.test(first)) return first.replace(/^svif hbs\s*:\s*/i, "");
+  return null;
+}
 
 function titleFromNotes(notes: string): string | null {
   const first = (notes || "").split("\n")[0]?.trim() || "";
@@ -59,7 +67,7 @@ export default function SvifAkureyri() {
   const load = async () => {
     const { data, error } = await supabase
       .from("companies")
-      .select("id,name,owner,phone,email,category,company_id,address,website_url,notes,svif_valid,last_call_outcome")
+      .select("id,name,owner,phone,email,category,company_id,address,website_url,notes,svif_valid,last_call_outcome,registered_in_svif")
       .eq("lead_source", "svif_akureyri")
       .order("category", { ascending: true })
       .order("name", { ascending: true });
@@ -89,6 +97,7 @@ export default function SvifAkureyri() {
   const groups = useMemo(() => {
     const map = new Map<string, AkureyriRow[]>();
     for (const r of filtered) {
+      if (r.registered_in_svif) continue; // skráð í Svif HBS fara í sér svæði efst
       if (r.svif_valid) continue; // valin fara í Valin v2 efst
       const key = r.category?.trim() || "Óflokkað";
       if (!map.has(key)) map.set(key, []);
@@ -97,7 +106,11 @@ export default function SvifAkureyri() {
     return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0], "is"));
   }, [filtered]);
 
-  const valinV2 = useMemo(() => filtered.filter((r) => r.svif_valid), [filtered]);
+  const valinV2 = useMemo(
+    () => filtered.filter((r) => r.svif_valid && !r.registered_in_svif),
+    [filtered]
+  );
+  const registered = useMemo(() => filtered.filter((r) => r.registered_in_svif), [filtered]);
 
   const total = rows.length;
   const selectedCount = rows.filter((r) => r.svif_valid).length;
@@ -167,6 +180,7 @@ export default function SvifAkureyri() {
 
   const renderRow = (r: AkureyriRow) => {
     const titill = titleFromNotes(r.notes || "");
+    const svifHbs = r.registered_in_svif ? svifHbsFromNotes(r.notes || "") : null;
     const notesOpen = openNotes.has(r.id);
     return (
       <li
@@ -199,6 +213,12 @@ export default function SvifAkureyri() {
               <p className="text-sm text-muted-foreground">
                 {r.owner}
                 {titill && <span className="italic"> · {titill}</span>}
+              </p>
+            )}
+            {svifHbs && (
+              <p className="text-sm text-amber-800 dark:text-amber-300 flex items-start gap-1 mt-0.5">
+                <Building2 className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                <span><span className="font-semibold">Svif HBS:</span> {svifHbs}</span>
               </p>
             )}
             <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
@@ -307,10 +327,34 @@ export default function SvifAkureyri() {
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {loading ? (
           <p className="text-muted-foreground">Hleð…</p>
-        ) : groups.length === 0 && valinV2.length === 0 ? (
+        ) : groups.length === 0 && valinV2.length === 0 && registered.length === 0 ? (
           <p className="text-muted-foreground">Engin fyrirtæki fundust.</p>
         ) : (
           <>
+          {registered.length > 0 && (
+            <section className="rounded-2xl border-2 border-amber-400 bg-amber-50/50 dark:bg-amber-950/20 shadow-sm overflow-hidden">
+              <button
+                onClick={() => toggleSet(collapsed, "__registered__", setCollapsed)}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-amber-100/60 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors text-left"
+              >
+                {collapsed.has("__registered__") ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <div className="flex-1 min-w-0">
+                  <h2 className="font-bold text-lg">Skráð í Svif – líka á Akureyri</h2>
+                  <p className="text-xs text-muted-foreground font-normal">
+                    Fyrirtæki sem eru þegar skráð í Svif á höfuðborgarsvæðinu og eru með starfsstöð á Akureyri
+                  </p>
+                </div>
+                <span className="text-sm font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300">
+                  {registered.length}
+                </span>
+              </button>
+              {!collapsed.has("__registered__") && (
+                <ul className="divide-y">
+                  {registered.map((r) => renderRow(r))}
+                </ul>
+              )}
+            </section>
+          )}
           {valinV2.length > 0 && (
             <section className="rounded-2xl border-2 border-sky-400 bg-sky-50/50 dark:bg-sky-950/20 shadow-sm overflow-hidden">
               <button
