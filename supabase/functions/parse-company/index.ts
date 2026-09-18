@@ -93,6 +93,12 @@ CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
     const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
     if (toolCall?.function?.arguments) {
       const parsed = JSON.parse(toolCall.function.arguments);
+      // Normalize phone to exactly 7 Icelandic digits
+      if (parsed.phone) {
+        let digits = String(parsed.phone).replace(/\D/g, "");
+        if (digits.startsWith("354")) digits = digits.slice(3);
+        parsed.phone = digits.length === 7 ? digits : "";
+      }
       return new Response(JSON.stringify(parsed), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
