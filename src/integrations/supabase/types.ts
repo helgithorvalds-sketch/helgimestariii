@@ -135,6 +135,7 @@ export type Database = {
         Row: {
           address: string | null
           amount_paid: number | null
+          both_regions: boolean
           category: string | null
           checklist: Json
           chosen_v2: boolean
@@ -172,6 +173,7 @@ export type Database = {
           preview_sub_status: string | null
           projected_earnings: number
           registered_date: string | null
+          registered_in_svif: boolean
           rejected: boolean
           rejected_at: string | null
           special_offer: boolean
@@ -183,6 +185,7 @@ export type Database = {
         Insert: {
           address?: string | null
           amount_paid?: number | null
+          both_regions?: boolean
           category?: string | null
           checklist?: Json
           chosen_v2?: boolean
@@ -220,6 +223,7 @@ export type Database = {
           preview_sub_status?: string | null
           projected_earnings?: number
           registered_date?: string | null
+          registered_in_svif?: boolean
           rejected?: boolean
           rejected_at?: string | null
           special_offer?: boolean
@@ -231,6 +235,7 @@ export type Database = {
         Update: {
           address?: string | null
           amount_paid?: number | null
+          both_regions?: boolean
           category?: string | null
           checklist?: Json
           chosen_v2?: boolean
@@ -268,6 +273,7 @@ export type Database = {
           preview_sub_status?: string | null
           projected_earnings?: number
           registered_date?: string | null
+          registered_in_svif?: boolean
           rejected?: boolean
           rejected_at?: string | null
           special_offer?: boolean
