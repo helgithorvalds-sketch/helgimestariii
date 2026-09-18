@@ -535,23 +535,28 @@ export default function Index() {
             </Button>
             <Button variant="outline" onClick={() => navigate("/svif-fyrirtæki")} className="gap-2 shadow-sm relative">
               <Plane className="w-4 h-4" />
-              Svif - fyrirtæki
-              {companies.filter(c => c.stage === "svif_fyrirtæki").length > 0 && (
+              Svif Akureyri
+              {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length > 0 && (
                 <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif_fyrirtæki").length}
+                  {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length}
                 </span>
               )}
             </Button>
             <Button variant="outline" onClick={() => navigate("/svif-listi")} className="gap-2 shadow-sm relative">
               <BookOpen className="w-4 h-4" />
-              SVIF
+              Svif fyrirtæki
+              {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                  {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length}
+                </span>
+              )}
             </Button>
             <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
-              Svif Akureyri
-              {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri").length > 0 && (
+              Akureyri hringilisti
+              {companies.filter((c) => c.leadSource === "svif_akureyri").length > 0 && (
                 <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {(companies as unknown as { lead_source?: string }[]).filter((c) => c.lead_source === "svif_akureyri").length}
+                  {companies.filter((c) => c.leadSource === "svif_akureyri").length}
                 </span>
               )}
             </Button>

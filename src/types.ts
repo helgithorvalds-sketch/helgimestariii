@@ -9,7 +9,7 @@ export type CompanyStage =
   | "svif_fyrirtæki";
 
 
-export type LeadSource = "facebook" | "new_company" | "restaurant";
+export type LeadSource = "facebook" | "new_company" | "restaurant" | "svif" | "svif_akureyri" | "fyrirtaekjabok" | "svif_fyrirtæki";
 
 export type PreviewSubStatus = 
   | "wanted_preview"
@@ -94,7 +94,7 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   paid: "Greitt",
   lead: "Til að hringja",
   svif: "Svif",
-  svif_fyrirtæki: "Svif - fyrirtæki",
+  svif_fyrirtæki: "Svif Akureyri",
 };
 
 
