@@ -19,6 +19,7 @@ import { Task, fetchAllTasks, addTask, toggleTaskCompleted, deleteTask } from "@
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+const SVIF_FYRIRTAEKI_SOURCE = "svif_fyrirtæki";
 
 export default function SvifFyrirtæki() {
   const navigate = useNavigate();
@@ -58,7 +59,10 @@ export default function SvifFyrirtæki() {
   useEffect(() => { load(); }, []);
 
 
-  const svifFyrirtæki = useMemo(() => companies.filter((c) => c.stage === "svif_fyrirtæki"), [companies]);
+  const svifFyrirtæki = useMemo(
+    () => companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource !== SVIF_FYRIRTAEKI_SOURCE),
+    [companies]
+  );
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -124,7 +128,7 @@ export default function SvifFyrirtæki() {
     const created = await addCompany({ ...company, stage: "svif_fyrirtæki" });
     if (created) {
       setCompanies((prev) => [...prev, created]);
-      toast.success("Fyrirtæki skráð í Svif - fyrirtæki");
+      toast.success("Fyrirtæki skráð í Svif Akureyri");
     } else {
       toast.error("Villa við vistun");
     }
@@ -462,7 +466,7 @@ export default function SvifFyrirtæki() {
             <div>
               <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
                 <Plane className="w-7 h-7 text-primary" />
-                Svif - fyrirtæki
+                Svif Akureyri
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">{svifFyrirtæki.length} fyrirtæki · {chosen.length} valin · {specialOffers.length} í sértilboði</p>
             </div>
@@ -496,7 +500,7 @@ export default function SvifFyrirtæki() {
         ) : filtered.length === 0 ? (
           <div className="rounded-xl border-2 border-dashed p-12 text-center">
             <Plane className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
-            <p className="font-semibold text-lg">Engin fyrirtæki í Svif - fyrirtæki</p>
+            <p className="font-semibold text-lg">Engin fyrirtæki í Svif Akureyri</p>
             <p className="text-sm text-muted-foreground mt-1">Skráðu fyrsta fyrirtækið með „Nýtt fyrirtæki“.</p>
           </div>
         ) : (
