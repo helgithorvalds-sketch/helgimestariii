@@ -35,8 +35,9 @@ Extract:
 - estimatedPrice: default 160000
 - stage: default "email_sent"
 - email: try to guess the company's email from their website domain or any email visible in the text. If the website is e.g. example.is, guess info@example.is. Mark it as a guess. If no website or email found, leave empty.
+- phone: the company's phone number. Icelandic phone numbers are ALWAYS exactly 7 digits (e.g. "5551234", "8987654"). Extract any phone number in the text and normalize it to exactly 7 digits: remove spaces, dashes, and country code (+354 or 354 prefix). If multiple numbers appear, pick the main/landline one. If none found, return empty string. NEVER invent a number.
 
-IMPORTANT: Do NOT extract phone numbers. Do NOT fill in notes. Leave phone and notes empty.
+IMPORTANT: Do NOT fill in notes. Leave notes empty.
 CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
           },
           { role: "user", content: text }
@@ -57,9 +58,10 @@ CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
                     finnaUrl: { type: "string", description: "The finna.is URL for this company" },
                     estimatedPrice: { type: "number", description: "Estimated price in ISK, default 160000" },
                     stage: { type: "string", enum: ["email_sent", "registered", "preview", "finished", "paid"] },
-                    email: { type: "string", description: "Probable email address for the company, guessed from domain if needed" }
+                    email: { type: "string", description: "Probable email address for the company, guessed from domain if needed" },
+                    phone: { type: "string", description: "Phone number normalized to exactly 7 Icelandic digits, no spaces or country code. Empty if none found." }
                   },
-                  required: ["name", "owner", "companyId", "websiteUrl", "finnaUrl", "estimatedPrice", "stage", "email"],
+                  required: ["name", "owner", "companyId", "websiteUrl", "finnaUrl", "estimatedPrice", "stage", "email", "phone"],
                   additionalProperties: false
               }
             }
@@ -91,6 +93,12 @@ CRITICAL: NEVER fabricate finna.is URLs. The kennitala is NOT the finna.is ID.`
     const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
     if (toolCall?.function?.arguments) {
       const parsed = JSON.parse(toolCall.function.arguments);
+      // Normalize phone to exactly 7 Icelandic digits
+      if (parsed.phone) {
+        let digits = String(parsed.phone).replace(/\D/g, "");
+        if (digits.startsWith("354")) digits = digits.slice(3);
+        parsed.phone = digits.length === 7 ? digits : "";
+      }
       return new Response(JSON.stringify(parsed), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

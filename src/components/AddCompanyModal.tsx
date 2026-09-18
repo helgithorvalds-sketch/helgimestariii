@@ -83,7 +83,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
 
       if (data.name) handleNameChange(data.name);
       if (data.stage) setStage(data.stage);
-      if (data.owner) setContacts([{ id: "new-c-0", name: data.owner, phone: "" }]);
+      if (data.owner || data.phone) setContacts([{ id: "new-c-0", name: data.owner || "", phone: data.phone || "" }]);
       if (data.companyId) setCompanyId(data.companyId);
       if (data.websiteUrl) setWebsiteUrl(data.websiteUrl);
       if (data.finnaUrl) setFinnaUrl(data.finnaUrl);
