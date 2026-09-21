@@ -110,7 +110,7 @@ export default function SvifFyrirtæki() {
     (c) => !c.rejected && (c.lastCallOutcome === "interested" || c.specialOffer || hasCall(c))
   );
   const rest = filtered.filter(
-    (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested" && !hasCall(c)
+    (c) => !c.rejected && !c.isDone && !c.specialOffer && c.lastCallOutcome !== "interested"
   );
 
   const persist = async (updated: Company, msg?: string) => {
