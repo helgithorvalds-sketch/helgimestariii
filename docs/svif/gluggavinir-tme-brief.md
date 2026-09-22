@@ -32,6 +32,12 @@ Annað: styrktaraðili Njarðvíkur (körfubolti), DV-viðtal 2016, afhending s�
 - Portrett: `2026/09/finnbogi-arnason-husasmidameistari.jpg`, `thomas-zahniser-rekstrastjori.jpg`, `tomasz-mroz-framkvaemdarstjori.jpg`, `ingvar-gudmundsson-solustjori.jpg`, `magdalena-mroz-fjarmalastjori.jpg`, `przemyslaw-bezuch-verkstjori.jpg`, breiðir borðar `01_thomas_zahniser_tme.jpg`, `10_tomasz_mroz_tme.jpg`.
 - Ekki nota: Unsplash-myndir („Verkefni 1–3") og sex ChatGPT-myndir frá maí 2026.
 - Vantar: fyrir/eftir-myndir af raunverulegum verkum – biðja Tomma/Finnboga.
+- AI fyrir/eftir til bráðabirgða (Higgsfield GPT Image 2.5, 2048×1360, sama hús, aðeins gluggarnir breytast):
+  - EFTIR: https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260922_133542_c745f687-0f4c-46bf-98c6-01c82d713e55.png
+  - FYRIR v1: https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260922_133619_1245ac96-3a35-4c55-baf6-3199ae7096cf.png
+  - FYRIR v2: https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260922_133619_54c8859e-80ad-4f43-a8c9-872c5e2c6a4a.png
+
+Tommi gaf aðeins þrjú atriði og enga tölu: frí mæling og ráðgjöf, pakki A–Ö, afsláttur fyrir nýja húseigendur. Auglýsingin byggir á þeim; afsláttartalan er eyða („X%") þar til eftir símtalið.
 
 ## 5. Verð
 - Engin opinber verðskrá. Gamli vefurinn var með „Tilboð"-síður per stærð (Gluggi 1045×1085, 1990×1085, 2400×2350, PVC 120 mm Rehau Nordic Design Plus) – nú 404.
