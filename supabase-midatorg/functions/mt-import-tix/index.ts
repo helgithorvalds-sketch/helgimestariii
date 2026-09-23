@@ -22,7 +22,7 @@ import {
 import { FetchError, fetchPage, identifyCaller, json, log, preflight, serviceClient, sleep } from '../_shared/edge.ts';
 
 const FN = 'mt-import-tix';
-const MAX_EVENT_PAGES = 120;
+const MAX_EVENT_PAGES = 60; // 120 died with WORKER_RESOURCE_LIMIT (HTTP 546, "Memory limit exceeded") after ~80 pages; 60 is proven to fit
 const PAGE_TIMEOUT_MS = 10_000;
 const SPACING_MS = 200;
 const FRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -39,7 +39,7 @@ interface RunOptions {
   categories: ReadonlyArray<{ slug: string; category: TixCategory }>;
 }
 
-/** Optional body knobs for manual runs: { limit?: 1..120, categories?: ['music', …] }. */
+/** Optional body knobs for manual runs: { limit?: 1..60, categories?: ['music', …] }. */
 function readOptions(body: unknown): RunOptions {
   const o = body && typeof body === 'object' ? (body as Record<string, unknown>) : {};
   let limit = MAX_EVENT_PAGES;
