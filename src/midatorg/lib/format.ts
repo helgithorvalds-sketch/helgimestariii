@@ -208,7 +208,7 @@ export function priceDelta(asking: number | null | undefined, face: number | nul
   if (asking == null || face == null || !Number.isFinite(asking) || !Number.isFinite(face) || face <= 0) {
     return { pct: 0, kind: 'at' };
   }
-  const pct = Math.round(((asking - face) / face) * 100);
+  const pct = Math.round(((asking - face) / face) * 100) || 0; // `|| 0` normalises -0
   return { pct, kind: pct < 0 ? 'below' : pct > 0 ? 'above' : 'at' };
 }
 

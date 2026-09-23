@@ -1,0 +1,214 @@
+/*
+ * Miðatorg theme — DESIGN.md §2 tokens, scoped to `.midatorg` (the CRM owns :root).
+ * `.midatorg.dark` is listed too so these win over the CRM's `.dark` block
+ * regardless of stylesheet order. MidatorgApp also puts the classes on <body>
+ * so Radix portals (menus, dialogs, tooltips) and sonner toasts pick them up.
+ */
+.midatorg,
+.midatorg.dark {
+  color-scheme: dark;
+
+  --background: 220 29% 6%; /* #0B0E14 canvas */
+  --foreground: 220 32% 92%; /* #E6EAF2 */
+  --card: 222 27% 10%; /* #12161F card / panel */
+  --card-foreground: 220 32% 92%;
+  --popover: 221 25% 12%; /* #181D28 */
+  --popover-foreground: 220 32% 92%;
+  --primary: 221 83% 53%; /* #2563EB buttons + chart only, never body text */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 221 25% 12%; /* #181D28 raised neutral fill */
+  --secondary-foreground: 220 32% 92%;
+  --muted: 221 25% 12%; /* #181D28 */
+  --muted-foreground: 218 15% 60%; /* #8A95A8 captions, labels */
+  --accent: 222 26% 15%; /* #1C2230 hover row / menu item */
+  --accent-foreground: 220 32% 92%;
+  --destructive: 0 72% 51%; /* #DC2626 */
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 23% 18%; /* #232A38 */
+  --input: 220 23% 18%;
+  --ring: 217 91% 60%; /* #3B82F6 */
+  --radius: 0.5rem; /* 8px */
+
+  /* custom */
+  --ask: 146 69% 39%; /* #1FA85A sell side */
+  --ask-foreground: 220 29% 6%;
+  --bid: 36 77% 61%; /* #E8AB4E want side */
+  --bid-foreground: 220 29% 6%;
+  --up: 146 69% 39%; /* price below face value */
+  --down: 0 84% 60%; /* price above face value (text only) */
+  --verified: 213 100% 74%; /* #7CB8FF Staðfestur */
+  --surface-2: 221 25% 12%; /* #181D28 raised panel, tooltip, pressed segment */
+  --chart-line: 221 83% 53%;
+  --chart-fill: 221 83% 53%;
+
+  /* event placeholder tiles */
+  --ph-1: 227 51% 35%;
+  --ph-2: 308 40% 30%;
+  --ph-3: 358 41% 38%;
+  --ph-4: 163 59% 26%;
+  --ph-5: 33 67% 30%;
+  --ph-6: 199 54% 31%;
+
+  /* neutralise CRM-only tokens that shadcn pieces may reference */
+  --sidebar-background: 222 27% 10%;
+  --sidebar-foreground: 220 32% 92%;
+  --sidebar-primary: 221 83% 53%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 222 26% 15%;
+  --sidebar-accent-foreground: 220 32% 92%;
+  --sidebar-border: 220 23% 18%;
+  --sidebar-ring: 217 91% 60%;
+  --success: 146 69% 39%;
+  --success-foreground: 220 29% 6%;
+  --warning: 36 77% 61%;
+  --warning-foreground: 220 29% 6%;
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: 0 8px 24px -8px hsl(220 29% 2% / 0.6);
+  --shadow-lg: 0 16px 40px -12px hsl(220 29% 2% / 0.7);
+  --shadow-glow: none;
+}
+
+/* ------------------------------------------------------------------ base */
+.midatorg {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-feature-settings: 'tnum' 1, 'cv11' 1, 'ss01' 1;
+  font-size: 14px;
+  line-height: 1.45;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+/* the CRM paints a fixed radial-gradient on <body>; cover it fully while we are mounted */
+body.midatorg {
+  background-image: none;
+  background-color: hsl(var(--background));
+}
+
+.midatorg h1,
+.midatorg h2,
+.midatorg h3,
+.midatorg h4 {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.midatorg ::selection {
+  background: hsl(var(--primary) / 0.35);
+  color: hsl(var(--foreground));
+}
+
+.midatorg ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.midatorg ::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+  border: 2px solid hsl(var(--background));
+}
+.midatorg ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.midatorg :focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* DESIGN.md §4: 120ms transitions on colour only (overrides the CRM's 180ms rule) */
+.midatorg button,
+.midatorg a,
+.midatorg [role='button'] {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: ease;
+  transition-duration: 120ms;
+}
+
+.midatorg [disabled],
+.midatorg [aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+.midatorg img {
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------ utilities */
+/* numbers: Tailwind's `tabular-nums` works too; this covers ad-hoc containers */
+.midatorg .tabular-nums,
+.midatorg .mt-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* mono only for axis ticks, the "/" kbd hint and step numerals */
+.midatorg .font-mono,
+.midatorg .mt-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* card / panel: card bg, 1px border, 10px radius */
+.midatorg .mt-panel {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+}
+
+/* eyebrow label: 11px uppercase +0.05em muted */
+.midatorg .mt-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+/* bordered tag (category, "Uppselt á tix.is") */
+.midatorg .mt-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+}
+
+/* headline number: 24px / 600 / −0.02em / lh 1 */
+.midatorg .mt-headline {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* horizontal scroll rail with hidden scrollbar (chips, trending strip) */
+.midatorg .mt-scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.midatorg .mt-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+/* skeleton pulse: 1.2s, never faster */
+.midatorg .animate-pulse {
+  animation-duration: 1.2s;
+}
+
+/* safe-area padding for the bottom nav on phones */
+.midatorg .mt-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
