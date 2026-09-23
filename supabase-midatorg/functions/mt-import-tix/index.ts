@@ -22,9 +22,9 @@ import {
 import { FetchError, fetchPage, identifyCaller, json, log, preflight, serviceClient, sleep } from '../_shared/edge.ts';
 
 const FN = 'mt-import-tix';
-const MAX_EVENT_PAGES = 60;
+const MAX_EVENT_PAGES = 120;
 const PAGE_TIMEOUT_MS = 10_000;
-const SPACING_MS = 300;
+const SPACING_MS = 200;
 const FRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
 const TIME_BUDGET_MS = 110_000; // stay under the platform wall-clock limit
 const IMPORT_CHUNK = 25;
@@ -39,7 +39,7 @@ interface RunOptions {
   categories: ReadonlyArray<{ slug: string; category: TixCategory }>;
 }
 
-/** Optional body knobs for manual runs: { limit?: 1..60, categories?: ['music', …] }. */
+/** Optional body knobs for manual runs: { limit?: 1..120, categories?: ['music', …] }. */
 function readOptions(body: unknown): RunOptions {
   const o = body && typeof body === 'object' ? (body as Record<string, unknown>) : {};
   let limit = MAX_EVENT_PAGES;
@@ -121,7 +121,20 @@ Deno.serve(async (req: Request) => {
     for (const row of data ?? []) if (row.tix_event_id) fresh.add(row.tix_event_id);
   }
   const stale = allIds.filter((id) => !fresh.has(id));
-  const queue = stale.slice(0, options.limit);
+  // Interleave categories (round-robin) so one run never spends its whole budget on the first category.
+  const byCategory = new Map<TixCategory, string[]>();
+  for (const id of stale) {
+    const cat = candidates.get(id) as TixCategory;
+    const list = byCategory.get(cat) ?? [];
+    list.push(id);
+    byCategory.set(cat, list);
+  }
+  const interleaved: string[] = [];
+  const lists = [...byCategory.values()];
+  for (let i = 0; interleaved.length < stale.length; i++) {
+    for (const list of lists) if (i < list.length) interleaved.push(list[i]);
+  }
+  const queue = interleaved.slice(0, options.limit);
   const skipped = scanned - stale.length;
 
   // 3. Event pages, sequentially and politely.
