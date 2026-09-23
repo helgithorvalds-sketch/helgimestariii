@@ -47,6 +47,27 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Miðatorg tokens (scoped under .midatorg in src/midatorg/theme.css)
+        ask: {
+          DEFAULT: "hsl(var(--ask) / <alpha-value>)",
+          foreground: "hsl(var(--ask-foreground) / <alpha-value>)",
+        },
+        bid: {
+          DEFAULT: "hsl(var(--bid) / <alpha-value>)",
+          foreground: "hsl(var(--bid-foreground) / <alpha-value>)",
+        },
+        up: "hsl(var(--up) / <alpha-value>)",
+        down: "hsl(var(--down) / <alpha-value>)",
+        verified: "hsl(var(--verified) / <alpha-value>)",
+        "surface-2": "hsl(var(--surface-2) / <alpha-value>)",
+        "chart-line": "hsl(var(--chart-line) / <alpha-value>)",
+        "chart-fill": "hsl(var(--chart-fill) / <alpha-value>)",
+        "ph-1": "hsl(var(--ph-1) / <alpha-value>)",
+        "ph-2": "hsl(var(--ph-2) / <alpha-value>)",
+        "ph-3": "hsl(var(--ph-3) / <alpha-value>)",
+        "ph-4": "hsl(var(--ph-4) / <alpha-value>)",
+        "ph-5": "hsl(var(--ph-5) / <alpha-value>)",
+        "ph-6": "hsl(var(--ph-6) / <alpha-value>)",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
