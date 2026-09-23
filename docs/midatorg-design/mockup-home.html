@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Miðatorg – Markaðurinn</title>
+<meta name="description" content="Miðatorg: kaupa og selja miða á viðburði á Íslandi, aldrei yfir miðaverði.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --background: #0B0E14;
+  --surface: #12161F;
+  --surface-2: #181D28;
+  --border: #232A38;
+  --foreground: #E6EAF2;
+  --muted-foreground: #8A95A8;
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+  --ask: #1FA85A;
+  --ask-foreground: #0B0E14;
+  --bid: #E8AB4E;
+  --bid-foreground: #0B0E14;
+  --up: #1FA85A;
+  --down: #EF4444;
+  --verified: #7CB8FF;
+  --ring: #3B82F6;
+  --chart-line: #2563EB;
+  --chart-fill: color-mix(in srgb, #2563EB 10%, transparent);
+  --radius: 8px;
+  --ph-1: #2B3F86; --ph-2: #6B2E63; --ph-3: #8A3A3C; --ph-4: #1B6A54; --ph-5: #7F5119; --ph-6: #245E78;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--background); color: var(--foreground);
+  font-family: var(--font-sans); font-size: 14px; line-height: 1.45;
+  font-feature-settings: "tnum" 1, "cv11" 1, "ss01" 1;
+  -webkit-font-smoothing: antialiased;
+}
+.num { font-family: var(--font-sans); font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; letter-spacing: -0.01em; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.nowrap { white-space: nowrap; }
+a { color: inherit; text-decoration: none; }
+a.link { text-decoration: underline; text-decoration-color: var(--muted-foreground); text-underline-offset: 3px; }
+a.link:hover { text-decoration-color: var(--foreground); }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+svg { display: inline-block; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+.icon { width: 16px; height: 16px; flex: none; }
+.icon-sm { width: 13px; height: 13px; flex: none; }
+
+/* --- nav --- */
+.nav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--background) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.nav-row { display: flex; align-items: center; gap: 16px; height: 56px; }
+.wordmark { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 17px; letter-spacing: -0.02em; flex: none; }
+.wordmark .mark { width: 24px; height: 24px; border-radius: 7px; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; }
+.wordmark .mark svg { width: 15px; height: 15px; }
+.search { position: relative; flex: 1; max-width: 520px; }
+.search input { width: 100%; height: 36px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0 44px 0 36px; color: var(--foreground); font: inherit; font-size: 13.5px; }
+.search input::placeholder { color: var(--muted-foreground); }
+.search input:hover { border-color: color-mix(in srgb, var(--border) 50%, var(--muted-foreground)); }
+.search .icon { position: absolute; left: 12px; top: 10px; color: var(--muted-foreground); pointer-events: none; }
+.search kbd { position: absolute; right: 8px; top: 8px; height: 20px; min-width: 20px; padding: 0 5px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 5px; background: var(--background); }
+.nav-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; flex: none; }
+
+/* --- buttons --- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: var(--radius); font-weight: 600; font-size: 13px; border: 1px solid transparent; white-space: nowrap; transition: background-color .12s, border-color .12s; }
+.btn-sm { height: 34px; padding: 0 12px; font-size: 13px; border-radius: 7px; }
+.btn-xs { height: 30px; padding: 0 10px; font-size: 12.5px; border-radius: 6px; }
+.btn-primary { background: var(--primary); color: var(--primary-foreground); }
+.btn-primary:hover { background: color-mix(in srgb, var(--primary) 86%, white); }
+.btn-ghost { color: var(--foreground); }
+.btn-ghost:hover { background: var(--surface-2); }
+.btn-outline { border-color: var(--border); background: var(--surface); color: var(--foreground); }
+.btn-outline:hover { background: var(--surface-2); border-color: color-mix(in srgb, var(--border) 50%, var(--muted-foreground)); }
+.btn-ask { background: color-mix(in srgb, var(--ask) 10%, var(--surface)); color: var(--ask); border-color: color-mix(in srgb, var(--ask) 35%, transparent); }
+.btn-ask:hover { background: var(--ask); color: var(--ask-foreground); border-color: var(--ask); }
+.btn-bid { background: color-mix(in srgb, var(--bid) 10%, var(--surface)); color: var(--bid); border-color: color-mix(in srgb, var(--bid) 35%, transparent); }
+.btn-bid:hover { background: var(--bid); color: var(--bid-foreground); border-color: var(--bid); }
+.btn .icon { width: 15px; height: 15px; }
+
+/* --- thumbs (image placeholders) --- */
+.thumb { flex: none; width: 44px; height: 44px; border-radius: 8px; display: grid; place-items: center; font-weight: 700; font-size: 14px; letter-spacing: .03em; color: var(--foreground); }
+.thumb-a { background: var(--ph-1); } .thumb-b { background: var(--ph-2); } .thumb-c { background: var(--ph-3); }
+.thumb-d { background: var(--ph-4); } .thumb-e { background: var(--ph-5); } .thumb-f { background: var(--ph-6); }
+
+/* --- delta labels --- */
+.delta { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; }
+.delta.good { color: var(--up); }
+.delta.flat { color: var(--muted-foreground); }
+.delta.bad { color: var(--down); }
+
+/* --- verified badge & rating --- */
+.verified { display: inline-flex; align-items: center; gap: 3px; height: 18px; padding: 0 6px 0 4px; border-radius: 4px; font-size: 11px; font-weight: 600; color: var(--verified); background: color-mix(in srgb, var(--verified) 9%, transparent); }
+.verified .icon { width: 11px; height: 11px; }
+.rating { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted-foreground); }
+.rating .icon { width: 12px; height: 12px; color: var(--foreground); }
+.rating .num { color: var(--foreground); }
+
+/* --- footer --- */
+.footer { border-top: 1px solid var(--border); margin-top: 48px; padding: 24px 0 40px; font-size: 12px; color: var(--muted-foreground); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 24px; }
+.footer nav { display: flex; gap: 6px; align-items: center; }
+.footer nav a:hover { color: var(--foreground); }
+.footer nav span { color: var(--muted-foreground); }
+
+@media (max-width: 640px) {
+  .container { padding: 0 16px; }
+  .nav-row { height: auto; flex-wrap: wrap; padding: 10px 0; gap: 10px; row-gap: 10px; }
+  .search { order: 3; flex-basis: 100%; max-width: none; }
+  .nav-actions { margin-left: auto; }
+  .footer { flex-direction: column; align-items: flex-start; }
+}
+
+/* --- category bar --- */
+.subbar { border-bottom: 1px solid var(--border); background: var(--background); }
+.subbar-row { display: flex; align-items: center; gap: 8px; height: 50px; }
+.chips { display: flex; min-width: 0; flex: 1 1 auto; gap: 6px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding: 4px 0; margin: -4px 0; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted-foreground); font-weight: 500; font-size: 13px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.chip:hover { color: var(--foreground); border-color: color-mix(in srgb, var(--border) 50%, var(--muted-foreground)); }
+.chip[aria-pressed="true"] { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.chip .cnt { font-family: var(--font-mono); font-size: 11px; opacity: .75; }
+.sort { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted-foreground); flex: none; }
+.sort select { appearance: none; -webkit-appearance: none; height: 34px; padding: 0 28px 0 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--foreground); font: inherit; font-size: 12.5px; font-weight: 500; }
+.sort .sel { position: relative; display: inline-flex; }
+.sort .sel .icon { position: absolute; right: 8px; top: 10px; width: 14px; height: 14px; color: var(--muted-foreground); pointer-events: none; }
+
+/* --- trending strip --- */
+.trend-head { display: flex; align-items: center; gap: 8px; padding: 18px 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); }
+.trend-head .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ask); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ask) 20%, transparent); }
+.trend { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.trend-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); min-width: 0; transition: border-color .12s; }
+.trend-item:hover { border-color: color-mix(in srgb, var(--border) 40%, var(--muted-foreground)); }
+.trend-item .thumb { width: 30px; height: 30px; font-size: 11px; border-radius: 6px; }
+.trend-item .tx { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.trend-item .t { display: block; font-weight: 600; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trend-item .s { display: block; font-size: 11.5px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trend-item .v { flex: none; display: flex; flex-direction: column; align-items: flex-end; font-size: 12.5px; font-weight: 600; white-space: nowrap; line-height: 1.25; }
+.trend-item .vs { font-size: 11px; font-weight: 500; color: var(--muted-foreground); }
+.trend-item .v.good .vs { color: var(--up); }
+.trend-item .v.good { color: var(--up); }
+.trend-item .v.want { color: var(--bid); }
+.trend-item .no { flex: none; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); width: 16px; }
+
+/* --- market section --- */
+.sec-head { display: flex; align-items: baseline; gap: 10px; padding: 26px 0 12px; flex-wrap: wrap; }
+.sec-head h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+.sec-head .sub { color: var(--muted-foreground); font-size: 13px; }
+.sec-head .tagline { margin: 0 0 0 auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted-foreground); }
+.sec-head .tagline .icon { width: 14px; height: 14px; color: var(--verified); }
+
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.card { position: relative; min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 12px; transition: border-color .12s; }
+.card:hover { border-color: color-mix(in srgb, var(--border) 35%, var(--muted-foreground)); }
+.card-head { display: flex; gap: 12px; align-items: flex-start; }
+.card-title { min-width: 0; flex: 1; }
+.card-title h2 { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-title h2 a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.card-title p { margin: 4px 0 0; font-size: 12px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.price { font-size: 24px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+.price .unit { font-size: 15px; font-weight: 500; color: var(--muted-foreground); margin-left: 5px; }
+.price-lbl { display: block; font-size: 11px; color: var(--muted-foreground); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 500; }
+.card-main .delta { margin-top: 6px; }
+.spark { width: 96px; height: 32px; flex: none; }
+.card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; font-size: 12px; color: var(--muted-foreground); }
+.card-foot .counts b { font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.card-foot .cat { font-size: 11px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+.card.soldout .price { color: var(--bid); }
+.card.soldout .none { font-size: 12px; color: var(--muted-foreground); margin-top: 6px; display: block; }
+.card.soldout .none .num { white-space: nowrap; }
+
+@media (max-width: 1240px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .trend { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px)  { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .trend { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sec-head .tagline { flex-basis: 100%; margin-left: 0; } }
+@media (max-width: 640px)  {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .trend { display: flex; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 2px; }
+  .trend::-webkit-scrollbar { display: none; }
+  .trend-item { flex: 0 0 236px; }
+  .subbar-row { height: 50px; }
+  .sort label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .sort select { max-width: 132px; }
+  .sec-head .sub { flex-basis: 100%; }
+  .card-actions .btn-sm { height: 40px; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-row">
+    <a class="wordmark" href="home.html" aria-label="Miðatorg – forsíða"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z"/><path d="M13 5v14" stroke-dasharray="2 3"/></svg></span>Miðatorg</a>
+    <form class="search" role="search" action="#">
+      <label for="q" class="sr-only">Leita að viðburði, listamanni eða stað</label>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="q" type="search" name="q" placeholder="Leita að viðburði, listamanni eða stað…" value="" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </form>
+    <div class="nav-actions">
+      <a class="btn btn-primary" href="#selja">Selja miða</a>
+      <a class="btn btn-ghost" href="#innskra">Innskrá</a>
+    </div>
+  </div>
+</header>
+<div class="subbar">
+  <div class="container subbar-row">
+    <div class="chips" role="group" aria-label="Flokkar"><button class="chip" type="button" aria-pressed="true">Allt<span class="cnt">16</span></button><button class="chip" type="button" aria-pressed="false">Tónleikar<span class="cnt">8</span></button><button class="chip" type="button" aria-pressed="false">Leikhús<span class="cnt">2</span></button><button class="chip" type="button" aria-pressed="false">Íþróttir<span class="cnt">3</span></button><button class="chip" type="button" aria-pressed="false">Hátíðir<span class="cnt">2</span></button><button class="chip" type="button" aria-pressed="false">Uppistand<span class="cnt">2</span></button></div>
+    <div class="sort">
+      <label for="sort">Raða eftir</label>
+      <span class="sel"><select id="sort" name="sort"><option>Vinsældum</option><option>Lægsta verði</option><option>Mestum afslætti</option><option>Dagsetningu</option><option>Eftirspurn</option></select><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <section aria-labelledby="trend-h">
+    <h2 id="trend-h" class="trend-head"><span class="dot" aria-hidden="true"></span>Vinsælt núna</h2>
+    <div class="trend"><a class="trend-item" href="#la"><span class="no" aria-hidden="true">01</span><span class="thumb thumb-b" aria-hidden="true">LA</span><span class="tx"><span class="t">Laufey 2027</span><span class="s">Laugardalshöll · 21. feb.</span></span><span class="v want"><span class="num">41</span><span class="vs">á biðlista</span></span></a><a class="trend-item" href="#ís"><span class="no" aria-hidden="true">02</span><span class="thumb thumb-d" aria-hidden="true">ÍS</span><span class="tx"><span class="t">Ísland – Danmörk</span><span class="s">Laugardalsvöllur · 26. mars</span></span><span class="v want"><span class="num">58</span><span class="vs">vilja kaupa</span></span></a><a class="trend-item" href="#sí"><span class="no" aria-hidden="true">03</span><span class="thumb thumb-a" aria-hidden="true">SÍ</span><span class="tx"><span class="t">Vínartónleikar SÍ</span><span class="s">Harpa · 8. jan.</span></span><span class="v good"><span class="num">9.900 kr.</span><span class="vs">−17%</span></span></a><a class="trend-item" href="#el"><span class="no" aria-hidden="true">04</span><span class="thumb thumb-c" aria-hidden="true">EL</span><span class="tx"><span class="t">Ellý</span><span class="s">Borgarleikhúsið · 14. nóv.</span></span><span class="v good"><span class="num">8.900 kr.</span><span class="vs">−10%</span></span></a><a class="trend-item" href="#ia"><span class="no" aria-hidden="true">05</span><span class="thumb thumb-e" aria-hidden="true">IA</span><span class="tx"><span class="t">Airwaves 2026</span><span class="s">Miðbær · 5.–7. nóv.</span></span><span class="v good"><span class="num">24.900 kr.</span><span class="vs">−11%</span></span></a></div>
+  </section>
+
+  <section aria-labelledby="market-h">
+    <div class="sec-head">
+      <h1 id="market-h">Markaðurinn</h1>
+      <span class="sub"><span class="num">16</span> viðburðir · <span class="num">77</span> miðar til sölu · <span class="num">312</span> vilja kaupa</span>
+      <p class="tagline"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Verð aldrei hærra en miðaverð · Engin þóknun · Greitt beint á milli fólks</p>
+    </div>
+    <div class="grid">
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-a" aria-hidden="true">SÍ</div>
+      <div class="card-title">
+        <h2><a href="event.html">Sinfóníuhljómsveit Íslands: Vínartónleikar</a></h2>
+        <p>Harpa – Eldborg · fim. 8. jan. · 19:30</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">9.900 kr.</div>
+        <span class="delta good"><span class="num">−17%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 8.2 L27.5 8.2 L27.5 8.2 L35.7 8.2 L35.7 12.1 L43.9 12.1 L43.9 16.0 L52.1 16.0 L52.1 16.0 L60.3 16.0 L60.3 22.5 L68.5 22.5 L68.5 22.5 L76.6 22.5 L76.6 16.0 L84.8 16.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 8.2 L27.5 8.2 L27.5 8.2 L35.7 8.2 L35.7 12.1 L43.9 12.1 L43.9 16.0 L52.1 16.0 L52.1 16.0 L60.3 16.0 L60.3 22.5 L68.5 22.5 L68.5 22.5 L76.6 22.5 L76.6 16.0 L84.8 16.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>7</b> til sölu · <b>23</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card soldout">
+    <div class="card-head">
+      <div class="thumb thumb-b" aria-hidden="true">LA</div>
+      <div class="card-title">
+        <h2><a href="#laufey">Laufey – Reykjavík 2027</a></h2>
+        <p>Laugardalshöll · lau. 21. feb. · 20:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Á biðlista</span>
+        <div class="price num">41<span class="unit">manns</span></div>
+        <span class="none">Engir miðar til sölu — miðaverð <span class="num">14.900 kr.</span></span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><line x1="3" y1="16.0" x2="93" y2="16.0" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="3 4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-bid" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Láta vita</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>0</b> til sölu · <b>41</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-c" aria-hidden="true">EL</div>
+      <div class="card-title">
+        <h2><a href="#elly">Borgarleikhúsið: Ellý</a></h2>
+        <p>Borgarleikhúsið – Stóra sviðið · fös. 14. nóv. · 20:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">8.900 kr.</div>
+        <span class="delta good"><span class="num">−10%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 13.4 L35.7 13.4 L35.7 13.4 L43.9 13.4 L43.9 21.2 L52.1 21.2 L52.1 21.2 L60.3 21.2 L60.3 29.0 L68.5 29.0 L68.5 21.2 L76.6 21.2 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 13.4 L35.7 13.4 L35.7 13.4 L43.9 13.4 L43.9 21.2 L52.1 21.2 L52.1 21.2 L60.3 21.2 L60.3 29.0 L68.5 29.0 L68.5 21.2 L76.6 21.2 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>12</b> til sölu · <b>34</b> vilja kaupa</span><span class="cat">Leikhús</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-d" aria-hidden="true">ÍS</div>
+      <div class="card-title">
+        <h2><a href="#island-danmork">Ísland – Danmörk · Undankeppni HM</a></h2>
+        <p>Laugardalsvöllur · fim. 26. mars · 19:45</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">4.900 kr.</div>
+        <span class="delta flat"><span class="num">±0%</span> á miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 29.0 L11.2 29.0 L11.2 29.0 L19.4 29.0 L19.4 21.6 L27.5 21.6 L27.5 21.6 L35.7 21.6 L35.7 14.1 L43.9 14.1 L43.9 14.1 L52.1 14.1 L52.1 3.0 L60.3 3.0 L60.3 3.0 L68.5 3.0 L68.5 3.0 L76.6 3.0 L76.6 3.0 L84.8 3.0 L84.8 3.0 L93.0 3.0 L93.0 3.0 L93.0 32 L3.0 32 Z" fill="var(--muted-foreground)" opacity=".12"/><path d="M3.0 29.0 L11.2 29.0 L11.2 29.0 L19.4 29.0 L19.4 21.6 L27.5 21.6 L27.5 21.6 L35.7 21.6 L35.7 14.1 L43.9 14.1 L43.9 14.1 L52.1 14.1 L52.1 3.0 L60.3 3.0 L60.3 3.0 L68.5 3.0 L68.5 3.0 L76.6 3.0 L76.6 3.0 L84.8 3.0 L84.8 3.0 L93.0 3.0 L93.0 3.0" fill="none" stroke="var(--muted-foreground)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="3.0" r="2.5" fill="var(--muted-foreground)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>5</b> til sölu · <b>58</b> vilja kaupa</span><span class="cat">Íþróttir</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-e" aria-hidden="true">IA</div>
+      <div class="card-title">
+        <h2><a href="#airwaves">Iceland Airwaves 2026 · Helgarpassi</a></h2>
+        <p>Miðbær Reykjavíkur · fim. 5. nóv. – lau. 7. nóv.</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">24.900 kr.</div>
+        <span class="delta good"><span class="num">−11%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 11.7 L27.5 11.7 L27.5 11.7 L35.7 11.7 L35.7 11.7 L43.9 11.7 L43.9 20.3 L52.1 20.3 L52.1 20.3 L60.3 20.3 L60.3 20.3 L68.5 20.3 L68.5 29.0 L76.6 29.0 L76.6 24.7 L84.8 24.7 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 11.7 L27.5 11.7 L27.5 11.7 L35.7 11.7 L35.7 11.7 L43.9 11.7 L43.9 20.3 L52.1 20.3 L52.1 20.3 L60.3 20.3 L60.3 20.3 L68.5 20.3 L68.5 29.0 L76.6 29.0 L76.6 24.7 L84.8 24.7 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>9</b> til sölu · <b>17</b> vilja kaupa</span><span class="cat">Hátíðir</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-a" aria-hidden="true">BM</div>
+      <div class="card-title">
+        <h2><a href="#bubbi">Bubbi Morthens: Jólatónleikar</a></h2>
+        <p>Háskólabíó · lau. 13. des. · 20:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">7.900 kr.</div>
+        <span class="delta good"><span class="num">−11%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 13.4 L35.7 13.4 L35.7 13.4 L43.9 13.4 L43.9 13.4 L52.1 13.4 L52.1 21.2 L60.3 21.2 L60.3 21.2 L68.5 21.2 L68.5 29.0 L76.6 29.0 L76.6 29.0 L84.8 29.0 L84.8 21.2 L93.0 21.2 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 13.4 L35.7 13.4 L35.7 13.4 L43.9 13.4 L43.9 13.4 L52.1 13.4 L52.1 21.2 L60.3 21.2 L60.3 21.2 L68.5 21.2 L68.5 29.0 L76.6 29.0 L76.6 29.0 L84.8 29.0 L84.8 21.2 L93.0 21.2 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>4</b> til sölu · <b>12</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-c" aria-hidden="true">KB</div>
+      <div class="card-title">
+        <h2><a href="#kardemommu">Þjóðleikhúsið: Kardemommubærinn</a></h2>
+        <p>Þjóðleikhúsið – Stóra sviðið · sun. 30. nóv. · 14:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">5.900 kr.</div>
+        <span class="delta good"><span class="num">−9%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 16.0 L27.5 16.0 L27.5 16.0 L35.7 16.0 L35.7 16.0 L43.9 16.0 L43.9 16.0 L52.1 16.0 L52.1 29.0 L60.3 29.0 L60.3 29.0 L68.5 29.0 L68.5 16.0 L76.6 16.0 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 16.0 L27.5 16.0 L27.5 16.0 L35.7 16.0 L35.7 16.0 L43.9 16.0 L43.9 16.0 L52.1 16.0 L52.1 29.0 L60.3 29.0 L60.3 29.0 L68.5 29.0 L68.5 16.0 L76.6 16.0 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>3</b> til sölu · <b>9</b> vilja kaupa</span><span class="cat">Leikhús</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-f" aria-hidden="true">AE</div>
+      <div class="card-title">
+        <h2><a href="#ari">Ari Eldjárn: Nýtt efni</a></h2>
+        <p>Bæjarbíó, Hafnarfirði · lau. 22. nóv. · 20:30</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">5.900 kr.</div>
+        <span class="delta flat"><span class="num">±0%</span> á miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 29.0 L11.2 29.0 L11.2 29.0 L19.4 29.0 L19.4 18.6 L27.5 18.6 L27.5 18.6 L35.7 18.6 L35.7 18.6 L43.9 18.6 L43.9 3.0 L52.1 3.0 L52.1 3.0 L60.3 3.0 L60.3 3.0 L68.5 3.0 L68.5 3.0 L76.6 3.0 L76.6 3.0 L84.8 3.0 L84.8 3.0 L93.0 3.0 L93.0 3.0 L93.0 32 L3.0 32 Z" fill="var(--muted-foreground)" opacity=".12"/><path d="M3.0 29.0 L11.2 29.0 L11.2 29.0 L19.4 29.0 L19.4 18.6 L27.5 18.6 L27.5 18.6 L35.7 18.6 L35.7 18.6 L43.9 18.6 L43.9 3.0 L52.1 3.0 L52.1 3.0 L60.3 3.0 L60.3 3.0 L68.5 3.0 L68.5 3.0 L76.6 3.0 L76.6 3.0 L84.8 3.0 L84.8 3.0 L93.0 3.0 L93.0 3.0" fill="none" stroke="var(--muted-foreground)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="3.0" r="2.5" fill="var(--muted-foreground)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>2</b> til sölu · <b>26</b> vilja kaupa</span><span class="cat">Uppistand</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-d" aria-hidden="true">VK</div>
+      <div class="card-title">
+        <h2><a href="#valur-kr">Valur – KR · Bestu deild karla</a></h2>
+        <p>Hlíðarendi · sun. 5. okt. · 16:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">2.500 kr.</div>
+        <span class="delta flat"><span class="num">±0%</span> á miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 29.0 L11.2 29.0 L11.2 29.0 L19.4 29.0 L19.4 20.3 L27.5 20.3 L27.5 20.3 L35.7 20.3 L35.7 3.0 L43.9 3.0 L43.9 3.0 L52.1 3.0 L52.1 3.0 L60.3 3.0 L60.3 3.0 L68.5 3.0 L68.5 3.0 L76.6 3.0 L76.6 3.0 L84.8 3.0 L84.8 3.0 L93.0 3.0 L93.0 3.0 L93.0 32 L3.0 32 Z" fill="var(--muted-foreground)" opacity=".12"/><path d="M3.0 29.0 L11.2 29.0 L11.2 29.0 L19.4 29.0 L19.4 20.3 L27.5 20.3 L27.5 20.3 L35.7 20.3 L35.7 3.0 L43.9 3.0 L43.9 3.0 L52.1 3.0 L52.1 3.0 L60.3 3.0 L60.3 3.0 L68.5 3.0 L68.5 3.0 L76.6 3.0 L76.6 3.0 L84.8 3.0 L84.8 3.0 L93.0 3.0 L93.0 3.0" fill="none" stroke="var(--muted-foreground)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="3.0" r="2.5" fill="var(--muted-foreground)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>8</b> til sölu · <b>3</b> vilja kaupa</span><span class="cat">Íþróttir</span></div>
+  </article>
+<article class="card soldout">
+    <div class="card-head">
+      <div class="thumb thumb-b" aria-hidden="true">GD</div>
+      <div class="card-title">
+        <h2><a href="#gdrn">GDRN – Útgáfutónleikar</a></h2>
+        <p>Gamla bíó · fös. 28. nóv. · 21:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Á biðlista</span>
+        <div class="price num">18<span class="unit">manns</span></div>
+        <span class="none">Engir miðar til sölu — miðaverð <span class="num">7.900 kr.</span></span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><line x1="3" y1="16.0" x2="93" y2="16.0" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="3 4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-bid" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Láta vita</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>0</b> til sölu · <b>18</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-e" aria-hidden="true">SS</div>
+      <div class="card-title">
+        <h2><a href="#solstice">Secret Solstice 2027</a></h2>
+        <p>Laugardalur · fös. 18. júní – sun. 20. júní</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">29.900 kr.</div>
+        <span class="delta good"><span class="num">−9%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 11.7 L35.7 11.7 L35.7 11.7 L43.9 11.7 L43.9 20.3 L52.1 20.3 L52.1 20.3 L60.3 20.3 L60.3 20.3 L68.5 20.3 L68.5 29.0 L76.6 29.0 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 11.7 L35.7 11.7 L35.7 11.7 L43.9 11.7 L43.9 20.3 L52.1 20.3 L52.1 20.3 L60.3 20.3 L60.3 20.3 L68.5 20.3 L68.5 29.0 L76.6 29.0 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>6</b> til sölu · <b>11</b> vilja kaupa</span><span class="cat">Hátíðir</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-a" aria-hidden="true">LT</div>
+      <div class="card-title">
+        <h2><a href="#traviata">Íslenska óperan: La Traviata</a></h2>
+        <p>Harpa – Eldborg · lau. 7. feb. · 19:30</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">12.900 kr.</div>
+        <span class="delta good"><span class="num">−7%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 13.4 L27.5 13.4 L27.5 13.4 L35.7 13.4 L35.7 13.4 L43.9 13.4 L43.9 21.2 L52.1 21.2 L52.1 21.2 L60.3 21.2 L60.3 29.0 L68.5 29.0 L68.5 29.0 L76.6 29.0 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 13.4 L27.5 13.4 L27.5 13.4 L35.7 13.4 L35.7 13.4 L43.9 13.4 L43.9 21.2 L52.1 21.2 L52.1 21.2 L60.3 21.2 L60.3 29.0 L68.5 29.0 L68.5 29.0 L76.6 29.0 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>5</b> til sölu · <b>8</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-a" aria-hidden="true">ÞF</div>
+      <div class="card-title">
+        <h2><a href="#thursar">Þursaflokkurinn – Endurkoma</a></h2>
+        <p>Harpa – Silfurberg · lau. 31. jan. · 20:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">10.900 kr.</div>
+        <span class="delta good"><span class="num">−16%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 9.5 L27.5 9.5 L27.5 9.5 L35.7 9.5 L35.7 16.0 L43.9 16.0 L43.9 16.0 L52.1 16.0 L52.1 22.5 L60.3 22.5 L60.3 22.5 L68.5 22.5 L68.5 22.5 L76.6 22.5 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 9.5 L27.5 9.5 L27.5 9.5 L35.7 9.5 L35.7 16.0 L43.9 16.0 L43.9 16.0 L52.1 16.0 L52.1 22.5 L60.3 22.5 L60.3 22.5 L68.5 22.5 L68.5 22.5 L76.6 22.5 L76.6 29.0 L84.8 29.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>3</b> til sölu · <b>14</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card soldout">
+    <div class="card-head">
+      <div class="thumb thumb-b" aria-hidden="true">BR</div>
+      <div class="card-title">
+        <h2><a href="#briet">Bríet – Vetrartónleikar</a></h2>
+        <p>Harpa – Norðurljós · fös. 12. des. · 20:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Á biðlista</span>
+        <div class="price num">27<span class="unit">manns</span></div>
+        <span class="none">Engir miðar til sölu — miðaverð <span class="num">9.900 kr.</span></span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><line x1="3" y1="16.0" x2="93" y2="16.0" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="3 4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-bid" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Láta vita</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>0</b> til sölu · <b>27</b> vilja kaupa</span><span class="cat">Tónleikar</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-d" aria-hidden="true">KN</div>
+      <div class="card-title">
+        <h2><a href="#keflavik">Keflavík – Njarðvík · Subway-deildin</a></h2>
+        <p>Blue-höllin, Reykjanesbæ · fim. 20. nóv. · 19:15</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">2.900 kr.</div>
+        <span class="delta good"><span class="num">−9%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 11.7 L35.7 11.7 L35.7 11.7 L43.9 11.7 L43.9 20.3 L52.1 20.3 L52.1 20.3 L60.3 20.3 L60.3 29.0 L68.5 29.0 L68.5 29.0 L76.6 29.0 L76.6 20.3 L84.8 20.3 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 11.7 L35.7 11.7 L35.7 11.7 L43.9 11.7 L43.9 20.3 L52.1 20.3 L52.1 20.3 L60.3 20.3 L60.3 29.0 L68.5 29.0 L68.5 29.0 L76.6 29.0 L76.6 20.3 L84.8 20.3 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>11</b> til sölu · <b>6</b> vilja kaupa</span><span class="cat">Íþróttir</span></div>
+  </article>
+<article class="card">
+    <div class="card-head">
+      <div class="thumb thumb-f" aria-hidden="true">SG</div>
+      <div class="card-title">
+        <h2><a href="#saga">Saga Garðars: Uppistand í Tjarnarbíói</a></h2>
+        <p>Tjarnarbíó · lau. 8. nóv. · 20:00</p>
+      </div>
+    </div>
+    <div class="card-main">
+      <div>
+        <span class="price-lbl">Lægsta verð</span>
+        <div class="price num">4.500 kr.</div>
+        <span class="delta good"><span class="num">−8%</span> undir miðaverði</span>
+      </div>
+      <svg class="spark" viewBox="0 0 96 32" aria-hidden="true"><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 16.0 L35.7 16.0 L35.7 16.0 L43.9 16.0 L43.9 16.0 L52.1 16.0 L52.1 29.0 L60.3 29.0 L60.3 29.0 L68.5 29.0 L68.5 29.0 L76.6 29.0 L76.6 16.0 L84.8 16.0 L84.8 29.0 L93.0 29.0 L93.0 29.0 L93.0 32 L3.0 32 Z" fill="var(--up)" opacity=".12"/><path d="M3.0 3.0 L11.2 3.0 L11.2 3.0 L19.4 3.0 L19.4 3.0 L27.5 3.0 L27.5 16.0 L35.7 16.0 L35.7 16.0 L43.9 16.0 L43.9 16.0 L52.1 16.0 L52.1 29.0 L60.3 29.0 L60.3 29.0 L68.5 29.0 L68.5 29.0 L76.6 29.0 L76.6 16.0 L84.8 16.0 L84.8 29.0 L93.0 29.0 L93.0 29.0" fill="none" stroke="var(--up)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="93.0" cy="29.0" r="2.5" fill="var(--up)" stroke="var(--surface)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-ask" type="button">Kaupa</button>
+      <button class="btn btn-sm btn-outline" type="button">Ég á miða</button>
+    </div>
+    <div class="card-foot"><span class="counts"><b>2</b> til sölu · <b>5</b> vilja kaupa</span><span class="cat">Uppistand</span></div>
+  </article>
+    </div>
+  </section>
+</main>
+
+<footer class="container footer">
+  <div>© 2026 Miðatorg · Ókeypis að nota. Við geymum aldrei greiðslur – verð fara aldrei yfir miðaverð. Miðatorg er ekki tengt tix.is.</div>
+  <nav aria-label="Neðanmálstenglar"><a href="#um">Um Miðatorg</a><span>·</span><a href="#reglur">Reglur</a><span>·</span><a href="#samband">Hafa samband</a></nav>
+</footer>
+</body>
+</html>
