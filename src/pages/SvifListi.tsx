@@ -151,6 +151,15 @@ export default function SvifListi() {
         >
           <Building className="w-3 h-3" />Fyrirtækjaskrá<ExternalLink className="w-3 h-3" />
         </a>
+        {c.companyId && (
+          <a
+            href={`https://keldan.is/Fyrirtaeki/Yfirlit/${c.companyId}`}
+            target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted"
+          >
+            Keldan — velta & starfsmenn<ExternalLink className="w-3 h-3" />
+          </a>
+        )}
         {c.finnaUrl && (
           <a href={c.finnaUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium hover:bg-muted">
             finna.is<ExternalLink className="w-3 h-3" />

@@ -9,7 +9,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, Building2, Check,
+  ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, Building2, Check, ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -42,6 +42,25 @@ function titleFromNotes(notes: string): string | null {
   const first = (notes || "").split("\n")[0]?.trim() || "";
   if (/^titill\s*:/i.test(first)) return first.replace(/^titill\s*:\s*/i, "");
   return null;
+}
+
+// Opinberar uppflettingar: Fyrirtækjaskrá sýnir rekstrarform, ÍSAT og VSK-númer,
+// Keldan sýnir veltu og starfsmannafjölda úr ársreikningum.
+function lookupLinks(r: FyrirtaekjabokRow): { label: string; href: string }[] {
+  const kt = (r.company_id || "").replace(/\D/g, "");
+  const q = encodeURIComponent(r.name);
+  const links = [
+    {
+      label: "Fyrirtækjaskrá",
+      href: kt
+        ? `https://www.skatturinn.is/fyrirtaekjaskra/leit/kennitala/${kt}`
+        : `https://www.rsk.is/fyrirtaekjaskra/leit/?nafn=${q}`,
+    },
+  ];
+  if (kt) links.push({ label: "Keldan", href: `https://keldan.is/Fyrirtaeki/Yfirlit/${kt}` });
+  links.push({ label: "1819", href: `https://1819.is/?q=${encodeURIComponent(r.owner || r.name)}` });
+  links.push({ label: "Já.is", href: `https://ja.is/?q=${q}` });
+  return links;
 }
 
 export default function Fyrirtaekjabok() {
@@ -279,6 +298,21 @@ export default function Fyrirtaekjabok() {
                             >
                               <StickyNote className="w-4 h-4" />
                             </Button>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-1.5 pl-8 text-xs">
+                            {r.company_id && <span className="font-mono text-muted-foreground mr-1">{r.company_id}</span>}
+                            {lookupLinks(r).map((l) => (
+                              <a
+                                key={l.label}
+                                href={l.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-medium hover:bg-muted"
+                              >
+                                {l.label}<ExternalLink className="w-3 h-3" />
+                              </a>
+                            ))}
                           </div>
 
                           <div className="flex flex-wrap gap-1.5 pl-8">

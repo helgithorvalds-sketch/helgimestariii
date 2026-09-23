@@ -376,6 +376,15 @@ export default function SvifFyrirtæki() {
           >
             <Building className="w-3 h-3" />Fyrirtækjaskrá<ExternalLink className="w-3 h-3" />
           </a>
+          {c.companyId && (
+            <a
+              href={`https://keldan.is/Fyrirtaeki/Yfirlit/${c.companyId}`}
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700 hover:bg-amber-100 dark:bg-amber-950 dark:border-amber-800 dark:text-amber-300"
+            >
+              Keldan — velta & starfsmenn<ExternalLink className="w-3 h-3" />
+            </a>
+          )}
           <a
             href={`https://1819.is/?q=${encodeURIComponent(c.owner || c.name)}`}
             target="_blank" rel="noopener noreferrer"
