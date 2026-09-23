@@ -1,3 +1,23 @@
-// Owned by the "event" feature agent (spec §7). Export your components from here, e.g.
-//   export { MarketCard } from './MarketCard';
-export {};
+// Owned by the "event" feature agent (spec §7).
+export { EventHeader, EventThumb } from './EventHeader';
+export type { EventHeaderProps } from './EventHeader';
+export { StatsRow, StatsRowSkeleton } from './StatsRow';
+export type { StatsRowProps } from './StatsRow';
+export { StatTile } from './StatTile';
+export type { StatTileProps } from './StatTile';
+export { PriceChart } from './PriceChart';
+export type { PriceChartProps } from './PriceChart';
+export { OrderBook } from './OrderBook';
+export type { OrderBookProps } from './OrderBook';
+export { SellRow } from './SellRow';
+export type { SellRowProps } from './SellRow';
+export { WantRow } from './WantRow';
+export type { WantRowProps } from './WantRow';
+export { BuyDialog } from './BuyDialog';
+export type { BuyDialogProps } from './BuyDialog';
+export { AlertButton } from './AlertButton';
+export type { AlertButtonProps } from './AlertButton';
+export { HowItWorks } from './HowItWorks';
+export type { HowItWorksProps } from './HowItWorks';
+export { useMediaQuery, MD_QUERY } from './useMediaQuery';
+export * from './eventUtils';

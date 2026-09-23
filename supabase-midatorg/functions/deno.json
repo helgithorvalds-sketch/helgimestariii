@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.window"]
+  },
+  "tasks": {
+    "test": "deno test _shared/",
+    "test:node": "node _shared/run_tests_node.mjs",
+    "check": "deno check mt-import-tix/index.ts mt-fetch-tix-event/index.ts"
+  },
+  "fmt": {
+    "singleQuote": true,
+    "lineWidth": 140
+  },
+  "lint": {
+    "rules": { "tags": ["recommended"] }
+  }
+}
