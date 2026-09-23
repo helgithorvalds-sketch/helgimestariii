@@ -17,7 +17,7 @@ with u as (
     ('kaupandi@test.midatorg.local', 'Prufa-kaupandi-2026', 'Prufu Kaupandi'),
     ('seljandi@test.midatorg.local', 'Prufa-seljandi-2026', 'Prufu Seljandi')
   ) as v(email, pw, name)
-  on conflict (email) do nothing
+  on conflict (email) where is_sso_user = false do nothing
   returning id, email
 )
 insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)

@@ -244,7 +244,7 @@ create table public.mt_price_snapshots (
 -- Helper functions
 -- ---------------------------------------------------------------------
 create or replace function public.mt_set_updated_at()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = public as $$
 begin
   new.updated_at := now();
   return new;
@@ -278,7 +278,7 @@ $$;
 
 -- Internal-only flag so guard triggers can tell RPC writes from direct client writes.
 create or replace function public.mt_internal()
-returns boolean language sql stable as $$
+returns boolean language sql stable set search_path = public as $$
   select coalesce(current_setting('mt.internal', true), '') = '1';
 $$;
 
@@ -687,3 +687,17 @@ create policy "mt_price_snapshots_read" on public.mt_price_snapshots for select 
 
 -- internal helpers are not callable from the client
 revoke execute on function public.mt_notify(uuid, public.mt_notification_type, text, text, text, uuid) from public, anon, authenticated;
+
+-- trigger functions are only ever invoked by their triggers; keep them off the RPC surface
+revoke execute on function public.mt_set_updated_at() from public, anon, authenticated;
+revoke execute on function public.mt_handle_new_user() from public, anon, authenticated;
+revoke execute on function public.mt_handle_user_updated() from public, anon, authenticated;
+revoke execute on function public.mt_listings_before_insert() from public, anon, authenticated;
+revoke execute on function public.mt_listings_before_update() from public, anon, authenticated;
+revoke execute on function public.mt_requests_before_insert() from public, anon, authenticated;
+revoke execute on function public.mt_requests_before_update() from public, anon, authenticated;
+revoke execute on function public.mt_profiles_before_update() from public, anon, authenticated;
+revoke execute on function public.mt_events_before_insert() from public, anon, authenticated;
+revoke execute on function public.mt_listings_after_insert_notify() from public, anon, authenticated;
+revoke execute on function public.mt_requests_after_insert_notify() from public, anon, authenticated;
+revoke execute on function public.mt_messages_after_insert_notify() from public, anon, authenticated;

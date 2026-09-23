@@ -71,6 +71,8 @@ begin
     '/midatorg/vidskipti/' || v_deal.id, v_deal.id);
   return v_deal;
 end $$;
+revoke execute on function public.mt_reserve_listing(uuid, integer) from public, anon;
+grant execute on function public.mt_reserve_listing(uuid, integer) to authenticated, service_role;
 
 -- ---------------------------------------------------------------------
 -- Deal state machine
@@ -178,6 +180,8 @@ begin
   select * into v_d from public.mt_deals where id = p_deal_id;
   return v_d;
 end $$;
+revoke execute on function public.mt_deal_transition(uuid, text, text) from public, anon;
+grant execute on function public.mt_deal_transition(uuid, text, text) to authenticated, service_role;
 
 -- ---------------------------------------------------------------------
 -- Ratings (only after a completed deal, one per party)
@@ -205,6 +209,8 @@ begin
   perform public.mt_notify(v_ratee, 'rating', 'Þú fékkst einkunn', p_score || ' af 5 stjörnum', '/midatorg/notendur/' || v_ratee, v_r.id);
   return v_r;
 end $$;
+revoke execute on function public.mt_rate_deal(uuid, integer, text) from public, anon;
+grant execute on function public.mt_rate_deal(uuid, integer, text) to authenticated, service_role;
 
 -- ---------------------------------------------------------------------
 -- Housekeeping: expire stale reservations, listings, requests, events
@@ -353,6 +359,8 @@ begin
     update public.mt_requests set status = 'cancelled' where buyer_id = p_user and status = 'active';
   end if;
 end $$;
+revoke execute on function public.mt_admin_set_ban(uuid, boolean, text) from public, anon;
+grant execute on function public.mt_admin_set_ban(uuid, boolean, text) to authenticated, service_role;
 
 create or replace function public.mt_admin_set_verification(p_user uuid, p_level public.mt_verification_level)
 returns void language plpgsql security definer set search_path = public as $$
@@ -361,6 +369,8 @@ begin
   perform set_config('mt.internal', '1', true);
   update public.mt_profiles set verification = p_level where id = p_user;
 end $$;
+revoke execute on function public.mt_admin_set_verification(uuid, public.mt_verification_level) from public, anon;
+grant execute on function public.mt_admin_set_verification(uuid, public.mt_verification_level) to authenticated, service_role;
 
 -- ---------------------------------------------------------------------
 -- Storage: private bucket for ticket proofs
