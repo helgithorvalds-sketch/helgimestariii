@@ -51,7 +51,7 @@ function PriceEditor({ listing, onClose }: { listing: ListingWithEvent; onClose:
   };
 
   return (
-    <form onSubmit={submit} noValidate className="mt-3 rounded-lg border border-border bg-surface-2/60 p-3">
+    <form onSubmit={submit} noValidate className="mt-3 rounded-lg border border-border bg-secondary p-3">
       <Label htmlFor={inputId}>{t('account.listings.newPrice')}</Label>
       <div className="mt-1.5 flex flex-wrap items-center gap-2">
         <div className="relative w-40">

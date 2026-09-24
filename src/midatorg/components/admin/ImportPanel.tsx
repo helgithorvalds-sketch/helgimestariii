@@ -100,7 +100,7 @@ export function ImportPanel({ className }: { className?: string }) {
           <p className="text-[12px] text-muted-foreground">{t('admin.import.runHint')}</p>
 
           {result && (
-            <div className="mt-panel bg-surface-2/60 p-3" role="status">
+            <div className="mt-panel bg-secondary p-3" role="status">
               <p className="flex items-center gap-1.5 text-[13px] font-semibold">
                 <CheckCircle2 className="h-4 w-4 text-up" aria-hidden="true" />
                 {t('admin.import.done')}
@@ -115,7 +115,7 @@ export function ImportPanel({ className }: { className?: string }) {
                   ] as const
                 ).map(([key, value]) => (
                   <div key={key}>
-                    <dt className="mt-eyebrow">{t(`admin.import.${key}`)}</dt>
+                    <dt className="mt-label">{t(`admin.import.${key}`)}</dt>
                     <dd className={cn('text-[22px] font-semibold tabular-nums leading-tight', key === 'errors' && value > 0 && 'text-down')}>{value}</dd>
                   </div>
                 ))}

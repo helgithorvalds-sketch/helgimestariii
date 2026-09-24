@@ -9,8 +9,6 @@ import { MarketCard, MarketCardSkeleton } from './MarketCard';
 
 export type MarketGridProps = {
   events: MarketEvent[];
-  /** `{ [eventId]: min_ask series }` from `useSparklines`. */
-  sparklines?: Record<string, number[]>;
   /** First load: skeleton cards. */
   isLoading?: boolean;
   /** A refetch for new filters is in flight while old data is still shown. */
@@ -26,12 +24,11 @@ export type MarketGridProps = {
   className?: string;
 };
 
-/** 4 → 3 (≤1240) → 2 (≤900) → 1 (≤640) columns, 12px gap. */
-const GRID = 'grid grid-cols-1 gap-3 sm:grid-cols-2 min-[901px]:grid-cols-3 min-[1241px]:grid-cols-4';
+/** 1 column (phone) / 2 (sm) / 3 (lg) / 4 (xl), 16px gap. */
+const GRID = 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
 
 export function MarketGrid({
   events,
-  sparklines,
   isLoading = false,
   isStale = false,
   error,
@@ -64,23 +61,21 @@ export function MarketGrid({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn('space-y-6', className)}>
       <div className={cn(GRID, isStale && 'opacity-70')} aria-busy={isStale || undefined} data-testid="market-grid">
         {events.map((event) => (
-          <MarketCard key={event.id} event={event} sparkline={sparklines?.[event.id]} />
+          <MarketCard key={event.id} event={event} />
         ))}
       </div>
 
-      {error !== undefined && error !== null && (
-        <ErrorState error={error} body={t('home.loadMoreError')} retry={onLoadMore ?? onRetry} />
-      )}
+      {error !== undefined && error !== null && <ErrorState error={error} body={t('home.loadMoreError')} retry={onLoadMore ?? onRetry} />}
 
       {hasMore && onLoadMore && (
         <div className="flex justify-center">
           <Button
             type="button"
             variant="outline"
-            className={cn(secondaryButtonClass, 'h-10 min-w-[160px] text-[13px] font-semibold')}
+            className={cn(secondaryButtonClass, 'h-11 min-w-[180px] rounded-lg text-[14px] font-semibold sm:h-10')}
             onClick={onLoadMore}
             disabled={isLoadingMore}
           >

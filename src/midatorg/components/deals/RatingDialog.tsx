@@ -46,7 +46,7 @@ export function RatingDialog({ deal, role, className }: RatingDialogProps) {
   if (!ratee) return null;
 
   if (myRating.isPending) {
-    return <Skeleton className={cn('h-10 w-full bg-surface-2', className)} aria-busy="true" />;
+    return <Skeleton className={cn('h-10 w-full bg-secondary', className)} aria-busy="true" />;
   }
   if (myRating.isError) {
     return <ErrorState error={myRating.error} retry={() => void myRating.refetch()} className={className} />;
@@ -112,7 +112,7 @@ export function RatingDialog({ deal, role, className }: RatingDialogProps) {
                       onMouseEnter={() => setHover(n)}
                       onFocus={() => setHover(n)}
                       onBlur={() => setHover(0)}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-md hover:bg-surface-2"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-md hover:bg-secondary"
                     >
                       <Star className={cn('h-6 w-6', filled ? 'fill-foreground text-foreground' : 'fill-transparent text-border')} aria-hidden="true" />
                     </button>

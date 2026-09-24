@@ -12,15 +12,12 @@ export type SortMenuProps = {
 
 const SORT_ID = 'mt-sort';
 
-/**
- * "Raða eftir" + shadcn Select (34px) with the dative options from dict/common
- * (Dagsetningu · Eftirspurn · Lægsta verði). The label is sr-only on phones.
- */
+/** "Raða eftir" + a small select (Næst á dagskrá · Mest eftirspurn · Lægsta verð). The label is sr-only on phones. */
 export function SortMenu({ value, onChange, className }: SortMenuProps) {
   const t = useT();
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <label htmlFor={SORT_ID} className="sr-only whitespace-nowrap text-[12.5px] text-muted-foreground sm:not-sr-only">
+      <label htmlFor={SORT_ID} className="sr-only whitespace-nowrap text-[13px] text-muted-foreground sm:not-sr-only">
         {t('sort.label')}
       </label>
       <Select
@@ -32,13 +29,13 @@ export function SortMenu({ value, onChange, className }: SortMenuProps) {
         <SelectTrigger
           id={SORT_ID}
           aria-label={t('sort.label')}
-          className="h-[34px] w-auto min-w-[120px] max-w-[132px] gap-1.5 rounded-[6px] border-border bg-card px-2.5 text-[12.5px] font-medium text-foreground sm:max-w-[180px]"
+          className="h-10 w-auto min-w-[150px] gap-1.5 rounded-lg border-border bg-card px-3 text-[14px] font-medium text-foreground"
         >
           <SelectValue>{t(`sort.${value}`)}</SelectValue>
         </SelectTrigger>
-        <SelectContent align="end">
+        <SelectContent align="end" className="rounded-xl">
           {MARKET_SORTS.map((s) => (
-            <SelectItem key={s} value={s} className="text-[13px]">
+            <SelectItem key={s} value={s} className="text-[14px]">
               {t(`sort.${s}`)}
             </SelectItem>
           ))}

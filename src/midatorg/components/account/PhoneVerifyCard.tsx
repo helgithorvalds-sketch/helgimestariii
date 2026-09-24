@@ -100,7 +100,7 @@ export function PhoneVerifyCard({ onVerified, className }: PhoneVerifyCardProps)
   };
 
   return (
-    <section className={cn('mt-panel bg-surface-2/40 p-4', className)} aria-labelledby="mt-phone-verify-title">
+    <section className={cn('mt-panel bg-secondary p-4', className)} aria-labelledby="mt-phone-verify-title">
       <h3 id="mt-phone-verify-title" className="flex items-center gap-2 text-[14px] font-semibold">
         <Phone className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
         {t('account.phone.title')}

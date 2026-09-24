@@ -29,7 +29,7 @@ export function EventThumb({ event, size = 44, className }: EventThumbProps) {
         style={style}
         loading="lazy"
         decoding="async"
-        className={cn('shrink-0 bg-surface-2 object-cover', radius, className)}
+        className={cn('shrink-0 bg-secondary object-cover', radius, className)}
         data-testid="event-thumb-image"
       />
     );

@@ -11,13 +11,13 @@ export default {
     'common.wipBody': 'Hér birtist efni innan skamms.',
 
     // nav
-    'nav.market': 'Markaður',
+    'nav.market': 'Viðburðir',
     'nav.sell': 'Selja miða',
     'nav.sellShort': 'Selja',
     'nav.want': 'Ég vil kaupa',
     'nav.deals': 'Viðskipti',
     'nav.me': 'Ég',
-    'nav.myPage': 'Mín síða',
+    'nav.myPage': 'Notandasíða',
     'nav.login': 'Innskrá',
     'nav.logout': 'Útskrá',
     'nav.notifications': 'Tilkynningar',
@@ -26,7 +26,6 @@ export default {
     'nav.search': 'Leita',
     'nav.searchPlaceholder': 'Leita að viðburði, listamanni eða stað',
     'nav.searchLabel': 'Leita að viðburði, listamanni eða stað',
-    'nav.searchHint': 'Ýttu á / til að leita',
     'nav.userMenu': 'Notendavalmynd',
     'nav.openMenu': 'Opna valmynd',
     'nav.home': 'Forsíða',
@@ -49,11 +48,11 @@ export default {
     'category.uppistand': 'Uppistand',
     'category.annad': 'Annað',
 
-    // sort (dative, as DESIGN.md asks)
+    // sort
     'sort.label': 'Raða eftir',
-    'sort.date': 'Dagsetningu',
-    'sort.demand': 'Eftirspurn',
-    'sort.price': 'Lægsta verði',
+    'sort.date': 'Næst á dagskrá',
+    'sort.demand': 'Mest eftirspurn',
+    'sort.price': 'Lægsta verð',
 
     // deal statuses
     'dealStatus.reserved': 'Tekið frá',
@@ -116,7 +115,7 @@ export default {
     'common.copy': 'Afrita',
     'common.copied': 'Afritað',
     'common.report': 'Tilkynna',
-    'common.goHome': 'Fara á markaðinn',
+    'common.goHome': 'Skoða viðburði',
     'common.loginToContinue': 'Skráðu þig inn til að halda áfram',
 
     // generic states
@@ -160,7 +159,7 @@ export default {
 
     // banned banner
     'banned.title': 'Aðgangurinn þinn hefur verið lokaður.',
-    'banned.body': 'Þú getur skoðað markaðinn en ekki skráð miða, óskað eftir miðum, tekið frá eða sent skilaboð.',
+    'banned.body': 'Þú getur skoðað viðburði en ekki selt miða, óskað eftir miðum, keypt eða sent skilaboð.',
     'banned.reason': 'Ástæða: {reason}',
 
     // footer
@@ -197,7 +196,7 @@ export default {
     'countdown.reservedUntil': 'Frátekið til {time}',
 
     // page titles set by the foundation
-    'title.home': 'Markaðurinn',
+    'title.home': 'Viðburðir',
     'title.notFound': 'Síða fannst ekki',
   },
   en: {
@@ -206,13 +205,13 @@ export default {
     'common.wip': 'This page is under construction',
     'common.wipBody': 'Content is coming shortly.',
 
-    'nav.market': 'Market',
+    'nav.market': 'Events',
     'nav.sell': 'Sell tickets',
     'nav.sellShort': 'Sell',
     'nav.want': 'I want to buy',
     'nav.deals': 'Deals',
     'nav.me': 'Me',
-    'nav.myPage': 'My page',
+    'nav.myPage': 'Profile page',
     'nav.login': 'Sign in',
     'nav.logout': 'Sign out',
     'nav.notifications': 'Notifications',
@@ -221,7 +220,6 @@ export default {
     'nav.search': 'Search',
     'nav.searchPlaceholder': 'Search events, artists or venues',
     'nav.searchLabel': 'Search events, artists or venues',
-    'nav.searchHint': 'Press / to search',
     'nav.userMenu': 'User menu',
     'nav.openMenu': 'Open menu',
     'nav.home': 'Home',
@@ -243,8 +241,8 @@ export default {
     'category.annad': 'Other',
 
     'sort.label': 'Sort by',
-    'sort.date': 'Date',
-    'sort.demand': 'Demand',
+    'sort.date': 'Soonest',
+    'sort.demand': 'Most wanted',
     'sort.price': 'Lowest price',
 
     'dealStatus.reserved': 'Reserved',
@@ -301,7 +299,7 @@ export default {
     'common.copy': 'Copy',
     'common.copied': 'Copied',
     'common.report': 'Report',
-    'common.goHome': 'Go to the market',
+    'common.goHome': 'Browse events',
     'common.loginToContinue': 'Sign in to continue',
 
     'common.loading': 'Loading…',
@@ -342,7 +340,7 @@ export default {
     'delta.above': 'above face value',
 
     'banned.title': 'Your account has been suspended.',
-    'banned.body': "You can browse the market but can't list, request, reserve or message.",
+    'banned.body': "You can browse events but can't sell, request, buy or message.",
     'banned.reason': 'Reason: {reason}',
 
     'footer.copyright': '© 2026 Miðatorg',
@@ -374,7 +372,7 @@ export default {
     'countdown.expired': 'Expired',
     'countdown.reservedUntil': 'Reserved until {time}',
 
-    'title.home': 'The market',
+    'title.home': 'Events',
     'title.notFound': 'Page not found',
   },
 } as { is: Record<string, string>; en: Record<string, string> };

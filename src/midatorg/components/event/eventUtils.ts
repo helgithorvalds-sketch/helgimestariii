@@ -141,20 +141,6 @@ export function lastPrice(points: ChartPoint[]): number | null {
 }
 
 /**
- * Cumulative depth per row as a percentage (0–100) of the total quantity, in
- * the given order: [2, 1, 2, 2] → [29, 43, 71, 100].
- */
-export function cumulativeDepth(quantities: number[]): number[] {
-  const total = quantities.reduce((s, q) => s + Math.max(0, q), 0);
-  if (total <= 0) return quantities.map(() => 0);
-  let acc = 0;
-  return quantities.map((q) => {
-    acc += Math.max(0, q);
-    return Math.min(100, Math.round((acc / total) * 100));
-  });
-}
-
-/**
  * Keeps a requested quantity inside what the listing allows: 1…quantity_remaining,
  * or exactly quantity_remaining when the seller does not split.
  */

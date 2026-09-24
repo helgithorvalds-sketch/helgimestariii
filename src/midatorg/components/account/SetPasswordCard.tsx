@@ -46,7 +46,7 @@ export function SetPasswordCard({ onDone, className }: SetPasswordCardProps) {
   return (
     <section className={cn('mt-panel border-primary/40 p-4 sm:p-5', className)} aria-labelledby="mt-set-password-title">
       <div className="flex items-start gap-3">
-        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-muted-foreground">
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary text-muted-foreground">
           <KeyRound className="h-4 w-4" aria-hidden="true" />
         </span>
         <div>

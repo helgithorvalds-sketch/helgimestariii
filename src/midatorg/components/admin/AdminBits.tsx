@@ -48,12 +48,12 @@ export function RowsSkeleton({ rows = 5, className }: { rows?: number; className
     <div className={cn('mt-panel divide-y divide-border', className)} aria-busy="true" aria-live="polite">
       {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="flex items-center gap-3 px-4 py-3">
-          <Skeleton className="h-8 w-8 rounded-full bg-surface-2" />
+          <Skeleton className="h-8 w-8 rounded-full bg-secondary" />
           <div className="flex-1 space-y-2">
-            <Skeleton className="h-3.5 w-1/3 bg-surface-2" />
-            <Skeleton className="h-3 w-1/2 bg-surface-2" />
+            <Skeleton className="h-3.5 w-1/3 bg-secondary" />
+            <Skeleton className="h-3 w-1/2 bg-secondary" />
           </div>
-          <Skeleton className="hidden h-8 w-24 bg-surface-2 sm:block" />
+          <Skeleton className="hidden h-8 w-24 bg-secondary sm:block" />
         </div>
       ))}
     </div>
@@ -88,7 +88,7 @@ export function Segmented<T extends string>({
             onClick={() => onChange(o.value)}
             className={cn(
               'inline-flex h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md px-3 text-[12.5px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              pressed ? 'bg-surface-2 text-foreground shadow-[inset_0_0_0_1px_hsl(var(--border))]' : 'text-muted-foreground hover:text-foreground',
+              pressed ? 'bg-accent text-primary' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             {o.label}
@@ -105,9 +105,9 @@ export type PillTone = 'up' | 'down' | 'bid' | 'primary' | 'muted' | 'verified';
 const PILL_TONES: Record<PillTone, string> = {
   up: 'bg-up/10 text-up',
   down: 'bg-destructive/10 text-down',
-  bid: 'bg-bid/10 text-bid',
-  primary: 'bg-primary/15 text-foreground',
-  muted: 'bg-surface-2 text-muted-foreground',
+  bid: 'bg-accent text-accent-foreground',
+  primary: 'bg-accent text-accent-foreground',
+  muted: 'bg-secondary text-muted-foreground',
   verified: 'bg-verified/10 text-verified',
 };
 
@@ -127,5 +127,5 @@ export function Pill({ tone = 'muted', children, className }: { tone?: PillTone;
 }
 
 /** Eyebrow-style table header cell text. */
-export const thClass = 'mt-eyebrow h-10 whitespace-nowrap px-3 text-left align-middle font-semibold';
+export const thClass = 'h-10 whitespace-nowrap px-3 text-left align-middle text-[13px] font-medium text-muted-foreground';
 export const tdClass = 'px-3 py-2.5 align-middle text-[13px]';

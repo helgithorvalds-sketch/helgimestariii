@@ -71,7 +71,7 @@ export function QuantityInput({
         type="button"
         variant="outline"
         size="icon"
-        className="h-10 w-11 rounded-r-none border-r-0 bg-card hover:bg-surface-2"
+        className="h-10 w-11 rounded-r-none border-r-0 bg-card hover:bg-secondary"
         onClick={() => commit(value - 1)}
         disabled={disabled || value <= min}
         aria-label={t('forms.field.decrease')}
@@ -100,7 +100,7 @@ export function QuantityInput({
         type="button"
         variant="outline"
         size="icon"
-        className="h-10 w-11 rounded-l-none border-l-0 bg-card hover:bg-surface-2"
+        className="h-10 w-11 rounded-l-none border-l-0 bg-card hover:bg-secondary"
         onClick={() => commit(value + 1)}
         disabled={disabled || value >= max}
         aria-label={t('forms.field.increase')}

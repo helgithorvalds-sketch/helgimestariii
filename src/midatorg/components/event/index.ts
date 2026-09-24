@@ -1,5 +1,5 @@
 // Owned by the "event" feature agent (spec §7).
-export { EventHeader, EventThumb } from './EventHeader';
+export { EventHeader, EventHero } from './EventHeader';
 export type { EventHeaderProps } from './EventHeader';
 export { StatsRow, StatsRowSkeleton } from './StatsRow';
 export type { StatsRowProps } from './StatsRow';
@@ -7,7 +7,7 @@ export { StatTile } from './StatTile';
 export type { StatTileProps } from './StatTile';
 export { PriceChart } from './PriceChart';
 export type { PriceChartProps } from './PriceChart';
-export { OrderBook } from './OrderBook';
+export { OrderBook, SELL_SECTION_ID } from './OrderBook';
 export type { OrderBookProps } from './OrderBook';
 export { SellRow } from './SellRow';
 export type { SellRowProps } from './SellRow';

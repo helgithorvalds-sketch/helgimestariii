@@ -611,7 +611,7 @@ describe('ProofDownload', () => {
     const link = await screen.findByTestId('proof-link');
     expect(link).toHaveAttribute('href', 'https://x/proof.pdf?token=1');
     expect(link).toHaveAttribute('target', '_blank');
-    expect(link).toHaveTextContent('Opna sönnun seljanda');
+    expect(link).toHaveTextContent('Opna miðaskjal seljanda');
     expect(mocks.getProofSignedUrl).toHaveBeenCalledWith('li-1');
   });
   it('buyer before ticket_sent: nothing; buyer without a proof: a note', async () => {
@@ -619,16 +619,16 @@ describe('ProofDownload', () => {
     expect(container).toBeEmptyDOMElement();
     expect(mocks.getProofSignedUrl).not.toHaveBeenCalled();
     wrap(<ProofDownload deal={makeDeal({ status: 'completed' })} status="completed" role="buyer" />);
-    expect(await screen.findByText('Seljandi hlóð ekki upp sönnun. Biddu um miðann í spjallinu.')).toBeInTheDocument();
+    expect(await screen.findByText('Seljandi hlóð ekki upp miðaskjali. Biddu um miðann í spjallinu.')).toBeInTheDocument();
   });
   it('seller: uploaded / missing states', async () => {
     authState.current = signedInAs(seller);
     mocks.getMyProof.mockResolvedValue({ id: 'p-1', listing_id: 'li-1', seller_id: 'seller-1', path: 'seller-1/li-1.pdf', sha256: 'abc', created_at: minutes(-9) });
     wrap(<ProofDownload deal={makeDeal()} status="reserved" role="seller" />);
-    expect(await screen.findByTestId('proof-uploaded')).toHaveTextContent('Sönnun hlaðið upp');
+    expect(await screen.findByTestId('proof-uploaded')).toHaveTextContent('Miðaskjal hlaðið upp');
     mocks.getMyProof.mockResolvedValue(null);
     wrap(<ProofDownload deal={makeDeal()} status="reserved" role="seller" />);
-    expect(await screen.findByText('Engin sönnun hlaðið upp')).toBeInTheDocument();
+    expect(await screen.findByText('Ekkert miðaskjal hlaðið upp')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Mínar sölur' })).toHaveAttribute('href', '/midatorg/eg');
   });
 });
@@ -663,7 +663,7 @@ describe('DealsPage', () => {
     mocks.listMyDeals.mockResolvedValue([]);
     wrap(<DealsPage />);
     expect(await screen.findByText('Engin virk viðskipti')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Skoða markaðinn' })).toHaveAttribute('href', '/midatorg');
+    expect(screen.getByRole('link', { name: 'Skoða viðburði' })).toHaveAttribute('href', '/midatorg');
   });
   it('error state with retry', async () => {
     mocks.listMyDeals.mockRejectedValueOnce(new Error('Failed to fetch')).mockResolvedValueOnce([]);
@@ -703,7 +703,7 @@ describe('DealRoomPage', () => {
     expect(screen.getByRole('button', { name: 'Ég hef greitt' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Hætta við' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Skrá ágreining' })).not.toBeInTheDocument();
-    expect(screen.queryByText('Sönnun miða')).not.toBeInTheDocument();
+    expect(screen.queryByText('Miðaskjal')).not.toBeInTheDocument();
 
     // mark paid → confirm → transitionDeal + success toast
     fireEvent.click(screen.getByRole('button', { name: 'Ég hef greitt' }));
@@ -720,7 +720,7 @@ describe('DealRoomPage', () => {
     act(() => onChange?.({ ...deal, status: 'ticket_sent' }));
     expect(await screen.findByRole('button', { name: 'Ég hef fengið miðana' })).toBeInTheDocument();
     expect(screen.getByText('Seljandi hefur sent miðana. Staðfestu móttöku þegar þú ert með þá.')).toBeInTheDocument();
-    expect(screen.getByText('Sönnun miða')).toBeInTheDocument();
+    expect(screen.getByText('Miðaskjal')).toBeInTheDocument();
   });
 
   it('cancel asks for a reason and passes it on', async () => {

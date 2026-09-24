@@ -170,7 +170,7 @@ export function RequestForm({ preselectEventId, className }: RequestFormProps) {
       </FormSection>
 
       {existsFor && (
-        <div className="mx-4 mb-4 flex items-start gap-3 rounded-lg border border-border bg-surface-2 p-3 sm:mx-5" role="alert">
+        <div className="mx-4 mb-4 flex items-start gap-3 rounded-lg border border-border bg-secondary p-3 sm:mx-5" role="alert">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-bid" aria-hidden="true" />
           <div className="min-w-0 space-y-1 text-[13px]">
             <p className="font-semibold">{t('forms.want.existsTitle')}</p>
@@ -187,7 +187,7 @@ export function RequestForm({ preselectEventId, className }: RequestFormProps) {
         </div>
       )}
 
-      <div className="border-t border-border bg-surface-2/40 px-4 py-4 sm:px-5">
+      <div className="border-t border-border bg-secondary px-4 py-4 sm:px-5">
         <Button type="submit" variant="outline" className={cn(bidButtonClass, 'h-10 w-full font-semibold sm:w-auto')} disabled={busy}>
           {busy ? t('forms.want.submitting') : t('forms.want.submit')}
         </Button>

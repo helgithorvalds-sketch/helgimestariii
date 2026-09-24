@@ -107,7 +107,7 @@ export function ManualEventForm({ initialTitle = '', onCreated, onCancel, classN
     <fieldset onKeyDown={onKeyDown} className={cn('mt-panel space-y-4 bg-card p-4', className)} data-testid="manual-event-form">
       <legend className="sr-only">{t('forms.manual.title')}</legend>
       <div className="flex items-start gap-3">
-        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-muted-foreground">
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary text-muted-foreground">
           <CalendarPlus className="h-4 w-4" aria-hidden="true" />
         </span>
         <div>
@@ -275,7 +275,7 @@ export function ManualEventForm({ initialTitle = '', onCreated, onCancel, classN
       </Field>
 
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        <Button type="button" variant="outline" className="h-10 bg-card hover:bg-surface-2" onClick={onCancel} disabled={busy}>
+        <Button type="button" variant="outline" className="h-10 bg-card hover:bg-secondary" onClick={onCancel} disabled={busy}>
           {t('common.cancel')}
         </Button>
         <Button type="button" className="h-10" onClick={submit} disabled={busy}>

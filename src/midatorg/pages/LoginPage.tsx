@@ -41,8 +41,8 @@ export default function LoginPage() {
   return (
     <PageContainer className="py-8 sm:py-12">
       <div className="mx-auto w-full max-w-[400px]">
-        <h1 className="mb-5 flex items-center justify-center gap-2 text-[17px] font-bold tracking-tight">
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground" aria-hidden="true">
+        <h1 className="mb-5 flex items-center justify-center gap-2 text-[19px] font-bold tracking-tight text-primary">
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground" aria-hidden="true">
             <Ticket className="h-4 w-4" />
           </span>
           {t('common.appName')}

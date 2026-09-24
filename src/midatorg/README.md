@@ -7,11 +7,11 @@ extra colour names in `tailwind.config.ts`.
 
 ## What it does
 
-- **Market home** (`/midatorg`): every upcoming event as a market card with the lowest asking price,
-  how far under face value it is, tickets for sale, people looking, and a price sparkline. Search,
-  category chips, sorting, trending strip.
-- **Event page** (`/midatorg/vidburdir/:id`): stat tiles, price history chart with the face-value
-  ceiling, order book with "Til sölu" and "Óskað eftir" sides, buy dialog, alerts ("Láta mig vita").
+- **Market home** (`/midatorg`): every upcoming event as a tix.is-style card (image, title, date · venue,
+  "Frá X kr." with the discount under face value, tickets for sale / wanted). Search in the top bar,
+  category pills, sorting.
+- **Event page** (`/midatorg/vidburdir/:id`): hero image, four-fact summary strip, "Miðar til sölu" and
+  "Óskað eftir" lists, price history ("Verðþróun") with the face-value line, buy dialog, alerts ("Láta mig vita").
 - **Sell / want** (`/midatorg/selja`, `/midatorg/oska`): forms with event picker (or add an event
   manually), price capped at face value, private proof upload with duplicate detection.
 - **Deals** (`/midatorg/vidskipti`): reservation timer, step-by-step no-escrow flow
@@ -60,7 +60,7 @@ lib/format.ts          ISK, dates, relative time, price deltas
 lib/errors.ts          server error codes → translated messages
 components/layout      AppShell, TopNav, Footer, MobileNav
 components/common      badges, avatars, ratings, empty/error states, dialogs
-components/market      home market cards, chips, search, sparkline
+components/market      home event cards, category pills, sort
 components/event       event header, stats, price chart, order book, buy dialog
 components/forms       sell/want forms, event picker, proof upload
 components/deals       deal stepper, guidance, actions, chat, rating

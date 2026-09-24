@@ -69,7 +69,6 @@ vi.mock('../lib/api/admin', async (importOriginal) => {
 import {
   chartYDomain,
   clampQuantity,
-  cumulativeDepth,
   eventFaceValue,
   filterByRange,
   isEventOpen,
@@ -312,7 +311,7 @@ describe('eventUtils', () => {
     expect(filterByRange(pts, 'all', NOW)).toHaveLength(5);
   });
 
-  it('chartYDomain follows DESIGN.md and keeps the data inside', () => {
+  it('chartYDomain keeps the data inside the face-value window', () => {
     const pts = toChartPoints(snapshots);
     expect(chartYDomain(pts, 11900)).toEqual([8000, 12500]);
     expect(chartYDomain(toChartPoints([snapshot('2026-09-01', 5000)]), 11900)[0]).toBeLessThanOrEqual(5000);
@@ -335,12 +334,6 @@ describe('eventUtils', () => {
     expect(priceChange(pts)).toEqual({ first: 11900, last: 9900, diff: -2000, pct: expect.closeTo(-16.8, 1) });
     expect(priceChange(pts.slice(0, 1))).toBeNull();
     expect(priceChange(toChartPoints([snapshot('2026-09-01', null), snapshot('2026-09-02', 100)]))).toBeNull();
-  });
-
-  it('cumulativeDepth returns cumulative percentages', () => {
-    expect(cumulativeDepth([2, 1, 2, 2])).toEqual([29, 43, 71, 100]);
-    expect(cumulativeDepth([])).toEqual([]);
-    expect(cumulativeDepth([0, 0])).toEqual([0, 0]);
   });
 
   it('clampQuantity respects quantity_remaining and split_allowed', () => {
@@ -374,21 +367,23 @@ describe('StatTile / StatsRow', () => {
     expect(screen.getByTestId('stat-sub')).toHaveTextContent('engir miðar');
   });
 
-  it('renders the five tiles from the market row', () => {
+  it('renders the four facts and the "seldir hér" sentence', () => {
     wrap(<StatsRow event={event} listings={listings} />);
     const tiles = screen.getAllByTestId('stat-tile');
-    expect(tiles).toHaveLength(5);
-    expect(tiles[0]).toHaveTextContent('Lægsta verð');
-    expect(tiles[0]).toHaveTextContent('9.900 kr.');
-    expect(tiles[0]).toHaveTextContent('−17%');
-    expect(tiles[1]).toHaveTextContent('11.900 kr.');
-    expect(tiles[1]).toHaveTextContent('Hámark skv. tix.is');
+    expect(tiles).toHaveLength(4);
+    expect(tiles[0]).toHaveTextContent('Miðaverð');
+    expect(tiles[0]).toHaveTextContent('11.900 kr.');
+    expect(tiles[0]).not.toHaveTextContent('tix.is');
+    expect(tiles[1]).toHaveTextContent('Lægsta verð');
+    expect(tiles[1]).toHaveTextContent('9.900 kr.');
+    expect(tiles[1]).toHaveTextContent('−17%');
+    expect(tiles[2]).toHaveTextContent('Til sölu');
     expect(tiles[2]).toHaveTextContent('3');
-    expect(tiles[2]).toHaveTextContent('frá 2 seljendum');
+    expect(tiles[2]).toHaveTextContent('2 seljendur');
+    expect(tiles[3]).toHaveTextContent('Óskað eftir');
     expect(tiles[3]).toHaveTextContent('4');
-    expect(tiles[3]).toHaveTextContent('hæsta boð 11.900 kr.');
-    expect(tiles[4]).toHaveTextContent('15');
-    expect(tiles[4]).toHaveTextContent('síðast á 9.900 kr.');
+    expect(tiles[3]).toHaveTextContent('2 óskir');
+    expect(screen.getByTestId('stats-sold')).toHaveTextContent('15 miðar seldir hér.');
   });
 
   it('shows dashes for an empty market and a face-value range', () => {
@@ -398,56 +393,70 @@ describe('StatTile / StatsRow', () => {
       />,
     );
     const tiles = screen.getAllByTestId('stat-tile');
-    expect(within(tiles[0]).getByTestId('stat-value')).toHaveTextContent('—');
-    expect(tiles[0]).toHaveTextContent('engir miðar til sölu');
-    expect(tiles[1]).toHaveTextContent('8.900–11.900 kr.');
-    expect(tiles[1]).toHaveTextContent('Hámarksverð á miða');
-    expect(tiles[4]).toHaveTextContent('engin sala enn');
+    expect(tiles[0]).toHaveTextContent('8.900–11.900 kr.');
+    expect(within(tiles[1]).getByTestId('stat-value')).toHaveTextContent('—');
+    expect(tiles[1]).toHaveTextContent('Engir miðar til sölu');
+    expect(screen.getByTestId('stats-sold')).toHaveTextContent('Engir miðar seldir hér enn.');
   });
 });
 
 describe('EventHeader', () => {
-  it('renders title, venue, date, tix link, CTAs and the report button', () => {
+  it('renders hero, title, date · venue, tix link, the three buttons and the report button', () => {
     const onReport = vi.fn();
-    wrap(<EventHeader event={event} onReport={onReport} alertButton={<button type="button">VAKTA</button>} />);
+    const onBuy = vi.fn();
+    wrap(<EventHeader event={event} onReport={onReport} onBuy={onBuy} alertButton={<button type="button">VAKTA</button>} />);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Sinfóníuhljómsveit Íslands: Vínartónleikar');
-    expect(screen.getByText('Harpa – Eldborg · Reykjavík')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Sjá á tix.is/ })).toHaveAttribute('href', 'https://tix.is/is/event/123/');
-    expect(screen.getByRole('link', { name: /Selja miða á þennan viðburð/ })).toHaveAttribute('href', '/midatorg/selja?event=ev-1');
+    expect(screen.getByText(/Harpa – Eldborg · Reykjavík/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /tix\.is/ })).toHaveAttribute('href', 'https://tix.is/is/event/123/');
+    fireEvent.click(screen.getByRole('button', { name: 'Kaupa miða' }));
+    expect(onBuy).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('link', { name: 'Selja miða' })).toHaveAttribute('href', '/midatorg/selja?event=ev-1');
     expect(screen.getByRole('link', { name: 'Ég vil kaupa' })).toHaveAttribute('href', '/midatorg/oska?event=ev-1');
     expect(screen.getByText('VAKTA')).toBeInTheDocument();
-    expect(screen.getByText('11.900 kr.')).toBeInTheDocument();
     expect(screen.getByTestId('event-thumb')).toHaveTextContent('SÍ');
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Tilkynna viðburð/ }));
     expect(onReport).toHaveBeenCalledTimes(1);
     expect(screen.getByRole('navigation', { name: 'Slóð' })).toHaveTextContent('Tónleikar');
   });
 
-  it('hides the CTAs and explains when the event is past', () => {
+  it('renders the tix.is image over the placeholder with object-cover', () => {
+    wrap(<EventHeader event={{ ...event, image_url: 'https://cdn.tixly.com/is/tix/EventImages/Event_19476.jpg' }} onReport={() => undefined} />);
+    const img = screen.getByRole('img', { name: /Mynd af viðburðinum/ });
+    expect(img).toHaveAttribute('src', 'https://cdn.tixly.com/is/tix/EventImages/Event_19476.jpg');
+    expect(img).toHaveClass('object-cover');
+    expect(screen.getByTestId('event-thumb')).toHaveTextContent('SÍ');
+  });
+
+  it('hides the buttons and explains when the event is past', () => {
     wrap(<EventHeader event={{ ...event, status: 'past' }} onReport={() => undefined} />);
-    expect(screen.queryByRole('link', { name: /Selja miða/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Selja miða' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Kaupa miða' })).not.toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Viðburðurinn er liðinn');
     expect(screen.getByText('Liðinn')).toBeInTheDocument();
   });
 });
 
 describe('OrderBook', () => {
-  it('desktop: two columns with sell and want rows', () => {
+  it('lists the tickets for sale and the requests as plain rows', () => {
     const onBuy = vi.fn();
     authState.current = signedIn();
     wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={onBuy} currentUserId="u1" />);
-    expect(screen.getByRole('heading', { name: 'Skráningar' })).toBeInTheDocument();
-    expect(screen.getByText('3 miðar til sölu · 4 vilja kaupa')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Miðar til sölu' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Óskað eftir' })).toBeInTheDocument();
+    expect(screen.queryByText(/Skráningar/)).not.toBeInTheDocument();
+    expect(screen.getByText('2 seljendur')).toBeInTheDocument();
+    expect(screen.getByText('2 óskir')).toBeInTheDocument();
+
     const sellRows = screen.getAllByTestId('sell-row');
     expect(sellRows).toHaveLength(2);
-    expect(sellRows[0]).toHaveAttribute('data-depth', '67');
-    expect(sellRows[1]).toHaveAttribute('data-depth', '100');
     expect(within(sellRows[0]).getByRole('link', { name: 'Guðrún H.' })).toHaveAttribute('href', '/midatorg/notendur/u-gudrun');
     expect(within(sellRows[0]).getByText('Staðfestur')).toBeInTheDocument();
     expect(within(sellRows[0]).getByText('4,9')).toBeInTheDocument();
     expect(within(sellRows[0]).getByText('Svalir A, röð 3')).toBeInTheDocument();
     expect(within(sellRows[0]).getByText('2 miðar')).toBeInTheDocument();
     expect(within(sellRows[0]).getByText('9.900 kr.')).toBeInTheDocument();
+    expect(within(sellRows[0]).getByText('á miða')).toBeInTheDocument();
     expect(within(sellRows[0]).getByText('−17%')).toBeInTheDocument();
     expect(within(sellRows[1]).getByText('1 miði')).toBeInTheDocument();
     expect(within(sellRows[1]).getByText('aðeins saman')).toBeInTheDocument();
@@ -456,25 +465,26 @@ describe('OrderBook', () => {
 
     const wantRows = screen.getAllByTestId('want-row');
     expect(wantRows).toHaveLength(2);
-    expect(within(wantRows[0]).getByText('11.900 kr.')).toBeInTheDocument();
-    expect(within(wantRows[0]).getByText('Hámark')).toBeInTheDocument();
+    expect(wantRows[0]).toHaveTextContent('vantar 2 miða');
+    expect(within(wantRows[0]).getByText('hámark 11.900 kr.')).toBeInTheDocument();
     expect(within(wantRows[1]).getByText('ekkert hámark')).toBeInTheDocument();
     expect(within(wantRows[0]).getByRole('link', { name: 'Selja til Anna Lísa' })).toHaveAttribute('href', '/midatorg/selja?event=ev-1');
-    expect(screen.getByRole('link', { name: 'Lesa reglurnar' })).toHaveAttribute('href', '/midatorg/um#reglur');
   });
 
-  it('marks the viewer’s own listing and request', () => {
+  it('marks the viewer’s own tickets ("Skoða") and request', () => {
     wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={() => undefined} currentUserId="u-gudrun" />);
-    expect(screen.getByText('Þín skráning')).toBeInTheDocument();
+    expect(screen.getByText('Þínir miðar')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Skoða þína miða' })).toHaveAttribute('href', '/midatorg/eg?flipi=solur');
     expect(screen.getAllByRole('button', { name: /Kaupa af/ })).toHaveLength(1);
   });
 
-  it('empty columns offer an alert link and the want form', () => {
+  it('empty lists offer "Láta mig vita" and the want form', () => {
     wrap(<OrderBook event={event} listings={[]} requests={[]} onBuy={() => undefined} />);
     expect(screen.getByText('Engir miðar til sölu núna.')).toBeInTheDocument();
     expect(screen.getByText('2 manns bíða.')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Láta vita' })).toHaveAttribute('href', '/midatorg/vidburdir/ev-1?vakta=1');
-    expect(screen.getByText('Enginn hefur óskað eftir miða enn.')).toBeInTheDocument();
+    expect(screen.getByText('Vilt þú láta vita þegar miðar koma?')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Láta mig vita' })).toHaveAttribute('href', '/midatorg/vidburdir/ev-1?vakta=1');
+    expect(screen.getByText('Enginn hefur óskað eftir miðum enn.')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ég vil kaupa' })).toHaveAttribute('href', '/midatorg/oska?event=ev-1');
   });
 
@@ -486,27 +496,24 @@ describe('OrderBook', () => {
     expect(retry).toHaveBeenCalled();
   });
 
-  it('phone: the two sides become tabs', () => {
+  it('phone: both lists stay stacked, no tabs', () => {
     setMatchMedia(false);
     wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={() => undefined} />);
-    expect(screen.getByRole('tab', { name: 'Til sölu (2)' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.queryByRole('tab')).not.toBeInTheDocument();
     expect(screen.getAllByTestId('sell-row')).toHaveLength(2);
-    expect(screen.queryByTestId('want-row')).not.toBeInTheDocument();
-    fireEvent.mouseDown(screen.getByRole('tab', { name: 'Óskað eftir (2)' }));
     expect(screen.getAllByTestId('want-row')).toHaveLength(2);
-    expect(screen.queryByTestId('sell-row')).not.toBeInTheDocument();
   });
 });
 
 describe('PriceChart', () => {
-  it('shows the empty state with the ceiling when fewer than two points', () => {
+  it('shows the empty state with the face-value line when fewer than two points', () => {
     wrap(<PriceChart snapshots={[snapshot('2026-09-22', 9900)]} faceValue={11900} range="month" onRangeChange={() => undefined} />);
-    expect(screen.getByRole('status')).toHaveTextContent('Engin sölusaga enn');
-    expect(screen.getByText('Miðaverð 11.900 kr. (hámark)')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Engin verðsaga enn');
+    expect(screen.getByText('Miðaverð 11.900 kr.')).toBeInTheDocument();
     expect(screen.queryByTestId('chart-plot')).not.toBeInTheDocument();
   });
 
-  it('renders header numbers, the range selector and the table fallback', () => {
+  it('renders the current price, the range pills, the caption and the table fallback', () => {
     const onRange = vi.fn();
     wrap(
       <PriceChart
@@ -517,6 +524,7 @@ describe('PriceChart', () => {
         lastSold={{ price: 9900, at: '2026-09-20T14:02:00Z' }}
       />,
     );
+    expect(screen.getByRole('heading', { name: 'Verðþróun' })).toBeInTheDocument();
     expect(screen.getByTestId('chart-current')).toHaveTextContent('9.900 kr.');
     expect(screen.getByTestId('chart-change')).toHaveTextContent('−2.000 kr. (−16,8%)');
     expect(screen.getByTestId('chart-change')).toHaveTextContent('síðasta mánuð');
@@ -526,15 +534,26 @@ describe('PriceChart', () => {
     expect(within(group).getByRole('button', { name: 'Síðasti mánuður' })).toHaveAttribute('aria-pressed', 'true');
     fireEvent.click(within(group).getByRole('button', { name: 'Síðasta vika' }));
     expect(onRange).toHaveBeenCalledWith('week');
-    expect(screen.getByText('síðast skráð 22. sept.')).toBeInTheDocument();
-    expect(screen.getByText('Verð fer aldrei yfir miðaverð, 11.900 kr.')).toBeInTheDocument();
-    expect(screen.getByText(/Síðast selt á 9.900 kr./)).toBeInTheDocument();
+    expect(screen.getByText('Lægsta verð sem var til sölu hvern dag')).toBeInTheDocument();
+    expect(screen.getByText(/síðast skráð 22\. sept\./)).toBeInTheDocument();
+    expect(screen.getByText(/Síðast selt á 9\.900 kr\./)).toBeInTheDocument();
     // table fallback: one row per day with the delta
     const rows = screen.getAllByRole('row');
     expect(rows).toHaveLength(6); // header + 5
     expect(rows[1]).toHaveTextContent('25. ágúst');
     expect(rows[1]).toHaveTextContent('á miðaverði');
     expect(rows[5]).toHaveTextContent('−17%');
+  });
+
+  it('is collapsed on phones until opened', () => {
+    setMatchMedia(false);
+    wrap(<PriceChart snapshots={snapshots} faceValue={11900} range="month" onRangeChange={() => undefined} />);
+    expect(screen.queryByTestId('chart-current')).not.toBeInTheDocument();
+    const toggle = screen.getByRole('button', { name: 'Sýna verðþróun' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(toggle);
+    expect(screen.getByTestId('chart-current')).toHaveTextContent('9.900 kr.');
+    expect(screen.getByRole('button', { name: 'Fela verðþróun' })).toHaveAttribute('aria-expanded', 'true');
   });
 
   it('loading and error states', () => {
@@ -590,8 +609,8 @@ describe('BuyDialog', () => {
     await screen.findByRole('dialog');
     fireEvent.click(screen.getByRole('button', { name: 'Taka frá' }));
     const alert = await screen.findByRole('alert');
-    expect(alert).toHaveTextContent('Þetta er þín eigin skráning');
-    expect(within(alert).getByRole('link', { name: 'Fara á Mína síðu' })).toHaveAttribute('href', '/midatorg/eg');
+    expect(alert).toHaveTextContent('Þetta eru þínir eigin miðar');
+    expect(within(alert).getByRole('link', { name: 'Fara á notandasíðu' })).toHaveAttribute('href', '/midatorg/eg');
     expect(screen.getByRole('button', { name: 'Taka frá' })).toBeEnabled();
 
     api.reserveListing.mockRejectedValueOnce({ message: 'ALREADY_RESERVED', code: 'P0001' });
@@ -627,15 +646,15 @@ describe('AlertButton', () => {
     fireEvent.click(trigger);
     const input = await screen.findByLabelText(/Hámarksverð á miða/);
     fireEvent.change(input, { target: { value: '15000' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Vakta viðburð' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Vista' }));
     expect(screen.getByText('Hámark getur ekki verið hærra en miðaverð, 11.900 kr.')).toBeInTheDocument();
     expect(api.upsertAlert).not.toHaveBeenCalled();
     fireEvent.change(input, { target: { value: '10.000' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Vakta viðburð' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Vista' }));
     await waitFor(() => expect(api.upsertAlert).toHaveBeenCalledWith('ev-1', 10000));
   });
 
-  it('signed in and following: shows the pressed state and can remove the alert', async () => {
+  it('signed in and following: shows the pressed state and can stop', async () => {
     authState.current = signedIn();
     api.getMyAlert.mockResolvedValue({ id: 'a-1', user_id: 'u1', event_id: 'ev-1', max_price: null, created_at: '' } as Alert);
     api.removeAlert.mockResolvedValue(undefined);
@@ -643,19 +662,19 @@ describe('AlertButton', () => {
     const trigger = await screen.findByRole('button', { name: 'Fylgist með' });
     expect(trigger).toHaveAttribute('aria-pressed', 'true');
     // autoOpen: the popover is already open
-    expect(await screen.findByTestId('alert-current')).toHaveTextContent('Vaktað – öll verð.');
-    fireEvent.click(screen.getByRole('button', { name: 'Hætta að vakta' }));
+    expect(await screen.findByTestId('alert-current')).toHaveTextContent('Þú færð tilkynningu um alla miða sem koma í sölu.');
+    fireEvent.click(screen.getByRole('button', { name: 'Hætta að láta vita' }));
     await waitFor(() => expect(api.removeAlert).toHaveBeenCalledWith('ev-1'));
   });
 });
 
 describe('HowItWorks', () => {
-  it('renders three steps with the reservation minutes and the face-value note', () => {
+  it('renders three steps with the reservation minutes and the face-value sentence', () => {
     wrap(<HowItWorks faceValue={11900} reservationMinutes={45} />);
     expect(screen.getByRole('heading', { name: 'Hvernig virkar þetta?' })).toBeInTheDocument();
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
-    expect(screen.getByText(/frátekin fyrir þig í 45 mínútur/)).toBeInTheDocument();
-    expect(screen.getByText(/Verð má aldrei fara yfir miðaverð \(11.900 kr.\)/)).toBeInTheDocument();
+    expect(screen.getByText(/fráteknir fyrir þig í 45 mínútur/)).toBeInTheDocument();
+    expect(screen.getByText(/Verð má aldrei fara yfir miðaverð \(11.900 kr.\) svo miðarnir haldi gildi sínu hjá tix.is/)).toBeInTheDocument();
   });
 });
 
@@ -663,17 +682,18 @@ describe('HowItWorks', () => {
 // Page
 // ---------------------------------------------------------------------------
 describe('EventPage', () => {
-  it('loads the event and renders header, stats, chart, order book and sidebar', async () => {
+  it('loads the event and renders header, summary strip, lists, price history and sidebar', async () => {
     wrap(<EventPage />);
     expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Vínartónleikar');
     expect(api.getMarketEvent).toHaveBeenCalledWith('ev-1');
-    expect(screen.getAllByTestId('stat-tile')).toHaveLength(5);
+    expect(screen.getAllByTestId('stat-tile')).toHaveLength(4);
+    expect(screen.getByRole('heading', { name: 'Miðar til sölu' })).toBeInTheDocument();
     expect(await screen.findAllByTestId('sell-row')).toHaveLength(2);
     expect(screen.getAllByTestId('want-row')).toHaveLength(2);
     await waitFor(() => expect(screen.getByTestId('chart-current')).toHaveTextContent('9.900 kr.'));
     expect(screen.getByRole('heading', { name: 'Hvernig virkar þetta?' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Um viðburðinn' })).toBeInTheDocument();
-    expect(screen.getByTestId('mobile-cta')).toBeInTheDocument();
+    expect(screen.getByTestId('mobile-cta')).toHaveTextContent('Kaupa miða');
     expect(document.title).toContain('Vínartónleikar');
   });
 
@@ -684,7 +704,7 @@ describe('EventPage', () => {
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/midatorg/innskra?next=%2Fmidatorg%2Fvidburdir%2Fev-1'));
   });
 
-  it('signed in: Kaupa opens the buy dialog for that listing', async () => {
+  it('signed in: Kaupa opens the buy dialog for those tickets', async () => {
     authState.current = signedIn();
     wrap(<EventPage />);
     fireEvent.click((await screen.findAllByRole('button', { name: /Kaupa af/ }))[1]);
@@ -697,7 +717,7 @@ describe('EventPage', () => {
     api.getMarketEvent.mockResolvedValue(null);
     wrap(<EventPage />, '/midatorg/vidburdir/missing');
     expect(await screen.findByText('Viðburðurinn fannst ekki')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Fara á markaðinn' })).toHaveAttribute('href', '/midatorg');
+    expect(screen.getByRole('link', { name: 'Skoða viðburði' })).toHaveAttribute('href', '/midatorg');
   });
 
   it('shows the error state and retries', async () => {

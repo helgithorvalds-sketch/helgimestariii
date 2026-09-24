@@ -1,85 +1,89 @@
 /*
- * Miðatorg theme — DESIGN.md §2 tokens, scoped to `.midatorg` (the CRM owns :root).
- * `.midatorg.dark` is listed too so these win over the CRM's `.dark` block
- * regardless of stylesheet order. MidatorgApp also puts the classes on <body>
- * so Radix portals (menus, dialogs, tooltips) and sonner toasts pick them up.
+ * Miðatorg theme — DESIGN-v2.md §1 tokens, scoped to `.midatorg` (the CRM owns :root).
+ * Light only: white canvas, near-black text, one blue accent. MidatorgApp also
+ * puts the class on <body> so Radix portals (menus, dialogs, tooltips) and the
+ * sonner toasts pick these tokens up.
  */
-.midatorg,
-.midatorg.dark {
-  color-scheme: dark;
+.midatorg {
+  color-scheme: light;
 
-  --background: 220 29% 6%; /* #0B0E14 canvas */
-  --foreground: 220 32% 92%; /* #E6EAF2 */
-  --card: 222 27% 10%; /* #12161F card / panel */
-  --card-foreground: 220 32% 92%;
-  --popover: 221 25% 12%; /* #181D28 */
-  --popover-foreground: 220 32% 92%;
-  --primary: 221 83% 53%; /* #2563EB buttons + chart only, never body text */
+  --background: 0 0% 100%; /* #FFFFFF */
+  --foreground: 222 47% 9%; /* #0F172A near-black text */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 222 47% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 9%;
+  --primary: 221 83% 53%; /* #2563EB blue: buttons, links, active tabs */
   --primary-foreground: 0 0% 100%;
-  --secondary: 221 25% 12%; /* #181D28 raised neutral fill */
-  --secondary-foreground: 220 32% 92%;
-  --muted: 221 25% 12%; /* #181D28 */
-  --muted-foreground: 218 15% 60%; /* #8A95A8 captions, labels */
-  --accent: 222 26% 15%; /* #1C2230 hover row / menu item */
-  --accent-foreground: 220 32% 92%;
-  --destructive: 0 72% 51%; /* #DC2626 */
+  --secondary: 214 32% 96%; /* #F1F5F9 light grey fill */
+  --secondary-foreground: 222 47% 9%;
+  --muted: 214 32% 96%; /* #F1F5F9 */
+  --muted-foreground: 215 16% 40%; /* #57657A captions (7.0:1 on white) */
+  --accent: 214 95% 96%; /* #EBF2FF light blue hover / selected */
+  --accent-foreground: 221 83% 40%; /* #1D4ED8 */
+  --destructive: 0 72% 45%; /* #C22626 */
   --destructive-foreground: 0 0% 100%;
-  --border: 220 23% 18%; /* #232A38 */
-  --input: 220 23% 18%;
-  --ring: 217 91% 60%; /* #3B82F6 */
-  --radius: 0.5rem; /* 8px */
+  --border: 214 20% 89%; /* #DDE3EA */
+  --input: 214 20% 89%;
+  --ring: 221 83% 53%;
+  --radius: 0.75rem; /* 12px */
 
-  /* custom */
-  --ask: 146 69% 39%; /* #1FA85A sell side */
-  --ask-foreground: 220 29% 6%;
-  --bid: 36 77% 61%; /* #E8AB4E want side */
-  --bid-foreground: 220 29% 6%;
-  --up: 146 69% 39%; /* price below face value */
-  --down: 0 84% 60%; /* price above face value (text only) */
-  --verified: 213 100% 74%; /* #7CB8FF Staðfestur */
-  --surface-2: 221 25% 12%; /* #181D28 raised panel, tooltip, pressed segment */
+  /* semantic (kept for compatibility with existing classes) */
+  --ask: 221 83% 53%; /* sell side uses the same blue */
+  --ask-foreground: 0 0% 100%;
+  --bid: 221 83% 53%; /* wanted side: blue outline */
+  --bid-foreground: 0 0% 100%;
+  --up: 152 60% 32%; /* #21804F "undir miðaverði" text on white (5.6:1) */
+  --down: 0 72% 45%; /* only for errors / over face value */
+  --verified: 221 83% 40%; /* #1D4ED8 badge text on light-blue fill */
+  --surface-2: 214 32% 97%; /* #F4F7FA raised panel */
   --chart-line: 221 83% 53%;
-  --chart-fill: 221 83% 53%;
+  --chart-fill: 221 83% 53%; /* at 8% alpha */
 
-  /* event placeholder tiles */
-  --ph-1: 227 51% 35%;
-  --ph-2: 308 40% 30%;
-  --ph-3: 358 41% 38%;
-  --ph-4: 163 59% 26%;
-  --ph-5: 33 67% 30%;
-  --ph-6: 199 54% 31%;
+  /* soft placeholder tiles (dark text on top) */
+  --ph-1: 221 60% 92%;
+  --ph-2: 262 50% 92%;
+  --ph-3: 0 50% 93%;
+  --ph-4: 160 45% 92%;
+  --ph-5: 35 70% 92%;
+  --ph-6: 199 60% 92%;
 
-  /* neutralise CRM-only tokens that shadcn pieces may reference */
-  --sidebar-background: 222 27% 10%;
-  --sidebar-foreground: 220 32% 92%;
+  /* CRM-only tokens that shadcn pieces may reference */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 222 47% 9%;
   --sidebar-primary: 221 83% 53%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 222 26% 15%;
-  --sidebar-accent-foreground: 220 32% 92%;
-  --sidebar-border: 220 23% 18%;
-  --sidebar-ring: 217 91% 60%;
-  --success: 146 69% 39%;
-  --success-foreground: 220 29% 6%;
-  --warning: 36 77% 61%;
-  --warning-foreground: 220 29% 6%;
-  --shadow-xs: none;
-  --shadow-sm: none;
-  --shadow-md: 0 8px 24px -8px hsl(220 29% 2% / 0.6);
-  --shadow-lg: 0 16px 40px -12px hsl(220 29% 2% / 0.7);
+  --sidebar-accent: 214 95% 96%;
+  --sidebar-accent-foreground: 221 83% 40%;
+  --sidebar-border: 214 20% 89%;
+  --sidebar-ring: 221 83% 53%;
+  --success: 152 60% 32%;
+  --success-foreground: 0 0% 100%;
+  --warning: 35 90% 40%;
+  --warning-foreground: 0 0% 100%;
+  --shadow-xs: 0 1px 2px 0 hsl(222 47% 9% / 0.04);
+  --shadow-sm: 0 1px 2px 0 hsl(222 47% 9% / 0.05);
+  --shadow-md: 0 2px 4px -2px hsl(222 47% 9% / 0.06), 0 6px 16px -4px hsl(222 47% 9% / 0.1);
+  --shadow-lg: 0 4px 8px -4px hsl(222 47% 9% / 0.08), 0 12px 28px -6px hsl(222 47% 9% / 0.12);
   --shadow-glow: none;
 }
 
 /* ------------------------------------------------------------------ base */
 .midatorg {
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-feature-settings: 'tnum' 1, 'cv11' 1, 'ss01' 1;
-  font-size: 14px;
+  font-feature-settings: 'cv11' 1, 'ss01' 1;
+  font-size: 15px;
   line-height: 1.45;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+@media (min-width: 768px) {
+  .midatorg {
+    font-size: 16px;
+  }
 }
 
 /* the CRM paints a fixed radial-gradient on <body>; cover it fully while we are mounted */
@@ -97,21 +101,8 @@ body.midatorg {
 }
 
 .midatorg ::selection {
-  background: hsl(var(--primary) / 0.35);
+  background: hsl(var(--primary) / 0.2);
   color: hsl(var(--foreground));
-}
-
-.midatorg ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-.midatorg ::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 999px;
-  border: 2px solid hsl(var(--background));
-}
-.midatorg ::-webkit-scrollbar-track {
-  background: transparent;
 }
 
 .midatorg :focus-visible {
@@ -119,11 +110,11 @@ body.midatorg {
   outline-offset: 2px;
 }
 
-/* DESIGN.md §4: 120ms transitions on colour only (overrides the CRM's 180ms rule) */
+/* 120ms colour transitions only */
 .midatorg button,
 .midatorg a,
 .midatorg [role='button'] {
-  transition-property: color, background-color, border-color;
+  transition-property: color, background-color, border-color, box-shadow;
   transition-timing-function: ease;
   transition-duration: 120ms;
 }
@@ -138,51 +129,45 @@ body.midatorg {
 }
 
 /* ------------------------------------------------------------ utilities */
-/* numbers: Tailwind's `tabular-nums` works too; this covers ad-hoc containers */
+/* prices and counts line up */
 .midatorg .tabular-nums,
-.midatorg .mt-num {
+.midatorg .mt-num,
+.midatorg .mt-mono,
+.midatorg .font-mono {
+  font-family: inherit;
   font-variant-numeric: tabular-nums;
 }
 
-/* mono only for axis ticks, the "/" kbd hint and step numerals */
-.midatorg .font-mono,
-.midatorg .mt-mono {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* card / panel: card bg, 1px border, 10px radius */
+/* card / panel: white, 1px border, 12px radius */
 .midatorg .mt-panel {
   background-color: hsl(var(--card));
   border: 1px solid hsl(var(--border));
-  border-radius: 10px;
+  border-radius: var(--radius);
 }
 
-/* eyebrow label: 11px uppercase +0.05em muted */
-.midatorg .mt-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+/* small label above a value (13px, muted, normal case) */
+.midatorg .mt-label {
+  font-size: 13px;
+  font-weight: 500;
   color: hsl(var(--muted-foreground));
 }
 
-/* bordered tag (category, "Uppselt á tix.is") */
+/* tiny chip (category, status): grey fill, normal case */
 .midatorg .mt-tag {
   display: inline-flex;
   align-items: center;
-  height: 20px;
-  padding: 0 6px;
-  border: 1px solid hsl(var(--border));
-  border-radius: 4px;
-  font-size: 11px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background-color: hsl(var(--secondary));
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: hsl(var(--muted-foreground));
+  line-height: 1;
+  color: hsl(var(--foreground));
   white-space: nowrap;
 }
 
-/* headline number: 24px / 600 / −0.02em / lh 1 */
+/* headline number: 24px / 600 / lh 1 */
 .midatorg .mt-headline {
   font-size: 24px;
   font-weight: 600;
@@ -191,7 +176,7 @@ body.midatorg {
   font-variant-numeric: tabular-nums;
 }
 
-/* horizontal scroll rail with hidden scrollbar (chips, trending strip) */
+/* horizontal scroll rail with hidden scrollbar (pills, tabs) */
 .midatorg .mt-scroll-x {
   overflow-x: auto;
   overflow-y: hidden;
