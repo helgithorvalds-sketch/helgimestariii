@@ -20,7 +20,6 @@ import { VerifiedBadge } from '../common/VerifiedBadge';
 import { RatingStars } from '../common/RatingStars';
 import { Money } from '../common/Money';
 import { PriceDelta } from '../common/PriceDelta';
-import { askButtonClass } from '../common/buttonClasses';
 import { clampQuantity } from './eventUtils';
 
 export type BuyDialogProps = {
@@ -104,17 +103,17 @@ export function BuyDialog({ listing, open, onOpenChange, reservationMinutes = 30
 
   return (
     <Dialog open={open} onOpenChange={reserve.isPending ? () => undefined : onOpenChange}>
-      <DialogContent className="mt-panel max-w-md bg-card p-5">
+      <DialogContent className="mt-panel max-w-md rounded-xl bg-card p-5">
         <DialogHeader>
           <DialogTitle className="text-base">{t('event.buy.title')}</DialogTitle>
           <DialogDescription className="text-[13px]">{t('event.buy.description', { minutes: reservationMinutes })}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-3 rounded-lg border border-border bg-surface-2/60 p-3">
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-secondary p-3">
             <UserAvatar profile={listing.seller} size="sm" />
             <div className="min-w-0 flex-1">
-              <div className="text-[11px] uppercase tracking-[0.05em] text-muted-foreground">{t('event.buy.seller')}</div>
+              <div className="mt-label">{t('event.buy.seller')}</div>
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="truncate text-[13px] font-semibold">{listing.seller.display_name}</span>
                 <VerifiedBadge level={listing.seller.verification} />
@@ -122,7 +121,7 @@ export function BuyDialog({ listing, open, onOpenChange, reservationMinutes = 30
               <RatingStars value={listing.seller.rating_avg} count={listing.seller.rating_count} />
             </div>
             <div className="text-right">
-              <div className="text-[11px] uppercase tracking-[0.05em] text-muted-foreground">{t('event.buy.pricePer')}</div>
+              <div className="mt-label">{t('event.buy.pricePer')}</div>
               <Money amount={listing.asking_price} plain className="text-[14px] font-semibold" />
               <div>
                 <PriceDelta asking={listing.asking_price} face={listing.face_value} className="text-[11px]" />
@@ -172,7 +171,7 @@ export function BuyDialog({ listing, open, onOpenChange, reservationMinutes = 30
               </Button>
             </div>
             {!splitAllowed && (
-              <p className="text-[12px] text-muted-foreground">{t('event.buy.onlyTogether', { count: formatNumber(remaining, locale) })}</p>
+              <p className="text-[12px] text-muted-foreground">{t('event.buy.onlyTogether', { tickets: formatTickets(remaining, locale) })}</p>
             )}
           </div>
 
@@ -200,14 +199,13 @@ export function BuyDialog({ listing, open, onOpenChange, reservationMinutes = 30
         </div>
 
         <DialogFooter className="gap-2">
-          <Button type="button" variant="outline" size="sm" className="h-10 sm:h-9" onClick={() => onOpenChange(false)} disabled={reserve.isPending}>
+          <Button type="button" variant="outline" size="sm" className="h-11 rounded-lg sm:h-10" onClick={() => onOpenChange(false)} disabled={reserve.isPending}>
             {t('common.cancel')}
           </Button>
           <Button
             type="button"
-            variant="outline"
             size="sm"
-            className={cn('h-10 font-semibold sm:h-9', askButtonClass)}
+            className="h-11 rounded-lg font-semibold sm:h-10"
             onClick={submit}
             disabled={reserve.isPending || remaining < 1}
           >

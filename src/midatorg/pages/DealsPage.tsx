@@ -24,13 +24,13 @@ function DealsSkeleton() {
         <div key={i} className="mt-panel space-y-3 p-[14px]">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 space-y-2">
-              <Skeleton className="h-3.5 w-3/4 bg-surface-2" />
-              <Skeleton className="h-3 w-1/2 bg-surface-2" />
+              <Skeleton className="h-3.5 w-3/4 bg-secondary" />
+              <Skeleton className="h-3 w-1/2 bg-secondary" />
             </div>
-            <Skeleton className="h-5 w-16 bg-surface-2" />
+            <Skeleton className="h-5 w-16 bg-secondary" />
           </div>
-          <Skeleton className="h-6 w-2/5 bg-surface-2" />
-          <Skeleton className="h-6 w-28 bg-surface-2" />
+          <Skeleton className="h-6 w-2/5 bg-secondary" />
+          <Skeleton className="h-6 w-28 bg-secondary" />
         </div>
       ))}
     </div>

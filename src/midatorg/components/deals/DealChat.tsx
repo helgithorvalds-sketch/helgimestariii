@@ -30,7 +30,7 @@ function Bubble({ message, own, name, showName }: { message: Message; own: boole
       <p
         className={cn(
           'whitespace-pre-wrap break-words rounded-lg border px-3 py-2 text-[13px] leading-[1.45]',
-          own ? 'border-primary/30 bg-primary/15' : 'border-border bg-surface-2',
+          own ? 'border-transparent bg-accent text-foreground' : 'border-transparent bg-secondary text-foreground',
         )}
       >
         {message.body}
@@ -98,7 +98,7 @@ export function DealChat({ deal, status, userId, className }: DealChatProps) {
           {t('deals.chat.title')}
         </h2>
       </div>
-      <p className="flex items-start gap-2 border-b border-border bg-surface-2/60 px-[14px] py-2 text-[12px] text-muted-foreground">
+      <p className="flex items-start gap-2 border-b border-border bg-secondary px-[14px] py-2 text-[12px] text-muted-foreground">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-verified" aria-hidden="true" />
         <span>{t('deals.chat.pinned')}</span>
       </p>
@@ -106,9 +106,9 @@ export function DealChat({ deal, status, userId, className }: DealChatProps) {
       <div ref={listRef} className="max-h-[440px] min-h-[220px] flex-1 overflow-y-auto p-[14px]" data-testid="chat-scroll">
         {messagesQ.isPending ? (
           <div className="space-y-3" aria-busy="true">
-            <Skeleton className="h-9 w-2/3 bg-surface-2" />
-            <Skeleton className="ml-auto h-9 w-1/2 bg-surface-2" />
-            <Skeleton className="h-9 w-3/5 bg-surface-2" />
+            <Skeleton className="h-9 w-2/3 bg-secondary" />
+            <Skeleton className="ml-auto h-9 w-1/2 bg-secondary" />
+            <Skeleton className="h-9 w-3/5 bg-secondary" />
           </div>
         ) : messagesQ.isError ? (
           <ErrorState error={messagesQ.error} retry={() => void messagesQ.refetch()} />

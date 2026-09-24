@@ -1,12 +1,16 @@
 /**
- * DESIGN.md §5 button variants that shadcn's Button does not ship.
- * Use with `variant="outline"`: `<Button variant="outline" className={askButtonClass}>Kaupa</Button>`.
+ * DESIGN-v2 §2 button looks that shadcn's Button does not ship, used with
+ * `variant="outline"`: `<Button variant="outline" className={askButtonClass}>Kaupa</Button>`.
+ * primary = solid blue, secondary = white with border, ghost = blue text.
  */
+/** Solid blue (the "Kaupa" / confirm side). */
 export const askButtonClass =
-  'border-ask/35 bg-ask/10 text-ask hover:border-ask hover:bg-ask hover:text-ask-foreground focus-visible:ring-ask';
-export const bidButtonClass =
-  'border-bid/35 bg-bid/10 text-bid hover:border-bid hover:bg-bid hover:text-bid-foreground focus-visible:ring-bid';
-/** Neutral outline per DESIGN ("secondary"): card bg, border, hover surface-2. */
-export const secondaryButtonClass = 'border-border bg-card text-foreground hover:bg-surface-2 hover:border-muted-foreground/60';
-/** Phone-first sizing: 40px on phones, 34px from sm. */
-export const cardButtonClass = 'h-10 sm:h-[34px] text-[13px] font-semibold';
+  'border-primary bg-primary text-primary-foreground hover:border-primary/90 hover:bg-primary/90 hover:text-primary-foreground';
+/** Blue outline (the "Ég vil kaupa" / "Selja til" side). */
+export const bidButtonClass = 'border-primary/40 bg-card text-primary hover:border-primary hover:bg-accent hover:text-accent-foreground';
+/** Neutral secondary: white, 1px border, light-grey hover. */
+export const secondaryButtonClass = 'border-border bg-card text-foreground hover:border-border hover:bg-secondary hover:text-foreground';
+/** Ghost: blue text, light-blue hover, no border. */
+export const ghostButtonClass = 'border-transparent bg-transparent text-primary hover:border-transparent hover:bg-accent hover:text-accent-foreground';
+/** Phone-first sizing: 44px on phones, 40px from sm. */
+export const cardButtonClass = 'h-11 sm:h-10 rounded-lg text-[14px] font-semibold';

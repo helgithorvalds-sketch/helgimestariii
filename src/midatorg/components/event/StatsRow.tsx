@@ -4,6 +4,7 @@ import { useLocale, useT } from '../../lib/i18n';
 import { formatISK, formatNumber } from '../../lib/format';
 import type { ListingWithSeller, MarketEvent } from '../../lib/types';
 import { PriceDelta } from '../common/PriceDelta';
+import { pluralSuffix } from '../market/helpers';
 import { StatTile } from './StatTile';
 import { eventFaceValue } from './eventUtils';
 
@@ -18,7 +19,9 @@ function num(v: number | null | undefined): number | null {
   return v == null || !Number.isFinite(v) ? null : v;
 }
 
-/** Five tiles: Lægsta verð · Miðaverð · Til sölu · Vilja kaupa · Seldir. Grid 5 → 3 → 2 (last spans 2). */
+const GRID = 'grid grid-cols-2 sm:grid-cols-4 [&>*+*]:border-border [&>*:nth-child(even)]:border-l [&>*:nth-child(n+3)]:border-t sm:[&>*+*]:border-l sm:[&>*:nth-child(n+3)]:border-t-0';
+
+/** Four plain facts in a bordered row: Miðaverð · Lægsta verð · Til sölu · Óskað eftir, and a muted "N miðar seldir hér" sentence. */
 export function StatsRow({ event, listings, className }: StatsRowProps) {
   const t = useT();
   const [locale] = useLocale();
@@ -30,9 +33,7 @@ export function StatsRow({ event, listings, className }: StatsRowProps) {
   const sellers = num(event.listings_active);
   const wanted = num(event.wanted_tickets);
   const requests = num(event.requests_active);
-  const maxBid = num(event.max_bid);
-  const sold = num(event.sold_count);
-  const lastSold = num(event.last_sold_price);
+  const sold = num(event.sold_count) ?? 0;
 
   const faceMin = num(event.face_value_min);
   const faceMax = num(event.face_value_max);
@@ -43,68 +44,52 @@ export function StatsRow({ event, listings, className }: StatsRowProps) {
     faceValue = formatISK(face);
   }
 
-  const unitTickets = (n: number) => (locale === 'is' && n % 10 === 1 && n % 100 !== 11 ? t('event.stats.unitTicket') : t('event.stats.unitTickets'));
-
-  const wantedSub = (() => {
-    if (requests == null) return null;
-    const people = requests === 1 ? t('event.stats.requestOne') : t('event.stats.requests', { count: formatNumber(requests, locale) });
-    return maxBid != null ? `${people} · ${t('event.stats.highestBid', { price: formatISK(maxBid) })}` : people;
-  })();
+  const unitTickets = (n: number) => (locale === 'is' && n % 10 === 1 && n % 100 !== 11 ? t('common.ticket') : t('common.tickets'));
 
   return (
-    <section aria-label={t('event.stats.aria')} className={cn('grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5', className)}>
-      <StatTile
-        label={t('event.stats.lowest')}
-        value={minAsk != null ? formatISK(minAsk) : null}
-        sub={minAsk != null ? <PriceDelta asking={minAsk} face={lowestFace} /> : t('event.stats.noListings')}
-      />
-      <StatTile
-        label={t('event.stats.face')}
-        value={faceValue}
-        sub={faceValue ? (event.source === 'tix' ? t('event.stats.faceSubTix') : t('event.stats.faceSub')) : t('event.stats.faceUnknown')}
-      />
-      <StatTile
-        label={t('event.stats.forSale')}
-        swatch="ask"
-        value={available != null ? formatNumber(available, locale) : null}
-        unit={available != null ? unitTickets(available) : undefined}
-        sub={
-          sellers == null || sellers === 0
-            ? t('event.stats.noListings')
-            : sellers === 1
-              ? t('event.stats.fromSeller')
-              : t('event.stats.fromSellers', { count: formatNumber(sellers, locale) })
-        }
-      />
-      <StatTile
-        label={t('event.stats.wanted')}
-        swatch="bid"
-        value={wanted != null ? formatNumber(wanted, locale) : null}
-        unit={wanted != null ? unitTickets(wanted) : undefined}
-        sub={wantedSub}
-      />
-      <StatTile
-        label={t('event.stats.sold')}
-        value={sold != null ? formatNumber(sold, locale) : null}
-        unit={sold != null ? unitTickets(sold) : undefined}
-        sub={lastSold != null ? t('event.stats.lastSold', { price: formatISK(lastSold) }) : t('event.stats.noSales')}
-        className="col-span-2 sm:col-span-2 xl:col-span-1"
-      />
+    <section aria-label={t('event.stats.aria')} className={cn('mt-panel overflow-hidden', className)}>
+      <div className={GRID}>
+        <StatTile label={t('event.stats.face')} value={faceValue} sub={faceValue ? undefined : t('event.stats.faceUnknown')} />
+        <StatTile
+          label={t('event.stats.lowest')}
+          value={minAsk != null ? formatISK(minAsk) : null}
+          sub={minAsk != null ? <PriceDelta asking={minAsk} face={lowestFace} /> : t('event.stats.noListings')}
+        />
+        <StatTile
+          label={t('event.stats.forSale')}
+          value={available != null ? formatNumber(available, locale) : null}
+          unit={available != null ? unitTickets(available) : undefined}
+          sub={sellers != null && sellers > 0 ? t(`event.book.sellers${pluralSuffix(sellers, locale)}`, { count: formatNumber(sellers, locale) }) : undefined}
+        />
+        <StatTile
+          label={t('event.stats.wanted')}
+          value={wanted != null ? formatNumber(wanted, locale) : null}
+          unit={wanted != null ? unitTickets(wanted) : undefined}
+          sub={requests != null && requests > 0 ? t(`event.book.requests${pluralSuffix(requests, locale)}`, { count: formatNumber(requests, locale) }) : undefined}
+        />
+      </div>
+      <p className="border-t border-border px-4 py-2 text-[13px] text-muted-foreground" data-testid="stats-sold">
+        {sold > 0 ? t(`event.stats.soldHere${pluralSuffix(sold, locale)}`, { count: formatNumber(sold, locale) }) : t('event.stats.noSales')}
+      </p>
     </section>
   );
 }
 
-/** Same boxes while the event loads. */
+/** Same box while the event loads. */
 export function StatsRowSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn('grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5', className)} aria-hidden="true">
-      {[0, 1, 2, 3, 4].map((i) => (
-        <div key={i} className={cn('mt-panel space-y-2 px-[14px] py-3', i === 4 && 'col-span-2 sm:col-span-2 xl:col-span-1')}>
-          <Skeleton className="h-3 w-16 bg-surface-2" />
-          <Skeleton className="h-6 w-24 bg-surface-2" />
-          <Skeleton className="h-3 w-20 bg-surface-2" />
-        </div>
-      ))}
+    <div className={cn('mt-panel overflow-hidden', className)} aria-hidden="true">
+      <div className={GRID}>
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="space-y-2 px-4 py-3">
+            <Skeleton className="h-3 w-16 bg-secondary" />
+            <Skeleton className="h-5 w-24 bg-secondary" />
+          </div>
+        ))}
+      </div>
+      <div className="border-t border-border px-4 py-2">
+        <Skeleton className="h-3 w-40 bg-secondary" />
+      </div>
     </div>
   );
 }

@@ -456,7 +456,7 @@ describe('ReportsTable', () => {
 
     const first = screen.getAllByTestId('report-row')[0];
     expect(within(first).getByRole('link', { name: 'Guðrún Jóns' })).toHaveAttribute('href', '/midatorg/notendur/u1');
-    expect(await within(first).findByRole('link', { name: 'Viðburður skráningar' })).toHaveAttribute('href', '/midatorg/vidburdir/e1');
+    expect(await within(first).findByRole('link', { name: 'Viðburður miðanna' })).toHaveAttribute('href', '/midatorg/vidburdir/e1');
     expect(within(first).getByRole('link', { name: 'Notandasíða' })).toHaveAttribute('href', '/midatorg/notendur/u2');
     expect(within(first).getByRole('link', { name: 'Viðskiptaherbergi' })).toHaveAttribute('href', '/midatorg/vidskipti/d1');
 
@@ -560,7 +560,7 @@ describe('EventsTable', () => {
     expect(within(row).getByText('Tónleikar')).toBeInTheDocument();
     expect(within(row).getByText('Væntanlegur')).toBeInTheDocument();
     expect(within(row).getByText('tix.is')).toBeInTheDocument();
-    expect(within(row).getByText('4 skráningar · 7 miðar')).toBeInTheDocument();
+    expect(within(row).getByText('4 seljendur · 7 miðar')).toBeInTheDocument();
 
     fireEvent.click(within(row).getByRole('button', { name: 'Eyða viðburði: Sigur Rós' }));
     const dialog = await screen.findByRole('alertdialog');
@@ -774,7 +774,7 @@ describe('NotificationsPage', () => {
     vi.mocked(notificationsApi.unreadCount).mockResolvedValue(0);
     wrap(<NotificationsPage />, '/midatorg/tilkynningar');
     expect(await screen.findByText('Engar tilkynningar enn')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Fara á markaðinn' })).toHaveAttribute('href', '/midatorg');
+    expect(screen.getByRole('link', { name: 'Skoða viðburði' })).toHaveAttribute('href', '/midatorg');
     expect(screen.getByRole('button', { name: 'Allt lesið' })).toBeDisabled();
   });
 

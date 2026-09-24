@@ -89,7 +89,7 @@ export function DisputesTable() {
             </TableHeader>
             <TableBody>
               {disputes.data.map((d) => (
-                <TableRow key={d.id} className="border-border align-top hover:bg-surface-2/40" data-testid="dispute-row">
+                <TableRow key={d.id} className="border-border align-top even:bg-secondary/50 hover:bg-accent/50" data-testid="dispute-row">
                   <TableCell className={tdClass}>
                     <Link to={href('/vidburdir/' + d.event.id)} className="line-clamp-2 max-w-[240px] font-semibold underline-offset-2 hover:underline">
                       {d.event.title}

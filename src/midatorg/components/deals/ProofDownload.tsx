@@ -28,7 +28,7 @@ function Panel({ children, className }: { children: React.ReactNode; className?:
   const t = useT();
   return (
     <section className={cn('mt-panel p-[14px]', className)} aria-labelledby="mt-proof-title">
-      <h2 id="mt-proof-title" className="mt-eyebrow mb-2">
+      <h2 id="mt-proof-title" className="mb-2 text-[16px] font-semibold">
         {t('deals.proof.title')}
       </h2>
       {children}
@@ -48,7 +48,7 @@ function BuyerProof({ listingId, className }: { listingId: string; className?: s
   return (
     <Panel className={className}>
       {q.isPending ? (
-        <Skeleton className="h-10 w-48 bg-surface-2" aria-busy="true" />
+        <Skeleton className="h-10 w-48 bg-secondary" aria-busy="true" />
       ) : q.isError ? (
         <ErrorState error={q.error} body={t('deals.proof.error')} retry={() => void q.refetch()} />
       ) : q.data ? (
@@ -77,7 +77,7 @@ function SellerProof({ listingId, className }: { listingId: string; className?: 
   return (
     <Panel className={className}>
       {q.isPending ? (
-        <Skeleton className="h-5 w-40 bg-surface-2" aria-busy="true" />
+        <Skeleton className="h-5 w-40 bg-secondary" aria-busy="true" />
       ) : q.isError ? (
         <ErrorState error={q.error} body={t('deals.proof.error')} retry={() => void q.refetch()} />
       ) : q.data ? (

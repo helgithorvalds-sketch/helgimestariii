@@ -37,10 +37,10 @@ export function DealCard({ deal, userId, isAdmin = false, onExpire, className }:
   const venue = deal.event.venue_name;
 
   return (
-    <article className={cn('mt-panel min-w-0 hover:border-muted-foreground/60', className)} data-status={status} data-deal-id={deal.id}>
+    <article className={cn('mt-panel min-w-0 transition-[box-shadow,border-color] hover:border-primary/40 hover:shadow-md', className)} data-status={status} data-deal-id={deal.id}>
       <Link
         to={href(`/vidskipti/${deal.id}`)}
-        className="flex h-full flex-col gap-3 rounded-[10px] p-[14px]"
+        className="flex h-full flex-col gap-3 rounded-xl p-4"
         aria-label={t('deals.card.aria', { title: deal.event.title })}
       >
         <div className="flex items-start justify-between gap-3">

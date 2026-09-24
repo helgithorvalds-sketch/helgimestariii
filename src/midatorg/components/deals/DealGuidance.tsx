@@ -45,7 +45,7 @@ export function DealGuidance({ deal, status, role, className }: DealGuidanceProp
 
   return (
     <div
-      className={cn('flex items-start gap-3 rounded-lg border border-border bg-surface-2/60 p-3 text-[13px]', className)}
+      className={cn('flex items-start gap-3 rounded-lg border border-border bg-secondary p-3 text-[13px]', className)}
       role="status"
       aria-live="polite"
       data-guidance={key}

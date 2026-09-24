@@ -136,7 +136,7 @@ function LoginForm({ next, onMagic, onReset }: { next: string; onMagic: () => vo
       <Button type="submit" className={primaryButtonClass} disabled={isSubmitting}>
         {isSubmitting ? t('account.login.working') : t('account.login.submitLogin')}
       </Button>
-      <div className="flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted-foreground" aria-hidden="true">
+      <div className="flex items-center gap-3 text-[12px] text-muted-foreground" aria-hidden="true">
         <span className="h-px flex-1 bg-border" />
         <span>{t('account.login.or')}</span>
         <span className="h-px flex-1 bg-border" />
@@ -259,7 +259,7 @@ function EmailLinkForm({ kind, onSent, onBack }: { kind: LinkKind; onSent: (emai
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4" aria-label={title}>
       <div className="flex items-start gap-3">
-        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-muted-foreground">
+        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary text-muted-foreground">
           <Icon className="h-4 w-4" aria-hidden="true" />
         </span>
         <div>

@@ -50,7 +50,7 @@ function Section({ id, title, children }: { id: SectionId; title: string; childr
 function Rule({ icon: Icon, title, body }: { icon: ComponentType<LucideProps>; title: string; body: string }) {
   return (
     <li className="flex gap-3">
-      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-verified">
+      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
         <Icon className="h-4 w-4" aria-hidden="true" />
       </span>
       <div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
           <ol className="divide-y divide-border">
             {steps.map(({ n, title, body }) => (
               <li key={n} className="flex gap-3 py-3 first:pt-0 last:pb-0">
-                <span className="mt-mono inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-[12px]" aria-hidden="true">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[13px] font-semibold tabular-nums text-primary-foreground" aria-hidden="true">
                   {n}
                 </span>
                 <div>

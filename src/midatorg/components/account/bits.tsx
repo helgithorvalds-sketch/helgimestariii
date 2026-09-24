@@ -13,16 +13,16 @@ export function ListSkeleton({ rows = 3, className }: { rows?: number; className
     <div className={cn('space-y-3', className)} aria-busy="true" aria-live="polite">
       {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="mt-panel space-y-3 p-4">
-          <Skeleton className="h-4 w-2/3 bg-surface-2" />
-          <Skeleton className="h-3 w-1/3 bg-surface-2" />
-          <Skeleton className="h-6 w-28 bg-surface-2" />
+          <Skeleton className="h-4 w-2/3 bg-secondary" />
+          <Skeleton className="h-3 w-1/3 bg-secondary" />
+          <Skeleton className="h-6 w-28 bg-secondary" />
         </div>
       ))}
     </div>
   );
 }
 
-/** Bordered uppercase status tag. The label is always shown, so colour is never the only signal. */
+/** Small grey status chip. The label is always shown, so colour is never the only signal. */
 export function StatusTag({ label, tone, className }: { label: string; tone?: string; className?: string }) {
   return <span className={cn('mt-tag', tone, className)}>{label}</span>;
 }
@@ -54,7 +54,7 @@ export function EventLine({ event, children, className }: { event: EventLike; ch
 export function Stat({ label, children, className }: { label: string; children: ReactNode; className?: string }) {
   return (
     <div className={cn('min-w-0', className)}>
-      <dt className="mt-eyebrow">{label}</dt>
+      <dt className="mt-label">{label}</dt>
       <dd className="mt-0.5 text-[13px] tabular-nums">{children}</dd>
     </div>
   );

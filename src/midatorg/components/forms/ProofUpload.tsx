@@ -103,7 +103,7 @@ export function ProofUpload({ id, file, onChange, error, disabled, uploading, de
 
       {file ? (
         <div className="flex items-center gap-3 rounded-lg border border-border bg-background p-3">
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-surface-2 text-muted-foreground">
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-secondary text-muted-foreground">
             <Icon className="h-4 w-4" aria-hidden="true" />
           </span>
           <div className="min-w-0 flex-1">
@@ -115,7 +115,7 @@ export function ProofUpload({ id, file, onChange, error, disabled, uploading, de
               <span aria-hidden="true"> · </span>
               {hash ? (
                 <span>
-                  {t('forms.proof.fingerprint')} <span className="mt-mono text-foreground">{shortHash(hash)}</span>
+                  {t('forms.proof.fingerprint')} <span className="text-foreground">{shortHash(hash)}</span>
                 </span>
               ) : (
                 <span>{t('forms.proof.hashing')}</span>
@@ -156,7 +156,7 @@ export function ProofUpload({ id, file, onChange, error, disabled, uploading, de
             type="button"
             variant="outline"
             size="sm"
-            className="h-9 bg-card hover:bg-surface-2"
+            className="h-9 bg-card hover:bg-secondary"
             onClick={() => inputRef.current?.click()}
             disabled={disabled}
             aria-describedby={described}

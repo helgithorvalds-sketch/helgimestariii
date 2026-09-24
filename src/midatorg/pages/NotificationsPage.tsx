@@ -94,14 +94,14 @@ export default function NotificationsPage() {
                   type="button"
                   onClick={() => open(n)}
                   className={cn(
-                    'flex w-full min-h-[44px] items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-2/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-                    isUnread && 'bg-primary/5',
+                    'flex w-full min-h-[44px] items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+                    isUnread && 'bg-accent/40',
                   )}
                 >
                   <span
                     className={cn(
-                      'mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border',
-                      isUnread ? 'bg-primary/15 text-foreground' : 'bg-surface-2 text-muted-foreground',
+                      'mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+                      isUnread ? 'bg-accent text-primary' : 'bg-secondary text-muted-foreground',
                     )}
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
@@ -111,7 +111,7 @@ export default function NotificationsPage() {
                       {isUnread && (
                         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" role="img" aria-label={t('notifPage.unreadLabel')} />
                       )}
-                      <span className={cn('min-w-0 flex-1 text-[13.5px]', isUnread ? 'font-semibold text-foreground' : 'font-medium text-foreground/90')}>
+                      <span className={cn('min-w-0 flex-1 text-[13.5px]', isUnread ? 'font-semibold text-foreground' : 'font-medium text-foreground')}>
                         {n.title}
                       </span>
                       <time dateTime={n.created_at} className="shrink-0 text-[11.5px] tabular-nums text-muted-foreground">

@@ -120,7 +120,7 @@ export function UsersTable() {
                 const s = stats.data?.get(u.id);
                 const banned = !!u.banned_at;
                 return (
-                  <TableRow key={u.id} className="border-border hover:bg-surface-2/40" data-testid="user-row">
+                  <TableRow key={u.id} className="border-border even:bg-secondary/50 hover:bg-accent/50" data-testid="user-row">
                     <TableCell className={tdClass}>
                       <div className="flex items-center gap-2.5">
                         <UserAvatar profile={u} size="sm" />

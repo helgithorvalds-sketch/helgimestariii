@@ -75,7 +75,7 @@ export function DealActions({ deal, status, role, isAdmin = false, className }: 
 
   return (
     <section className={cn('mt-panel p-[14px]', className)} aria-labelledby="mt-deal-actions-title">
-      <h2 id="mt-deal-actions-title" className="mt-eyebrow mb-3">
+      <h2 id="mt-deal-actions-title" className="mb-3 text-[16px] font-semibold">
         {t('deals.actions.title')}
       </h2>
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">

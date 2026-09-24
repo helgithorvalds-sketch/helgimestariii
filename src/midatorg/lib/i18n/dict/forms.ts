@@ -13,11 +13,11 @@ export default {
     'forms.sell.submit': 'Skrá miða til sölu',
     'forms.sell.submitting': 'Skrái…',
     'forms.sell.success': 'Miðarnir eru komnir í sölu.',
-    'forms.sell.afterNote': 'Skráningin sést strax á viðburðasíðunni. Þú getur eytt henni hvenær sem er.',
+    'forms.sell.afterNote': 'Miðarnir sjást strax á viðburðasíðunni. Þú getur tekið þá úr sölu hvenær sem er.',
     'forms.sell.summary': '{tickets} á {price} hver · samtals {total}',
     'forms.sell.phoneGate': 'Staðfestu símanúmer áður en þú skráir miða.',
     'forms.sell.phoneGateAction': 'Staðfesta símanúmer',
-    'forms.sell.proofFailedTitle': 'Skráningin er komin inn en staðfestingarskráin vistaðist ekki',
+    'forms.sell.proofFailedTitle': 'Miðarnir eru komnir í sölu en miðaskjalið vistaðist ekki',
     'forms.sell.proofFailedBody':
       'Þú getur valið aðra skrá og reynt aftur, eða haldið áfram án hennar. Þú getur líka bætt skrá við síðar undir „Mínar sölur“.',
     'forms.sell.continueWithout': 'Halda áfram án skráar',
@@ -45,7 +45,7 @@ export default {
     'forms.step.event': 'Viðburður',
     'forms.step.tickets': 'Miðar',
     'forms.step.price': 'Verð',
-    'forms.step.proof': 'Staðfesting',
+    'forms.step.proof': 'Miðaskjal',
     'forms.step.request': 'Ósk',
 
     // event picker
@@ -66,7 +66,7 @@ export default {
 
     // manual event form
     'forms.manual.title': 'Bæta við viðburði',
-    'forms.manual.intro': 'Fylltu inn það helsta. Viðburðurinn birtist strax á markaðnum.',
+    'forms.manual.intro': 'Fylltu inn það helsta. Viðburðurinn birtist strax á síðunni.',
     'forms.manual.eventTitle': 'Heiti viðburðar',
     'forms.manual.eventTitlePlaceholder': 'T.d. Sigur Rós í Hörpu',
     'forms.manual.category': 'Flokkur',
@@ -86,7 +86,7 @@ export default {
 
     // listing fields
     'forms.field.quantity': 'Fjöldi miða',
-    'forms.field.quantityHint': '1–10 miðar í hverri skráningu.',
+    'forms.field.quantityHint': '1–10 miðar í hverri sölu.',
     'forms.field.decrease': 'Fækka miðum',
     'forms.field.increase': 'Fjölga miðum',
     'forms.field.notes': 'Athugasemd',
@@ -105,7 +105,7 @@ export default {
     'forms.listing.notesPlaceholder': 'T.d. „Sætin eru saman“ eða hvernig þú afhendir miðana',
 
     // proof upload
-    'forms.proof.label': 'Staðfesting á miða',
+    'forms.proof.label': 'Miðaskjal',
     'forms.proof.hint':
       'PDF eða mynd af miðanum. Aðeins kaupandinn sér skrána, og ekki fyrr en þú hefur staðfest greiðslu.',
     'forms.proof.drop': 'Dragðu skrá hingað eða',
@@ -115,9 +115,9 @@ export default {
     'forms.proof.fingerprint': 'Fingrafar',
     'forms.proof.remove': 'Fjarlægja skrá',
     'forms.proof.uploading': 'Hleð upp skrá…',
-    'forms.proof.dropzone': 'Hlaða upp staðfestingu á miða',
+    'forms.proof.dropzone': 'Hlaða upp miðaskjali',
     'forms.proof.duplicate':
-      'Þessi skrá hefur þegar verið notuð fyrir aðra skráningu á Miðatorgi. Sami miði má aðeins vera í sölu einu sinni — veldu aðra skrá eða slepptu henni.',
+      'Þessi skrá hefur þegar verið notuð fyrir aðra miða á Miðatorgi. Sami miði má aðeins vera í sölu einu sinni — veldu aðra skrá eða slepptu henni.',
 
     // validation
     'forms.error.eventRequired': 'Veldu viðburð.',
@@ -149,11 +149,11 @@ export default {
     'forms.sell.submit': 'List tickets for sale',
     'forms.sell.submitting': 'Listing…',
     'forms.sell.success': 'Your tickets are now for sale.',
-    'forms.sell.afterNote': 'The listing appears on the event page right away. You can remove it at any time.',
+    'forms.sell.afterNote': 'The tickets appear on the event page right away. You can take them off sale at any time.',
     'forms.sell.summary': '{tickets} at {price} each · total {total}',
     'forms.sell.phoneGate': 'Verify your phone number before listing tickets.',
     'forms.sell.phoneGateAction': 'Verify phone number',
-    'forms.sell.proofFailedTitle': 'The listing was created but the proof file was not saved',
+    'forms.sell.proofFailedTitle': 'The tickets are on sale but the ticket file was not saved',
     'forms.sell.proofFailedBody':
       'You can choose another file and try again, or continue without it. You can also add a file later under "My sales".',
     'forms.sell.continueWithout': 'Continue without a file',
@@ -179,7 +179,7 @@ export default {
     'forms.step.event': 'Event',
     'forms.step.tickets': 'Tickets',
     'forms.step.price': 'Price',
-    'forms.step.proof': 'Proof',
+    'forms.step.proof': 'Ticket file',
     'forms.step.request': 'Request',
 
     'forms.event.label': 'Event',
@@ -198,7 +198,7 @@ export default {
     'forms.event.notUpcoming': 'This event has passed or is no longer open. Choose another event.',
 
     'forms.manual.title': 'Add an event',
-    'forms.manual.intro': 'Fill in the basics. The event appears on the market right away.',
+    'forms.manual.intro': 'Fill in the basics. The event appears on the site right away.',
     'forms.manual.eventTitle': 'Event title',
     'forms.manual.eventTitlePlaceholder': 'e.g. Sigur Rós at Harpa',
     'forms.manual.category': 'Category',
@@ -217,7 +217,7 @@ export default {
     'forms.manual.success': 'The event has been added.',
 
     'forms.field.quantity': 'Number of tickets',
-    'forms.field.quantityHint': '1–10 tickets per listing.',
+    'forms.field.quantityHint': '1–10 tickets per sale.',
     'forms.field.decrease': 'Fewer tickets',
     'forms.field.increase': 'More tickets',
     'forms.field.notes': 'Notes',
@@ -235,7 +235,7 @@ export default {
     'forms.listing.splitAllowedOff': 'The tickets are only sold together.',
     'forms.listing.notesPlaceholder': 'e.g. "Seats are together" or how you will hand over the tickets',
 
-    'forms.proof.label': 'Ticket proof',
+    'forms.proof.label': 'Ticket file',
     'forms.proof.hint':
       'A PDF or image of the ticket. Only the buyer sees the file, and not until you have confirmed payment.',
     'forms.proof.drop': 'Drag a file here or',
@@ -245,9 +245,9 @@ export default {
     'forms.proof.fingerprint': 'Fingerprint',
     'forms.proof.remove': 'Remove file',
     'forms.proof.uploading': 'Uploading file…',
-    'forms.proof.dropzone': 'Upload ticket proof',
+    'forms.proof.dropzone': 'Upload ticket file',
     'forms.proof.duplicate':
-      'This file has already been used for another listing on Miðatorg. The same ticket can only be listed once — choose another file or skip it.',
+      'This file has already been used for other tickets on Miðatorg. The same ticket can only be listed once — choose another file or skip it.',
 
     'forms.error.eventRequired': 'Choose an event.',
     'forms.error.quantityRange': 'Quantity must be between 1 and 10.',

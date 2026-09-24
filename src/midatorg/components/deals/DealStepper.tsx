@@ -5,10 +5,10 @@ import type { DealStatus } from '../../lib/types';
 import { DEAL_STEPS, badgeFor, stepStates, terminalBadge, type BadgeTone, type StepSource, type StepState } from './dealState';
 
 const BADGE_TONE_CLASS: Record<BadgeTone, string> = {
-  reserved: 'bg-bid/10 text-bid',
-  progress: 'bg-verified/10 text-verified',
+  reserved: 'bg-accent text-accent-foreground',
+  progress: 'bg-accent text-accent-foreground',
   done: 'bg-up/10 text-up',
-  muted: 'border border-border bg-surface-2 text-muted-foreground',
+  muted: 'bg-secondary text-muted-foreground',
   disputed: 'bg-destructive/10 text-down',
 };
 
@@ -32,15 +32,15 @@ export function DealStatusBadge({ status, className }: { status: DealStatus; cla
 }
 
 const NUMERAL_CLASS: Record<StepState, string> = {
-  done: 'border-ask bg-ask text-ask-foreground',
-  current: 'border-primary bg-transparent text-foreground',
-  upcoming: 'border-border bg-transparent text-muted-foreground',
-  halted: 'border-border bg-transparent text-muted-foreground opacity-60',
+  done: 'border-primary bg-primary text-primary-foreground',
+  current: 'border-primary bg-accent text-primary',
+  upcoming: 'border-border bg-card text-muted-foreground',
+  halted: 'border-border bg-card text-muted-foreground opacity-60',
 };
 
 const LABEL_CLASS: Record<StepState, string> = {
   done: 'text-foreground',
-  current: 'font-semibold text-foreground',
+  current: 'font-semibold text-primary',
   upcoming: 'text-muted-foreground',
   halted: 'text-muted-foreground opacity-60',
 };
@@ -74,7 +74,7 @@ export function DealStepper({ deal, className }: DealStepperProps) {
             >
               <span
                 className={cn(
-                  'mt-mono inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[12px] font-medium leading-none',
+                  'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[13px] font-semibold tabular-nums leading-none',
                   NUMERAL_CLASS[state],
                 )}
                 aria-hidden="true"

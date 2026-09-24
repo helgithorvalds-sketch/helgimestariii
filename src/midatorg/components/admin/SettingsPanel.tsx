@@ -222,8 +222,8 @@ export function SettingsPanel() {
           <dl className="divide-y divide-border">
             {unknown.map((s) => (
               <div key={s.key} className="grid gap-1 px-4 py-3 sm:grid-cols-[220px_minmax(0,1fr)]">
-                <dt className="mt-mono text-[12.5px]">{s.key}</dt>
-                <dd className="mt-mono break-all text-[12.5px] text-muted-foreground">{JSON.stringify(s.value)}</dd>
+                <dt className="text-[12.5px]">{s.key}</dt>
+                <dd className="break-all text-[12.5px] text-muted-foreground">{JSON.stringify(s.value)}</dd>
               </div>
             ))}
           </dl>

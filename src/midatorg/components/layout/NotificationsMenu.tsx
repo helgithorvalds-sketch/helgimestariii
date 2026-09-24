@@ -77,7 +77,7 @@ export function NotificationsMenu({ className }: { className?: string }) {
               <DropdownMenuItem
                 key={n.id}
                 onSelect={() => open(n)}
-                className={cn('flex cursor-pointer flex-col items-start gap-0.5 px-3 py-2', !n.read_at && 'bg-primary/5')}
+                className={cn('flex cursor-pointer flex-col items-start gap-0.5 px-3 py-2', !n.read_at && 'bg-accent/40')}
               >
                 <span className="flex w-full items-center gap-2">
                   {!n.read_at && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />}

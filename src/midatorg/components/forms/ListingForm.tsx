@@ -184,7 +184,7 @@ export function ListingForm({ preselectEventId, className }: ListingFormProps) {
           <Button
             type="button"
             variant="outline"
-            className="h-10 bg-card hover:bg-surface-2"
+            className="h-10 bg-card hover:bg-secondary"
             onClick={() => finish(created.event_id)}
             disabled={uploadProof.isPending}
           >
@@ -211,10 +211,10 @@ export function ListingForm({ preselectEventId, className }: ListingFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className={cn('mt-panel overflow-hidden', className)}>
       {showPhoneGate && (
-        <div className="flex flex-wrap items-center gap-3 border-b border-border bg-surface-2 px-4 py-3 text-[13px] sm:px-5" role="status">
+        <div className="flex flex-wrap items-center gap-3 border-b border-border bg-secondary px-4 py-3 text-[13px] sm:px-5" role="status">
           <ShieldAlert className="h-4 w-4 shrink-0 text-verified" aria-hidden="true" />
           <p className="min-w-0 flex-1">{t('forms.sell.phoneGate')}</p>
-          <Button asChild variant="outline" size="sm" className="h-9 bg-card hover:bg-surface-2">
+          <Button asChild variant="outline" size="sm" className="h-9 bg-card hover:bg-secondary">
             <Link to={href('/eg')}>{t('forms.sell.phoneGateAction')}</Link>
           </Button>
         </div>
@@ -382,7 +382,7 @@ export function ListingForm({ preselectEventId, className }: ListingFormProps) {
         />
       </FormSection>
 
-      <div className="border-t border-border bg-surface-2/40 px-4 py-4 sm:px-5">
+      <div className="border-t border-border bg-secondary px-4 py-4 sm:px-5">
         <Field id="mt-notes" label={t('forms.field.notes')} optional error={errors.notes?.message} className="mb-4">
           {(p) => (
             <Textarea

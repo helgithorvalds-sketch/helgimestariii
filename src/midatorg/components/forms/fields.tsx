@@ -23,12 +23,12 @@ export function FormSection({ step, title, optional = false, description, childr
       <div className="mb-4 flex items-start gap-3">
         <span
           aria-hidden="true"
-          className="mt-mono inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border bg-surface-2 text-[12px] text-muted-foreground"
+          className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[13px] font-semibold tabular-nums text-primary-foreground"
         >
           {step}
         </span>
         <div className="min-w-0">
-          <h2 id={headingId} className="text-sm font-semibold leading-6">
+          <h2 id={headingId} className="text-sm font-semibold leading-7">
             {title}
             {optional && <span className="ml-1 font-normal text-muted-foreground">({t('common.optional')})</span>}
           </h2>

@@ -515,7 +515,7 @@ describe('MyPage', () => {
 
   it('overview: profile form prefilled and verification rows', () => {
     renderMyPage();
-    expect(screen.getByRole('heading', { name: 'Mín síða' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Notandasíða' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Skoða opinbera síðu' })).toHaveAttribute('href', '/midatorg/notendur/u1');
     expect(screen.getByLabelText('Nafn')).toHaveValue('Guðrún Jóns');
     expect(screen.getByLabelText(/Kynning/)).toHaveValue('Tónleikafíkill');
@@ -595,9 +595,9 @@ describe('MyPage', () => {
     expect(within(rows[0]).getByText('−25%')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Seld')).toBeInTheDocument();
     expect(within(rows[1]).queryByRole('button', { name: 'Breyta verði' })).not.toBeInTheDocument();
-    expect(await within(rows[0]).findByText('Engin staðfesting enn')).toBeInTheDocument();
-    expect(within(rows[0]).getByRole('button', { name: 'Hlaða upp staðfestingu' })).toBeInTheDocument();
-    expect(within(rows[1]).queryByRole('button', { name: 'Hlaða upp staðfestingu' })).not.toBeInTheDocument();
+    expect(await within(rows[0]).findByText('Ekkert miðaskjal enn')).toBeInTheDocument();
+    expect(within(rows[0]).getByRole('button', { name: 'Hlaða upp miðaskjali' })).toBeInTheDocument();
+    expect(within(rows[1]).queryByRole('button', { name: 'Hlaða upp miðaskjali' })).not.toBeInTheDocument();
 
     fireEvent.click(within(rows[0]).getByRole('button', { name: 'Breyta verði' }));
     const priceInput = within(rows[0]).getByLabelText('Nýtt verð á miða');
@@ -613,12 +613,12 @@ describe('MyPage', () => {
     await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Verð uppfært'));
     await waitFor(() => expect(within(rows[0]).queryByLabelText('Nýtt verð á miða')).not.toBeInTheDocument());
 
-    fireEvent.click(within(rows[0]).getByRole('button', { name: 'Hætta við skráningu' }));
+    fireEvent.click(within(rows[0]).getByRole('button', { name: 'Taka úr sölu' }));
     const dialog = await screen.findByRole('alertdialog');
-    expect(dialog).toHaveTextContent('Hætta við skráningu?');
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Hætta við skráningu' }));
+    expect(dialog).toHaveTextContent('Taka miðana úr sölu?');
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Taka úr sölu' }));
     await waitFor(() => expect(listingsApi.cancelListing).toHaveBeenCalledWith('l1'));
-    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Skráningu hætt'));
+    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Miðarnir teknir úr sölu'));
   });
 
   it('listings tab: empty state links to the sell form; error state retries', async () => {
@@ -667,18 +667,18 @@ describe('MyPage', () => {
     expect(within(rows[1]).getByText('Öll verð')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Engir miðar til sölu')).toBeInTheDocument();
 
-    fireEvent.click(within(rows[0]).getByRole('button', { name: 'Fjarlægja vaktun' }));
+    fireEvent.click(within(rows[0]).getByRole('button', { name: 'Hætta að láta vita' }));
     const dialog = await screen.findByRole('alertdialog');
-    expect(dialog).toHaveTextContent('Fjarlægja vaktun?');
+    expect(dialog).toHaveTextContent('Hætta að láta vita?');
     fireEvent.click(within(dialog).getByRole('button', { name: 'Fjarlægja' }));
     await waitFor(() => expect(alertsApi.removeAlert).toHaveBeenCalledWith('e1'));
-    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Vaktun fjarlægð'));
+    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Þú færð ekki lengur tilkynningar'));
   });
 
   it('alerts tab: empty state', async () => {
     vi.mocked(alertsApi.listMyAlerts).mockResolvedValue([]);
     renderMyPage('/midatorg/eg?flipi=vaktanir');
-    expect(await screen.findByText('Engar vaktanir')).toBeInTheDocument();
+    expect(await screen.findByText('Þú fylgist ekki með neinum viðburði')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Skoða viðburði' })).toHaveAttribute('href', '/midatorg');
   });
 
@@ -776,7 +776,7 @@ describe('PublicProfilePage', () => {
     vi.mocked(profilesApi.getPublicProfile).mockResolvedValueOnce(null);
     const { unmount } = renderProfile('nope');
     expect(await screen.findByText('Notandi fannst ekki')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Fara á markaðinn' })).toHaveAttribute('href', '/midatorg');
+    expect(screen.getByRole('link', { name: 'Skoða viðburði' })).toHaveAttribute('href', '/midatorg');
     unmount();
 
     vi.mocked(profilesApi.getPublicProfile).mockRejectedValueOnce(new Error('Failed to fetch')).mockResolvedValueOnce(rater);

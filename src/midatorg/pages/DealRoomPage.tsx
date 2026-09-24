@@ -40,7 +40,7 @@ function PartyCard({ profile, heading, onReport }: PartyCardProps) {
   const profileHref = href(`/notendur/${profile.id}`);
   return (
     <section className="mt-panel p-[14px]" aria-label={heading} data-testid="party-card">
-      <p className="mt-eyebrow">{heading}</p>
+      <p className="mt-label">{heading}</p>
       <div className="mt-2 flex items-center gap-3">
         <UserAvatar profile={profile} size="md" />
         <div className="min-w-0 flex-1">
@@ -130,7 +130,7 @@ function DealRoom({ deal }: { deal: DealWithContext }) {
           <section className="mt-panel p-[14px]" aria-labelledby="mt-deal-title">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="mt-eyebrow">{t('deals.room.title')}</p>
+                <p className="mt-label">{t('deals.room.title')}</p>
                 <h1 id="mt-deal-title" className="text-[22px] font-bold leading-[1.2] tracking-[-0.025em] sm:text-[26px]">
                   <Link to={href(`/vidburdir/${deal.event.id}`)} className="underline-offset-4 hover:underline">
                     {deal.event.title}
@@ -146,13 +146,13 @@ function DealRoom({ deal }: { deal: DealWithContext }) {
               <DealStatusBadge status={status} />
             </div>
             {status === 'reserved' && (
-              <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-[13px]">
+              <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-secondary px-3 py-2 text-[13px]">
                 <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <span>{t('countdown.reservedUntil', { time: formatTime(deal.reserved_until) })}</span>
                 <span className="text-muted-foreground" aria-hidden="true">
                   ·
                 </span>
-                <span className="mt-eyebrow">{t('deals.timer.label')}</span>
+                <span className="text-[13px] text-muted-foreground">{t('deals.timer.label')}</span>
                 <Countdown until={deal.reserved_until} className="font-semibold" onExpire={onExpire} />
               </p>
             )}
@@ -162,7 +162,7 @@ function DealRoom({ deal }: { deal: DealWithContext }) {
           <DealGuidance deal={deal} status={status} role={role} />
 
           <section className="mt-panel p-[14px]" aria-labelledby="mt-amount-title">
-            <h2 id="mt-amount-title" className="mt-eyebrow">
+            <h2 id="mt-amount-title" className="text-[16px] font-semibold">
               {t('deals.amount.title')}
             </h2>
             <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
@@ -182,7 +182,7 @@ function DealRoom({ deal }: { deal: DealWithContext }) {
           <ProofDownload deal={deal} status={status} role={role} />
           {canRate(status, role) && <RatingDialog deal={deal} role={role} />}
 
-          <p className="flex items-start gap-2 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-[12px] text-muted-foreground">
+          <p className="flex items-start gap-2 rounded-lg border border-border bg-secondary px-3 py-2 text-[12px] text-muted-foreground">
             <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-verified" aria-hidden="true" />
             <span>{t('deals.room.trust')}</span>
           </p>

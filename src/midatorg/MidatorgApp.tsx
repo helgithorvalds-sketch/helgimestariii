@@ -5,27 +5,13 @@ import { MidatorgRoutes } from './routes';
 import { APP_TITLE } from './lib/useDocumentTitle';
 import './theme.css';
 
-const FONT_HREF =
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap';
-const FONT_LINK_ID = 'midatorg-fonts';
-const ROOT_CLASSES = ['midatorg', 'dark'];
-
-/** Adds the DESIGN.md fonts once (Inter is already loaded by index.html; JetBrains Mono is not). */
-function useFonts() {
-  useEffect(() => {
-    if (document.getElementById(FONT_LINK_ID)) return;
-    const link = document.createElement('link');
-    link.id = FONT_LINK_ID;
-    link.rel = 'stylesheet';
-    link.href = FONT_HREF;
-    document.head.appendChild(link);
-  }, []);
-}
+const ROOT_CLASS = 'midatorg';
 
 /**
- * Puts `.midatorg.dark` on <body> as well, so Radix portals (menus, dialogs,
+ * Puts `.midatorg` on <body> as well, so Radix portals (menus, dialogs,
  * selects, tooltips) and the app-level sonner toaster — which render outside our
  * root div — get the Miðatorg tokens. Restored when the module unmounts.
+ * Inter is already loaded by index.html; the module uses no other font.
  */
 function useBodyTheme() {
   useEffect(() => {
@@ -33,12 +19,12 @@ function useBodyTheme() {
     const html = document.documentElement;
     const previousTitle = document.title;
     const previousLang = html.lang;
-    body.classList.add(...ROOT_CLASSES);
+    body.classList.add(ROOT_CLASS);
     html.classList.add('midatorg-html');
     html.lang = 'is';
     document.title = APP_TITLE;
     return () => {
-      body.classList.remove(...ROOT_CLASSES);
+      body.classList.remove(ROOT_CLASS);
       html.classList.remove('midatorg-html');
       html.lang = previousLang;
       document.title = previousTitle;
@@ -51,10 +37,9 @@ function useBodyTheme() {
  * QueryClientProvider, TooltipProvider and the sonner Toaster come from App.tsx.
  */
 export default function MidatorgApp() {
-  useFonts();
   useBodyTheme();
   return (
-    <div className="midatorg dark min-h-screen bg-background text-foreground" style={{ colorScheme: 'dark' }}>
+    <div className="midatorg min-h-screen bg-background text-foreground" style={{ colorScheme: 'light' }}>
       <I18nProvider>
         <AuthProvider>
           <MidatorgRoutes />

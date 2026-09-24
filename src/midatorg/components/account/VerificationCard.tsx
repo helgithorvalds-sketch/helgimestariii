@@ -28,7 +28,7 @@ function Row({
   const t = useT();
   return (
     <li className="flex flex-wrap items-center gap-x-3 gap-y-2 py-3">
-      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-muted-foreground">
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-secondary text-muted-foreground">
         <Icon className="h-4 w-4" aria-hidden="true" />
       </span>
       <div className="min-w-0 flex-1">

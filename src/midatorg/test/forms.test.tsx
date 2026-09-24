@@ -553,7 +553,7 @@ describe('ProofUpload', () => {
     }
     wrap(<Harness />);
     const file = pdfFile();
-    fireEvent.change(screen.getByLabelText('Staðfesting á miða'), { target: { files: [file] } });
+    fireEvent.change(screen.getByLabelText('Miðaskjal'), { target: { files: [file] } });
     expect(onChange).toHaveBeenCalledWith(file);
     expect(await screen.findByText('midi.pdf')).toBeInTheDocument();
     expect(await screen.findByText(PDF_SHA_SHORT)).toBeInTheDocument();
@@ -565,7 +565,7 @@ describe('ProofUpload', () => {
   it('rejects wrong types and oversized files with translated messages', () => {
     const onChange = vi.fn();
     wrap(<ProofUpload id="proof" file={null} onChange={onChange} />);
-    const input = screen.getByLabelText('Staðfesting á miða');
+    const input = screen.getByLabelText('Miðaskjal');
     fireEvent.change(input, { target: { files: [new File(['x'], 'a.txt', { type: 'text/plain' })] } });
     expect(screen.getByText('Aðeins PDF, PNG og JPG skrár eru leyfðar.')).toBeInTheDocument();
     expect(onChange).toHaveBeenLastCalledWith(null);
@@ -769,7 +769,7 @@ describe('ListingForm', () => {
     await screen.findByTestId('event-picker-selected');
     fillPrices('10000', '9000');
     const file = pdfFile();
-    fireEvent.change(screen.getByLabelText('Staðfesting á miða'), { target: { files: [file] } });
+    fireEvent.change(screen.getByLabelText('Miðaskjal'), { target: { files: [file] } });
     expect(await screen.findByText(PDF_SHA_SHORT)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Skrá miða til sölu' }));
     await waitFor(() => expect(uploadProof).toHaveBeenCalledWith('l1', file));
@@ -782,18 +782,18 @@ describe('ListingForm', () => {
     wrap(<ListingForm preselectEventId="e1" />);
     await screen.findByTestId('event-picker-selected');
     fillPrices('10000', '9000');
-    fireEvent.change(screen.getByLabelText('Staðfesting á miða'), { target: { files: [pdfFile()] } });
+    fireEvent.change(screen.getByLabelText('Miðaskjal'), { target: { files: [pdfFile()] } });
     await screen.findByText('midi.pdf');
     fireEvent.click(screen.getByRole('button', { name: 'Skrá miða til sölu' }));
     expect(await screen.findByTestId('proof-recovery')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toHaveTextContent('Þessi skrá hefur þegar verið notuð fyrir aðra skráningu á Miðatorgi.');
+    expect(screen.getByRole('alert')).toHaveTextContent('Þessi skrá hefur þegar verið notuð fyrir aðra miða á Miðatorgi.');
     expect(createListing).toHaveBeenCalledTimes(1);
     expect(screen.getByTestId('location')).toHaveTextContent('/midatorg/selja');
 
     // retry with another file re-uses the created listing id
     fireEvent.click(screen.getByRole('button', { name: 'Fjarlægja skrá' }));
     const other = new File([new Uint8Array([9, 9])], 'annar.png', { type: 'image/png' });
-    fireEvent.change(screen.getByLabelText('Staðfesting á miða'), { target: { files: [other] } });
+    fireEvent.change(screen.getByLabelText('Miðaskjal'), { target: { files: [other] } });
     fireEvent.click(screen.getByRole('button', { name: 'Reyna aftur' }));
     await waitFor(() => expect(uploadProof).toHaveBeenLastCalledWith('l1', other));
     expect(createListing).toHaveBeenCalledTimes(1);
@@ -805,7 +805,7 @@ describe('ListingForm', () => {
     wrap(<ListingForm preselectEventId="e1" />);
     await screen.findByTestId('event-picker-selected');
     fillPrices('10000', '9000');
-    fireEvent.change(screen.getByLabelText('Staðfesting á miða'), { target: { files: [pdfFile()] } });
+    fireEvent.change(screen.getByLabelText('Miðaskjal'), { target: { files: [pdfFile()] } });
     await screen.findByText('midi.pdf');
     fireEvent.click(screen.getByRole('button', { name: 'Skrá miða til sölu' }));
     await screen.findByTestId('proof-recovery');

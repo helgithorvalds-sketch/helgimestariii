@@ -96,7 +96,7 @@ export function EventsTable() {
             </TableHeader>
             <TableBody>
               {events.data.map((e) => (
-                <TableRow key={e.id} className="border-border hover:bg-surface-2/40" data-testid="event-row">
+                <TableRow key={e.id} className="border-border even:bg-secondary/50 hover:bg-accent/50" data-testid="event-row">
                   <TableCell className={tdClass}>
                     <div className="flex items-center gap-2.5">
                       <UserAvatar profile={{ id: e.id, display_name: e.title, avatar_url: e.image_url }} size="sm" shape="square" />

@@ -88,7 +88,7 @@ export function EventPicker({ value, onChange, preselectId, error, disabled, cla
             type="button"
             variant="outline"
             size="sm"
-            className="h-9 shrink-0 bg-card hover:bg-surface-2"
+            className="h-9 shrink-0 bg-card hover:bg-secondary"
             onClick={() => pick(null)}
             disabled={disabled}
           >
@@ -113,10 +113,10 @@ export function EventPicker({ value, onChange, preselectId, error, disabled, cla
   if (wantPreselect && preselect.isLoading) {
     return (
       <div className={cn('flex items-center gap-3 rounded-lg border border-border bg-background p-3', className)} aria-busy="true">
-        <Skeleton className="h-11 w-11 rounded-lg bg-surface-2" />
+        <Skeleton className="h-11 w-11 rounded-lg bg-secondary" />
         <div className="flex-1 space-y-2">
-          <Skeleton className="h-3.5 w-2/3 bg-surface-2" />
-          <Skeleton className="h-3 w-1/2 bg-surface-2" />
+          <Skeleton className="h-3.5 w-2/3 bg-secondary" />
+          <Skeleton className="h-3 w-1/2 bg-secondary" />
         </div>
       </div>
     );
@@ -145,10 +145,10 @@ export function EventPicker({ value, onChange, preselectId, error, disabled, cla
       <div className="space-y-1 p-2" aria-busy="true">
         {[0, 1, 2].map((i) => (
           <div key={i} className="flex items-center gap-3 px-2 py-2">
-            <Skeleton className="h-[30px] w-[30px] rounded-md bg-surface-2" />
+            <Skeleton className="h-[30px] w-[30px] rounded-md bg-secondary" />
             <div className="flex-1 space-y-1.5">
-              <Skeleton className="h-3.5 w-2/3 bg-surface-2" />
-              <Skeleton className="h-3 w-1/2 bg-surface-2" />
+              <Skeleton className="h-3.5 w-2/3 bg-secondary" />
+              <Skeleton className="h-3 w-1/2 bg-secondary" />
             </div>
           </div>
         ))}
@@ -174,7 +174,7 @@ export function EventPicker({ value, onChange, preselectId, error, disabled, cla
           type="button"
           variant="outline"
           size="sm"
-          className="mt-1 h-9 gap-1.5 bg-card hover:bg-surface-2"
+          className="mt-1 h-9 gap-1.5 bg-card hover:bg-secondary"
           onClick={() => setManualOpen(true)}
           disabled={disabled}
         >

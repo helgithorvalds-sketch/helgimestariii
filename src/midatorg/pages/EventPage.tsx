@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { CalendarX, Tag } from 'lucide-react';
+import { CalendarX, ShoppingCart, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -21,11 +21,11 @@ import { PageContainer } from '../components/layout/PageContainer';
 import { EmptyState } from '../components/common/EmptyState';
 import { ErrorState } from '../components/common/ErrorState';
 import { ReportDialog } from '../components/common/ReportDialog';
-import { bidButtonClass } from '../components/common/buttonClasses';
+import { secondaryButtonClass } from '../components/common/buttonClasses';
 import { EventHeader } from '../components/event/EventHeader';
-import { StatsRow, StatsRowSkeleton } from '../components/event/StatsRow';
+import { StatsRowSkeleton, StatsRow } from '../components/event/StatsRow';
 import { PriceChart } from '../components/event/PriceChart';
-import { OrderBook } from '../components/event/OrderBook';
+import { OrderBook, SELL_SECTION_ID } from '../components/event/OrderBook';
 import { BuyDialog } from '../components/event/BuyDialog';
 import { AlertButton } from '../components/event/AlertButton';
 import { HowItWorks } from '../components/event/HowItWorks';
@@ -34,28 +34,32 @@ import { eventFaceValue, isEventOpen, reservationMinutes, type ChartRange } from
 function EventPageSkeleton() {
   return (
     <div className="space-y-5" aria-busy="true" aria-live="polite">
-      <Skeleton className="h-3 w-48 bg-surface-2" />
-      <div className="flex items-start gap-4">
-        <Skeleton className="h-14 w-14 rounded-lg bg-surface-2 sm:h-[72px] sm:w-[72px]" />
-        <div className="flex-1 space-y-2">
-          <Skeleton className="h-4 w-20 bg-surface-2" />
-          <Skeleton className="h-7 w-2/3 bg-surface-2" />
-          <Skeleton className="h-3.5 w-1/2 bg-surface-2" />
-        </div>
+      <Skeleton className="h-3 w-48 bg-secondary" />
+      <Skeleton className="aspect-video max-h-[360px] w-full rounded-xl bg-secondary" />
+      <div className="space-y-2">
+        <Skeleton className="h-5 w-20 bg-secondary" />
+        <Skeleton className="h-8 w-2/3 bg-secondary" />
+        <Skeleton className="h-4 w-1/2 bg-secondary" />
       </div>
       <StatsRowSkeleton />
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-4">
-          <Skeleton className="h-[320px] w-full rounded-[10px] bg-surface-2" />
-          <Skeleton className="h-[280px] w-full rounded-[10px] bg-surface-2" />
+          <Skeleton className="h-[220px] w-full rounded-xl bg-secondary" />
+          <Skeleton className="h-[160px] w-full rounded-xl bg-secondary" />
         </div>
-        <Skeleton className="h-[260px] w-full rounded-[10px] bg-surface-2" />
+        <Skeleton className="h-[260px] w-full rounded-xl bg-secondary" />
       </div>
     </div>
   );
 }
 
-/** `/vidburdir/:eventId` — header, stats, chart, order book, CTAs, how-it-works (spec §5). */
+/** Scrolls to the "Miðar til sölu" list (no-op where scrollIntoView is unavailable, e.g. jsdom). */
+function scrollToTickets() {
+  const el = document.getElementById(SELL_SECTION_ID);
+  if (el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/** `/vidburdir/:eventId` — hero, title, buttons, summary strip, tickets for sale, wanted, price history, how it works (DESIGN-v2 §4). */
 export default function EventPage() {
   const { eventId } = useParams<{ eventId: string }>();
   const [params] = useSearchParams();
@@ -81,7 +85,7 @@ export default function EventPage() {
 
   if (!eventId || eventQ.isPending) {
     return (
-      <PageContainer className="py-4 sm:py-6">
+      <PageContainer className="py-5 sm:py-8">
         <EventPageSkeleton />
       </PageContainer>
     );
@@ -103,7 +107,7 @@ export default function EventPage() {
           title={t('event.notFoundTitle')}
           body={t('event.notFoundBody')}
           action={
-            <Button asChild variant="outline" size="sm">
+            <Button asChild variant="outline" size="sm" className={cn('h-10 rounded-lg px-4 text-[14px]', secondaryButtonClass)}>
               <Link to={href('/')}>{t('common.goHome')}</Link>
             </Button>
           }
@@ -128,27 +132,18 @@ export default function EventPage() {
   };
 
   return (
-    <PageContainer className={cn('py-4 sm:py-6', open && 'pb-20 md:pb-6')}>
+    <PageContainer className={cn('py-5 sm:py-8', open && 'pb-24 md:pb-8')}>
       <EventHeader
         event={event}
         onReport={() => setReportOpen(true)}
+        onBuy={scrollToTickets}
         alertButton={open ? <AlertButton eventId={event.id} faceValue={face} autoOpen={autoOpenAlert} /> : undefined}
       />
 
-      <StatsRow event={event} listings={listingsQ.data} className="mt-5" />
+      <StatsRow event={event} listings={listingsQ.data} className="mt-6" />
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="min-w-0 space-y-4">
-          <PriceChart
-            snapshots={snapshotsQ.data}
-            faceValue={face}
-            range={range}
-            onRangeChange={setRange}
-            loading={snapshotsQ.isPending}
-            error={snapshotsQ.isError ? snapshotsQ.error : undefined}
-            retry={() => void snapshotsQ.refetch()}
-            lastSold={soldQ.data?.[0] ?? null}
-          />
+      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="min-w-0 space-y-8">
           <OrderBook
             event={event}
             listings={listingsQ.data}
@@ -162,17 +157,25 @@ export default function EventPage() {
             onBuy={onBuy}
             currentUserId={user?.id ?? null}
           />
+          <PriceChart
+            snapshots={snapshotsQ.data}
+            faceValue={face}
+            range={range}
+            onRangeChange={setRange}
+            loading={snapshotsQ.isPending}
+            error={snapshotsQ.isError ? snapshotsQ.error : undefined}
+            retry={() => void snapshotsQ.refetch()}
+            lastSold={soldQ.data?.[0] ?? null}
+          />
         </div>
-        <aside className="min-w-0 space-y-4" aria-label={t('event.how.title')}>
+        <aside className="min-w-0 space-y-6" aria-label={t('event.how.title')}>
           <HowItWorks faceValue={face} reservationMinutes={minutes} />
           {event.description && (
-            <section className="mt-panel" aria-labelledby="mt-about-h">
-              <div className="border-b border-border px-[14px] py-3">
-                <h2 id="mt-about-h" className="text-[14px] font-semibold">
-                  {t('event.about.title')}
-                </h2>
-              </div>
-              <div className="space-y-2 px-[14px] py-3 text-[13px] text-muted-foreground">
+            <section className="mt-panel p-4 sm:p-5" aria-labelledby="mt-about-h">
+              <h2 id="mt-about-h" className="text-[20px] font-semibold tracking-tight">
+                {t('event.about.title')}
+              </h2>
+              <div className="mt-3 space-y-2 text-[14px] text-muted-foreground">
                 <p className="whitespace-pre-line">{event.description}</p>
                 {event.source === 'tix' && <p>{t('event.about.tixNote')}</p>}
               </div>
@@ -183,21 +186,21 @@ export default function EventPage() {
 
       {open && (
         <div
-          className="fixed inset-x-0 z-30 border-t border-border bg-background/95 px-4 py-2 backdrop-blur md:hidden"
+          className="fixed inset-x-0 z-30 border-t border-border bg-background px-4 py-2 md:hidden"
           style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom, 0px))' }}
           data-testid="mobile-cta"
         >
           <div className="flex items-center gap-2">
-            <Button asChild size="sm" className="h-10 flex-1 text-[13px] font-semibold">
+            <Button type="button" size="sm" className="h-11 flex-1 rounded-lg text-[14px] font-semibold" onClick={scrollToTickets}>
+              <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+              {t('event.buy')}
+            </Button>
+            <Button asChild variant="outline" size="sm" className={cn('h-11 flex-1 rounded-lg text-[14px] font-semibold', secondaryButtonClass)}>
               <Link to={href(`/selja?event=${event.id}`)}>
-                <Tag className="h-[15px] w-[15px]" aria-hidden="true" />
-                {t('event.sellShort')}
+                <Tag className="h-4 w-4" aria-hidden="true" />
+                {t('event.sell')}
               </Link>
             </Button>
-            <Button asChild variant="outline" size="sm" className={cn('h-10 flex-1 text-[13px] font-semibold', bidButtonClass)}>
-              <Link to={href(`/oska?event=${event.id}`)}>{t('event.want')}</Link>
-            </Button>
-            <AlertButton eventId={event.id} faceValue={face} compact />
           </div>
         </div>
       )}

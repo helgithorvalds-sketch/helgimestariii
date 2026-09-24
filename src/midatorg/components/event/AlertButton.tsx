@@ -12,7 +12,7 @@ import { useT } from '../../lib/i18n';
 import { useAuth, loginHref } from '../../lib/auth';
 import { formatISK } from '../../lib/format';
 import { mtKeys, useMyAlert, useRemoveAlert, useUpsertAlert } from '../../lib/queries';
-import { secondaryButtonClass } from '../common/buttonClasses';
+import { ghostButtonClass } from '../common/buttonClasses';
 
 export type AlertButtonProps = {
   eventId: string;
@@ -74,10 +74,10 @@ export function AlertButton({ eventId, faceValue = null, autoOpen = false, compa
   const label = following ? t('event.alert.following') : t('event.alert.button');
   const Icon = following ? BellRing : Bell;
   const buttonClass = cn(
-    'h-10 text-[13px] font-semibold sm:h-9',
-    secondaryButtonClass,
-    following && 'border-muted-foreground/60 bg-surface-2',
-    compact ? 'w-10 px-0 sm:w-9' : 'px-3.5',
+    'h-11 rounded-lg text-[14px] font-semibold sm:h-10',
+    ghostButtonClass,
+    following && 'bg-accent text-accent-foreground',
+    compact ? 'w-11 px-0 sm:w-10' : 'px-3',
     className,
   );
 
@@ -143,7 +143,7 @@ export function AlertButton({ eventId, faceValue = null, autoOpen = false, compa
           {!compact && label}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="mt-panel w-80 bg-popover p-4 shadow-none">
+      <PopoverContent align="end" className="mt-panel w-80 rounded-xl bg-popover p-4 shadow-lg">
         <div className="space-y-3">
           <div>
             <p className="text-[14px] font-semibold">{t('event.alert.title')}</p>
@@ -178,11 +178,11 @@ export function AlertButton({ eventId, faceValue = null, autoOpen = false, compa
           </div>
           <div className="flex flex-wrap justify-end gap-2">
             {following && (
-              <Button type="button" variant="outline" size="sm" className="h-9" onClick={stop} disabled={busy}>
+              <Button type="button" variant="outline" size="sm" className="h-10 rounded-lg" onClick={stop} disabled={busy}>
                 {t('event.alert.remove')}
               </Button>
             )}
-            <Button type="button" size="sm" className="h-9 font-semibold" onClick={save} disabled={busy}>
+            <Button type="button" size="sm" className="h-10 rounded-lg font-semibold" onClick={save} disabled={busy}>
               {busy ? t('common.saving') : following ? t('event.alert.update') : t('event.alert.save')}
             </Button>
           </div>
