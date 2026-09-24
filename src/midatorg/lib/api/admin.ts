@@ -111,7 +111,17 @@ export async function deleteEvent(id: string): Promise<void> {
 }
 
 export type FetchTixEventResult = { eventId: string };
-export type TixImportResult = { scanned: number; inserted: number; updated: number; errors: string[] };
+export type TixImportResult = {
+  scanned: number;
+  fetched?: number;
+  skipped?: number;
+  parsed?: number;
+  inserted: number;
+  updated: number;
+  /** One entry per failed category page / event page / import chunk, as mt-import-tix returns them. */
+  errors: { id: string; message: string }[];
+  durationMs?: number;
+};
 
 /** Function error bodies are `{ error: CODE, reason? | status? | message? }`; codes not in lib/errors.ts map to a close one. */
 const EDGE_CODE_MAP: Record<string, string> = {
@@ -178,24 +188,22 @@ export async function listDisputes(): Promise<DealWithContext[]> {
 
 // ---------------------------------------------------------------- settings
 /**
- * `mt_public_settings` (migration 0008) has exactly the `mt_settings` columns but only
- * the harmless keys, readable by everyone. database.types.ts is generated and does not
- * list the view yet, hence the cast.
- */
-const PUBLIC_SETTINGS_VIEW = 'mt_public_settings' as unknown as 'mt_settings';
-
-/**
  * Settings for the UI. Non-admins read the public view (reservation_minutes, the
  * max_* limits, require_phone_to_sell); admins read the whole table (admin_emails …).
  * The importer's `cron_secret` is never returned.
  */
 export async function getSettings(opts: { admin?: boolean } = {}): Promise<Setting[]> {
-  const query = opts.admin
-    ? supabase.from('mt_settings').select('*').neq('key', 'cron_secret')
-    : supabase.from(PUBLIC_SETTINGS_VIEW).select('*');
-  const { data, error } = await query.order('key', { ascending: true });
+  if (opts.admin) {
+    const { data, error } = await supabase.from('mt_settings').select('*').neq('key', 'cron_secret').order('key', { ascending: true });
+    if (error) throw error;
+    return data ?? [];
+  }
+  // `mt_public_settings` (migration 0008) exposes only the harmless keys to everyone.
+  const { data, error } = await supabase.from('mt_public_settings').select('*').order('key', { ascending: true });
   if (error) throw error;
-  return data ?? [];
+  return (data ?? [])
+    .filter((row): row is typeof row & { key: string } => typeof row.key === 'string')
+    .map((row) => ({ key: row.key, value: row.value ?? null, updated_at: row.updated_at ?? '' }));
 }
 
 export async function setSetting(key: string, value: Json): Promise<Setting> {

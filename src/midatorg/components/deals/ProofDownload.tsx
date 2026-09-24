@@ -115,7 +115,7 @@ function SellerProof({ listingId, className }: { listingId: string; className?: 
  */
 export function ProofDownload({ deal, status, role, className }: ProofDownloadProps) {
   if (role === 'buyer') {
-    if (!canDownloadProof(status, role)) return null;
+    if (!canDownloadProof(status, role, deal.ticket_sent_at)) return null;
     return <BuyerProof listingId={deal.listing_id} className={className} />;
   }
   if (role === 'seller') return <SellerProof listingId={deal.listing_id} className={className} />;

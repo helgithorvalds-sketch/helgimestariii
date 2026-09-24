@@ -631,7 +631,7 @@ describe('ImportPanel', () => {
   });
 
   it('runs the importer and shows the counts', async () => {
-    vi.mocked(adminApi.runTixImport).mockResolvedValue({ scanned: 12, inserted: 3, updated: 4, errors: ['event 5: no JSON-LD'] });
+    vi.mocked(adminApi.runTixImport).mockResolvedValue({ scanned: 12, inserted: 3, updated: 4, errors: [{ id: 'event 5', message: 'no JSON-LD' }] });
     wrap(<ImportPanel />);
     fireEvent.click(screen.getByRole('button', { name: 'Keyra innflutning núna' }));
     await waitFor(() => expect(adminApi.runTixImport).toHaveBeenCalled());

@@ -277,8 +277,10 @@ export function chatClosedKey(status: DealStatus, role?: DealRole): string | nul
   return null;
 }
 
-export function canDownloadProof(status: DealStatus, role: DealRole): boolean {
-  return role === 'buyer' && PROOF_VISIBLE_STATUSES.includes(status);
+export function canDownloadProof(status: DealStatus, role: DealRole, ticketSentAt?: string | null): boolean {
+  if (role !== 'buyer') return false;
+  if (status === 'disputed') return !!ticketSentAt;
+  return PROOF_VISIBLE_STATUSES.includes(status);
 }
 
 export function canRate(status: DealStatus, role: DealRole): boolean {

@@ -442,7 +442,7 @@ describe('LoginPage', () => {
     type(screen.getByLabelText('Netfang'), 'gudrun@example.is');
     type(screen.getByLabelText('Lykilorð'), 'leyni123');
     fireEvent.click(screen.getByRole('button', { name: 'Stofna aðgang' }));
-    await waitFor(() => expect(signUp).toHaveBeenCalledWith('gudrun@example.is', 'leyni123', 'Guðrún Jóns'));
+    await waitFor(() => expect(signUp).toHaveBeenCalledWith('gudrun@example.is', 'leyni123', 'Guðrún Jóns', expect.any(String)));
     expect(await screen.findByText('Staðfestu netfangið þitt')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('gudrun@example.is');
     expect(screen.queryByRole('button', { name: 'Senda aftur' })).not.toBeInTheDocument();
@@ -476,7 +476,7 @@ describe('LoginPage', () => {
     expect(screen.getByRole('heading', { name: 'Innskráningartengill' })).toBeInTheDocument();
     type(screen.getByLabelText('Netfang'), 'gudrun@example.is');
     fireEvent.click(screen.getByRole('button', { name: 'Senda tengil' }));
-    await waitFor(() => expect(sendMagicLink).toHaveBeenCalledWith('gudrun@example.is'));
+    await waitFor(() => expect(sendMagicLink).toHaveBeenCalledWith('gudrun@example.is', expect.any(String)));
     expect(await screen.findByText('Tengill sendur')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('gudrun@example.is');
     fireEvent.click(screen.getByRole('button', { name: 'Senda aftur' }));

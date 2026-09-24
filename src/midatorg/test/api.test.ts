@@ -34,6 +34,7 @@ import { listMyDeals, transitionDeal } from '../lib/api/deals';
 import { createManualEvent, listMarketEvents } from '../lib/api/events';
 import { uploadProof } from '../lib/api/listings';
 import { fetchTixEvent, getSettings } from '../lib/api/admin';
+import { listNotifications } from '../lib/api/notifications';
 import { parseApiError } from '../lib/errors';
 
 /** Chainable query builder that records every call and resolves to `result`. */
@@ -118,6 +119,15 @@ describe('events', () => {
     const calls = nextFrom({ data: { id: 'e9' }, error: null });
     await expect(createManualEvent({ ...base, tix_url: 'https://www.tix.is/is/event/1/', image_url: 'https://cdn.tix.is/a.jpg' })).resolves.toEqual({ id: 'e9' });
     expect(calls[0]).toEqual({ method: 'from', args: ['mt_events'] });
+  });
+});
+
+describe('notifications', () => {
+  it('listNotifications pages with range(offset, offset + limit - 1) and an id tiebreaker', async () => {
+    const calls = nextFrom({ data: [], error: null });
+    await expect(listNotifications(20, 40)).resolves.toEqual([]);
+    expect(calls).toContainEqual({ method: 'range', args: [40, 59] });
+    expect(lastOrder(calls)).toEqual(['id', { ascending: true }]);
   });
 });
 

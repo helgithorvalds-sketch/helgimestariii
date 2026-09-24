@@ -218,7 +218,7 @@ Common: `VerifiedBadge(level)`, `RatingStars(value, count?)`, `UserAvatar(profil
   Returns `{ scanned, inserted, updated, errors: [...] }`. Logs are structured, never dump HTML.
 - `mt-fetch-tix-event` (verify_jwt true; admin only, checked via the caller's profile): body `{ url }`, only `tix.is` hosts,
   parses one event page the same way, imports it, returns `{ eventId }`.
-- Cron: `cron.schedule('mt-import-tix', '17 */6 * * *', $$ select net.http_post(url := '<functions url>/mt-import-tix', headers := '{"Authorization":"Bearer <anon key>","Content-Type":"application/json"}'::jsonb, body := '{}'::jsonb) $$)`.
+- Cron: `mt-import-tix` runs every 6 hours via pg_cron + pg_net, posting to the function with the anon key **and** the `x-mt-cron-secret` header read from `mt_settings.cron_secret` (migration 0008); the function rejects anonymous calls without the matching secret. Admins trigger it from the admin page with their own JWT.
 
 Note: the build sandbox cannot reach tix.is, so the parser is written defensively and verified by unit tests on fixture HTML; a real run is triggered from the admin page once deployed.
 

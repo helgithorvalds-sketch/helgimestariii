@@ -60,6 +60,7 @@ export const CLIENT_ERROR_CODES = [
   'INVALID_EMAIL',
   'SAME_PASSWORD',
   'INVALID_PHONE',
+  'SMS_SEND_FAILED',
   'FILE_TOO_LARGE',
   'FILE_TYPE_NOT_ALLOWED',
   // edge functions (mt-fetch-tix-event / mt-import-tix), surfaced by lib/api/admin.ts
@@ -131,7 +132,7 @@ const AUTH_CODE_MAP: Record<string, ApiErrorCode> = {
   session_expired: 'AUTH_REQUIRED',
   refresh_token_not_found: 'AUTH_REQUIRED',
   user_banned: 'USER_BANNED',
-  sms_send_failed: 'INVALID_PHONE',
+  sms_send_failed: 'SMS_SEND_FAILED',
 };
 
 /**
@@ -210,6 +211,10 @@ export function parseApiError(err: unknown): ParsedError {
   }
   if (haystack.includes('unable to validate email') || haystack.includes('invalid email')) {
     return make('INVALID_EMAIL', message);
+  }
+  // SMS provider not set up / delivery failed (Supabase: "Error sending sms", "sms provider not configured", …)
+  if (haystack.includes('sms') && (haystack.includes('send') || haystack.includes('provider') || haystack.includes('not configured'))) {
+    return make('SMS_SEND_FAILED', message);
   }
   if (haystack.includes('invalid phone') || haystack.includes('phone number')) return make('INVALID_PHONE', message);
   if (haystack.includes('auth session missing') || haystack.includes('jwt expired') || haystack.includes('not authenticated')) {

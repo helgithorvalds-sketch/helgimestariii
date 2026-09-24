@@ -166,7 +166,7 @@ function SignupForm({ next, onConfirm }: { next: string; onConfirm: (email: stri
   const onSubmit = handleSubmit(async (values) => {
     setFormError(null);
     try {
-      const result = await signUp(values.email, values.password, values.displayName);
+      const result = await signUp(values.email, values.password, values.displayName, next);
       if (result.needsConfirmation) {
         onConfirm(values.email);
         return;
@@ -231,7 +231,7 @@ function SignupForm({ next, onConfirm }: { next: string; onConfirm: (email: stri
   );
 }
 
-function EmailLinkForm({ kind, onSent, onBack }: { kind: LinkKind; onSent: (email: string) => void; onBack: () => void }) {
+function EmailLinkForm({ kind, next, onSent, onBack }: { kind: LinkKind; next: string; onSent: (email: string) => void; onBack: () => void }) {
   const t = useT();
   const { sendMagicLink, resetPassword } = useAuth();
   const [formError, setFormError] = useState<string | null>(null);
@@ -240,7 +240,7 @@ function EmailLinkForm({ kind, onSent, onBack }: { kind: LinkKind; onSent: (emai
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<EmailOnlyValues>({ resolver: zodResolver(emailOnlySchema), defaultValues: { email: '' } });
-  const send = kind === 'magic' ? sendMagicLink : resetPassword;
+  const send = kind === 'magic' ? (email: string) => sendMagicLink(email, next) : resetPassword;
   const Icon = kind === 'magic' ? MailCheck : KeyRound;
   const title = t(kind === 'magic' ? 'account.login.magicLinkTitle' : 'account.login.forgotTitle');
 
@@ -352,14 +352,14 @@ export function AuthForm({ mode, next, onSwitchMode }: AuthFormProps) {
   if (sent) {
     const resend =
       sent.kind === 'magic'
-        ? () => sendMagicLink(sent.email)
+        ? () => sendMagicLink(sent.email, next)
         : sent.kind === 'reset'
           ? () => resetPassword(sent.email)
           : undefined;
     return <SentPanel sent={sent} onResend={resend} onBack={backToLogin} />;
   }
   if (view !== 'form') {
-    return <EmailLinkForm kind={view} onSent={(email) => setSent({ kind: view, email })} onBack={() => setView('form')} />;
+    return <EmailLinkForm next={next} kind={view} onSent={(email) => setSent({ kind: view, email })} onBack={() => setView('form')} />;
   }
   if (mode === 'signup') {
     return <SignupForm next={next} onConfirm={(email) => setSent({ kind: 'confirm', email })} />;

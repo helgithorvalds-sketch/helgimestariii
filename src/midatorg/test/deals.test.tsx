@@ -459,7 +459,8 @@ describe('dealState.roles, status, lists, parties', () => {
     expect(confirmBodyKey('cancel', 'reserved')).toBe('deals.confirm.cancel.body');
     expect(confirmBodyKey('mark_paid', 'reserved')).toBe('deals.confirm.mark_paid.body');
     for (const s of STATUSES) {
-      expect(canDownloadProof(s, 'buyer')).toBe(['ticket_sent', 'completed', 'disputed'].includes(s));
+      expect(canDownloadProof(s, 'buyer')).toBe(['ticket_sent', 'completed'].includes(s));
+      expect(canDownloadProof(s, 'buyer', '2026-09-20T10:00:00Z')).toBe(['ticket_sent', 'completed', 'disputed'].includes(s));
       expect(canDownloadProof(s, 'seller')).toBe(false);
       expect(canDownloadProof(s, 'admin')).toBe(false);
       expect(canRate(s, 'buyer')).toBe(s === 'completed');

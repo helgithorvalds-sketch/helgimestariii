@@ -1,13 +1,15 @@
 import { supabase, requireUid } from '../supabase';
 import type { Notification } from '../types';
 
-export async function listNotifications(limit = 50): Promise<Notification[]> {
+/** Newest first; `offset` pages through older ones (`range`), `id` breaks ties so pages never overlap. */
+export async function listNotifications(limit = 50, offset = 0): Promise<Notification[]> {
   await requireUid();
   const { data, error } = await supabase
     .from('mt_notifications')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(limit);
+    .order('id', { ascending: true })
+    .range(offset, offset + limit - 1);
   if (error) throw error;
   return data ?? [];
 }

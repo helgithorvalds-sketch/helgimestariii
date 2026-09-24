@@ -54,6 +54,10 @@ describe('parseApiError', () => {
     );
     expect(parseApiError({ message: 'x', code: 'invalid_credentials' }).code).toBe('INVALID_CREDENTIALS');
     expect(parseApiError({ message: 'x', code: 'over_email_send_rate_limit' }).code).toBe('RATE_LIMITED');
+    expect(parseApiError({ message: 'x', code: 'sms_send_failed' }).code).toBe('SMS_SEND_FAILED');
+    expect(parseApiError({ message: 'Error sending sms: provider not configured', status: 500 }).code).toBe('SMS_SEND_FAILED');
+    expect(parseApiError({ message: 'x', code: 'over_sms_send_rate_limit' }).code).toBe('RATE_LIMITED');
+    expect(parseApiError({ message: 'Invalid phone number format' }).code).toBe('INVALID_PHONE');
     expect(parseApiError({ message: 'Token has expired or is invalid' }).code).toBe('OTP_INVALID');
     expect(parseApiError({ message: 'For security purposes, you can only request this after 60 seconds.' }).code).toBe(
       'RATE_LIMITED',

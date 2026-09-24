@@ -990,6 +990,24 @@ export type Database = {
         }
         Relationships: []
       }
+      mt_public_settings: {
+        Row: {
+          key: string | null
+          updated_at: string | null
+          value: Json | null
+        }
+        Insert: {
+          key?: string | null
+          updated_at?: string | null
+          value?: Json | null
+        }
+        Update: {
+          key?: string | null
+          updated_at?: string | null
+          value?: Json | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       mt_admin_set_ban: {
@@ -1032,7 +1050,9 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      mt_event_in_use: { Args: { p_event: string }; Returns: boolean }
       mt_expire_stale: { Args: never; Returns: Json }
+      mt_fmt_kr: { Args: { p_amount: number }; Returns: string }
       mt_import_events: { Args: { p_events: Json }; Returns: Json }
       mt_internal: { Args: never; Returns: boolean }
       mt_is_admin: { Args: never; Returns: boolean }
@@ -1049,6 +1069,8 @@ export type Database = {
         }
         Returns: undefined
       }
+      mt_proof_locked: { Args: { p_listing: string }; Returns: boolean }
+      mt_proof_path_locked: { Args: { p_name: string }; Returns: boolean }
       mt_rate_deal: {
         Args: { p_comment?: string; p_deal_id: string; p_score: number }
         Returns: {
