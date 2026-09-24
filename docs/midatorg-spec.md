@@ -17,8 +17,9 @@ Working name: **Miðatorg**. Route prefix: **`/midatorg`**. UI language: Iceland
    everywhere a user or listing is shown. Bans.
 4. **No dark patterns.** No fake urgency counters, no countdowns except the real reservation timer, no
    "41 people viewing". Demand is shown as real counts (tickets available, people looking, sold).
-5. **Market look.** Dark, dense, Polymarket-inspired: market cards with one headline number, stat tiles,
-   price chart, order book with two sides (Til sölu / Óskað eftir). Spec in `DESIGN.md` (from the design panel).
+5. **Simple, light look.** White background, near-black text, one blue accent; cards like tix.is with the
+   event image on top; plain lists for "Miðar til sölu" and "Óskað eftir". Spec in `docs/midatorg-design/DESIGN-v2.md`
+   (the earlier dark direction in `DESIGN.md` is superseded but its component inventory and a11y rules still apply).
 
 ## 2. Placement in this repository
 
@@ -115,7 +116,7 @@ Always visible: amount = quantity × price_per_ticket, counterpart profile (name
 | Path | Page file | Auth | Content |
 |---|---|---|---|
 | `/` | `HomePage` | no | Market: search, category chips, sort (Dagsetning · Eftirspurn · Lægsta verð), trending strip, market card grid with infinite "Sýna fleiri", empty/loading states. Query params `q`, `flokkur`, `rada`. |
-| `/vidburdir/:eventId` | `EventPage` | no (actions prompt login) | Event header, stats row, price chart (snapshots + completed deal prices), order book, CTAs (Selja miða · Ég vil kaupa · Láta mig vita), how-it-works strip, tix.is link, report event link. Buy dialog: choose quantity → `mt_reserve_listing` → navigate to deal room. |
+| `/vidburdir/:eventId` | `EventPage` | no (actions prompt login) | Hero image, title block, summary strip (Miðaverð · Lægsta verð · Til sölu · Óskað eftir), "Miðar til sölu" and "Óskað eftir" lists, CTAs (Kaupa miða · Selja miða · Ég vil kaupa · Láta mig vita), collapsible "Verðþróun" chart, how-it-works strip, tix.is link, report event link. Buy dialog: choose quantity → `mt_reserve_listing` → navigate to deal room. |
 | `/selja` | `SellPage` | yes | Sell form. `?event=<id>` preselects. Event picker (search existing; "Bæta við viðburði" inline form for a manual event), quantity, ticket type, seat info, face value, asking price (validated ≤ face value with live delta), split allowed, notes, proof upload (PDF/PNG/JPG ≤10MB, sha256 in browser, duplicate detection). Success → event page with toast. |
 | `/oska` | `WantPage` | yes | Want form: event picker, quantity, max price (optional), notes. Success → event page. |
 | `/vidskipti` | `DealsPage` | yes | My deals, tabs Virk · Lokið · Öll, as buyer and as seller, with status badges and timers. |
@@ -184,16 +185,15 @@ Common: `VerifiedBadge(level)`, `RatingStars(value, count?)`, `UserAvatar(profil
 
 | Agent | Owns | Consumes |
 |---|---|---|
-| home | `pages/HomePage.tsx`, `components/market/*` (MarketCard, MarketGrid, CategoryChips, SearchField, SortMenu, TrendingStrip, Sparkline), `i18n/dict/home.ts`, `test/home.test.tsx` | foundation |
-| event | `pages/EventPage.tsx`, `components/event/*` (EventHeader, StatsRow, StatTile, PriceChart, OrderBook, SellRow, WantRow, BuyDialog, AlertButton, HowItWorks), `i18n/dict/event.ts`, `test/event.test.tsx` | foundation, `components/market/Sparkline` |
+| home | `pages/HomePage.tsx`, `components/market/*` (MarketCard, MarketGrid, CategoryChips, SortMenu), `i18n/dict/home.ts`, `test/home.test.tsx` | foundation |
+| event | `pages/EventPage.tsx`, `components/event/*` (EventHeader, StatsRow, StatTile, PriceChart, OrderBook, SellRow, WantRow, BuyDialog, AlertButton, HowItWorks), `i18n/dict/event.ts`, `test/event.test.tsx` | foundation |
 | forms | `pages/SellPage.tsx`, `pages/WantPage.tsx`, `components/forms/*` (EventPicker, ManualEventForm, ProofUpload, PriceInput, QuantityInput, ListingForm, RequestForm), `i18n/dict/forms.ts`, `test/forms.test.tsx` | foundation |
 | deals | `pages/DealsPage.tsx`, `pages/DealRoomPage.tsx`, `components/deals/*` (DealCard, DealStepper, DealGuidance, DealActions, DealChat, RatingDialog, ProofDownload), `i18n/dict/deals.ts`, `test/deals.test.tsx` | foundation |
 | account | `pages/LoginPage.tsx`, `pages/MyPage.tsx`, `pages/PublicProfilePage.tsx`, `components/account/*` (AuthForm, PhoneVerifyCard, ProfileForm, VerificationCard, MyListingsList, MyRequestsList, MyAlertsList, RatingsList), `i18n/dict/account.ts`, `test/account.test.tsx` | foundation, `components/market/MarketCard` |
 | admin | `pages/AdminPage.tsx`, `pages/AboutPage.tsx`, `pages/NotificationsPage.tsx`, `components/admin/*` (ReportsTable, UsersTable, EventsTable, DisputesTable, ImportPanel, SettingsPanel), `i18n/dict/admin.ts`, `test/admin.test.tsx` | foundation |
 | backend-functions | `supabase-midatorg/functions/mt-import-tix/*`, `supabase-midatorg/functions/mt-fetch-tix-event/*`, `supabase-midatorg/README.md`, cron SQL for the importer | migrations |
 
-`MarketCard` props contract (home agent must export exactly this): `({ event: MarketEvent, sparkline?: number[], compact?: boolean }) => JSX`.
-`Sparkline` props: `({ points: number[], width?: number, height?: number, tone?: 'up' | 'down' | 'neutral' })`.
+`MarketCard` props contract: `({ event: MarketEvent, sparkline?: number[], compact?: boolean }) => JSX` (the sparkline prop is accepted for compatibility and ignored in the light design).
 `ReportDialog` props (foundation): `({ open, onOpenChange, target: { userId?: string; listingId?: string; dealId?: string }, contextLabel?: string })`.
 
 ## 8. Conventions
