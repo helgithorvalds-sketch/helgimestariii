@@ -79,6 +79,10 @@ export function loadFixtures(fixturesDir) {
   }
   db.mt_event_stats = [];
   for (const e of db.mt_events_market) refreshEventStats(db, e.id, { fromFixture: true });
+  // keep fixture reservations alive: a deal that was 'reserved' when exported would otherwise show as expired
+  for (const d of db.mt_deals ?? []) {
+    if (d.status === 'reserved') d.reserved_until = new Date(Date.now() + 25 * 60_000).toISOString();
+  }
   return db;
 }
 
@@ -412,7 +416,7 @@ function solidPng(r, g, b) {
   const idat = zlib.deflateSync(Buffer.from([0, r, g, b]));
   return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', idat), chunk('IEND', Buffer.alloc(0))]);
 }
-const PLACEHOLDER_PNG = solidPng(0x2a, 0x33, 0x40);
+const PLACEHOLDER_PNG = solidPng(0xe8, 0xee, 0xf6); // light placeholder for images the sandbox cannot fetch
 
 function tinyPdf() {
   return Buffer.from(

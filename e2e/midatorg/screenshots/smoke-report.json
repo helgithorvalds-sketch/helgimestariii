@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T17:40:52.978Z",
+  "generatedAt": "2026-09-24T17:43:04.437Z",
   "baseUrl": "http://127.0.0.1:8131",
   "mode": "preview",
   "fixturesDir": "e2e/midatorg/fixtures",
@@ -59,7 +59,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Viðburðir Kauptu og seldu miða á viðburði á tix.is — beint á milli fólks, aldrei yfir miðaverði. Allt Tónleikar Leikhús Íþróttir Hátíðir Uppistand Annað Raða eftir Næst á dagskrá HQ Tónleikar Liðinn HG Quarte",
       "screenshot": "e2e/midatorg/screenshots/smoke-home-1440.png",
-      "ms": 1811
+      "ms": 1839
     },
     {
       "slug": "home-search",
@@ -82,7 +82,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Viðburðir Kauptu og seldu miða á viðburði á tix.is — beint á milli fólks, aldrei yfir miðaverði. Allt Tónleikar Leikhús Íþróttir Hátíðir Uppistand Annað Raða eftir Næst á dagskrá Leitarniðurstöður fyrir „har“",
       "screenshot": "e2e/midatorg/screenshots/smoke-home-search-1440.png",
-      "ms": 1666
+      "ms": 1674
     },
     {
       "slug": "home-tonleikar",
@@ -105,7 +105,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Viðburðir Kauptu og seldu miða á viðburði á tix.is — beint á milli fólks, aldrei yfir miðaverði. Allt Tónleikar Leikhús Íþróttir Hátíðir Uppistand Annað Raða eftir Næst á dagskrá HQ Tónleikar Liðinn HG Quarte",
       "screenshot": "e2e/midatorg/screenshots/smoke-home-tonleikar-1440.png",
-      "ms": 1720
+      "ms": 1692
     },
     {
       "slug": "event-listings",
@@ -135,7 +135,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Viðburðir Tónleikar Sinfóníuhljómsveit Íslands: Vínartónleikar SÍ Tónleikar Sinfóníuhljómsveit Íslands: Vínartónleikar fös. 2. okt. · 20:00 · Harpa · Reykjavík Sjá viðburð á tix.is Tilkynna viðburð Kaupa miða",
       "screenshot": "e2e/midatorg/screenshots/smoke-event-listings-1440.png",
-      "ms": 1750
+      "ms": 1759
     },
     {
       "slug": "event-empty",
@@ -164,7 +164,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Viðburðir Annað Rafmagnað: Klúbbakvöld RK Annað Rafmagnað: Klúbbakvöld fös. 25. sept. · 23:00 · Gaukurinn · Reykjavík Sjá viðburð á tix.is Tilkynna viðburð Kaupa miða Selja miða Ég vil kaupa Láta mig vita Mið",
       "screenshot": "e2e/midatorg/screenshots/smoke-event-empty-1440.png",
-      "ms": 1678
+      "ms": 1680
     },
     {
       "slug": "about",
@@ -187,7 +187,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Um Miðatorg Miðatorg tengir fólk sem á miða sem það kemst ekki á við fólk sem vill kaupa. Verð fara aldrei yfir miðaverð, engin þóknun er tekin og greitt er beint á milli fólks. Verð aldrei hærra en miðaverð ",
       "screenshot": "e2e/midatorg/screenshots/smoke-about-1440.png",
-      "ms": 1619
+      "ms": 1611
     },
     {
       "slug": "login",
@@ -208,7 +208,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Um Miðatorg Selja miða Innskrá EN Miðatorg · Innskráning Innskrá Nýskrá Netfang Lykilorð Gleymt lykilorð? Innskrá eða Senda innskráningartengil Verð aldrei hærra en miðaverð Engin þóknun Greitt beint á milli fólks © 2026 Miðatorg · Ókeypis að",
       "screenshot": "e2e/midatorg/screenshots/smoke-login-1440.png",
-      "ms": 1487
+      "ms": 1478
     },
     {
       "slug": "deals",
@@ -236,7 +236,7 @@
         "GET /rest/v1/mt_listings?select=*&id=in.%28cb18d1ce-8a7e-48ad-b5f9-097b304c0b08%2C3dc602a3-7e70-4522-9b12-c7f1a8c3bcd5%2C77086097-f4cc-4c56-bd73-71517e71672f%29 → 200"
       ],
       "brokenImages": [],
-      "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Viðskiptin mín Kaup og sölur sem þú átt aðild að. Virk 1 Lokið 2 Öll 3 Stórtónleikar í Laugardalshöll mán. 7. des. · 20:00 · Laugardalshöll Miðar sendir Þú kaupir KÁ Kári 1 miði × 12.900",
+      "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Viðskiptin mín Kaup og sölur sem þú átt aðild að. Virk 2 Lokið 1 Öll 3 Landsleikur í handbolta: Ísland – Danmörk lau. 17. okt. · 19:30 · Laugardalshöll Tekið frá Þú kaupir BJ Bjarki Stað",
       "screenshot": "e2e/midatorg/screenshots/smoke-deals-1440.png",
       "ms": 1560
     },
@@ -269,7 +269,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Viðskipti Landsleikur í handbolta: Ísland – Danmörk Viðskipti Landsleikur í handbolta: Ísland – Danmörk lau. 17. okt. · 19:30 · Laugardalshöll Stúka B · Stúka B, röð 3 Stofnað fyrir 22 k",
       "screenshot": "e2e/midatorg/screenshots/smoke-deal-reserved-1440.png",
-      "ms": 1628
+      "ms": 1632
     },
     {
       "slug": "deal-ticket-sent",
@@ -301,7 +301,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Viðskipti Stórtónleikar í Laugardalshöll Viðskipti Stórtónleikar í Laugardalshöll mán. 7. des. · 20:00 · Laugardalshöll Stúka B · Stúka B, röð 2 Stofnað fyrir 1 degi Miðar sendir Tekið f",
       "screenshot": "e2e/midatorg/screenshots/smoke-deal-ticket-sent-1440.png",
-      "ms": 1636
+      "ms": 1624
     },
     {
       "slug": "deal-completed",
@@ -334,7 +334,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Viðskipti Jazz í Hofi Viðskipti Jazz í Hofi mán. 12. okt. · 20:00 · Hof Almennt · Hamraborg, röð 6 Stofnað fyrir 4 dögum Lokið Tekið frá , lokið Greitt , lokið Miðar sendir , lokið Lokið",
       "screenshot": "e2e/midatorg/screenshots/smoke-deal-completed-1440.png",
-      "ms": 1615
+      "ms": 1598
     },
     {
       "slug": "me",
@@ -353,14 +353,14 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
-        "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
         "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
+        "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200"
       ],
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN PK Notandasíða Prufu Kaupandi Skoða eins og aðrir sjá Yfirlit Mínar sölur Óskir Láta mig vita Einkunnir Upplýsingar um þig PK Velja mynd PNG, JPG eða WebP, mest 2 MB. Nafn Birtist öðrum ",
       "screenshot": "e2e/midatorg/screenshots/smoke-me-1440.png",
-      "ms": 1568
+      "ms": 1578
     },
     {
       "slug": "sell",
@@ -388,7 +388,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Selja miða Skráðu miða sem þú kemst ekki á. Verðið má aldrei vera hærra en miðaverð og greiðslan fer beint á milli ykkar. 1 Viðburður SÍ Sinfóníuhljómsveit Íslands: Vínartónleikar Tónlei",
       "screenshot": "e2e/midatorg/screenshots/smoke-sell-1440.png",
-      "ms": 1642
+      "ms": 1628
     },
     {
       "slug": "want",
@@ -415,7 +415,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Ég vil kaupa Segðu hvaða miða þig vantar. Seljendur með miða á viðburðinn fá tilkynningu og þú færð tilkynningu þegar miðar undir hámarkinu þínu eru skráðir. 1 Viðburður SÍ Sinfóníuhljóm",
       "screenshot": "e2e/midatorg/screenshots/smoke-want-1440.png",
-      "ms": 1627
+      "ms": 1612
     },
     {
       "slug": "notifications",
@@ -442,7 +442,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN Tilkynningar 6 ólesnar Merkja allt lesið Þú fékkst einkunn fyrir 22 klst. 5 af 5 stjörnum Opna Miðarnir eru komnir fyrir 22 klst. Kári hefur sent miðana á Stórtónleikar í Laugardalshöll.",
       "screenshot": "e2e/midatorg/screenshots/smoke-notifications-1440.png",
-      "ms": 1544
+      "ms": 1524
     },
     {
       "slug": "profile-seller",
@@ -472,7 +472,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða 6 PK Prufu Kaupandi EN BJ Bjarki Staðfestur sími Meðlimur síðan apríl 2026 Nýr notandi Handboltinn og Harpa. Fljót og örugg viðskipti. Tilkynna notanda Sölur 1 Kaup 0 Einkunnir 1 Miðar til sölu Hlátursbomban: ",
       "screenshot": "e2e/midatorg/screenshots/smoke-profile-seller-1440.png",
-      "ms": 1637
+      "ms": 1631
     },
     {
       "slug": "admin",
@@ -491,7 +491,6 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
-        "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
         "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200",
         "GET /rest/v1/mt_reports?select=*&order=created_at.desc&status=eq.open&limit=200 → 200"
@@ -499,7 +498,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða PS Prufu Seljandi EN Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Opnar Leystar Hafnað Allar 0 alls Engar opnar tilk",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-1440.png",
-      "ms": 1584
+      "ms": 1573
     },
     {
       "slug": "admin-users",
@@ -527,7 +526,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða PS Prufu Seljandi EN Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Leita að notanda 8 alls Nafn Staðfesting Einkunn S",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-users-1440.png",
-      "ms": 1698
+      "ms": 1683
     },
     {
       "slug": "admin-events",
@@ -546,15 +545,15 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
-        "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
         "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
+        "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200",
         "GET /rest/v1/mt_events_market?select=*&order=starts_at.desc%2Cid.asc&limit=200 → 200"
       ],
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða PS Prufu Seljandi EN Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Flytja inn frá tix.is Límdu slóð á viðburð á tix.i",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-events-1440.png",
-      "ms": 2281
+      "ms": 2297
     },
     {
       "slug": "admin-settings",
@@ -581,7 +580,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Viðburðir Viðskipti Um Miðatorg Selja miða PS Prufu Seljandi EN Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Gildin taka gildi strax; bakendinn framfylgir þeim",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-settings-1440.png",
-      "ms": 1668
+      "ms": 1666
     },
     {
       "slug": "home",
@@ -604,7 +603,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Viðburðir Kauptu og seldu miða á viðburði á tix.is — beint á milli fólks, aldrei yfir miðaverði. Allt Tónleikar Leikhús Íþróttir Hátíðir Uppistand Annað Raða eftir Næst á dagskrá HQ Tónleikar Liðinn HG Quartet - Múlinn jazzklúbbur mi",
       "screenshot": "e2e/midatorg/screenshots/smoke-home-390.png",
-      "ms": 1824
+      "ms": 1832
     },
     {
       "slug": "home-search",
@@ -627,7 +626,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Viðburðir Kauptu og seldu miða á viðburði á tix.is — beint á milli fólks, aldrei yfir miðaverði. Allt Tónleikar Leikhús Íþróttir Hátíðir Uppistand Annað Raða eftir Næst á dagskrá Leitarniðurstöður fyrir „har“ Hreinsa leit HQ Tónleika",
       "screenshot": "e2e/midatorg/screenshots/smoke-home-search-390.png",
-      "ms": 1686
+      "ms": 1687
     },
     {
       "slug": "home-tonleikar",
@@ -650,7 +649,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Viðburðir Kauptu og seldu miða á viðburði á tix.is — beint á milli fólks, aldrei yfir miðaverði. Allt Tónleikar Leikhús Íþróttir Hátíðir Uppistand Annað Raða eftir Næst á dagskrá HQ Tónleikar Liðinn HG Quartet - Múlinn jazzklúbbur mi",
       "screenshot": "e2e/midatorg/screenshots/smoke-home-tonleikar-390.png",
-      "ms": 1683
+      "ms": 1685
     },
     {
       "slug": "event-listings",
@@ -680,7 +679,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Viðburðir Tónleikar Sinfóníuhljómsveit Íslands: Vínartónleikar SÍ Tónleikar Sinfóníuhljómsveit Íslands: Vínartónleikar fös. 2. okt. · 20:00 · Harpa · Reykjavík Sjá viðburð á tix.is Tilkynna viðburð Kaupa miða Selja miða Ég vil kaupa ",
       "screenshot": "e2e/midatorg/screenshots/smoke-event-listings-390.png",
-      "ms": 1676
+      "ms": 1721
     },
     {
       "slug": "event-empty",
@@ -709,7 +708,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Viðburðir Annað Rafmagnað: Klúbbakvöld RK Annað Rafmagnað: Klúbbakvöld fös. 25. sept. · 23:00 · Gaukurinn · Reykjavík Sjá viðburð á tix.is Tilkynna viðburð Kaupa miða Selja miða Ég vil kaupa Láta mig vita Miðaverð 4.900 kr. Lægsta ve",
       "screenshot": "e2e/midatorg/screenshots/smoke-event-empty-390.png",
-      "ms": 1641
+      "ms": 1591
     },
     {
       "slug": "about",
@@ -732,7 +731,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Um Miðatorg Miðatorg tengir fólk sem á miða sem það kemst ekki á við fólk sem vill kaupa. Verð fara aldrei yfir miðaverð, engin þóknun er tekin og greitt er beint á milli fólks. Verð aldrei hærra en miðaverð · Engin þóknun · Greitt b",
       "screenshot": "e2e/midatorg/screenshots/smoke-about-390.png",
-      "ms": 1560
+      "ms": 1695
     },
     {
       "slug": "login",
@@ -753,7 +752,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða Innskrá Miðatorg · Innskráning Innskrá Nýskrá Netfang Lykilorð Gleymt lykilorð? Innskrá eða Senda innskráningartengil Verð aldrei hærra en miðaverð Engin þóknun Greitt beint á milli fólks © 2026 Miðatorg · Ókeypis að nota. Við geymum aldrei ",
       "screenshot": "e2e/midatorg/screenshots/smoke-login-390.png",
-      "ms": 1492
+      "ms": 1473
     },
     {
       "slug": "deals",
@@ -781,9 +780,9 @@
         "GET /rest/v1/mt_listings?select=*&id=in.%28cb18d1ce-8a7e-48ad-b5f9-097b304c0b08%2C3dc602a3-7e70-4522-9b12-c7f1a8c3bcd5%2C77086097-f4cc-4c56-bd73-71517e71672f%29 → 200"
       ],
       "brokenImages": [],
-      "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Viðskiptin mín Kaup og sölur sem þú átt aðild að. Virk 1 Lokið 2 Öll 3 Stórtónleikar í Laugardalshöll mán. 7. des. · 20:00 · Laugardalshöll Miðar sendir Þú kaupir KÁ Kári 1 miði × 12.900 kr. 12.900kr. Opna viðskipti © 2026 Miðatorg · Ók",
+      "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Viðskiptin mín Kaup og sölur sem þú átt aðild að. Virk 2 Lokið 1 Öll 3 Landsleikur í handbolta: Ísland – Danmörk lau. 17. okt. · 19:30 · Laugardalshöll Tekið frá Þú kaupir BJ Bjarki Staðfestur 2 miðar × 7.500 kr. 15.000kr. Frátekið til ",
       "screenshot": "e2e/midatorg/screenshots/smoke-deals-390.png",
-      "ms": 1521
+      "ms": 1559
     },
     {
       "slug": "deal-reserved",
@@ -802,7 +801,6 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
-        "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
         "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200",
         "GET /rest/v1/mt_deals?select=*&id=eq.a1b2c3d4-0001-4000-8000-000000000001 → 200",
@@ -812,9 +810,9 @@
         "GET /rest/v1/mt_messages?select=*&deal_id=eq.a1b2c3d4-0001-4000-8000-000000000001&order=created_at.asc → 200"
       ],
       "brokenImages": [],
-      "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Viðskipti Landsleikur í handbolta: Ísland – Danmörk Viðskipti Landsleikur í handbolta: Ísland – Danmörk lau. 17. okt. · 19:30 · Laugardalshöll Stúka B · Stúka B, röð 3 Stofnað fyrir 22 klst. Rann út Tekið frá , lokið 2 Greitt , ekki náð",
+      "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Viðskipti Landsleikur í handbolta: Ísland – Danmörk Viðskipti Landsleikur í handbolta: Ísland – Danmörk lau. 17. okt. · 19:30 · Laugardalshöll Stúka B · Stúka B, röð 3 Stofnað fyrir 22 klst. Tekið frá Frátekið til 18:08 · Tími eftir 24:",
       "screenshot": "e2e/midatorg/screenshots/smoke-deal-reserved-390.png",
-      "ms": 1601
+      "ms": 1620
     },
     {
       "slug": "deal-ticket-sent",
@@ -846,7 +844,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Viðskipti Stórtónleikar í Laugardalshöll Viðskipti Stórtónleikar í Laugardalshöll mán. 7. des. · 20:00 · Laugardalshöll Stúka B · Stúka B, röð 2 Stofnað fyrir 1 degi Miðar sendir Tekið frá , lokið Greitt , lokið 3 Miðar sendir , núveran",
       "screenshot": "e2e/midatorg/screenshots/smoke-deal-ticket-sent-390.png",
-      "ms": 1621
+      "ms": 1597
     },
     {
       "slug": "deal-completed",
@@ -879,7 +877,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Viðskipti Jazz í Hofi Viðskipti Jazz í Hofi mán. 12. okt. · 20:00 · Hof Almennt · Hamraborg, röð 6 Stofnað fyrir 4 dögum Lokið Tekið frá , lokið Greitt , lokið Miðar sendir , lokið Lokið , lokið Viðskiptum lokið. Gefðu einkunn. Upphæð 2",
       "screenshot": "e2e/midatorg/screenshots/smoke-deal-completed-390.png",
-      "ms": 1629
+      "ms": 1611
     },
     {
       "slug": "me",
@@ -905,7 +903,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK PK Notandasíða Prufu Kaupandi Skoða eins og aðrir sjá Yfirlit Mínar sölur Óskir Láta mig vita Einkunnir Upplýsingar um þig PK Velja mynd PNG, JPG eða WebP, mest 2 MB. Nafn Birtist öðrum notendum við miðana þína og í viðskiptum. Kynning ",
       "screenshot": "e2e/midatorg/screenshots/smoke-me-390.png",
-      "ms": 1541
+      "ms": 1565
     },
     {
       "slug": "sell",
@@ -933,7 +931,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Selja miða Skráðu miða sem þú kemst ekki á. Verðið má aldrei vera hærra en miðaverð og greiðslan fer beint á milli ykkar. 1 Viðburður SÍ Sinfóníuhljómsveit Íslands: Vínartónleikar Tónleikar Harpa · fös. 2. okt. · 20:00 Miðaverð skv. tix",
       "screenshot": "e2e/midatorg/screenshots/smoke-sell-390.png",
-      "ms": 1630
+      "ms": 1624
     },
     {
       "slug": "want",
@@ -952,15 +950,15 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
-        "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
         "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
+        "GET /rest/v1/mt_profiles?select=*&id=eq.08ff277b-289e-4ab4-a8d5-9fa3f0327ce6 → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200",
         "GET /rest/v1/mt_events_market?select=*&id=eq.108f2fd2-1900-49fe-8c11-7ef1b9ce0918 → 200"
       ],
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Ég vil kaupa Segðu hvaða miða þig vantar. Seljendur með miða á viðburðinn fá tilkynningu og þú færð tilkynningu þegar miðar undir hámarkinu þínu eru skráðir. 1 Viðburður SÍ Sinfóníuhljómsveit Íslands: Vínartónleikar Tónleikar Harpa · fö",
       "screenshot": "e2e/midatorg/screenshots/smoke-want-390.png",
-      "ms": 1585
+      "ms": 1554
     },
     {
       "slug": "notifications",
@@ -987,7 +985,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK Tilkynningar 6 ólesnar Merkja allt lesið Þú fékkst einkunn fyrir 22 klst. 5 af 5 stjörnum Opna Miðarnir eru komnir fyrir 22 klst. Kári hefur sent miðana á Stórtónleikar í Laugardalshöll. Staðfestu móttöku í viðskiptaherberginu. Opna Ný ",
       "screenshot": "e2e/midatorg/screenshots/smoke-notifications-390.png",
-      "ms": 1547
+      "ms": 1587
     },
     {
       "slug": "profile-seller",
@@ -1017,7 +1015,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða 6 PK BJ Bjarki Staðfestur sími Meðlimur síðan apríl 2026 Nýr notandi Handboltinn og Harpa. Fljót og örugg viðskipti. Tilkynna notanda Sölur 1 Kaup 0 Einkunnir 1 Miðar til sölu Hlátursbomban: Uppistandskvöld fim. 1. okt. · 20:30 · Bæjarbíó 2 ",
       "screenshot": "e2e/midatorg/screenshots/smoke-profile-seller-390.png",
-      "ms": 1571
+      "ms": 1585
     },
     {
       "slug": "admin",
@@ -1044,7 +1042,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða PS Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Opnar Leystar Hafnað Allar 0 alls Engar opnar tilkynningar Allt með felldu eins og er. Nýjar tilkynn",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-390.png",
-      "ms": 1579
+      "ms": 1596
     },
     {
       "slug": "admin-users",
@@ -1063,8 +1061,8 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
-        "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
         "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
+        "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200",
         "GET /rest/v1/mt_profiles?select=*&order=created_at.desc&limit=50 → 200",
         "GET /rest/v1/mt_public_profiles?select=*&id=in.%2808ff277b-289e-4ab4-a8d5-9fa3f0327ce6%2C15472716-bb30-4f73-b817-61618f0fdfdf%2C4f841ca4-c43c-4f79-b8ab-19541f7ca83c%2C818059c6-9dc8-45a2-8b0a-e7ce63e82d9c%2C844819a0-4b8c-4f49-95d7-2f912bb36ead%2C95f7bbf8-c745-47be-891f-8ab9b0349a73%2C95fc552f-957b-422d-854e-083c45fe440e%2Cab6b924f-43cf-4d56-8252-9dad6c14e1a0%29 → 200"
@@ -1072,7 +1070,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða PS Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Leita að notanda 8 alls Nafn Staðfesting Einkunn Sölur Aðgangur Aðgerðir PK Prufu Kaupandi Skráður s",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-users-390.png",
-      "ms": 1643
+      "ms": 1592
     },
     {
       "slug": "admin-events",
@@ -1099,7 +1097,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða PS Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Flytja inn frá tix.is Límdu slóð á viðburð á tix.is til að flytja hann inn strax, eða keyrðu heildar",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-events-390.png",
-      "ms": 1991
+      "ms": 1995
     },
     {
       "slug": "admin-settings",
@@ -1118,7 +1116,6 @@
       "unhandledRequests": [],
       "supabaseRequests": [
         "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
-        "GET /rest/v1/mt_profiles?select=*&id=eq.ab6b924f-43cf-4d56-8252-9dad6c14e1a0 → 200",
         "HEAD /rest/v1/mt_notifications?select=id&read_at=is.null → 200",
         "GET /rest/v1/mt_notifications?select=*&order=created_at.desc%2Cid.asc&offset=0&limit=8 → 200",
         "GET /rest/v1/mt_settings?select=*&key=neq.cron_secret&order=key.asc → 200"
@@ -1126,7 +1123,7 @@
       "brokenImages": [],
       "visibleTextSample": "Miðatorg Leita að viðburði, listamanni eða stað Selja miða PS Stjórnborð Tilkynningar, notendur, viðburðir, ágreiningur og stillingar Miðatorgs. Tilkynningar Notendur Viðburðir Ágreiningur Stillingar Gildin taka gildi strax; bakendinn framfylgir þeim. Frátektartími Mínútur sem miðar eru fráteknir fy",
       "screenshot": "e2e/midatorg/screenshots/smoke-admin-settings-390.png",
-      "ms": 1583
+      "ms": 1596
     }
   ],
   "mockWarnings": [],
