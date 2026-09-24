@@ -107,8 +107,8 @@ export function formatShortDate(iso: string | Date | null | undefined, locale: L
 
 type RelUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
 
-function isSingular(n: number): boolean {
-  // Icelandic: numbers ending in 1 (except 11) take the singular.
+/** Icelandic: numbers ending in 1 (except 11) take the singular (21 miði, 11 miðar). */
+export function isSingular(n: number): boolean {
   return n % 10 === 1 && n % 100 !== 11;
 }
 

@@ -230,6 +230,15 @@ export function availableActions(status: DealStatus, role: DealRole, opts: { isA
   return actionSpecs(status, role, opts).map((s) => s.action);
 }
 
+/**
+ * i18n key for the confirm-dialog body. Cancelling after the buyer has marked
+ * paid gets its own copy: agree on a refund in the chat first (Miðatorg holds no money).
+ */
+export function confirmBodyKey(action: DealAction, status: DealStatus): string {
+  if (action === 'cancel' && status === 'paid_claimed') return 'deals.confirm.cancel.bodyPaid';
+  return `deals.confirm.${action}.body`;
+}
+
 // ---------------------------------------------------------------------------
 // Lists, amounts, parties
 // ---------------------------------------------------------------------------
@@ -257,10 +266,14 @@ export function counterpartOf(deal: Pick<DealWithContext, 'buyer' | 'seller'>, r
   return null;
 }
 
-/** i18n key explaining why the chat composer is disabled, or null when open. */
-export function chatClosedKey(status: DealStatus): string | null {
+/**
+ * i18n key explaining why the chat composer is disabled, or null when open.
+ * An admin who is not a party can read but not post (mt_messages_insert needs mt_is_deal_party).
+ */
+export function chatClosedKey(status: DealStatus, role?: DealRole): string | null {
   if (status === 'cancelled') return 'deals.chat.closed.cancelled';
   if (status === 'expired') return 'deals.chat.closed.expired';
+  if (role === 'admin') return 'deals.chat.closed.admin';
   return null;
 }
 

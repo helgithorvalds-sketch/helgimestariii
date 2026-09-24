@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { useT } from '../../lib/i18n';
 import { useUpdateEvent } from '../../lib/queries';
 import { EVENT_CATEGORIES } from '../../lib/constants';
+import { MAX_CITY_LENGTH, MAX_TITLE_LENGTH, MAX_VENUE_LENGTH } from '../forms/schemas';
 import type { EventCategory, EventStatus, MarketEvent } from '../../lib/types';
 import { eventToValues, fromDateTimeLocal, isTixUrl, parseWholeNumber, valuesToPatch, type EventEditValues } from './adminUtils';
 
@@ -20,10 +21,11 @@ const EVENT_STATUSES: EventStatus[] = ['upcoming', 'past', 'cancelled'];
 /** Messages are i18n keys under admin.eventEdit.errors.* (translated where rendered). */
 const schema = z
   .object({
-    title: z.string().trim().min(2, 'title').max(120, 'title'),
+    // the same limits as the manual event form and the DB checks (mt_events.title is 200)
+    title: z.string().trim().min(2, 'title').max(MAX_TITLE_LENGTH, 'title'),
     category: z.enum(EVENT_CATEGORIES as [EventCategory, ...EventCategory[]]),
-    venue_name: z.string().trim().max(120),
-    city: z.string().trim().max(80),
+    venue_name: z.string().trim().max(MAX_VENUE_LENGTH, 'venue'),
+    city: z.string().trim().max(MAX_CITY_LENGTH, 'city'),
     starts_at: z.string().refine((v) => fromDateTimeLocal(v) !== null, 'startsAt'),
     face_value_min: z.string().refine((v) => v.trim() === '' || parseWholeNumber(v) !== null, 'face'),
     face_value_max: z.string().refine((v) => v.trim() === '' || parseWholeNumber(v) !== null, 'face'),
@@ -152,8 +154,8 @@ export function EventEditDialog({ event, open, onOpenChange }: EventEditDialogPr
               )}
             />,
           )}
-          {field('venue_name', t('admin.eventEdit.venue'), <Input id="mt-event-venue_name" {...register('venue_name')} className={inputClass} />)}
-          {field('city', t('admin.eventEdit.city'), <Input id="mt-event-city" {...register('city')} className={inputClass} />)}
+          {field('venue_name', t('admin.eventEdit.venue'), <Input id="mt-event-venue_name" {...register('venue_name')} className={inputClass} aria-invalid={!!err('venue_name')} />)}
+          {field('city', t('admin.eventEdit.city'), <Input id="mt-event-city" {...register('city')} className={inputClass} aria-invalid={!!err('city')} />)}
           {field(
             'starts_at',
             t('admin.eventEdit.startsAt'),
@@ -173,7 +175,7 @@ export function EventEditDialog({ event, open, onOpenChange }: EventEditDialogPr
           {field(
             'tix_url',
             t('admin.eventEdit.tixUrl'),
-            <Input id="mt-event-tix_url" type="url" inputMode="url" placeholder="https://tix.is/is/event/…" {...register('tix_url')} className={inputClass} aria-invalid={!!err('tix_url')} />,
+            <Input id="mt-event-tix_url" type="url" inputMode="url" placeholder={t('forms.manual.tixUrlPlaceholder')} {...register('tix_url')} className={inputClass} aria-invalid={!!err('tix_url')} />,
             'sm:col-span-2',
           )}
           <DialogFooter className="gap-2 sm:col-span-2">

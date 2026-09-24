@@ -21,8 +21,12 @@ import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { PageContainer } from '../components/layout/PageContainer';
 import { settingNumber } from '../components/admin/adminUtils';
 
-/** Placeholder contact address until a real mailbox exists (spec §5: "Hafa samband (placeholder mailto)"). */
-export const CONTACT_EMAIL = 'hallo@midatorg.is';
+/**
+ * The monitored contact mailbox. `null` until the owner provides one: the contact
+ * section then shows a clearly marked placeholder instead of a dead mailto
+ * (spec §5: "Hafa samband (placeholder mailto)").
+ */
+export const CONTACT_EMAIL: string | null = null;
 const TIX_URL = 'https://tix.is';
 const DEFAULT_RESERVATION_MINUTES = 30;
 
@@ -161,13 +165,21 @@ export default function AboutPage() {
 
         <Section id="samband" title={t('about.contact.title')}>
           <p className="text-[13px] text-muted-foreground">{t('about.contact.body')}</p>
-          <Button asChild size="sm" className="mt-3 h-10 gap-1.5 sm:h-9">
-            <a href={`mailto:${CONTACT_EMAIL}`}>
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              {t('about.contact.email')}
-            </a>
-          </Button>
-          <p className="mt-2 text-[12.5px] text-muted-foreground">{CONTACT_EMAIL}</p>
+          {CONTACT_EMAIL ? (
+            <>
+              <Button asChild size="sm" className="mt-3 h-10 gap-1.5 sm:h-9">
+                <a href={`mailto:${CONTACT_EMAIL}`}>
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  {t('about.contact.email')}
+                </a>
+              </Button>
+              <p className="mt-2 text-[12.5px] text-muted-foreground">{CONTACT_EMAIL}</p>
+            </>
+          ) : (
+            <p className="mt-3 text-[13px] font-medium" data-testid="contact-pending">
+              {t('about.contact.pending')}
+            </p>
+          )}
         </Section>
       </div>
     </PageContainer>

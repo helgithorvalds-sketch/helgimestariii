@@ -29,7 +29,7 @@ type RatingDialogProps = {
 const SCORES = [1, 2, 3, 4, 5] as const;
 
 /**
- * "Gefðu X einkunn" panel + dialog with five star buttons and an optional
+ * "Gefðu seljanda/kaupanda einkunn" panel + dialog with five star buttons and an optional
  * comment. Shown after completion; collapses to a confirmation line once
  * `getMyRatingForDeal` returns a rating.
  */
@@ -61,6 +61,8 @@ export function RatingDialog({ deal, role, className }: RatingDialogProps) {
   }
 
   const name = ratee.display_name;
+  // the heading names the role ("seljanda" / "kaupanda"): display names are nominative and cannot be declined
+  const title = t(role === 'buyer' ? 'deals.rating.titleSeller' : 'deals.rating.titleBuyer');
   const starLabel = (n: number) => (n === 1 ? t('deals.rating.star.one') : t('deals.rating.star.many', { n }));
 
   const submit = () => {
@@ -79,7 +81,7 @@ export function RatingDialog({ deal, role, className }: RatingDialogProps) {
   return (
     <section className={cn('mt-panel p-[14px]', className)} aria-labelledby="mt-rating-title">
       <h2 id="mt-rating-title" className="text-sm font-semibold">
-        {t('deals.rating.title', { name })}
+        {title}
       </h2>
       <p className="mt-1 text-[13px] text-muted-foreground">{t('deals.rating.body', { name })}</p>
       <Button type="button" className="mt-3 h-10 text-[13px] font-semibold sm:h-9" onClick={() => setOpen(true)}>
@@ -90,7 +92,7 @@ export function RatingDialog({ deal, role, className }: RatingDialogProps) {
       <Dialog open={open} onOpenChange={rate.isPending ? () => undefined : setOpen}>
         <DialogContent className="mt-panel max-w-md bg-card p-5">
           <DialogHeader>
-            <DialogTitle className="text-base">{t('deals.rating.title', { name })}</DialogTitle>
+            <DialogTitle className="text-base">{title}</DialogTitle>
             <DialogDescription className="text-[13px]">{t('deals.rating.body', { name })}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">

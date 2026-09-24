@@ -139,7 +139,7 @@ export function TopNav() {
 
         <SearchForm className="order-last w-full basis-full sm:order-none sm:mx-2 sm:w-auto sm:max-w-[480px] sm:flex-1 sm:basis-auto" />
 
-        <nav className="ml-auto flex items-center gap-1" aria-label={t('nav.market')}>
+        <nav className="ml-auto flex items-center gap-1" aria-label={t('nav.mainLabel')}>
           <NavLink to={href('/')} end className={cn(navLinkClass, 'hidden lg:inline-flex')}>
             {t('nav.market')}
           </NavLink>

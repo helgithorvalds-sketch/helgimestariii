@@ -20,6 +20,7 @@ import { VerifiedBadge } from '../common/VerifiedBadge';
 import { RatingStars } from '../common/RatingStars';
 import { Money } from '../common/Money';
 import { PriceDelta } from '../common/PriceDelta';
+import { myPageHref } from '../account/logic';
 import { clampQuantity } from './eventUtils';
 
 export type BuyDialogProps = {
@@ -98,7 +99,7 @@ export function BuyDialog({ listing, open, onOpenChange, reservationMinutes = 30
     errorCode === 'ALREADY_RESERVED' || errorCode === 'TOO_MANY_RESERVATIONS'
       ? { to: href('/vidskipti'), label: t('event.buy.goToDeals') }
       : errorCode === 'OWN_LISTING'
-        ? { to: href('/eg'), label: t('event.buy.goToMyPage') }
+        ? { to: myPageHref('solur'), label: t('event.buy.goToMyPage') }
         : null;
 
   return (

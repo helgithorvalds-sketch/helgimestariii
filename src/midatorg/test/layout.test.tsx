@@ -127,7 +127,7 @@ describe('AppShell', () => {
       </Routes>,
     );
     expect(screen.getByText('INNIHALD')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toHaveTextContent('Aðgangurinn þinn hefur verið lokaður.');
+    expect(screen.getByRole('alert')).toHaveTextContent('Aðgangnum þínum hefur verið lokað.');
     expect(screen.getByRole('alert')).toHaveTextContent('Ástæða: Svik');
     expect(screen.getByRole('contentinfo')).toHaveTextContent('© 2026 Miðatorg');
     const aboutLinks = screen.getAllByRole('link', { name: 'Um Miðatorg' }); // TopNav + Footer

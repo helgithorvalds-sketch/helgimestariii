@@ -14,6 +14,8 @@ import { href } from '../../lib/paths';
 import { useCreateRequest } from '../../lib/queries';
 import type { MarketEvent } from '../../lib/types';
 import { bidButtonClass } from '../common/buttonClasses';
+import { myPageHref } from '../account/logic';
+import { eventFaceValue } from '../event/eventUtils';
 import { EventPicker } from './EventPicker';
 import { Field, FormSection, invalidControlClass } from './fields';
 import { PriceInput } from './PriceInput';
@@ -59,7 +61,8 @@ export function RequestForm({ preselectEventId, className }: RequestFormProps) {
       setEvent(next);
       setExistsFor(null);
       setValue('event_id', next?.id ?? '', { shouldValidate: !!next, shouldDirty: true });
-      setValue('face_cap', next?.face_value_max ?? null);
+      // the same ceiling as the sell form and the event page: face_value_max, else face_value_min
+      setValue('face_cap', eventFaceValue(next));
     },
     [setValue],
   );
@@ -86,7 +89,7 @@ export function RequestForm({ preselectEventId, className }: RequestFormProps) {
     }
   };
 
-  const faceCap = event?.face_value_max ?? null;
+  const faceCap = eventFaceValue(event);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className={cn('mt-panel overflow-hidden', className)}>
@@ -179,7 +182,7 @@ export function RequestForm({ preselectEventId, className }: RequestFormProps) {
               <Link to={href(`/vidburdir/${existsFor}`)} className="font-medium underline underline-offset-2 hover:text-foreground">
                 {t('forms.want.viewEvent')}
               </Link>
-              <Link to={href('/eg')} className="font-medium underline underline-offset-2 hover:text-foreground">
+              <Link to={myPageHref('oskir')} className="font-medium underline underline-offset-2 hover:text-foreground">
                 {t('forms.want.existsLink')}
               </Link>
             </p>

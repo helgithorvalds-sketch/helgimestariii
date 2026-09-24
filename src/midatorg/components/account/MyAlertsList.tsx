@@ -4,8 +4,8 @@ import { toast } from 'sonner';
 import { Bell, BellOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useT } from '../../lib/i18n';
-import { formatISK } from '../../lib/format';
+import { useLocale, useT } from '../../lib/i18n';
+import { formatISK, formatTickets } from '../../lib/format';
 import { href } from '../../lib/paths';
 import { useMyAlerts, useRemoveAlert } from '../../lib/queries';
 import type { AlertWithEvent } from '../../lib/types';
@@ -21,6 +21,7 @@ const smallButton = 'h-10 text-[13px] sm:h-9';
 
 function AlertRow({ alert }: { alert: AlertWithEvent }) {
   const t = useT();
+  const [locale] = useLocale();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const remove = useRemoveAlert();
   const { event } = alert;
@@ -51,9 +52,7 @@ function AlertRow({ alert }: { alert: AlertWithEvent }) {
         </Stat>
         <Stat label={t('common.forSale')}>
           {event.tickets_available > 0 ? (
-            <span>
-              {event.tickets_available} {t(event.tickets_available === 1 ? 'common.ticket' : 'common.tickets')}
-            </span>
+            <span>{formatTickets(event.tickets_available, locale)}</span>
           ) : (
             <span className="text-muted-foreground">{t('common.dash')}</span>
           )}

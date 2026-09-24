@@ -863,7 +863,7 @@ describe('RequestForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Skrá ósk' }));
     expect(await screen.findByText('Þú ert nú þegar með ósk fyrir þennan viðburð')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Skoða viðburð' })).toHaveAttribute('href', '/midatorg/vidburdir/e1');
-    expect(screen.getByRole('link', { name: 'Skoða mínar óskir' })).toHaveAttribute('href', '/midatorg/eg');
+    expect(screen.getByRole('link', { name: 'Skoða mínar óskir' })).toHaveAttribute('href', '/midatorg/eg?flipi=oskir');
     expect(toastMock.error).toHaveBeenCalledWith('Þú ert nú þegar með ósk fyrir þennan viðburð.', undefined);
     expect(screen.getByTestId('location')).toHaveTextContent('/midatorg/selja');
     expect(screen.getByRole('button', { name: 'Skrá ósk' })).not.toBeDisabled();

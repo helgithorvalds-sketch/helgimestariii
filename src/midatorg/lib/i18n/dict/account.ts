@@ -25,7 +25,7 @@ export default {
     'account.login.magicLink': 'Senda innskráningartengil',
     'account.login.magicLinkTitle': 'Innskráningartengill',
     'account.login.magicLinkHelp':
-      'Við sendum þér tengil í tölvupósti sem skráir þig inn án lykilorðs. Nýr á Miðatorgi? Sami tengill býr til aðgang.',
+      'Við sendum þér tengil í tölvupósti sem skráir þig inn án lykilorðs. Fyrsta skiptið á Miðatorgi? Sami tengill býr til aðgang.',
     'account.login.forgot': 'Gleymt lykilorð?',
     'account.login.forgotTitle': 'Gleymt lykilorð',
     'account.login.forgotHelp': 'Sláðu inn netfangið þitt og við sendum þér tengil til að velja nýtt lykilorð.',
@@ -63,8 +63,8 @@ export default {
     'account.my.tabs.requests': 'Óskir',
     'account.my.tabs.alerts': 'Láta mig vita',
     'account.my.tabs.ratings': 'Einkunnir',
-    'account.my.viewPublic': 'Skoða opinbera síðu',
-    'account.my.profileMissing': 'Náði ekki í prófílinn þinn.',
+    'account.my.viewPublic': 'Skoða eins og aðrir sjá',
+    'account.my.profileMissing': 'Náði ekki í upplýsingarnar þínar.',
     'account.common.uploading': 'Hleð upp…',
 
     // ------------------------------------------------------------ profile form
@@ -83,7 +83,7 @@ export default {
     // ------------------------------------------------------------ verification
     'account.verification.title': 'Staðfesting',
     'account.verification.body':
-      'Staðfestir notendur fá merkið „Staðfestur“ og þurfa staðfest símanúmer til að skrá miða til sölu.',
+      'Notendur með staðfest símanúmer fá merkið „Staðfestur“. Staðfest símanúmer þarf til að skrá miða til sölu.',
     'account.verification.email': 'Netfang',
     'account.verification.phone': 'Símanúmer',
     'account.verification.eid': 'Rafræn skilríki',
@@ -100,8 +100,6 @@ export default {
     'account.phone.label': 'Símanúmer',
     'account.phone.placeholder': '666 1234',
     'account.phone.help': 'Við sendum þér 6 stafa kóða í SMS. Íslensk númer þurfa ekki landsnúmer.',
-    'account.phone.smsNotice':
-      'SMS-sendingar geta verið óvirkar þar til símaþjónusta hefur verið stillt. Berist enginn kóði, reyndu aftur síðar.',
     'account.phone.send': 'Senda kóða',
     'account.phone.sending': 'Sendi…',
     'account.phone.sent': 'Kóði sendur á {phone}',
@@ -112,7 +110,7 @@ export default {
     'account.phone.resend': 'Senda kóða aftur',
     'account.phone.changeNumber': 'Breyta númeri',
     'account.phone.success': 'Símanúmerið er staðfest',
-    'account.phone.serverError': 'Villa frá þjóni: {message}',
+    'account.phone.sendFailed': 'Ekki tókst að senda kóðann. Reyndu aftur eftir smá stund.',
 
     // ------------------------------------------------------------ my listings
     'account.listings.empty': 'Þú hefur ekki skráð neina miða',
@@ -153,7 +151,7 @@ export default {
     'account.alerts.emptyBody': 'Veldu „Láta mig vita“ á viðburði og við sendum þér tilkynningu þegar miðar koma í sölu.',
     'account.alerts.browse': 'Skoða viðburði',
     'account.alerts.anyPrice': 'Öll verð',
-    'account.alerts.underPrice': 'Miðar á {price} eða minna',
+    'account.alerts.underPrice': 'Miðar á {price} eða lægra',
     'account.alerts.lowestNow': 'Lægsta verð núna',
     'account.alerts.noneForSale': 'Engir miðar til sölu',
     'account.alerts.remove': 'Hætta að láta vita',
@@ -184,14 +182,14 @@ export default {
     'account.publicProfile.sales': 'Sölur',
     'account.publicProfile.purchases': 'Kaup',
     'account.publicProfile.ratings': 'Einkunnir',
-    'account.publicProfile.banned': 'Þessi notandi hefur verið lokaður og getur ekki átt viðskipti.',
+    'account.publicProfile.banned': 'Aðgangi þessa notanda hefur verið lokað og hann getur ekki átt viðskipti.',
     'account.publicProfile.report': 'Tilkynna notanda',
     'account.publicProfile.activeListings': 'Miðar til sölu',
     'account.publicProfile.noListings': 'Engir miðar til sölu',
     'account.publicProfile.noListingsBody': '{name} er ekki með miða til sölu núna.',
     'account.publicProfile.thisIsYou': 'Þetta ert þú',
-    'account.publicProfile.editProfile': 'Breyta prófíl',
-    'account.publicProfile.about': 'Um {name}',
+    'account.publicProfile.editProfile': 'Breyta upplýsingum',
+    'account.publicProfile.about': 'Um notandann: {name}',
     'account.publicProfile.perTicket': 'á miða',
   },
   en: {
@@ -244,12 +242,12 @@ export default {
 
     'account.my.title': 'Profile page',
     'account.my.tabs.overview': 'Overview',
-    'account.my.tabs.listings': 'My listings',
+    'account.my.tabs.listings': 'My sales',
     'account.my.tabs.requests': 'Requests',
     'account.my.tabs.alerts': 'Notify me',
     'account.my.tabs.ratings': 'Ratings',
-    'account.my.viewPublic': 'View public profile',
-    'account.my.profileMissing': 'Could not load your profile.',
+    'account.my.viewPublic': 'View as others see it',
+    'account.my.profileMissing': 'Could not load your details.',
     'account.common.uploading': 'Uploading…',
 
     'account.profile.title': 'About you',
@@ -266,7 +264,7 @@ export default {
 
     'account.verification.title': 'Verification',
     'account.verification.body':
-      'Verified users get the "Verified" badge, and a verified phone number is required to list tickets.',
+      'Users with a verified phone number get the "Verified" badge. A verified phone number is required to list tickets.',
     'account.verification.email': 'Email',
     'account.verification.phone': 'Phone number',
     'account.verification.eid': 'Electronic ID',
@@ -282,8 +280,6 @@ export default {
     'account.phone.label': 'Phone number',
     'account.phone.placeholder': '666 1234',
     'account.phone.help': 'We text you a 6-digit code. Icelandic numbers need no country code.',
-    'account.phone.smsNotice':
-      'SMS may be unavailable until the SMS provider has been configured. If no code arrives, try again later.',
     'account.phone.send': 'Send code',
     'account.phone.sending': 'Sending…',
     'account.phone.sent': 'Code sent to {phone}',
@@ -294,7 +290,7 @@ export default {
     'account.phone.resend': 'Resend code',
     'account.phone.changeNumber': 'Change number',
     'account.phone.success': 'Phone number verified',
-    'account.phone.serverError': 'Server error: {message}',
+    'account.phone.sendFailed': 'The code could not be sent. Try again in a moment.',
 
     'account.listings.empty': 'You have not listed any tickets',
     'account.listings.emptyBody': 'Have tickets you cannot use? List them for sale in seconds.',
@@ -366,8 +362,8 @@ export default {
     'account.publicProfile.noListings': 'No tickets for sale',
     'account.publicProfile.noListingsBody': '{name} has no tickets for sale right now.',
     'account.publicProfile.thisIsYou': 'This is you',
-    'account.publicProfile.editProfile': 'Edit profile',
-    'account.publicProfile.about': 'About {name}',
+    'account.publicProfile.editProfile': 'Edit details',
+    'account.publicProfile.about': 'About the user: {name}',
     'account.publicProfile.perTicket': 'per ticket',
   },
 } as { is: Record<string, string>; en: Record<string, string> };

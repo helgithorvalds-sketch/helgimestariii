@@ -516,7 +516,7 @@ describe('MyPage', () => {
   it('overview: profile form prefilled and verification rows', () => {
     renderMyPage();
     expect(screen.getByRole('heading', { name: 'Notandasíða' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Skoða opinbera síðu' })).toHaveAttribute('href', '/midatorg/notendur/u1');
+    expect(screen.getByRole('link', { name: 'Skoða eins og aðrir sjá' })).toHaveAttribute('href', '/midatorg/notendur/u1');
     expect(screen.getByLabelText('Nafn')).toHaveValue('Guðrún Jóns');
     expect(screen.getByLabelText(/Kynning/)).toHaveValue('Tónleikafíkill');
     expect(screen.getByText('14/300')).toBeInTheDocument();
@@ -545,7 +545,8 @@ describe('MyPage', () => {
     authState.current = auth({ user, profile, startPhoneVerification, verifyPhone });
     renderMyPage();
     fireEvent.click(screen.getByRole('button', { name: 'Staðfesta símanúmer' }));
-    expect(screen.getByText(/SMS-sendingar geta verið óvirkar/)).toBeInTheDocument();
+    // no permanent developer caveat about the SMS provider
+    expect(screen.queryByText(/SMS-sendingar geta verið óvirkar/)).not.toBeInTheDocument();
     type(screen.getByLabelText('Símanúmer'), '666 1234');
     fireEvent.click(screen.getByRole('button', { name: 'Senda kóða' }));
     await waitFor(() => expect(startPhoneVerification).toHaveBeenCalledWith('+3546661234'));
@@ -558,7 +559,7 @@ describe('MyPage', () => {
     expect(toastMock.success).toHaveBeenCalledWith('Símanúmerið er staðfest');
   });
 
-  it('phone verification: rejects a bad number locally and shows the server error verbatim', async () => {
+  it('phone verification: rejects a bad number locally and translates an SMS-provider failure', async () => {
     const startPhoneVerification = vi.fn(async () => {
       throw { code: 'sms_send_failed', message: 'Error sending sms: provider not configured' };
     });
@@ -573,10 +574,11 @@ describe('MyPage', () => {
     type(screen.getByLabelText('Símanúmer'), '666 1234');
     fireEvent.click(screen.getByRole('button', { name: 'Senda kóða' }));
     await waitFor(() => expect(startPhoneVerification).toHaveBeenCalled());
-    expect(await screen.findByTestId('phone-server-error')).toHaveTextContent(
-      'Villa frá þjóni: Error sending sms: provider not configured',
-    );
-    expect(toastMock.error).toHaveBeenCalled();
+    // never the raw English server message; the same translated line as the toast
+    expect(await screen.findByTestId('phone-server-error')).toHaveTextContent('Ekki tókst að senda kóðann. Reyndu aftur eftir smá stund.');
+    expect(screen.queryByText(/provider not configured/)).not.toBeInTheDocument();
+    expect(toastMock.error).toHaveBeenCalledWith('Ekki tókst að senda kóðann. Reyndu aftur eftir smá stund.');
+    expect(screen.queryByText(/SMS-sendingar geta verið óvirkar/)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Senda kóða' })).toBeEnabled();
   });
 
@@ -662,7 +664,7 @@ describe('MyPage', () => {
     renderMyPage('/midatorg/eg?flipi=vaktanir');
     const rows = await screen.findAllByTestId('my-alert-row');
     expect(rows).toHaveLength(2);
-    expect(within(rows[0]).getByText('Miðar á 9.000 kr. eða minna')).toBeInTheDocument();
+    expect(within(rows[0]).getByText('Miðar á 9.000 kr. eða lægra')).toBeInTheDocument();
     expect(within(rows[0]).getByText('8.900 kr.')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Öll verð')).toBeInTheDocument();
     expect(within(rows[1]).getByText('Engir miðar til sölu')).toBeInTheDocument();
@@ -760,7 +762,7 @@ describe('PublicProfilePage', () => {
     expect(screen.getByText('Þetta ert þú')).toBeInTheDocument();
     expect(screen.getByText('Óstaðfestur')).toBeInTheDocument();
     expect(screen.getByText('(1 einkunn)')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Breyta prófíl' })).toHaveAttribute('href', '/midatorg/eg');
+    expect(screen.getByRole('link', { name: 'Breyta upplýsingum' })).toHaveAttribute('href', '/midatorg/eg');
     expect(screen.queryByRole('button', { name: 'Tilkynna notanda' })).not.toBeInTheDocument();
   });
 
@@ -768,7 +770,7 @@ describe('PublicProfilePage', () => {
     vi.mocked(profilesApi.getPublicProfile).mockResolvedValue({ ...rater, is_banned: true });
     vi.mocked(listingsApi.listUserListings).mockResolvedValue([]);
     renderProfile('u2');
-    expect(await screen.findByRole('alert')).toHaveTextContent('Þessi notandi hefur verið lokaður');
+    expect(await screen.findByRole('alert')).toHaveTextContent('Aðgangi þessa notanda hefur verið lokað');
     expect(await screen.findByText('Bjarki Þór er ekki með miða til sölu núna.')).toBeInTheDocument();
   });
 

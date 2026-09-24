@@ -11,6 +11,17 @@ import { href } from '../../lib/paths';
 import { useFetchTixEvent, useRunTixImport } from '../../lib/queries';
 import { isTixUrl } from './adminUtils';
 
+/** The edge function reports `{ id, message }` objects (older builds sent plain strings); React must never be handed the object. */
+function importErrorText(err: unknown): string {
+  if (typeof err === 'string') return err;
+  if (err && typeof err === 'object') {
+    const { id, message } = err as { id?: unknown; message?: unknown };
+    const parts = [id, message].filter((p) => p != null && p !== '').map(String);
+    if (parts.length > 0) return parts.join(': ');
+  }
+  return String(err);
+}
+
 /** "Flytja inn frá tix.is": one-event URL box → mt-fetch-tix-event, and "Keyra innflutning núna" → mt-import-tix. */
 export function ImportPanel({ className }: { className?: string }) {
   const t = useT();
@@ -31,6 +42,7 @@ export function ImportPanel({ className }: { className?: string }) {
   };
 
   const result = runImport.data;
+  const importErrors: string[] = Array.isArray(result?.errors) ? result.errors.map(importErrorText) : [];
 
   return (
     <section className={cn('mt-panel p-4', className)} aria-labelledby="mt-import-title">
@@ -108,10 +120,10 @@ export function ImportPanel({ className }: { className?: string }) {
               <dl className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {(
                   [
-                    ['scanned', result.scanned],
-                    ['inserted', result.inserted],
-                    ['updated', result.updated],
-                    ['errors', result.errors?.length ?? 0],
+                    ['scanned', result.scanned ?? 0],
+                    ['inserted', result.inserted ?? 0],
+                    ['updated', result.updated ?? 0],
+                    ['errors', importErrors.length],
                   ] as const
                 ).map(([key, value]) => (
                   <div key={key}>
@@ -120,11 +132,11 @@ export function ImportPanel({ className }: { className?: string }) {
                   </div>
                 ))}
               </dl>
-              {result.errors && result.errors.length > 0 && (
+              {importErrors.length > 0 && (
                 <details className="mt-2 text-[12.5px]">
                   <summary className="cursor-pointer text-muted-foreground">{t('admin.import.errorList')}</summary>
                   <ul className="mt-1 max-h-40 list-disc space-y-0.5 overflow-y-auto pl-5">
-                    {result.errors.map((err, i) => (
+                    {importErrors.map((err, i) => (
                       <li key={i} className="break-words">
                         {err}
                       </li>

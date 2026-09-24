@@ -99,7 +99,6 @@ function DealRoom({ deal }: { deal: DealWithContext }) {
   const qc = useQueryClient();
   const [, bump] = useReducer((n: number) => n + 1, 0);
   const [reportTarget, setReportTarget] = useState<PublicProfile | null>(null);
-  useDocumentTitle(deal.event.title);
 
   const role = roleFor(deal, user?.id, isAdmin);
   if (role === 'none' || !user) return <NoAccess />;
@@ -197,7 +196,7 @@ function DealRoom({ deal }: { deal: DealWithContext }) {
               <PartyCard profile={deal.seller} heading={t('common.seller')} onReport={setReportTarget} />
             </>
           )}
-          <DealChat deal={deal} status={status} userId={user.id} />
+          <DealChat deal={deal} status={status} userId={user.id} role={role} />
         </aside>
       </div>
 
@@ -218,7 +217,8 @@ export default function DealRoomPage() {
   const { dealId } = useParams<{ dealId: string }>();
   const t = useT();
   const dealQ = useDeal(dealId);
-  useDocumentTitle(t('deals.room.title'));
+  // set here, not in the child: a child's effect runs first and the parent's would overwrite it
+  useDocumentTitle(dealQ.data?.event.title ?? t('deals.room.title'));
 
   if (dealQ.isPending) {
     return (

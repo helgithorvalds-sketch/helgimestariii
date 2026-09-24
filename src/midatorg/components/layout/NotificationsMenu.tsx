@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useLocale, useT } from '../../lib/i18n';
-import { formatRelative } from '../../lib/format';
+import { formatRelative, isSingular } from '../../lib/format';
 import { href } from '../../lib/paths';
 import { useMarkAllRead, useMarkRead, useNotifications, useUnreadCount } from '../../lib/queries';
 import type { Notification } from '../../lib/types';
@@ -25,6 +25,7 @@ export function NotificationsMenu({ className }: { className?: string }) {
   const markRead = useMarkRead();
   const markAll = useMarkAllRead();
   const count = unread.data ?? 0;
+  const ariaKey = (locale === 'is' ? isSingular(count) : count === 1) ? 'notifications.ariaOne' : 'notifications.aria';
 
   const open = (n: Notification) => {
     if (!n.read_at) markRead.mutate(n.id);
@@ -39,7 +40,7 @@ export function NotificationsMenu({ className }: { className?: string }) {
           variant="ghost"
           size="icon"
           className={cn('relative h-9 w-9 text-muted-foreground hover:text-foreground', className)}
-          aria-label={t('notifications.aria', { count })}
+          aria-label={t(ariaKey, { count })}
         >
           <Bell className="h-[18px] w-[18px]" aria-hidden="true" />
           {count > 0 && (
@@ -68,7 +69,18 @@ export function NotificationsMenu({ className }: { className?: string }) {
         </div>
         <DropdownMenuSeparator className="my-0" />
         <div className="max-h-[360px] overflow-y-auto py-1">
-          {(list.data?.length ?? 0) === 0 ? (
+          {list.isError ? (
+            <div className="px-3 py-6 text-center text-[13px] text-muted-foreground" role="alert">
+              <p>{t('common.errorBody')}</p>
+              <button
+                type="button"
+                className="mt-2 text-[12px] font-medium text-foreground underline underline-offset-2"
+                onClick={() => void list.refetch()}
+              >
+                {t('common.retry')}
+              </button>
+            </div>
+          ) : (list.data?.length ?? 0) === 0 ? (
             <p className="px-3 py-6 text-center text-[13px] text-muted-foreground">
               {list.isPending ? t('common.loading') : t('notifications.empty')}
             </p>

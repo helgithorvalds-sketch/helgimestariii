@@ -11,7 +11,7 @@ import { formatDateTime, formatNumber, formatRelative } from '../../lib/format';
 import { useMessages, useSendMessage } from '../../lib/queries';
 import type { DealStatus, DealWithContext, Message } from '../../lib/types';
 import { ErrorState } from '../common/ErrorState';
-import { MAX_MESSAGE_LENGTH, chatClosedKey } from './dealState';
+import { MAX_MESSAGE_LENGTH, chatClosedKey, type DealRole } from './dealState';
 
 type DealChatProps = {
   deal: DealWithContext;
@@ -19,6 +19,8 @@ type DealChatProps = {
   status: DealStatus;
   /** The signed-in user (decides which side a bubble sits on). */
   userId: string;
+  /** Admins who are not a party get a read-only chat (the insert policy would reject them). */
+  role?: DealRole;
   className?: string;
 };
 
@@ -50,10 +52,10 @@ function Bubble({ message, own, name, showName }: { message: Message; own: boole
 /**
  * Realtime chat for a deal: `useMessages` (list + subscribeMessages) and
  * `useSendMessage`. Enter sends, Shift+Enter breaks the line, 2000 chars max.
- * The composer is replaced by an explanation when the deal is cancelled/expired
- * or the viewer is banned (the server rejects those inserts anyway).
+ * The composer is replaced by an explanation when the deal is cancelled/expired,
+ * the viewer is banned or an admin who is not a party (the server rejects those inserts anyway).
  */
-export function DealChat({ deal, status, userId, className }: DealChatProps) {
+export function DealChat({ deal, status, userId, role, className }: DealChatProps) {
   const t = useT();
   const { isBanned } = useAuth();
   const messagesQ = useMessages(deal.id);
@@ -61,7 +63,7 @@ export function DealChat({ deal, status, userId, className }: DealChatProps) {
   const [text, setText] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
 
-  const closedKey = chatClosedKey(status) ?? (isBanned ? 'deals.chat.closed.banned' : null);
+  const closedKey = chatClosedKey(status, role) ?? (isBanned ? 'deals.chat.closed.banned' : null);
   const items = messagesQ.data ?? [];
   const count = items.length;
 

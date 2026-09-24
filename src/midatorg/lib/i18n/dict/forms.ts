@@ -72,7 +72,7 @@ export default {
     'forms.manual.category': 'Flokkur',
     'forms.manual.venue': 'Staður',
     'forms.manual.venuePlaceholder': 'T.d. Harpa',
-    'forms.manual.city': 'Bæjarfélag',
+    'forms.manual.city': 'Sveitarfélag',
     'forms.manual.cityPlaceholder': 'T.d. Reykjavík',
     'forms.manual.date': 'Dagsetning',
     'forms.manual.time': 'Tími',

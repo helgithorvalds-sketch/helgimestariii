@@ -449,7 +449,7 @@ describe('ReportsTable', () => {
     vi.mocked(adminApi.listReports).mockResolvedValue([report(), report({ id: 'r2', reason: 'other', details: null, listing_id: null, deal_id: null })]);
     vi.mocked(adminApi.resolveReport).mockResolvedValue(undefined);
     wrap(<ReportsTable />);
-    expect(await screen.findByText('Svik / Falskur miði')).toBeInTheDocument();
+    expect(await screen.findByText('Svik / falskur miði')).toBeInTheDocument();
     expect(screen.getByText('Annað')).toBeInTheDocument();
     expect(screen.getByText('Engin lýsing fylgdi.')).toBeInTheDocument();
     expect(screen.getAllByTestId('report-row')).toHaveLength(2);
@@ -487,7 +487,7 @@ describe('ReportsTable', () => {
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent('Náði ekki sambandi við Miðatorg');
     fireEvent.click(within(alert).getByRole('button', { name: 'Reyna aftur' }));
-    expect(await screen.findByText('Svik / Falskur miði')).toBeInTheDocument();
+    expect(await screen.findByText('Svik / falskur miði')).toBeInTheDocument();
   });
 });
 
@@ -583,7 +583,7 @@ describe('EventsTable', () => {
 
     fireEvent.change(title, { target: { value: 'X' } });
     fireEvent.click(within(dialog).getByRole('button', { name: 'Vista' }));
-    expect(await within(dialog).findByText('Titill þarf að vera 2–120 stafir.')).toBeInTheDocument();
+    expect(await within(dialog).findByText('Titill þarf að vera 2–200 stafir.')).toBeInTheDocument();
     expect(adminApi.updateEvent).not.toHaveBeenCalled();
 
     fireEvent.change(title, { target: { value: 'Sigur Rós – aukatónleikar' } });
@@ -641,6 +641,31 @@ describe('ImportPanel', () => {
     expect(within(status).getByText('3')).toBeInTheDocument();
     expect(within(status).getByText('4')).toBeInTheDocument();
     expect(within(status).getByText('event 5: no JSON-LD')).toBeInTheDocument();
+  });
+
+  it('renders `{ id, message }` error objects from the edge function as text instead of crashing', async () => {
+    vi.mocked(adminApi.runTixImport).mockResolvedValue({
+      scanned: 60,
+      inserted: 0,
+      updated: 59,
+      errors: [{ id: 'tix-41207', message: 'HTTP 500' }, { id: 'category/leikhus', message: 'PARSE_FAILED' }],
+    } as unknown as Awaited<ReturnType<typeof adminApi.runTixImport>>);
+    wrap(<ImportPanel />);
+    fireEvent.click(screen.getByRole('button', { name: 'Keyra innflutning núna' }));
+    const status = await screen.findByRole('status');
+    expect(status).toHaveTextContent('Innflutningi lokið');
+    expect(within(status).getByText('2')).toBeInTheDocument();
+    expect(within(status).getByText('tix-41207: HTTP 500')).toBeInTheDocument();
+    expect(within(status).getByText('category/leikhus: PARSE_FAILED')).toBeInTheDocument();
+  });
+
+  it('copes with a result that carries no counts or error list', async () => {
+    vi.mocked(adminApi.runTixImport).mockResolvedValue({} as Awaited<ReturnType<typeof adminApi.runTixImport>>);
+    wrap(<ImportPanel />);
+    fireEvent.click(screen.getByRole('button', { name: 'Keyra innflutning núna' }));
+    const status = await screen.findByRole('status');
+    expect(status).toHaveTextContent('Innflutningi lokið');
+    expect(within(status).getAllByText('0')).toHaveLength(4);
   });
 });
 
@@ -784,6 +809,28 @@ describe('NotificationsPage', () => {
     wrap(<NotificationsPage />, '/midatorg/tilkynningar');
     expect(await screen.findByRole('alert')).toHaveTextContent('Náði ekki sambandi við Miðatorg');
   });
+
+  it('offers "Sækja eldri" when the window is full and widens the limit', async () => {
+    const full = Array.from({ length: 50 }, (_, i) => notification({ id: `n${i}`, read_at: '2026-04-30T00:00:00Z' }));
+    vi.mocked(notificationsApi.listNotifications).mockResolvedValueOnce(full).mockResolvedValueOnce([...full, notification({ id: 'old', title: 'Gömul tilkynning', read_at: '2026-04-30T00:00:00Z' })]);
+    vi.mocked(notificationsApi.unreadCount).mockResolvedValue(0);
+    wrap(<NotificationsPage />, '/midatorg/tilkynningar');
+    expect(await screen.findAllByTestId('notification-row')).toHaveLength(50);
+    expect(notificationsApi.listNotifications).toHaveBeenLastCalledWith(50);
+    fireEvent.click(screen.getByRole('button', { name: 'Sækja eldri' }));
+    await waitFor(() => expect(notificationsApi.listNotifications).toHaveBeenLastCalledWith(100));
+    expect(await screen.findByText('Gömul tilkynning')).toBeInTheDocument();
+    expect(screen.getAllByTestId('notification-row')).toHaveLength(51);
+    // 51 < 100: nothing older to fetch
+    expect(screen.queryByRole('button', { name: 'Sækja eldri' })).not.toBeInTheDocument();
+  });
+
+  it('pluralises the unread line the Icelandic way (21 ólesin)', async () => {
+    vi.mocked(notificationsApi.listNotifications).mockResolvedValue([notification()]);
+    vi.mocked(notificationsApi.unreadCount).mockResolvedValue(21);
+    wrap(<NotificationsPage />, '/midatorg/tilkynningar');
+    expect(await screen.findByText('21 ólesin')).toBeInTheDocument();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -804,7 +851,13 @@ describe('AboutPage', () => {
     expect(screen.getByRole('heading', { name: 'Hafa samband' })).toBeInTheDocument();
     expect(screen.getByText('Verð aldrei hærra en miðaverð')).toBeInTheDocument();
     expect(await screen.findByText(/fráteknir fyrir þig í 45 mínútur/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Senda tölvupóst' })).toHaveAttribute('href', `mailto:${CONTACT_EMAIL}`);
+    if (CONTACT_EMAIL) {
+      expect(screen.getByRole('link', { name: 'Senda tölvupóst' })).toHaveAttribute('href', `mailto:${CONTACT_EMAIL}`);
+    } else {
+      // no monitored mailbox yet: a marked placeholder, never a dead mailto
+      expect(screen.queryByRole('link', { name: 'Senda tölvupóst' })).not.toBeInTheDocument();
+      expect(screen.getByTestId('contact-pending')).toHaveTextContent('[netfang]');
+    }
     expect(screen.getByRole('link', { name: /Fara á tix.is/ })).toHaveAttribute('href', 'https://tix.is');
     expect(screen.getByRole('link', { name: 'Selja miða' })).toHaveAttribute('href', '/midatorg/selja');
   });

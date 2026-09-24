@@ -460,7 +460,7 @@ describe('OrderBook', () => {
     expect(within(sellRows[0]).getByText('−17%')).toBeInTheDocument();
     expect(within(sellRows[1]).getByText('1 miði')).toBeInTheDocument();
     expect(within(sellRows[1]).getByText('aðeins saman')).toBeInTheDocument();
-    fireEvent.click(within(sellRows[0]).getByRole('button', { name: 'Kaupa af Guðrún H.' }));
+    fireEvent.click(within(sellRows[0]).getByRole('button', { name: 'Kaupa: Guðrún H.' }));
     expect(onBuy).toHaveBeenCalledWith(listings[0]);
 
     const wantRows = screen.getAllByTestId('want-row');
@@ -468,14 +468,14 @@ describe('OrderBook', () => {
     expect(wantRows[0]).toHaveTextContent('vantar 2 miða');
     expect(within(wantRows[0]).getByText('hámark 11.900 kr.')).toBeInTheDocument();
     expect(within(wantRows[1]).getByText('ekkert hámark')).toBeInTheDocument();
-    expect(within(wantRows[0]).getByRole('link', { name: 'Selja til Anna Lísa' })).toHaveAttribute('href', '/midatorg/selja?event=ev-1');
+    expect(within(wantRows[0]).getByRole('link', { name: 'Selja til: Anna Lísa' })).toHaveAttribute('href', '/midatorg/selja?event=ev-1');
   });
 
   it('marks the viewer’s own tickets ("Skoða") and request', () => {
     wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={() => undefined} currentUserId="u-gudrun" />);
     expect(screen.getByText('Þínir miðar')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Skoða þína miða' })).toHaveAttribute('href', '/midatorg/eg?flipi=solur');
-    expect(screen.getAllByRole('button', { name: /Kaupa af/ })).toHaveLength(1);
+    expect(screen.getAllByRole('button', { name: /^Kaupa: / })).toHaveLength(1);
   });
 
   it('empty lists offer "Láta mig vita" and the want form', () => {
@@ -610,7 +610,7 @@ describe('BuyDialog', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Taka frá' }));
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent('Þetta eru þínir eigin miðar');
-    expect(within(alert).getByRole('link', { name: 'Fara á notandasíðu' })).toHaveAttribute('href', '/midatorg/eg');
+    expect(within(alert).getByRole('link', { name: 'Skoða mínar sölur' })).toHaveAttribute('href', '/midatorg/eg?flipi=solur');
     expect(screen.getByRole('button', { name: 'Taka frá' })).toBeEnabled();
 
     api.reserveListing.mockRejectedValueOnce({ message: 'ALREADY_RESERVED', code: 'P0001' });
@@ -699,7 +699,7 @@ describe('EventPage', () => {
 
   it('signed out: Kaupa sends to the login page with a return URL', async () => {
     wrap(<EventPage />);
-    const buy = (await screen.findAllByRole('button', { name: /Kaupa af/ }))[0];
+    const buy = (await screen.findAllByRole('button', { name: /^Kaupa: / }))[0];
     fireEvent.click(buy);
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/midatorg/innskra?next=%2Fmidatorg%2Fvidburdir%2Fev-1'));
   });
@@ -707,7 +707,7 @@ describe('EventPage', () => {
   it('signed in: Kaupa opens the buy dialog for those tickets', async () => {
     authState.current = signedIn();
     wrap(<EventPage />);
-    fireEvent.click((await screen.findAllByRole('button', { name: /Kaupa af/ }))[1]);
+    fireEvent.click((await screen.findAllByRole('button', { name: /^Kaupa: / }))[1]);
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toHaveTextContent('Ólafur K.');
     expect(dialog).toHaveTextContent('10.500 kr.');

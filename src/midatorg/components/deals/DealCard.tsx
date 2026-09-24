@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -6,7 +6,6 @@ import { useT } from '../../lib/i18n';
 import { href } from '../../lib/paths';
 import { formatDateTime, formatISK, formatTickets, formatTime } from '../../lib/format';
 import type { DealWithContext } from '../../lib/types';
-import { Countdown } from '../common/Countdown';
 import { Money } from '../common/Money';
 import { UserAvatar } from '../common/UserAvatar';
 import { VerifiedBadge } from '../common/VerifiedBadge';
@@ -17,20 +16,38 @@ type DealCardProps = {
   deal: DealWithContext;
   userId: string | null | undefined;
   isAdmin?: boolean;
-  /** Called when the live reservation timer reaches zero (the list refetches). */
+  /** Called once the reservation passes `reserved_until` (the list refetches). */
   onExpire?: () => void;
   className?: string;
 };
 
 /**
  * One deal in the list: event title/date, counterpart, quantity × price = total,
- * status badge, a live countdown while reserved. The whole card is the link.
+ * status badge and a static "Frátekið til HH:MM" while reserved — the live timer
+ * belongs to the deal room only (DESIGN-v2 §7: cards never count down). The whole card is the link.
  */
 export function DealCard({ deal, userId, isAdmin = false, onExpire, className }: DealCardProps) {
   const t = useT();
   const [, bump] = useReducer((n: number) => n + 1, 0);
   const role = roleFor(deal, userId, isAdmin);
   const status = effectiveStatus(deal);
+  const onExpireRef = useRef(onExpire);
+  onExpireRef.current = onExpire;
+
+  // flip to "expired" (and let the list refetch) when the reservation lapses, without a visible ticker
+  useEffect(() => {
+    if (status !== 'reserved') return;
+    const ms = Date.parse(deal.reserved_until) - Date.now();
+    if (!Number.isFinite(ms)) return;
+    const id = window.setTimeout(
+      () => {
+        bump();
+        onExpireRef.current?.();
+      },
+      Math.min(Math.max(0, ms) + 500, 2 ** 31 - 1),
+    );
+    return () => window.clearTimeout(id);
+  }, [status, deal.reserved_until]);
   const other = counterpartOf(deal, role);
   const total = dealTotal(deal);
   const roleLabel = role === 'buyer' ? t('deals.role.buying') : role === 'seller' ? t('deals.role.selling') : t('deals.role.admin');
@@ -73,18 +90,9 @@ export function DealCard({ deal, userId, isAdmin = false, onExpire, className }:
         </div>
 
         {status === 'reserved' ? (
-          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-muted-foreground">
+          <p className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{t('countdown.reservedUntil', { time: formatTime(deal.reserved_until) })}</span>
-            <span aria-hidden="true">·</span>
-            <Countdown
-              until={deal.reserved_until}
-              className="font-semibold text-foreground"
-              onExpire={() => {
-                bump();
-                onExpire?.();
-              }}
-            />
           </p>
         ) : null}
 

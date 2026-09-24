@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { toast } from 'sonner';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { Info, Phone } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,11 +21,19 @@ export type PhoneVerifyCardProps = {
   className?: string;
 };
 
+/** Rate limits and bad codes keep their own message; any SMS-provider failure reads as "could not send". */
+function phoneErrorKey(err: unknown): string {
+  const parsed = parseApiError(err);
+  if (parsed.code === 'RATE_LIMITED' || parsed.code === 'OTP_INVALID' || parsed.code === 'AUTH_REQUIRED') return parsed.key;
+  const raw = `${String((err as { code?: unknown } | null)?.code ?? '')} ${parsed.message}`.toLowerCase();
+  if (/sms|provider|not configured|unsupported/.test(raw)) return 'account.phone.sendFailed';
+  return parsed.key;
+}
+
 /**
  * Two steps: phone number → `startPhoneVerification(+354…)`; six-digit SMS code
- * (shadcn InputOTP) → `verifyPhone`. Explains that SMS may be unavailable until
- * the provider is configured, and shows the raw server message under the
- * translated toast so support can act on it.
+ * (shadcn InputOTP) → `verifyPhone`. Failures are shown translated (toast + inline);
+ * the raw server message only goes to the console.
  */
 export function PhoneVerifyCard({ onVerified, className }: PhoneVerifyCardProps) {
   const t = useT();
@@ -40,9 +48,10 @@ export function PhoneVerifyCard({ onVerified, className }: PhoneVerifyCardProps)
   const [busy, setBusy] = useState(false);
 
   const fail = (err: unknown) => {
-    const parsed = parseApiError(err);
-    toast.error(t(parsed.key));
-    setServerError(parsed.message.trim() || null);
+    const key = phoneErrorKey(err);
+    if (import.meta.env.DEV) console.warn('[midatorg] phone verification', err);
+    toast.error(t(key));
+    setServerError(key);
   };
 
   const send = async (number: string) => {
@@ -105,10 +114,6 @@ export function PhoneVerifyCard({ onVerified, className }: PhoneVerifyCardProps)
         <Phone className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
         {t('account.phone.title')}
       </h3>
-      <p className="mt-2 flex items-start gap-2 text-[12px] text-muted-foreground">
-        <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-        <span>{t('account.phone.smsNotice')}</span>
-      </p>
 
       {step === 'phone' ? (
         <form onSubmit={onPhoneSubmit} noValidate className="mt-4 space-y-3">
@@ -185,8 +190,8 @@ export function PhoneVerifyCard({ onVerified, className }: PhoneVerifyCardProps)
       )}
 
       {serverError && (
-        <p className="mt-3 break-words text-[12px] text-muted-foreground" data-testid="phone-server-error">
-          {t('account.phone.serverError', { message: serverError })}
+        <p className="mt-3 text-[12px] text-down" role="alert" data-testid="phone-server-error">
+          {t(serverError)}
         </p>
       )}
     </section>

@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components -- provider + hooks live together by design */
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, isLocale, type Locale } from './locale';
 import { setFormatLocale } from '../format';
 import common from './dict/common';
@@ -84,6 +84,10 @@ export function I18nProvider({ children, initialLocale }: { children: ReactNode;
   const [locale, setLocaleState] = useState<Locale>(() => initialLocale ?? readStoredLocale());
   // keep the non-React formatters in sync (idempotent)
   setFormatLocale(locale);
+  // <html lang> follows the locale from the first render, not only after a toggle
+  useEffect(() => {
+    if (typeof document !== 'undefined') document.documentElement.lang = locale;
+  }, [locale]);
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
@@ -93,7 +97,6 @@ export function I18nProvider({ children, initialLocale }: { children: ReactNode;
     } catch {
       /* ignore */
     }
-    if (typeof document !== 'undefined') document.documentElement.lang = l;
   }, []);
 
   const t = useCallback<TFunction>((key, vars) => translate(locale, key, vars), [locale]);

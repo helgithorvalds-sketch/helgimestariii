@@ -73,6 +73,11 @@ export function parseMyTab(raw: string | null | undefined): MyTab {
   return (MY_TABS as readonly string[]).includes(raw ?? '') ? (raw as MyTab) : 'yfirlit';
 }
 
+/** `/midatorg/eg?flipi=solur` — a link that promises a tab ("undir Mínar sölur") must open that tab. */
+export function myPageHref(tab: MyTab = 'yfirlit'): string {
+  return tab === 'yfirlit' ? href('/eg') : href(`/eg?flipi=${tab}`);
+}
+
 // ---------------------------------------------------------------------------
 // Phone numbers — Supabase wants E.164 (+3546661234)
 // ---------------------------------------------------------------------------

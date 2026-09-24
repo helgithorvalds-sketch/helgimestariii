@@ -29,15 +29,18 @@ export default {
     'nav.userMenu': 'Notendavalmynd',
     'nav.openMenu': 'Opna valmynd',
     'nav.home': 'Forsíða',
+    'nav.mainLabel': 'Aðalvalmynd',
+    'nav.bottomLabel': 'Neðri valmynd',
 
     // notifications menu
     'notifications.title': 'Tilkynningar',
     'notifications.unread': '{count} ólesnar',
-    'notifications.unreadOne': '1 ólesin',
+    'notifications.unreadOne': '{count} ólesin',
     'notifications.markAllRead': 'Merkja allt lesið',
     'notifications.seeAll': 'Sjá allar',
     'notifications.empty': 'Engar tilkynningar enn',
     'notifications.aria': 'Tilkynningar, {count} ólesnar',
+    'notifications.ariaOne': 'Tilkynningar, {count} ólesin',
 
     // categories
     'category.all': 'Allt',
@@ -158,7 +161,7 @@ export default {
     'delta.above': 'yfir miðaverði',
 
     // banned banner
-    'banned.title': 'Aðgangurinn þinn hefur verið lokaður.',
+    'banned.title': 'Aðgangnum þínum hefur verið lokað.',
     'banned.body': 'Þú getur skoðað viðburði en ekki selt miða, óskað eftir miðum, keypt eða sent skilaboð.',
     'banned.reason': 'Ástæða: {reason}',
 
@@ -181,7 +184,7 @@ export default {
     'report.description': 'Segðu okkur hvað er að. Stjórnendur skoða allar tilkynningar.',
     'report.reasonLabel': 'Ástæða',
     'report.reasonPlaceholder': 'Veldu ástæðu',
-    'report.reason.fraud': 'Svik / Falskur miði',
+    'report.reason.fraud': 'Svik / falskur miði',
     'report.reason.price_above_face': 'Verð yfir miðaverði',
     'report.reason.behaviour': 'Óviðeigandi hegðun',
     'report.reason.other': 'Annað',
@@ -190,6 +193,7 @@ export default {
     'report.submit': 'Senda tilkynningu',
     'report.success': 'Takk, tilkynningin er móttekin.',
     'report.contextLabel': 'Varðar: {label}',
+    'report.eventContext': 'Viðburður: {label} ({id})',
 
     // countdown / reservation
     'countdown.expired': 'Rann út',
@@ -223,14 +227,17 @@ export default {
     'nav.userMenu': 'User menu',
     'nav.openMenu': 'Open menu',
     'nav.home': 'Home',
+    'nav.mainLabel': 'Main navigation',
+    'nav.bottomLabel': 'Bottom navigation',
 
     'notifications.title': 'Notifications',
     'notifications.unread': '{count} unread',
-    'notifications.unreadOne': '1 unread',
+    'notifications.unreadOne': '{count} unread',
     'notifications.markAllRead': 'Mark all as read',
     'notifications.seeAll': 'See all',
     'notifications.empty': 'No notifications yet',
     'notifications.aria': 'Notifications, {count} unread',
+    'notifications.ariaOne': 'Notifications, {count} unread',
 
     'category.all': 'All',
     'category.tonleikar': 'Concerts',
@@ -368,6 +375,7 @@ export default {
     'report.submit': 'Send report',
     'report.success': 'Thanks, your report has been received.',
     'report.contextLabel': 'Regarding: {label}',
+    'report.eventContext': 'Event: {label} ({id})',
 
     'countdown.expired': 'Expired',
     'countdown.reservedUntil': 'Reserved until {time}',

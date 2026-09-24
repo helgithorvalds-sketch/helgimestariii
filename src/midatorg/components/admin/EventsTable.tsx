@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { useLocale, useT } from '../../lib/i18n';
-import { formatDateTime } from '../../lib/format';
+import { formatDateTime, formatNumber, formatTickets } from '../../lib/format';
 import { href } from '../../lib/paths';
 import { useAdminEvents, useDeleteEvent } from '../../lib/queries';
 import type { EventStatus, MarketEvent } from '../../lib/types';
@@ -18,6 +18,7 @@ import { UserAvatar } from '../common/UserAvatar';
 import { useDebouncedValue } from './adminQueries';
 import { AdminSearch, Pill, RowsSkeleton, tdClass, thClass, type PillTone } from './AdminBits';
 import { EventEditDialog } from './EventEditDialog';
+import { pluralSuffix } from '../market/helpers';
 
 const STATUS_TONE: Record<EventStatus, PillTone> = { upcoming: 'up', past: 'muted', cancelled: 'down' };
 
@@ -135,7 +136,10 @@ export function EventsTable() {
                   </TableCell>
                   <TableCell className={cn(tdClass, 'text-muted-foreground')}>{t(`admin.events.source.${e.source}`)}</TableCell>
                   <TableCell className={cn(tdClass, 'whitespace-nowrap text-right tabular-nums')}>
-                    {t('admin.events.listingsCell', { listings: e.listings_active ?? 0, tickets: e.tickets_available ?? 0 })}
+                    {t('admin.events.listingsCell', {
+                      sellers: t(`admin.events.sellers${pluralSuffix(e.listings_active ?? 0, locale)}`, { count: formatNumber(e.listings_active ?? 0, locale) }),
+                      tickets: formatTickets(e.tickets_available ?? 0, locale),
+                    })}
                   </TableCell>
                   <TableCell className={cn(tdClass, 'text-right')}>
                     <div className="flex justify-end gap-1">

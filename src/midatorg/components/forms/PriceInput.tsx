@@ -1,6 +1,7 @@
 import { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState, type ChangeEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import { useT } from '../../lib/i18n';
 import { caretAfterDigits, formatIskInput, parseIsk } from './schemas';
 import { invalidControlClass } from './fields';
 
@@ -27,6 +28,7 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(function
   { id, value, onChange, onBlur, name, placeholder, disabled, invalid, describedBy, autoComplete = 'off', className },
   ref,
 ) {
+  const t = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
@@ -84,7 +86,7 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(function
         aria-hidden="true"
         className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[13px] font-medium text-muted-foreground"
       >
-        kr.
+        {t('common.kr')}
       </span>
     </div>
   );

@@ -10,7 +10,7 @@ import { useTransitionDeal } from '../../lib/queries';
 import type { DealStatus, DealWithContext } from '../../lib/types';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { secondaryButtonClass } from '../common/buttonClasses';
-import { MAX_REASON_LENGTH, actionSpecs, dealTotal, isTerminal, type DealActionSpec, type DealRole } from './dealState';
+import { MAX_REASON_LENGTH, actionSpecs, confirmBodyKey, dealTotal, isTerminal, type DealActionSpec, type DealRole } from './dealState';
 
 type DealActionsProps = {
   deal: DealWithContext;
@@ -104,7 +104,7 @@ export function DealActions({ deal, status, role, isAdmin = false, className }: 
           if (!open) close();
         }}
         title={pending ? t(`deals.confirm.${pending.action}.title`) : undefined}
-        description={pending ? t(`deals.confirm.${pending.action}.body`, { amount }) : undefined}
+        description={pending ? t(confirmBodyKey(pending.action, status), { amount }) : undefined}
         confirmLabel={pending ? t(`deals.confirm.${pending.action}.confirm`) : undefined}
         cancelLabel={t('deals.confirm.back')}
         destructive={pending?.tone === 'destructive'}

@@ -14,7 +14,7 @@ export function MobileNav() {
     { to: href('/eg'), end: false, icon: User, label: t('nav.me') },
   ];
   return (
-    <nav className="mt-safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background md:hidden" aria-label={t('nav.market')}>
+    <nav className="mt-safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background md:hidden" aria-label={t('nav.bottomLabel')}>
       <ul className="grid h-14 grid-cols-4">
         {items.map(({ to, end, icon: Icon, label }) => (
           <li key={to} className="min-w-0">

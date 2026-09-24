@@ -86,6 +86,7 @@ import {
   canDownloadProof,
   canRate,
   chatClosedKey,
+  confirmBodyKey,
   counterpartOf,
   dealTotal,
   effectiveStatus,
@@ -449,6 +450,14 @@ describe('dealState.roles, status, lists, parties', () => {
     expect(chatClosedKey('cancelled')).toBe('deals.chat.closed.cancelled');
     expect(chatClosedKey('expired')).toBe('deals.chat.closed.expired');
     for (const s of ['reserved', 'paid_claimed', 'ticket_sent', 'completed', 'disputed'] as DealStatus[]) expect(chatClosedKey(s)).toBeNull();
+    // an admin who is not a party can read but not post; the parties keep the composer
+    expect(chatClosedKey('reserved', 'admin')).toBe('deals.chat.closed.admin');
+    expect(chatClosedKey('cancelled', 'admin')).toBe('deals.chat.closed.cancelled');
+    expect(chatClosedKey('reserved', 'buyer')).toBeNull();
+    // cancelling after the buyer marked paid gets the refund-first copy
+    expect(confirmBodyKey('cancel', 'paid_claimed')).toBe('deals.confirm.cancel.bodyPaid');
+    expect(confirmBodyKey('cancel', 'reserved')).toBe('deals.confirm.cancel.body');
+    expect(confirmBodyKey('mark_paid', 'reserved')).toBe('deals.confirm.mark_paid.body');
     for (const s of STATUSES) {
       expect(canDownloadProof(s, 'buyer')).toBe(['ticket_sent', 'completed', 'disputed'].includes(s));
       expect(canDownloadProof(s, 'seller')).toBe(false);
@@ -482,7 +491,7 @@ describe('DealStepper', () => {
 });
 
 describe('DealCard', () => {
-  it('buyer view: title, seller, quantity × price = total, badge, countdown, link', () => {
+  it('buyer view: title, seller, quantity × price = total, badge, static reserved-until time, link', () => {
     wrap(<DealCard deal={makeDeal()} userId="buyer-1" />);
     expect(screen.getByRole('heading', { name: 'Sigur Rós í Hörpu' })).toBeInTheDocument();
     expect(screen.getByText('Þú kaupir')).toBeInTheDocument();
@@ -491,7 +500,9 @@ describe('DealCard', () => {
     expect(screen.getByText('16.020')).toBeInTheDocument();
     expect(screen.getByText('Tekið frá')).toHaveAttribute('data-status', 'reserved');
     expect(screen.getByRole('link', { name: 'Sigur Rós í Hörpu – opna viðskipti' })).toHaveAttribute('href', '/midatorg/vidskipti/deal-1');
-    expect(document.querySelector('time')).toHaveTextContent(/^\d\d:\d\d$/);
+    // DESIGN-v2 §7: cards never count down — a static time, no ticking <time>
+    expect(screen.getByText(/^Frátekið til \d\d:\d\d$/)).toBeInTheDocument();
+    expect(document.querySelector('time')).toBeNull();
   });
   it('seller view of a completed deal: no countdown, buyer shown', () => {
     wrap(<DealCard deal={makeDeal({ status: 'completed' })} userId="seller-1" />);
@@ -551,6 +562,11 @@ describe('DealChat', () => {
     expect(screen.getByText('Spjallið er lokað því viðskiptunum var hætt.')).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
+  it('is read-only for an admin who is not a party', async () => {
+    wrap(<DealChat deal={makeDeal()} status="reserved" userId="admin-1" role="admin" />);
+    expect(await screen.findByText('Stjórnendur geta lesið spjallið en ekki skrifað í það.')).toBeInTheDocument();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  });
   it('shows an error state with retry', async () => {
     mocks.listMessages.mockRejectedValueOnce(new Error('Failed to fetch')).mockResolvedValueOnce([]);
     wrap(<DealChat deal={makeDeal()} status="reserved" userId="buyer-1" />);
@@ -575,7 +591,8 @@ describe('RatingDialog', () => {
       }),
     );
     wrap(<RatingDialog deal={makeDeal({ status: 'completed' })} role="buyer" />);
-    expect(await screen.findByRole('heading', { name: 'Gefðu Kári Stef einkunn' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Gefðu seljanda einkunn' })).toBeInTheDocument();
+    expect(screen.getByText('Hvernig gengu viðskiptin? Einkunnin birtist á notandasíðu hins aðilans (Kári Stef).')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Gefa einkunn' }));
     const dialog = await screen.findByRole('dialog');
     const submit = within(dialog).getByRole('button', { name: 'Senda einkunn' });
@@ -629,7 +646,7 @@ describe('ProofDownload', () => {
     mocks.getMyProof.mockResolvedValue(null);
     wrap(<ProofDownload deal={makeDeal()} status="reserved" role="seller" />);
     expect(await screen.findByText('Ekkert miðaskjal hlaðið upp')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Mínar sölur' })).toHaveAttribute('href', '/midatorg/eg');
+    expect(screen.getByRole('link', { name: 'Mínar sölur' })).toHaveAttribute('href', '/midatorg/eg?flipi=solur');
   });
 });
 
@@ -698,7 +715,7 @@ describe('DealRoomPage', () => {
     expect(within(party).getByText('Seljandi')).toBeInTheDocument();
     expect(within(party).getByRole('link', { name: 'Kári Stef' })).toHaveAttribute('href', '/midatorg/notendur/seller-1');
     expect(within(party).getByText('Nýr notandi')).toBeInTheDocument();
-    expect(within(party).getByRole('button', { name: 'Tilkynna Kári Stef' })).toBeInTheDocument();
+    expect(within(party).getByRole('button', { name: 'Tilkynna: Kári Stef' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Spjall' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Ég hef greitt' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Hætta við' })).toBeInTheDocument();
@@ -756,9 +773,10 @@ describe('DealRoomPage', () => {
     mocks.getDeal.mockResolvedValue(makeDeal({ status: 'paid_claimed', paid_claimed_at: minutes(-1) }));
     mocks.getMyProof.mockResolvedValue({ id: 'p-1', listing_id: 'li-1', seller_id: 'seller-1', path: 'x', sha256: 'y', created_at: minutes(-9) });
     renderRoom();
-    expect(await screen.findByText('Kaupandi segist hafa greitt 16.020 kr. Athugaðu bankann/Aur, sendu miðana og staðfestu.')).toBeInTheDocument();
+    // the amount ends in the "kr." abbreviation, so the sentence continues with a dash rather than a second full stop
+    expect(await screen.findByText('Kaupandi segist hafa greitt 16.020 kr. – athugaðu bankann eða Aur, sendu miðana og staðfestu.')).toBeInTheDocument();
     expect(screen.getByText(/flytja miðann á tix.is/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Staðfesta greiðslu og senda miða' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Greiðsla móttekin og miðar sendir' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Skrá ágreining' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Hætta við' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Ég hef greitt' })).not.toBeInTheDocument();
@@ -775,6 +793,13 @@ describe('DealRoomPage', () => {
     fireEvent.click(within(dialog).getByRole('button', { name: 'Skrá ágreining' }));
     expect(await within(dialog).findByText('Ástæða er nauðsynleg.')).toBeInTheDocument();
     expect(mocks.transitionDeal).not.toHaveBeenCalled();
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Til baka' }));
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument());
+
+    // cancelling after the buyer marked paid: the dialog says so and asks for a refund agreement first
+    fireEvent.click(screen.getByRole('button', { name: 'Hætta við' }));
+    const cancel = await screen.findByRole('alertdialog');
+    expect(cancel).toHaveTextContent('Kaupandi segist þegar hafa greitt. Semjið um endurgreiðslu í spjallinu áður en þú hættir við');
   });
 
   it('completed buyer: rating prompt and proof link; stepper all done', async () => {

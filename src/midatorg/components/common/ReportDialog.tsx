@@ -23,7 +23,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export type ReportDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  target: ReportTarget;
+  /** `mt_reports` has no event column, so an event report writes the event (title + id) into `details`. */
+  target: ReportTarget & { eventId?: string };
   /** Shown under the title: "Varðar: Sigur Rós · Harpa". */
   contextLabel?: string;
 };
@@ -54,13 +55,15 @@ export function ReportDialog({ open, onOpenChange, target, contextLabel }: Repor
 
   const submit = () => {
     if (!reason) return;
+    const eventLine = target.eventId ? t('report.eventContext', { label: contextLabel ?? target.eventId, id: target.eventId }) : null;
+    const fullDetails = [eventLine, details.trim()].filter(Boolean).join('\n\n');
     create.mutate(
       {
         reported_user_id: target.userId ?? null,
         listing_id: target.listingId ?? null,
         deal_id: target.dealId ?? null,
         reason,
-        details: details || null,
+        details: fullDetails || null,
       },
       {
         onSuccess: () => {

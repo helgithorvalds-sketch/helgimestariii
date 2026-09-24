@@ -206,7 +206,7 @@ export default function EventPage() {
       )}
 
       <BuyDialog listing={buyListing} open={buyOpen} onOpenChange={setBuyOpen} reservationMinutes={minutes} />
-      <ReportDialog open={reportOpen} onOpenChange={setReportOpen} target={{}} contextLabel={venue ? `${event.title} · ${venue}` : event.title} />
+      <ReportDialog open={reportOpen} onOpenChange={setReportOpen} target={{ eventId: event.id }} contextLabel={venue ? `${event.title} · ${venue}` : event.title} />
     </PageContainer>
   );
 }

@@ -73,12 +73,12 @@ export default {
     'event.book.requestsMany': '{count} óskir',
     'event.book.perTicket': 'á miða',
     'event.book.buy': 'Kaupa',
-    'event.book.buyAria': 'Kaupa af {name}',
+    'event.book.buyAria': 'Kaupa: {name}',
     'event.book.own': 'Þínir miðar',
     'event.book.view': 'Skoða',
     'event.book.viewAria': 'Skoða þína miða',
     'event.book.sellTo': 'Selja til',
-    'event.book.sellToAria': 'Selja til {name}',
+    'event.book.sellToAria': 'Selja til: {name}',
     'event.book.splitOk': 'má kaupa stakan',
     'event.book.splitNo': 'aðeins saman',
     'event.book.wantQty': 'vantar {count} miða',
@@ -114,7 +114,7 @@ export default {
     'event.buy.err.TOO_MANY_RESERVATIONS': 'Ljúktu eða hættu við eldri frátektir undir Viðskipti áður en þú tekur fleiri miða frá.',
     'event.buy.err.NOT_ENOUGH_TICKETS': 'Einhver var á undan þér – færri miðar eru eftir en þú baðst um. Fjöldinn hefur verið uppfærður.',
     'event.buy.goToDeals': 'Skoða viðskiptin mín',
-    'event.buy.goToMyPage': 'Fara á notandasíðu',
+    'event.buy.goToMyPage': 'Skoða mínar sölur',
 
     // "Láta mig vita" (alerts)
     'event.alert.button': 'Láta mig vita',
@@ -249,7 +249,7 @@ export default {
     'event.buy.err.TOO_MANY_RESERVATIONS': 'Finish or cancel older reservations under Deals before reserving more tickets.',
     'event.buy.err.NOT_ENOUGH_TICKETS': 'Someone got there first – fewer tickets are left than you asked for. The count has been updated.',
     'event.buy.goToDeals': 'View my deals',
-    'event.buy.goToMyPage': 'Go to profile page',
+    'event.buy.goToMyPage': 'View my sales',
 
     'event.alert.button': 'Notify me',
     'event.alert.following': 'Following',

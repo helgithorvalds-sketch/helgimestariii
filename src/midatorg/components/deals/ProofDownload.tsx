@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useT } from '../../lib/i18n';
-import { href } from '../../lib/paths';
 import { getProofSignedUrl } from '../../lib/api/listings';
 import { mtKeys, useMyProof } from '../../lib/queries';
 import type { DealStatus, DealWithContext } from '../../lib/types';
 import { ErrorState } from '../common/ErrorState';
 import { secondaryButtonClass } from '../common/buttonClasses';
+import { myPageHref } from '../account/logic';
 import { canDownloadProof, type DealRole } from './dealState';
 
 type ProofDownloadProps = {
@@ -99,7 +99,7 @@ function SellerProof({ listingId, className }: { listingId: string; className?: 
               <p className="text-muted-foreground">{t('deals.proof.missingBody')}</p>
             </div>
             <Button asChild variant="outline" size="sm" className={secondaryButtonClass}>
-              <Link to={href('/eg')}>{t('deals.proof.goToListings')}</Link>
+              <Link to={myPageHref('solur')}>{t('deals.proof.goToListings')}</Link>
             </Button>
           </div>
         </div>

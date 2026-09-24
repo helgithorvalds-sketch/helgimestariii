@@ -11,6 +11,7 @@ const ROOT_CLASS = 'midatorg';
  * Puts `.midatorg` on <body> as well, so Radix portals (menus, dialogs,
  * selects, tooltips) and the app-level sonner toaster — which render outside our
  * root div — get the Miðatorg tokens. Restored when the module unmounts.
+ * `<html lang>` follows the locale (I18nProvider); only the previous value is kept here.
  * Inter is already loaded by index.html; the module uses no other font.
  */
 function useBodyTheme() {
@@ -21,7 +22,6 @@ function useBodyTheme() {
     const previousLang = html.lang;
     body.classList.add(ROOT_CLASS);
     html.classList.add('midatorg-html');
-    html.lang = 'is';
     document.title = APP_TITLE;
     return () => {
       body.classList.remove(ROOT_CLASS);
