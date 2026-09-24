@@ -344,6 +344,7 @@ async function main() {
     pages: [],
     mockWarnings: [],
     externalBlocked: [],
+    externalStubbed: [],
   };
 
   const browser = await chromium.launch({ headless: !HEADFUL });
@@ -366,6 +367,7 @@ async function main() {
       }
       report.mockWarnings.push(...mock.warnings);
       report.externalBlocked.push(...mock.externalBlocked);
+      report.externalStubbed.push(...mock.externalStubbed);
       await context.close();
 
       // -- admin (fresh storage; seller promoted to admin in the fixture copy only) -----
@@ -386,6 +388,7 @@ async function main() {
         for (const entry of adminPages) if (wanted(entry)) report.pages.push(await visit(page, mock, entry, width, collectors));
         report.mockWarnings.push(...mock.warnings);
         report.externalBlocked.push(...mock.externalBlocked);
+        report.externalStubbed.push(...mock.externalStubbed);
         await context.close();
       }
     }
@@ -396,12 +399,14 @@ async function main() {
 
   report.mockWarnings = Array.from(new Set(report.mockWarnings));
   report.externalBlocked = Array.from(new Set(report.externalBlocked));
+  report.externalStubbed = Array.from(new Set(report.externalStubbed));
   const ok = report.pages.filter((p) => p.status === 'ok').length;
   report.summary = { pages: report.pages.length, ok, error: report.pages.length - ok };
   fs.writeFileSync(REPORT_FILE, JSON.stringify(report, null, 2));
   console.log(`[smoke] ${ok}/${report.pages.length} pages ok — report: ${path.relative(REPO_ROOT, REPORT_FILE)}`);
   if (report.mockWarnings.length) console.log(`[smoke] emulator warnings:\n  - ${report.mockWarnings.join('\n  - ')}`);
-  if (report.externalBlocked.length) console.log(`[smoke] external requests blocked: ${report.externalBlocked.join(', ')}`);
+  if (report.externalStubbed.length) console.log(`[smoke] external hosts answered with placeholders: ${report.externalStubbed.join(', ')}`);
+  if (report.externalBlocked.length) console.log(`[smoke] external requests aborted: ${report.externalBlocked.slice(0, 10).join(', ')}${report.externalBlocked.length > 10 ? ` … (+${report.externalBlocked.length - 10})` : ''}`);
   process.exitCode = report.summary.error ? 1 : 0;
 }
 

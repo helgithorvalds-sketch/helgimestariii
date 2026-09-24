@@ -28,6 +28,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import zlib from 'node:zlib';
 
 export const PROJECT_REF = 'qiylxtybmlzvoadvbnca';
 
@@ -377,6 +378,41 @@ function tinyPng() {
   return Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'base64');
 }
 
+let crcTable = null;
+function crc32(buf) {
+  if (!crcTable) {
+    crcTable = new Int32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+      crcTable[n] = c;
+    }
+  }
+  let crc = -1;
+  for (let i = 0; i < buf.length; i++) crc = crcTable[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
+  return (crc ^ -1) >>> 0;
+}
+
+/** A 1x1 solid-colour PNG (stretched by the browser) used in place of blocked external images. */
+function solidPng(r, g, b) {
+  const chunk = (type, data) => {
+    const len = Buffer.alloc(4);
+    len.writeUInt32BE(data.length);
+    const td = Buffer.concat([Buffer.from(type, 'ascii'), data]);
+    const crc = Buffer.alloc(4);
+    crc.writeUInt32BE(crc32(td));
+    return Buffer.concat([len, td, crc]);
+  };
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(1, 0);
+  ihdr.writeUInt32BE(1, 4);
+  ihdr[8] = 8; // bit depth
+  ihdr[9] = 2; // RGB
+  const idat = zlib.deflateSync(Buffer.from([0, r, g, b]));
+  return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', idat), chunk('IEND', Buffer.alloc(0))]);
+}
+const PLACEHOLDER_PNG = solidPng(0x2a, 0x33, 0x40);
+
 function tinyPdf() {
   return Buffer.from(
     '%PDF-1.1\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n' +
@@ -411,7 +447,7 @@ export async function installSupabaseMock(page, options = {}) {
   if (mutate) mutate(db);
 
   const origin = `https://${projectRef}.supabase.co`;
-  const state = { db, origin, unhandled: [], warnings: [], requests: [], externalBlocked: [] };
+  const state = { db, origin, unhandled: [], warnings: [], requests: [], externalBlocked: [], externalStubbed: [] };
   const log = (...a) => console.log('[supabase-mock]', ...a);
   const warn = (msg) => {
     if (!state.warnings.includes(msg)) {
@@ -1032,8 +1068,22 @@ export async function installSupabaseMock(page, options = {}) {
       (u) => !u.href.startsWith(origin + '/') && !isLocal(u.href) && !u.href.startsWith('data:') && !u.href.startsWith('blob:'),
       async (route, request) => {
         const u = request.url();
+        const host = (() => {
+          try {
+            return new URL(u).host;
+          } catch {
+            return u;
+          }
+        })();
         if (u.includes('fonts.googleapis.com')) {
+          if (!state.externalStubbed.includes(host)) state.externalStubbed.push(host);
           await route.fulfill({ status: 200, headers: { 'content-type': 'text/css', 'access-control-allow-origin': '*' }, body: '/* fonts stubbed by mockSupabase.mjs */' });
+          return;
+        }
+        // external images (tix.is event posters, avatars, …) → solid placeholder so the page has no broken images or console errors
+        if (request.resourceType() === 'image' || /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(u)) {
+          if (!state.externalStubbed.includes(host)) state.externalStubbed.push(host);
+          await route.fulfill({ status: 200, headers: { 'content-type': 'image/png', 'access-control-allow-origin': '*', 'cache-control': 'no-store' }, body: PLACEHOLDER_PNG });
           return;
         }
         if (!state.externalBlocked.includes(u)) state.externalBlocked.push(u);
