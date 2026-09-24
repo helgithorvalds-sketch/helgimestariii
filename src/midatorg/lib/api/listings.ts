@@ -106,37 +106,64 @@ export async function listUserListings(userId: string): Promise<ListingWithEvent
 }
 
 /**
- * Hashes the file in the browser, uploads it to `mt-ticket-proofs/<uid>/<listingId>.<ext>`
- * (upsert) and records it in `mt_listing_proofs`. A file already used for another
- * listing (unique sha256) removes the uploaded object and throws `Error('DUPLICATE_PROOF')`.
+ * Hashes the file in the browser, records it in `mt_listing_proofs` (upsert on
+ * listing_id) and only then uploads it to `mt-ticket-proofs/<uid>/<listingId>[-<suffix>].<ext>`,
+ * so nothing destructive happens before the new row is accepted:
+ * - a file already used for another listing (unique sha256) → `Error('DUPLICATE_PROOF')`
+ *   with the previous proof untouched;
+ * - a proof locked by a deal in ticket_sent / disputed / completed → NOT_ALLOWED (RLS);
+ * - a replacement gets a fresh object name and the old object is removed last.
+ * The sha256 is client-computed: duplicate detection is best-effort (the server only
+ * checks its format and that the path names the seller's own listing).
  */
 export async function uploadProof(listingId: string, file: File): Promise<ListingProof> {
   const uid = await requireUid();
   const sha256 = await sha256Hex(file);
   const ext = fileExtension(file);
-  const path = `${uid}/${listingId}.${ext}`;
 
-  // re-uploading for the same listing replaces the previous proof row
-  const { error: delErr } = await supabase.from('mt_listing_proofs').delete().eq('listing_id', listingId).eq('seller_id', uid);
-  if (delErr) throw delErr;
+  const existing = await getMyProof(listingId);
+  if (existing && existing.sha256 === sha256) return existing;
+
+  // My own other listings' proofs are visible, so catch those before touching anything;
+  // other sellers' rows are not, the unique index catches them at the upsert.
+  const { data: dup, error: dupErr } = await supabase
+    .from('mt_listing_proofs')
+    .select('listing_id')
+    .eq('sha256', sha256)
+    .neq('listing_id', listingId)
+    .limit(1);
+  if (dupErr) throw dupErr;
+  if (dup && dup.length > 0) throw new Error('DUPLICATE_PROOF');
+
+  const basePath = `${uid}/${listingId}.${ext}`;
+  const path = existing && existing.path === basePath ? `${uid}/${listingId}-${Date.now().toString(36)}.${ext}` : basePath;
+
+  const { data, error } = await supabase
+    .from('mt_listing_proofs')
+    .upsert({ listing_id: listingId, seller_id: uid, path, sha256 }, { onConflict: 'listing_id' })
+    .select('*')
+    .single();
+  if (error) {
+    if (error.code === '23505') throw new Error('DUPLICATE_PROOF');
+    throw error;
+  }
 
   const { error: upErr } = await supabase.storage
     .from(PROOF_BUCKET)
     .upload(path, file, { upsert: true, contentType: file.type || undefined });
-  if (upErr) throw upErr;
-
-  const { data, error } = await supabase
-    .from('mt_listing_proofs')
-    .insert({ listing_id: listingId, seller_id: uid, path, sha256 })
-    .select('*')
-    .single();
-  if (error) {
-    if (error.code === '23505') {
-      await supabase.storage.from(PROOF_BUCKET).remove([path]);
-      throw new Error('DUPLICATE_PROOF');
+  if (upErr) {
+    // never leave the row pointing at an object that does not exist
+    if (existing) {
+      await supabase
+        .from('mt_listing_proofs')
+        .upsert({ listing_id: listingId, seller_id: uid, path: existing.path, sha256: existing.sha256 }, { onConflict: 'listing_id' });
+    } else {
+      await supabase.from('mt_listing_proofs').delete().eq('listing_id', listingId).eq('seller_id', uid);
     }
-    throw error;
+    throw upErr;
   }
+
+  if (existing && existing.path !== path) await supabase.storage.from(PROOF_BUCKET).remove([existing.path]);
   return data;
 }
 
@@ -155,7 +182,8 @@ export async function getMyProof(listingId: string): Promise<ListingProof | null
 
 /**
  * Short-lived download URL for a listing's proof. RLS lets the seller, admins
- * and the buyer of a deal in ticket_sent/completed/disputed read it.
+ * and the buyer of a deal read it once the seller has confirmed payment
+ * (ticket_sent / completed, or disputed after the ticket was sent).
  * Returns null when there is no proof or the caller may not see it.
  */
 export async function getProofSignedUrl(listingId: string, expiresInSeconds = 300): Promise<string | null> {

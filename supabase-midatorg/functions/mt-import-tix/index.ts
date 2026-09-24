@@ -3,7 +3,9 @@
 // mt_import_events(jsonb) with the service role.
 //
 // Deployed with verify_jwt = true. Callable by:
-//   * the project's anon key (pg_cron, see migrations/0006_import_cron.sql)
+//   * the project's anon key **together with** the x-mt-cron-secret header
+//     (pg_cron, see migrations/0006_import_cron.sql and 0008_security_fixes.sql);
+//     the anon key alone is public and is refused with 403
 //   * a signed-in user whose mt_profiles.role = 'admin' (admin page)
 // Returns { scanned, fetched, skipped, parsed, inserted, updated, errors: [{ id, message }], durationMs }.
 // Logs are structured JSON lines and never contain page HTML.
@@ -14,12 +16,23 @@ import {
   canonicalEventUrl,
   categoryPageUrl,
   extractEventIds,
+  isTixHost,
   parseEventPage,
   toImportRow,
   type ImportRow,
   type TixCategory,
 } from '../_shared/tix.ts';
-import { FetchError, fetchPage, identifyCaller, json, log, preflight, serviceClient, sleep } from '../_shared/edge.ts';
+import {
+  FetchError,
+  fetchPage,
+  hasValidCronSecret,
+  identifyCaller,
+  json,
+  log,
+  preflight,
+  serviceClient,
+  sleep,
+} from '../_shared/edge.ts';
 
 const FN = 'mt-import-tix';
 const MAX_EVENT_PAGES = 60; // 120 died with WORKER_RESOURCE_LIMIT (HTTP 546, "Memory limit exceeded") after ~80 pages; 60 is proven to fit
@@ -68,6 +81,10 @@ Deno.serve(async (req: Request) => {
   const caller = await identifyCaller(req, admin);
   if (caller.kind === 'none') return json({ error: 'UNAUTHORIZED', reason: caller.reason }, 401);
   if (caller.kind === 'user') return json({ error: 'NOT_ALLOWED' }, 403);
+  if (caller.kind === 'anon' && !(await hasValidCronSecret(req, admin))) {
+    log(FN, 'warn', 'anon call without a valid cron secret');
+    return json({ error: 'NOT_ALLOWED', reason: 'CRON_SECRET' }, 403);
+  }
 
   let body: unknown = {};
   if (req.method === 'POST') {
@@ -88,7 +105,7 @@ Deno.serve(async (req: Request) => {
   for (const page of options.categories) {
     const url = categoryPageUrl(page.slug);
     try {
-      const res = await fetchPage(url, PAGE_TIMEOUT_MS);
+      const res = await fetchPage(url, { timeoutMs: PAGE_TIMEOUT_MS, allowHost: isTixHost });
       if (res.status !== 200) {
         errors.push({ id: `category:${page.slug}`, message: `HTTP ${res.status}` });
         log(FN, 'warn', 'category page not ok', { slug: page.slug, status: res.status });
@@ -151,7 +168,7 @@ Deno.serve(async (req: Request) => {
     const url = canonicalEventUrl(id);
     fetched += 1;
     try {
-      const res = await fetchPage(url, PAGE_TIMEOUT_MS);
+      const res = await fetchPage(url, { timeoutMs: PAGE_TIMEOUT_MS, allowHost: isTixHost });
       if (res.status !== 200) {
         errors.push({ id, message: `HTTP ${res.status}` });
         log(FN, 'warn', 'event page not ok', { id, status: res.status });

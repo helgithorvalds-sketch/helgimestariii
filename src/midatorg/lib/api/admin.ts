@@ -41,7 +41,11 @@ export async function resolveReport(id: string, status: Exclude<ReportStatus, 'o
 // ---------------------------------------------------------------- users
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Full `mt_profiles` rows (admins see role / ban columns). Matches display name, or an exact id. */
+/**
+ * Full `mt_profiles` rows (role / ban columns). Since 0008 the base table is
+ * readable by admins (and each user for their own row) only, so this is admin-only.
+ * Matches display name, or an exact id.
+ */
 export async function searchUsers(q: string, limit = 50): Promise<Profile[]> {
   let query = supabase.from('mt_profiles').select('*');
   const term = q.trim();
@@ -73,7 +77,7 @@ export async function listAllEvents(q = '', limit = 200): Promise<MarketEvent[]>
     const pattern = orValue(ilikePattern(q));
     query = query.or(`title.ilike.${pattern},venue_name.ilike.${pattern}`);
   }
-  const { data, error } = await query.order('starts_at', { ascending: false }).limit(limit);
+  const { data, error } = await query.order('starts_at', { ascending: false }).order('id', { ascending: true }).limit(limit);
   if (error) throw error;
   return (data ?? []) as MarketEvent[];
 }
@@ -109,22 +113,56 @@ export async function deleteEvent(id: string): Promise<void> {
 export type FetchTixEventResult = { eventId: string };
 export type TixImportResult = { scanned: number; inserted: number; updated: number; errors: string[] };
 
-/** Edge function `mt-fetch-tix-event` (admin only): imports one tix.is event page. */
-export async function fetchTixEvent(url: string): Promise<FetchTixEventResult> {
-  const { data, error } = await supabase.functions.invoke<FetchTixEventResult>('mt-fetch-tix-event', {
-    body: { url },
-  });
-  if (error) throw error;
+/** Function error bodies are `{ error: CODE, reason? | status? | message? }`; codes not in lib/errors.ts map to a close one. */
+const EDGE_CODE_MAP: Record<string, string> = {
+  UNAUTHORIZED: 'AUTH_REQUIRED',
+  INVALID_URL: 'INVALID_INPUT',
+  URL_REQUIRED: 'INVALID_INPUT',
+  IMPORT_REJECTED: 'IMPORT_FAILED',
+  LOOKUP_FAILED: 'IMPORT_FAILED',
+};
+
+type EdgeErrorBody = { error?: unknown; reason?: unknown; status?: unknown; message?: unknown };
+
+/**
+ * `functions.invoke` rejects a non-2xx response with a fixed message and the
+ * `Response` on `error.context`; read the JSON body so the function's own code
+ * (PARSE_FAILED, FETCH_FAILED, HOST_NOT_ALLOWED, NOT_ALLOWED, …) reaches parseApiError.
+ */
+async function edgeError(error: unknown): Promise<Error> {
+  const ctx = (error as { context?: unknown } | null)?.context as { json?: () => Promise<unknown> } | undefined;
+  if (ctx && typeof ctx.json === 'function') {
+    try {
+      const body = (await ctx.json()) as EdgeErrorBody | null;
+      if (body && typeof body.error === 'string' && body.error) {
+        const code = EDGE_CODE_MAP[body.error] ?? body.error;
+        const detail = [body.reason, body.status, body.message].find(
+          (v) => (typeof v === 'string' && v !== '') || typeof v === 'number',
+        );
+        return new Error(detail === undefined ? code : `${code}: ${String(detail)}`);
+      }
+    } catch {
+      /* not a JSON body */
+    }
+  }
+  return error instanceof Error ? error : new Error(String(error));
+}
+
+async function invokeEdge<T>(name: string, body: Record<string, unknown>): Promise<T> {
+  const { data, error } = await supabase.functions.invoke<T>(name, { body });
+  if (error) throw await edgeError(error);
   if (!data) throw new Error('GENERIC');
   return data;
 }
 
-/** Edge function `mt-import-tix`: walks tix.is category pages. */
-export async function runTixImport(): Promise<TixImportResult> {
-  const { data, error } = await supabase.functions.invoke<TixImportResult>('mt-import-tix', { body: {} });
-  if (error) throw error;
-  if (!data) throw new Error('GENERIC');
-  return data;
+/** Edge function `mt-fetch-tix-event` (admin only): imports one tix.is event page. */
+export function fetchTixEvent(url: string): Promise<FetchTixEventResult> {
+  return invokeEdge<FetchTixEventResult>('mt-fetch-tix-event', { url });
+}
+
+/** Edge function `mt-import-tix` (admin JWT; cron uses the anon key plus its secret): walks tix.is category pages. */
+export function runTixImport(): Promise<TixImportResult> {
+  return invokeEdge<TixImportResult>('mt-import-tix', {});
 }
 
 // ---------------------------------------------------------------- disputes
@@ -139,8 +177,23 @@ export async function listDisputes(): Promise<DealWithContext[]> {
 }
 
 // ---------------------------------------------------------------- settings
-export async function getSettings(): Promise<Setting[]> {
-  const { data, error } = await supabase.from('mt_settings').select('*').order('key', { ascending: true });
+/**
+ * `mt_public_settings` (migration 0008) has exactly the `mt_settings` columns but only
+ * the harmless keys, readable by everyone. database.types.ts is generated and does not
+ * list the view yet, hence the cast.
+ */
+const PUBLIC_SETTINGS_VIEW = 'mt_public_settings' as unknown as 'mt_settings';
+
+/**
+ * Settings for the UI. Non-admins read the public view (reservation_minutes, the
+ * max_* limits, require_phone_to_sell); admins read the whole table (admin_emails …).
+ * The importer's `cron_secret` is never returned.
+ */
+export async function getSettings(opts: { admin?: boolean } = {}): Promise<Setting[]> {
+  const query = opts.admin
+    ? supabase.from('mt_settings').select('*').neq('key', 'cron_secret')
+    : supabase.from(PUBLIC_SETTINGS_VIEW).select('*');
+  const { data, error } = await query.order('key', { ascending: true });
   if (error) throw error;
   return data ?? [];
 }

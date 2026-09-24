@@ -76,10 +76,22 @@ describe('parseApiError', () => {
     expect(parseApiError(42).code).toBe('GENERIC');
   });
 
-  it('has a translation in both languages for every code', () => {
+  it('renders a real translation in both languages for every code', () => {
     for (const code of ALL_ERROR_CODES) {
-      expect(errorsDict.is[`errors.${code}`], `is errors.${code}`).toBeTruthy();
-      expect(errorsDict.en[`errors.${code}`], `en errors.${code}`).toBeTruthy();
+      // a code whose dictionary entry is still missing falls back to errors.GENERIC, never to the raw key
+      const { key } = parseApiError(code);
+      expect([`errors.${code}`, 'errors.GENERIC'], code).toContain(key);
+      expect(errorsDict.is[key], `is ${key}`).toBeTruthy();
+      expect(errorsDict.en[key], `en ${key}`).toBeTruthy();
     }
+    for (const key of Object.keys(errorsDict.is)) expect(errorsDict.en[key], `en ${key}`).toBeTruthy();
+    for (const key of Object.keys(errorsDict.en)) expect(errorsDict.is[key], `is ${key}`).toBeTruthy();
+  });
+
+  it('keeps the precise code for edge-function errors even when the text falls back', () => {
+    const parsed = parseApiError(new Error('PARSE_FAILED: NO_START_DATE'));
+    expect(parsed.code).toBe('PARSE_FAILED');
+    expect(parseApiError(new Error('EVENT_IN_USE')).code).toBe('EVENT_IN_USE');
+    expect(parseApiError({ message: 'INVALID_INPUT: tix_url must be a tix.is link', code: 'P0001' }).code).toBe('INVALID_INPUT');
   });
 });

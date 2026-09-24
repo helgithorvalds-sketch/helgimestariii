@@ -15,14 +15,21 @@ export type AuthContextValue = {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
+  /**
+   * Why `profile` is null although a user is signed in: the query failed, or
+   * there is no row. Undefined while the profile is loading or once it loaded.
+   */
+  profileError?: unknown;
   isAdmin: boolean;
   isBanned: boolean;
   /** True until the initial session (and profile, when signed in) has been resolved. */
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, displayName: string) => Promise<SignUpResult>;
+  /** `next` is the app path (e.g. '/midatorg/selja?event=1') the confirmation e-mail should return to. */
+  signUp: (email: string, password: string, displayName: string, next?: string | null) => Promise<SignUpResult>;
   signOut: () => Promise<void>;
-  sendMagicLink: (email: string) => Promise<void>;
+  /** `next` as in `signUp`. */
+  sendMagicLink: (email: string, next?: string | null) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (newPassword: string) => Promise<void>;
   /** Sends an SMS code to the number (E.164, e.g. +3546661234) via `updateUser({ phone })`. */
@@ -40,18 +47,29 @@ function appOrigin(): string {
   return typeof window === 'undefined' ? '' : window.location.origin;
 }
 
-async function fetchProfile(uid: string): Promise<Profile | null> {
+/** Absolute redirect URL for auth e-mails: only a same-origin app path is honoured, anything else lands on the market home. */
+function emailRedirect(next?: string | null): string {
+  const value = next?.trim() ?? '';
+  const safe =
+    value.startsWith('/') && !value.startsWith('//') && !value.startsWith('/\\') && !/\s/.test(value) && !value.includes('://');
+  return appOrigin() + href(safe ? value : '/');
+}
+
+type ProfileFetch = { profile: Profile | null; error: unknown };
+
+async function fetchProfile(uid: string): Promise<ProfileFetch> {
   const { data, error } = await supabase.from('mt_profiles').select('*').eq('id', uid).maybeSingle();
   if (error) {
     console.error('[midatorg] profile fetch failed', error);
-    return null;
+    return { profile: null, error };
   }
-  return data;
+  return { profile: data, error: data ? undefined : new Error('NOT_FOUND') };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [profileError, setProfileError] = useState<unknown>(undefined);
   const [loading, setLoading] = useState(true);
   const [pendingPhone, setPendingPhone] = useState<string | null>(null);
   const sessionRef = useRef<Session | null>(null);
@@ -59,12 +77,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = useCallback(async (uid: string | undefined) => {
     if (!uid) {
       setProfile(null);
+      setProfileError(undefined);
       return null;
     }
-    const p = await fetchProfile(uid);
+    const result = await fetchProfile(uid);
     // ignore late results for a user who has signed out in the meantime
-    if (sessionRef.current?.user.id === uid) setProfile(p);
-    return p;
+    if (sessionRef.current?.user.id === uid) {
+      setProfile(result.profile);
+      setProfileError(result.error);
+    }
+    return result.profile;
   }, []);
 
   useEffect(() => {
@@ -88,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s);
       if (event === 'SIGNED_OUT' || !s) {
         setProfile(null);
+        setProfileError(undefined);
         return;
       }
       if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'TOKEN_REFRESHED') {
@@ -113,30 +136,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, displayName: string): Promise<SignUpResult> => {
-    const { data, error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: {
-        data: { display_name: displayName.trim() },
-        emailRedirectTo: appOrigin() + href('/'),
-      },
-    });
-    if (error) throw error;
-    return { needsConfirmation: !data.session, user: data.user };
-  }, []);
+  const signUp = useCallback(
+    async (email: string, password: string, displayName: string, next?: string | null): Promise<SignUpResult> => {
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          data: { display_name: displayName.trim() },
+          emailRedirectTo: emailRedirect(next),
+        },
+      });
+      if (error) throw error;
+      return { needsConfirmation: !data.session, user: data.user };
+    },
+    [],
+  );
 
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     setProfile(null);
+    setProfileError(undefined);
     setPendingPhone(null);
     if (error) throw error;
   }, []);
 
-  const sendMagicLink = useCallback(async (email: string) => {
+  const sendMagicLink = useCallback(async (email: string, next?: string | null) => {
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: appOrigin() + href('/'), shouldCreateUser: true },
+      options: { emailRedirectTo: emailRedirect(next), shouldCreateUser: true },
     });
     if (error) throw error;
   }, []);
@@ -177,6 +204,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       user: session?.user ?? null,
       profile,
+      profileError,
       isAdmin: profile?.role === 'admin',
       isBanned: !!profile?.banned_at,
       loading,
@@ -194,6 +222,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [
       session,
       profile,
+      profileError,
       loading,
       signIn,
       signUp,
@@ -235,11 +264,16 @@ export function RequireAuth({ children }: { children?: ReactNode }) {
 }
 
 export function RequireAdmin({ children }: { children?: ReactNode }) {
-  const { user, isAdmin, loading, profile } = useAuth();
+  const { user, isAdmin, loading, profile, profileError, refreshProfile } = useAuth();
   const location = useLocation();
   const t = useT();
-  if (loading || (user && !profile)) return <PageSkeleton />;
+  if (loading) return <PageSkeleton />;
   if (!user) return <Navigate to={loginHref(location.pathname + location.search)} replace />;
+  if (!profile) {
+    // still loading, or the profile could not be loaded: never a skeleton forever
+    if (profileError === undefined) return <PageSkeleton />;
+    return <ErrorState error={profileError} retry={() => void refreshProfile()} />;
+  }
   if (!isAdmin) return <ErrorState title={t('common.noAccessTitle')} body={t('common.noAccessBody')} />;
   return children ? <>{children}</> : <Outlet />;
 }

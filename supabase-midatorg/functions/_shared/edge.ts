@@ -1,6 +1,6 @@
 // Miðatorg — shared plumbing for the Deno edge functions: CORS, caller
-// identification, polite fetch with timeout, structured logging.
-// Deno-only (uses Deno.env); the parser in tix.ts stays runtime-agnostic.
+// identification, the cron secret, polite fetch with timeout, structured
+// logging. Deno-only (uses Deno.env); the parser in tix.ts stays runtime-agnostic.
 
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2';
 
@@ -74,7 +74,8 @@ function decodeJwtPayload(token: string): Record<string, unknown> | undefined {
 /**
  * The gateway (verify_jwt = true) has already checked the signature of the
  * Authorization JWT. Here we decide *who* it is:
- *   - the project's anon key  → 'anon' (pg_cron / scheduled runs)
+ *   - the project's anon key  → 'anon' (pg_cron / scheduled runs; the caller
+ *                              must additionally pass hasValidCronSecret)
  *   - a signed-in user       → validated with auth.getUser(), then the
  *                              mt_profiles.role decides 'admin' vs 'user'
  *   - anything else          → 'none' (never trusted)
@@ -103,6 +104,39 @@ export async function identifyCaller(req: Request, admin: SupabaseClient): Promi
 }
 
 // ---------------------------------------------------------------------
+// Cron secret (migrations/0008). The anon key is public (it ships in every
+// frontend bundle), so an anon-key call is only trusted when it also carries
+// x-mt-cron-secret equal to mt_settings.cron_secret — which only the
+// pg_cron job (running inside the database) can read.
+// ---------------------------------------------------------------------
+
+export const CRON_SECRET_HEADER = 'x-mt-cron-secret';
+
+/** Constant-time comparison: both sides are hashed to equal length first. */
+export async function secretsMatch(a: string, b: string): Promise<boolean> {
+  const enc = new TextEncoder();
+  const [ha, hb] = await Promise.all([
+    crypto.subtle.digest('SHA-256', enc.encode(a)),
+    crypto.subtle.digest('SHA-256', enc.encode(b)),
+  ]);
+  const va = new Uint8Array(ha);
+  const vb = new Uint8Array(hb);
+  let diff = 0;
+  for (let i = 0; i < va.length; i++) diff |= va[i] ^ vb[i];
+  return diff === 0 && a.length === b.length;
+}
+
+export async function hasValidCronSecret(req: Request, admin: SupabaseClient): Promise<boolean> {
+  const given = req.headers.get(CRON_SECRET_HEADER)?.trim();
+  if (!given) return false;
+  const { data, error } = await admin.from('mt_settings').select('value').eq('key', 'cron_secret').maybeSingle();
+  if (error || !data) return false;
+  const expected = typeof data.value === 'string' ? data.value : '';
+  if (!expected) return false;
+  return secretsMatch(given, expected);
+}
+
+// ---------------------------------------------------------------------
 // Polite fetch
 // ---------------------------------------------------------------------
 
@@ -110,6 +144,13 @@ export interface FetchedPage {
   status: number;
   finalUrl: string;
   text: string;
+}
+
+export interface FetchOptions {
+  timeoutMs?: number;
+  maxBytes?: number;
+  /** Which hosts a redirect may lead to; defaults to the host the request started on. */
+  allowHost?: (hostname: string) => boolean;
 }
 
 export class FetchError extends Error {
@@ -121,21 +162,45 @@ export class FetchError extends Error {
   }
 }
 
-/** GET a page as text with a hard timeout (tix.is category pages run to ~3.2 MB, hence the 8 MB cap). Errors carry status/reason only, never the body. */
-export async function fetchPage(url: string, timeoutMs = 10_000, maxBytes = 8_000_000): Promise<FetchedPage> {
+const MAX_REDIRECTS = 3;
+const FETCH_HEADERS: Record<string, string> = {
+  'User-Agent': USER_AGENT,
+  Accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.5',
+  'Accept-Language': 'is,en;q=0.7',
+};
+
+/**
+ * GET a page as text with a hard timeout (tix.is category pages run to ~3.2 MB,
+ * hence the 8 MB cap). Redirects are followed by hand (at most 3 hops) and every
+ * hop must pass `allowHost`, so an open redirect on the allowed host can never
+ * make the runtime fetch another host. Errors carry status/reason only, never the body.
+ */
+export async function fetchPage(url: string, opts: FetchOptions = {}): Promise<FetchedPage> {
+  const timeoutMs = opts.timeoutMs ?? 10_000;
+  const maxBytes = opts.maxBytes ?? 8_000_000;
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
-      method: 'GET',
-      redirect: 'follow',
-      signal: ctrl.signal,
-      headers: {
-        'User-Agent': USER_AGENT,
-        Accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.5',
-        'Accept-Language': 'is,en;q=0.7',
-      },
-    });
+    const startHost = new URL(url).hostname.toLowerCase();
+    const hostAllowed = opts.allowHost ?? ((h: string) => h === startHost);
+    let current = url;
+    let res: Response | undefined;
+    for (let hop = 0; ; hop++) {
+      const target = new URL(current);
+      if ((target.protocol !== 'https:' && target.protocol !== 'http:') || !hostAllowed(target.hostname.toLowerCase())) {
+        throw new FetchError(`redirect to disallowed host ${target.hostname}`);
+      }
+      res = await fetch(current, { method: 'GET', redirect: 'manual', signal: ctrl.signal, headers: FETCH_HEADERS });
+      const location = res.headers.get('location');
+      if (res.status >= 300 && res.status < 400 && location) {
+        await res.body?.cancel();
+        if (hop >= MAX_REDIRECTS) throw new FetchError('too many redirects', res.status);
+        current = new URL(location, current).toString();
+        continue;
+      }
+      break;
+    }
+    if (!res) throw new FetchError('no response');
     const len = Number(res.headers.get('content-length') ?? '0');
     if (len > maxBytes) {
       await res.body?.cancel();
@@ -143,7 +208,7 @@ export async function fetchPage(url: string, timeoutMs = 10_000, maxBytes = 8_00
     }
     const text = await res.text();
     if (text.length > maxBytes) throw new FetchError(`response too large (${text.length} chars)`, res.status);
-    return { status: res.status, finalUrl: res.url || url, text };
+    return { status: res.status, finalUrl: current, text };
   } catch (err) {
     if (err instanceof FetchError) throw err;
     const name = err instanceof Error ? err.name : 'Error';

@@ -624,8 +624,14 @@ export function useCreateReport() {
 // ---------------------------------------------------------------------------
 // Settings & admin
 // ---------------------------------------------------------------------------
+/** Public keys (mt_public_settings) for everyone; admins get the full table so the settings panel can edit it. */
 export function useSettings() {
-  return useQuery({ queryKey: mtKeys.settings, queryFn: admin.getSettings, staleTime: 5 * 60_000 });
+  const { isAdmin } = useAuth();
+  return useQuery({
+    queryKey: [...mtKeys.settings, isAdmin ? 'admin' : 'public'] as const,
+    queryFn: () => admin.getSettings({ admin: isAdmin }),
+    staleTime: 5 * 60_000,
+  });
 }
 
 export function useSetSetting() {

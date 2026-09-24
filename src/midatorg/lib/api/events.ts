@@ -10,7 +10,8 @@ import type { CreateManualEventInput, EventRow, MarketEvent, MarketEventsParams,
  * - `status` defaults to 'upcoming'; 'all' disables the filter
  * - sort: date = starts_at asc; demand = wanted_tickets desc (nulls last), tickets_available desc;
  *   price = min_ask asc (nulls last)
- * - range pagination with `limit` / `offset`
+ * - range pagination with `limit` / `offset`; `id` is always the last sort key so
+ *   pages never overlap or skip rows that tie on the sort columns
  */
 export async function listMarketEvents(params: MarketEventsParams = {}): Promise<MarketEvent[]> {
   const { q, category, sort = 'date', status = 'upcoming', limit = DEFAULT_PAGE_SIZE, offset = 0 } = params;
@@ -28,14 +29,14 @@ export async function listMarketEvents(params: MarketEventsParams = {}): Promise
       query = query
         .order('wanted_tickets', { ascending: false, nullsFirst: false })
         .order('tickets_available', { ascending: false, nullsFirst: false })
-        .order('starts_at', { ascending: true });
+        .order('starts_at', { ascending: true }).order('id', { ascending: true });
       break;
     case 'price':
-      query = query.order('min_ask', { ascending: true, nullsFirst: false }).order('starts_at', { ascending: true });
+      query = query.order('min_ask', { ascending: true, nullsFirst: false }).order('starts_at', { ascending: true }).order('id', { ascending: true });
       break;
     case 'date':
     default:
-      query = query.order('starts_at', { ascending: true });
+      query = query.order('starts_at', { ascending: true }).order('id', { ascending: true });
       break;
   }
 
@@ -57,13 +58,21 @@ export async function searchEvents(q: string, limit = 10): Promise<MarketEvent[]
     const pattern = orValue(ilikePattern(q));
     query = query.or(`title.ilike.${pattern},venue_name.ilike.${pattern}`);
   }
-  const { data, error } = await query.order('starts_at', { ascending: true }).limit(limit);
+  const { data, error } = await query.order('starts_at', { ascending: true }).order('id', { ascending: true }).limit(limit);
   if (error) throw error;
   return (data ?? []) as MarketEvent[];
 }
 
-/** Direct insert; the guard trigger forces source='manual', created_by=me, status='upcoming'. */
+const TIX_URL_RE = /^https:\/\/(www\.)?tix\.is\//i;
+const HTTPS_URL_RE = /^https:\/\//i;
+
+/**
+ * Direct insert; the guard trigger forces source='manual', created_by=me, status='upcoming'
+ * and (like this check) only accepts tix.is links and https image URLs, which the UI renders as href/src.
+ */
 export async function createManualEvent(input: CreateManualEventInput): Promise<EventRow> {
+  if (input.tix_url && !TIX_URL_RE.test(input.tix_url)) throw new Error('INVALID_INPUT');
+  if (input.image_url && !HTTPS_URL_RE.test(input.image_url)) throw new Error('INVALID_INPUT');
   const { data, error } = await supabase
     .from('mt_events')
     .insert({

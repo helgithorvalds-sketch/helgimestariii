@@ -1,5 +1,5 @@
 // mt-fetch-tix-event — admin-only: fetch and import a single tix.is event page.
-// Body: { url }. Only tix.is / www.tix.is hosts. Returns { eventId, title }.
+// Body: { url }. Only tix.is / www.tix.is hosts, also across redirects. Returns { eventId, title }.
 // Deployed with verify_jwt = true; the caller must be a signed-in admin.
 
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
@@ -55,7 +55,7 @@ Deno.serve(async (req: Request) => {
 
   let page;
   try {
-    page = await fetchPage(target.url, PAGE_TIMEOUT_MS);
+    page = await fetchPage(target.url, { timeoutMs: PAGE_TIMEOUT_MS, allowHost: isTixHost });
   } catch (err) {
     const message = err instanceof FetchError ? err.message : 'unexpected error';
     log(FN, 'warn', 'fetch failed', { id: target.id, message });

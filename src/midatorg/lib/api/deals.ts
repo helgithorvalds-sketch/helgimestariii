@@ -41,7 +41,12 @@ export async function reserveListing(listingId: string, quantity: number): Promi
   return data as Deal;
 }
 
-/** `mt_deal_transition` → the updated deal. */
+/**
+ * `mt_deal_transition` → the updated deal. A reservation whose timer has run out
+ * is expired inside the RPC and *returned* as `status = 'expired'` (migration 0008,
+ * so the expiry persists); for anything but a cancel that is the
+ * `RESERVATION_EXPIRED` error the UI already handles.
+ */
 export async function transitionDeal(dealId: string, action: DealAction, reason?: string | null): Promise<Deal> {
   const { data, error } = await supabase.rpc('mt_deal_transition', {
     p_deal_id: dealId,
@@ -49,13 +54,22 @@ export async function transitionDeal(dealId: string, action: DealAction, reason?
     p_reason: reason ?? undefined,
   });
   if (error) throw error;
-  return data as Deal;
+  const deal = data as Deal;
+  if (deal.status === 'expired' && action !== 'cancel') throw new Error('RESERVATION_EXPIRED');
+  return deal;
 }
 
-/** Every deal where I am buyer or seller, newest first. */
+/**
+ * Every deal where I am buyer or seller, newest first. Filtered explicitly
+ * (RLS also lets admins read every deal; admin oversight lives in /stjorn).
+ */
 export async function listMyDeals(): Promise<DealWithContext[]> {
-  await requireUid();
-  const { data, error } = await supabase.from('mt_deals').select('*').order('created_at', { ascending: false });
+  const uid = await requireUid();
+  const { data, error } = await supabase
+    .from('mt_deals')
+    .select('*')
+    .or(`buyer_id.eq.${uid},seller_id.eq.${uid}`)
+    .order('created_at', { ascending: false });
   if (error) throw error;
   return withDealContext(data ?? []);
 }

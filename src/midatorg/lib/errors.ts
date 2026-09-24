@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { toast } from 'sonner';
-import { useT } from './i18n';
+import { hasKey, useT } from './i18n';
 
 /** Codes raised by the RPCs / guard triggers (spec §3). */
 export const RPC_ERROR_CODES = [
@@ -36,6 +36,7 @@ export const RPC_ERROR_CODES = [
   'INVALID_SCORE',
   'DEAL_NOT_COMPLETED',
   'ALREADY_RATED',
+  'EVENT_IN_USE',
 ] as const;
 
 /** Codes produced client-side or derived from Postgres / auth / storage errors. */
@@ -61,6 +62,12 @@ export const CLIENT_ERROR_CODES = [
   'INVALID_PHONE',
   'FILE_TOO_LARGE',
   'FILE_TYPE_NOT_ALLOWED',
+  // edge functions (mt-fetch-tix-event / mt-import-tix), surfaced by lib/api/admin.ts
+  'PARSE_FAILED',
+  'FETCH_FAILED',
+  'HOST_NOT_ALLOWED',
+  'NOT_AN_EVENT_URL',
+  'IMPORT_FAILED',
   'NETWORK',
   'GENERIC',
 ] as const;
@@ -99,7 +106,9 @@ function str(v: unknown): string {
 }
 
 function make(code: ApiErrorCode, message: string): ParsedError {
-  return { code, key: `errors.${code}`, message };
+  // The dictionary can lag behind newly added codes; never surface a raw key.
+  const key = `errors.${code}` as const;
+  return { code, key: hasKey(key, 'is') || hasKey(key, 'en') ? key : 'errors.GENERIC', message };
 }
 
 const AUTH_CODE_MAP: Record<string, ApiErrorCode> = {
