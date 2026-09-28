@@ -1,7 +1,7 @@
 // mt-eid — rafræn skilríki (Icelandic electronic ID) through any OpenID Connect provider
 // (Kenni is the reference; Auðkenni, Signicat and Dokobit speak the same protocol).
 //
-//   GET  /mt-eid/start?next=/midatorg/eg   (Authorization: Bearer <app access token>)
+//   GET  /mt-eid/start?next=/eg   (Authorization: Bearer <app access token>)
 //        → 200 { url }  the provider's authorize URL (authorization code + PKCE S256)
 //        → 503 { code: 'EID_NOT_CONFIGURED' } until the secrets below exist
 //   GET  /mt-eid/callback?code&state         (the provider redirects the browser here)
@@ -16,7 +16,7 @@
 //   EID_CLIENT_ID       client id registered at the provider
 //   EID_CLIENT_SECRET   client secret (omit for a public client)
 //   EID_REDIRECT_URL    https://<project>.supabase.co/functions/v1/mt-eid/callback (register it at the provider)
-//   EID_APP_ORIGIN      where users come back, e.g. https://helgimestariii.lovable.app
+//   EID_APP_ORIGIN      where users come back, e.g. https://midatorg.lovable.app
 //   EID_SCOPES          optional, default "openid profile national_id"
 //   EID_ID_CLAIM        optional, default "national_id,kennitala,ssn,nationalId"
 //   EID_NAME_CLAIM      optional, default "name"
@@ -101,12 +101,15 @@ function normaliseKennitala(input: unknown): string | null {
 }
 
 /** Only paths inside the app; no scheme, no host, no protocol-relative "//". */
-function safeNextPath(input: unknown, fallback = '/midatorg/eg'): string {
+function safeNextPath(input: unknown, fallback = '/eg'): string {
   if (typeof input !== 'string') return fallback;
-  const value = input.trim();
-  if (!value.startsWith('/midatorg')) return fallback;
-  if (value.startsWith('//') || value.includes('\\') || /[\r\n]/.test(value)) return fallback;
+  let value = input.trim();
+  if (!value.startsWith('/') || value.startsWith('//') || value.includes('\\') || value.includes('://') || /[\r\n]/.test(value)) return fallback;
   if (value.length > 300) return fallback;
+  // the app used to live under /midatorg; old links keep working
+  if (value === '/midatorg') return '/';
+  if (value.startsWith('/midatorg/')) value = value.slice('/midatorg'.length);
+  else if (value.startsWith('/midatorg?')) value = '/' + value.slice('/midatorg'.length);
   return value;
 }
 
@@ -263,7 +266,7 @@ async function callback(url: URL): Promise<Response> {
   const admin = serviceClient();
   const state = url.searchParams.get('state') ?? '';
   const code = url.searchParams.get('code') ?? '';
-  const fallback = `${cfg.appOrigin}/midatorg/eg`;
+  const fallback = `${cfg.appOrigin}/eg`;
 
   const { data: session } = state
     ? await admin.from('mt_eid_sessions').select('*').eq('state', state).maybeSingle()
@@ -271,7 +274,7 @@ async function callback(url: URL): Promise<Response> {
   if (session) await admin.from('mt_eid_sessions').delete().eq('state', state); // single use
 
   const back = (params: Record<string, string>) =>
-    redirect(withParams(`${cfg.appOrigin}${session?.next_path ?? '/midatorg/eg'}`, params));
+    redirect(withParams(`${cfg.appOrigin}${safeNextPath(session?.next_path)}`, params));
 
   if (!session || new Date(session.expires_at).getTime() < Date.now()) {
     log(FN, 'warn', 'unknown or expired state');

@@ -54,6 +54,10 @@ export function categoryForSlug(slug: string): TixCategory | undefined {
   return CATEGORY_SLUGS[slug.toLowerCase()];
 }
 
+export function frontPageUrl(lang = 'is'): string {
+  return `${TIX_BASE}/${lang}/`;
+}
+
 export function categoryPageUrl(slug: string, lang = 'is'): string {
   return `${TIX_BASE}/${lang}/category/${slug}`;
 }
@@ -79,10 +83,14 @@ export interface ParsedTixEvent {
   tix_url: string;
   face_value_min?: number;
   face_value_max?: number;
+  /** From schema.org offer availability (SoldOut, LimitedAvailability, PreOrder, InStock). */
+  availability?: TixAvailability;
   cancelled: boolean;
   /** Which strategy produced the core fields — handy in logs, never HTML. */
   parsed_from: 'jsonld' | 'meta';
 }
+
+export type TixAvailability = 'available' | 'limited' | 'sold_out' | 'presale';
 
 export type ParseResult = { ok: true; event: ParsedTixEvent } | { ok: false; reason: string };
 
@@ -448,6 +456,76 @@ export function priceRange(offers: unknown): { min?: number; max?: number } {
   return { min: Math.min(...prices), max: Math.max(...prices) };
 }
 
+function collectAvailability(offers: unknown, out: string[], depth = 0): void {
+  if (depth > 3 || offers === null || offers === undefined) return;
+  if (Array.isArray(offers)) {
+    for (const o of offers) collectAvailability(o, out, depth + 1);
+    return;
+  }
+  const o = asObject(offers);
+  if (!o) return;
+  const a = firstString(o.availability);
+  if (a) out.push(a.replace(/^https?:\/\/schema\.org\//i, '').toLowerCase());
+  if (o.offers !== undefined) collectAvailability(o.offers, out, depth + 1);
+}
+
+/**
+ * schema.org availability across all offers → one value. Sold out only when every
+ * offer is sold out; limited when nothing is plainly in stock but something is limited.
+ */
+export function offerAvailability(offers: unknown): TixAvailability | undefined {
+  const list: string[] = [];
+  collectAvailability(offers, list);
+  if (list.length === 0) return undefined;
+  const soldOut = (a: string) => a === 'soldout' || a === 'outofstock' || a === 'discontinued';
+  if (list.every(soldOut)) return 'sold_out';
+  if (list.some((a) => a === 'instock' || a === 'onlineonly' || a === 'instoreonly')) return 'available';
+  if (list.some((a) => a === 'limitedavailability')) return 'limited';
+  if (list.some((a) => a === 'preorder' || a === 'presale')) return 'presale';
+  return undefined;
+}
+
+// ---------------------------------------------------------------------
+// Front page: order and "Uppselt" chips
+// ---------------------------------------------------------------------
+
+export interface FrontPageSignals {
+  /** Event ids in the order the front page shows them (first = most prominent). */
+  ranked: string[];
+  /** Ids whose card carries the "Uppselt" chip or an "UPPSELT" title. */
+  soldOut: string[];
+}
+
+const CARD_WINDOW = 4000;
+
+/**
+ * Reads the tix.is front page. Each event link opens a card; the text up to the next
+ * event link (at most a few KB) is that card, where a MUI chip "Uppselt" or a title
+ * ending in "UPPSELT" marks it sold out.
+ */
+export function parseFrontPage(html: string): FrontPageSignals {
+  const ranked = extractEventIds(html);
+  const soldOut: string[] = [];
+  if (typeof html !== 'string' || ranked.length === 0) return { ranked, soldOut };
+  const linkRe = /href\s*=\s*["'][^"']*\/event\/(\d+)[^"']*["']/gi;
+  const starts: Array<{ id: string; at: number }> = [];
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) !== null) starts.push({ id: m[1], at: m.index });
+  const seen = new Set<string>();
+  for (let i = 0; i < starts.length; i++) {
+    const { id, at } = starts[i];
+    const end = Math.min(i + 1 < starts.length ? starts[i + 1].at : html.length, at + CARD_WINDOW);
+    const card = html.slice(at, end);
+    if (/MuiChip-label[^>]*>\s*Uppselt\s*</i.test(card) || /<h3[^>]*>[^<]*UPPSELT[^<]*<\/h3>/.test(card)) {
+      if (!seen.has(id)) {
+        seen.add(id);
+        soldOut.push(id);
+      }
+    }
+  }
+  return { ranked, soldOut };
+}
+
 // ---------------------------------------------------------------------
 // Meta tags
 // ---------------------------------------------------------------------
@@ -587,6 +665,7 @@ export function parseEventPage(html: string, opts: ParseOptions): ParseResult {
     cleanText(metaContent(html, 'og:description'), 2000) ??
     cleanText(metaContent(html, 'description'), 2000);
   const prices = node ? priceRange(node.offers) : {};
+  const availability = node ? offerAvailability(node.offers) : undefined;
   const types = node ? typeNames(node) : [];
   const category = opts.category ?? categoryForTypes(types);
 
@@ -624,6 +703,7 @@ export function parseEventPage(html: string, opts: ParseOptions): ParseResult {
   if (image_url) event.image_url = image_url;
   if (prices.min !== undefined) event.face_value_min = prices.min;
   if (prices.max !== undefined) event.face_value_max = prices.max;
+  if (availability) event.availability = availability;
   return { ok: true, event };
 }
 
@@ -644,6 +724,7 @@ export interface ImportRow {
   image_url?: string;
   face_value_min?: number;
   face_value_max?: number;
+  availability?: TixAvailability;
 }
 
 /** Only the keys the RPC reads; undefined keys are dropped so the RPC keeps existing values. */
@@ -662,5 +743,6 @@ export function toImportRow(e: ParsedTixEvent): ImportRow {
   if (e.image_url) row.image_url = e.image_url;
   if (e.face_value_min !== undefined) row.face_value_min = e.face_value_min;
   if (e.face_value_max !== undefined) row.face_value_max = e.face_value_max;
+  if (e.availability) row.availability = e.availability;
   return row;
 }

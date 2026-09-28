@@ -11,6 +11,7 @@ import type { MarketEvent } from '../../lib/types';
 import { PriceDelta } from '../common/PriceDelta';
 import { ghostButtonClass, secondaryButtonClass } from '../common/buttonClasses';
 import { eventHref, eventMeta } from '../market/helpers';
+import { TixBadge } from '../common/TixBadge';
 
 export type EventSheetProps = {
   event: MarketEvent;
@@ -29,10 +30,10 @@ export function EventSheet({ event, onClose, className }: EventSheetProps) {
   const hasTickets = event.min_ask != null && (event.tickets_available ?? 0) > 0;
   const below = hasTickets && priceDelta(event.min_ask, event.face_value_min).kind === 'below';
   const available = event.tickets_available ?? 0;
-  const wanted = event.wanted_tickets ?? 0;
+  const watchers = event.watchers ?? 0;
   const counts: string[] = [];
   if (available > 0) counts.push(t('home.card.forSale', { tickets: formatTickets(available, locale) }));
-  if (wanted > 0) counts.push(t('home.card.wanted', { count: formatNumber(wanted, locale) }));
+  if (watchers > 0) counts.push(t('home.card.watching', { count: formatNumber(watchers, locale) }));
   const showImage = !!event.image_url && !broken;
 
   return (
@@ -48,6 +49,7 @@ export function EventSheet({ event, onClose, className }: EventSheetProps) {
         {showImage && (
           <img src={event.image_url ?? undefined} alt="" onError={() => setBroken(true)} className="absolute inset-0 h-full w-full object-cover" />
         )}
+        <TixBadge event={event} className="absolute left-2 top-2" />
         <button
           type="button"
           onClick={onClose}

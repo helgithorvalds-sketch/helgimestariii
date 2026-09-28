@@ -9,8 +9,8 @@ import type { CreateManualEventInput, EventRow, MarketEvent, MarketEventsParams,
  * - `category` filters; 'all' / null = every category
  * - `status` defaults to 'upcoming'; 'all' disables the filter
  * - `from` / `to` bound starts_at (from inclusive, to exclusive) — the map's day picker
- * - sort: date = starts_at asc; demand = wanted_tickets desc (nulls last), tickets_available desc;
- *   price = min_ask asc (nulls last)
+ * - sort: date = starts_at asc; demand ("Vinsælast") = place on the tix.is front page (tix_rank asc,
+ *   nulls last), then watchers desc, then tickets_available desc; price = min_ask asc (nulls last)
  * - range pagination with `limit` / `offset`; `id` is always the last sort key so
  *   pages never overlap or skip rows that tie on the sort columns
  */
@@ -30,7 +30,8 @@ export async function listMarketEvents(params: MarketEventsParams = {}): Promise
   switch (sort) {
     case 'demand':
       query = query
-        .order('wanted_tickets', { ascending: false, nullsFirst: false })
+        .order('tix_rank', { ascending: true, nullsFirst: false })
+        .order('watchers', { ascending: false, nullsFirst: false })
         .order('tickets_available', { ascending: false, nullsFirst: false })
         .order('starts_at', { ascending: true }).order('id', { ascending: true });
       break;

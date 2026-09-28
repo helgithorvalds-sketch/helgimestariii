@@ -12,7 +12,9 @@ import {
   extractJsonLd,
   findDateInHtml,
   metaContent,
+  offerAvailability,
   pageTitle,
+  parseFrontPage,
   parseDate,
   parseEventPage,
   parsePrice,
@@ -243,4 +245,34 @@ Deno.test('toImportRow drops unknown keys and undefined values', () => {
   assertEquals(Object.keys(row).sort(), ['cancelled', 'description', 'image_url', 'starts_at', 'title', 'tix_event_id', 'tix_url']);
   assert(!('parsed_from' in row));
   assert(!('category' in row), 'no category → key absent so the RPC keeps the existing one');
+});
+
+Deno.test('offerAvailability reads schema.org availability across offers', () => {
+  assertEquals(offerAvailability([{ availability: 'SoldOut' }, { availability: 'https://schema.org/SoldOut' }]), 'sold_out');
+  assertEquals(offerAvailability([{ availability: 'SoldOut' }, { availability: 'https://schema.org/InStock' }]), 'available');
+  assertEquals(offerAvailability({ availability: 'http://schema.org/LimitedAvailability' }), 'limited');
+  assertEquals(offerAvailability({ availability: 'PreOrder' }), 'presale');
+  assertEquals(offerAvailability({ price: 1000 }), undefined);
+  assertEquals(offerAvailability(undefined), undefined);
+});
+
+Deno.test('parseEventPage carries availability into the import row', () => {
+  const html = `<script type="application/ld+json">{"@type":"MusicEvent","name":"Queens of the Stone Age","startDate":"2026-11-01T20:00:00+00:00",
+    "offers":[{"@type":"Offer","price":"14.990","availability":"SoldOut"}]}</script>`;
+  const r = parseEventPage(html, { url: 'https://tix.is/is/event/21723/' });
+  assert(r.ok);
+  assertEquals(r.event.availability, 'sold_out');
+  assertEquals(toImportRow(r.event).availability, 'sold_out');
+});
+
+Deno.test('parseFrontPage keeps front-page order and finds Uppselt cards', () => {
+  const card = (id: string, title: string, chip = '') =>
+    `<a href="/is/event/${id}/slug"><img src="x.jpg"/>` +
+    (chip ? `<div class="MuiChip-root"><span class="MuiChip-label MuiChip-labelMedium mui-uyi5fo">${chip}</span></div>` : '') +
+    `<h3 class="MuiTypography-root">${title}</h3></a>`;
+  const html = card('300', 'Baggalútur') + card('21723', 'QUEENS OF THE STONE AGE', 'Uppselt') + card('150', 'Laufey', 'Forsala') + card('77', 'Emmsjé Gauti - UPPSELT') + card('300', 'Baggalútur again');
+  const signals = parseFrontPage(html);
+  assertEquals(signals.ranked, ['300', '21723', '150', '77']);
+  assertEquals(signals.soldOut, ['21723', '77']);
+  assertEquals(parseFrontPage(''), { ranked: [], soldOut: [] });
 });

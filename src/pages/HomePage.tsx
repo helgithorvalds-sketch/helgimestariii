@@ -15,6 +15,8 @@ import { SortMenu } from '../components/market/SortMenu';
 import { HOME_PAGE_SIZE, buildHomeParams, parseHomeParams, type HomeParams } from '../components/market/helpers';
 import { ViewToggle } from '../components/map/ViewToggle';
 import { readHomeView, writeHomeView, type HomeView } from '../components/map/viewPref';
+import { DayPicker } from '../components/map/DayPicker';
+import { rangeFor } from '../components/map/mapUtils';
 
 const MapView = lazy(() => import('../components/map/MapView').then((m) => ({ default: m.MapView })));
 
@@ -62,7 +64,9 @@ export default function HomePage() {
   useDocumentTitle(t('title.home'));
 
   const [params, setParams] = useSearchParams();
-  const state = useMemo(() => parseHomeParams(params), [params]);
+  const [now] = useState(() => new Date());
+  const state = useMemo(() => parseHomeParams(params, now), [params, now]);
+  const range = useMemo(() => (state.day === 'all' ? null : rangeFor(state.day, now)), [state.day, now]);
   const update = useCallback(
     (patch: Partial<HomeParams>) => {
       setParams(buildHomeParams({ ...state, ...patch }), { replace: true });
@@ -84,12 +88,14 @@ export default function HomePage() {
     q: state.q || undefined,
     category: state.category ?? undefined,
     sort: state.sort,
+    from: range?.from,
+    to: range?.to,
     limit: HOME_PAGE_SIZE,
   }, { enabled: !showMap });
   const events = useMemo(() => list.data?.pages.flat() ?? [], [list.data]);
 
-  const isFiltered = !!state.q || !!state.category;
-  const showAll = () => update({ q: '', category: null });
+  const isFiltered = !!state.q || !!state.category || state.day !== 'all';
+  const showAll = () => update({ q: '', category: null, day: 'all' });
 
   let empty: ReactNode;
   if (state.q) {
@@ -110,7 +116,7 @@ export default function HomePage() {
         }
       />
     );
-  } else if (state.category) {
+  } else if (state.category || state.day !== 'all') {
     empty = (
       <EmptyState
         icon={CalendarX}
@@ -163,6 +169,8 @@ export default function HomePage() {
         </div>
         <Intro />
       </header>
+
+      <DayPicker first="all" value={state.day} onChange={(day) => update({ day })} now={now} className="mb-3" />
 
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <CategoryChips value={state.category} onChange={(category) => update({ category })} className="min-w-0 flex-1" />

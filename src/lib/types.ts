@@ -15,7 +15,11 @@ export type Update<T extends keyof Tables> = Tables[T]['Update'];
 // ---------------------------------------------------------------------------
 export type Profile = Row<'mt_profiles'>;
 export type Venue = Row<'mt_venues'>;
-export type EventRow = Row<'mt_events'>;
+/** tix.is signals (migration 0011); optional so events built by hand (tests, forms) stay valid. */
+type TixSignalKeys = 'tix_availability' | 'tix_rank' | 'tix_rank_at';
+export type EventRow = Omit<Row<'mt_events'>, TixSignalKeys> & Partial<Pick<Row<'mt_events'>, TixSignalKeys>>;
+/** schema.org availability read from tix.is; 'sold_out' also from the front page "Uppselt" chip. */
+export type TixAvailability = 'available' | 'limited' | 'sold_out' | 'presale';
 export type Listing = Row<'mt_listings'>;
 export type ListingProof = Row<'mt_listing_proofs'>;
 export type TicketRequest = Row<'mt_requests'>;
@@ -71,6 +75,8 @@ export type EventStats = {
   sold_count: number;
   last_sold_price: number | null;
   last_sold_at: string | null;
+  /** People who asked to be told about new tickets ("Láta mig vita"), migration 0011. */
+  watchers?: number;
 };
 
 /**

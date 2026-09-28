@@ -7,11 +7,10 @@ import { cn } from '@/lib/utils';
 import { useT } from '../lib/i18n';
 import { useAuth, loginHref } from '../lib/auth';
 import { href } from '../lib/paths';
-import { useDocumentTitle } from '../lib/useDocumentTitle';
+import { useSeo } from '../lib/seo';
 import {
   useCompletedDealPrices,
   useEventListings,
-  useEventRequests,
   useMarketEvent,
   usePriceSnapshots,
   useSettings,
@@ -30,6 +29,7 @@ import { BuyDialog } from '../components/event/BuyDialog';
 import { AlertButton } from '../components/event/AlertButton';
 import { HowItWorks } from '../components/event/HowItWorks';
 import { eventFaceValue, isEventOpen, reservationMinutes, type ChartRange } from '../components/event/eventUtils';
+import { eventJsonLd, eventSeoDescription } from '../components/event/eventSeo';
 
 function EventPageSkeleton() {
   return (
@@ -59,7 +59,7 @@ function scrollToTickets() {
   if (el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/** `/vidburdir/:eventId` — hero, title, buttons, summary strip, tickets for sale, wanted, price history, how it works (DESIGN-v2 §4). */
+/** `/vidburdir/:eventId` — hero, title, buttons, summary strip, tickets for sale, price history, how it works (DESIGN-v2 §4). */
 export default function EventPage() {
   const { eventId } = useParams<{ eventId: string }>();
   const [params] = useSearchParams();
@@ -70,7 +70,6 @@ export default function EventPage() {
 
   const eventQ = useMarketEvent(eventId);
   const listingsQ = useEventListings(eventId);
-  const requestsQ = useEventRequests(eventId);
   const snapshotsQ = usePriceSnapshots(eventId, 365);
   const soldQ = useCompletedDealPrices(eventId);
   const settingsQ = useSettings();
@@ -81,7 +80,17 @@ export default function EventPage() {
   const [reportOpen, setReportOpen] = useState(false);
 
   const event = eventQ.data ?? null;
-  useDocumentTitle(event?.title ?? null);
+  useSeo(
+    event
+      ? {
+          title: event.title,
+          description: eventSeoDescription(event),
+          image: event.image_url,
+          path: `/vidburdir/${event.id}`,
+          jsonLd: eventJsonLd(event),
+        }
+      : { title: null, path: eventId ? `/vidburdir/${eventId}` : null },
+  );
 
   if (!eventId || eventQ.isPending) {
     return (
@@ -147,13 +156,9 @@ export default function EventPage() {
           <OrderBook
             event={event}
             listings={listingsQ.data}
-            requests={requestsQ.data}
-            loading={listingsQ.isPending || requestsQ.isPending}
-            error={listingsQ.isError ? listingsQ.error : requestsQ.isError ? requestsQ.error : undefined}
-            retry={() => {
-              void listingsQ.refetch();
-              void requestsQ.refetch();
-            }}
+            loading={listingsQ.isPending}
+            error={listingsQ.isError ? listingsQ.error : undefined}
+            retry={() => void listingsQ.refetch()}
             onBuy={onBuy}
             currentUserId={user?.id ?? null}
           />

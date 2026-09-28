@@ -31,8 +31,7 @@ export function StatsRow({ event, listings, className }: StatsRowProps) {
   const lowestFace = cheapest?.face_value ?? face;
   const available = num(event.tickets_available);
   const sellers = num(event.listings_active);
-  const wanted = num(event.wanted_tickets);
-  const requests = num(event.requests_active);
+  const watchers = num(event.watchers) ?? 0;
   const sold = num(event.sold_count) ?? 0;
 
   const faceMin = num(event.face_value_min);
@@ -61,12 +60,7 @@ export function StatsRow({ event, listings, className }: StatsRowProps) {
           unit={available != null ? unitTickets(available) : undefined}
           sub={sellers != null && sellers > 0 ? t(`event.book.sellers${pluralSuffix(sellers, locale)}`, { count: formatNumber(sellers, locale) }) : undefined}
         />
-        <StatTile
-          label={t('event.stats.wanted')}
-          value={wanted != null ? formatNumber(wanted, locale) : null}
-          unit={wanted != null ? unitTickets(wanted) : undefined}
-          sub={requests != null && requests > 0 ? t(`event.book.requests${pluralSuffix(requests, locale)}`, { count: formatNumber(requests, locale) }) : undefined}
-        />
+        <StatTile label={t('event.stats.watching')} value={formatNumber(watchers, locale)} sub={t('event.stats.watchingSub')} />
       </div>
       <p className="border-t border-border px-4 py-2 text-[13px] text-muted-foreground" data-testid="stats-sold">
         {sold > 0 ? t(`event.stats.soldHere${pluralSuffix(sold, locale)}`, { count: formatNumber(sold, locale) }) : t('event.stats.noSales')}

@@ -66,7 +66,7 @@ export function resolveNext(raw: string | null | undefined, fallback: string = h
 // ---------------------------------------------------------------------------
 // My page tabs (`?flipi=`)
 // ---------------------------------------------------------------------------
-export const MY_TABS = ['yfirlit', 'solur', 'oskir', 'vaktanir', 'einkunnir'] as const;
+export const MY_TABS = ['yfirlit', 'solur', 'vaktanir', 'einkunnir'] as const;
 export type MyTab = (typeof MY_TABS)[number];
 
 export function parseMyTab(raw: string | null | undefined): MyTab {

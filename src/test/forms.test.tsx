@@ -68,12 +68,10 @@ import * as listingsApi from '../lib/api/listings';
 import * as requestsApi from '../lib/api/requests';
 import { EventPicker } from '../components/forms/EventPicker';
 import { ListingForm } from '../components/forms/ListingForm';
-import { RequestForm } from '../components/forms/RequestForm';
 import { PriceInput } from '../components/forms/PriceInput';
 import { QuantityInput } from '../components/forms/QuantityInput';
 import { ProofUpload } from '../components/forms/ProofUpload';
 import SellPage from '../pages/SellPage';
-import WantPage from '../pages/WantPage';
 import {
   caretAfterDigits,
   eventRowToMarketEvent,
@@ -826,59 +824,5 @@ describe('ListingForm', () => {
     expect(screen.getByText('Kaupendur mega taka færri miða en allan fjöldann.')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('switch', { name: 'Má selja sitt í hvoru lagi' }));
     expect(screen.getByText('Miðarnir seljast aðeins allir saman.')).toBeInTheDocument();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// RequestForm / WantPage
-// ---------------------------------------------------------------------------
-describe('RequestForm', () => {
-  it('creates a request, toasts and navigates to the event page', async () => {
-    wrap(<WantPage />, '/oska?event=e1');
-    expect(await screen.findByTestId('event-picker-selected')).toHaveTextContent('Sigur Rós');
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Ég vil kaupa');
-    fireEvent.click(screen.getByRole('button', { name: 'Fjölga miðum' }));
-    typeInto(screen.getByLabelText(/Hámarksverð/), '5000');
-    typeInto(screen.getByLabelText(/Athugasemd/), ' Helst saman ');
-    expect(screen.getByText(/Enginn getur selt yfir miðaverði \(12\.900 kr\.\)\./)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Skrá ósk' }));
-    await waitFor(() =>
-      expect(createRequest).toHaveBeenCalledWith({ event_id: 'e1', quantity: 2, max_price: 5000, notes: 'Helst saman' }),
-    );
-    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/vidburdir/e1'));
-    expect(toastMock.success).toHaveBeenCalledWith('Óskin þín er skráð.');
-  });
-
-  it('rejects a max price above the event face value', async () => {
-    wrap(<RequestForm preselectEventId="e1" />);
-    await screen.findByTestId('event-picker-selected');
-    typeInto(screen.getByLabelText(/Hámarksverð/), '15000');
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'Skrá ósk' }));
-    });
-    expect(await screen.findByText('Hámarksverð má ekki vera hærra en miðaverð.')).toBeInTheDocument();
-    expect(createRequest).not.toHaveBeenCalled();
-  });
-
-  it('handles REQUEST_EXISTS with an inline notice and links', async () => {
-    createRequest.mockRejectedValueOnce(new Error('REQUEST_EXISTS'));
-    wrap(<RequestForm preselectEventId="e1" />);
-    await screen.findByTestId('event-picker-selected');
-    fireEvent.click(screen.getByRole('button', { name: 'Skrá ósk' }));
-    expect(await screen.findByText('Þú ert nú þegar með ósk fyrir þennan viðburð')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Skoða viðburð' })).toHaveAttribute('href', '/vidburdir/e1');
-    expect(screen.getByRole('link', { name: 'Skoða mínar óskir' })).toHaveAttribute('href', '/eg?flipi=oskir');
-    expect(toastMock.error).toHaveBeenCalledWith('Þú ert nú þegar með ósk fyrir þennan viðburð.', undefined);
-    expect(screen.getByTestId('location')).toHaveTextContent('/selja');
-    expect(screen.getByRole('button', { name: 'Skrá ósk' })).not.toBeDisabled();
-  });
-
-  it('submits without a max price when left empty', async () => {
-    wrap(<RequestForm preselectEventId="e1" />);
-    await screen.findByTestId('event-picker-selected');
-    fireEvent.click(screen.getByRole('button', { name: 'Skrá ósk' }));
-    await waitFor(() =>
-      expect(createRequest).toHaveBeenCalledWith({ event_id: 'e1', quantity: 1, max_price: null, notes: null }),
-    );
   });
 });

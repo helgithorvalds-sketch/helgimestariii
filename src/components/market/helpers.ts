@@ -6,6 +6,7 @@ import { EVENT_CATEGORIES } from '../../lib/constants';
 import { href } from '../../lib/paths';
 import type { Locale } from '../../lib/i18n/locale';
 import type { EventCategory, MarketEvent, MarketSort } from '../../lib/types';
+import { PARAM_DAY, dayParamValue, parseDay, type DaySelection } from '../map/mapUtils';
 
 export const MARKET_SORTS: readonly MarketSort[] = ['date', 'demand', 'price'];
 export const DEFAULT_SORT: MarketSort = 'date';
@@ -26,6 +27,8 @@ export type HomeParams = {
   q: string;
   category: EventCategory | null;
   sort: MarketSort;
+  /** `?dagur=`: 'all' (default) · 'next30' · a YYYY-MM-DD day. */
+  day: DaySelection;
 };
 
 export function isEventCategory(v: unknown): v is EventCategory {
@@ -36,15 +39,17 @@ export function isMarketSort(v: unknown): v is MarketSort {
   return typeof v === 'string' && (MARKET_SORTS as string[]).includes(v);
 }
 
-/** Reads `?q=&flokkur=&rada=`; unknown values fall back to the defaults. */
-export function parseHomeParams(params: URLSearchParams): HomeParams {
+/** Reads `?q=&flokkur=&rada=&dagur=`; unknown values fall back to the defaults. */
+export function parseHomeParams(params: URLSearchParams, now: Date = new Date()): HomeParams {
   const q = (params.get(PARAM_Q) ?? '').trim();
   const cat = params.get(PARAM_CATEGORY);
   const sort = params.get(PARAM_SORT);
+  const rawDay = params.get(PARAM_DAY);
   return {
     q,
     category: isEventCategory(cat) ? cat : null,
     sort: isMarketSort(sort) ? sort : DEFAULT_SORT,
+    day: rawDay ? parseDay(rawDay, now) : 'all',
   };
 }
 
@@ -55,6 +60,7 @@ export function buildHomeParams(state: HomeParams): URLSearchParams {
   if (q) out.set(PARAM_Q, q);
   if (state.category) out.set(PARAM_CATEGORY, state.category);
   if (state.sort !== DEFAULT_SORT) out.set(PARAM_SORT, state.sort);
+  if (state.day && state.day !== 'all') out.set(PARAM_DAY, dayParamValue(state.day));
   return out;
 }
 

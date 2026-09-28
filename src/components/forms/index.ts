@@ -11,7 +11,5 @@ export { QuantityInput } from './QuantityInput';
 export type { QuantityInputProps } from './QuantityInput';
 export { ListingForm } from './ListingForm';
 export type { ListingFormProps } from './ListingForm';
-export { RequestForm } from './RequestForm';
-export type { RequestFormProps } from './RequestForm';
 export { Field, FormSection } from './fields';
 export * from './schemas';

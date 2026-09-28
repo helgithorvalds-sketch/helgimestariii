@@ -7,7 +7,6 @@ export { ProfileForm } from './ProfileForm';
 export type { ProfileFormProps } from './ProfileForm';
 export { VerificationCard } from './VerificationCard';
 export { MyListingsList } from './MyListingsList';
-export { MyRequestsList } from './MyRequestsList';
 export { MyAlertsList } from './MyAlertsList';
 export { RatingsList, ScoreStars } from './RatingsList';
 export type { RatingsListProps } from './RatingsList';

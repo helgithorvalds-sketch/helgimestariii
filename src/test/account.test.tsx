@@ -649,24 +649,10 @@ describe('MyPage', () => {
     expect(await screen.findByTestId('my-listing-row')).toBeInTheDocument();
   });
 
-  it('requests tab: rows with max price and cancel', async () => {
-    vi.mocked(requestsApi.listMyRequests).mockResolvedValue([request, { ...request, id: 'r2', max_price: null, status: 'fulfilled', notes: null }]);
-    vi.mocked(requestsApi.cancelRequest).mockResolvedValue({ ...request, status: 'cancelled' });
+  it('the old "Óskir" tab link falls back to the overview', async () => {
     renderMyPage('/eg?flipi=oskir');
-    const rows = await screen.findAllByTestId('my-request-row');
-    expect(rows).toHaveLength(2);
-    expect(within(rows[0]).getByText('2 miðar')).toBeInTheDocument();
-    expect(within(rows[0]).getByText('9.000 kr.')).toBeInTheDocument();
-    expect(within(rows[0]).getByText('Helst saman')).toBeInTheDocument();
-    expect(within(rows[1]).getByText('Ekkert hámark')).toBeInTheDocument();
-    expect(within(rows[1]).getByText('Uppfyllt')).toBeInTheDocument();
-    expect(within(rows[1]).queryByRole('button', { name: 'Hætta við ósk' })).not.toBeInTheDocument();
-
-    fireEvent.click(within(rows[0]).getByRole('button', { name: 'Hætta við ósk' }));
-    const dialog = await screen.findByRole('alertdialog');
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Hætta við ósk' }));
-    await waitFor(() => expect(requestsApi.cancelRequest).toHaveBeenCalledWith('r1'));
-    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Ósk afturkölluð'));
+    expect(await screen.findByRole('tab', { name: /Yfirlit/ })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.queryByRole('tab', { name: /Óskir/ })).not.toBeInTheDocument();
   });
 
   it('alerts tab: shows the max price and the current lowest price, removes with confirm', async () => {

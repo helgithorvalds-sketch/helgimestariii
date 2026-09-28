@@ -41,12 +41,15 @@ export function normaliseKennitala(input: unknown): string | null {
 }
 
 /** Only paths inside the app; no scheme, no host, no protocol-relative "//". */
-export function safeNextPath(input: unknown, fallback = '/midatorg/eg'): string {
+export function safeNextPath(input: unknown, fallback = '/eg'): string {
   if (typeof input !== 'string') return fallback;
-  const value = input.trim();
-  if (!value.startsWith('/midatorg')) return fallback;
-  if (value.startsWith('//') || value.includes('\\') || /[\r\n]/.test(value)) return fallback;
+  let value = input.trim();
+  if (!value.startsWith('/') || value.startsWith('//') || value.includes('\\') || value.includes('://') || /[\r\n]/.test(value)) return fallback;
   if (value.length > 300) return fallback;
+  // the app used to live under /midatorg; old links keep working
+  if (value === '/midatorg') return '/';
+  if (value.startsWith('/midatorg/')) value = value.slice('/midatorg'.length);
+  else if (value.startsWith('/midatorg?')) value = '/' + value.slice('/midatorg'.length);
   return value;
 }
 

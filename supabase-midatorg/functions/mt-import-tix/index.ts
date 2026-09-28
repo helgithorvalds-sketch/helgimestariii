@@ -1,13 +1,14 @@
-// mt-import-tix — walks the tix.is category pages, fetches new/stale event
-// pages, parses them (see ../_shared/tix.ts) and upserts through
-// mt_import_events(jsonb) with the service role.
+// mt-import-tix — reads the tix.is front page (order + "Uppselt" chips) and the
+// category pages, fetches new/stale event pages (events we have never seen first),
+// parses them (see ../_shared/tix.ts), upserts through mt_import_events(jsonb) and
+// stores the front-page signals through mt_set_tix_signals(text[], text[]).
 //
 // Deployed with verify_jwt = true. Callable by:
 //   * the project's anon key **together with** the x-mt-cron-secret header
 //     (pg_cron, see migrations/0006_import_cron.sql and 0008_security_fixes.sql);
 //     the anon key alone is public and is refused with 403
 //   * a signed-in user whose mt_profiles.role = 'admin' (admin page)
-// Returns { scanned, fetched, skipped, parsed, inserted, updated, errors: [{ id, message }], durationMs }.
+// Returns { scanned, fetched, skipped, parsed, inserted, updated, frontPage: { ranked, soldOut }, errors: [{ id, message }], durationMs }.
 // Logs are structured JSON lines and never contain page HTML.
 
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
@@ -16,8 +17,11 @@ import {
   canonicalEventUrl,
   categoryPageUrl,
   extractEventIds,
+  frontPageUrl,
   isTixHost,
   parseEventPage,
+  parseFrontPage,
+  type FrontPageSignals,
   toImportRow,
   type ImportRow,
   type TixCategory,
@@ -100,8 +104,25 @@ Deno.serve(async (req: Request) => {
   const errors: ImportError[] = [];
   log(FN, 'info', 'run started', { caller: caller.kind, limit: options.limit, categories: options.categories.map((c) => c.slug) });
 
+  // 0. Front page: what tix.is puts first is what is popular, and its "Uppselt" chips.
+  const candidates = new Map<string, TixCategory | undefined>();
+  let front: FrontPageSignals = { ranked: [], soldOut: [] };
+  try {
+    const res = await fetchPage(frontPageUrl(), { timeoutMs: PAGE_TIMEOUT_MS, allowHost: isTixHost });
+    if (res.status === 200) {
+      front = parseFrontPage(res.text);
+      log(FN, 'info', 'front page scanned', { bytes: res.text.length, ranked: front.ranked.length, soldOut: front.soldOut.length });
+    } else {
+      errors.push({ id: 'front', message: `HTTP ${res.status}` });
+    }
+  } catch (err) {
+    const message = err instanceof FetchError ? err.message : 'unexpected error';
+    errors.push({ id: 'front', message });
+    log(FN, 'warn', 'front page failed', { message });
+  }
+  await sleep(SPACING_MS);
+
   // 1. Category pages → candidate ids (the first category that lists an id wins).
-  const candidates = new Map<string, TixCategory>();
   for (const page of options.categories) {
     const url = categoryPageUrl(page.slug);
     try {
@@ -112,7 +133,7 @@ Deno.serve(async (req: Request) => {
         continue;
       }
       const ids = extractEventIds(res.text);
-      for (const id of ids) if (!candidates.has(id)) candidates.set(id, page.category);
+      for (const id of ids) if (candidates.get(id) === undefined) candidates.set(id, page.category);
       log(FN, 'info', 'category page scanned', { slug: page.slug, bytes: res.text.length, ids: ids.length });
     } catch (err) {
       const message = err instanceof FetchError ? err.message : 'unexpected error';
@@ -121,37 +142,48 @@ Deno.serve(async (req: Request) => {
     }
     await sleep(SPACING_MS);
   }
+  for (const id of front.ranked) if (!candidates.has(id)) candidates.set(id, undefined);
   const scanned = candidates.size;
 
-  // 2. Skip ids refreshed within the last 24h.
+  // 2. Which ids we already have, and which of those were refreshed within the last 24h.
+  const known = new Set<string>();
   const fresh = new Set<string>();
   const allIds = [...candidates.keys()];
-  const freshCutoff = new Date(Date.now() - FRESH_WINDOW_MS).toISOString();
+  const freshCutoff = Date.now() - FRESH_WINDOW_MS;
   for (let i = 0; i < allIds.length; i += 100) {
     const chunk = allIds.slice(i, i + 100);
-    const { data, error } = await admin.from('mt_events').select('tix_event_id').in('tix_event_id', chunk).gte('updated_at', freshCutoff);
+    const { data, error } = await admin.from('mt_events').select('tix_event_id, updated_at').in('tix_event_id', chunk);
     if (error) {
       errors.push({ id: 'db:mt_events', message: error.message });
       log(FN, 'error', 'freshness lookup failed', { message: error.message });
       break;
     }
-    for (const row of data ?? []) if (row.tix_event_id) fresh.add(row.tix_event_id);
+    for (const row of data ?? []) {
+      if (!row.tix_event_id) continue;
+      known.add(row.tix_event_id);
+      if (new Date(row.updated_at).getTime() >= freshCutoff) fresh.add(row.tix_event_id);
+    }
   }
   const stale = allIds.filter((id) => !fresh.has(id));
-  // Interleave categories (round-robin) so one run never spends its whole budget on the first category.
-  const byCategory = new Map<TixCategory, string[]>();
-  for (const id of stale) {
-    const cat = candidates.get(id) as TixCategory;
-    const list = byCategory.get(cat) ?? [];
-    list.push(id);
-    byCategory.set(cat, list);
-  }
-  const interleaved: string[] = [];
-  const lists = [...byCategory.values()];
-  for (let i = 0; interleaved.length < stale.length; i++) {
-    for (const list of lists) if (i < list.length) interleaved.push(list[i]);
-  }
-  const queue = interleaved.slice(0, options.limit);
+  // New events first (they are not on Miðatorg at all yet), then the rest. Within each
+  // group, interleave categories (round-robin) so one run never spends its whole budget
+  // on the first category.
+  const interleave = (ids: string[]): string[] => {
+    const byCategory = new Map<string, string[]>();
+    for (const id of ids) {
+      const cat = candidates.get(id) ?? 'front';
+      const list = byCategory.get(cat) ?? [];
+      list.push(id);
+      byCategory.set(cat, list);
+    }
+    const out: string[] = [];
+    const lists = [...byCategory.values()];
+    for (let i = 0; out.length < ids.length; i++) {
+      for (const list of lists) if (i < list.length) out.push(list[i]);
+    }
+    return out;
+  };
+  const queue = [...interleave(stale.filter((id) => !known.has(id))), ...interleave(stale.filter((id) => known.has(id)))].slice(0, options.limit);
   const skipped = scanned - stale.length;
 
   // 3. Event pages, sequentially and politely.
@@ -206,6 +238,15 @@ Deno.serve(async (req: Request) => {
     updated += result.updated ?? 0;
   }
 
+  // 5. Front-page order and sold-out chips (after the upsert so new events get their rank too).
+  if (front.ranked.length > 0) {
+    const { error } = await admin.rpc('mt_set_tix_signals', { p_ranked: front.ranked, p_sold_out: front.soldOut });
+    if (error) {
+      errors.push({ id: 'signals', message: error.message });
+      log(FN, 'error', 'mt_set_tix_signals failed', { message: error.message });
+    }
+  }
+
   const summary = {
     scanned,
     fetched,
@@ -213,6 +254,7 @@ Deno.serve(async (req: Request) => {
     parsed: rows.length,
     inserted,
     updated,
+    frontPage: { ranked: front.ranked.length, soldOut: front.soldOut.length },
     errors,
     durationMs: Date.now() - startedAt,
   };

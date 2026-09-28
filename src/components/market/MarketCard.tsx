@@ -7,6 +7,7 @@ import { formatDate, formatISK, formatNumber, formatTickets, priceDelta } from '
 import { initialsOf, placeholderClass } from '../../lib/avatar';
 import type { MarketEvent } from '../../lib/types';
 import { PriceDelta } from '../common/PriceDelta';
+import { TixBadge } from '../common/TixBadge';
 import { EventThumb } from './EventThumb';
 import { cardStateOf, eventHref, eventMeta, pluralSuffix } from './helpers';
 
@@ -51,6 +52,7 @@ function CardImage({ event, past }: { event: MarketEvent; past: boolean }) {
       <span className="absolute left-2 top-2 inline-flex h-6 items-center rounded-full bg-card/95 px-2.5 text-[12px] font-medium text-foreground shadow-sm">
         {t(`category.${event.category}`)}
       </span>
+      {!past && <TixBadge event={event} className="absolute right-2 top-2" />}
       {past && (
         <span className="absolute right-2 top-2 inline-flex h-6 items-center rounded-full bg-foreground/80 px-2.5 text-[12px] font-medium text-background">
           {t(`eventStatus.${event.status === 'cancelled' ? 'cancelled' : 'past'}`)}
@@ -69,7 +71,7 @@ export function MarketCard({ event, compact = false }: MarketCardProps) {
   const eventUrl = eventHref(event.id);
   const meta = eventMeta(event, formatDate(event.starts_at, locale));
   const available = event.tickets_available ?? 0;
-  const wanted = event.wanted_tickets ?? 0;
+  const watchers = event.watchers ?? 0;
   const face = event.face_value_min;
 
   if (compact) {
@@ -119,7 +121,7 @@ export function MarketCard({ event, compact = false }: MarketCardProps) {
     if (sold > 0) counts.push(t(`home.card.soldHere${pluralSuffix(sold, locale)}`, { count: formatNumber(sold, locale) }));
   } else {
     if (available > 0) counts.push(t('home.card.forSale', { tickets: formatTickets(available, locale) }));
-    if (wanted > 0) counts.push(t('home.card.wanted', { count: formatNumber(wanted, locale) }));
+    if (watchers > 0) counts.push(t('home.card.watching', { count: formatNumber(watchers, locale) }));
   }
 
   return (

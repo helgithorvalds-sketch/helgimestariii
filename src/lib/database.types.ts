@@ -250,7 +250,10 @@ export type Database = {
           starts_at: string
           status: Database["public"]["Enums"]["mt_event_status"]
           title: string
+          tix_availability: string | null
           tix_event_id: string | null
+          tix_rank: number | null
+          tix_rank_at: string | null
           tix_url: string | null
           updated_at: string
           venue_id: string | null
@@ -270,7 +273,10 @@ export type Database = {
           starts_at: string
           status?: Database["public"]["Enums"]["mt_event_status"]
           title: string
+          tix_availability?: string | null
           tix_event_id?: string | null
+          tix_rank?: number | null
+          tix_rank_at?: string | null
           tix_url?: string | null
           updated_at?: string
           venue_id?: string | null
@@ -290,7 +296,10 @@ export type Database = {
           starts_at?: string
           status?: Database["public"]["Enums"]["mt_event_status"]
           title?: string
+          tix_availability?: string | null
           tix_event_id?: string | null
+          tix_rank?: number | null
+          tix_rank_at?: string | null
           tix_url?: string | null
           updated_at?: string
           venue_id?: string | null
@@ -989,6 +998,7 @@ export type Database = {
           sold_count: number | null
           tickets_available: number | null
           wanted_tickets: number | null
+          watchers: number | null
         }
         Relationships: []
       }
@@ -1018,12 +1028,16 @@ export type Database = {
           status: Database["public"]["Enums"]["mt_event_status"] | null
           tickets_available: number | null
           title: string | null
+          tix_availability: string | null
           tix_event_id: string | null
+          tix_rank: number | null
+          tix_rank_at: string | null
           tix_url: string | null
           updated_at: string | null
           venue_id: string | null
           venue_name: string | null
           wanted_tickets: number | null
+          watchers: number | null
         }
         Relationships: [
           {
@@ -1135,6 +1149,8 @@ export type Database = {
       mt_expire_stale: { Args: never; Returns: Json }
       mt_fmt_kr: { Args: { p_amount: number }; Returns: string }
       mt_import_events: { Args: { p_events: Json }; Returns: Json }
+      mt_set_tix_signals: { Args: { p_ranked: string[]; p_sold_out?: string[] }; Returns: Json }
+      mt_app_path: { Args: { p_link: string }; Returns: string }
       mt_internal: { Args: never; Returns: boolean }
       mt_is_admin: { Args: never; Returns: boolean }
       mt_is_banned: { Args: { p_user: string }; Returns: boolean }

@@ -11,8 +11,6 @@ export { OrderBook, SELL_SECTION_ID } from './OrderBook';
 export type { OrderBookProps } from './OrderBook';
 export { SellRow } from './SellRow';
 export type { SellRowProps } from './SellRow';
-export { WantRow } from './WantRow';
-export type { WantRowProps } from './WantRow';
 export { BuyDialog } from './BuyDialog';
 export type { BuyDialogProps } from './BuyDialog';
 export { AlertButton } from './AlertButton';

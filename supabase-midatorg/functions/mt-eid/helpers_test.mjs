@@ -27,12 +27,15 @@ test('kennitala: formats accepted, check digit and century validated', () => {
 });
 
 test('next path must stay inside the app', () => {
-  assert.equal(safeNextPath('/midatorg/eg?flipi=solur'), '/midatorg/eg?flipi=solur');
-  assert.equal(safeNextPath('https://evil.example/midatorg'), '/midatorg/eg');
-  assert.equal(safeNextPath('//evil.example'), '/midatorg/eg');
-  assert.equal(safeNextPath('/admin'), '/midatorg/eg');
-  assert.equal(safeNextPath('/midatorg\\evil'), '/midatorg/eg');
-  assert.equal(safeNextPath(undefined), '/midatorg/eg');
+  assert.equal(safeNextPath('/eg?flipi=solur'), '/eg?flipi=solur');
+  assert.equal(safeNextPath('/midatorg/eg?flipi=solur'), '/eg?flipi=solur', 'legacy prefix is dropped');
+  assert.equal(safeNextPath('/midatorg'), '/');
+  assert.equal(safeNextPath('/midatorg?eid=1'), '/?eid=1');
+  assert.equal(safeNextPath('https://evil.example/eg'), '/eg');
+  assert.equal(safeNextPath('//evil.example'), '/eg');
+  assert.equal(safeNextPath('/x/https://evil.example'), '/eg');
+  assert.equal(safeNextPath('/eg\\evil'), '/eg');
+  assert.equal(safeNextPath(undefined), '/eg');
 });
 
 test('claims are picked in order', () => {
@@ -42,7 +45,7 @@ test('claims are picked in order', () => {
 });
 
 test('helpers for URLs and env lists', () => {
-  assert.equal(withParams('https://app.example/midatorg/eg?flipi=yfirlit', { eid: 'ok' }), 'https://app.example/midatorg/eg?flipi=yfirlit&eid=ok');
+  assert.equal(withParams('https://app.example/eg?flipi=yfirlit', { eid: 'ok' }), 'https://app.example/eg?flipi=yfirlit&eid=ok');
   assert.deepEqual(listFromEnv('national_id, kennitala ssn', ['x']), ['national_id', 'kennitala', 'ssn']);
   assert.deepEqual(listFromEnv(undefined, ['x']), ['x']);
 });

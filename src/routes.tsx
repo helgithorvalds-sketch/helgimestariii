@@ -10,7 +10,6 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const EventPage = lazy(() => import('./pages/EventPage'));
 const MapPage = lazy(() => import('./pages/MapPage'));
 const SellPage = lazy(() => import('./pages/SellPage'));
-const WantPage = lazy(() => import('./pages/WantPage'));
 const DealsPage = lazy(() => import('./pages/DealsPage'));
 const DealRoomPage = lazy(() => import('./pages/DealRoomPage'));
 const MyPage = lazy(() => import('./pages/MyPage'));
@@ -41,6 +40,16 @@ function LegacyRedirect() {
   return <Navigate to={href(location.pathname) + location.search + location.hash} replace />;
 }
 
+/**
+ * "Ég vil kaupa" (/oska) was folded into "Láta mig vita": an event link opens its alert,
+ * anything else goes to the market.
+ */
+function WantRedirect() {
+  const location = useLocation();
+  const event = new URLSearchParams(location.search).get('event');
+  return <Navigate to={event ? href(`/vidburdir/${encodeURIComponent(event)}?vakta=1`) : href('/')} replace />;
+}
+
 /** Route table. */
 export function MidatorgRoutes() {
   return (
@@ -52,11 +61,11 @@ export function MidatorgRoutes() {
         <Route path="vidburdir/:eventId" element={<Page><EventPage /></Page>} />
         <Route path="notendur/:userId" element={<Page><PublicProfilePage /></Page>} />
         <Route path="innskra" element={<Page><LoginPage /></Page>} />
+        <Route path="oska" element={<WantRedirect />} />
         <Route path="um" element={<Page><AboutPage /></Page>} />
 
         <Route element={<RequireAuth />}>
           <Route path="selja" element={<Page><SellPage /></Page>} />
-          <Route path="oska" element={<Page><WantPage /></Page>} />
           <Route path="vidskipti" element={<Page><DealsPage /></Page>} />
           <Route path="vidskipti/:dealId" element={<Page><DealRoomPage /></Page>} />
           <Route path="eg" element={<Page><MyPage /></Page>} />

@@ -67,15 +67,16 @@ function makeEvent(overrides: Partial<MarketEvent> = {}): MarketEvent {
     sold_count: 4,
     last_sold_price: 9900,
     last_sold_at: '2026-02-01T00:00:00Z',
+    watchers: 23,
     ...overrides,
   };
 }
 
 const listing = () => makeEvent({ id: 'listing', title: 'Sinfóníuhljómsveit Íslands: Vínartónleikar' });
 const waitlist = () =>
-  makeEvent({ id: 'wait', title: 'Laufey – Reykjavík 2027', min_ask: null, tickets_available: 0, listings_active: 0, wanted_tickets: 41, face_value_min: 14900 });
+  makeEvent({ id: 'wait', title: 'Laufey – Reykjavík 2027', min_ask: null, tickets_available: 0, listings_active: 0, wanted_tickets: 0, watchers: 41, face_value_min: 14900 });
 const pastEvent = () =>
-  makeEvent({ id: 'past', title: 'Liðinn viðburður', starts_at: PAST, status: 'past', min_ask: null, tickets_available: 0, wanted_tickets: 0, sold_count: 15, last_sold_price: 9900 });
+  makeEvent({ id: 'past', title: 'Liðinn viðburður', starts_at: PAST, status: 'past', min_ask: null, tickets_available: 0, wanted_tickets: 0, watchers: 0, sold_count: 15, last_sold_price: 9900 });
 
 function LocationProbe() {
   const loc = useLocation();
@@ -113,23 +114,29 @@ afterEach(() => {
 // Pure helpers
 // ---------------------------------------------------------------------------
 describe('home params', () => {
-  it('parses q / flokkur / rada with defaults and ignores junk', () => {
-    expect(parseHomeParams(new URLSearchParams(''))).toEqual({ q: '', category: null, sort: 'date' });
+  it('parses q / flokkur / rada / dagur with defaults and ignores junk', () => {
+    expect(parseHomeParams(new URLSearchParams(''))).toEqual({ q: '', category: null, sort: 'date', day: 'all' });
     expect(parseHomeParams(new URLSearchParams('q=%20sigur%20&flokkur=leikhus&rada=price'))).toEqual({
       q: 'sigur',
       category: 'leikhus',
       sort: 'price',
+      day: 'all',
     });
-    expect(parseHomeParams(new URLSearchParams('flokkur=nope&rada=nope'))).toEqual({ q: '', category: null, sort: 'date' });
+    expect(parseHomeParams(new URLSearchParams('flokkur=nope&rada=nope'))).toEqual({ q: '', category: null, sort: 'date', day: 'all' });
+    const now = new Date(2026, 8, 28, 12);
+    expect(parseHomeParams(new URLSearchParams('dagur=2026-10-02'), now).day).toBe('2026-10-02');
+    expect(parseHomeParams(new URLSearchParams('dagur=30'), now).day).toBe('next30');
+    expect(parseHomeParams(new URLSearchParams('dagur=2020-01-01'), now).day).toBe('next30');
   });
 
   it('builds a clean query string (defaults omitted) that round-trips', () => {
-    expect(buildHomeParams({ q: '', category: null, sort: 'date' }).toString()).toBe('');
-    const qs = buildHomeParams({ q: 'björk', category: 'tonleikar', sort: 'demand' });
+    expect(buildHomeParams({ q: '', category: null, sort: 'date', day: 'all' }).toString()).toBe('');
+    expect(buildHomeParams({ q: '', category: null, sort: 'date', day: '2026-10-02' }).get('dagur')).toBe('2026-10-02');
+    const qs = buildHomeParams({ q: 'björk', category: 'tonleikar', sort: 'demand', day: 'all' });
     expect(qs.get('q')).toBe('björk');
     expect(qs.get('flokkur')).toBe('tonleikar');
     expect(qs.get('rada')).toBe('demand');
-    expect(parseHomeParams(qs)).toEqual({ q: 'björk', category: 'tonleikar', sort: 'demand' });
+    expect(parseHomeParams(qs)).toEqual({ q: 'björk', category: 'tonleikar', sort: 'demand', day: 'all' });
   });
 });
 
@@ -177,7 +184,7 @@ describe('MarketCard', () => {
     expect(screen.getByText('Frá 9.900 kr.')).toBeInTheDocument();
     expect(screen.getByText('−23%')).toBeInTheDocument();
     expect(screen.getByText('undir miðaverði')).toBeInTheDocument();
-    expect(card).toHaveTextContent('7 miðar til sölu · vantar 23 miða');
+    expect(card).toHaveTextContent('7 miðar til sölu · 23 vakta');
     expect(card).toHaveTextContent('fim. 14. nóv. · Harpa');
     expect(screen.getByText('Tónleikar')).toBeInTheDocument();
     expect(screen.getByTestId('market-card-placeholder')).toHaveTextContent('SÍ');
@@ -191,20 +198,20 @@ describe('MarketCard', () => {
     expect(screen.queryByText('á miðaverði')).not.toBeInTheDocument();
   });
 
-  it('no listings: "Engir miðar til sölu" and how many tickets are wanted', () => {
+  it('no listings: "Engir miðar til sölu" and how many people watch the event', () => {
     wrap(<MarketCard event={waitlist()} />);
     const card = screen.getByTestId('market-card');
     expect(card).toHaveAttribute('data-state', 'waitlist');
     expect(screen.getByText('Engir miðar til sölu')).toBeInTheDocument();
-    expect(card).toHaveTextContent('vantar 41 miða');
+    expect(card).toHaveTextContent('41 vakta');
     expect(card).not.toHaveTextContent('Frá');
     expect(card).not.toHaveTextContent('til sölu ·');
   });
 
   it('no listings and nobody waiting: no counts line at all', () => {
-    wrap(<MarketCard event={makeEvent({ min_ask: null, tickets_available: 0, wanted_tickets: 0, face_value_min: null })} />);
+    wrap(<MarketCard event={makeEvent({ min_ask: null, tickets_available: 0, watchers: 0, face_value_min: null })} />);
     expect(screen.getByText('Engir miðar til sölu')).toBeInTheDocument();
-    expect(screen.getByTestId('market-card')).not.toHaveTextContent('vantar');
+    expect(screen.getByTestId('market-card')).not.toHaveTextContent('vakta');
   });
 
   it('past event: "Liðinn" chip, last sold price, sold count, still a link', () => {
@@ -229,6 +236,20 @@ describe('MarketCard', () => {
     expect(screen.queryByTestId('market-card-img')).not.toBeInTheDocument();
   });
 
+  it('tix.is badges: sold out wins over popular; nothing on past events', () => {
+    const { unmount } = wrap(<MarketCard event={makeEvent({ tix_availability: 'sold_out', tix_rank: 2 })} />);
+    expect(screen.getByTestId('tix-badge')).toHaveTextContent('Uppselt á tix.is');
+    unmount();
+    const second = wrap(<MarketCard event={makeEvent({ tix_availability: 'available', tix_rank: 2 })} />);
+    expect(screen.getByTestId('tix-badge')).toHaveTextContent('Vinsælt á tix.is');
+    second.unmount();
+    const third = wrap(<MarketCard event={makeEvent({ tix_rank: 40 })} />);
+    expect(screen.queryByTestId('tix-badge')).not.toBeInTheDocument();
+    third.unmount();
+    wrap(<MarketCard event={pastEvent()} />);
+    expect(screen.queryByTestId('tix-badge')).not.toBeInTheDocument();
+  });
+
   it('compact: thumb, title link and meta only', () => {
     wrap(<MarketCard event={makeEvent({ image_url: 'https://x/e.jpg' })} compact />);
     const img = screen.getByTestId('event-thumb-image');
@@ -240,7 +261,7 @@ describe('MarketCard', () => {
   it('speaks English too', () => {
     wrap(<MarketCard event={waitlist()} />, '/', 'en');
     expect(screen.getByText('No tickets for sale')).toBeInTheDocument();
-    expect(screen.getByTestId('market-card')).toHaveTextContent('41 wanted');
+    expect(screen.getByTestId('market-card')).toHaveTextContent('41 watching');
     expect(screen.getByText('Concerts')).toBeInTheDocument();
   });
 });
@@ -316,6 +337,23 @@ describe('HomePage', () => {
     expect(screen.getByRole('combobox', { name: 'Raða eftir' })).toHaveTextContent('Lægsta verð');
     expect(screen.queryByRole('button', { name: 'Sýna fleiri' })).not.toBeInTheDocument();
     expect(screen.queryByTestId('home-query')).not.toBeInTheDocument();
+  });
+
+  it('filters by day: "Allar dagsetningar" by default, a chip or any date narrows the list', async () => {
+    listMock().mockResolvedValue([listing()]);
+    wrap(<HomePage />);
+    await screen.findAllByTestId('market-card');
+    expect(screen.getByRole('button', { name: 'Allar dagsetningar' })).toHaveAttribute('aria-pressed', 'true');
+    expect(listMock()).toHaveBeenLastCalledWith(expect.objectContaining({ from: undefined, to: undefined }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Á morgun' }));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent(/dagur=\d{4}-\d{2}-\d{2}/));
+    await waitFor(() => expect(listMock()).toHaveBeenLastCalledWith(expect.objectContaining({ from: expect.any(String), to: expect.any(String) })));
+    const { from, to } = listMock().mock.lastCall![0];
+    expect(Date.parse(to) - Date.parse(from)).toBe(24 * 60 * 60 * 1000);
+
+    fireEvent.change(screen.getByLabelText('Velja aðra dagsetningu'), { target: { value: '2099-12-24' } });
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('dagur=2099-12-24'));
   });
 
   it('the intro can be closed and stays closed', async () => {

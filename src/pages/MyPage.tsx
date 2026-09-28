@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { Bell, ExternalLink, Search, Star, Tag, User, type LucideProps } from 'lucide-react';
+import { Bell, ExternalLink, Star, Tag, User, type LucideProps } from 'lucide-react';
 import { useEffect, type ComponentType } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,6 @@ import { secondaryButtonClass } from '../components/common/buttonClasses';
 import { ProfileForm } from '../components/account/ProfileForm';
 import { VerificationCard } from '../components/account/VerificationCard';
 import { MyListingsList } from '../components/account/MyListingsList';
-import { MyRequestsList } from '../components/account/MyRequestsList';
 import { MyAlertsList } from '../components/account/MyAlertsList';
 import { RatingsList } from '../components/account/RatingsList';
 import { SetPasswordCard } from '../components/account/SetPasswordCard';
@@ -85,7 +84,6 @@ export default function MyPage() {
   const tabs: { value: MyTab; label: string; icon: ComponentType<LucideProps> }[] = [
     { value: 'yfirlit', label: t('account.my.tabs.overview'), icon: User },
     { value: 'solur', label: t('account.my.tabs.listings'), icon: Tag },
-    { value: 'oskir', label: t('account.my.tabs.requests'), icon: Search },
     { value: 'vaktanir', label: t('account.my.tabs.alerts'), icon: Bell },
     { value: 'einkunnir', label: t('account.my.tabs.ratings'), icon: Star },
   ];
@@ -135,9 +133,6 @@ export default function MyPage() {
         </TabsContent>
         <TabsContent value="solur" className="mt-0">
           <MyListingsList />
-        </TabsContent>
-        <TabsContent value="oskir" className="mt-0">
-          <MyRequestsList />
         </TabsContent>
         <TabsContent value="vaktanir" className="mt-0">
           <MyAlertsList />

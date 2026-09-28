@@ -9,6 +9,7 @@ import { formatDateTime } from '../../lib/format';
 import { initialsOf, placeholderClass } from '../../lib/avatar';
 import type { MarketEvent } from '../../lib/types';
 import { CategoryBadge } from '../common/CategoryBadge';
+import { TixBadge, tixBadgeOf } from '../common/TixBadge';
 import { secondaryButtonClass } from '../common/buttonClasses';
 import { isEventOpen } from './eventUtils';
 
@@ -89,6 +90,7 @@ export function EventHeader({ event, onReport, onBuy, alertButton, className }: 
           <div className="mb-2 flex flex-wrap items-center gap-1.5">
             <CategoryBadge category={event.category} />
             {event.status !== 'upcoming' && <span className="mt-tag">{t(`eventStatus.${event.status}`)}</span>}
+            <TixBadge event={event} />
           </div>
           <h1 className="text-[26px] font-bold leading-[1.2] tracking-tight sm:text-[30px]">{event.title}</h1>
           <p className="mt-2 text-[15px] text-foreground">
@@ -97,6 +99,11 @@ export function EventHeader({ event, onReport, onBuy, alertButton, className }: 
             </time>
             {venue && <span className="text-muted-foreground"> · {venue}</span>}
           </p>
+          {tixBadgeOf(event) === 'soldOut' && (
+            <p className="mt-2 max-w-prose text-[14px] text-muted-foreground" data-testid="sold-out-hint">
+              {t('event.tix.soldOutHint')}
+            </p>
+          )}
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px]">
             {event.tix_url && (
               <a
@@ -132,9 +139,6 @@ export function EventHeader({ event, onReport, onBuy, alertButton, className }: 
                   <Tag className="h-4 w-4" aria-hidden="true" />
                   {t('event.sell')}
                 </Link>
-              </Button>
-              <Button asChild variant="outline" size="sm" className={cn(CTA, secondaryButtonClass)}>
-                <Link to={href(`/oska?event=${event.id}`)}>{t('event.want')}</Link>
               </Button>
               {alertButton}
             </div>

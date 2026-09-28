@@ -142,6 +142,7 @@ const event: MarketEvent = {
   sold_count: 15,
   last_sold_price: 9900,
   last_sold_at: '2026-09-20T14:02:00Z',
+  watchers: 2,
 };
 
 function listing(over: Partial<ListingWithSeller> & { id: string; seller: PublicProfile }): ListingWithSeller {
@@ -380,9 +381,9 @@ describe('StatTile / StatsRow', () => {
     expect(tiles[2]).toHaveTextContent('Til sölu');
     expect(tiles[2]).toHaveTextContent('3');
     expect(tiles[2]).toHaveTextContent('2 seljendur');
-    expect(tiles[3]).toHaveTextContent('Óskað eftir');
-    expect(tiles[3]).toHaveTextContent('4');
-    expect(tiles[3]).toHaveTextContent('2 óskir');
+    expect(tiles[3]).toHaveTextContent('Vakta viðburðinn');
+    expect(tiles[3]).toHaveTextContent('2');
+    expect(tiles[3]).toHaveTextContent('fá tilkynningu um miða');
     expect(screen.getByTestId('stats-sold')).toHaveTextContent('15 miðar seldir hér.');
   });
 
@@ -401,7 +402,7 @@ describe('StatTile / StatsRow', () => {
 });
 
 describe('EventHeader', () => {
-  it('renders hero, title, date · venue, tix link, the three buttons and the report button', () => {
+  it('renders hero, title, date · venue, tix link, the buttons and the report button', () => {
     const onReport = vi.fn();
     const onBuy = vi.fn();
     wrap(<EventHeader event={event} onReport={onReport} onBuy={onBuy} alertButton={<button type="button">VAKTA</button>} />);
@@ -411,8 +412,9 @@ describe('EventHeader', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Kaupa miða' }));
     expect(onBuy).toHaveBeenCalledTimes(1);
     expect(screen.getByRole('link', { name: 'Selja miða' })).toHaveAttribute('href', '/selja?event=ev-1');
-    expect(screen.getByRole('link', { name: 'Ég vil kaupa' })).toHaveAttribute('href', '/oska?event=ev-1');
+    expect(screen.queryByRole('link', { name: 'Ég vil kaupa' })).not.toBeInTheDocument();
     expect(screen.getByText('VAKTA')).toBeInTheDocument();
+    expect(screen.queryByTestId('tix-badge')).not.toBeInTheDocument();
     expect(screen.getByTestId('event-thumb')).toHaveTextContent('SÍ');
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Tilkynna viðburð/ }));
@@ -428,6 +430,16 @@ describe('EventHeader', () => {
     expect(screen.getByTestId('event-thumb')).toHaveTextContent('SÍ');
   });
 
+  it('shows "Uppselt á tix.is" with a hint, or "Vinsælt á tix.is" for front-page events', () => {
+    const { unmount } = wrap(<EventHeader event={{ ...event, tix_availability: 'sold_out', tix_rank: 3 }} onReport={() => undefined} />);
+    expect(screen.getByTestId('tix-badge')).toHaveTextContent('Uppselt á tix.is');
+    expect(screen.getByTestId('sold-out-hint')).toHaveTextContent('Láta mig vita');
+    unmount();
+    wrap(<EventHeader event={{ ...event, tix_availability: 'available', tix_rank: 3 }} onReport={() => undefined} />);
+    expect(screen.getByTestId('tix-badge')).toHaveTextContent('Vinsælt á tix.is');
+    expect(screen.queryByTestId('sold-out-hint')).not.toBeInTheDocument();
+  });
+
   it('hides the buttons and explains when the event is past', () => {
     wrap(<EventHeader event={{ ...event, status: 'past' }} onReport={() => undefined} />);
     expect(screen.queryByRole('link', { name: 'Selja miða' })).not.toBeInTheDocument();
@@ -438,15 +450,14 @@ describe('EventHeader', () => {
 });
 
 describe('OrderBook', () => {
-  it('lists the tickets for sale and the requests as plain rows', () => {
+  it('lists the tickets for sale as plain rows (no "Óskað eftir" list any more)', () => {
     const onBuy = vi.fn();
     authState.current = signedIn();
-    wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={onBuy} currentUserId="u1" />);
+    wrap(<OrderBook event={event} listings={listings} onBuy={onBuy} currentUserId="u1" />);
     expect(screen.getByRole('heading', { name: 'Miðar til sölu' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Óskað eftir' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Óskað eftir' })).not.toBeInTheDocument();
     expect(screen.queryByText(/Skráningar/)).not.toBeInTheDocument();
     expect(screen.getByText('2 seljendur')).toBeInTheDocument();
-    expect(screen.getByText('2 óskir')).toBeInTheDocument();
 
     const sellRows = screen.getAllByTestId('sell-row');
     expect(sellRows).toHaveLength(2);
@@ -462,46 +473,38 @@ describe('OrderBook', () => {
     expect(within(sellRows[1]).getByText('aðeins saman')).toBeInTheDocument();
     fireEvent.click(within(sellRows[0]).getByRole('button', { name: 'Kaupa: Guðrún H.' }));
     expect(onBuy).toHaveBeenCalledWith(listings[0]);
-
-    const wantRows = screen.getAllByTestId('want-row');
-    expect(wantRows).toHaveLength(2);
-    expect(wantRows[0]).toHaveTextContent('vantar 2 miða');
-    expect(within(wantRows[0]).getByText('hámark 11.900 kr.')).toBeInTheDocument();
-    expect(within(wantRows[1]).getByText('ekkert hámark')).toBeInTheDocument();
-    expect(within(wantRows[0]).getByRole('link', { name: 'Selja til: Anna Lísa' })).toHaveAttribute('href', '/selja?event=ev-1');
+    expect(screen.queryByTestId('want-row')).not.toBeInTheDocument();
   });
 
-  it('marks the viewer’s own tickets ("Skoða") and request', () => {
-    wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={() => undefined} currentUserId="u-gudrun" />);
+  it('marks the viewer’s own tickets ("Skoða")', () => {
+    wrap(<OrderBook event={event} listings={listings} onBuy={() => undefined} currentUserId="u-gudrun" />);
     expect(screen.getByText('Þínir miðar')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Skoða þína miða' })).toHaveAttribute('href', '/eg?flipi=solur');
     expect(screen.getAllByRole('button', { name: /^Kaupa: / })).toHaveLength(1);
   });
 
-  it('empty lists offer "Láta mig vita" and the want form', () => {
-    wrap(<OrderBook event={event} listings={[]} requests={[]} onBuy={() => undefined} />);
+  it('an empty list says how many watch the event and offers "Láta mig vita"', () => {
+    wrap(<OrderBook event={event} listings={[]} onBuy={() => undefined} />);
     expect(screen.getByText('Engir miðar til sölu núna.')).toBeInTheDocument();
-    expect(screen.getByText('2 manns bíða.')).toBeInTheDocument();
+    expect(screen.getByText('2 vakta þennan viðburð.')).toBeInTheDocument();
     expect(screen.getByText('Vilt þú láta vita þegar miðar koma?')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Láta mig vita' })).toHaveAttribute('href', '/vidburdir/ev-1?vakta=1');
-    expect(screen.getByText('Enginn hefur óskað eftir miðum enn.')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ég vil kaupa' })).toHaveAttribute('href', '/oska?event=ev-1');
+    expect(screen.queryByRole('link', { name: 'Ég vil kaupa' })).not.toBeInTheDocument();
   });
 
   it('shows an error state with retry', () => {
     const retry = vi.fn();
-    wrap(<OrderBook event={event} listings={undefined} requests={undefined} error={new Error('failed to fetch')} retry={retry} onBuy={() => undefined} />);
+    wrap(<OrderBook event={event} listings={undefined} error={new Error('failed to fetch')} retry={retry} onBuy={() => undefined} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Náði ekki sambandi við Miðatorg');
     fireEvent.click(screen.getByRole('button', { name: 'Reyna aftur' }));
     expect(retry).toHaveBeenCalled();
   });
 
-  it('phone: both lists stay stacked, no tabs', () => {
+  it('phone: a plain list, no tabs', () => {
     setMatchMedia(false);
-    wrap(<OrderBook event={event} listings={listings} requests={requests} onBuy={() => undefined} />);
+    wrap(<OrderBook event={event} listings={listings} onBuy={() => undefined} />);
     expect(screen.queryByRole('tab')).not.toBeInTheDocument();
     expect(screen.getAllByTestId('sell-row')).toHaveLength(2);
-    expect(screen.getAllByTestId('want-row')).toHaveLength(2);
   });
 });
 
@@ -644,7 +647,7 @@ describe('AlertButton', () => {
     const trigger = await screen.findByRole('button', { name: 'Láta mig vita' });
     expect(trigger).toHaveAttribute('aria-pressed', 'false');
     fireEvent.click(trigger);
-    const input = await screen.findByLabelText(/Hámarksverð á miða/);
+    const input = await screen.findByLabelText(/Láta vita ef verðið er/);
     fireEvent.change(input, { target: { value: '15000' } });
     fireEvent.click(screen.getByRole('button', { name: 'Vista' }));
     expect(screen.getByText('Hámark getur ekki verið hærra en miðaverð, 11.900 kr.')).toBeInTheDocument();
@@ -689,12 +692,18 @@ describe('EventPage', () => {
     expect(screen.getAllByTestId('stat-tile')).toHaveLength(4);
     expect(screen.getByRole('heading', { name: 'Miðar til sölu' })).toBeInTheDocument();
     expect(await screen.findAllByTestId('sell-row')).toHaveLength(2);
-    expect(screen.getAllByTestId('want-row')).toHaveLength(2);
+    expect(screen.queryByTestId('want-row')).not.toBeInTheDocument();
     await waitFor(() => expect(screen.getByTestId('chart-current')).toHaveTextContent('9.900 kr.'));
     expect(screen.getByRole('heading', { name: 'Hvernig virkar þetta?' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Um viðburðinn' })).toBeInTheDocument();
     expect(screen.getByTestId('mobile-cta')).toHaveTextContent('Kaupa miða');
     expect(document.title).toContain('Vínartónleikar');
+    // search engines: canonical link, description and a schema.org event
+    expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toMatch(/\/vidburdir\/ev-1$/);
+    expect(document.head.querySelector('meta[name="description"]')?.getAttribute('content')).toContain('Vínartónleikar');
+    const ld = JSON.parse(document.getElementById('mt-page-jsonld')?.textContent ?? '{}');
+    expect(ld['@type']).toBe('MusicEvent');
+    expect(ld.offers).toMatchObject({ '@type': 'AggregateOffer', priceCurrency: 'ISK', lowPrice: 9900, offerCount: 3 });
   });
 
   it('signed out: Kaupa sends to the login page with a return URL', async () => {

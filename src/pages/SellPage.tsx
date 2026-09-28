@@ -1,6 +1,5 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useT } from '../lib/i18n';
-import { href } from '../lib/paths';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import { PageContainer } from '../components/layout/PageContainer';
 import { ListingForm } from '../components/forms/ListingForm';
@@ -20,15 +19,6 @@ export default function SellPage() {
           <p className="mt-1 text-[13px] text-muted-foreground">{t('forms.sell.intro')}</p>
         </header>
         <ListingForm preselectEventId={preselect} />
-        <p className="mt-4 text-[12.5px] text-muted-foreground">
-          {t('forms.sell.wantInsteadText')}{' '}
-          <Link
-            to={href(preselect ? `/oska?event=${encodeURIComponent(preselect)}` : '/oska')}
-            className="font-medium text-foreground underline underline-offset-2"
-          >
-            {t('nav.want')}
-          </Link>
-        </p>
       </div>
     </PageContainer>
   );

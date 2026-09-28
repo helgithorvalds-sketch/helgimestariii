@@ -209,12 +209,13 @@ describe('DayPicker', () => {
 describe('EventSheet', () => {
   it('shows price, counts and the three actions for an event with tickets', () => {
     const onClose = vi.fn();
-    wrap(<EventSheet event={makeEvent({ id: 'e1', title: 'Vínartónleikar', min_ask: 9900, face_value_min: 11900, tickets_available: 3, wanted_tickets: 2 })} onClose={onClose} />);
+    wrap(<EventSheet event={makeEvent({ id: 'e1', title: 'Vínartónleikar', min_ask: 9900, face_value_min: 11900, tickets_available: 3, watchers: 2, tix_availability: 'sold_out' })} onClose={onClose} />);
     const sheet = screen.getByTestId('event-sheet');
     expect(within(sheet).getByRole('heading', { name: 'Vínartónleikar' })).toBeInTheDocument();
     expect(sheet).toHaveTextContent('Frá 9.900 kr.');
     expect(sheet).toHaveTextContent('3 miðar til sölu');
-    expect(sheet).toHaveTextContent('vantar 2 miða');
+    expect(sheet).toHaveTextContent('2 vakta');
+    expect(within(sheet).getByTestId('tix-badge')).toHaveTextContent('Uppselt á tix.is');
     expect(within(sheet).getByRole('link', { name: 'Skoða viðburð' })).toHaveAttribute('href', '/vidburdir/e1');
     expect(within(sheet).getByRole('link', { name: 'Selja miða' })).toHaveAttribute('href', '/selja?event=e1');
     expect(within(sheet).getByRole('link', { name: /Láta mig vita/ })).toHaveAttribute('href', '/vidburdir/e1?vakta=1');

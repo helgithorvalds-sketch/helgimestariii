@@ -54,7 +54,7 @@ export default {
     // sort
     'sort.label': 'Raða eftir',
     'sort.date': 'Næst á dagskrá',
-    'sort.demand': 'Mest eftirspurn',
+    'sort.demand': 'Vinsælast',
     'sort.price': 'Lægsta verð',
 
     // deal statuses
@@ -249,7 +249,7 @@ export default {
 
     'sort.label': 'Sort by',
     'sort.date': 'Soonest',
-    'sort.demand': 'Most wanted',
+    'sort.demand': 'Most popular',
     'sort.price': 'Lowest price',
 
     'dealStatus.reserved': 'Reserved',

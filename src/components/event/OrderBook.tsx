@@ -5,18 +5,16 @@ import { cn } from '@/lib/utils';
 import { useLocale, useT } from '../../lib/i18n';
 import { href } from '../../lib/paths';
 import { formatNumber } from '../../lib/format';
-import type { ListingWithSeller, MarketEvent, RequestWithBuyer } from '../../lib/types';
+import type { ListingWithSeller, MarketEvent } from '../../lib/types';
 import { ErrorState } from '../common/ErrorState';
 import { secondaryButtonClass } from '../common/buttonClasses';
 import { pluralSuffix } from '../market/helpers';
 import { SellRow } from './SellRow';
-import { WantRow } from './WantRow';
 import { isEventOpen } from './eventUtils';
 
 export type OrderBookProps = {
   event: MarketEvent;
   listings: ListingWithSeller[] | undefined;
-  requests: RequestWithBuyer[] | undefined;
   loading?: boolean;
   error?: unknown;
   retry?: () => void;
@@ -60,16 +58,15 @@ function SectionHead({ id, title, count }: { id: string; title: string; count?: 
 }
 
 /**
- * "Miðar til sölu" and "Óskað eftir": two plain lists of white bordered rows,
- * stacked, each with its own empty state. Keeps the OrderBook name and props.
+ * "Miðar til sölu": a plain list of white bordered rows, or — when nobody is selling —
+ * how many people watch the event and the "Láta mig vita" button.
  */
-export function OrderBook({ event, listings, requests, loading = false, error, retry, onBuy, currentUserId, className }: OrderBookProps) {
+export function OrderBook({ event, listings, loading = false, error, retry, onBuy, currentUserId, className }: OrderBookProps) {
   const t = useT();
   const [locale] = useLocale();
   const open = isEventOpen(event);
   const sellRows = listings ?? [];
-  const wantRows = requests ?? [];
-  const waiting = event.requests_active ?? wantRows.length;
+  const waiting = event.watchers ?? 0;
 
   if (error !== undefined && error !== null) {
     return (
@@ -123,41 +120,6 @@ export function OrderBook({ event, listings, requests, loading = false, error, r
         )}
       </section>
 
-      <section aria-labelledby="mt-want-h" data-testid="want-column">
-        <SectionHead
-          id="mt-want-h"
-          title={t('event.book.want')}
-          count={
-            !loading && wantRows.length > 0
-              ? t(`event.book.requests${pluralSuffix(wantRows.length, locale)}`, { count: formatNumber(wantRows.length, locale) })
-              : undefined
-          }
-        />
-        {loading ? (
-          <SkeletonRows />
-        ) : wantRows.length === 0 ? (
-          <div className="mt-panel flex flex-col items-start gap-3 p-4 sm:flex-row sm:items-center sm:justify-between" role="status">
-            <p className="text-[15px]">
-              <span className="font-medium">{t('event.book.wantEmpty')}</span>
-              {open && <span className="block text-[14px] text-muted-foreground">{t('event.book.wantEmptyAsk')}</span>}
-            </p>
-            {open && (
-              <Button asChild variant="outline" size="sm" className={cn(EMPTY_BUTTON, secondaryButtonClass)}>
-                <Link to={href(`/oska?event=${event.id}`)}>{t('event.want')}</Link>
-              </Button>
-            )}
-          </div>
-        ) : (
-          <>
-            <ul className="mt-panel divide-y divide-border">
-              {wantRows.map((r) => (
-                <WantRow key={r.id} request={r} isOwn={!!currentUserId && r.buyer_id === currentUserId} disabled={!open} />
-              ))}
-            </ul>
-            <p className="mt-2 text-[13px] text-muted-foreground">{t('event.book.wantFoot')}</p>
-          </>
-        )}
-      </section>
     </div>
   );
 }

@@ -26,8 +26,11 @@ export const TILE_ATTRIBUTION: string =
 // ---------------------------------------------------------------------------
 export const PARAM_DAY = 'dagur';
 export const NEXT_DAYS = 30;
-/** `next30` = the next 30 days (default, so the map is never empty); otherwise a local date key. */
-export type DaySelection = 'next30' | string;
+/**
+ * `next30` = the next 30 days (the map's default, so it is never empty); `all` = no date
+ * limit (the list's default); otherwise a local date key (YYYY-MM-DD).
+ */
+export type DaySelection = 'next30' | 'all' | string;
 
 const DAY_KEY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -74,7 +77,7 @@ export function rangeFor(sel: DaySelection, now: Date = new Date()): { from: str
   return { from: from.toISOString(), to: addDays(start, 1).toISOString() };
 }
 
-export type DayOption = { value: DaySelection; date: Date | null; kind: 'next30' | 'today' | 'tomorrow' | 'date' };
+export type DayOption = { value: DaySelection; date: Date | null; kind: 'next30' | 'all' | 'today' | 'tomorrow' | 'date' };
 
 /** Chips: "Næstu 30 dagar", "Í dag", "Á morgun", then the following days. */
 export function dayOptions(now: Date = new Date(), days = 14): DayOption[] {
