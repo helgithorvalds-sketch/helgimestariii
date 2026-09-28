@@ -42,6 +42,7 @@ export const FIXTURE_TABLES = [
   'mt_price_snapshots',
   'mt_settings',
   'mt_public_settings',
+  'mt_places',
   'mt_deals',
   'mt_messages',
   'mt_ratings',

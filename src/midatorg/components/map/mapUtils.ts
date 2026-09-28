@@ -111,26 +111,40 @@ export type ScreenPoint = { x: number; y: number };
 export type Cluster = { key: string; points: MapPoint[]; lat: number; lng: number };
 
 /**
- * Grid clustering in screen space: points whose projected pixels fall into the same
- * `cell`-sized square become one cluster. Deterministic (input order) and O(n).
- * The cluster sits at the mean of its points.
+ * Greedy distance clustering in screen space: each point joins the first cluster whose
+ * centre is within `radius` pixels, otherwise it starts a new one. Unlike a fixed grid,
+ * two pins can never end up overlapping across a cell border. Deterministic (input
+ * order); O(n·k), fine for the few hundred events a map shows. The cluster sits at the
+ * mean of its points.
  */
-export function clusterPoints(points: MapPoint[], project: (p: MapPoint) => ScreenPoint, cell = 56): Cluster[] {
-  const buckets = new Map<string, MapPoint[]>();
+export function clusterPoints(points: MapPoint[], project: (p: MapPoint) => ScreenPoint, radius = 52): Cluster[] {
+  type Acc = { points: MapPoint[]; sx: number; sy: number };
+  const accs: Acc[] = [];
   for (const p of points) {
     const { x, y } = project(p);
-    const key = `${Math.floor(x / cell)}:${Math.floor(y / cell)}`;
-    const list = buckets.get(key);
-    if (list) list.push(p);
-    else buckets.set(key, [p]);
+    let target: Acc | null = null;
+    for (const acc of accs) {
+      const cx = acc.sx / acc.points.length;
+      const cy = acc.sy / acc.points.length;
+      if ((cx - x) ** 2 + (cy - y) ** 2 <= radius * radius) {
+        target = acc;
+        break;
+      }
+    }
+    if (target) {
+      target.points.push(p);
+      target.sx += x;
+      target.sy += y;
+    } else {
+      accs.push({ points: [p], sx: x, sy: y });
+    }
   }
-  const out: Cluster[] = [];
-  for (const [key, list] of buckets) {
-    const lat = list.reduce((s, p) => s + p.lat, 0) / list.length;
-    const lng = list.reduce((s, p) => s + p.lng, 0) / list.length;
-    out.push({ key: list.length === 1 ? list[0].event.id : `c:${key}:${list.length}`, points: list, lat, lng });
-  }
-  return out;
+  return accs.map((acc) => {
+    const lat = acc.points.reduce((sum, p) => sum + p.lat, 0) / acc.points.length;
+    const lng = acc.points.reduce((sum, p) => sum + p.lng, 0) / acc.points.length;
+    const key = acc.points.length === 1 ? acc.points[0].event.id : `c:${acc.points[0].event.id}:${acc.points.length}`;
+    return { key, points: acc.points, lat, lng };
+  });
 }
 
 /** Minimal HTML escaping for strings placed inside Leaflet divIcon markup. */

@@ -298,11 +298,25 @@ async function main() {
   const ids = pickIds();
   const events = readFixture('mt_events_market');
   const titleOf = (id) => events.find((e) => e.id === id)?.title ?? '';
+  // the upcoming day with the most pinned events, for the map-with-a-day screenshot
+  const busiestDay = () => {
+    const counts = new Map();
+    for (const e of events) {
+      if (e.status !== 'upcoming' || e.map_lat == null || new Date(e.starts_at) <= new Date()) continue;
+      const d = new Date(e.starts_at);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? '30';
+  };
 
   const publicPages = [
-    { slug: 'home', path: '/midatorg', expect: [titleOf(ids.eventWithListings)] },
+    { slug: 'home', path: '/midatorg' },
+    { slug: 'home-list', path: '/midatorg?syn=listi', expect: [titleOf(ids.eventWithListings)] },
     { slug: 'home-search', path: '/midatorg?q=har' },
-    { slug: 'home-tonleikar', path: '/midatorg?flokkur=tonleikar' },
+    { slug: 'home-tonleikar', path: '/midatorg?syn=listi&flokkur=tonleikar' },
+    { slug: 'kort', path: '/midatorg/kort' },
+    { slug: 'kort-dagur', path: `/midatorg/kort?dagur=${busiestDay()}` },
     { slug: 'event-listings', path: `/midatorg/vidburdir/${ids.eventWithListings}`, expect: [titleOf(ids.eventWithListings)] },
     { slug: 'event-empty', path: `/midatorg/vidburdir/${ids.eventWithoutListings}`, expect: [titleOf(ids.eventWithoutListings)] },
     { slug: 'about', path: '/midatorg/um' },

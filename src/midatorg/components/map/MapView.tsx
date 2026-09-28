@@ -126,13 +126,17 @@ export function MapView({ toolbar }: MapViewProps) {
             <EventMap points={placed} selectedId={selectedId} onSelect={setSelectedId} onReady={setMap} className="absolute inset-0 z-0" />
           </Suspense>
 
-          <div role="group" aria-label={t('map.region.label')} className="absolute right-3 top-3 z-10 flex flex-col gap-1.5">
+          <div
+            role="group"
+            aria-label={t('map.region.label')}
+            className="absolute left-14 right-2 top-2 z-10 flex flex-row flex-wrap justify-end gap-1.5 sm:left-auto sm:right-3 sm:top-3 sm:flex-col"
+          >
             {(['all', 'capital', 'north'] as RegionKey[]).map((key) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => goRegion(key)}
-                className="h-9 rounded-full border border-border bg-card/95 px-3 text-[13px] font-medium shadow-sm hover:bg-card"
+                className="h-8 rounded-full border border-border bg-card/95 px-2.5 text-[12px] font-medium shadow-sm hover:bg-card sm:h-9 sm:px-3 sm:text-[13px]"
               >
                 {t(`map.region.${key}`)}
               </button>

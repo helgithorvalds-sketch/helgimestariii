@@ -70,7 +70,9 @@ export default function HomePage() {
     [state, setParams],
   );
 
-  const [view, setViewState] = useState<HomeView>(readHomeView);
+  // ?syn=kort|listi opens a specific view (shareable); otherwise the remembered choice, map first.
+  const synParam = params.get('syn');
+  const [view, setViewState] = useState<HomeView>(() => (synParam === 'listi' ? 'list' : synParam === 'kort' ? 'map' : readHomeView()));
   const setView = (v: HomeView) => {
     writeHomeView(v);
     setViewState(v);

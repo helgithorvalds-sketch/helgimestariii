@@ -76,7 +76,7 @@ function ClusteredMarkers({ points, selectedId, onSelect }: Pick<EventMapProps, 
   useMapEvents({ zoomend: () => setZoom(map.getZoom()) });
 
   const clusters: Cluster[] = useMemo(
-    () => clusterPoints(points, (p) => map.project([p.lat, p.lng], zoom), 56),
+    () => clusterPoints(points, (p) => map.project([p.lat, p.lng], zoom), 52),
     [points, map, zoom],
   );
 
@@ -123,6 +123,22 @@ function ClusteredMarkers({ points, selectedId, onSelect }: Pick<EventMapProps, 
   );
 }
 
+/**
+ * Zoom to the chosen day's events whenever the set of events changes (not when one is
+ * selected), so a busy Reykjavík evening spreads out instead of collapsing into one bubble.
+ */
+function FitToPoints({ points }: { points: MapPoint[] }) {
+  const map = useMap();
+  const signature = points.map((p) => p.event.id).join(',');
+  useEffect(() => {
+    if (points.length === 0) return;
+    const bounds = L.latLngBounds(points.map((p) => [p.lat, p.lng] as [number, number]));
+    map.fitBounds(bounds, { padding: [56, 56], maxZoom: 13, animate: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refit only when the set of events changes
+  }, [map, signature]);
+  return null;
+}
+
 function ReadyReporter({ onReady }: { onReady?: (map: L.Map) => void }) {
   const map = useMap();
   useEffect(() => {
@@ -147,6 +163,7 @@ export function EventMap({ points, selectedId, onSelect, onReady, className }: E
     >
       <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
       <ClusteredMarkers points={points} selectedId={selectedId} onSelect={onSelect} />
+      <FitToPoints points={points} />
       <ReadyReporter onReady={onReady} />
     </MapContainer>
   );
