@@ -49,3 +49,31 @@ export async function uploadAvatar(file: File): Promise<string> {
   await updateMyProfile({ avatar_url: url });
   return url;
 }
+
+/**
+ * Starts electronic-ID verification (rafræn skilríki) through the mt-eid edge function.
+ * Returns the provider URL to send the browser to; the provider then returns the user to
+ * `next` with ?eid=ok or ?eid=error&code=… . Throws Error('EID_NOT_CONFIGURED') until the
+ * provider secrets are set, Error('AUTH_REQUIRED') without a session, Error('EID_FAILED') otherwise.
+ */
+export async function startEidVerification(next: string): Promise<{ url: string }> {
+  const { data, error } = await supabase.functions.invoke<{ url?: string; code?: string }>(
+    `mt-eid/start?next=${encodeURIComponent(next)}`,
+    { method: 'GET' },
+  );
+  if (error) {
+    let code = 'EID_FAILED';
+    const context = (error as { context?: unknown }).context;
+    if (context instanceof Response) {
+      try {
+        const body = (await context.clone().json()) as { code?: unknown };
+        if (typeof body.code === 'string') code = body.code;
+      } catch {
+        /* non-JSON error body: keep the generic code */
+      }
+    }
+    throw new Error(code);
+  }
+  if (!data?.url) throw new Error('EID_FAILED');
+  return { url: data.url };
+}

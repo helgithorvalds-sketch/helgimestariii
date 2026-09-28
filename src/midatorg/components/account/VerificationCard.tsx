@@ -1,10 +1,14 @@
 import { useState, type ComponentType, type ReactNode } from 'react';
-import { Check, Mail, Phone, ShieldCheck, type LucideProps } from 'lucide-react';
+import { Check, Loader2, Mail, Phone, ShieldCheck, type LucideProps } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLocale, useT } from '../../lib/i18n';
 import { useAuth } from '../../lib/auth';
 import { formatDate } from '../../lib/format';
+import { useSettings } from '../../lib/queries';
+import { useErrorToast } from '../../lib/errors';
+import { startEidVerification } from '../../lib/api/profiles';
+import { settingBoolean } from '../admin/adminUtils';
 import { secondaryButtonClass } from '../common/buttonClasses';
 import { PhoneVerifyCard } from './PhoneVerifyCard';
 
@@ -53,7 +57,7 @@ function Row({
   );
 }
 
-/** Email ✓ · phone (SMS OTP via PhoneVerifyCard) · rafræn skilríki "Væntanlegt". */
+/** Email ✓ · phone (SMS OTP via PhoneVerifyCard) · rafræn skilríki (button when the admin switch `eid_enabled` is on, else "Væntanlegt"). */
 export function VerificationCard({ className }: { className?: string }) {
   const t = useT();
   const [locale] = useLocale();
@@ -63,6 +67,27 @@ export function VerificationCard({ className }: { className?: string }) {
   const emailConfirmed = !!user?.email_confirmed_at;
   const phoneVerified = !!profile?.phone_verified_at || (profile?.verification ?? 'none') !== 'none';
   const eidVerified = profile?.verification === 'eid';
+  const settings = useSettings();
+  const eidEnabled = settingBoolean(settings.data?.find((s) => s.key === 'eid_enabled')?.value);
+  const showError = useErrorToast();
+  const [eidBusy, setEidBusy] = useState(false);
+  const startEid = async () => {
+    setEidBusy(true);
+    try {
+      const { url } = await startEidVerification('/midatorg/eg');
+      window.location.assign(url);
+    } catch (err) {
+      showError(err);
+      setEidBusy(false);
+    }
+  };
+  const eidDetail = eidVerified
+    ? profile?.eid_verified_at
+      ? t('account.verification.eidDone', { date: formatDate(profile.eid_verified_at, locale), name: profile.legal_name ?? profile.display_name })
+      : undefined
+    : eidEnabled
+      ? t('account.verification.eidHint')
+      : t('account.verification.eidBody');
 
   return (
     <section className={cn('mt-panel p-4 sm:p-5', className)} aria-labelledby="mt-verification-title">
@@ -110,8 +135,16 @@ export function VerificationCard({ className }: { className?: string }) {
         <Row
           icon={ShieldCheck}
           label={t('account.verification.eid')}
-          status={eidVerified ? 'verified' : 'soon'}
-          detail={eidVerified ? undefined : t('account.verification.eidBody')}
+          status={eidVerified ? 'verified' : eidEnabled ? 'unverified' : 'soon'}
+          detail={eidDetail}
+          action={
+            !eidVerified && eidEnabled ? (
+              <Button type="button" size="sm" className="h-10 text-[13px] font-semibold sm:h-9" onClick={() => void startEid()} disabled={eidBusy}>
+                {eidBusy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+                {t('account.verification.eidStart')}
+              </Button>
+            ) : undefined
+          }
         />
       </ul>
     </section>

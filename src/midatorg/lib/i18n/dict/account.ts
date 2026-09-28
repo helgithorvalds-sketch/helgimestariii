@@ -94,6 +94,10 @@ export default {
     'account.verification.verifyPhone': 'Staðfesta símanúmer',
     'account.verification.comingSoon': 'Væntanlegt',
     'account.verification.eidBody': 'Staðfesting með rafrænum skilríkjum bætist við síðar.',
+    'account.verification.eidStart': 'Staðfesta með rafrænum skilríkjum',
+    'account.verification.eidHint': 'Þú skráir þig inn með rafrænum skilríkjum í símanum og færð merkið „Staðfestur“.',
+    'account.verification.eidDone': 'Staðfest {date} · {name}',
+    'account.verification.eidOk': 'Aðgangurinn er staðfestur með rafrænum skilríkjum.',
 
     // ------------------------------------------------------------ phone verify
     'account.phone.title': 'Staðfesta símanúmer',
@@ -275,6 +279,10 @@ export default {
     'account.verification.verifyPhone': 'Verify phone number',
     'account.verification.comingSoon': 'Coming soon',
     'account.verification.eidBody': 'Verification with electronic ID is coming later.',
+    'account.verification.eidStart': 'Verify with electronic ID',
+    'account.verification.eidHint': 'Sign in with the electronic ID on your phone to get the "Verified" badge.',
+    'account.verification.eidDone': 'Verified {date} · {name}',
+    'account.verification.eidOk': 'Your account is verified with electronic ID.',
 
     'account.phone.title': 'Verify phone number',
     'account.phone.label': 'Phone number',

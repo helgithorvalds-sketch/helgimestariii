@@ -61,6 +61,11 @@ export const CLIENT_ERROR_CODES = [
   'SAME_PASSWORD',
   'INVALID_PHONE',
   'SMS_SEND_FAILED',
+  // electronic ID (mt-eid edge function)
+  'EID_NOT_CONFIGURED',
+  'KENNITALA_IN_USE',
+  'EID_FAILED',
+  'EID_CANCELLED',
   'FILE_TOO_LARGE',
   'FILE_TYPE_NOT_ALLOWED',
   // edge functions (mt-fetch-tix-event / mt-import-tix), surfaced by lib/api/admin.ts

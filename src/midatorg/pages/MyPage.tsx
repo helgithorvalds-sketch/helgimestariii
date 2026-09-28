@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { Bell, ExternalLink, Search, Star, Tag, User, type LucideProps } from 'lucide-react';
-import type { ComponentType } from 'react';
+import { useEffect, type ComponentType } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
@@ -43,6 +44,30 @@ export default function MyPage() {
       },
       { replace: true },
     );
+
+  // Back from the electronic-ID provider: ?eid=ok | ?eid=error&code=… → toast, refresh, clean the URL.
+  const eidResult = params.get('eid');
+  const eidCode = params.get('code');
+  useEffect(() => {
+    if (!eidResult) return;
+    if (eidResult === 'ok') {
+      toast.success(t('account.verification.eidOk'));
+      void refreshProfile();
+    } else {
+      const known = ['EID_NOT_CONFIGURED', 'KENNITALA_IN_USE', 'EID_FAILED', 'EID_CANCELLED'];
+      toast.error(t(`errors.${eidCode && known.includes(eidCode) ? eidCode : 'EID_FAILED'}`));
+    }
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('eid');
+        next.delete('code');
+        return next;
+      },
+      { replace: true },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once per return from the provider
+  }, [eidResult]);
 
   const finishReset = () =>
     setParams(

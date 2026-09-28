@@ -71,6 +71,11 @@ vi.mock('../lib/api/profiles', async (importOriginal) => ({
   getPublicProfile: vi.fn(),
   updateMyProfile: vi.fn(),
   uploadAvatar: vi.fn(),
+  startEidVerification: vi.fn(),
+}));
+vi.mock('../lib/api/admin', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../lib/api/admin')>()),
+  getSettings: vi.fn(),
 }));
 
 import * as listingsApi from '../lib/api/listings';
@@ -78,6 +83,7 @@ import * as requestsApi from '../lib/api/requests';
 import * as alertsApi from '../lib/api/alerts';
 import * as ratingsApi from '../lib/api/ratings';
 import * as profilesApi from '../lib/api/profiles';
+import * as adminApi from '../lib/api/admin';
 import LoginPage from '../pages/LoginPage';
 import MyPage from '../pages/MyPage';
 import PublicProfilePage from '../pages/PublicProfilePage';
@@ -288,6 +294,7 @@ const selectTab = (name: string) => fireEvent.mouseDown(screen.getByRole('tab', 
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.mocked(adminApi.getSettings).mockResolvedValue([]);
   authState.current = auth({});
   vi.mocked(listingsApi.getMyProof).mockResolvedValue(null);
 });
@@ -791,5 +798,57 @@ describe('PublicProfilePage', () => {
     expect(alert).toHaveTextContent('Náði ekki sambandi við Miðatorg');
     fireEvent.click(within(alert).getByRole('button', { name: 'Reyna aftur' }));
     expect(await screen.findByRole('heading', { name: 'Bjarki Þór' })).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Electronic ID (rafræn skilríki)
+// ---------------------------------------------------------------------------
+describe('Electronic ID', () => {
+  const eidSetting = (on: boolean) => [{ key: 'eid_enabled', value: on, updated_at: '2026-09-28T00:00:00Z' }];
+  const eidRow = () => within(screen.getByRole('region', { name: 'Staðfesting' })).getByText('Rafræn skilríki').closest('li') as HTMLElement;
+
+  it('shows "Væntanlegt" and no button while the admin switch is off', async () => {
+    authState.current = auth({ user, profile, session: {} as AuthContextValue['session'] });
+    vi.mocked(adminApi.getSettings).mockResolvedValue(eidSetting(false));
+    renderMyPage();
+    await waitFor(() => expect(adminApi.getSettings).toHaveBeenCalled());
+    expect(within(eidRow()).getByText('Væntanlegt')).toBeInTheDocument();
+    expect(within(eidRow()).queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('offers the button when enabled, starts the flow and explains a missing configuration', async () => {
+    authState.current = auth({ user, profile, session: {} as AuthContextValue['session'] });
+    vi.mocked(adminApi.getSettings).mockResolvedValue(eidSetting(true));
+    vi.mocked(profilesApi.startEidVerification).mockRejectedValue(new Error('EID_NOT_CONFIGURED'));
+    renderMyPage();
+    const button = await within(await waitFor(eidRow)).findByRole('button', { name: 'Staðfesta með rafrænum skilríkjum' });
+    fireEvent.click(button);
+    await waitFor(() => expect(profilesApi.startEidVerification).toHaveBeenCalledWith('/midatorg/eg'));
+    await waitFor(() => expect(toastMock.error).toHaveBeenCalledWith('Staðfesting með rafrænum skilríkjum er ekki komin í gagnið enn þá.', undefined));
+  });
+
+  it('shows the verified state with date and legal name', async () => {
+    authState.current = auth({
+      user,
+      profile: { ...profile, verification: 'eid', eid_verified_at: '2026-09-20T12:00:00Z', legal_name: 'Guðrún Jónsdóttir', kennitala: '0101302989' },
+      session: {} as AuthContextValue['session'],
+    });
+    renderMyPage();
+    expect(within(eidRow()).getByText('Staðfest')).toBeInTheDocument();
+    expect(eidRow()).toHaveTextContent('Guðrún Jónsdóttir');
+    expect(eidRow()).not.toHaveTextContent('0101302989');
+  });
+
+  it('handles the return from the provider: success refreshes the profile, errors are translated', async () => {
+    const refreshProfile = vi.fn(async () => null);
+    authState.current = auth({ user, profile, session: {} as AuthContextValue['session'], refreshProfile });
+    const first = renderMyPage('/midatorg/eg?eid=ok');
+    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Aðgangurinn er staðfestur með rafrænum skilríkjum.'));
+    expect(refreshProfile).toHaveBeenCalled();
+    first.unmount();
+
+    renderMyPage('/midatorg/eg?eid=error&code=KENNITALA_IN_USE');
+    await waitFor(() => expect(toastMock.error).toHaveBeenCalledWith('Þessi kennitala er þegar tengd öðrum aðgangi.'));
   });
 });

@@ -188,6 +188,9 @@ export default {
     'admin.settings.hint.max_quantity_per_listing': 'Fleiri miða þarf að setja í sölu í fleiri en einu lagi.',
     'admin.settings.key.require_phone_to_sell': 'Krefjast staðfests símanúmers til að selja',
     'admin.settings.hint.require_phone_to_sell': 'Þegar kveikt er á þessu geta aðeins notendur með staðfest símanúmer skráð miða.',
+    'admin.settings.key.eid_enabled': 'Staðfesting með rafrænum skilríkjum',
+    'admin.settings.hint.eid_enabled':
+      'Sýnir notendum hnappinn „Staðfesta með rafrænum skilríkjum“. Kveiktu aðeins á þessu eftir að EID_ISSUER, EID_CLIENT_ID, EID_CLIENT_SECRET, EID_REDIRECT_URL og EID_APP_ORIGIN eru skráð í Supabase (Edge Functions → Secrets) og slóðin https://qiylxtybmlzvoadvbnca.supabase.co/functions/v1/mt-eid/callback er skráð hjá þjónustuaðilanum (t.d. Kenni).',
     'admin.settings.key.admin_emails': 'Netföng stjórnenda',
     'admin.settings.hint.admin_emails': 'Eitt netfang í hverri línu. Nýir notendur með þessi netföng verða sjálfkrafa stjórnendur.',
     'admin.settings.unit.minutes': 'mín.',
@@ -435,6 +438,9 @@ export default {
     'admin.settings.hint.max_quantity_per_listing': 'More tickets need to be split over several sales.',
     'admin.settings.key.require_phone_to_sell': 'Require a verified phone to sell',
     'admin.settings.hint.require_phone_to_sell': 'When on, only users with a verified phone number can list tickets.',
+    'admin.settings.key.eid_enabled': 'Electronic ID verification',
+    'admin.settings.hint.eid_enabled':
+      'Shows users the "Verify with electronic ID" button. Turn this on only after EID_ISSUER, EID_CLIENT_ID, EID_CLIENT_SECRET, EID_REDIRECT_URL and EID_APP_ORIGIN are set in Supabase (Edge Functions → Secrets) and https://qiylxtybmlzvoadvbnca.supabase.co/functions/v1/mt-eid/callback is registered with the provider (e.g. Kenni).',
     'admin.settings.key.admin_emails': 'Admin emails',
     'admin.settings.hint.admin_emails': 'One email per line. New users with these emails become admins automatically.',
     'admin.settings.unit.minutes': 'min',
