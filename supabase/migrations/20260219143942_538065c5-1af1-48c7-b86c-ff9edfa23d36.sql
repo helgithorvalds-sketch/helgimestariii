@@ -1,1 +1,0 @@
-ALTER TABLE public.companies ADD COLUMN finna_url text DEFAULT NULL;

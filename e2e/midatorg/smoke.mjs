@@ -8,16 +8,16 @@
  * (390x844) widths — logged out, as the test buyer (logged in through the UI)
  * and as an admin — and writes full-page screenshots plus a JSON report.
  *
- *   node e2e/midatorg/smoke.mjs                # vite preview (builds first if dist/ is missing)
- *   node e2e/midatorg/smoke.mjs --dev          # vite dev server instead of preview
- *   node e2e/midatorg/smoke.mjs --build        # force `vite build` before preview
- *   node e2e/midatorg/smoke.mjs --no-server --base http://127.0.0.1:8131   # reuse a running server
- *   node e2e/midatorg/smoke.mjs --only deals,me --widths 390
+ *   node e2e/smoke.mjs                # vite preview (builds first if dist/ is missing)
+ *   node e2e/smoke.mjs --dev          # vite dev server instead of preview
+ *   node e2e/smoke.mjs --build        # force `vite build` before preview
+ *   node e2e/smoke.mjs --no-server --base http://127.0.0.1:8131   # reuse a running server
+ *   node e2e/smoke.mjs --only deals,me --widths 390
  *
  * Playwright is resolved from $PW_MODULES (default: the scratchpad install) —
  * nothing is installed and no browsers are downloaded.
  *
- * Outputs: e2e/midatorg/screenshots/smoke-<slug>-<width>.png and smoke-report.json.
+ * Outputs: e2e/screenshots/smoke-<slug>-<width>.png and smoke-report.json.
  * Exit code 1 when any page has issues (page errors, console errors, overflow,
  * error panels, raw i18n keys, "undefined"/"NaN" in the visible text).
  */
@@ -267,7 +267,7 @@ async function visit(page, mock, entry, width, collectors) {
 }
 
 async function loginViaUi(page, email, password) {
-  await page.goto(`${BASE}/midatorg/innskra`, { waitUntil: 'load' });
+  await page.goto(`${BASE}/innskra`, { waitUntil: 'load' });
   await page.locator('#mt-login-email').waitFor({ state: 'visible', timeout: 20_000 });
   await page.fill('#mt-login-email', email);
   await page.fill('#mt-login-password', password);
@@ -311,33 +311,33 @@ async function main() {
   };
 
   const publicPages = [
-    { slug: 'home', path: '/midatorg' },
-    { slug: 'home-list', path: '/midatorg?syn=listi', expect: [titleOf(ids.eventWithListings)] },
-    { slug: 'home-search', path: '/midatorg?q=har' },
-    { slug: 'home-tonleikar', path: '/midatorg?syn=listi&flokkur=tonleikar' },
-    { slug: 'kort', path: '/midatorg/kort' },
-    { slug: 'kort-dagur', path: `/midatorg/kort?dagur=${busiestDay()}` },
-    { slug: 'event-listings', path: `/midatorg/vidburdir/${ids.eventWithListings}`, expect: [titleOf(ids.eventWithListings)] },
-    { slug: 'event-empty', path: `/midatorg/vidburdir/${ids.eventWithoutListings}`, expect: [titleOf(ids.eventWithoutListings)] },
-    { slug: 'about', path: '/midatorg/um' },
-    { slug: 'login', path: '/midatorg/innskra' },
+    { slug: 'home', path: '/' },
+    { slug: 'home-list', path: '/?syn=listi', expect: [titleOf(ids.eventWithListings)] },
+    { slug: 'home-search', path: '/?q=har' },
+    { slug: 'home-tonleikar', path: '/?syn=listi&flokkur=tonleikar' },
+    { slug: 'kort', path: '/kort' },
+    { slug: 'kort-dagur', path: `/kort?dagur=${busiestDay()}` },
+    { slug: 'event-listings', path: `/vidburdir/${ids.eventWithListings}`, expect: [titleOf(ids.eventWithListings)] },
+    { slug: 'event-empty', path: `/vidburdir/${ids.eventWithoutListings}`, expect: [titleOf(ids.eventWithoutListings)] },
+    { slug: 'about', path: '/um' },
+    { slug: 'login', path: '/innskra' },
   ];
   const buyerPages = [
-    { slug: 'deals', path: '/midatorg/vidskipti' },
-    { slug: 'deal-reserved', path: `/midatorg/vidskipti/${ids.reservedDeal}` },
-    ...(ids.ticketSentDeal ? [{ slug: 'deal-ticket-sent', path: `/midatorg/vidskipti/${ids.ticketSentDeal}` }] : []),
-    { slug: 'deal-completed', path: `/midatorg/vidskipti/${ids.completedDeal}` },
-    { slug: 'me', path: '/midatorg/eg', expect: [ids.buyer.display_name] },
-    { slug: 'sell', path: `/midatorg/selja?event=${ids.eventWithListings}` },
-    { slug: 'want', path: `/midatorg/oska?event=${ids.eventWithListings}` },
-    { slug: 'notifications', path: '/midatorg/tilkynningar' },
-    { slug: 'profile-seller', path: `/midatorg/notendur/${ids.seedSeller}` },
+    { slug: 'deals', path: '/vidskipti' },
+    { slug: 'deal-reserved', path: `/vidskipti/${ids.reservedDeal}` },
+    ...(ids.ticketSentDeal ? [{ slug: 'deal-ticket-sent', path: `/vidskipti/${ids.ticketSentDeal}` }] : []),
+    { slug: 'deal-completed', path: `/vidskipti/${ids.completedDeal}` },
+    { slug: 'me', path: '/eg', expect: [ids.buyer.display_name] },
+    { slug: 'sell', path: `/selja?event=${ids.eventWithListings}` },
+    { slug: 'want', path: `/oska?event=${ids.eventWithListings}` },
+    { slug: 'notifications', path: '/tilkynningar' },
+    { slug: 'profile-seller', path: `/notendur/${ids.seedSeller}` },
   ];
   const adminPages = [
-    { slug: 'admin', path: '/midatorg/stjorn' },
-    { slug: 'admin-users', path: '/midatorg/stjorn?flipi=notendur' },
-    { slug: 'admin-events', path: '/midatorg/stjorn?flipi=vidburdir' },
-    { slug: 'admin-settings', path: '/midatorg/stjorn?flipi=stillingar' },
+    { slug: 'admin', path: '/stjorn' },
+    { slug: 'admin-users', path: '/stjorn?flipi=notendur' },
+    { slug: 'admin-events', path: '/stjorn?flipi=vidburdir' },
+    { slug: 'admin-settings', path: '/stjorn?flipi=stillingar' },
   ];
   const wanted = (entry) => ONLY.length === 0 || ONLY.includes(entry.slug);
 
@@ -345,7 +345,7 @@ async function main() {
   if (!NO_SERVER) {
     if (MODE === 'preview') buildIfNeeded();
     server = startServer();
-    await waitForServer(`${BASE}/midatorg`);
+    await waitForServer(`${BASE}/`);
     console.log(`[smoke] ${MODE} server ready at ${BASE}`);
   }
 

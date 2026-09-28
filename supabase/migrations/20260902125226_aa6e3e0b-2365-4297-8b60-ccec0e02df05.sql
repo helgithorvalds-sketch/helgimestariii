@@ -1,1 +1,0 @@
-ALTER TABLE public.companies ADD COLUMN IF NOT EXISTS svif_valid boolean NOT NULL DEFAULT false;

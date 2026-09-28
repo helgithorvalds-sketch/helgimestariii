@@ -1,1 +1,0 @@
-ALTER TABLE public.companies ADD COLUMN finished_sub_status text;

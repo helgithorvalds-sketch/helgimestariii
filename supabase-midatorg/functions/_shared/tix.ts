@@ -237,6 +237,7 @@ function parseJsonLoose(raw: string): unknown {
   } catch {
     // Second chance: trailing commas and raw control characters are the
     // usual culprits in hand-written templates.
+    // eslint-disable-next-line no-control-regex -- stripping control characters is the point
     text = text.replace(/,\s*([}\]])/g, '$1').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '');
     try {
       return JSON.parse(text);

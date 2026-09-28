@@ -1,1 +1,0 @@
-ALTER TABLE public.companies ADD COLUMN paid_sub_status text DEFAULT NULL;

@@ -1,1 +1,0 @@
--- No schema change needed, stage is a text column that accepts any value

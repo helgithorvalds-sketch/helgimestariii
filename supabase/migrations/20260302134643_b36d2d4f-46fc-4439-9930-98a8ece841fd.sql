@@ -1,1 +1,0 @@
-ALTER TABLE public.companies ADD COLUMN contacts jsonb NOT NULL DEFAULT '[]'::jsonb;

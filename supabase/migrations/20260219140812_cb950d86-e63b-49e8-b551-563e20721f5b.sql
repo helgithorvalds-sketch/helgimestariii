@@ -1,1 +1,0 @@
-ALTER TABLE public.companies ADD COLUMN next_call_at timestamp with time zone DEFAULT NULL;
