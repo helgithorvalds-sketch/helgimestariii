@@ -7,6 +7,7 @@ import { RequireAdmin, RequireAuth } from './lib/auth';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const EventPage = lazy(() => import('./pages/EventPage'));
+const MapPage = lazy(() => import('./pages/MapPage'));
 const SellPage = lazy(() => import('./pages/SellPage'));
 const WantPage = lazy(() => import('./pages/WantPage'));
 const DealsPage = lazy(() => import('./pages/DealsPage'));
@@ -39,6 +40,7 @@ export function MidatorgRoutes() {
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<Page><HomePage /></Page>} />
+        <Route path="kort" element={<Page><MapPage /></Page>} />
         <Route path="vidburdir/:eventId" element={<Page><EventPage /></Page>} />
         <Route path="notendur/:userId" element={<Page><PublicProfilePage /></Page>} />
         <Route path="innskra" element={<Page><LoginPage /></Page>} />

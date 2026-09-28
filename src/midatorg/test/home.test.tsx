@@ -296,6 +296,9 @@ describe('MarketGrid', () => {
 // HomePage
 // ---------------------------------------------------------------------------
 describe('HomePage', () => {
+  // These cover the list view; the map view (the first-visit default) has its own suite in map.test.tsx.
+  beforeEach(() => window.localStorage.setItem('midatorg-view', 'list'));
+
   it('loads the events from the URL params and shows title, intro, pills, sort and cards', async () => {
     listMock().mockResolvedValue([listing(), waitlist()]);
     wrap(<HomePage />, '/midatorg?flokkur=tonleikar&rada=price');

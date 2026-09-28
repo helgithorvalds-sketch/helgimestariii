@@ -99,9 +99,10 @@ export function useMarketEvents(params: MarketEventsParams = {}, opts?: QueryOpt
 }
 
 /** Infinite version for the "Sýna fleiri" grid. `hasNextPage` is true while a page came back full. */
-export function useInfiniteMarketEvents(params: Omit<MarketEventsParams, 'offset'> = {}) {
+export function useInfiniteMarketEvents(params: Omit<MarketEventsParams, 'offset'> = {}, opts: { enabled?: boolean } = {}) {
   const limit = params.limit ?? DEFAULT_PAGE_SIZE;
   return useInfiniteQuery({
+    enabled: opts.enabled ?? true,
     queryKey: mtKeys.eventsInfinite({ ...params, limit }),
     queryFn: ({ pageParam }) => events.listMarketEvents({ ...params, limit, offset: pageParam }),
     initialPageParam: 0,

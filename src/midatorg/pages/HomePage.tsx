@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useMemo, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CalendarX, SearchX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,10 @@ import { CategoryChips } from '../components/market/CategoryChips';
 import { MarketGrid } from '../components/market/MarketGrid';
 import { SortMenu } from '../components/market/SortMenu';
 import { HOME_PAGE_SIZE, buildHomeParams, parseHomeParams, type HomeParams } from '../components/market/helpers';
+import { ViewToggle } from '../components/map/ViewToggle';
+import { readHomeView, writeHomeView, type HomeView } from '../components/map/viewPref';
+
+const MapView = lazy(() => import('../components/map/MapView').then((m) => ({ default: m.MapView })));
 
 const INTRO_KEY = 'midatorg-intro-dismissed';
 
@@ -66,12 +70,20 @@ export default function HomePage() {
     [state, setParams],
   );
 
+  const [view, setViewState] = useState<HomeView>(readHomeView);
+  const setView = (v: HomeView) => {
+    writeHomeView(v);
+    setViewState(v);
+  };
+  // A search from the top bar always shows results as a list.
+  const showMap = view === 'map' && !state.q;
+
   const list = useInfiniteMarketEvents({
     q: state.q || undefined,
     category: state.category ?? undefined,
     sort: state.sort,
     limit: HOME_PAGE_SIZE,
-  });
+  }, { enabled: !showMap });
   const events = useMemo(() => list.data?.pages.flat() ?? [], [list.data]);
 
   const isFiltered = !!state.q || !!state.category;
@@ -124,12 +136,29 @@ export default function HomePage() {
     );
   }
 
+  if (showMap) {
+    return (
+      <Suspense
+        fallback={
+          <PageContainer className="py-6">
+            <div className="h-[60dvh] animate-pulse rounded-xl bg-secondary" />
+          </PageContainer>
+        }
+      >
+        <MapView toolbar={<ViewToggle value="map" onChange={setView} />} />
+      </Suspense>
+    );
+  }
+
   return (
     <PageContainer className="py-5 sm:py-8">
       <header className="mb-5">
-        <h1 id="mt-market-heading" className="text-[26px] font-bold leading-tight tracking-tight sm:text-[30px]">
-          {t('home.title')}
-        </h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 id="mt-market-heading" className="text-[26px] font-bold leading-tight tracking-tight sm:text-[30px]">
+            {t('home.title')}
+          </h1>
+          {!state.q && <ViewToggle value="list" onChange={setView} />}
+        </div>
         <Intro />
       </header>
 
