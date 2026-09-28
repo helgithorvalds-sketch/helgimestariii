@@ -56,7 +56,7 @@ export const NUMBER_SETTING_KEYS = [
   'max_active_reservations',
   'max_quantity_per_listing',
 ] as const;
-export const BOOLEAN_SETTING_KEYS = ['require_phone_to_sell', 'eid_enabled', 'sms_enabled'] as const;
+export const BOOLEAN_SETTING_KEYS = ['require_phone_to_sell', 'eid_enabled', 'sms_enabled', 'push_enabled'] as const;
 export const LIST_SETTING_KEYS = ['admin_emails'] as const;
 
 export type NumberSettingKey = (typeof NUMBER_SETTING_KEYS)[number];
