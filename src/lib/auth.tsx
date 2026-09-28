@@ -1,9 +1,13 @@
 /* eslint-disable react-refresh/only-export-components -- provider, hook and guards live together by design */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import type { Session, User } from '@supabase/supabase-js';
+import type { EmailOtpType, Session, User } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 import { supabase } from './supabase';
 import { href } from './paths';
+import { SITE_URL } from './seo';
+import { isNativeApp } from './platform';
+import { parseApiError } from './errors';
 import type { Profile } from './types';
 import { PageSkeleton } from '../components/common/PageSkeleton';
 import { ErrorState } from '../components/common/ErrorState';
@@ -30,6 +34,13 @@ export type AuthContextValue = {
   signOut: () => Promise<void>;
   /** `next` as in `signUp`. */
   sendMagicLink: (email: string, next?: string | null) => Promise<void>;
+  /** Sends the sign-up confirmation e-mail again. */
+  resendConfirmation: (email: string, next?: string | null) => Promise<void>;
+  /**
+   * Signs in with the 6-digit code from an e-mail (magic link or sign-up confirmation).
+   * Works in the phone apps, where the e-mail link would open the browser instead.
+   */
+  verifyEmailCode: (email: string, code: string, kind: 'magic' | 'signup') => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (newPassword: string) => Promise<void>;
   /** Sends an SMS code to the number (E.164, e.g. +3546661234) via `updateUser({ phone })`. */
@@ -43,8 +54,32 @@ export type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+/**
+ * Where auth e-mails send people back to. On the website that is the page's own origin;
+ * in the phone apps (origin capacitor://localhost) it is the public website.
+ */
 function appOrigin(): string {
-  return typeof window === 'undefined' ? '' : window.location.origin;
+  if (typeof window === 'undefined' || isNativeApp()) return SITE_URL;
+  return window.location.origin;
+}
+
+/**
+ * Supabase sends people back with `#error=…&error_code=otp_expired` (or `?error=…`) when an
+ * e-mail link is expired or already used. Returns the parsed code and strips it from the URL.
+ */
+function takeAuthLinkError(): string | null {
+  if (typeof window === 'undefined') return null;
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const query = new URLSearchParams(window.location.search);
+  const code = hash.get('error_code') ?? query.get('error_code');
+  const error = hash.get('error') ?? query.get('error');
+  if (!code && !error) return null;
+  const description = hash.get('error_description') ?? query.get('error_description') ?? '';
+  for (const key of ['error', 'error_code', 'error_description']) query.delete(key);
+  const search = query.toString();
+  window.history.replaceState(window.history.state, '', window.location.pathname + (search ? `?${search}` : ''));
+  if (code === 'otp_expired' || /expired|invalid/i.test(description)) return 'LINK_EXPIRED';
+  return code ?? error;
 }
 
 /** Absolute redirect URL for auth e-mails: only a same-origin app path is honoured, anything else lands on the market home. */
@@ -67,6 +102,7 @@ async function fetchProfile(uid: string): Promise<ProfileFetch> {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const t = useT();
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileError, setProfileError] = useState<unknown>(undefined);
@@ -87,6 +123,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfileError(result.error);
     }
     return result.profile;
+  }, []);
+
+  // An expired or already-used e-mail link: say so instead of silently showing a signed-out page.
+  useEffect(() => {
+    const code = takeAuthLinkError();
+    if (code) toast.error(t(parseApiError(code).key), { duration: 10_000 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on the first render after the redirect
   }, []);
 
   useEffect(() => {
@@ -147,6 +190,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         },
       });
       if (error) throw error;
+      // With e-mail confirmation on, Supabase answers a sign-up for an existing address with a
+      // user that has no identities (and sends nothing) instead of an error.
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        throw new Error('USER_ALREADY_REGISTERED');
+      }
       return { needsConfirmation: !data.session, user: data.user };
     },
     [],
@@ -165,6 +213,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: email.trim(),
       options: { emailRedirectTo: emailRedirect(next), shouldCreateUser: true },
     });
+    if (error) throw error;
+  }, []);
+
+  const resendConfirmation = useCallback(async (email: string, next?: string | null) => {
+    const { error } = await supabase.auth.resend({ type: 'signup', email: email.trim(), options: { emailRedirectTo: emailRedirect(next) } });
+    if (error) throw error;
+  }, []);
+
+  const verifyEmailCode = useCallback(async (email: string, code: string, kind: 'magic' | 'signup') => {
+    const type: EmailOtpType = kind === 'signup' ? 'signup' : 'email';
+    const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token: code.replace(/\s/g, ''), type });
     if (error) throw error;
   }, []);
 
@@ -212,6 +271,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signUp,
       signOut,
       sendMagicLink,
+      resendConfirmation,
+      verifyEmailCode,
       resetPassword,
       updatePassword,
       startPhoneVerification,
@@ -228,6 +289,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signUp,
       signOut,
       sendMagicLink,
+      resendConfirmation,
+      verifyEmailCode,
       resetPassword,
       updatePassword,
       startPhoneVerification,

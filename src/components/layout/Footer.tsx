@@ -21,6 +21,12 @@ export function Footer() {
           <Link to={href('/um#reglur')} className={linkClass}>
             {t('footer.rules')}
           </Link>
+          <Link to={href('/skilmalar')} className={linkClass}>
+            {t('footer.terms')}
+          </Link>
+          <Link to={href('/personuvernd')} className={linkClass}>
+            {t('footer.privacy')}
+          </Link>
           <Link to={href('/um#samband')} className={linkClass}>
             {t('footer.contact')}
           </Link>

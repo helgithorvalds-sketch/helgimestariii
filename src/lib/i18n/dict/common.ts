@@ -171,6 +171,12 @@ export default {
     'footer.about': 'Um Miðatorg',
     'footer.rules': 'Reglur',
     'footer.contact': 'Hafa samband',
+    'footer.terms': 'Skilmálar',
+    'footer.privacy': 'Persónuvernd',
+    'legal.version': 'Útgáfa {version} · {date}',
+    'legal.contents': 'Efnisyfirlit',
+    'legal.termsLink': 'Lesa skilmálana',
+    'legal.privacyLink': 'Lesa persónuverndarstefnuna',
 
     // locale toggle
     'locale.is': 'Íslenska',
@@ -355,6 +361,12 @@ export default {
     'footer.about': 'About Miðatorg',
     'footer.rules': 'Rules',
     'footer.contact': 'Contact',
+    'footer.terms': 'Terms',
+    'footer.privacy': 'Privacy',
+    'legal.version': 'Version {version} · {date}',
+    'legal.contents': 'Contents',
+    'legal.termsLink': 'Read the terms',
+    'legal.privacyLink': 'Read the privacy policy',
 
     'locale.is': 'Íslenska',
     'locale.en': 'English',

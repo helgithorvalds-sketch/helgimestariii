@@ -9,7 +9,8 @@ import { formatDateTime } from '../../lib/format';
 import { initialsOf, placeholderClass } from '../../lib/avatar';
 import type { MarketEvent } from '../../lib/types';
 import { CategoryBadge } from '../common/CategoryBadge';
-import { TixBadge, tixBadgeOf } from '../common/TixBadge';
+import { TixBadge } from '../common/TixBadge';
+import { tixBadgeOf } from '../common/tixSignals';
 import { secondaryButtonClass } from '../common/buttonClasses';
 import { isEventOpen } from './eventUtils';
 

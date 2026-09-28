@@ -120,6 +120,8 @@ function auth(partial: Partial<AuthContextValue>): AuthContextValue {
     signUp: async () => ({ needsConfirmation: false, user: null }),
     signOut: noop,
     sendMagicLink: noop,
+    resendConfirmation: noop,
+    verifyEmailCode: noop,
     resetPassword: noop,
     updatePassword: noop,
     startPhoneVerification: noop,
@@ -292,9 +294,11 @@ function renderProfile(id = 'u2') {
 const type = (el: HTMLElement, value: string) => fireEvent.change(el, { target: { value } });
 const selectTab = (name: string) => fireEvent.mouseDown(screen.getByRole('tab', { name }), { button: 0 });
 
+const smsOn = [{ key: 'sms_enabled', value: true, updated_at: '2026-09-28T00:00:00Z' }];
+
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.mocked(adminApi.getSettings).mockResolvedValue([]);
+  vi.mocked(adminApi.getSettings).mockResolvedValue(smsOn);
   authState.current = auth({});
   vi.mocked(listingsApi.getMyProof).mockResolvedValue(null);
 });
@@ -446,7 +450,8 @@ describe('LoginPage', () => {
 
   it('signs up with a display name and shows "Staðfestu netfangið þitt" when confirmation is needed', async () => {
     const signUp = vi.fn(async () => ({ needsConfirmation: true, user: null }));
-    authState.current = auth({ signUp });
+    const resendConfirmation = vi.fn(noop);
+    authState.current = auth({ signUp, resendConfirmation });
     renderLogin();
     selectTab('Nýskrá');
     type(await screen.findByLabelText('Nafn'), 'Guðrún Jóns');
@@ -456,7 +461,55 @@ describe('LoginPage', () => {
     await waitFor(() => expect(signUp).toHaveBeenCalledWith('gudrun@example.is', 'leyni123', 'Guðrún Jóns', expect.any(String)));
     expect(await screen.findByText('Staðfestu netfangið þitt')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('gudrun@example.is');
-    expect(screen.queryByRole('button', { name: 'Senda aftur' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Senda aftur' }));
+    await waitFor(() => expect(resendConfirmation).toHaveBeenCalledWith('gudrun@example.is', expect.any(String)));
+  });
+
+  it('confirms the sign-up with the 6-digit code from the e-mail', async () => {
+    const signUp = vi.fn(async () => ({ needsConfirmation: true, user: null }));
+    const verifyEmailCode = vi.fn(noop);
+    authState.current = auth({ signUp, verifyEmailCode });
+    renderLogin('/innskra?next=%2Fselja');
+    selectTab('Nýskrá');
+    type(await screen.findByLabelText('Nafn'), 'Guðrún Jóns');
+    type(screen.getByLabelText('Netfang'), 'gudrun@example.is');
+    type(screen.getByLabelText('Lykilorð'), 'leyni123');
+    fireEvent.click(screen.getByRole('button', { name: 'Stofna aðgang' }));
+    const code = await screen.findByLabelText('Eða sláðu inn kóðann úr póstinum');
+    type(code, '12');
+    fireEvent.click(screen.getByRole('button', { name: 'Staðfesta kóða' }));
+    expect(await screen.findByText('Kóðinn er rangur eða útrunninn.')).toBeInTheDocument();
+    expect(verifyEmailCode).not.toHaveBeenCalled();
+    type(code, '123 456');
+    fireEvent.click(screen.getByRole('button', { name: 'Staðfesta kóða' }));
+    await waitFor(() => expect(verifyEmailCode).toHaveBeenCalledWith('gudrun@example.is', '123456', 'signup'));
+    expect(await screen.findByTestId('location')).toHaveTextContent('/selja');
+  });
+
+  it('an unconfirmed account gets the confirmation panel instead of a dead end', async () => {
+    const signIn = vi.fn(async () => {
+      throw { code: 'email_not_confirmed', message: 'Email not confirmed' };
+    });
+    authState.current = auth({ signIn });
+    renderLogin();
+    type(screen.getByLabelText('Netfang'), 'gudrun@example.is');
+    type(screen.getByLabelText('Lykilorð'), 'leyni123');
+    fireEvent.click(screen.getByRole('button', { name: 'Innskrá' }));
+    expect(await screen.findByText('Staðfestu netfangið þitt')).toBeInTheDocument();
+    expect(toastMock.error).toHaveBeenCalledWith('Þú þarft að staðfesta netfangið áður en þú skráir þig inn.');
+    expect(screen.getByRole('button', { name: 'Senda aftur' })).toBeInTheDocument();
+  });
+
+  it('says so when the mailer cannot reach the address', async () => {
+    const sendMagicLink = vi.fn(async () => {
+      throw { code: 'email_address_not_authorized', message: 'Email address not authorized' };
+    });
+    authState.current = auth({ sendMagicLink });
+    renderLogin();
+    fireEvent.click(screen.getByRole('button', { name: 'Senda innskráningartengil' }));
+    type(screen.getByLabelText('Netfang'), 'gudrun@example.is');
+    fireEvent.click(screen.getByRole('button', { name: 'Senda tengil' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Ekki tókst að senda tölvupóst á þetta netfang.');
   });
 
   it('translates "user already registered" and "weak password" on signup', async () => {
@@ -524,7 +577,16 @@ describe('MyPage', () => {
     authState.current = auth({ user, profile, session: {} as AuthContextValue['session'] });
   });
 
-  it('overview: profile form prefilled and verification rows', () => {
+  it('overview: phone verification says "Væntanlegt" until an SMS provider is switched on', async () => {
+    vi.mocked(adminApi.getSettings).mockResolvedValue([]);
+    renderMyPage();
+    const verification = screen.getByRole('region', { name: 'Staðfesting' });
+    await waitFor(() => expect(adminApi.getSettings).toHaveBeenCalled());
+    await waitFor(() => expect(within(verification).getAllByText('Væntanlegt')).toHaveLength(2));
+    expect(within(verification).queryByRole('button', { name: 'Staðfesta símanúmer' })).not.toBeInTheDocument();
+  });
+
+  it('overview: profile form prefilled and verification rows', async () => {
     renderMyPage();
     expect(screen.getByRole('heading', { name: 'Notandasíða' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Skoða eins og aðrir sjá' })).toHaveAttribute('href', '/notendur/u1');
@@ -534,7 +596,7 @@ describe('MyPage', () => {
     const verification = screen.getByRole('region', { name: 'Staðfesting' });
     expect(verification).toHaveTextContent('gudrun@example.is');
     expect(within(verification).getByText('Staðfest')).toBeInTheDocument();
-    expect(within(verification).getByRole('button', { name: 'Staðfesta símanúmer' })).toBeInTheDocument();
+    expect(await within(verification).findByRole('button', { name: 'Staðfesta símanúmer' })).toBeInTheDocument();
     expect(within(verification).getByText('Væntanlegt')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Vista' })).toBeDisabled();
   });
@@ -555,7 +617,7 @@ describe('MyPage', () => {
     const verifyPhone = vi.fn(noop);
     authState.current = auth({ user, profile, startPhoneVerification, verifyPhone });
     renderMyPage();
-    fireEvent.click(screen.getByRole('button', { name: 'Staðfesta símanúmer' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Staðfesta símanúmer' }));
     // no permanent developer caveat about the SMS provider
     expect(screen.queryByText(/SMS-sendingar geta verið óvirkar/)).not.toBeInTheDocument();
     type(screen.getByLabelText('Símanúmer'), '666 1234');
@@ -576,7 +638,7 @@ describe('MyPage', () => {
     });
     authState.current = auth({ user, profile, startPhoneVerification });
     renderMyPage();
-    fireEvent.click(screen.getByRole('button', { name: 'Staðfesta símanúmer' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Staðfesta símanúmer' }));
     type(screen.getByLabelText('Símanúmer'), '12');
     fireEvent.click(screen.getByRole('button', { name: 'Senda kóða' }));
     expect(await screen.findByText('Símanúmerið er ekki gilt.')).toBeInTheDocument();

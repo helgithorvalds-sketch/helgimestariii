@@ -69,6 +69,8 @@ export function VerificationCard({ className }: { className?: string }) {
   const eidVerified = profile?.verification === 'eid';
   const settings = useSettings();
   const eidEnabled = settingBoolean(settings.data?.find((s) => s.key === 'eid_enabled')?.value);
+  // SMS codes need a provider in Supabase Auth; until the admin turns this on the row says "Væntanlegt".
+  const smsEnabled = settingBoolean(settings.data?.find((s) => s.key === 'sms_enabled')?.value);
   const showError = useErrorToast();
   const [eidBusy, setEidBusy] = useState(false);
   const startEid = async () => {
@@ -107,14 +109,14 @@ export function VerificationCard({ className }: { className?: string }) {
         <Row
           icon={Phone}
           label={t('account.verification.phone')}
-          status={phoneVerified ? 'verified' : 'unverified'}
+          status={phoneVerified ? 'verified' : smsEnabled ? 'unverified' : 'soon'}
           detail={
             phoneVerified && profile?.phone_verified_at
               ? t('account.verification.verifiedOn', { date: formatDate(profile.phone_verified_at, locale) })
               : undefined
           }
           action={
-            !phoneVerified && !showPhone ? (
+            !phoneVerified && smsEnabled && !showPhone ? (
               <Button
                 type="button"
                 variant="outline"
@@ -127,7 +129,7 @@ export function VerificationCard({ className }: { className?: string }) {
             ) : undefined
           }
         />
-        {showPhone && !phoneVerified && (
+        {showPhone && smsEnabled && !phoneVerified && (
           <li className="py-3">
             <PhoneVerifyCard onVerified={() => setShowPhone(false)} />
           </li>

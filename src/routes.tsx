@@ -17,6 +17,7 @@ const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
+const LegalPage = lazy(() => import('./pages/LegalPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
@@ -63,6 +64,8 @@ export function MidatorgRoutes() {
         <Route path="innskra" element={<Page><LoginPage /></Page>} />
         <Route path="oska" element={<WantRedirect />} />
         <Route path="um" element={<Page><AboutPage /></Page>} />
+        <Route path="skilmalar" element={<Page><LegalPage doc="terms" /></Page>} />
+        <Route path="personuvernd" element={<Page><LegalPage doc="privacy" /></Page>} />
 
         <Route element={<RequireAuth />}>
           <Route path="selja" element={<Page><SellPage /></Page>} />

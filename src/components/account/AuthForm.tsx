@@ -83,7 +83,18 @@ function EmailField({
   );
 }
 
-function LoginForm({ next, onMagic, onReset }: { next: string; onMagic: () => void; onReset: () => void }) {
+function LoginForm({
+  next,
+  onMagic,
+  onReset,
+  onUnconfirmed,
+}: {
+  next: string;
+  onMagic: () => void;
+  onReset: () => void;
+  /** The account exists but the e-mail was never confirmed: offer to send it again. */
+  onUnconfirmed: (email: string) => void;
+}) {
   const t = useT();
   const { signIn } = useAuth();
   const navigate = useNavigate();
@@ -101,7 +112,12 @@ function LoginForm({ next, onMagic, onReset }: { next: string; onMagic: () => vo
       toast.success(t('account.login.success'));
       navigate(next, { replace: true });
     } catch (err) {
-      const message = t(parseApiError(err).key);
+      const parsed = parseApiError(err);
+      if (parsed.code === 'EMAIL_NOT_CONFIRMED') {
+        onUnconfirmed(values.email);
+        return;
+      }
+      const message = t(parsed.key);
       setFormError(message);
       toast.error(message);
     }
@@ -222,8 +238,12 @@ function SignupForm({ next, onConfirm }: { next: string; onConfirm: (email: stri
       </Button>
       <p className="text-[12px] text-muted-foreground">
         {t('account.login.rulesPrefix')}{' '}
-        <Link to={href('/um#reglur')} className="underline underline-offset-2 hover:text-foreground">
+        <Link to={href('/skilmalar')} className="underline underline-offset-2 hover:text-foreground">
           {t('account.login.rulesLink')}
+        </Link>{' '}
+        {t('account.login.rulesAnd')}{' '}
+        <Link to={href('/personuvernd')} className="underline underline-offset-2 hover:text-foreground">
+          {t('account.login.privacyLink')}
         </Link>
         .
       </p>
@@ -282,7 +302,58 @@ function EmailLinkForm({ kind, next, onSent, onBack }: { kind: LinkKind; next: s
   );
 }
 
-function SentPanel({ sent, onResend, onBack }: { sent: Sent; onResend?: () => Promise<void>; onBack: () => void }) {
+/** 6-digit code from the e-mail (when the e-mail template includes it): signs in without leaving the app. */
+function CodeForm({ email, kind, next }: { email: string; kind: 'magic' | 'signup'; next: string }) {
+  const t = useT();
+  const { verifyEmailCode } = useAuth();
+  const navigate = useNavigate();
+  const [code, setCode] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = code.replace(/\s/g, '');
+    if (!/^\d{6,10}$/.test(clean)) {
+      setError(t('errors.OTP_INVALID'));
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      await verifyEmailCode(email, clean, kind);
+      toast.success(t('account.login.success'));
+      navigate(next, { replace: true });
+    } catch (err) {
+      setError(t(parseApiError(err).key));
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <form onSubmit={submit} noValidate className="space-y-2 border-t border-border pt-4 text-left">
+      <Label htmlFor="mt-email-code">{t('account.login.codeLabel')}</Label>
+      <div className="flex gap-2">
+        <Input
+          id="mt-email-code"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          maxLength={12}
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          className={cn(authInputClass, 'tracking-[0.3em]', error && 'border-destructive')}
+          aria-invalid={!!error}
+          aria-describedby={error ? 'mt-email-code-error' : undefined}
+        />
+        <Button type="submit" className="h-10 shrink-0 px-4 text-[13px] font-semibold" disabled={busy}>
+          {busy ? t('account.login.codeWorking') : t('account.login.codeSubmit')}
+        </Button>
+      </div>
+      <FieldMessage id="mt-email-code-error" message={error} />
+    </form>
+  );
+}
+
+function SentPanel({ sent, next, onResend, onBack }: { sent: Sent; next: string; onResend?: () => Promise<void>; onBack: () => void }) {
   const t = useT();
   const [busy, setBusy] = useState(false);
   const isConfirm = sent.kind === 'confirm';
@@ -311,6 +382,7 @@ function SentPanel({ sent, onResend, onBack }: { sent: Sent; onResend?: () => Pr
           {t(isConfirm ? 'account.login.confirmBody' : 'account.login.sentBody', { email: sent.email })}
         </p>
       </div>
+      {sent.kind !== 'reset' && <CodeForm email={sent.email} kind={isConfirm ? 'signup' : 'magic'} next={next} />}
       <div className="flex flex-col gap-2">
         {onResend && (
           <Button type="button" variant="outline" className={cn(primaryButtonClass, secondaryButtonClass)} onClick={resend} disabled={busy}>
@@ -339,7 +411,8 @@ export type AuthFormProps = {
  * parsed, shown inline and toasted.
  */
 export function AuthForm({ mode, next, onSwitchMode }: AuthFormProps) {
-  const { sendMagicLink, resetPassword } = useAuth();
+  const t = useT();
+  const { sendMagicLink, resetPassword, resendConfirmation } = useAuth();
   const [view, setView] = useState<'form' | LinkKind>('form');
   const [sent, setSent] = useState<Sent | null>(null);
 
@@ -355,8 +428,8 @@ export function AuthForm({ mode, next, onSwitchMode }: AuthFormProps) {
         ? () => sendMagicLink(sent.email, next)
         : sent.kind === 'reset'
           ? () => resetPassword(sent.email)
-          : undefined;
-    return <SentPanel sent={sent} onResend={resend} onBack={backToLogin} />;
+          : () => resendConfirmation(sent.email, next);
+    return <SentPanel sent={sent} next={next} onResend={resend} onBack={backToLogin} />;
   }
   if (view !== 'form') {
     return <EmailLinkForm next={next} kind={view} onSent={(email) => setSent({ kind: view, email })} onBack={() => setView('form')} />;
@@ -364,5 +437,15 @@ export function AuthForm({ mode, next, onSwitchMode }: AuthFormProps) {
   if (mode === 'signup') {
     return <SignupForm next={next} onConfirm={(email) => setSent({ kind: 'confirm', email })} />;
   }
-  return <LoginForm next={next} onMagic={() => setView('magic')} onReset={() => setView('reset')} />;
+  return (
+    <LoginForm
+      next={next}
+      onMagic={() => setView('magic')}
+      onReset={() => setView('reset')}
+      onUnconfirmed={(email) => {
+        toast.error(t('account.login.notConfirmedHint'));
+        setSent({ kind: 'confirm', email });
+      }}
+    />
+  );
 }

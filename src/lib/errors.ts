@@ -56,6 +56,8 @@ export const CLIENT_ERROR_CODES = [
   'WEAK_PASSWORD',
   'RATE_LIMITED',
   'OTP_INVALID',
+  'LINK_EXPIRED',
+  'EMAIL_SEND_FAILED',
   'SIGNUP_DISABLED',
   'INVALID_EMAIL',
   'SAME_PASSWORD',
@@ -128,6 +130,7 @@ const AUTH_CODE_MAP: Record<string, ApiErrorCode> = {
   over_email_send_rate_limit: 'RATE_LIMITED',
   over_sms_send_rate_limit: 'RATE_LIMITED',
   otp_expired: 'OTP_INVALID',
+  email_address_not_authorized: 'EMAIL_SEND_FAILED',
   otp_disabled: 'OTP_INVALID',
   signup_disabled: 'SIGNUP_DISABLED',
   email_address_invalid: 'INVALID_EMAIL',
@@ -213,6 +216,11 @@ export function parseApiError(err: unknown): ParsedError {
   }
   if (haystack.includes('signups not allowed') || haystack.includes('signup is disabled')) {
     return make('SIGNUP_DISABLED', message);
+  }
+  // Supabase's built-in mailer only reaches the project's own team ("Email address not authorized"),
+  // or the SMTP server refused the message ("Error sending confirmation email").
+  if (haystack.includes('address not authorized') || (haystack.includes('error sending') && haystack.includes('email'))) {
+    return make('EMAIL_SEND_FAILED', message);
   }
   if (haystack.includes('unable to validate email') || haystack.includes('invalid email')) {
     return make('INVALID_EMAIL', message);

@@ -236,6 +236,8 @@ function auth(partial: Partial<AuthContextValue>): AuthContextValue {
     signUp: async () => ({ needsConfirmation: false, user: null }),
     signOut: noop,
     sendMagicLink: noop,
+    resendConfirmation: noop,
+    verifyEmailCode: noop,
     resetPassword: noop,
     updatePassword: noop,
     startPhoneVerification: noop,
