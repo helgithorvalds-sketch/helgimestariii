@@ -1,7 +1,7 @@
 // Tests for helpers.ts. Run with: node --experimental-strip-types supabase-midatorg/functions/mt-eid/helpers_test.mjs
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { base64url, listFromEnv, normaliseKennitala, pickClaim, pkceChallenge, randomToken, safeNextPath, withParams } from './helpers.ts';
+import { base64url, decodeNext, encodeNext, listFromEnv, normaliseKennitala, pickClaim, pkceChallenge, randomToken, safeNextPath, withParams } from './helpers.ts';
 
 test('PKCE S256 matches the RFC 7636 appendix B example', async () => {
   assert.equal(await pkceChallenge('dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk'), 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM');
@@ -48,4 +48,13 @@ test('helpers for URLs and env lists', () => {
   assert.equal(withParams('https://app.example/eg?flipi=yfirlit', { eid: 'ok' }), 'https://app.example/eg?flipi=yfirlit&eid=ok');
   assert.deepEqual(listFromEnv('national_id, kennitala ssn', ['x']), ['national_id', 'kennitala', 'ssn']);
   assert.deepEqual(listFromEnv(undefined, ['x']), ['x']);
+});
+
+test('app return: encode/decode keeps the path safe and remembers the phone app', () => {
+  assert.equal(encodeNext('/eg', true), 'app:/eg');
+  assert.deepEqual(decodeNext('app:/eg?flipi=yfirlit'), { path: '/eg?flipi=yfirlit', app: true });
+  assert.deepEqual(decodeNext('/eg'), { path: '/eg', app: false });
+  assert.deepEqual(decodeNext('app://evil.example'), { path: '/eg', app: true });
+  assert.deepEqual(decodeNext(null), { path: '/eg', app: false });
+  assert.equal(withParams('is.midatorg.app://app/eg', { eid: 'ok' }), 'is.midatorg.app://app/eg?eid=ok');
 });

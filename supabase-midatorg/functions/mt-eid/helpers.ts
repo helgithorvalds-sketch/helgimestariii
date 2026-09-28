@@ -53,6 +53,20 @@ export function safeNextPath(input: unknown, fallback = '/eg'): string {
   return value;
 }
 
+/** Where the phone apps get the user back after electronic ID (custom URL scheme, see capacitor.config.ts). */
+export const APP_RETURN_BASE = 'is.midatorg.app://app';
+
+/** next_path as stored in mt_eid_sessions: 'app:' + path when the phone app started the flow. */
+export function encodeNext(path: string, app: boolean): string {
+  return app ? `app:${path}` : path;
+}
+
+export function decodeNext(stored: string | null | undefined): { path: string; app: boolean } {
+  const value = stored ?? '';
+  const app = value.startsWith('app:');
+  return { path: safeNextPath(app ? value.slice(4) : value), app };
+}
+
 /** First non-empty string (or number) among the candidate claim names. */
 export function pickClaim(claims: Record<string, unknown>, names: string[]): string | null {
   for (const name of names) {

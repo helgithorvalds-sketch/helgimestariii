@@ -8,6 +8,8 @@ import { formatDate } from '../../lib/format';
 import { useSettings } from '../../lib/queries';
 import { useErrorToast } from '../../lib/errors';
 import { startEidVerification } from '../../lib/api/profiles';
+import { openExternal } from '../../lib/native';
+import { isNativeApp } from '../../lib/platform';
 import { settingBoolean } from '../admin/adminUtils';
 import { secondaryButtonClass } from '../common/buttonClasses';
 import { PhoneVerifyCard } from './PhoneVerifyCard';
@@ -76,8 +78,9 @@ export function VerificationCard({ className }: { className?: string }) {
   const startEid = async () => {
     setEidBusy(true);
     try {
-      const { url } = await startEidVerification('/eg');
-      window.location.assign(url);
+      const { url } = await startEidVerification('/eg', { app: isNativeApp() });
+      await openExternal(url);
+      if (isNativeApp()) setEidBusy(false);
     } catch (err) {
       showError(err);
       setEidBusy(false);

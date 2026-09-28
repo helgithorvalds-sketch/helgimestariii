@@ -1,10 +1,13 @@
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, ExternalLink, Flag, ShoppingCart, Tag } from 'lucide-react';
+import { ChevronRight, ExternalLink, Flag, Share2, ShoppingCart, Tag } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useT } from '../../lib/i18n';
 import { href } from '../../lib/paths';
+import { SITE_URL } from '../../lib/seo';
+import { shareLink } from '../../lib/native';
 import { formatDateTime } from '../../lib/format';
 import { initialsOf, placeholderClass } from '../../lib/avatar';
 import type { MarketEvent } from '../../lib/types';
@@ -117,6 +120,21 @@ export function EventHeader({ event, onReport, onBuy, alertButton, className }: 
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             )}
+            <button
+              type="button"
+              onClick={async () => {
+                const result = await shareLink({
+                  title: event.title,
+                  text: t('event.shareText', { title: event.title }),
+                  url: `${SITE_URL}/vidburdir/${event.id}`,
+                });
+                if (result === 'copied') toast.success(t('event.shareCopied'));
+              }}
+              className="inline-flex min-h-[28px] items-center gap-1 rounded-sm py-1 text-[13px] font-medium text-primary underline-offset-2 hover:underline"
+            >
+              <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+              {t('event.share')}
+            </button>
             <button
               type="button"
               onClick={onReport}

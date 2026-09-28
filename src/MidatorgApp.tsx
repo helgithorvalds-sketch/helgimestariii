@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { I18nProvider } from './lib/i18n';
 import { AuthProvider } from './lib/auth';
 import { MidatorgRoutes } from './routes';
+import { NativeBridge } from './components/layout/NativeBridge';
 import './theme.css';
 
 const ROOT_CLASS = 'midatorg';
@@ -25,6 +26,7 @@ export default function MidatorgApp() {
     <div className="midatorg min-h-screen bg-background text-foreground" style={{ colorScheme: 'light' }}>
       <I18nProvider>
         <AuthProvider>
+          <NativeBridge />
           <MidatorgRoutes />
         </AuthProvider>
       </I18nProvider>

@@ -1,11 +1,12 @@
 // mt-eid — rafræn skilríki (Icelandic electronic ID) through any OpenID Connect provider
 // (Kenni is the reference; Auðkenni, Signicat and Dokobit speak the same protocol).
 //
-//   GET  /mt-eid/start?next=/eg   (Authorization: Bearer <app access token>)
+//   GET  /mt-eid/start?next=/eg[&app=1]   (Authorization: Bearer <app access token>)
 //        → 200 { url }  the provider's authorize URL (authorization code + PKCE S256)
 //        → 503 { code: 'EID_NOT_CONFIGURED' } until the secrets below exist
 //   GET  /mt-eid/callback?code&state         (the provider redirects the browser here)
-//        → 302 to EID_APP_ORIGIN + next with ?eid=ok | ?eid=error&code=…
+//        → 302 to EID_APP_ORIGIN + next (is.midatorg.app://app + next when app=1)
+//          with ?eid=ok | ?eid=error&code=…
 //
 // Deployed with verify_jwt = false because the provider redirects a bare browser to
 // /callback; /start verifies the app user itself, /callback trusts only the single-use
@@ -24,7 +25,18 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createRemoteJWKSet, jwtVerify } from 'npm:jose@5';
 import { CORS_HEADERS, json, log, serviceClient, bearerToken } from '../_shared/edge.ts';
-import { listFromEnv, normaliseKennitala, pickClaim, pkceChallenge, randomToken, safeNextPath, withParams } from './helpers.ts';
+import {
+  APP_RETURN_BASE,
+  decodeNext,
+  encodeNext,
+  listFromEnv,
+  normaliseKennitala,
+  pickClaim,
+  pkceChallenge,
+  randomToken,
+  safeNextPath,
+  withParams,
+} from './helpers.ts';
 
 const FN = 'mt-eid';
 const SESSION_TTL_MS = 10 * 60 * 1000;
@@ -106,12 +118,13 @@ async function start(req: Request, url: URL): Promise<Response> {
   const nonce = randomToken();
   const verifier = randomToken(48);
   const next = safeNextPath(url.searchParams.get('next'));
+  const fromApp = url.searchParams.get('app') === '1';
   const { error } = await admin.from('mt_eid_sessions').insert({
     state,
     user_id: userId,
     code_verifier: verifier,
     nonce,
-    next_path: next,
+    next_path: encodeNext(next, fromApp),
     expires_at: new Date(Date.now() + SESSION_TTL_MS).toISOString(),
   });
   if (error) {
@@ -160,8 +173,9 @@ async function callback(url: URL): Promise<Response> {
     : { data: null };
   if (session) await admin.from('mt_eid_sessions').delete().eq('state', state); // single use
 
+  const returnTo = decodeNext(session?.next_path);
   const back = (params: Record<string, string>) =>
-    redirect(withParams(`${cfg.appOrigin}${safeNextPath(session?.next_path)}`, params));
+    redirect(withParams(`${returnTo.app ? APP_RETURN_BASE : cfg.appOrigin}${returnTo.path}`, params));
 
   if (!session || new Date(session.expires_at).getTime() < Date.now()) {
     log(FN, 'warn', 'unknown or expired state');

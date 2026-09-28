@@ -692,6 +692,33 @@ export type Database = {
         }
         Relationships: []
       }
+      mt_push_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          last_seen_at: string
+          platform: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform: string
+          token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mt_ratings: {
         Row: {
           comment: string | null
@@ -1150,6 +1177,7 @@ export type Database = {
       mt_fmt_kr: { Args: { p_amount: number }; Returns: string }
       mt_import_events: { Args: { p_events: Json }; Returns: Json }
       mt_set_tix_signals: { Args: { p_ranked: string[]; p_sold_out?: string[] }; Returns: Json }
+      mt_register_push_token: { Args: { p_token: string; p_platform: string }; Returns: undefined }
       mt_app_path: { Args: { p_link: string }; Returns: string }
       mt_internal: { Args: never; Returns: boolean }
       mt_is_admin: { Args: never; Returns: boolean }

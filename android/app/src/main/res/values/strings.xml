@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Miðatorg</string>
+    <string name="title_activity_main">Miðatorg</string>
+    <string name="package_name">is.midatorg.app</string>
+    <string name="custom_url_scheme">is.midatorg.app</string>
+</resources>

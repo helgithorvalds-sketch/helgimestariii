@@ -872,7 +872,7 @@ describe('Electronic ID', () => {
     renderMyPage();
     const button = await within(await waitFor(eidRow)).findByRole('button', { name: 'Staðfesta með rafrænum skilríkjum' });
     fireEvent.click(button);
-    await waitFor(() => expect(profilesApi.startEidVerification).toHaveBeenCalledWith('/eg'));
+    await waitFor(() => expect(profilesApi.startEidVerification).toHaveBeenCalledWith('/eg', { app: false }));
     await waitFor(() => expect(toastMock.error).toHaveBeenCalledWith('Staðfesting með rafrænum skilríkjum er ekki komin í gagnið enn þá.', undefined));
   });
 

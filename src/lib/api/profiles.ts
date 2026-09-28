@@ -56,9 +56,9 @@ export async function uploadAvatar(file: File): Promise<string> {
  * `next` with ?eid=ok or ?eid=error&code=… . Throws Error('EID_NOT_CONFIGURED') until the
  * provider secrets are set, Error('AUTH_REQUIRED') without a session, Error('EID_FAILED') otherwise.
  */
-export async function startEidVerification(next: string): Promise<{ url: string }> {
+export async function startEidVerification(next: string, opts: { app?: boolean } = {}): Promise<{ url: string }> {
   const { data, error } = await supabase.functions.invoke<{ url?: string; code?: string }>(
-    `mt-eid/start?next=${encodeURIComponent(next)}`,
+    `mt-eid/start?next=${encodeURIComponent(next)}${opts.app ? '&app=1' : ''}`,
     { method: 'GET' },
   );
   if (error) {
