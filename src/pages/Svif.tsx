@@ -167,6 +167,7 @@ export default function Svif() {
 
 
   const handleToggleOff = async (c: Company) => {
+    if (!c.rejected && !window.confirm(`Ertu viss um að þú viljir merkja „${c.name}“ sem off?`)) return;
     await persist(
       { ...c, rejected: !c.rejected, rejectedAt: !c.rejected ? new Date().toISOString() : undefined },
       !c.rejected ? "Merkt sem off" : "Endurvirkjað"
