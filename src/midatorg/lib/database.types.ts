@@ -205,6 +205,36 @@ export type Database = {
           },
         ]
       }
+      mt_eid_sessions: {
+        Row: {
+          code_verifier: string
+          created_at: string
+          expires_at: string
+          next_path: string | null
+          nonce: string
+          state: string
+          user_id: string
+        }
+        Insert: {
+          code_verifier: string
+          created_at?: string
+          expires_at: string
+          next_path?: string | null
+          nonce: string
+          state: string
+          user_id: string
+        }
+        Update: {
+          code_verifier?: string
+          created_at?: string
+          expires_at?: string
+          next_path?: string | null
+          nonce?: string
+          state?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mt_events: {
         Row: {
           category: Database["public"]["Enums"]["mt_event_category"]
@@ -523,6 +553,27 @@ export type Database = {
           },
         ]
       }
+      mt_places: {
+        Row: {
+          lat: number
+          lng: number
+          name: string
+          stem: string
+        }
+        Insert: {
+          lat: number
+          lng: number
+          name: string
+          stem: string
+        }
+        Update: {
+          lat?: number
+          lng?: number
+          name?: string
+          stem?: string
+        }
+        Relationships: []
+      }
       mt_price_snapshots: {
         Row: {
           avg_ask: number | null
@@ -586,7 +637,11 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string
+          eid_provider: string | null
+          eid_verified_at: string | null
           id: string
+          kennitala: string | null
+          legal_name: string | null
           phone_verified_at: string | null
           role: string
           updated_at: string
@@ -599,7 +654,11 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name: string
+          eid_provider?: string | null
+          eid_verified_at?: string | null
           id: string
+          kennitala?: string | null
+          legal_name?: string | null
           phone_verified_at?: string | null
           role?: string
           updated_at?: string
@@ -612,7 +671,11 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string
+          eid_provider?: string | null
+          eid_verified_at?: string | null
           id?: string
+          kennitala?: string | null
+          legal_name?: string | null
           phone_verified_at?: string | null
           role?: string
           updated_at?: string
@@ -879,21 +942,33 @@ export type Database = {
         Row: {
           city: string | null
           created_at: string
+          geocode_source: string | null
+          geocoded_at: string | null
           id: string
+          lat: number | null
+          lng: number | null
           name: string
           tix_venue_id: string | null
         }
         Insert: {
           city?: string | null
           created_at?: string
+          geocode_source?: string | null
+          geocoded_at?: string | null
           id?: string
+          lat?: number | null
+          lng?: number | null
           name: string
           tix_venue_id?: string | null
         }
         Update: {
           city?: string | null
           created_at?: string
+          geocode_source?: string | null
+          geocoded_at?: string | null
           id?: string
+          lat?: number | null
+          lng?: number | null
           name?: string
           tix_venue_id?: string | null
         }
@@ -932,6 +1007,8 @@ export type Database = {
           last_sold_at: string | null
           last_sold_price: number | null
           listings_active: number | null
+          map_lat: number | null
+          map_lng: number | null
           max_bid: number | null
           min_ask: number | null
           requests_active: number | null
@@ -1049,6 +1126,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      mt_eid_apply: {
+        Args: { p_kennitala: string; p_name: string; p_provider: string; p_user: string }
+        Returns: undefined
       }
       mt_event_in_use: { Args: { p_event: string }; Returns: boolean }
       mt_expire_stale: { Args: never; Returns: Json }
