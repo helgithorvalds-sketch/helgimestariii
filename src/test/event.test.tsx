@@ -385,7 +385,7 @@ describe('StatTile / StatsRow', () => {
     expect(tiles[2]).toHaveTextContent('2 seljendur');
     expect(tiles[3]).toHaveTextContent('Vakta viðburðinn');
     expect(tiles[3]).toHaveTextContent('2');
-    expect(tiles[3]).toHaveTextContent('fá tilkynningu um miða');
+    expect(tiles[3]).toHaveTextContent('bíða eftir miðum');
     expect(screen.getByTestId('stats-sold')).toHaveTextContent('15 miðar seldir hér.');
   });
 

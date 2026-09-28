@@ -16,7 +16,7 @@ import { HOME_PAGE_SIZE, buildHomeParams, parseHomeParams, type HomeParams } fro
 import { ViewToggle } from '../components/map/ViewToggle';
 import { readHomeView, writeHomeView, type HomeView } from '../components/map/viewPref';
 import { DayPicker } from '../components/map/DayPicker';
-import { rangeFor } from '../components/map/mapUtils';
+import { rangeFor, startOfLocalDay } from '../components/map/mapUtils';
 
 const MapView = lazy(() => import('../components/map/MapView').then((m) => ({ default: m.MapView })));
 
@@ -66,7 +66,11 @@ export default function HomePage() {
   const [params, setParams] = useSearchParams();
   const [now] = useState(() => new Date());
   const state = useMemo(() => parseHomeParams(params, now), [params, now]);
-  const range = useMemo(() => (state.day === 'all' ? null : rangeFor(state.day, now)), [state.day, now]);
+  // "Allar dagsetningar" still starts today, so an event that is over never tops the list.
+  const range = useMemo(
+    () => (state.day === 'all' ? { from: startOfLocalDay(now).toISOString(), to: undefined } : rangeFor(state.day, now)),
+    [state.day, now],
+  );
   const update = useCallback(
     (patch: Partial<HomeParams>) => {
       setParams(buildHomeParams({ ...state, ...patch }), { replace: true });

@@ -344,7 +344,7 @@ describe('HomePage', () => {
     wrap(<HomePage />);
     await screen.findAllByTestId('market-card');
     expect(screen.getByRole('button', { name: 'Allar dagsetningar' })).toHaveAttribute('aria-pressed', 'true');
-    expect(listMock()).toHaveBeenLastCalledWith(expect.objectContaining({ from: undefined, to: undefined }));
+    expect(listMock()).toHaveBeenLastCalledWith(expect.objectContaining({ from: expect.any(String), to: undefined }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Á morgun' }));
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent(/dagur=\d{4}-\d{2}-\d{2}/));
