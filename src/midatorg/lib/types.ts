@@ -73,8 +73,12 @@ export type EventStats = {
   last_sold_at: string | null;
 };
 
-/** Row of `mt_events_market` = every `mt_events` column + the `mt_event_stats` aggregates. */
-export type MarketEvent = EventRow & Omit<EventStats, 'event_id'>;
+/**
+ * Row of `mt_events_market` = every `mt_events` column + the `mt_event_stats` aggregates
+ * + map coordinates (venue → town → null; migration 0009). The coordinates are optional so
+ * hand-built fixtures without them stay valid.
+ */
+export type MarketEvent = EventRow & Omit<EventStats, 'event_id'> & { map_lat?: number | null; map_lng?: number | null };
 
 /** Row of `mt_public_profiles`. */
 export type PublicProfile = {
@@ -119,6 +123,10 @@ export type MarketEventsParams = {
   sort?: MarketSort;
   /** Defaults to 'upcoming'. Pass 'all' for every status (admin). */
   status?: EventStatus | 'all';
+  /** Inclusive lower bound on starts_at (ISO). */
+  from?: string;
+  /** Exclusive upper bound on starts_at (ISO). */
+  to?: string;
   limit?: number;
   offset?: number;
 };

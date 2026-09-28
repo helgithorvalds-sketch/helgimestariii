@@ -8,16 +8,19 @@ import type { CreateManualEventInput, EventRow, MarketEvent, MarketEventsParams,
  * - `q` matches title or venue (ilike)
  * - `category` filters; 'all' / null = every category
  * - `status` defaults to 'upcoming'; 'all' disables the filter
+ * - `from` / `to` bound starts_at (from inclusive, to exclusive) — the map's day picker
  * - sort: date = starts_at asc; demand = wanted_tickets desc (nulls last), tickets_available desc;
  *   price = min_ask asc (nulls last)
  * - range pagination with `limit` / `offset`; `id` is always the last sort key so
  *   pages never overlap or skip rows that tie on the sort columns
  */
 export async function listMarketEvents(params: MarketEventsParams = {}): Promise<MarketEvent[]> {
-  const { q, category, sort = 'date', status = 'upcoming', limit = DEFAULT_PAGE_SIZE, offset = 0 } = params;
+  const { q, category, sort = 'date', status = 'upcoming', from, to, limit = DEFAULT_PAGE_SIZE, offset = 0 } = params;
   let query = supabase.from('mt_events_market').select('*');
 
   if (status !== 'all') query = query.eq('status', status);
+  if (from) query = query.gte('starts_at', from);
+  if (to) query = query.lt('starts_at', to);
   if (category && category !== 'all') query = query.eq('category', category);
   if (q && q.trim()) {
     const pattern = orValue(ilikePattern(q));

@@ -10,6 +10,7 @@ import forms from './dict/forms';
 import deals from './dict/deals';
 import account from './dict/account';
 import admin from './dict/admin';
+import map from './dict/map';
 
 export type { Locale };
 export { LOCALES, DEFAULT_LOCALE, LOCALE_STORAGE_KEY } from './locale';
@@ -19,7 +20,7 @@ export type TVars = Record<string, string | number | null | undefined>;
 export type TFunction = (key: string, vars?: TVars) => string;
 
 /** Every dictionary, by owner. Exported for the parity test. */
-export const dictionaries: Record<string, Dict> = { common, errors, home, event, forms, deals, account, admin };
+export const dictionaries: Record<string, Dict> = { common, errors, home, event, forms, deals, account, admin, map };
 
 function merge(locale: Locale): Record<string, string> {
   const out: Record<string, string> = {};
