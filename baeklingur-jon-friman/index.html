@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jón Fríman – Tunnuskýli</title>
+<meta name="description" content="Bæklingur: sérsmíðuð ruslatunnuskýli úr timbri frá Jóni Fríman – fyrir og eftir, verð, tilboð og tilboðsbeiðni.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Caveat:wght@600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tjara: #221e1b;      /* tjörusvart */
+    --tjara-2: #3a332d;
+    --sag: #f1e7d6;        /* sag / kraftpappír */
+    --sag-2: #e6d7bd;
+    --kalk: #fbf7f0;
+    --timbur: #c8894a;     /* fura */
+    --lerki: #8a5a2b;      /* dökkt lerki */
+    --gulur: #f2b400;      /* málband */
+    --blyantur: #c23b22;   /* smiðsblýantur */
+    --grar: #7d7468;
+    --umhverfi: #d9d2c6;   /* bakgrunnur utan um síðurnar */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --umhverfi: #16130f; }
+  }
+  :root[data-theme="dark"] { --umhverfi: #16130f; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    background: var(--umhverfi);
+    font-family: "Barlow", system-ui, sans-serif;
+    color: var(--tjara);
+    font-size: 10.5pt;
+    line-height: 1.4;
+    padding: 24px 16px 48px;
+  }
+  img { display: block; max-width: 100%; }
+
+  /* ---------- A4 síður ---------- */
+  .sida {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto 24px;
+    position: relative;
+    overflow: hidden;
+    background: var(--sag);
+    box-shadow: 0 10px 40px rgba(0,0,0,.25);
+    zoom: var(--z, 1);
+  }
+  .sida + .sida { break-before: page; }
+  .innihald { position: absolute; inset: 0; padding: 14mm 14mm 12mm; display: flex; flex-direction: column; }
+
+  /* sagpappírsáferð */
+  .sida::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .33 0 0 0 0 .2 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .sida > * { position: relative; z-index: 1; }
+  .innihald { position: absolute; }
+
+  /* ---------- letur ---------- */
+  .kicker {
+    font-family: "Oswald", sans-serif; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .18em; font-size: 9pt; color: var(--lerki);
+    display: flex; align-items: center; gap: 3mm;
+  }
+  .kicker::before { content: ""; width: 10mm; height: 2.2mm; background: var(--gulur); display: inline-block; }
+  h1, h2, h3 { font-family: "Oswald", sans-serif; font-weight: 700; line-height: 1.02; text-transform: uppercase; letter-spacing: .01em; }
+  h2 { font-size: 30pt; margin: 2mm 0 0; }
+  h3 { font-size: 15pt; }
+  .hond { font-family: "Caveat", cursive; font-weight: 700; color: var(--blyantur); line-height: 1; }
+  .smaletur { font-size: 7.5pt; color: var(--grar); }
+
+  /* ---------- málband ---------- */
+  .malband {
+    --h: 7mm;
+    height: var(--h);
+    background:
+      repeating-linear-gradient(90deg, var(--tjara) 0 .35mm, transparent .35mm 10mm) 0 0 / 100% 100% no-repeat,
+      repeating-linear-gradient(90deg, var(--tjara) 0 .25mm, transparent .25mm 5mm) 0 0 / 100% 55% no-repeat,
+      repeating-linear-gradient(90deg, var(--tjara) 0 .18mm, transparent .18mm 1mm) 0 0 / 100% 28% no-repeat,
+      var(--gulur);
+    display: flex; align-items: flex-end;
+    font-family: "Oswald", sans-serif; font-weight: 600; font-size: 6.5pt; color: var(--tjara);
+    box-shadow: 0 1px 0 rgba(0,0,0,.25);
+  }
+  .malband span { width: 10mm; flex: none; text-align: left; padding: 0 0 .4mm .7mm; }
+
+  /* ---------- merki ---------- */
+  .merki { display: flex; align-items: center; gap: 3.5mm; }
+  .merki svg { width: 15mm; height: 15mm; flex: none; }
+  .merki .nafn { font-family: "Oswald", sans-serif; font-weight: 700; font-size: 19pt; letter-spacing: .06em; line-height: 1; text-transform: uppercase; }
+  .merki .undir { font-family: "Oswald", sans-serif; font-weight: 500; font-size: 7.5pt; letter-spacing: .32em; text-transform: uppercase; opacity: .85; margin-top: 1.2mm; }
+
+  /* ============ SÍÐA 1 – FORSÍÐA ============ */
+  .forsida { background: var(--tjara); color: var(--kalk); }
+  .forsida::before { display: none; }
+  .forsida .hero { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+  .forsida .skuggi {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(20,17,14,.92) 0%, rgba(20,17,14,.72) 26%, rgba(20,17,14,0) 50%),
+      linear-gradient(0deg, rgba(20,17,14,.95) 0%, rgba(20,17,14,.6) 17%, rgba(20,17,14,0) 32%);
+  }
+  .forsida .efst { position: absolute; top: 14mm; left: 22mm; right: 14mm; }
+  .forsida .kicker { color: var(--gulur); margin-top: 16mm; }
+  .forsida h1 { font-size: 46pt; margin-top: 4mm; max-width: 165mm; text-shadow: 0 2px 18px rgba(0,0,0,.35); }
+  .forsida h1 em { font-style: normal; color: var(--gulur); }
+  .forsida .inngangur { font-size: 13pt; max-width: 128mm; margin-top: 5mm; line-height: 1.35; color: #efe6d8; }
+  .forsida .lodrett-malband {
+    position: absolute; top: 0; bottom: 0; left: 0; width: 297mm; transform-origin: 0 0;
+    transform: rotate(90deg) translateY(-7mm);
+  }
+  .stimpill {
+    position: absolute; right: 14mm; bottom: 38mm; width: 44mm; height: 44mm; border-radius: 50%;
+    background: var(--gulur); color: var(--tjara); display: grid; place-content: center; text-align: center;
+    transform: rotate(-8deg); box-shadow: 0 6px 20px rgba(0,0,0,.4);
+    outline: 1.2mm dashed rgba(34,30,27,.55); outline-offset: -3mm;
+  }
+  .stimpill .a { font-family: "Oswald"; font-weight: 600; font-size: 9pt; letter-spacing: .14em; text-transform: uppercase; }
+  .stimpill .b { font-family: "Oswald"; font-weight: 700; font-size: 20pt; line-height: 1; margin: 1mm 0; }
+  .stimpill .c { font-family: "Caveat"; font-weight: 700; font-size: 15pt; line-height: 1; }
+  .forsida .nedst {
+    position: absolute; left: 22mm; right: 14mm; bottom: 12mm;
+    display: flex; gap: 6mm; flex-wrap: wrap;
+    font-family: "Oswald"; font-weight: 500; font-size: 10.5pt; letter-spacing: .04em; text-transform: uppercase;
+  }
+  .forsida .nedst span { display: inline-flex; align-items: center; gap: 2mm; }
+  .forsida .nedst span::before { content: ""; width: 3.2mm; height: 3.2mm; background: var(--gulur); transform: rotate(45deg); }
+  .forsida .slagord { position: absolute; left: 22mm; bottom: 22mm; font-size: 22pt; color: var(--gulur); transform: rotate(-3deg); }
+
+  /* ============ SÍÐA 2 – FYRIR / EFTIR ============ */
+  .fyrireftir { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-top: 9mm; position: relative; }
+  .fyrireftir figure { position: relative; aspect-ratio: 4 / 3; background: var(--sag-2); border: 1.6mm solid var(--kalk); box-shadow: 0 3px 12px rgba(34,30,27,.22); }
+  .fyrireftir figure:first-child { transform: rotate(-1.2deg); }
+  .fyrireftir figure:last-child { transform: rotate(1deg); }
+  .fyrireftir img { width: 100%; height: 100%; object-fit: cover; }
+  .merkimidi {
+    position: absolute; top: -3mm; left: 4mm; padding: 1.2mm 3.5mm; font-family: "Oswald"; font-weight: 700;
+    font-size: 11pt; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .merkimidi.fyrir { background: var(--grar); color: var(--kalk); }
+  .merkimidi.eftir { background: var(--gulur); color: var(--tjara); }
+  .or {
+    position: absolute; left: 50%; top: 50%; width: 13mm; height: 13mm; margin: -6.5mm 0 0 -6.5mm; z-index: 3;
+    border-radius: 50%; background: var(--tjara); color: var(--gulur); display: grid; place-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.35);
+  }
+  .or svg { width: 7mm; height: 7mm; }
+  .fyrireftir .hond { position: absolute; right: 2mm; bottom: -9mm; font-size: 17pt; transform: rotate(-4deg); }
+  .urvinnsla { display: grid; grid-template-columns: 1.05fr 1fr; gap: 8mm; margin-top: 16mm; align-items: start; }
+  .urvinnsla .stort { font-family: "Oswald"; font-weight: 700; font-size: 25pt; line-height: 1.02; text-transform: uppercase; }
+  .urvinnsla .stort em { font-style: normal; background: linear-gradient(transparent 58%, var(--gulur) 58% 92%, transparent 92%); }
+  .urvinnsla p { font-size: 11pt; }
+  .flokkun {
+    background: var(--tjara); color: var(--kalk); padding: 4.5mm 5mm; position: relative;
+  }
+  .flokkun h3 { color: var(--gulur); font-size: 12.5pt; }
+  .flokkun p { font-size: 9.5pt; margin-top: 1.5mm; color: #e9dfcf; }
+  .flokkun .tunnur { display: flex; gap: 2.2mm; margin-top: 3mm; }
+  .flokkun .tunna { flex: 1; text-align: center; font-family: "Oswald"; font-size: 7pt; letter-spacing: .08em; text-transform: uppercase; }
+  .flokkun .tunna svg { width: 100%; height: 12mm; display: block; margin-bottom: 1mm; }
+
+  .kostir { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8mm 6mm; margin-top: 7mm; }
+  .kostur { border-top: .6mm solid var(--tjara); padding-top: 3mm; }
+  .kostur svg { width: 9mm; height: 9mm; color: var(--lerki); margin-bottom: 2mm; }
+  .kostur h4 { font-family: "Oswald"; font-weight: 600; font-size: 11.5pt; text-transform: uppercase; letter-spacing: .02em; line-height: 1.1; }
+  .kostur p { font-size: 9.2pt; margin-top: 1.2mm; color: var(--tjara-2); }
+  .fotur { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; padding-top: 5mm; }
+  .fotur .sidunr { font-family: "Oswald"; font-weight: 600; font-size: 8pt; letter-spacing: .2em; color: var(--grar); }
+
+  /* ============ SÍÐA 3 – VERÐ ============ */
+  .pakkar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4.5mm; margin-top: 10mm; }
+  .pakki { background: var(--kalk); border: .5mm solid var(--tjara); padding: 5mm 4.5mm 5.5mm; position: relative; display: flex; flex-direction: column; }
+  .pakki.vinsaell { background: var(--tjara); color: var(--kalk); border-color: var(--tjara); box-shadow: 0 6px 18px rgba(34,30,27,.35); transform: translateY(-2mm); }
+  .pakki .heiti { font-family: "Oswald"; font-weight: 700; font-size: 17pt; letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
+  .pakki .fyrir-t { font-family: "Oswald"; font-weight: 500; font-size: 8.5pt; letter-spacing: .14em; text-transform: uppercase; color: var(--lerki); margin-top: 1mm; }
+  .pakki.vinsaell .fyrir-t { color: var(--gulur); }
+  .pakki svg.teikning { width: 100%; height: auto; margin: 6mm 0 4mm; color: var(--tjara); }
+  .pakki.vinsaell svg.teikning { color: var(--kalk); }
+  .pakki .mal { font-size: 8pt; color: var(--grar); }
+  .pakki.vinsaell .mal { color: #bdb3a4; }
+  .pakki .verd { margin-top: auto; padding-top: 2.5mm; }
+  .pakki .verd small { font-family: "Oswald"; font-weight: 500; font-size: 8pt; letter-spacing: .12em; text-transform: uppercase; display: block; }
+  .pakki .verd b { font-family: "Oswald"; font-weight: 700; font-size: 22pt; line-height: 1; }
+  .pakki .verd b span { font-size: 12pt; }
+  .pakki .borði { position: absolute; top: -4mm; right: 3mm; background: var(--gulur); color: var(--tjara); font-family: "Caveat"; font-weight: 700; font-size: 15pt; padding: .3mm 3mm; transform: rotate(3deg); }
+
+  .innifalid { margin-top: 8mm; display: flex; flex-wrap: wrap; gap: 1.6mm 5mm; font-size: 9.2pt; align-items: center; }
+  .innifalid b { font-family: "Oswald"; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: 9pt; margin-right: 1mm; }
+  .innifalid span { display: inline-flex; gap: 1.5mm; align-items: center; }
+  .innifalid span::before { content: "✓"; color: var(--lerki); font-weight: 700; }
+
+  .aferd-og-auka { display: grid; grid-template-columns: 1.25fr 1fr; gap: 7mm; margin-top: 10mm; }
+  .aferdir { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5mm; margin-top: 2.5mm; }
+  .aferd figure { aspect-ratio: 1; overflow: hidden; background: var(--sag-2); border: 1mm solid var(--kalk); box-shadow: 0 2px 6px rgba(34,30,27,.2); }
+  .aferd img { width: 100%; height: 100%; object-fit: cover; }
+  .aferd .t { font-family: "Oswald"; font-weight: 600; font-size: 9pt; text-transform: uppercase; letter-spacing: .04em; margin-top: 1.6mm; line-height: 1.1; }
+  .aferd .v { font-size: 8.5pt; color: var(--lerki); font-weight: 600; }
+  .undirfyrirsogn { font-family: "Oswald"; font-weight: 700; font-size: 12pt; text-transform: uppercase; letter-spacing: .04em; }
+  .aukalisti { list-style: none; margin-top: 2.5mm; }
+  .aukalisti li { display: flex; justify-content: space-between; gap: 3mm; padding: 2.4mm 0; border-bottom: .3mm dashed rgba(34,30,27,.35); font-size: 9.5pt; }
+  .aukalisti li b { white-space: nowrap; font-weight: 700; }
+  .husfelog { margin-top: 3.5mm; font-size: 9pt; background: var(--sag-2); padding: 2.8mm 3.2mm; border-left: 1.2mm solid var(--lerki); }
+  .husfelog b { font-family: "Oswald"; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+
+  .tilbod { margin-top: 11mm; display: grid; grid-template-columns: auto 1fr; gap: 0; background: var(--gulur); position: relative; }
+  .tilbod .rautt {
+    background: var(--blyantur); color: var(--kalk); padding: 6mm 6mm; display: grid; place-content: center; text-align: center;
+    clip-path: polygon(0 0, 100% 0, 92% 50%, 100% 100%, 0 100%);
+    padding-right: 10mm;
+  }
+  .tilbod .rautt .a { font-family: "Oswald"; font-weight: 600; font-size: 9.5pt; letter-spacing: .2em; text-transform: uppercase; }
+  .tilbod .rautt .b { font-family: "Oswald"; font-weight: 700; font-size: 36pt; line-height: 1; }
+  .tilbod .rautt .c { font-family: "Oswald"; font-weight: 600; font-size: 9.5pt; letter-spacing: .1em; text-transform: uppercase; }
+  .tilbod .texti { padding: 5mm 6mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; align-items: center; }
+  .tilbod h4 { font-family: "Oswald"; font-weight: 700; font-size: 14pt; text-transform: uppercase; line-height: 1.05; }
+  .tilbod p { font-size: 9.8pt; margin-top: 1mm; }
+  .verdskyring { margin-top: 4mm; }
+
+  /* ============ SÍÐA 4 – TILBOÐSBEIÐNI ============ */
+  .bakhlid .mynd-efst { position: absolute; left: 0; right: 0; top: 0; height: 88mm; }
+  .bakhlid .mynd-efst img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; background: var(--sag-2); }
+  .bakhlid .mynd-efst::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,17,14,.85), rgba(20,17,14,0) 55%); }
+  .bakhlid .mynd-efst p {
+    position: absolute; left: 14mm; right: 60mm; bottom: 8mm; z-index: 2; color: var(--kalk);
+    font-family: "Oswald"; font-weight: 600; font-size: 16pt; line-height: 1.12; text-transform: uppercase;
+  }
+  .bakhlid .mynd-efst p em { font-style: normal; color: var(--gulur); }
+  .bakhlid .malband.ofan { position: absolute; left: 0; right: 0; top: 88mm; }
+  .bakhlid .innihald { top: 95mm; padding-top: 7mm; }
+
+  .skref { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; margin-top: 5mm; counter-reset: s; }
+  .skref li { list-style: none; position: relative; padding-top: 1mm; }
+  .skref .nr { font-family: "Oswald"; font-weight: 700; font-size: 34pt; line-height: .9; color: var(--gulur); -webkit-text-stroke: .5mm var(--tjara); }
+  .skref h4 { font-family: "Oswald"; font-weight: 700; font-size: 12.5pt; text-transform: uppercase; margin-top: 1.5mm; line-height: 1.08; }
+  .skref p { font-size: 9.3pt; margin-top: 1.2mm; color: var(--tjara-2); }
+  .skref li:not(:last-child)::after {
+    content: ""; position: absolute; top: 5.5mm; right: -5mm; width: 4mm; height: 4mm;
+    border-top: .7mm solid var(--lerki); border-right: .7mm solid var(--lerki); transform: rotate(45deg);
+  }
+
+  .beidni {
+    margin-top: 9mm; background: var(--kalk); border: .5mm solid var(--tjara); padding: 5mm 6mm 5.5mm; position: relative;
+    outline: .5mm dashed var(--grar); outline-offset: 2.5mm;
+  }
+  .beidni .skaeri { position: absolute; top: -6.2mm; left: 8mm; background: var(--sag); padding: 0 1.5mm; font-size: 10pt; color: var(--grar); }
+  .beidni .haus { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .beidni h3 { font-size: 15pt; }
+  .beidni .haus .hond { font-size: 14pt; }
+  .reitir { display: grid; grid-template-columns: 1fr 1fr; gap: 4.6mm 7mm; margin-top: 5mm; }
+  .reitur { display: flex; align-items: flex-end; gap: 2mm; font-family: "Oswald"; font-weight: 500; font-size: 8.5pt; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+  .reitur::after { content: ""; flex: 1; border-bottom: .3mm solid var(--tjara); height: 4.5mm; }
+  .reitur.heil { grid-column: 1 / -1; }
+  .val { display: flex; flex-wrap: wrap; gap: 1.5mm 4.5mm; align-items: center; font-size: 9.5pt; }
+  .val .lbl { font-family: "Oswald"; font-weight: 500; font-size: 8.5pt; letter-spacing: .1em; text-transform: uppercase; margin-right: 1mm; min-width: 27mm; }
+  .val span { display: inline-flex; align-items: center; gap: 1.5mm; }
+  .val span:not(.lbl)::before { content: ""; width: 3.4mm; height: 3.4mm; border: .35mm solid var(--tjara); background: #fff; }
+  .reitur.athugasemd { grid-column: 1 / -1; height: 14mm; align-items: flex-start; }
+  .reitur.athugasemd::after { height: 100%; background: repeating-linear-gradient(transparent 0 5.2mm, var(--tjara) 5.2mm 5.5mm); border: 0; }
+
+  .bakhlid .nedst {
+    position: absolute; left: 0; right: 0; bottom: 0; background: var(--tjara); color: var(--kalk);
+    padding: 7mm 14mm 8mm; display: flex; justify-content: space-between; align-items: center; gap: 8mm;
+  }
+  .bakhlid .nedst .slagord2 { font-size: 21pt; color: var(--gulur); transform: rotate(-2deg); margin-top: 1.5mm; }
+  .samband { text-align: right; font-family: "Oswald"; font-weight: 500; font-size: 11pt; letter-spacing: .04em; line-height: 1.55; }
+  .samband b { color: var(--gulur); font-weight: 600; letter-spacing: .14em; font-size: 8.5pt; margin-right: 2mm; text-transform: uppercase; }
+  .fylla { background: rgba(242,180,0,.28); border-bottom: .4mm dashed var(--gulur); padding: 0 1mm; }
+
+  /* ---------- skjár vs. prent ---------- */
+  .skjar-haus { max-width: 210mm; margin: 0 auto 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: "Barlow"; color: var(--grar); font-size: 14px; flex-wrap: wrap; }
+  .skjar-haus button { font: 600 14px "Oswald", sans-serif; letter-spacing: .08em; text-transform: uppercase; background: var(--gulur); color: var(--tjara); border: 0; padding: 10px 16px; cursor: pointer; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .skjar-haus { color: #b8ae9f; } }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: none; padding: 0; }
+    .skjar-haus { display: none; }
+    .sida { margin: 0; box-shadow: none; zoom: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="skjar-haus">
+  <span>Bæklingur · 4 síður · A4 — myndir eru til skýringar</span>
+  <button type="button" onclick="window.print()">Prenta / vista sem PDF</button>
+</div>
+
+<!-- ============================ SÍÐA 1 ============================ -->
+<section class="sida forsida" aria-label="Forsíða">
+  <img class="hero" src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105418_f4c42def-2d49-4991-9cd3-613e7222c660.png" alt="Tunnuskýli úr lerki fyrir þrjár tunnur með gróðurþaki við íslenskt einbýlishús">
+  <div class="skuggi"></div>
+  <div class="malband lodrett-malband" aria-hidden="true">
+    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span>
+  </div>
+
+  <div class="efst">
+    <div class="merki">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="5" fill="#f2b400"/><path d="M12 29 32 13l20 16" fill="none" stroke="#221e1b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><text x="32" y="53" text-anchor="middle" font-family="Oswald, sans-serif" font-weight="700" font-size="23" fill="#221e1b">JF</text></svg>
+      <div><div class="nafn">Jón Fríman</div><div class="undir">Smíði &amp; uppsetning</div></div>
+    </div>
+    <div class="kicker">Ruslatunnuskýli úr timbri</div>
+    <h1>Tunnurnar eiga líka skilið <em>þak yfir höfuðið.</em></h1>
+    <p class="inngangur">Sérsmíðuð tunnuskýli sem passa við húsið þitt — smíðuð, sett upp og frágengin á 1–2 dögum.</p>
+  </div>
+
+  <div class="stimpill" aria-label="Fast verð frá 279.000 krónum, uppsett">
+    <div class="a">Fast verð</div>
+    <div class="b">frá 279<br>þús. kr.</div>
+    <div class="c">uppsett!</div>
+  </div>
+
+  <div class="slagord hond">Fallegt skýli fyrir ljótar tunnur.</div>
+  <div class="nedst">
+    <span>Frí skoðun</span><span>Fast verð innan 24 klst.</span><span>Pláss fyrir flokkunina</span>
+  </div>
+</section>
+
+<!-- ============================ SÍÐA 2 ============================ -->
+<section class="sida" aria-label="Fyrir og eftir">
+  <div class="innihald">
+    <div class="kicker">Sjáðu muninn</div>
+    <h2>Fyrir &amp; eftir</h2>
+
+    <div class="fyrireftir">
+      <figure>
+        <span class="merkimidi fyrir">Fyrir</span>
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105418_80a80fe2-d555-4630-a72f-0f2ee3c3211a.png" alt="Fyrir: fjórar tunnur á víð og dreif við innkeyrslu, ein fokin um koll og rusl á stéttinni">
+      </figure>
+      <figure>
+        <span class="merkimidi eftir">Eftir</span>
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105532_573d72b7-1503-484b-b33b-ee6e987b12cc.png" alt="Eftir: sama hús með nýju tunnuskýli úr lerki fyrir fjórar tunnur með gróðurþaki">
+      </figure>
+      <div class="or" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="hond">sama hús – nýr svipur!</div>
+    </div>
+
+    <div class="urvinnsla">
+      <div>
+        <div class="stort">Úr augsýn – <em>úr huga.</em></div>
+        <p style="margin-top:3mm">Tunnurnar hverfa inn í fallegt timburskýli og aðkoman að húsinu gjörbreytist. Ekkert fok, ekkert rusl á stéttinni — bara snyrtilegt skýli sem setur punktinn yfir i-ið.</p>
+      </div>
+      <div class="flokkun">
+        <h3>Fleiri flokkar = fleiri tunnur</h3>
+        <p>Með nýja flokkunarkerfinu er heimilissorp flokkað í fjóra flokka. Við smíðum skýli sem rúmar þær allar.</p>
+        <div class="tunnur" aria-hidden="true">
+          <div class="tunna"><svg viewBox="0 0 40 48"><path d="M8 10h24l-2.5 34h-19z" fill="#f2b400"/><rect x="6" y="5" width="28" height="5" rx="1" fill="#f2b400"/></svg>Pappír</div>
+          <div class="tunna"><svg viewBox="0 0 40 48"><path d="M8 10h24l-2.5 34h-19z" fill="#c8894a"/><rect x="6" y="5" width="28" height="5" rx="1" fill="#c8894a"/></svg>Plast</div>
+          <div class="tunna"><svg viewBox="0 0 40 48"><path d="M8 10h24l-2.5 34h-19z" fill="#8a5a2b"/><rect x="6" y="5" width="28" height="5" rx="1" fill="#8a5a2b"/></svg>Matarleifar</div>
+          <div class="tunna"><svg viewBox="0 0 40 48"><path d="M8 10h24l-2.5 34h-19z" fill="#7d7468"/><rect x="6" y="5" width="28" height="5" rx="1" fill="#7d7468"/></svg>Blandað</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kicker" style="margin-top:15mm">Við smíðum. Þú flokkar.</div>
+    <div class="kostir">
+      <div class="kostur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18M5 9v11h14V9M4 9l1-4h14l1 4M9.5 9v11M14.5 9v11"/></svg>
+        <h4>Pláss fyrir allar tunnurnar</h4>
+        <p>Skýli fyrir 2, 3 eða 4 tunnur — eða sérsmíðað eftir þínu plássi.</p>
+      </div>
+      <div class="kostur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7"/></svg>
+        <h4>Stenst íslenskt rok</h4>
+        <p>Skýlið er fest niður og tunnurnar standa kyrrar. Enginn eltingaleikur eftir storminn.</p>
+      </div>
+      <div class="kostur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11c3-3 6-3 10 1 4-4 7-4 10-1M12 12v2"/><path d="M4 20 20 4"/></svg>
+        <h4>Mávar komast ekki að</h4>
+        <p>Lokuð lok halda mávum og hröfnum frá — ekkert rifið rusl um lóðina.</p>
+      </div>
+      <div class="kostur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>
+        <h4>Fallegri aðkoma</h4>
+        <p>Það fyrsta sem gestir sjá. Skýlið er smíðað í stíl við húsið þitt.</p>
+      </div>
+      <div class="kostur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M6 20V11M18 20V11M6 11 17 4M9 9l6 2"/></svg>
+        <h4>Þægilegt alla daga</h4>
+        <p>Lokpumpur halda lokinu uppi og hurðir að framan létta sorphirðunni lífið.</p>
+      </div>
+      <div class="kostur">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4l6 6-3 3-6-6zM11 7l-8 8 3 3 8-8M4 21h7"/></svg>
+        <h4>Vandað efni</h4>
+        <p>Lerki eða gagnvarið timbur, ryðfríar lamir og skrúfur. Smíðað til að endast.</p>
+      </div>
+    </div>
+
+    <div class="fotur">
+      <span class="smaletur">Myndir í bæklingnum eru til skýringar.</span>
+      <span class="sidunr">JÓN FRÍMAN · 2</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SÍÐA 3 ============================ -->
+<section class="sida" aria-label="Verð og tilboð">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- eitt hólf: 70 x 125 (1 eining = 1 cm) -->
+      <symbol id="holf" viewBox="0 0 70 125" overflow="visible">
+        <rect x="3" y="8" width="64" height="115" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <g stroke="currentColor" stroke-width=".5" opacity=".55">
+          <path d="M11 8v115M19 8v115M27 8v115M35 8v115M43 8v115M51 8v115M59 8v115"/>
+        </g>
+        <rect x="7" y="14" width="56" height="104" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/>
+        <circle cx="57" cy="66" r="2" fill="currentColor"/>
+        <path d="M-1 8h72" stroke="currentColor" stroke-width="3"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="innihald">
+    <div class="kicker">Verð &amp; tilboð</div>
+    <h2>Veldu stærðina.<br>Við sjáum um restina.</h2>
+
+    <div class="pakkar">
+      <div class="pakki">
+        <div class="heiti">Tvenna</div>
+        <div class="fyrir-t">fyrir 2 tunnur</div>
+        <svg class="teikning" viewBox="-10 -6 320 165" aria-hidden="true">
+          <g transform="translate(77 0)"><use href="#holf" x="0" y="0" width="70" height="125"/><use href="#holf" x="70" y="0" width="70" height="125"/></g>
+          <path d="M77 140h140M77 133v14M217 133v14M73 144l8-8M213 144l8-8" stroke="currentColor" stroke-width="1" fill="none"/>
+          <text x="147" y="155" text-anchor="middle" font-family="Oswald" font-size="13" fill="currentColor">1,46 m</text>
+        </svg>
+        <div class="mal">u.þ.b. 1,46 × 0,90 × 1,30 m</div>
+        <div class="verd"><small>frá</small><b>279.000 <span>kr.</span></b></div>
+      </div>
+      <div class="pakki vinsaell">
+        <div class="borði">Vinsælast!</div>
+        <div class="heiti">Þrenna</div>
+        <div class="fyrir-t">fyrir 3 tunnur</div>
+        <svg class="teikning" viewBox="-10 -6 320 165" aria-hidden="true">
+          <g transform="translate(42 0)"><use href="#holf" x="0" y="0" width="70" height="125"/><use href="#holf" x="70" y="0" width="70" height="125"/><use href="#holf" x="140" y="0" width="70" height="125"/></g>
+          <path d="M42 140h210M42 133v14M252 133v14M38 144l8-8M248 144l8-8" stroke="currentColor" stroke-width="1" fill="none"/>
+          <text x="147" y="155" text-anchor="middle" font-family="Oswald" font-size="13" fill="currentColor">2,16 m</text>
+        </svg>
+        <div class="mal">u.þ.b. 2,16 × 0,90 × 1,30 m</div>
+        <div class="verd"><small>frá</small><b>359.000 <span>kr.</span></b></div>
+      </div>
+      <div class="pakki">
+        <div class="heiti">Ferna</div>
+        <div class="fyrir-t">fyrir 4 tunnur</div>
+        <svg class="teikning" viewBox="-10 -6 320 165" aria-hidden="true">
+          <g transform="translate(7 0)"><use href="#holf" x="0" y="0" width="70" height="125"/><use href="#holf" x="70" y="0" width="70" height="125"/><use href="#holf" x="140" y="0" width="70" height="125"/><use href="#holf" x="210" y="0" width="70" height="125"/></g>
+          <path d="M7 140h280M7 133v14M287 133v14M3 144l8-8M283 144l8-8" stroke="currentColor" stroke-width="1" fill="none"/>
+          <text x="147" y="155" text-anchor="middle" font-family="Oswald" font-size="13" fill="currentColor">2,86 m</text>
+        </svg>
+        <div class="mal">u.þ.b. 2,86 × 0,90 × 1,30 m</div>
+        <div class="verd"><small>frá</small><b>439.000 <span>kr.</span></b></div>
+      </div>
+    </div>
+
+    <div class="innifalid">
+      <b>Alltaf innifalið:</b>
+      <span>Efni og smíði</span><span>Uppsetning og festing</span><span>Lokpumpur á öll lok</span><span>Ryðfríar lamir og skrúfur</span><span>Akstur</span><span>Frágangur og förgun afgangs</span>
+    </div>
+
+    <div class="aferd-og-auka">
+      <div>
+        <div class="undirfyrirsogn">Veldu áferð</div>
+        <div class="aferdir">
+          <div class="aferd">
+            <figure><img src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105418_f4c42def-2d49-4991-9cd3-613e7222c660.png" alt="Náttúrulegt lerki"></figure>
+            <div class="t">Náttúrulegt lerki</div><div class="v">innifalið</div>
+          </div>
+          <div class="aferd">
+            <figure><img src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105418_71203be6-97f4-4cc3-8bc8-5b7825ededaf.png" alt="Tjörusvart"></figure>
+            <div class="t">Tjörusvart</div><div class="v">+ 19.000 kr.</div>
+          </div>
+          <div class="aferd">
+            <figure><img src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105418_955a356e-50bf-41f4-8f94-5438460cd72d.png" alt="Málað í lit hússins"></figure>
+            <div class="t">Í lit hússins</div><div class="v">+ 29.000 kr.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="undirfyrirsogn">Aukahlutir</div>
+        <ul class="aukalisti">
+          <li><span>Gróðurþak (hnoðrar)</span><b>+ 45.000 kr.</b></li>
+          <li><span>Lás á hurðir</span><b>+ 8.900 kr.</b></li>
+          <li><span>Flokkunarmerkingar</span><b>+ 4.900 kr.</b></li>
+          <li><span>Niðurrif og förgun á gömlu skýli</span><b>+ 19.000 kr.</b></li>
+        </ul>
+        <div class="husfelog"><b>Húsfélög &amp; fjölbýli:</b> skýli fyrir 660 L kör og fleiri tunnur — fáðu sérsniðið tilboð.</div>
+      </div>
+    </div>
+
+    <div class="tilbod">
+      <div class="rautt">
+        <div class="a">Haustilboð</div>
+        <div class="b">10%</div>
+        <div class="c">afsláttur</div>
+      </div>
+      <div class="texti">
+        <div>
+          <h4>Pantaðu fyrir 30. nóvember</h4>
+          <p>10% afsláttur af öllum skýlum sem pöntuð eru fyrir 30. nóvember 2026 — áður en vetrarveðrin skella á.</p>
+        </div>
+        <div>
+          <h4>Nágrannatilboð</h4>
+          <p>Pantið með nágrönnunum: <b>15.000 kr. afsláttur</b> á hvert skýli þegar tvö eða fleiri eru smíðuð í sömu götu.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="smaletur verdskyring">Öll verð eru með VSK og uppsetningu. „Frá“-verð miðast við staðlaða stærð í náttúrulegu lerki. Afslættir leggjast ekki saman við önnur tilboð.</p>
+
+    <div class="fotur">
+      <span class="smaletur">Myndir í bæklingnum eru til skýringar.</span>
+      <span class="sidunr">JÓN FRÍMAN · 3</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SÍÐA 4 ============================ -->
+<section class="sida bakhlid" aria-label="Svona færðu tilboð">
+  <div class="mynd-efst">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20260929_105418_b8205838-b102-4f6a-b7f2-8d2934781e71.png" alt="Smiður festir ryðfría löm á lok úr lerki">
+    <p>Hvert skýli er handsmíðað — <em>eins og það ætti að standa við okkar eigið hús.</em></p>
+  </div>
+  <div class="malband ofan" aria-hidden="true">
+    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span>
+  </div>
+
+  <div class="innihald">
+    <div class="kicker">Einfalt ferli</div>
+    <h2>Svona færðu tilboð</h2>
+
+    <ol class="skref">
+      <li>
+        <div class="nr">1</div>
+        <h4>Sendu mynd</h4>
+        <p>Taktu mynd af staðnum þar sem tunnurnar standa og sendu okkur ásamt fjölda tunna og heimilisfangi.</p>
+      </li>
+      <li>
+        <div class="nr">2</div>
+        <h4>Fast verð innan 24 klst.</h4>
+        <p>Þú færð fast verð — engin óvænt aukagjöld. Viltu frekar að við komum og mælum? Skoðunin er frí.</p>
+      </li>
+      <li>
+        <div class="nr">3</div>
+        <h4>Smíðað &amp; sett upp</h4>
+        <p>Við finnum tíma sem hentar og skýlið er klárt á 1–2 dögum. Við skiljum við lóðina hreina.</p>
+      </li>
+    </ol>
+
+    <div class="beidni">
+      <span class="skaeri" aria-hidden="true">✂ - - - - - - - - - - - - -</span>
+      <div class="haus">
+        <h3>Tilboðsbeiðni</h3>
+        <span class="hond">Fylltu út, taktu mynd og sendu okkur!</span>
+      </div>
+      <div class="reitir">
+        <div class="reitur">Nafn</div>
+        <div class="reitur">Sími</div>
+        <div class="reitur heil">Heimilisfang</div>
+        <div class="val heil" style="grid-column:1/-1"><span class="lbl">Fjöldi tunna</span><span>2</span><span>3</span><span>4</span><span>Fleiri / kör</span></div>
+        <div class="val" style="grid-column:1/-1"><span class="lbl">Áferð</span><span>Náttúrulegt lerki</span><span>Tjörusvart</span><span>Í lit hússins</span></div>
+        <div class="val" style="grid-column:1/-1"><span class="lbl">Aukahlutir</span><span>Gróðurþak</span><span>Lás</span><span>Merkingar</span><span>Fjarlægja gamalt skýli</span></div>
+        <div class="reitur athugasemd">Athugasemdir</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nedst">
+    <div>
+      <div class="merki">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="5" fill="#f2b400"/><path d="M12 29 32 13l20 16" fill="none" stroke="#221e1b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><text x="32" y="53" text-anchor="middle" font-family="Oswald, sans-serif" font-weight="700" font-size="23" fill="#221e1b">JF</text></svg>
+        <div><div class="nafn">Jón Fríman</div><div class="undir">Smíði &amp; uppsetning</div></div>
+      </div>
+      <div class="slagord2 hond">Fallegt skýli fyrir ljótar tunnur.</div>
+    </div>
+    <div class="samband">
+      <div><b>Sími</b><span class="fylla">000 0000</span></div>
+      <div><b>Netfang</b><span class="fylla">netfang@dæmi.is</span></div>
+      <div><b>Facebook</b><span class="fylla">Jón Fríman smíði</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Skalar A4-síðurnar niður á mjóum skjám (hefur ekki áhrif á prentun).
+  (function () {
+    function skala() {
+      var z = Math.min(1, (document.documentElement.clientWidth - 32) / 794);
+      document.documentElement.style.setProperty('--z', z.toFixed(4));
+    }
+    skala();
+    window.addEventListener('resize', skala);
+  })();
+</script>
+</body>
+</html>
