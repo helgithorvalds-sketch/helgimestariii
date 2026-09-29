@@ -1,19 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  Building, Facebook, Tag,
+  Building, Facebook, Tag, StickyNote, Check,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const SVIF_FYRIRTAEKI_SOURCE = "svif_fyrirtæki";
+
+const OUTCOMES: { value: string; label: string; cls: string }[] = [
+  { value: "answered", label: "Svaraði", cls: "border-blue-400 text-blue-700 dark:text-blue-300" },
+  { value: "no_answer", label: "Svaraði ekki", cls: "border-amber-400 text-amber-700 dark:text-amber-300" },
+  { value: "interested", label: "Áhugi", cls: "border-emerald-400 text-emerald-700 dark:text-emerald-300" },
+  { value: "rejected", label: "Ekki áhugi", cls: "border-red-400 text-red-700 dark:text-red-300" },
+  { value: "call_again", label: "Hringja aftur", cls: "border-purple-400 text-purple-700 dark:text-purple-300" },
+];
+
+const outcomeLabel = (v?: string | null) => OUTCOMES.find((o) => o.value === v)?.label || null;
 
 export default function SvifListi() {
   const navigate = useNavigate();
@@ -22,6 +34,14 @@ export default function SvifListi() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Company | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [openNotes, setOpenNotes] = useState<Set<string>>(new Set());
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
+  const toggleSet = (set: Set<string>, id: string, setter: (s: Set<string>) => void) => {
+    const next = new Set(set);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setter(next);
+  };
 
   const load = async () => {
     const list = await fetchCompanies();
@@ -93,16 +113,64 @@ export default function SvifListi() {
     setSelected(null);
   };
 
+  const setOutcome = async (c: Company, outcome: string) => {
+    const next = (c.lastCallOutcome === outcome ? null : outcome) as Company["lastCallOutcome"];
+    setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, lastCallOutcome: next } : x)));
+    const { error } = await supabase.from("companies").update({ last_call_outcome: next }).eq("id", c.id);
+    if (error) {
+      setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, lastCallOutcome: c.lastCallOutcome } : x)));
+      return toast.error("Villa við vistun");
+    }
+    if (next) {
+      const { error: cErr } = await supabase.from("communications").insert({
+        company_id: c.id,
+        channel: "símtal",
+        direction: "outbound",
+        subject: `Símtal – ${outcomeLabel(next)}`,
+        body: `Útkoma: ${outcomeLabel(next)}`,
+      });
+      if (cErr) console.error("communications insert", cErr);
+      toast.success(`Skráð: ${outcomeLabel(next)}`);
+    }
+  };
+
+  const saveNotes = (c: Company, value: string) => {
+    setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, notes: value } : x)));
+    clearTimeout(timers.current[c.id]);
+    timers.current[c.id] = setTimeout(async () => {
+      const { error } = await supabase.from("companies").update({ notes: value }).eq("id", c.id);
+      if (error) toast.error("Villa við vistun glósu");
+    }, 700);
+  };
+
   const renderCard = (c: Company) => (
     <div key={c.id} className="rounded-xl border bg-card shadow-sm p-4 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="font-bold text-base truncate">{c.name}</h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-bold text-base truncate">{c.name}</h3>
+            {c.lastCallOutcome && (
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-muted flex items-center gap-1">
+                <Check className="w-3 h-3" />
+                {outcomeLabel(c.lastCallOutcome)}
+              </span>
+            )}
+          </div>
           {c.owner && <p className="text-sm font-medium text-primary truncate">{c.owner}</p>}
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setSelected(c)} aria-label="Breyta">
-          <Pencil className="w-4 h-4" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => toggleSet(openNotes, c.id, setOpenNotes)}
+            aria-label="Glósa"
+          >
+            <StickyNote className="w-4 h-4" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setSelected(c)} aria-label="Breyta">
+            <Pencil className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
@@ -168,11 +236,37 @@ export default function SvifListi() {
         )}
       </div>
 
-      {c.notes && (
-        <div className="rounded-md bg-muted/40 border text-xs p-2 whitespace-pre-wrap">
-          <span className="font-semibold block mb-0.5">Glósur</span>
-          {c.notes}
-        </div>
+      <div className="flex flex-wrap gap-1.5 pl-1">
+        {OUTCOMES.map((o) => (
+          <button
+            key={o.value}
+            onClick={() => setOutcome(c, o.value)}
+            className={cn(
+              "text-xs font-bold px-2.5 py-1 rounded-full border-2 transition-all hover:scale-[1.03]",
+              o.cls,
+              c.lastCallOutcome === o.value ? "bg-muted" : "bg-transparent"
+            )}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+
+      {openNotes.has(c.id) ? (
+        <Textarea
+          value={c.notes || ""}
+          onChange={(e) => saveNotes(c, e.target.value)}
+          rows={5}
+          placeholder="Glósa…"
+          className="text-sm"
+        />
+      ) : (
+        c.notes && (
+          <div className="rounded-md bg-muted/40 border text-xs p-2 whitespace-pre-wrap">
+            <span className="font-semibold block mb-0.5">Glósur</span>
+            {c.notes}
+          </div>
+        )
       )}
     </div>
   );
@@ -191,7 +285,9 @@ export default function SvifListi() {
                 <Plane className="w-7 h-7 text-primary" />
                 Svif fyrirtæki
               </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{svifFyrirtæki.length} fyrirtæki</p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {svifFyrirtæki.length} fyrirtæki · {svifFyrirtæki.filter((c) => !!c.lastCallOutcome).length} hringd
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
