@@ -9,7 +9,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, Building2, Check,
+  ArrowLeft, Search, Phone, Mail, ChevronDown, ChevronRight, StickyNote, Building2, Check, ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ interface FyrirtaekjabokRow {
   category: string | null;
   company_id: string | null;
   address: string | null;
+  website_url: string | null;
   notes: string;
   svif_valid: boolean;
   last_call_outcome: string | null;
@@ -44,6 +45,11 @@ function titleFromNotes(notes: string): string | null {
   return null;
 }
 
+function rokFromNotes(notes: string): string | null {
+  const line = (notes || "").split("\n").find((l) => /^rök\s*:/i.test(l.trim()));
+  return line ? line.trim().replace(/^rök\s*:\s*/i, "") : null;
+}
+
 export default function Fyrirtaekjabok() {
   const navigate = useNavigate();
   const [rows, setRows] = useState<FyrirtaekjabokRow[]>([]);
@@ -58,7 +64,7 @@ export default function Fyrirtaekjabok() {
   const load = async () => {
     const { data, error } = await supabase
       .from("companies")
-      .select("id,name,owner,phone,email,category,company_id,address,notes,svif_valid,last_call_outcome")
+      .select("id,name,owner,phone,email,category,company_id,address,website_url,notes,svif_valid,last_call_outcome")
       .eq("lead_source", "fyrirtaekjabok")
       .order("category", { ascending: true })
       .order("name", { ascending: true });
@@ -224,6 +230,7 @@ export default function Fyrirtaekjabok() {
                   <ul className="divide-y">
                     {items.map((r) => {
                       const titill = titleFromNotes(r.notes || "");
+                      const rok = rokFromNotes(r.notes || "");
                       const notesOpen = openNotes.has(r.id);
                       return (
                         <li
@@ -258,15 +265,35 @@ export default function Fyrirtaekjabok() {
                                   {titill && <span className="italic"> · {titill}</span>}
                                 </p>
                               )}
+                              {rok && <p className="text-sm text-foreground/80 mt-0.5">{rok}</p>}
                               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-                                {r.phone && (
+                                {r.phone ? (
                                   <a href={`tel:${r.phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-1 text-primary font-semibold hover:underline">
                                     <Phone className="w-3.5 h-3.5" /> {r.phone}
+                                  </a>
+                                ) : (
+                                  <a
+                                    href={`https://ja.is/?q=${encodeURIComponent(r.name.split(" (")[0])}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-amber-700 dark:text-amber-300 font-semibold hover:underline"
+                                  >
+                                    <Phone className="w-3.5 h-3.5" /> Fletta upp á ja.is
                                   </a>
                                 )}
                                 {r.email && (
                                   <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 text-primary hover:underline break-all">
                                     <Mail className="w-3.5 h-3.5" /> {r.email}
+                                  </a>
+                                )}
+                                {r.website_url && (
+                                  <a
+                                    href={r.website_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-primary hover:underline break-all"
+                                  >
+                                    <ExternalLink className="w-3.5 h-3.5" /> Vefsíða
                                   </a>
                                 )}
                               </div>
