@@ -114,7 +114,7 @@ export default function SvifListi() {
   };
 
   const setOutcome = async (c: Company, outcome: string) => {
-    const next = c.lastCallOutcome === outcome ? null : outcome;
+    const next = (c.lastCallOutcome === outcome ? null : outcome) as Company["lastCallOutcome"];
     setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, lastCallOutcome: next } : x)));
     const { error } = await supabase.from("companies").update({ last_call_outcome: next }).eq("id", c.id);
     if (error) {
