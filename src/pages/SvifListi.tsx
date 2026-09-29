@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,14 @@ export default function SvifListi() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Company | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [openNotes, setOpenNotes] = useState<Set<string>>(new Set());
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
+  const toggleSet = (set: Set<string>, id: string, setter: (s: Set<string>) => void) => {
+    const next = new Set(set);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setter(next);
+  };
 
   const load = async () => {
     const list = await fetchCompanies();
@@ -103,6 +111,36 @@ export default function SvifListi() {
       toast.error("Villa við eyðingu");
     }
     setSelected(null);
+  };
+
+  const setOutcome = async (c: Company, outcome: string) => {
+    const next = c.lastCallOutcome === outcome ? null : outcome;
+    setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, lastCallOutcome: next } : x)));
+    const { error } = await supabase.from("companies").update({ last_call_outcome: next }).eq("id", c.id);
+    if (error) {
+      setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, lastCallOutcome: c.lastCallOutcome } : x)));
+      return toast.error("Villa við vistun");
+    }
+    if (next) {
+      const { error: cErr } = await supabase.from("communications").insert({
+        company_id: c.id,
+        channel: "símtal",
+        direction: "outbound",
+        subject: `Símtal – ${outcomeLabel(next)}`,
+        body: `Útkoma: ${outcomeLabel(next)}`,
+      });
+      if (cErr) console.error("communications insert", cErr);
+      toast.success(`Skráð: ${outcomeLabel(next)}`);
+    }
+  };
+
+  const saveNotes = (c: Company, value: string) => {
+    setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, notes: value } : x)));
+    clearTimeout(timers.current[c.id]);
+    timers.current[c.id] = setTimeout(async () => {
+      const { error } = await supabase.from("companies").update({ notes: value }).eq("id", c.id);
+      if (error) toast.error("Villa við vistun glósu");
+    }, 700);
   };
 
   const renderCard = (c: Company) => (
