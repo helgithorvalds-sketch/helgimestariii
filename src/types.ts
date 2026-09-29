@@ -61,7 +61,7 @@ export interface Company {
   pitch?: string;
   rejected?: boolean;
   rejectedAt?: string;
-  lastCallOutcome?: "answered" | "no_answer" | "rejected" | "interested";
+  lastCallOutcome?: "answered" | "no_answer" | "rejected" | "interested" | "call_again";
   stage: CompanyStage;
   previewSubStatus?: PreviewSubStatus;
   finishedSubStatus?: FinishedSubStatus;
