@@ -2,18 +2,30 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Search, X, Phone, Mail, Globe, ExternalLink, MapPin, Pencil, Plus, Plane,
-  Building, Facebook, Tag,
+  Building, Facebook, Tag, StickyNote, Check,
 } from "lucide-react";
 import { Company } from "@/types";
 import { fetchCompanies, updateCompany, deleteCompany, addCompany } from "@/services/companyService";
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const SVIF_FYRIRTAEKI_SOURCE = "svif_fyrirtæki";
+
+const OUTCOMES: { value: string; label: string; cls: string }[] = [
+  { value: "answered", label: "Svaraði", cls: "border-blue-400 text-blue-700 dark:text-blue-300" },
+  { value: "no_answer", label: "Svaraði ekki", cls: "border-amber-400 text-amber-700 dark:text-amber-300" },
+  { value: "interested", label: "Áhugi", cls: "border-emerald-400 text-emerald-700 dark:text-emerald-300" },
+  { value: "rejected", label: "Ekki áhugi", cls: "border-red-400 text-red-700 dark:text-red-300" },
+  { value: "call_again", label: "Hringja aftur", cls: "border-purple-400 text-purple-700 dark:text-purple-300" },
+];
+
+const outcomeLabel = (v?: string | null) => OUTCOMES.find((o) => o.value === v)?.label || null;
 
 export default function SvifListi() {
   const navigate = useNavigate();
