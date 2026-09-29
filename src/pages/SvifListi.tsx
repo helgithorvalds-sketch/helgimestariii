@@ -285,7 +285,9 @@ export default function SvifListi() {
                 <Plane className="w-7 h-7 text-primary" />
                 Svif fyrirtæki
               </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{svifFyrirtæki.length} fyrirtæki</p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {svifFyrirtæki.length} fyrirtæki · {svifFyrirtæki.filter((c) => !!c.lastCallOutcome).length} hringd
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
