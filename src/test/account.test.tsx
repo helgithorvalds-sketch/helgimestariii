@@ -72,6 +72,7 @@ vi.mock('../lib/api/profiles', async (importOriginal) => ({
   updateMyProfile: vi.fn(),
   uploadAvatar: vi.fn(),
   startEidVerification: vi.fn(),
+  deleteMyAccount: vi.fn(),
 }));
 vi.mock('../lib/api/admin', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../lib/api/admin')>()),
@@ -599,6 +600,25 @@ describe('MyPage', () => {
     expect(await within(verification).findByRole('button', { name: 'Staðfesta símanúmer' })).toBeInTheDocument();
     expect(within(verification).getByText('Væntanlegt')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Vista' })).toBeDisabled();
+  });
+
+  it('overview: deletes the account after confirming, and explains open deals', async () => {
+    const signOut = vi.fn(noop);
+    authState.current = auth({ user, profile, signOut, session: {} as AuthContextValue['session'] });
+    vi.mocked(profilesApi.deleteMyAccount).mockRejectedValueOnce({ code: 'P0001', message: 'OPEN_DEALS' });
+    renderMyPage();
+    fireEvent.click(screen.getByRole('button', { name: 'Eyða aðganginum mínum' }));
+    let dialog = await screen.findByRole('alertdialog');
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Eyða aðganginum mínum' }));
+    await waitFor(() => expect(toastMock.error).toHaveBeenCalledWith('Ekki hægt á meðan viðskipti eru í gangi.', undefined));
+    expect(signOut).not.toHaveBeenCalled();
+
+    vi.mocked(profilesApi.deleteMyAccount).mockResolvedValueOnce(undefined);
+    fireEvent.click(screen.getByRole('button', { name: 'Eyða aðganginum mínum' }));
+    dialog = await screen.findByRole('alertdialog');
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Eyða aðganginum mínum' }));
+    await waitFor(() => expect(signOut).toHaveBeenCalled());
+    expect(toastMock.success).toHaveBeenCalledWith('Aðganginum hefur verið eytt.');
   });
 
   it('overview: saves display name and bio', async () => {

@@ -77,3 +77,12 @@ export async function startEidVerification(next: string, opts: { app?: boolean }
   if (!data?.url) throw new Error('EID_FAILED');
   return { url: data.url };
 }
+
+/**
+ * Closes the signed-in account (migration 0014): personal data removed, login destroyed,
+ * deal history kept for the other party. Refused with OPEN_DEALS while a deal is open.
+ */
+export async function deleteMyAccount(): Promise<void> {
+  const { error } = await supabase.rpc('mt_delete_my_account');
+  if (error) throw error;
+}

@@ -21,6 +21,7 @@ import { MyAlertsList } from '../components/account/MyAlertsList';
 import { RatingsList } from '../components/account/RatingsList';
 import { SetPasswordCard } from '../components/account/SetPasswordCard';
 import { parseMyTab, type MyTab } from '../components/account/logic';
+import { DeleteAccountCard } from '../components/account/DeleteAccountCard';
 
 const tabTriggerClass =
   'h-11 shrink-0 gap-1.5 rounded-none border-b-2 border-transparent bg-transparent px-3 text-[13px] font-medium text-muted-foreground shadow-none data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none [&_svg]:h-4 [&_svg]:w-4';
@@ -126,6 +127,7 @@ export default function MyPage() {
             <>
               <ProfileForm profile={profile} />
               <VerificationCard />
+              <DeleteAccountCard />
             </>
           ) : (
             <ErrorState body={t('account.my.profileMissing')} retry={() => void refreshProfile()} />

@@ -1,73 +1,57 @@
-# Welcome to your Lovable project
+# Miðatorg
 
-## Project info
+Miðar á tónleika og viðburði á Íslandi, manna á milli — aldrei yfir upprunalegu verði.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+One codebase, three ways to use it:
 
-## How can I edit this code?
+| | Where | How it is built |
+|---|---|---|
+| **Website** | `https://midatorg.lovable.app` (Lovable project *Miðatorg*) | Lovable builds and hosts `npm run build` |
+| **iPhone app** | App Store, bundle id `is.midatorg.app` | `npm run app:ios` → Xcode → App Store Connect |
+| **Android app** | Google Play, package `is.midatorg.app` | `npm run app:android` → Android Studio → Play Console |
 
-There are several ways of editing your application.
+The apps are the website's build wrapped with [Capacitor](https://capacitorjs.com), plus phone-only
+features: push notifications, the share sheet, deep links back from electronic ID. See
+[docs/APP-STORE.md](docs/APP-STORE.md).
 
-**Use Lovable**
+## Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Vite · React 18 · TypeScript · Tailwind · shadcn/ui · react-router · TanStack Query · Supabase
+(own project `qiylxtybmlzvoadvbnca`) · Leaflet + OpenStreetMap · Capacitor 8.
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Run it
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm install
+npm run dev          # http://localhost:8080
+npm test             # unit tests (vitest)
+npm run lint
+npm run typecheck
+npm run build        # production build in dist/
 ```
 
-**Edit a file directly in GitHub**
+Visual smoke test with a mocked backend (Playwright + Chromium, screenshots in `e2e/midatorg/screenshots/`):
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+node e2e/midatorg/smoke.mjs --build
+```
 
-**Use GitHub Codespaces**
+## Where things are
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+| Path | What |
+|---|---|
+| `src/pages/` | One file per route (`/`, `/kort`, `/vidburdir/:id`, `/selja`, `/vidskipti`, `/eg`, `/stjorn`, `/skilmalar`, `/personuvernd` …) |
+| `src/components/` | Feature components (`market`, `map`, `event`, `forms`, `deals`, `account`, `admin`, `layout`) and `ui/` (shadcn) |
+| `src/lib/` | Supabase client, API calls, react-query hooks, auth, i18n (`is` / `en`), SEO, phone-app glue |
+| `src/content/legal.ts` | Terms and privacy policy (fill in the operator details before launch) |
+| `supabase-midatorg/` | Database migrations, edge functions and the backend README |
+| `ios/`, `android/`, `capacitor.config.ts`, `resources/` | Phone apps |
+| `docs/` | Product spec, design notes, App Store guide |
 
-## What technologies are used for this project?
+## Before launch
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Supabase Auth settings (Site URL, redirect URLs, SMTP, e-mail templates): `supabase-midatorg/README.md`.
+2. Operator name, kennitala, address and e-mail in `src/content/legal.ts`, and a contact e-mail in
+   `src/pages/AboutPage.tsx` (`CONTACT_EMAIL`).
+3. Remove the demo data (`supabase-midatorg/seed/README.md`).
+4. Electronic ID provider and push keys when ready (backend README).

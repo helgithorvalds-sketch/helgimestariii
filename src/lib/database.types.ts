@@ -1179,6 +1179,7 @@ export type Database = {
       mt_set_tix_signals: { Args: { p_ranked: string[]; p_sold_out?: string[] }; Returns: Json }
       mt_register_push_token: { Args: { p_token: string; p_platform: string }; Returns: undefined }
       mt_app_path: { Args: { p_link: string }; Returns: string }
+      mt_delete_my_account: { Args: Record<string, never>; Returns: undefined }
       mt_internal: { Args: never; Returns: boolean }
       mt_is_admin: { Args: never; Returns: boolean }
       mt_is_banned: { Args: { p_user: string }; Returns: boolean }
