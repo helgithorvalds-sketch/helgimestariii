@@ -147,12 +147,30 @@ export default function SvifListi() {
     <div key={c.id} className="rounded-xl border bg-card shadow-sm p-4 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="font-bold text-base truncate">{c.name}</h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-bold text-base truncate">{c.name}</h3>
+            {c.lastCallOutcome && (
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-muted flex items-center gap-1">
+                <Check className="w-3 h-3" />
+                {outcomeLabel(c.lastCallOutcome)}
+              </span>
+            )}
+          </div>
           {c.owner && <p className="text-sm font-medium text-primary truncate">{c.owner}</p>}
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setSelected(c)} aria-label="Breyta">
-          <Pencil className="w-4 h-4" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => toggleSet(openNotes, c.id, setOpenNotes)}
+            aria-label="Glósa"
+          >
+            <StickyNote className="w-4 h-4" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setSelected(c)} aria-label="Breyta">
+            <Pencil className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
@@ -218,11 +236,37 @@ export default function SvifListi() {
         )}
       </div>
 
-      {c.notes && (
-        <div className="rounded-md bg-muted/40 border text-xs p-2 whitespace-pre-wrap">
-          <span className="font-semibold block mb-0.5">Glósur</span>
-          {c.notes}
-        </div>
+      <div className="flex flex-wrap gap-1.5 pl-1">
+        {OUTCOMES.map((o) => (
+          <button
+            key={o.value}
+            onClick={() => setOutcome(c, o.value)}
+            className={cn(
+              "text-xs font-bold px-2.5 py-1 rounded-full border-2 transition-all hover:scale-[1.03]",
+              o.cls,
+              c.lastCallOutcome === o.value ? "bg-muted" : "bg-transparent"
+            )}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+
+      {openNotes.has(c.id) ? (
+        <Textarea
+          value={c.notes || ""}
+          onChange={(e) => saveNotes(c, e.target.value)}
+          rows={5}
+          placeholder="Glósa…"
+          className="text-sm"
+        />
+      ) : (
+        c.notes && (
+          <div className="rounded-md bg-muted/40 border text-xs p-2 whitespace-pre-wrap">
+            <span className="font-semibold block mb-0.5">Glósur</span>
+            {c.notes}
+          </div>
+        )
       )}
     </div>
   );
