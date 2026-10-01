@@ -1,0 +1,362 @@
+{
+ "project": {
+  "name": "svif-fyrsti-dagurinn",
+  "project_id": "da691da7-cca3-4434-8c28-2bb1bc104a5f",
+  "workspace_id": "a30f80c2-613b-4996-af3e-17c6aabfe09f"
+ },
+ "sheets": {
+  "hrefna": "1de7c9c2-00e6-472f-877a-000e61f6b2ec",
+  "kari": "9999001f-efc1-435c-82dc-8a47f8364486",
+  "asi": "2786d624-14b1-4c7f-b8d8-c042a6f93870",
+  "snati": "5890197d-0524-4473-b395-81d4a7d5db84",
+  "pipari": "63410952-5190-4458-bafd-d9f4b3ed963a",
+  "loc_hus": "aa05bf91-f271-4a91-8d75-840bcc5384ca",
+  "loc_gangur": "c74dc454-1051-412e-96cb-20df60b2ad33",
+  "loc_bad": "e2247c75-f460-481c-80f4-e9708b9f80f3",
+  "loc_stofa": "4d25c750-9df1-45fe-b6cc-7cfe29aa1936",
+  "loc_eldhus": "137a7a34-1ad0-47ef-a5af-3e37f01fec59"
+ },
+ "stills": {
+  "1": "942f1d0f-d937-4a62-a097-12ca521ac3e6",
+  "2": "f7e6f660-0d1f-49c1-ba67-9c00422321f5",
+  "3": "119e74c9-7ca8-406d-beeb-59cc49caee8c",
+  "4": "a0f1ae56-55a3-47ea-b7a2-93cd7cf88ef3",
+  "5": "f2738479-b8cb-457c-99a0-f920fba8a57d",
+  "6": "0fc2fbf0-6d86-49c9-97c4-c534292c85b8",
+  "7": "1d4cb58f-fe24-4724-b600-cdf8863f01ba",
+  "8": "f7f7726a-54d0-4662-8ff8-004f79043ecb",
+  "9": "e30ed9d6-205f-4efd-8694-0aabd9606947",
+  "10": "975443c7-baa5-435d-9589-ab549ef1e5c1",
+  "11": "9617cb39-ad46-4bca-b834-42cc5c18e667",
+  "12": "312d02b2-31d4-4674-a900-b224e6e78070",
+  "13": "0b8a2f13-9925-4e04-989f-44ebc0c2d331",
+  "14": "5cf13777-ccdb-4e46-986a-897f71dab547",
+  "15": "b78f2968-c83e-486b-a8b3-89fee8c1a7a6",
+  "16": "13505296-9ebe-4a20-8a9c-1cbe13201d4b",
+  "17": "69f65a1b-d38c-49b0-abb0-8081db92be73",
+  "18": "f374c8de-8738-45ab-b5ae-bad7be71a3b5",
+  "19": "6a18f873-3a61-4713-819c-ae352944830f",
+  "20": "fff01e94-6303-47fc-9da2-b27036bbe75b",
+  "21": "df465e48-fe4e-4a2f-bd9f-e1c79650c4f7",
+  "22": "a9b695fa-85c7-4e11-a9f2-89bfaee6baf4",
+  "23": "c6475d46-3ece-421a-8a0e-4db0ded2ea90",
+  "24": "6b41d042-bd29-43a1-a75e-dde0d03b4d8b",
+  "25": "FAILED-5a9ad23e-a524-409d-8e92-8c1fc9210e6c",
+  "26": "30c0d68b-b224-4708-8dbe-dda4fbd06036",
+  "27": "3df8cc4a-ab40-41c6-91e7-9d9909e30292",
+  "28": "4f952a42-09cd-4e7c-ab48-7f617f6a2fe0",
+  "29": "445f3e59-bdc8-41df-a842-1f495804a663",
+  "30": "6b4085a3-18a6-429f-986a-947dbe94db93",
+  "31": "25ca93b1-d07b-4ba2-865d-2f3e33caf352",
+  "32": "1ab840e8-efe7-44a6-8c2a-f71d6fea5c5b",
+  "33": "0ffa7b4a-6e01-42ea-b7a8-1d98c25c7177",
+  "34": "85f13bca-af5e-4fd7-a132-9737b914c2bf",
+  "35": "a84bfe65-6027-4aaf-9fff-16f7821c0836",
+  "36": "38c7f52d-ec40-40e1-9b8b-36071a69bed2",
+  "37": "2ef73578-8030-47de-9723-13976e768401",
+  "38": "70e11d2c-1344-4860-9c2c-f3e52a0618e8",
+  "39": "d9f5ee21-0f15-40d6-91a9-f05b74b261ae",
+  "40": "49989933-fd44-4b15-9017-55138ec99c13",
+  "41": "0cb84c69-5263-4b78-850e-d7b4ba3a876a",
+  "42": "b2060e0e-e448-4aa4-9ac4-3d7933c57739",
+  "43": "c07fca33-aae7-47bc-a49a-cd8d1d7575d7",
+  "44": "7886b1b4-9faa-4eee-a05a-5848ff51f87e",
+  "45": "435abb5b-11f3-416b-902f-2bf3597d4856",
+  "46a": "1037eaad-ede0-4c9d-ac7d-6c5fd5adcb0b",
+  "46b": "de3550aa-7ef3-4556-bd02-ed7a3adbd45d",
+  "46c": "aa2d1a6b-fe3e-4402-9c14-6e863d288b72",
+  "46d": "741bff41-7188-4631-80f4-1acd16d52d20",
+  "46e": "cc36c795-8aea-400d-91ca-12c67771c968",
+  "46f": "43270cfc-33dd-4595-9029-e4afb4e05e5b",
+  "46g": "1b15aaed-145a-4b8c-a520-81a273db8557",
+  "46h": "dd5e41da-1016-4dd3-8cd1-16bd1c2e5dde",
+  "47": "e0e2cb0e-2c24-491d-bb18-9f0925d1f1dc",
+  "48": "553c6320-667d-4605-b655-d20b909994b4",
+  "49": "f323f1fb-0ec1-4b8e-8868-1eaf6b61ee0b"
+ },
+ "clips": {
+  "2": {
+   "job": "eb41255a-da84-4c55-ac24-4f42974cb315",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "5": {
+   "job": "1ac3eb57-d3bf-4dce-b059-9a8b8ad737c7",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "6": {
+   "job": "859bc354-be46-4e99-a606-ee7cd166232c",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "7": {
+   "job": "b5df01b7-921b-497a-9759-7d9cc9be023f",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "8": {
+   "job": "84a9d6ee-741f-40ed-9554-52cccdde5c68",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "9": {
+   "job": "456cfcee-2a1b-41a2-a5fc-210599ef303c",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "11": {
+   "job": "88b64f4e-84fb-4238-abee-de8c78aaa03a",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "12": {
+   "job": "684c7297-0bd0-4623-bc30-e2ba5b80e565",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "13": {
+   "job": "0b7b2481-b4a0-4d1e-98a2-8b78ea5dc647",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "15": {
+   "job": "d9bd8ffe-2684-4a56-97e7-2f341d53fc47",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "16": {
+   "job": "b58b14ca-1684-4c9f-b9e5-8f4db74030cd",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "17": {
+   "job": "bb41416b-f443-447b-b2b2-6ed8efd5ead8",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "18": {
+   "job": "a9be41fa-f330-46cd-9031-0901d2f70e03",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "19": {
+   "job": "760c0dbc-5243-40e9-8266-49aae5c36591",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "20": {
+   "job": "53ef4731-e14c-44f5-939c-ab9a3d3e36c7",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "21": {
+   "job": "6c531654-5983-4b75-a7ad-3c6e71520c15",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "22": {
+   "job": "7b1c7505-ae45-4422-90e5-1fcd1fa27669",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "23": {
+   "job": "6eea6ab3-d76e-4f96-b627-3ea798653cdd",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "24": {
+   "job": "c7d16f34-dc39-4f4a-9d89-df5707bfd4c8",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "25": {
+   "job": "e90a1cfc-3756-45f1-8d18-d683894bc472",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "26": {
+   "job": "f5b96c75-4853-4c44-aa9b-577023476f52",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "27": {
+   "job": "dac586fd-8653-4100-9618-f057752e2174",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "28": {
+   "job": "a03f2aa1-b7e2-4283-865d-d375406fd910",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "29": {
+   "job": "836a6ce8-b312-4e3d-ac33-4f261b6dd269",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "30": {
+   "job": "d6031eb4-cfff-4baf-ad6d-e73e544c670d",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "32": {
+   "job": "573d10e7-5e1a-4437-bb7a-39eefd92b7ec",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "33": {
+   "job": "fd0b92b9-701f-4f62-b272-e64240da5e3e",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "35": {
+   "job": "3900b486-c323-4898-a5e1-6b287fe35967",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "36": {
+   "job": "74fe9960-16a0-4a00-b7d5-45d728378efb",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "37": {
+   "job": "77e18c26-14bd-45fa-810e-0a6f23c2ab71",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "38": {
+   "job": "20308af4-6ac9-4914-abbf-eb90f95428db",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "39": {
+   "job": "002544db-7b8b-4ed3-9f2a-bc163011d1e4",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "40": {
+   "job": "40ba28a5-f727-4253-a347-9fa6ea193c57",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "41": {
+   "job": "1290b043-bcfd-4945-9804-ee4cfe33e6de",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "42": {
+   "job": "10b3e531-ef9b-4666-9fe5-b1f9c5a5fa9c",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "43": {
+   "job": "d7850209-ae77-4367-8850-7b0577ee752a",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "44": {
+   "job": "53946379-f29c-4a19-9d47-a6a6cb661bac",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "45": {
+   "job": "e6dee075-6b5a-41fb-bafc-7ae98c2fecfb",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46a": {
+   "job": "a57c2a1d-4e5e-4feb-b91d-8b7f543ae522",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46b": {
+   "job": "5c8acd0b-11b7-4c83-ba74-65ecf4f376c5",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46d": {
+   "job": "ba883de7-2708-432c-98f8-5f893c65b7c2",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46e": {
+   "job": "62077f3f-5f3a-4c7c-922d-6cfc79f776c1",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46f": {
+   "job": "439757f0-931b-49aa-a6e5-014362fab2f6",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46g": {
+   "job": "3541d6a6-1e84-41c3-8094-52aea7a3885e",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46h": {
+   "job": "68bf67e1-b286-44a5-b34b-4e809bec44cb",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "48": {
+   "job": "2f4f3c4b-4d9c-4462-b20e-33c0ea9ea7d6",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "46c": {
+   "job": "3e89042e-be03-46e1-b9de-abd78b658946",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "47": {
+   "job": "8e92140e-9d2c-41b8-996d-93a787755238",
+   "model": "kling3_0 pro 5s",
+   "status": "completed"
+  },
+  "1": {
+   "job": "f219130f-5df4-4242-b7dd-1516a3eca718",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  },
+  "3": {
+   "job": "86a6a443-a8d7-4219-a9c1-b01607798913",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  },
+  "4": {
+   "job": "eee45487-3fcb-4ae7-a632-21b444c2292f",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  },
+  "10": {
+   "job": "c157acf0-0a7f-4082-b06c-ac455c7afa54",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  },
+  "14": {
+   "job": "3dbaf056-67e2-4ef1-a6cb-a7bab4adc274",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  },
+  "34": {
+   "job": "751d14b6-1707-4a8d-af12-41b1ab787746",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  },
+  "49": {
+   "job": "c459149e-516b-42b6-8f84-9204179d2b93",
+   "model": "seedance_2_5 480p 4s",
+   "status": "pending"
+  }
+ },
+ "kling_failed": {
+  "1": "0b0b9b57-2493-4865-936b-1d4f09c9edfe",
+  "3": "44d10332-5f2d-4aec-b4a7-c109c95cd643",
+  "4": "d16333e8-100e-43a6-b361-48e4b22f4405",
+  "10": "4d8cabc4-e116-414c-ac3c-db40dc2606bb",
+  "14": "f96309ec-c317-4d71-b0a0-b4b00cf8b92b",
+  "31": "98982da6-328f-4bd6-a3ef-23d7143bc30c"
+ }
+}
