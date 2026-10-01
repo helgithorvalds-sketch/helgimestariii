@@ -1,0 +1,5 @@
+out/
+state/kaupskra.csv
+state/kaupskra.csv.tmp
+state/seen.json
+__pycache__/
