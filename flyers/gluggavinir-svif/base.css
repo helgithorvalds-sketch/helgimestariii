@@ -1,0 +1,21 @@
+/* Gluggavinir SVIF flyers – shared base. 800px = 200mm (4px/mm). Trim 194mm, bleed 3mm (12px), safe 5mm inside trim (32px from edge). */
+@font-face{font-family:'Carmen Sans';src:url(fonts/CarmenSans-Heavy.woff2) format('woff2');font-weight:900;font-style:normal}
+@font-face{font-family:'Carmen Sans';src:url(fonts/CarmenSans-Bold.woff2) format('woff2');font-weight:700;font-style:normal}
+@font-face{font-family:'Carmen Sans';src:url(fonts/CarmenSans-Medium.woff2) format('woff2');font-weight:500;font-style:normal}
+@font-face{font-family:'Carmen Sans';src:url(fonts/CarmenSans-Regular.woff2) format('woff2');font-weight:400;font-style:normal}
+:root{--or:#FF6600;--ink:#0C0D0E;--navy:#324A6D;--grey:#F1F1F1;--mid:#5E5D5D;--line:#D6D5D5}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff}
+.sheet{width:800px;height:800px;overflow:hidden}
+.page{position:relative;width:800px;height:800px;overflow:hidden;background:#fff;font-family:'Carmen Sans','Outfit',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.2}
+.page h1,.page h2,.page p,.page ul{margin:0}
+.page ul{padding:0;list-style:none}
+.abs{position:absolute}
+.check{display:flex;gap:9px;align-items:flex-start}
+.check svg{flex:0 0 auto;margin-top:1px}
+.guides{display:none;position:absolute;inset:0;pointer-events:none}
+body.guides .guides{display:block}
+.guides .trim{position:absolute;left:12px;top:12px;right:12px;bottom:12px;border:1px dashed rgba(255,0,0,.9)}
+.guides .safe{position:absolute;left:32px;top:32px;right:32px;bottom:32px;border:1px dashed rgba(0,120,255,.9)}
+@page{size:200mm 200mm;margin:0}
+@media print{html,body{width:200mm;height:200mm;background:#fff}.sheet{width:200mm;height:200mm}.page{transform:scale(.944882);transform-origin:top left}}
