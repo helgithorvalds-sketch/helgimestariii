@@ -37,3 +37,16 @@ node render.js a,b,c      # skrifar out/flyer-{a,b,c}.png og .pdf
 - Heildarþjónusta á einum stað, allt innifalið: mæling (með ábyrgð), ráðgjöf um efnisval, pöntun, ísetning (TME Gluggar), förgun, frágangur og þrif.
 - Frí mæling og tilboð.
 - 10% afsláttur af gluggum og ísetningu þegar hvort tveggja er tekið saman í pakka.
+
+## Tilbúnar prentskrár (Higgsfield-geymsla)
+
+| | PNG 2362×2362 px (300 dpi, með bleed) | PDF 200×200 mm (vektor) |
+| --- | --- | --- |
+| A | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/45eeba3a-d403-4909-93cb-6fc769cb1ad5.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/418c2d43-cdda-472f-b32d-69b29167000b.pdf |
+| B | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/81fd2346-5d05-4c83-9217-a93663acea30.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/aa6aa66c-a0ed-4ec0-8e5c-c44de27fc08f.pdf |
+| C | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/faa6b9b0-9605-4462-91de-1b69c636b1af.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/c37d7e11-8f7f-425e-9395-23cd012a0d36.pdf |
+
+Hero-myndin uppsköluð í 4K (4096×2737 PNG): https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20261005_140554_0c5e7b04-1ca7-44ce-b49d-5bea8bb1b61e.png
+(vistist sem `assets/hero_4k.jpg` með `convert hero.png -quality 90 assets/hero_4k.jpg`)
+
+Hönnunarstriga (Claude Design) með öllum þremur: https://claude.ai/artifact/FYf6xW4sfCH6vM8RhxcZ69
