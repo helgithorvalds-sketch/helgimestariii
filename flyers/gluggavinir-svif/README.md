@@ -41,8 +41,8 @@ node render.js a,b        # skrifar out/flyer-{a,b}.png og .pdf
 
 | | PNG 2362×2362 px (300 dpi, með bleed) | PDF 200×200 mm (vektor) |
 | --- | --- | --- |
-| A | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/ef1aab88-dbbd-4082-9b19-62f683f90eb6.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/25e8f239-2020-455e-b781-c8010edbec61.pdf |
-| B | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/fed0cd6d-25d9-4137-a6f2-562290bbedf8.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/37657a9a-495d-46fa-8284-a45badd05d1a.pdf |
+| A | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/ef1aab88-dbbd-4082-9b19-62f683f90eb6.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/05241b9a-86c5-4dad-81e1-e02daf389b31.pdf |
+| B | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/6b0a9f23-96eb-4817-8c94-9f2f236ea144.png | https://d2ol7oe51mr4n9.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/086f3130-c71e-43d4-98eb-47aee992a367.pdf |
 
 Hero-myndin uppsköluð í 4K (4096×2737 PNG): https://d8j0ntlcm91z4.cloudfront.net/user_34vsSReFkdGCAGhtasiRFYvLczn/hf_20261005_140554_0c5e7b04-1ca7-44ce-b49d-5bea8bb1b61e.png
 (vistist sem `assets/hero_4k.jpg` með `convert hero.png -quality 90 assets/hero_4k.jpg`)
