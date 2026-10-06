@@ -160,6 +160,14 @@
     border: 1px solid hsl(var(--border) / 0.7);
     box-shadow: var(--shadow-sm);
   }
+  /* Horizontal chip rows on phones: scrollable without a visible scrollbar */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Smoother global transitions for interactive surfaces */

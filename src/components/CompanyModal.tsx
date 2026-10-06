@@ -1024,8 +1024,9 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
     <>
       {/* Full call overlay */}
       {finishingCall && createPortal(
-        <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
-          <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6">
+        <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm overflow-y-auto">
+          <div className="min-h-full flex items-center justify-center p-4 sm:p-6">
+          <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6">
             <div className="text-center">
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-primary" />
@@ -1048,7 +1049,7 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
               </div>
             )}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <label className="text-sm font-medium text-foreground">Hvað fjallaði símtalið um?</label>
                 <div className="flex items-center gap-1.5 flex-wrap justify-end">
                   {originalNotes !== null && (
@@ -1192,14 +1193,15 @@ export function CompanyModal({ company, open, onClose, onUpdate, onDelete, initi
               </Button>
             </div>
           </div>
+          </div>
         </div>
       , document.body)}
 
       <Dialog open={open && !finishingCall} onOpenChange={(v) => { if (!v) { onClose(); setEditMode(false); } }} modal={!finishingCall}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <div className="flex items-center justify-between">
-              <DialogTitle className="text-xl font-bold text-foreground">{company.name}</DialogTitle>
+            <div className="flex flex-wrap items-center justify-between gap-2 pr-6 text-left">
+              <DialogTitle className="text-lg sm:text-xl font-bold text-foreground min-w-0 break-words leading-snug">{company.name}</DialogTitle>
               <StageBadge stage={company.stage} size="md" />
             </div>
           </DialogHeader>

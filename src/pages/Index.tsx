@@ -12,12 +12,45 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin, type LucideIcon } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import confetti from "canvas-confetti";
+
+type NavButtonProps = {
+  icon: LucideIcon;
+  label: string;
+  count?: number;
+  alert?: boolean;
+  onClick: () => void;
+};
+
+/** Compact navigation chip used in the header; the count sits inside the chip so it survives horizontal scrolling. */
+function NavButton({ icon: Icon, label, count = 0, alert = false, onClick }: NavButtonProps) {
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={onClick}
+      className="h-9 gap-1.5 rounded-full px-3 shadow-sm flex-shrink-0"
+    >
+      <Icon className="w-4 h-4 text-muted-foreground" />
+      <span>{label}</span>
+      {count > 0 && (
+        <span
+          className={cn(
+            "ml-0.5 min-w-5 h-5 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center text-white tabular-nums",
+            alert ? "bg-destructive" : "bg-primary"
+          )}
+        >
+          {count}
+        </span>
+      )}
+    </Button>
+  );
+}
 
 export default function Index() {
   const navigate = useNavigate();
@@ -74,6 +107,12 @@ export default function Index() {
 
   const pendingTaskCount = allTasks.filter((t) => !t.completed).length;
   const hasOverdueTasks = allTasks.some((t) => !t.completed && t.deadline && new Date(t.deadline) < new Date());
+  const totalCount = companies.filter((c) => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki").length;
+  const leadCount = companies.filter((c) => c.stage === "lead").length;
+  const svifCount = companies.filter((c) => c.stage === "svif").length;
+  const svifAkureyriCount = companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length;
+  const svifFyrirtaekiCount = companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length;
+  const akureyriListCount = companies.filter((c) => c.leadSource === "svif_akureyri").length;
 
   const handleAdd = async (data: Omit<Company, "id" | "createdAt">) => {
     const result = await addCompany(data);
@@ -280,7 +319,7 @@ export default function Index() {
       >
         {!isExpanded ? (
           <div className="flex items-center gap-2">
-            <GripVertical className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 flex-shrink-0 cursor-grab transition-opacity" />
+            <GripVertical className="hidden sm:block w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 flex-shrink-0 cursor-grab transition-opacity" />
             <p className="font-semibold text-sm text-foreground truncate flex-1">{company.name}</p>
             <span className="text-xs text-muted-foreground font-medium flex-shrink-0">
               {company.stage === "paid" && company.amountPaid
@@ -291,8 +330,8 @@ export default function Index() {
         ) : (
           <div className="p-4 space-y-2">
             {/* Name */}
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-base text-foreground">{company.name}</h3>
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="font-bold text-base text-foreground min-w-0 break-words leading-snug">{company.name}</h3>
               <button
                 onClick={(e) => { e.stopPropagation(); setExpandedCardId(null); }}
                 className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-muted"
@@ -318,7 +357,7 @@ export default function Index() {
 
             {/* Email */}
             {company.email && (
-              <div className="flex items-center gap-1.5 text-sm">
+              <div className="flex items-center gap-1.5 text-sm min-w-0">
                 <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
                 <a href={`mailto:${company.email}`} className="font-medium text-muted-foreground hover:text-foreground transition-colors truncate" onClick={(e) => e.stopPropagation()}>
                   {company.email}
@@ -372,7 +411,7 @@ export default function Index() {
 
             {/* Next call with countdown */}
             {company.nextCallAt && (
-              <div className="flex items-center justify-between rounded-md border p-2">
+              <div className="flex flex-wrap items-center justify-between gap-1 rounded-md border p-2">
                 <div className="flex items-center gap-1.5">
                   <Phone className="w-3.5 h-3.5 text-primary" />
                   <span className="text-xs text-muted-foreground">Næsta símtal:</span>
@@ -436,11 +475,11 @@ export default function Index() {
             })()}
 
             {/* Action buttons */}
-            <div className="flex gap-1.5 mt-1">
+            <div className="flex flex-wrap gap-1.5 mt-2">
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 gap-1.5 text-xs h-7 px-2"
+                className="flex-1 min-w-[88px] gap-1.5 text-xs h-8 px-2"
                 onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); setInitialTab("call"); }}
               >
                 <Phone className="w-3 h-3" />
@@ -449,7 +488,7 @@ export default function Index() {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 gap-1.5 text-xs h-7 px-2"
+                className="flex-1 min-w-[88px] gap-1.5 text-xs h-8 px-2"
                 onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); setInitialTab("tasks"); }}
               >
                 <ClipboardList className="w-3 h-3" />
@@ -458,7 +497,7 @@ export default function Index() {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 gap-1.5 text-xs h-7 px-2"
+                className="flex-1 min-w-[88px] gap-1.5 text-xs h-8 px-2"
                 onClick={(e) => { e.stopPropagation(); setSelectedCompany(company); }}
               >
                 <Pencil className="w-3 h-3" />
@@ -476,115 +515,72 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm px-6 py-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src={logo} alt="Logo" className="w-14 h-14 rounded-xl shadow-sm" />
-            <div>
-              <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
-              <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki").length} fyrirtæki samtals</p>
+      <header className="border-b bg-card shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3 pb-3 sm:pt-5 sm:pb-4 space-y-3">
+          {/* Row 1: brand + primary action */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+              <img src={logo} alt="Logo" className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl shadow-sm flex-shrink-0 object-cover" />
+              <div className="min-w-0">
+                <h1 className="text-lg xs:text-xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-tight truncate">Verkefnastjórnun</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">{totalCount} fyrirtæki samtals</p>
+              </div>
             </div>
+            <Button
+              onClick={() => setAddOpen(true)}
+              aria-label="Nýtt fyrirtæki"
+              className="h-9 w-9 p-0 xs:w-auto xs:px-3 sm:h-10 sm:px-4 gap-1.5 shadow-sm flex-shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden xs:inline sm:hidden">Nýtt</span>
+              <span className="hidden sm:inline">Nýtt fyrirtæki</span>
+            </Button>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
+
+          {/* Row 2: search + navigation (chips scroll sideways on phones, wrap on larger screens) */}
+          <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-3">
+            <div className="relative md:w-56 flex-shrink-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Leita að fyrirtæki..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-8 w-56 h-9 text-sm"
+                className="pl-9 pr-8 w-full h-10 md:h-9 text-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+                  aria-label="Hreinsa leit"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
-            <Button variant="outline" onClick={() => navigate("/tasks")} className="gap-2 shadow-sm relative">
-              <ClipboardList className="w-4 h-4" />
-              Verkefni
-              {pendingTaskCount > 0 && (
-                <span className={cn(
-                  "absolute -top-2 -right-2 min-w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white",
-                  hasOverdueTasks ? "bg-destructive" : "bg-primary"
-                )}>
-                  {pendingTaskCount}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/leads")} className="gap-2 shadow-sm relative">
-              <PhoneCall className="w-4 h-4" />
-              Til að hringja
-              {companies.filter(c => c.stage === "lead").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "lead").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif")} className="gap-2 shadow-sm relative">
-              <Plane className="w-4 h-4" />
-              Svif
-              {companies.filter(c => c.stage === "svif").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-fyrirtæki")} className="gap-2 shadow-sm relative">
-              <Plane className="w-4 h-4" />
-              Svif Akureyri
-              {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-listi")} className="gap-2 shadow-sm relative">
-              <BookOpen className="w-4 h-4" />
-              Svif fyrirtæki
-              {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
-              <MapPin className="w-4 h-4" />
-              Akureyri hringilisti
-              {companies.filter((c) => c.leadSource === "svif_akureyri").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter((c) => c.leadSource === "svif_akureyri").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/fyrirtaekjabok")} className="gap-2 shadow-sm relative">
-              <Building2 className="w-4 h-4" />
-              Fyrirtækjabókin
-            </Button>
-
-            <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
-              <TrendingUp className="w-4 h-4" />
-              Fjárhagur
-            </Button>
-            <Button onClick={() => setAddOpen(true)} className="gap-2 shadow-sm">
-              <Plus className="w-4 h-4" />
-              Nýtt fyrirtæki
-            </Button>
+            <nav
+              aria-label="Síður"
+              className="flex items-center gap-2 overflow-x-auto scrollbar-none -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible py-0.5"
+            >
+              <NavButton icon={ClipboardList} label="Verkefni" count={pendingTaskCount} alert={hasOverdueTasks} onClick={() => navigate("/tasks")} />
+              <NavButton icon={PhoneCall} label="Til að hringja" count={leadCount} onClick={() => navigate("/leads")} />
+              <NavButton icon={Plane} label="Svif" count={svifCount} onClick={() => navigate("/svif")} />
+              <NavButton icon={Plane} label="Svif Akureyri" count={svifAkureyriCount} onClick={() => navigate("/svif-fyrirtæki")} />
+              <NavButton icon={BookOpen} label="Svif fyrirtæki" count={svifFyrirtaekiCount} onClick={() => navigate("/svif-listi")} />
+              <NavButton icon={MapPin} label="Akureyri hringilisti" count={akureyriListCount} onClick={() => navigate("/svif-akureyri")} />
+              <NavButton icon={Building2} label="Fyrirtækjabókin" onClick={() => navigate("/fyrirtaekjabok")} />
+              <NavButton icon={TrendingUp} label="Fjárhagur" onClick={() => navigate("/finances")} />
+            </nav>
           </div>
-
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-6">
+      <main className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 pb-20 sm:pb-24">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <p className="text-muted-foreground">Hleð...</p>
           </div>
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-4 sm:space-y-5">
             {/* Overdue calls banner */}
             {(() => {
               const now = new Date();
@@ -597,19 +593,19 @@ export default function Index() {
               });
               if (overdue.length === 0) return null;
               return (
-                <div className="rounded-xl border-2 border-destructive bg-destructive/10 p-4 flex items-center gap-4 animate-fade-in">
-                  <div className="w-12 h-12 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" />
+                <div className="rounded-xl border-2 border-destructive bg-destructive/10 p-3 sm:p-4 flex items-center gap-3 sm:gap-4 animate-fade-in">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-destructive text-lg">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-destructive text-base sm:text-lg leading-snug">
                       {overdue.length} {overdue.length === 1 ? "símtal" : "símtöl"} óafgreitt!
                     </p>
-                    <p className="text-sm text-destructive/80">
+                    <p className="text-xs sm:text-sm text-destructive/80 line-clamp-2">
                       {overdue.map((c) => c.name).join(", ")}
                     </p>
                   </div>
-                  <AlertTriangle className="w-8 h-8 text-destructive animate-[pulse_1.5s_ease-in-out_infinite]" />
+                  <AlertTriangle className="hidden sm:block w-8 h-8 text-destructive animate-[pulse_1.5s_ease-in-out_infinite] flex-shrink-0" />
                 </div>
               );
             })()}
@@ -689,7 +685,7 @@ export default function Index() {
               return (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {/* LEFT: Á eftir að hringja */}
-                  <div className="rounded-2xl border bg-card/80 backdrop-blur-sm p-4 shadow-sm">
+                  <div className="rounded-2xl border bg-card/80 backdrop-blur-sm p-3 sm:p-4 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-muted-foreground" />
@@ -697,7 +693,7 @@ export default function Index() {
                       </div>
                       <span className="text-lg font-extrabold text-foreground">{toCall.length}</span>
                     </div>
-                    <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+                    <div className="space-y-2 max-h-[420px] lg:max-h-[480px] overflow-y-auto pr-1 overscroll-contain">
                       {toCall.length === 0 ? (
                         <p className="text-xs text-muted-foreground/60 italic px-1">Engin fyrirtæki bíða eftir símtali</p>
                       ) : (
@@ -720,7 +716,7 @@ export default function Index() {
                   </div>
 
                   {/* RIGHT: Áætluð símtöl, grouped */}
-                  <div className="rounded-2xl border-2 border-primary/30 bg-card p-4 shadow-sm">
+                  <div className="rounded-2xl border-2 border-primary/30 bg-card p-3 sm:p-4 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-primary" />
@@ -728,7 +724,7 @@ export default function Index() {
                       </div>
                       <span className="text-lg font-extrabold text-primary">{scheduled.length}</span>
                     </div>
-                    <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1">
+                    <div className="space-y-4 max-h-[420px] lg:max-h-[480px] overflow-y-auto pr-1 overscroll-contain">
                       <Section title="Í dag" list={todayList} accent="text-destructive" />
                       <Section title="Á morgun" list={tomorrowList} />
                       <Section title="Síðar" list={laterList} />
@@ -747,7 +743,7 @@ export default function Index() {
                     onDragOver={(e) => onDragOver(e, stage)}
                     onDragLeave={onDragLeave}
                     onDrop={(e) => onDropStage(e, stage)}
-                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-4 min-h-[260px] transition-all shadow-sm ${
+                    className={`rounded-2xl border bg-card/80 backdrop-blur-sm p-3 sm:p-4 min-h-[200px] sm:min-h-[260px] transition-all shadow-sm ${
                       dragOverStage === stage ? "drag-over" : ""
                     }`}
                   >
@@ -784,7 +780,7 @@ export default function Index() {
                 }}
                 onDragLeave={onDragLeave}
                 onDrop={(e) => onDropStage(e, "preview", "sold_preview")}
-                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
+                className="w-full flex items-center justify-between gap-3 p-3 sm:p-4 hover:bg-muted/30 transition-colors rounded-xl"
               >
                 <div className="flex items-center gap-3">
                   <StageBadge stage="preview" size="md" />
@@ -803,17 +799,17 @@ export default function Index() {
               </button>
 
               {previewExpanded && (
-                <div className="px-4 pb-4">
+                <div className="px-3 pb-3 sm:px-4 sm:pb-4">
                   {previewUncategorized.length > 0 && (
                     <div className="mb-4">
                       <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                         {previewUncategorized.map(renderCompanyCard)}
                       </div>
                     </div>
                   )}
 
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
                     {PREVIEW_SUB_ORDER.map((sub) => {
                       const dropId = `preview_${sub}`;
                       return (
@@ -822,7 +818,7 @@ export default function Index() {
                           onDragOver={(e) => onDragOver(e, dropId)}
                           onDragLeave={onDragLeave}
                           onDrop={(e) => onDropStage(e, "preview", sub)}
-                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
+                          className={`rounded-lg border border-dashed p-3 min-h-[120px] sm:min-h-[200px] transition-all ${
                             dragOverStage === dropId ? "drag-over" : "bg-muted/20"
                           }`}
                         >
@@ -859,7 +855,7 @@ export default function Index() {
                 }}
                 onDragLeave={onDragLeave}
                 onDrop={(e) => onDropStage(e, "finished", undefined, "not_contacted")}
-                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
+                className="w-full flex items-center justify-between gap-3 p-3 sm:p-4 hover:bg-muted/30 transition-colors rounded-xl"
               >
                 <div className="flex items-center gap-3">
                   <StageBadge stage="finished" size="md" />
@@ -878,17 +874,17 @@ export default function Index() {
               </button>
 
               {finishedExpanded && (
-                <div className="px-4 pb-4">
+                <div className="px-3 pb-3 sm:px-4 sm:pb-4">
                   {finishedUncategorized.length > 0 && (
                     <div className="mb-4">
                       <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                         {finishedUncategorized.map(renderCompanyCard)}
                       </div>
                     </div>
                   )}
 
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
                     {FINISHED_SUB_ORDER.map((sub) => {
                       const dropId = `finished_${sub}`;
                       return (
@@ -897,7 +893,7 @@ export default function Index() {
                           onDragOver={(e) => onDragOver(e, dropId)}
                           onDragLeave={onDragLeave}
                           onDrop={(e) => onDropStage(e, "finished", undefined, sub)}
-                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
+                          className={`rounded-lg border border-dashed p-3 min-h-[120px] sm:min-h-[200px] transition-all ${
                             dragOverStage === dropId ? "drag-over" : "bg-muted/20"
                           }`}
                         >
@@ -934,7 +930,7 @@ export default function Index() {
                 }}
                 onDragLeave={onDragLeave}
                 onDrop={(e) => onDropStage(e, "paid")}
-                className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors rounded-xl"
+                className="w-full flex items-center justify-between gap-3 p-3 sm:p-4 hover:bg-muted/30 transition-colors rounded-xl"
               >
                 <div className="flex items-center gap-3">
                   <StageBadge stage="paid" size="md" />
@@ -953,17 +949,17 @@ export default function Index() {
               </button>
 
               {paidExpanded && (
-                <div className="px-4 pb-4">
+                <div className="px-3 pb-3 sm:px-4 sm:pb-4">
                   {paidUncategorized.length > 0 && (
                     <div className="mb-4">
                       <p className="text-xs text-muted-foreground mb-2 font-medium">Óflokkað — dragðu í undirflokk</p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                         {paidUncategorized.map(renderCompanyCard)}
                       </div>
                     </div>
                   )}
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {PAID_SUB_ORDER.map((sub) => {
                       const dropId = `paid_${sub}`;
                       return (
@@ -972,7 +968,7 @@ export default function Index() {
                           onDragOver={(e) => onDragOver(e, dropId)}
                           onDragLeave={onDragLeave}
                           onDrop={(e) => onDropStage(e, "paid", undefined, undefined, sub)}
-                          className={`rounded-lg border border-dashed p-3 min-h-[200px] transition-all ${
+                          className={`rounded-lg border border-dashed p-3 min-h-[120px] sm:min-h-[200px] transition-all ${
                             dragOverStage === dropId ? "drag-over" : "bg-muted/20"
                           }`}
                         >
@@ -997,33 +993,37 @@ export default function Index() {
 
             {/* Paid amount prompt dialog */}
             {pendingPaidDrop && (
-              <div className="rounded-xl border-2 border-primary bg-card p-5 shadow-lg">
+              <div className="rounded-xl border-2 border-primary bg-card p-4 sm:p-5 shadow-lg">
                 <p className="font-semibold text-foreground mb-3">
                   {pendingPaidDrop.sub === "fully_paid" ? "Hversu mikið var borgað samtals?" : "Hversu mikið hefur verið greitt?"}
                 </p>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={paidAmountInput}
                     onChange={(e) => setPaidAmountInput(e.target.value)}
                     placeholder="Upphæð í kr..."
-                    className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm"
+                    className="flex-1 min-w-0 h-10 rounded-lg border border-input bg-background px-3 text-sm"
                     autoFocus
                   />
-                  <Button onClick={confirmPaidAmount} disabled={!paidAmountInput || Number(paidAmountInput) <= 0}>
-                    Staðfesta
-                  </Button>
-                  <Button variant="ghost" onClick={() => { setPendingPaidDrop(null); setPaidAmountInput(""); }}>
-                    Hætta við
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button className="flex-1 sm:flex-none" onClick={confirmPaidAmount} disabled={!paidAmountInput || Number(paidAmountInput) <= 0}>
+                      Staðfesta
+                    </Button>
+                    <Button variant="ghost" onClick={() => { setPendingPaidDrop(null); setPaidAmountInput(""); }}>
+                      Hætta við
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
 
             {/* Website URL reminder - full screen overlay */}
             {websiteReminder && (
-              <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
-                <div className="max-w-md w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6 text-center">
+              <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm overflow-y-auto">
+                <div className="min-h-full flex items-center justify-center p-4 sm:p-6">
+                <div className="max-w-md w-full rounded-2xl border-2 border-primary bg-card p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6 text-center">
                   <div className="flex justify-center">
                     <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
                       <AlertTriangle className="w-8 h-8 text-primary" />
@@ -1067,6 +1067,7 @@ export default function Index() {
                     </Button>
                   </div>
                 </div>
+                </div>
               </div>
             )}
 
@@ -1098,7 +1099,7 @@ export default function Index() {
                   </summary>
                   <div className="px-4 pb-4 space-y-2">
                     {rejected.map((c) => (
-                      <div key={c.id} className="flex items-center justify-between rounded-lg border bg-background px-3 py-2">
+                      <div key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-background px-3 py-2">
                         <div className="min-w-0 flex-1">
                           <p className="font-semibold text-sm truncate">{c.name}</p>
                           {c.rejectedAt && (
@@ -1107,7 +1108,7 @@ export default function Index() {
                             </p>
                           )}
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-shrink-0">
                           <Button variant="outline" size="sm" onClick={() => setSelectedCompany(c)}>
                             Skoða
                           </Button>

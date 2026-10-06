@@ -273,8 +273,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
     <>
     {/* Finish call full-screen overlay */}
     {finishingCall && (
-      <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-6">
-        <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-8 shadow-2xl space-y-6">
+      <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm overflow-y-auto">
+        <div className="min-h-full flex items-center justify-center p-4 sm:p-6">
+        <div className="max-w-lg w-full rounded-2xl border-2 border-primary bg-card p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6">
           <div className="text-center">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-primary" />
@@ -471,15 +472,16 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
             </Button>
           </div>
         </div>
+        </div>
       </div>
     )}
 
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
       {/* Schedule - 2/3 */}
-      <div className={cn("col-span-2 rounded-xl border bg-card p-4", unscheduledFirst ? "order-2" : "order-1")}>
+      <div className={cn("lg:col-span-2 rounded-xl border bg-card p-3 sm:p-4", unscheduledFirst ? "order-2" : "order-1")}>
         <div className="flex items-center gap-2 mb-4">
           <Phone className="w-5 h-5 text-primary" />
-          <h2 className="text-lg font-bold text-foreground">Áætlun símtala</h2>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Áætlun símtala</h2>
           <span className="text-sm text-muted-foreground ml-auto">{scheduled.length} skipulögð</span>
         </div>
 
@@ -502,12 +504,12 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                     onClick={() => onCompanyClick(company)}
                     className="p-3 cursor-pointer hover:shadow-md transition-all"
                   >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-sm text-foreground">{company.name}</p>
-                        <div className="flex items-center gap-2 mt-0.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm text-foreground break-words">{company.name}</p>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
                           <StageBadge stage={company.stage} size="sm" />
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
                             {company.estimatedPrice.toLocaleString("is-IS")} kr.
                           </span>
                         </div>
@@ -527,10 +529,10 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                             <a
                               href={`mailto:${company.email}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 text-xs text-primary font-medium hover:underline"
+                              className="inline-flex items-center gap-1 text-xs text-primary font-medium hover:underline min-w-0 max-w-full"
                             >
-                              <Mail className="w-3 h-3" />
-                              {company.email}
+                              <Mail className="w-3 h-3 flex-shrink-0" />
+                              <span className="truncate">{company.email}</span>
                             </a>
                           )}
                           {company.finnaUrl && (
@@ -574,7 +576,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                         setFinishingCall(company);
                         setFinishNotes("");
                       }}
-                      className="gap-1 text-xs h-6 px-2 rounded-full"
+                      className="gap-1 text-xs h-7 px-2.5 rounded-full"
                     >
                       <CheckCircle className="w-3 h-3" />
                       Lokið
@@ -644,7 +646,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                         variant="destructive"
                         size="sm"
                         onClick={(e) => { e.stopPropagation(); setConfirmNoAnswer(company.id); }}
-                        className="gap-1 text-xs h-6 px-2 rounded-full"
+                        className="gap-1 text-xs h-7 px-2.5 rounded-full"
                       >
                         <PhoneMissed className="w-3 h-3" />
                         Svaraði ekki
@@ -661,7 +663,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                         setNextCallDate("");
                         setNextCallTime("");
                       }}
-                      className="gap-1 text-xs h-6 px-2 rounded-full"
+                      className="gap-1 text-xs h-7 px-2.5 rounded-full"
                     >
                       <Phone className="w-3 h-3" />
                       Nýtt símtal
@@ -732,7 +734,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                           setCallbackTime("");
                           setCallbackCompany(company.id);
                         }}
-                        className="gap-1 text-xs h-6 px-2 rounded-full"
+                        className="gap-1 text-xs h-7 px-2.5 rounded-full"
                       >
                         <CalendarClock className="w-3 h-3" />
                         Hringja aftur
@@ -745,7 +747,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
                         e.stopPropagation();
                         toggleCallLogs(company.id);
                       }}
-                      className="gap-1 text-xs text-muted-foreground h-6 px-2 rounded-full"
+                      className="gap-1 text-xs text-muted-foreground h-7 px-2.5 rounded-full"
                     >
                       <FileText className="w-3 h-3" />
                       {loadingLogs === company.id ? "Hleð..." : "Fyrri símtöl"}
@@ -777,10 +779,10 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
       </div>
 
       {/* Unscheduled - 1/3 */}
-      <div className={cn("col-span-1 rounded-xl border bg-card p-4", unscheduledFirst ? "order-1" : "order-2")}>
+      <div className={cn("lg:col-span-1 rounded-xl border bg-card p-3 sm:p-4", unscheduledFirst ? "order-1" : "order-2")}>
         <div className="flex items-center gap-2 mb-4">
           <AlertCircle className="w-5 h-5 text-amber-500" />
-          <h2 className="text-lg font-bold text-foreground">{unscheduledTitle}</h2>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">{unscheduledTitle}</h2>
           <span className="text-sm text-muted-foreground ml-auto">{unscheduled.length}</span>
         </div>
 
@@ -827,10 +829,10 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
     </div>
 
     {/* Recent Notes Section */}
-    <div className="rounded-xl border bg-card p-4 mt-6">
+    <div className="rounded-xl border bg-card p-3 sm:p-4 mt-4 lg:mt-6">
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="w-5 h-5 text-primary" />
-        <h2 className="text-lg font-bold text-foreground">Nýlegar athugasemdir</h2>
+        <h2 className="text-base sm:text-lg font-bold text-foreground">Nýlegar athugasemdir</h2>
         <span className="text-sm text-muted-foreground ml-auto">{recentNotes.length} skráðar</span>
       </div>
 

@@ -168,7 +168,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-foreground">Skrá nýtt fyrirtæki</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl font-bold text-foreground pr-6 text-left">Skrá nýtt fyrirtæki</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-5 pt-2">
@@ -491,7 +491,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
                   else { setUseCustomPrice(false); setSelectedPrice(Number(val)); }
                 }}
               >
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {PRICE_OPTIONS.map((opt) => (
                     <label
                       key={opt.value}

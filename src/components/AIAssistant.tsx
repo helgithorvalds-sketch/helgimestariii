@@ -187,11 +187,11 @@ export function AIAssistant({ companies, onCompaniesChange }: AIAssistantProps) 
   };
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex flex-col" style={{ width: open ? 360 : "auto" }}>
+    <div className="fixed bottom-0 left-0 z-50 flex flex-col max-w-full" style={{ width: open ? "min(360px, 100vw)" : "auto" }}>
       {/* Expanded panel */}
       {open && (
         <div className="flex flex-col bg-card border border-border border-b-0 rounded-tr-2xl shadow-2xl overflow-hidden"
-          style={{ height: 520 }}>
+          style={{ height: "min(520px, 72vh)" }}>
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2 space-y-3">
             {messages.map((msg, i) => (
