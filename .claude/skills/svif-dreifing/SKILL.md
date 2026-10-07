@@ -13,10 +13,17 @@ description: SVIF bæklingadreifing til nýrra húseigenda (Nýtt Heimili / Heim
 
 ## Það sem má aldrei klikka
 
+- **Ekkert fer til Haralds nema Helgi sendi það sjálfur.** Allt til Póstdreifingar
+  verður fyrst DRÖG í Gmail (kerfið: IMAP-drög á mánudögum; lota: `create_draft`) —
+  aldrei `send_message` á haraldurb@postdreifing.is.
 - Fjölbýli fer ALDREI til Póstdreifingar án íbúðarnúmers („Hraunbær 158, íbúð 0301").
   Númerið er í FEPILOG-dálki kaupskrár HMS og `nytt-heimili/ibudir.py` setur það á.
-- Vikulegi listinn (~76) fer sjálfkrafa á mánudögum til haraldurb@postdreifing.is úr
-  GitHub Actions (`nytt-heimili.yml`), Helgi í cc. Dreift á laugardegi.
+- Listinn verður að vera læsilegur: Excel + PDF fylgja alltaf CSV-skránni
+  (`nytt-heimili/utflutningur.py`), pósttextinn er númeraður listi.
+- Hús sem er selt ófullbúið/óbyggt (FULLBUID=0) bíður ~7 mánuði í biðröðinni;
+  fullgerð nýbygging ~6 vikur. Daglegi pósturinn merkir þau ⏳.
+- Vikulegi listinn (~76) verður til sjálfkrafa á mánudögum í GitHub Actions
+  (`nytt-heimili.yml`) og lendir í Drögum hjá Helga; hann sendir, Haraldur dreifir á laugardegi.
 - Þetta skýjaumhverfi kemst ekki á HMS — allt sem þarf kaupskrána keyrir sem
   `workflow_dispatch` (`verkefni`: `utgafa_prufa` / `utgafa` / `laga_ibudir`) eða í
   Higgsfield-sandkassanum.
