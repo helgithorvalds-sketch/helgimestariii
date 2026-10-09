@@ -10,8 +10,11 @@ Fjórar útgáfur, hver með `.html` (hönnunin), `.pdf` (prentskjal) og `.png` 
 | `sticker-svif-A-skalina` | **Skálína** – mynd yfir alla síðuna, teal flötur á ská (sama halli og skástrikið í lógóinu), fyrirsögn snúin eftir skálínunni, miði sem stendur upp úr |
 | `sticker-svif-B-frost` | **Frost** – auglýsingin er sjálf gluggi með filmu: efri hlutinn glær, neðri hlutinn „sandblásinn“ á ská. „Þú sérð út. Enginn sér inn.“ |
 | `sticker-svif-C-skakkur` | **Skakki ramminn** – teal plakat, myndin í skökkum ramma (lógóformið), stór fyrirsögn, afsláttarmiði sem límmiði með uppbrettu horni |
+| `sticker-svif-D-frostbak` | **Frost í bakgrunni** – sama uppbygging og grunnútgáfan, en bakgrunnurinn er gluggi með filmu í stað hvíts pappírs |
+| `sticker-svif-E-filmuspjald` | **Filmuspjald** – myndin fyllir síðuna, textinn situr á ferhyrndu „sandblásnu“ spjaldi á glerinu |
+| `sticker-svif-F-tviskipt` | **Tvískipt** – bein lárétt skipting: efri hluti án filmu, neðri hluti með filmu. „Þú sérð út. Enginn sér inn.“ |
 
-`common.css` er sameiginlegt fyrir A, B og C. Afsláttur og kóði eru stilltir efst í `common.css` (fyrir A–C) og í `sticker-svif.html` (grunnútgáfan).
+`common.css` er sameiginlegt fyrir A–F. Afsláttur og kóði eru stilltir efst í `common.css` (fyrir A–F) og í `sticker-svif.html` (grunnútgáfan).
 
 ## Það sem þarf að staðfesta við Kristófer (sticker@sticker.is)
 
