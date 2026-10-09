@@ -2,9 +2,16 @@
 
 Auglýsing fyrir Sticker ehf (sticker.is) í SVIF-bæklinginn. Stærð 19,4 × 19,4 cm (1:1).
 
-- `sticker-svif.html` – hönnunin sjálf (opnast í vafra, prentast beint í 194 × 194 mm)
-- `sticker-svif.pdf` – prentskjal
-- `sticker-svif.png` – forsýning, 2202 × 2202 px (≈ 288 dpi)
+Fjórar útgáfur, hver með `.html` (hönnunin), `.pdf` (prentskjal) og `.png` (forsýning, 2202 px ≈ 288 dpi):
+
+| Skrá | Hugmynd |
+|---|---|
+| `sticker-svif` | Hrein grunnútgáfa – mynd í ramma, texti til hægri, afsláttarmiði neðst |
+| `sticker-svif-A-skalina` | **Skálína** – mynd yfir alla síðuna, teal flötur á ská (sama halli og skástrikið í lógóinu), fyrirsögn snúin eftir skálínunni, miði sem stendur upp úr |
+| `sticker-svif-B-frost` | **Frost** – auglýsingin er sjálf gluggi með filmu: efri hlutinn glær, neðri hlutinn „sandblásinn“ á ská. „Þú sérð út. Enginn sér inn.“ |
+| `sticker-svif-C-skakkur` | **Skakki ramminn** – teal plakat, myndin í skökkum ramma (lógóformið), stór fyrirsögn, afsláttarmiði sem límmiði með uppbrettu horni |
+
+`common.css` er sameiginlegt fyrir A, B og C. Afsláttur og kóði eru stilltir efst í `common.css` (fyrir A–C) og í `sticker-svif.html` (grunnútgáfan).
 
 ## Það sem þarf að staðfesta við Kristófer (sticker@sticker.is)
 
