@@ -6,31 +6,28 @@
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="panel.css">
 <style>
-  /* Eins og G, en mynd frá Sticker í hægri dálki spjaldsins í stað afsláttarkassans; afslátturinn færður í rönd undir listanum.
+  /* Eins og G, en mynd frá Sticker í hægri dálki spjaldsins (full hæð); afslátturinn og tilboðið koma í stað inngangstextans undir fyrirsögninni.
      Skiptu um mynd með því að breyta src á .shot img (mynd Kristófers, IMG_0913.JPG, á að fara þar). */
   .tag{color:var(--teal-deep)}
   .frostlayer::after{background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.22) 35%,rgba(255,255,255,.3))}
-  .inner{display:grid;grid-template-columns:1fr 58mm;grid-template-rows:1fr auto auto;gap:3mm 6mm;align-items:stretch}
+  .inner{display:grid;grid-template-columns:1fr 58mm;grid-template-rows:1fr auto;gap:3mm 6mm;align-items:stretch}
   .inner .l{display:flex;flex-direction:column;min-height:0}
   .inner h1{font-size:21pt}
-  .inner .lead{font-size:8.8pt;margin-top:2mm}
-  .inner ul{margin-top:2.6mm;gap:1.4mm}
-  .inner li{font-size:8.3pt}
-  .inner .steps{margin-top:auto;padding-top:3mm;padding-bottom:2.5mm;font-size:7.8pt;gap:2mm}
+  .inner ul{margin-top:5mm;gap:3mm}
+  .inner li{font-size:8.8pt}
+  .inner .steps{margin-top:auto;padding-top:3mm;font-size:7.8pt;gap:2mm}
   .inner .steps .s{background:#fff;border:.35mm solid var(--teal);padding:1.5mm 3mm;box-shadow:0 .8mm 2mm rgba(0,0,0,.08)}
-  .strip{grid-column:1/-1;background:var(--teal);color:#fff;border-radius:3mm;padding:1.9mm 4mm;display:flex;align-items:center;gap:5mm;box-shadow:0 2mm 6mm rgba(0,0,0,.14);margin-top:1.5mm}
-  .strip .disc{font-family:"Cabin",sans-serif;font-weight:700;font-size:22pt;line-height:1;white-space:nowrap;color:var(--teal-dark)}
-  .strip .disc small{font-size:10pt;margin-left:1.5mm}
-  .strip .txt{font-size:8pt;line-height:1.35;flex:1}
-  .strip .txt b{font-family:"Cabin",sans-serif;font-weight:700;font-size:7.4pt;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:.4mm}
-  .strip .box{background:#fff;border-radius:2.5mm;padding:1.7mm 5mm;text-align:center;white-space:nowrap}
-  .strip .lbl{font-family:"Cabin",sans-serif;font-weight:600;font-size:5.8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
-  .strip .code{font-family:"Cabin",sans-serif;font-weight:700;font-size:14pt;letter-spacing:.14em;line-height:1.1}
+  .offer{margin-top:3.5mm;background:var(--teal);color:#fff;border-radius:3mm;padding:2.2mm 3.5mm 2.2mm 2.2mm;display:flex;align-items:center;gap:3.5mm;box-shadow:0 2mm 6mm rgba(0,0,0,.14)}
+  .offer .box{background:#fff;border-radius:2.3mm;padding:1.8mm 3.5mm;text-align:center;white-space:nowrap;flex:none}
+  .offer .disc{font-family:"Cabin",sans-serif;font-weight:700;font-size:21pt;line-height:1;color:var(--teal-dark)}
+  .offer .disc small{display:block;font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;margin-top:.6mm;color:var(--ink-soft)}
+  .offer .txt{font-size:7.9pt;line-height:1.35}
+  .offer .txt b{font-family:"Cabin",sans-serif;font-weight:700;font-size:7.4pt;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:.5mm}
   .shot{position:relative;border-radius:4mm;overflow:hidden;box-shadow:inset 0 0 0 .45mm rgba(255,255,255,.95),0 3mm 8mm rgba(0,0,0,.18);background:#cfd4d6}
   .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
   .shot .cap{position:absolute;left:3mm;right:3mm;bottom:3mm;background:rgba(255,255,255,.9);color:var(--ink);font-family:"Cabin",sans-serif;font-weight:700;font-size:7pt;padding:1.4mm 2.6mm;border-radius:99px;text-align:center;box-shadow:0 1mm 3mm rgba(0,0,0,.15)}
   .shot .cap b{color:var(--teal-dark)}
-  .foot{grid-column:1/-1;position:static;align-self:end;padding-top:1mm}
+  .foot{grid-column:1/-1;position:static;align-self:end;padding-top:1.5mm}
 </style>
 </head>
 <body>
@@ -52,7 +49,10 @@
   <div class="inner">
     <div class="l">
       <h1>Settu þitt mark á <em>nýja heimilið</em></h1>
-      <p class="lead">Nöfn og heimilisfang á útihurðina, næði á baðið, minni hiti í stofunni. Við mælum, hönnum og setjum upp – <b>uppsetning innifalin í verðinu.</b></p>
+      <div class="offer">
+        <div class="box"><div class="disc"><small>afsláttur</small></div></div>
+        <div class="txt"><b>Sértilboð fyrir nýja húseigendur</b>Af öllum filmum og uppsetningu – nefndu SVIF-bæklinginn þegar þú bókar fría mælingu.</div>
+      </div>
       <ul>
           <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><div><b>Sandblástursfilmur</b> · yfir 80 mynstur, nöfn og heimilisfang</div></li>
           <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><div><b>Sólar- og privacy-filmur</b> · minni hiti, meira næði</div></li>
@@ -64,10 +64,6 @@
     <div class="shot">
       <img src="assets/grof.jpg" alt="Sandblástursfilma í glugga">
       <div class="cap">Sandblástursfilma · <b>yfir 80 mynstur</b></div>
-    </div>
-    <div class="strip">
-      <div class="txt"><b>Sértilboð fyrir nýja húseigendur</b>Afsláttur af öllum filmum og uppsetningu – nefndu SVIF-bæklinginn þegar þú bókar fría mælingu.</div>
-      <div class="box"><div class="disc"><small>afsláttur</small></div></div>
     </div>
     <footer class="foot">
       <div class="contacts">
