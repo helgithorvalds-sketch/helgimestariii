@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<title>Litamálun – SVIF síða 19,4 × 19,4 cm</title>
+<style>
+/* Page: 194 mm trim + 3 mm bleed = 200 mm. Safe area 8 mm inside trim. */
+@font-face{font-family:"Montserrat";src:url("../fonts/Montserrat.ttf") format("truetype");font-weight:100 900}
+@font-face{font-family:"Open Sans";src:url("../fonts/OpenSans.ttf") format("truetype");font-weight:300 800}
+@page{size:200mm 200mm;margin:0}
+:root{
+  --blue:#135bac; --blue-deep:#0e4788; --red:#d03c21; --yellow:#ebbb1c;
+  --ink:#1f2430; --muted:#5b6474; --paper:#ffffff; --panel:#eef3fa;
+  --display:"Montserrat",sans-serif; --body:"Open Sans",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff}
+.page{position:relative;width:200mm;height:200mm;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:9.5pt;line-height:1.4}
+
+/* blue painted field, slightly tilted like a roller stroke */
+.field{position:absolute;left:-10mm;right:-10mm;top:96mm;bottom:-10mm;background:var(--blue);transform:rotate(-2.2deg);transform-origin:left top}
+
+/* top: logo + headline */
+.logo{position:absolute;left:11mm;top:11mm;width:46mm;height:auto}
+.eyebrow{position:absolute;left:11mm;top:32mm;font-family:var(--display);font-weight:700;font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+h1{position:absolute;left:11mm;top:38mm;margin:0;width:104mm;font-family:var(--display);font-weight:800;font-size:31pt;line-height:1.02;letter-spacing:-.01em;color:var(--ink)}
+h1 em{font-style:normal;color:var(--blue)}
+.sub{position:absolute;left:11mm;top:64mm;width:100mm;font-size:10.5pt;line-height:1.45;color:var(--ink)}
+.sub b{font-weight:600}
+.trust{position:absolute;left:11mm;top:81mm;display:flex;gap:5mm;font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.trust span::before{content:"";display:inline-block;width:2.2mm;height:2.2mm;border-radius:50%;background:var(--red);margin-right:1.6mm;vertical-align:0.1mm}
+
+/* painter cutout */
+.painter{position:absolute;right:4mm;top:10mm;width:84mm;height:auto;z-index:2}
+
+/* lower content on the blue field */
+.lower{position:absolute;left:11mm;right:11mm;top:107mm;height:68mm;color:#fff;display:grid;grid-template-columns:1fr 66mm;column-gap:8mm;z-index:3}
+.benefits{list-style:none;margin:0;padding:0;display:grid;gap:2.4mm;align-content:start}
+.benefits li{display:grid;grid-template-columns:6.5mm 1fr;column-gap:2.5mm;align-items:start;font-size:9pt;line-height:1.3}
+.benefits li b{display:block;font-family:var(--display);font-weight:700;font-size:10pt}
+.benefits li i{display:block;width:6.5mm;height:6.5mm;border-radius:50%;background:#fff;color:var(--blue);font-style:normal;font-weight:800;font-family:var(--display);font-size:10pt;line-height:6.5mm;text-align:center;margin-top:.5mm}
+
+.offer{margin-top:4.5mm;background:var(--red);color:#fff;padding:3.4mm 4.5mm 3.6mm;border-radius:1.5mm;position:relative}
+.offer .tag{font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#ffd9d1}
+.offer .big{font-family:var(--display);font-weight:800;font-size:16pt;line-height:1.05;margin:1mm 0 1.2mm}
+.offer .fine{font-size:8pt;line-height:1.35;color:#fff}
+.offer .fine b{font-weight:700}
+.offer::after{content:"SVIF";position:absolute;right:-3mm;top:-4.2mm;transform:rotate(6deg);background:var(--yellow);color:var(--ink);font-family:var(--display);font-weight:800;font-size:8pt;letter-spacing:.1em;padding:1.6mm 2.6mm;border-radius:1mm;box-shadow:0 .6mm 1.2mm rgba(0,0,0,.25)}
+
+.proof{display:grid;gap:2mm;align-content:start}
+.proof h3{margin:0;font-family:var(--display);font-weight:700;font-size:8pt;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f7}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm;position:relative}
+.pair img{width:100%;height:22mm;object-fit:cover;display:block;border-radius:1mm;outline:.5mm solid rgba(255,255,255,.9)}
+.pair .lbl{position:absolute;top:1.5mm;font-family:var(--display);font-weight:800;font-size:6.5pt;letter-spacing:.1em;text-transform:uppercase;padding:.8mm 1.8mm;border-radius:.8mm;background:rgba(31,36,48,.85);color:#fff}
+.pair .lbl.after{background:var(--red)}
+.pair .l1{left:1.5mm}.pair .l2{left:calc(50% + 2.25mm)}
+.pair .cap{grid-column:1/-1;font-size:7.5pt;color:#dbe7f8;margin-top:-1mm}
+
+/* contact strip */
+.contact{position:absolute;left:11mm;right:11mm;bottom:9mm;z-index:4;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;border-top:.35mm solid rgba(255,255,255,.45);padding-top:2.6mm}
+.contact .phone{font-family:var(--display);font-weight:800;font-size:19pt;line-height:1;letter-spacing:-.01em}
+.contact .phone small{display:block;font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f7;margin-bottom:1.2mm}
+.contact .addr{text-align:right;font-size:8.5pt;line-height:1.4}
+.contact .addr b{font-family:var(--display);font-weight:700;font-size:11pt}
+
+/* trim guide (hidden in output, toggle with body.guides) */
+body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dashed rgba(255,0,0,.6);pointer-events:none;z-index:9}
+</style>
+</head>
+<body>
+<div class="page">
+  <img class="logo" src="../img/litamalun-logo.svg" alt="Litamálun">
+  <div class="eyebrow">Málningarþjónusta · Reykjavík og allt landið</div>
+  <h1>Nýtt heimili,<br><em>nýir litir?</em></h1>
+  <p class="sub">Litamálun málar eins og þú vilt að sé málað. <b>Innanhúss og utan</b>, fyrir íbúðir, einbýli og fjölbýli.</p>
+  <div class="trust"><span>Löggiltur málarameistari</span><span>25+ ára reynsla</span><span>Málarameistarafélagið</span></div>
+
+  <img class="painter" src="../img/painter.png" alt="">
+
+  <div class="field"></div>
+
+  <div class="lower">
+    <div>
+      <ul class="benefits">
+        <li><i>1</i><div><b>Frítt tilboð, við komum til þín</b>Svar innan tveggja sólarhringa.</div></li>
+        <li><i>2</i><div><b>Ráðgjöf um liti og samsetningar</b>Svo heimilið verði eins og þú sérð það fyrir þér.</div></li>
+        <li><i>3</i><div><b>Efni sem þolir íslenska veðráttu</b>Vönduð sprungu- og undirvinna sem endist.</div></li>
+      </ul>
+      <div class="offer">
+        <div class="tag">Tilboð fyrir nýja húseigendur</div>
+        <div class="big">Frí litaráðgjöf og 10% afsláttur</div>
+        <div class="fine">af fyrstu málningarvinnu innan 6 mánaða frá kaupum. <b>Nefndu SVIF</b> þegar þú hefur samband.</div>
+      </div>
+    </div>
+    <div class="proof">
+      <h3>Fyrir og eftir · verk okkar</h3>
+      <div class="pair">
+        <img src="../img/hverfisgata.jpg" alt=""><img src="../img/hverfisgataeftir_1.jpg" alt="">
+        <span class="lbl l1">Fyrir</span><span class="lbl after l2">Eftir</span>
+        <span class="cap">Hverfisgata, timburhús að utan</span>
+      </div>
+      <div class="pair">
+        <img src="../img/bakkastadir.jpg" alt=""><img src="../img/bakkastadireftir_1.jpg" alt="">
+        <span class="lbl l1">Fyrir</span><span class="lbl after l2">Eftir</span>
+        <span class="cap">Bakkastaðir, steinhús að utan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact">
+    <div class="phone"><small>Hringdu eða sendu línu</small>770 1400</div>
+    <div class="addr"><b>litamalun.is</b><br>malun@litamalun.is<br>Lyngháls 5, 110 Reykjavík</div>
+  </div>
+</div>
+</body>
+</html>

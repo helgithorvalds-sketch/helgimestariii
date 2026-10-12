@@ -3,8 +3,8 @@ Litamálun – asset pack for the SVIF ad (gathered 12 Oct 2026)
 Source: https://www.litamalun.is (Joomla site, designed by Filmís) and Gmail threads with gustaf@litamalun.is
 
 BRAND
-  Blue    #135BAC  (logo ≈ #1058A8)  primary: header, headings, buttons
-  Red     #D03C21  (logo ≈ #D03820)  action/hover, slider buttons, logo "Málun" + swoosh
+  Blue    #135BAC  (logo ≈ #1058A8)  primary: header, headings, buttons, logo "Málun"
+  Red     #D03C21  (logo ≈ #D03820)  action/hover, slider buttons, logo "Lita" + swoosh
   Yellow  #EBBB1C  hover accent only
   Panel   #F6F7FC   Text #333333   Footer #100E0D
   Fonts: Montserrat (headings), Open Sans (body)
@@ -27,3 +27,11 @@ CONTACT
 OFFER STATUS
   None stated yet. Gústaf approved the idea 6 Oct; info form sent 7 Oct, no reply.
   Múrbúðin declined a joint offer but is fine sharing the brochure.
+
+AD DRAFT (ad/)
+  litamalun-svif.html  source, 200x200 mm (194 mm trim + 3 mm bleed), fonts in ../fonts, images in ../img
+  litamalun-svif.pdf   print PDF, 200x200 mm
+  litamalun-svif.png   2363x2363 px (300 dpi) preview
+  img/litamalun-logo.svg  logo traced from the 168 px web PNG; good enough for a proof, replace with the client's vector before print
+  The offer in the red box (frí litaráðgjöf + 10%) is a PROPOSAL; Gústaf has not confirmed any offer.
+  Re-render: cd ad && node <path>/render.js litamalun-svif.html litamalun-svif  (needs playwright + chromium)
