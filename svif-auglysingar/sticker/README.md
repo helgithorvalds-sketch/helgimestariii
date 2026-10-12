@@ -13,8 +13,11 @@ Fjórar útgáfur, hver með `.html` (hönnunin), `.pdf` (prentskjal) og `.png` 
 | `sticker-svif-D-frostbak` | **Frost í bakgrunni** – sama uppbygging og grunnútgáfan, en bakgrunnurinn er gluggi með filmu í stað hvíts pappírs |
 | `sticker-svif-E-filmuspjald` | **Filmuspjald** – myndin fyllir síðuna, textinn situr á ferhyrndu „sandblásnu“ spjaldi á glerinu |
 | `sticker-svif-F-tviskipt` | **Tvískipt** – bein lárétt skipting: efri hluti án filmu, neðri hluti með filmu. „Þú sérð út. Enginn sér inn.“ |
+| `sticker-svif-G-ljos` | **Ljóst gler** (byggt á E, engin ljósmynd) – mjúkir ljóshringir í bakgrunni, þrjár glerflísar (útihurð, bað, stofa) fyrir ofan frostaða spjaldið |
+| `sticker-svif-H-birta` | **Dagsbirta** (byggt á E, engin ljósmynd) – skáhallandi ljósbönd eins og sól í gegnum glugga, stór yfirlýsing „Þú sérð út. Enginn sér inn.“ |
+| `sticker-svif-I-dokk` | **Dökkt gler** (byggt á E, engin ljósmynd) – djúpt teal gler með glóandi ljóshringjum, hvít yfirlýsing yfir ljósu spjaldi |
 
-`common.css` er sameiginlegt fyrir A–F. Afsláttur og kóði eru stilltir efst í `common.css` (fyrir A–F) og í `sticker-svif.html` (grunnútgáfan).
+`common.css` er sameiginlegt fyrir A–I og `panel.css` fyrir G–I (spjaldið úr E). Bakgrunnsmyndirnar fyrir G–I eru búnar til með `python3 make-bg.py` (Pillow), engin ljósmynd. Afsláttur og kóði eru stilltir efst í `common.css` (fyrir A–F) og í `sticker-svif.html` (grunnútgáfan).
 
 ## Það sem þarf að staðfesta við Kristófer (sticker@sticker.is)
 
@@ -48,4 +51,5 @@ Afsláttur og kóði eru breytanleg efst í `sticker-svif.html`:
 
 ```sh
 node render.mjs <mappa> <úttak-án-endingar>   # notar Playwright + Chromium
+node render-one.mjs <skrá.html> <úttak-án-endingar>   # ein tiltekin útgáfa
 ```

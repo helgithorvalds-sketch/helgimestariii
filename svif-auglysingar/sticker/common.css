@@ -1,0 +1,24 @@
+@import url("fonts.css");
+:root{
+  --discount:"25%"; --code:"SVIF25";
+  --teal:#57bdbd; --teal-dark:#3fa3a3; --teal-deep:#2f8a8a; --teal-light:#e9f7f7;
+  --ink:#151515; --ink-soft:#4a4a4a; --paper:#fff; --page:194mm;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#d9dcdf}
+body{font-family:"Karla","Inter",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+@page{size:var(--page) var(--page);margin:0}
+@media print{html,body{background:#fff}.page{box-shadow:none}}
+@media screen{.page{margin:10mm auto}}
+.page{position:relative;width:var(--page);height:var(--page);overflow:hidden;background:var(--paper);box-shadow:0 10px 40px rgba(0,0,0,.18)}
+.abs{position:absolute}
+.cabin{font-family:"Cabin","Karla",sans-serif}
+.photo{position:absolute;inset:0}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.contacts{display:flex;flex-wrap:wrap;gap:1.5mm 4.5mm;font-size:8pt;font-weight:600}
+.contacts span{display:inline-flex;align-items:center;gap:1.5mm;white-space:nowrap}
+.contacts svg{width:3.5mm;height:3.5mm}
+.ic{width:4.6mm;height:4.6mm;border-radius:50%;display:grid;place-items:center;flex:none}
+.ic svg{width:3mm;height:3mm}
+.disc::before{content:var(--discount)}
+.code::before{content:var(--code)}

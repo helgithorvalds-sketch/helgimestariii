@@ -1,0 +1,57 @@
+/* Sameiginlegt fyrir G, H og I: frostað glerspjald með texta (byggt á E) án ljósmyndar. */
+.bg{position:absolute;inset:0}
+.bg img{width:100%;height:100%;object-fit:cover;display:block}
+.frostlayer{position:absolute;inset:0;clip-path:inset(84mm 9mm 8mm 9mm round 5mm)}
+.frostlayer img{width:100%;height:100%;object-fit:cover;display:block}
+.frostlayer::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.16) 35%,rgba(255,255,255,.22))}
+.panel-edge{position:absolute;left:9mm;right:9mm;top:84mm;bottom:8mm;border-radius:5mm;
+  box-shadow:inset 0 0 0 .45mm rgba(255,255,255,.95),inset 0 .8mm 0 rgba(255,255,255,.6),0 3mm 10mm rgba(0,0,0,.2),0 .6mm 1.5mm rgba(0,0,0,.08)}
+.panel-edge::after{content:"";position:absolute;left:5mm;right:5mm;top:.45mm;height:.3mm;border-radius:99px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent)}
+
+.logo{position:absolute;left:9mm;top:8mm;height:12mm}
+.tag{position:absolute;right:9mm;top:9.5mm;text-align:right;font-family:"Cabin",sans-serif;font-weight:700;font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase}
+.note{position:absolute;right:14mm;top:79.5mm;background:var(--teal);color:#fff;font-family:"Cabin",sans-serif;font-weight:700;font-size:7.3pt;padding:1.5mm 3mm;border-radius:99px;box-shadow:0 1mm 3mm rgba(0,0,0,.2)}
+
+.inner{position:absolute;left:17mm;right:17mm;top:92mm;bottom:14mm}
+h1{font-family:"Cabin",sans-serif;font-weight:700;font-size:26pt;line-height:1.02;letter-spacing:-.015em;color:var(--ink)}
+h1 em{font-style:normal;color:var(--teal-deep)}
+.lead{font-size:9.2pt;line-height:1.42;color:#2e2e2e;margin-top:2.5mm;max-width:98mm}
+.lead b{color:var(--ink)}
+.cols{display:grid;grid-template-columns:1fr 58mm;gap:6mm;margin-top:4mm;align-items:start}
+ul{list-style:none;display:grid;gap:1.9mm}
+li{display:flex;gap:2.2mm;align-items:flex-start;font-size:8.6pt;line-height:1.3;color:#2e2e2e}
+li .ic{background:var(--teal);color:#fff;margin-top:.3mm}
+li b{color:var(--ink);font-weight:700}
+.steps{display:flex;gap:1.6mm;align-items:center;font-family:"Cabin",sans-serif;font-weight:600;font-size:7.3pt;color:var(--ink);margin-top:4mm}
+.steps .s{background:rgba(255,255,255,.85);border:.3mm solid #cfeaea;padding:1.3mm 2.4mm;border-radius:99px;white-space:nowrap}
+.steps .a{color:var(--teal-dark);font-weight:700}
+
+.ticket{background:var(--teal);color:#fff;border-radius:3mm;padding:4mm 4.5mm 3.5mm;text-align:center;box-shadow:0 3mm 8mm rgba(0,0,0,.18);position:relative;overflow:hidden}
+.ticket::before{content:"";position:absolute;inset:0;opacity:.12;background-image:radial-gradient(#fff .45mm,transparent .5mm);background-size:4mm 4mm}
+.ticket>*{position:relative}
+.ticket .k{font-family:"Cabin",sans-serif;font-weight:700;font-size:6.8pt;letter-spacing:.14em;text-transform:uppercase}
+.ticket .disc{font-family:"Cabin",sans-serif;font-weight:700;font-size:30pt;line-height:1;margin-top:1mm}
+.ticket .disc small{font-size:11pt;margin-left:1.5mm}
+.ticket .f{font-size:7.2pt;line-height:1.3;margin-top:1.2mm}
+.ticket .box{margin:3mm auto 0;background:#fff;color:var(--teal-dark);border-radius:2mm;padding:1.6mm 3mm}
+.ticket .lbl{font-family:"Cabin",sans-serif;font-weight:600;font-size:6.3pt;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.ticket .code{font-family:"Cabin",sans-serif;font-weight:700;font-size:17pt;letter-spacing:.14em;line-height:1.1}
+
+.foot{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;color:var(--ink)}
+.foot .contacts svg{color:var(--teal-deep)}
+.foot .contacts{font-size:7.8pt}
+.foot .web{font-family:"Cabin",sans-serif;font-weight:700;font-size:12pt;line-height:1;color:var(--teal-deep)}
+.foot .web small{display:block;font-family:"Karla",sans-serif;font-weight:600;font-size:6.8pt;margin-top:.8mm;color:var(--ink-soft);text-align:right}
+
+/* Efra svæðið (yfir spjaldinu) */
+.top{position:absolute;left:9mm;right:9mm;top:24mm;height:54mm}
+.statement{font-family:"Cabin",sans-serif;font-weight:700;font-size:30pt;line-height:1.02;letter-spacing:-.018em;color:var(--ink)}
+.statement em{font-style:normal;color:var(--teal-deep)}
+.statement small{display:block;font-family:"Karla",sans-serif;font-weight:600;font-size:9.5pt;letter-spacing:0;line-height:1.4;margin-top:3mm;color:#2e2e2e;max-width:110mm}
+
+/* Glerflísar með þjónustu (G) */
+.tiles{position:absolute;left:9mm;right:9mm;top:28mm;display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.tile{height:44mm;border-radius:4mm;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 .4mm rgba(255,255,255,.95),0 2mm 6mm rgba(0,0,0,.08);padding:4.5mm 5mm;display:flex;flex-direction:column;justify-content:space-between}
+.tile svg{width:15mm;height:15mm;color:var(--teal-deep)}
+.tile b{font-family:"Cabin",sans-serif;font-weight:700;font-size:10.5pt;line-height:1.1;color:var(--ink);display:block}
+.tile span{font-size:7.8pt;line-height:1.3;color:#3a3a3a;display:block;margin-top:1mm}
