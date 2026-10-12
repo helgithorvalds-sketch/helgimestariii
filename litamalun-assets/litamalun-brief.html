@@ -1,0 +1,203 @@
+<title>Litamálun SVIF Brief</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Open+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: a working brief for a one-page print ad. Left-aligned, two columns where room allows, brand colours used as content (swatches), not decoration. */
+:root{
+  --bg:#ffffff; --fg:#242730; --muted:#5f6675; --line:#dfe3ec; --panel:#f4f6fb;
+  --blue:#135bac; --red:#d03c21; --yellow:#ebbb1c;
+  --display:"Montserrat",system-ui,sans-serif; --body:"Open Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#15171c; --fg:#e8eaf0; --muted:#a3a9b8; --line:#2d313b; --panel:#1d2027; --blue:#4d8fe0; --red:#e85a40; --yellow:#f0c53a; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#15171c; --fg:#e8eaf0; --muted:#a3a9b8; --line:#2d313b; --panel:#1d2027; --blue:#4d8fe0; --red:#e85a40; --yellow:#f0c53a; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;padding-inline:clamp(16px,4vw,48px);padding-block:32px 80px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4vw,40px);font-weight:800;line-height:1.1}
+h2{font-size:22px;font-weight:700;padding-bottom:8px;border-bottom:2px solid var(--line);margin-bottom:20px}
+h3{font-size:15px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+header{display:grid;gap:14px}
+header .logo{width:168px;height:auto;background:#fff;padding:8px 10px;border:1px solid var(--line);border-radius:4px}
+.lead{color:var(--muted);max-width:70ch}
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.status div{background:var(--panel);padding:14px 16px;border-left:4px solid var(--blue)}
+.status div.warn{border-left-color:var(--red)}
+.status b{display:block;font-family:var(--display);font-size:13px;margin-bottom:4px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px}
+.cols>*{min-width:0}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:0}
+dt{color:var(--muted);font-size:13px}
+dd{margin:0}
+ul{margin:0;padding-left:18px}
+li{margin-bottom:4px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.sw{border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.sw i{display:block;height:64px}
+.sw div{padding:8px 10px;font-size:13px}
+.sw code{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+figure{margin:0;display:grid;gap:6px;min-width:0}
+figure img{width:100%;height:170px;object-fit:cover;border:1px solid var(--line);background:var(--panel)}
+figure.wide{grid-column:1/-1}
+figure.wide img{height:auto;max-height:360px}
+figcaption{font-size:13px;color:var(--muted)}
+figcaption b{color:var(--fg);display:block;font-family:var(--display);font-size:13px}
+.tag{display:inline-block;font-size:11px;font-weight:700;font-family:var(--display);letter-spacing:.04em;padding:1px 6px;border-radius:3px;margin-right:4px;vertical-align:1px}
+.tag.pick{background:var(--blue);color:#fff}
+.tag.own{background:var(--yellow);color:#1a1a1a}
+.tag.stock{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ba img{height:140px}
+.copy{background:var(--panel);padding:18px 20px;display:grid;gap:10px}
+.copy p{font-family:var(--display)}
+.copy .head{font-size:22px;font-weight:800;color:var(--blue);line-height:1.15}
+.copy .sub{font-weight:500}
+.copy small{font-family:var(--body);color:var(--muted)}
+.email{border-left:3px solid var(--line);padding-left:14px;color:var(--muted);font-size:14px}
+.email b{color:var(--fg)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tw{overflow-x:auto}
+a{color:var(--blue)}
+</style>
+
+<main>
+<header>
+  <img class="logo" src="img/logo-transparent.png" alt="Litamálun logo" width="168" height="70">
+  <span class="eyebrow">SVIF · Bæklingur · Málningarþjónusta</span>
+  <h1>Litamálun ad brief and asset pack</h1>
+  <p class="lead">Everything gathered so far for the Litamálun page in the SVIF brochure: brand colours, logo, company facts, the best available images, and where the offer negotiation stands as of 12 October 2026.</p>
+  <div class="status">
+    <div class="warn"><b>Offer: not yet decided</b>Gústaf said "mér líst vel á þetta" on 6 Oct. The info form you sent on 7 Oct has not come back. No discount or special offer has been stated by them.</div>
+    <div><b>Logo: only 168×70 px</b>The only logo file on the web is tiny. Ask Gústaf for a vector (PDF/AI/SVG) or a large PNG before print.</div>
+    <div><b>Hero photos are stock</b>The big site photos carry a Photographee.eu copyright. Their own photos are the before/after houses and the Bjarni portrait.</div>
+  </div>
+</header>
+
+<section>
+  <h2>Company facts</h2>
+  <div class="cols">
+    <div>
+      <dl>
+        <dt>Name</dt><dd>Litamálun ehf.</dd>
+        <dt>Tagline</dt><dd>„Litamálun málar eins og þú vilt að sé málað!“</dd>
+        <dt>Address</dt><dd>Lyngháls 5, 110 Reykjavík</dd>
+        <dt>Phone</dt><dd>770 1400 · 770 2600 (Gústaf)</dd>
+        <dt>Email</dt><dd>malun@litamalun.is · gustaf@litamalun.is</dd>
+        <dt>Web</dt><dd>litamalun.is · facebook.com/litamalun (about 2K likes)</dd>
+        <dt>Owner</dt><dd>Bjarni Þór Gústafsson, löggiltur málarameistari, 25+ years painting</dd>
+        <dt>Contact</dt><dd>Gústaf Bjarnason, málarameistari og framkvæmdastjóri</dd>
+        <dt>Team</dt><dd>8 people listed: 2 málarameistarar, 1 sveinn, assistants, a nemi, bookkeeping</dd>
+        <dt>Memberships</dt><dd>Málarameistarafélagið · Samtök iðnaðarins</dd>
+      </dl>
+    </div>
+    <div>
+      <h3>Services (from the site)</h3>
+      <ul>
+        <li>Almenn málningarvinna, innanhúss og utan, fyrir fyrirtæki og einstaklinga</li>
+        <li>Ráðgjöf við litaval og litasamsetningar</li>
+        <li>Sérverkefni, stór og smá</li>
+        <li>Viðhald, sprungu- og undirvinna</li>
+        <li>Kostnaðaráætlanir og verðtilboð</li>
+      </ul>
+      <h3 style="margin-top:16px">Existing promises you can quote</h3>
+      <ul>
+        <li>Free quote: „Litamálun kemur til þín og gerir þér tilboð, þér að kostnaðarlausu“</li>
+        <li>Reply within 48 hours: „við höfum samband innan tveggja sólarhringa“</li>
+        <li>Anywhere in Iceland: „hvar á landinu sem er“</li>
+        <li>Materials that withstand Icelandic weather</li>
+        <li>Values: stundvísi, snyrtimennska, góð skipulagning, glaðlyndi</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Colour theme</h2>
+  <p class="lead" style="margin-bottom:16px">Taken from the logo pixels and the site CSS. Blue is the primary (header, headings, buttons), red is the action colour (slider buttons, hover), yellow appears only as a hover accent. Fonts on the site are Montserrat for headings and Open Sans for body.</p>
+  <div class="swatches">
+    <div class="sw"><i style="background:#135bac"></i><div>Litamálun blue<br><code>#135BAC</code> · logo ≈ #1058A8</div></div>
+    <div class="sw"><i style="background:#d03c21"></i><div>Litamálun red<br><code>#D03C21</code> · logo ≈ #D03820</div></div>
+    <div class="sw"><i style="background:#ebbb1c"></i><div>Accent yellow<br><code>#EBBB1C</code> · hover only</div></div>
+    <div class="sw"><i style="background:#f6f7fc;border-bottom:1px solid #dfe3ec"></i><div>Light panel<br><code>#F6F7FC</code></div></div>
+    <div class="sw"><i style="background:#333333"></i><div>Body text<br><code>#333333</code></div></div>
+    <div class="sw"><i style="background:#100e0d"></i><div>Footer black<br><code>#100E0D</code></div></div>
+  </div>
+  <div class="cols" style="margin-top:20px">
+    <figure><img src="img/logo-6x.png" alt="Litamálun logo enlarged six times" style="object-fit:contain;background:#fff;height:120px"><figcaption><b>Logo (transparent PNG, upscaled 6×)</b>Blue "Lita", red "Málun", red swoosh underneath. Upscale is soft; print needs the vector.</figcaption></figure>
+    <figure><img src="img/fb-vans.png" alt="Litamálun vans with the logo" style="height:120px"><figcaption><b>Branded vans (Facebook cover)</b>Shows how the logo is used in real life. Low resolution.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>Images</h2>
+  <p class="lead" style="margin-bottom:16px"><span class="tag pick">PICK</span> best for the ad · <span class="tag own">OWN</span> Litamálun's own photo · <span class="tag stock">STOCK</span> licensed stock on their site, check rights before print. All files are in the asset folder.</p>
+  <div class="gallery">
+    <figure class="wide"><img src="img/skyggna2.jpg" alt="Two painters in white room preparing paint"><figcaption><b><span class="tag pick">PICK</span><span class="tag stock">STOCK</span> skyggna2.jpg · 1920×1116</b>Homepage slide. Bright, clean, lots of white space for headline text. Best candidate for a full-bleed background.</figcaption></figure>
+    <figure><img src="img/painter.png" alt="Painter with roller, cutout on transparent background" style="object-fit:contain;background:#fff"><figcaption><b><span class="tag pick">PICK</span><span class="tag stock">STOCK</span> painter.png · 647×598 cutout</b>Transparent PNG, blue shirt matches the brand blue. Easy to place over a colour block.</figcaption></figure>
+    <figure><img src="img/skyggna1.jpg" alt="Painter pouring green paint"><figcaption><b><span class="tag stock">STOCK</span> skyggna1.jpg · 2167×800</b>Wide banner from homepage slider.</figcaption></figure>
+    <figure><img src="img/raudmalning.jpg" alt="Red paint can and brush on red and white background"><figcaption><b><span class="tag pick">PICK</span> raudmalning.jpg · 800×785</b>Red matches the brand red closely. Good graphic element for a corner or coupon.</figcaption></figure>
+    <figure><img src="img/malar.jpg" alt="Hand holding an orange paint roller" style="object-fit:contain;background:#fff"><figcaption><b>malar.jpg · 800×673</b>Roller cutout on white. Usable as a spot illustration.</figcaption></figure>
+    <figure><img src="img/mynd-fyrir-br.jpg" alt="Portrait of Bjarni Þór Gústafsson" style="object-position:top"><figcaption><b><span class="tag own">OWN</span> mynd-fyrir-br.jpg · 768×1024</b>Portrait of owner Bjarni Þór Gústafsson, málarameistari. Adds trust if the ad has a "who we are" corner.</figcaption></figure>
+    <figure><img src="img/bc.jpg" alt="Painters working, darkened header"><figcaption><b><span class="tag stock">STOCK</span> bc.jpg · 1920×594</b>Darkened header banner (same scene as skyggna2).</figcaption></figure>
+    <figure><img src="img/bc2.jpg" alt="Painter with green roller, darkened"><figcaption><b><span class="tag stock">STOCK</span> bc2.jpg · 1920×594</b>Darkened header banner.</figcaption></figure>
+    <figure><img src="img/bc3.jpg" alt="Painter painting a window frame against the sky, darkened"><figcaption><b><span class="tag stock">STOCK</span> bc3.jpg · 1920×594</b>Darkened header banner, exterior work.</figcaption></figure>
+    <figure><img src="img/bakgrunnsmynd.jpg" alt="Freshly painted white interior stairwell"><figcaption><b><span class="tag own">OWN</span> bakgrunnsmynd.jpg · 370×250</b>Finished interior. Small file.</figcaption></figure>
+    <figure><img src="img/bakgrunnsmynd2.jpg" alt="Worker pressure-washing a corrugated roof"><figcaption><b><span class="tag own">OWN</span> bakgrunnsmynd2.jpg · 370×250</b>Roof prep work. Small file.</figcaption></figure>
+  </div>
+
+  <h3 style="margin:28px 0 12px">Before / after projects <span class="tag own">OWN</span> · 267×200 each, from 2010</h3>
+  <p class="lead" style="margin-bottom:14px">Real Litamálun jobs in Reykjavík. These are the most convincing images for a new-homeowner audience, but they are tiny. Ask Gústaf if the originals or newer project photos exist.</p>
+  <div class="gallery">
+    <figure><div class="ba"><img src="img/bakkastadir.jpg" alt="Bakkastaðir before"><img src="img/bakkastadireftir_1.jpg" alt="Bakkastaðir after"></div><figcaption><b><span class="tag pick">PICK</span> Bakkastaðir</b>Grey concrete house to dark charcoal. The clearest transformation.</figcaption></figure>
+    <figure><div class="ba"><img src="img/braedraborgarstigur.jpg" alt="Bræðraborgarstígur before"><img src="img/braedraborgarstigureftir.jpg" alt="Bræðraborgarstígur after"></div><figcaption><b>Bræðraborgarstígur</b>Faded red to fresh deep red.</figcaption></figure>
+    <figure><div class="ba"><img src="img/hverfisgata.jpg" alt="Hverfisgata before"><img src="img/hverfisgataeftir_1.jpg" alt="Hverfisgata after"></div><figcaption><b><span class="tag pick">PICK</span> Hverfisgata</b>Grey timber house to sky blue. Matches the brand blue.</figcaption></figure>
+    <figure><div class="ba"><img src="img/laufengi_1.jpg" alt="Laufengi before"><img src="img/laufengi.jpg" alt="Laufengi after"></div><figcaption><b>Laufengi</b>Apartment block, blue with red balconies. Shows larger jobs.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>Offers and what the email says</h2>
+  <div class="cols">
+    <div style="display:grid;gap:14px">
+      <div class="email"><b>18 Sep · you → Gústaf</b><br>Intro after a call. You told him SVIF gets the best response from companies that give new homeowners a special offer.</div>
+      <div class="email"><b>29 Sep · you → Gústaf</b><br>Price list: 1 page 50.000 kr/month, 2 pages 70.000 kr/month ex VAT. "Þið ákveðið sjálf hvaða þjónustu eða tilboð þið viljið leggja áherslu á."</div>
+      <div class="email"><b>6 Oct · Gústaf → you</b><br>"Búið að ganga eitthvað brusulega að ná sambandi, en mér líst vel á þetta." No offer mentioned.</div>
+      <div class="email"><b>7 Oct · you → Gústaf</b><br>Sent the info form to fill in. <b>No reply yet</b> (5 days).</div>
+      <div class="email"><b>6 Oct · Múrbúðin (Aron)</b><br>Happy to be in the same brochure as Litamálun, but will not do a direct partnership offer. Said anyone buying Múrbúðin paint and having Litamálun paint it is "winwin". So no joint discount, but you can still place the two near each other.</div>
+    </div>
+    <div style="display:grid;gap:14px">
+      <h3>Suggested offers to put to Gústaf</h3>
+      <p class="lead">He has not proposed anything, so these are starting points based on what the site already promises and what works in SVIF. Ask him to pick one when he returns the form.</p>
+      <ul>
+        <li><b>Frítt litaráðgjöf með tilboði</b> for new homeowners. Costs him little, matches the "Ráðgjöf" service.</li>
+        <li><b>10% afsláttur af fyrstu málningarvinnu</b> for buyers in the first 6 months after purchase.</li>
+        <li><b>Frítt tilboð innan 48 klst.</b>, which the site already promises, packaged as the offer.</li>
+        <li><b>Innimálun áður en flutt er inn</b>: a fixed-price package for painting an empty apartment before move-in, the moment most new owners actually paint.</li>
+      </ul>
+      <h3>Draft headline, pending his answer</h3>
+      <div class="copy">
+        <p class="head">Nýtt heimili, nýir litir?</p>
+        <p class="sub">Litamálun málar eins og þú vilt að sé málað. Málarameistari með 25 ára reynslu, innanhúss og utan.</p>
+        <p class="sub" style="color:var(--red)">[Tilboð fyrir nýja húseigendur kemur hér]</p>
+        <small>Frítt tilboð · svar innan 48 klst · 770 1400 · litamalun.is</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Still needed from Gústaf</h2>
+  <div class="tw"><table>
+    <tr><th>Item</th><th>Why</th></tr>
+    <tr><td>Filled-in info form</td><td>Sent 7 Oct, no reply. Everything else waits on it.</td></tr>
+    <tr><td>The offer</td><td>Nothing stated yet. Suggestions above.</td></tr>
+    <tr><td>Vector logo</td><td>Web logo is 168×70 px, too small for a 19.4 cm print page.</td></tr>
+    <tr><td>High-res project photos</td><td>Before/after photos are 267×200 from 2010. Newer, bigger ones would carry the ad.</td></tr>
+    <tr><td>1 or 2 pages</td><td>He said he likes it but did not pick a package.</td></tr>
+    <tr><td>Stock photo rights</td><td>If you reuse skyggna/bc images, confirm Litamálun's licence covers print.</td></tr>
+  </table></div>
+</section>
+</main>
