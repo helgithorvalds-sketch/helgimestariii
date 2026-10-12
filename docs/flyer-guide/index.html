@@ -1,0 +1,371 @@
+<title>New Company Flyer Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap">
+<style>
+  /* Layout: one reading column (~68ch), full-width figures, a sticky mini-nav. Palette: paper white with a stamp-red accent (the arrow colour in the screenshots) and a registry-blue for data. */
+  :root {
+    --bg: #fbfaf7;
+    --bg-2: #f1efe8;
+    --fg: #1b1b1a;
+    --fg-2: #55534d;
+    --line: #d9d6cc;
+    --accent: #c8271f;
+    --accent-soft: #fbe9e7;
+    --blue: #2a78d6;
+    --blue-soft: #e4eefb;
+    --ok: #1d7f3a;
+    --ok-soft: #e3f3e7;
+    --warn: #b36b00;
+    --warn-soft: #fff1dc;
+    --skip: #7d7a72;
+    --skip-soft: #ebe9e2;
+    --series-send: #2a78d6;
+    --series-maybe: #9cc0ea;
+    --series-skip: #b8b5ab;
+    --display: "Fraunces", "Georgia", serif;
+    --body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17171a; --bg-2: #222226; --fg: #efede6; --fg-2: #b8b5ac; --line: #3a3a40;
+      --accent: #ff6b5e; --accent-soft: #3a1f1d; --blue: #5b9cf0; --blue-soft: #1d2a3d;
+      --ok: #5fd083; --ok-soft: #1c3324; --warn: #ffb547; --warn-soft: #3a2b12; --skip: #a3a097; --skip-soft: #2b2b2f;
+      --series-send: #3987e5; --series-maybe: #4f6a8c; --series-skip: #4a4a4f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17171a; --bg-2: #222226; --fg: #efede6; --fg-2: #b8b5ac; --line: #3a3a40;
+    --accent: #ff6b5e; --accent-soft: #3a1f1d; --blue: #5b9cf0; --blue-soft: #1d2a3d;
+    --ok: #5fd083; --ok-soft: #1c3324; --warn: #ffb547; --warn-soft: #3a2b12; --skip: #a3a097; --skip-soft: #2b2b2f;
+    --series-send: #3987e5; --series-maybe: #4f6a8c; --series-skip: #4a4a4f;
+    color-scheme: dark;
+  }
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 18px; line-height: 1.55; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-block: 24px 80px; padding-inline: 16px; }
+  .col { max-width: 68ch; }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(34px, 6vw, 54px); font-weight: 800; }
+  h2 { font-size: clamp(26px, 4vw, 34px); font-weight: 800; margin-top: 64px; padding-top: 20px; border-top: 3px solid var(--fg); }
+  h3 { font-size: 22px; font-weight: 600; margin-top: 28px; }
+  p { margin: 14px 0; }
+  .lead { font-size: 21px; color: var(--fg-2); }
+  .eyebrow { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  a { color: var(--blue); }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; }
+  nav.toc a { text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 15px; color: var(--fg); background: var(--bg-2); }
+  nav.toc a:hover, nav.toc a:focus-visible { border-color: var(--accent); outline: none; }
+  .is { font-style: italic; color: var(--fg-2); }
+  .term { font-weight: 700; }
+  .story { background: var(--bg-2); border-left: 6px solid var(--accent); padding: 4px 20px; margin: 20px 0; border-radius: 0 10px 10px 0; }
+  .story p { font-size: 20px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 22px 0; }
+  .tile { background: var(--bg-2); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+  .tile .n { font-family: var(--display); font-size: 40px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; color: var(--blue); }
+  .tile .l { font-size: 14px; color: var(--fg-2); margin-top: 8px; }
+  figure { margin: 24px 0; }
+  figure img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; display: block; background: #fff; }
+  figcaption { font-size: 15px; color: var(--fg-2); margin-top: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .tablewrap { overflow-x: auto; margin: 16px 0; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); }
+  td.num, th.num { text-align: right; }
+  .pill { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+  .pill.send { background: var(--ok-soft); color: var(--ok); }
+  .pill.maybe { background: var(--warn-soft); color: var(--warn); }
+  .pill.skip { background: var(--skip-soft); color: var(--skip); }
+  .rules { display: grid; gap: 12px; margin: 20px 0; }
+  .rule { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+  .rule .k { font-family: var(--display); font-size: 30px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .rule b { display: block; margin-bottom: 4px; }
+  .rule p { margin: 0; font-size: 17px; }
+  .light { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 20px 0; }
+  .light div { border-radius: 12px; padding: 16px; }
+  .light .g { background: var(--ok-soft); } .light .y { background: var(--warn-soft); } .light .r { background: var(--skip-soft); }
+  .light b { display: block; font-size: 19px; margin-bottom: 6px; }
+  .light .g b { color: var(--ok); } .light .y b { color: var(--warn); } .light .r b { color: var(--skip); }
+  .light p { margin: 0; font-size: 16px; }
+  .chart { margin: 20px 0; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: var(--fg-2); margin-top: 6px; }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .legend .s::before { background: var(--series-send); } .legend .m::before { background: var(--series-maybe); } .legend .k::before { background: var(--series-skip); }
+  .calc { background: var(--blue-soft); border-radius: 14px; padding: 20px; margin: 24px 0; display: grid; gap: 14px; }
+  .calc label { display: grid; gap: 6px; font-size: 15px; font-weight: 700; }
+  .calc select, .calc input { font: inherit; font-size: 17px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
+  .calc .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .calc .out { font-family: var(--display); font-size: 36px; font-weight: 800; color: var(--blue); font-variant-numeric: tabular-nums; }
+  .calc .out small { font-family: var(--body); font-size: 16px; font-weight: 400; color: var(--fg-2); display: block; }
+  ol.steps { padding-left: 22px; } ol.steps li { margin: 10px 0; }
+  .note { border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; background: var(--bg-2); font-size: 16px; }
+  .note.warn { border-color: var(--warn); }
+  ul.src { font-size: 15px; padding-left: 20px; } ul.src li { margin: 6px 0; overflow-wrap: anywhere; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="wrap">
+  <div class="col">
+    <div class="eyebrow">Flyers to newly registered companies in Iceland</div>
+    <h1>New Company Flyer Guide</h1>
+    <p class="lead">How many new companies there are, how many flyers you need, and how to tell from the public register whether a company is a real, running business with a workplace.</p>
+    <nav class="toc" aria-label="Sections">
+      <a href="#story">The idea</a>
+      <a href="#numbers">The numbers</a>
+      <a href="#flyers">How many flyers</a>
+      <a href="#check">Is it a real business?</a>
+      <a href="#house">Is it a house?</a>
+      <a href="#sectors">Sector cheat-sheet</a>
+      <a href="#routine">Weekly routine</a>
+      <a href="#rules">Rules</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+
+  <div class="col">
+    <h2 id="story">The idea, explained simply</h2>
+    <div class="story">
+      <p>Every day in Iceland, a few new companies are born.</p>
+      <p>When a company is born, the government writes it down in a big public list. The list is called the <span class="term">fyrirtækjaskrá</span> (company register). Anyone can look at it for free on skatturinn.is.</p>
+      <p>Some new companies have a real workplace: a shop, a clinic, an office, a workshop. Those places need chairs, printers, coffee, cleaning and a website.</p>
+      <p>Other new companies are just a piece of paper. A holding company, or one person working from their kitchen table. They do not need any of that.</p>
+      <p>Our job: look at each new company, sort it into "has a workplace" or "does not", and post a flyer only to the ones that do.</p>
+    </div>
+    <p>The register shows five things about every company. Those five things are enough to sort almost every company in under a minute. They are explained with pictures in the section <a href="#check">Is it a real business?</a>.</p>
+  </div>
+
+  <div class="col">
+    <h2 id="numbers">The numbers</h2>
+    <p>These are official counts from Statistics Iceland (Hagstofa Íslands), table FYR03001, for the latest twelve months on record: July 2025 to June 2026. Statistics Iceland gets them straight from the company register.</p>
+  </div>
+  <div class="tiles">
+    <div class="tile"><div class="n">3,432</div><div class="l">new companies registered in 12 months (all legal forms)</div></div>
+    <div class="tile"><div class="n">3,047</div><div class="l">of those are private limited companies (ehf.)</div></div>
+    <div class="tile"><div class="n">286</div><div class="l">new companies per month on average</div></div>
+    <div class="tile"><div class="n">66</div><div class="l">new companies per week on average</div></div>
+    <div class="tile"><div class="n">71%</div><div class="l">are in the capital region (Reykjavík to Mosfellsbær), 2025</div></div>
+  </div>
+  <div class="col">
+    <h3>Month by month</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Month</th><th class="num">All new companies</th><th class="num">Of which ehf.</th></tr></thead>
+        <tbody>
+          <tr><td>July 2025</td><td class="num">297</td><td class="num">250</td></tr>
+          <tr><td>August 2025</td><td class="num">230</td><td class="num">205</td></tr>
+          <tr><td>September 2025</td><td class="num">279</td><td class="num">266</td></tr>
+          <tr><td>October 2025</td><td class="num">274</td><td class="num">245</td></tr>
+          <tr><td>November 2025</td><td class="num">270</td><td class="num">238</td></tr>
+          <tr><td>December 2025</td><td class="num">235</td><td class="num">191</td></tr>
+          <tr><td>January 2026</td><td class="num">369</td><td class="num">345</td></tr>
+          <tr><td>February 2026</td><td class="num">299</td><td class="num">274</td></tr>
+          <tr><td>March 2026</td><td class="num">325</td><td class="num">279</td></tr>
+          <tr><td>April 2026</td><td class="num">265</td><td class="num">234</td></tr>
+          <tr><td>May 2026</td><td class="num">292</td><td class="num">256</td></tr>
+          <tr><td>June 2026</td><td class="num">297</td><td class="num">264</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>January is the busiest month (people start the new year with a new company). August and December are the quietest.</p>
+
+    <h3>What kind of work the new companies do</h3>
+    <p>Each company gets an ÍSAT code that says what it does. The chart groups the 3,432 companies by that code, and colours each group by how likely it is to have a workplace.</p>
+  </div>
+  <div class="chart" id="sectorChart" role="img" aria-label="Horizontal bar chart of new company registrations by sector, July 2025 to June 2026"></div>
+  <div class="legend"><span class="s">Likely has a workplace (send)</span><span class="m">Maybe (check the address)</span><span class="k">Usually no workplace (skip)</span></div>
+
+  <div class="col">
+    <h2 id="flyers">How many flyers do you need?</h2>
+    <p>Pick how strict you want to be. The counts are per month, from the twelve-month averages above. Add about ten percent spare for misprints and companies you add later.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Who gets a flyer</th><th class="num">Per month, all Iceland</th><th class="num">Per month, capital region only</th><th class="num">Per year, all Iceland</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill send">Strict</span> only the "send" sectors</td><td class="num">≈ 87</td><td class="num">≈ 62</td><td class="num">≈ 1,040</td></tr>
+          <tr><td><span class="pill maybe">Medium</span> "send" + "maybe" sectors</td><td class="num">≈ 215</td><td class="num">≈ 153</td><td class="num">≈ 2,580</td></tr>
+          <tr><td><span class="pill skip">Everyone</span> every new company</td><td class="num">≈ 286</td><td class="num">≈ 203</td><td class="num">≈ 3,430</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Recommendation: print for the <b>medium</b> list, then use the address check in the next section to drop the ones that are run from a home. In practice you will post around 100 to 150 flyers a month in the capital region.</p>
+
+    <div class="calc">
+      <div class="row">
+        <label for="c-tier">How strict
+          <select id="c-tier">
+            <option value="87">Strict (send sectors only)</option>
+            <option value="215" selected>Medium (send + maybe)</option>
+            <option value="286">Everyone</option>
+          </select>
+        </label>
+        <label for="c-region">Where
+          <select id="c-region">
+            <option value="1">All of Iceland</option>
+            <option value="0.713" selected>Capital region only</option>
+          </select>
+        </label>
+        <label for="c-months">How many months of flyers
+          <input id="c-months" type="number" min="1" max="24" value="3">
+        </label>
+        <label for="c-spare">Spare copies (%)
+          <input id="c-spare" type="number" min="0" max="100" value="10">
+        </label>
+      </div>
+      <div class="out" id="c-out" aria-live="polite">0 flyers<small>for 0 months</small></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2 id="check">Is it a real business? The five things to look at</h2>
+    <p>Open <a href="https://www.skatturinn.is/fyrirtaekjaskra/leit/" target="_blank" rel="noopener">skatturinn.is › Fyrirtækjaskrá › Leit</a>, type the company name or its kennitala, and you get a page like the two below. The red arrows show where to look.</p>
+    <div class="rules">
+      <div class="rule"><div class="k">1</div><div><b>Stofnað/Skráð = the birthday</b><p>The date the company was registered. For this project we only care about companies born in the last month or two.</p></div></div>
+      <div class="rule"><div class="k">2</div><div><b>Lögheimili = the address</b><p>Where the company lives. An office building or shopping street means a workplace. A normal house or flat means someone is working from home. (Póstfang is where the post goes. If it is different from Lögheimili, send the flyer to Póstfang.)</p></div></div>
+      <div class="rule"><div class="k">3</div><div><b>ÍSAT = what the company does</b><p>A code and a description. Shops, restaurants, clinics, workshops and offices need a place. Holding companies, property companies and farms do not. See the <a href="#sectors">sector cheat-sheet</a>.</p></div></div>
+      <div class="rule"><div class="k">4</div><div><b>Virðisaukaskattsnúmer = the VAT number</b><p>A company only gets this number when it actually starts selling things. If the box is there with a start date and no "Afskráning" (stop) date, the company is trading right now. Brand-new companies often do not have it yet, so a missing box means "too early to tell", not "dead".</p></div></div>
+      <div class="rule"><div class="k">5</div><div><b>Raunverulegir eigendur = the owners</b><p>Click it to see the real people behind the company. One owner at a home address is usually a one-person business. A company owned by another company is usually a holding structure.</p></div></div>
+    </div>
+
+    <h3>Example 1: an established company with an office</h3>
+  </div>
+  <figure>
+    <img src="registry-running-business.png" alt="Screenshot of the Advania Ísland ehf. entry in the Icelandic company register with five numbered red arrows pointing at the registration date, the address, the ÍSAT code, the VAT number table, and the deregistration date column.">
+    <figcaption>Advania Ísland ehf. Old company, office address, desk-work ÍSAT code, and a live VAT number since 1990. Clearly a running business with an office.</figcaption>
+  </figure>
+  <div class="col"><h3>Example 2: a brand-new cleaning company run from a home</h3></div>
+  <figure>
+    <img src="registry-new-company.png" alt="Screenshot of the Þrif Verk ehf. entry in the Icelandic company register with five numbered red arrows pointing at the registration date, the home address, the cleaning ÍSAT code, the missing VAT number section, and the owners link.">
+    <figcaption>Þrif Verk ehf., registered 16 September 2026. Residential address, cleaning ÍSAT code, no VAT number yet. A real new business, but with no office of its own. If the flyer is about office cleaning, this one is a customer-of-the-cleaner, not a target.</figcaption>
+  </figure>
+
+  <div class="col">
+    <h2 id="house">Is it a house? The address test</h2>
+    <p>The register does not say "house" or "office". You check the address yourself. It takes thirty seconds.</p>
+    <ol class="steps">
+      <li>Copy the <b>Lögheimili</b> address.</li>
+      <li>Paste it into <a href="https://ja.is/kort/" target="_blank" rel="noopener">ja.is/kort</a> or Google Maps and look at the building. Street View shows you a house, a block of flats, or a commercial building straight away.</li>
+      <li>Still unsure? Look the address up in the property register, <a href="https://www.skra.is/" target="_blank" rel="noopener">skra.is › Fasteignaskrá</a>. Each unit has a type: <span class="is">Íbúð</span> or <span class="is">Einbýlishús</span> means a home; <span class="is">Skrifstofa</span>, <span class="is">Verslun</span>, <span class="is">Iðnaður</span> or <span class="is">Atvinnuhúsnæði</span> means a workplace.</li>
+      <li>Quick clue without any lookup: addresses with a floor or unit after the street number ("Borgartún 25, 3. hæð") and streets in business districts (Borgartún, Suðurlandsbraut, Skeifan, Hlíðasmári, Smáratorg, Lyngháls) are nearly always workplaces. Addresses on quiet residential streets in 108, 110, 112, 200, 210 and 220 postcodes are usually homes.</li>
+    </ol>
+    <div class="light">
+      <div class="g"><b>Green: send it</b><p>Workplace address, and an ÍSAT code that needs a place. VAT number present is a bonus, not a must for a new company.</p></div>
+      <div class="y"><b>Yellow: wait and re-check</b><p>Home address but a "send" sector, or a workplace address with a "maybe" sector. Put it on a list and look again in four to eight weeks. If a VAT number has appeared, send.</p></div>
+      <div class="r"><b>Red: skip</b><p>Holding, property or investment company, a farm, or a one-person "maybe" sector at a home address.</p></div>
+    </div>
+    <div class="note">One honest limit: a new company often registers at the owner's home first and moves into premises a few months later. That is why the yellow list exists. Re-checking it is where most of the extra good addresses come from.</div>
+  </div>
+
+  <div class="col">
+    <h2 id="sectors">Sector cheat-sheet</h2>
+    <p>The first digits of the ÍSAT code tell you the sector. The counts are new registrations in the twelve months to June 2026, all of Iceland.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>ÍSAT starts with</th><th>What it is</th><th class="num">12 months</th><th class="num">Per month</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>45–47</td><td>Shops, car dealers, repair garages, wholesale</td><td class="num">367</td><td class="num">31</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>55–56</td><td>Hotels, guesthouses, restaurants, cafés</td><td class="num">176</td><td class="num">15</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>86–88</td><td>Clinics, dentists, physio, care homes</td><td class="num">167</td><td class="num">14</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>10–33</td><td>Manufacturing and workshops</td><td class="num">104</td><td class="num">9</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>49–53</td><td>Transport, storage, couriers</td><td class="num">82</td><td class="num">7</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>94–96</td><td>Hairdressers, beauty, laundries, clubs</td><td class="num">75</td><td class="num">6</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>85</td><td>Schools, courses, driving schools</td><td class="num">72</td><td class="num">6</td><td><span class="pill send">Send</span></td></tr>
+          <tr><td>41–43</td><td>Builders, electricians, plumbers</td><td class="num">527</td><td class="num">44</td><td><span class="pill maybe">Maybe</span> many work from a van</td></tr>
+          <tr><td>69–75</td><td>Lawyers, accountants, architects, engineers, consultants</td><td class="num">362</td><td class="num">30</td><td><span class="pill maybe">Maybe</span> offices or home desks</td></tr>
+          <tr><td>58–63</td><td>Software, media, IT services</td><td class="num">308</td><td class="num">26</td><td><span class="pill maybe">Maybe</span> often remote at first</td></tr>
+          <tr><td>77–82</td><td>Rental, staffing, cleaning, office services</td><td class="num">215</td><td class="num">18</td><td><span class="pill maybe">Maybe</span> cleaners go to the customer</td></tr>
+          <tr><td>90–93</td><td>Arts, sport, gyms, entertainment</td><td class="num">121</td><td class="num">10</td><td><span class="pill maybe">Maybe</span> gyms yes, artists no</td></tr>
+          <tr><td>64–66</td><td>Holding and investment companies, finance</td><td class="num">426</td><td class="num">36</td><td><span class="pill skip">Skip</span> paper companies</td></tr>
+          <tr><td>68</td><td>Property companies, landlords</td><td class="num">314</td><td class="num">26</td><td><span class="pill skip">Skip</span></td></tr>
+          <tr><td>01–03</td><td>Farming, forestry, fishing</td><td class="num">103</td><td class="num">9</td><td><span class="pill skip">Skip</span></td></tr>
+          <tr><td>05–09, 35–39, unknown</td><td>Mining, utilities, waste, unclassified</td><td class="num">13</td><td class="num">1</td><td><span class="pill skip">Skip</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Totals: send sectors 1,043 a year, maybe sectors 1,533, skip sectors 856.</p>
+  </div>
+
+  <div class="col">
+    <h2 id="routine">The weekly routine</h2>
+    <ol class="steps">
+      <li><b>Get this week's new names.</b> Statistics Iceland only publishes counts, not names. Names come from one of these: the <a href="https://logbirtingablad.is/" target="_blank" rel="noopener">Lögbirtingablað</a> (every new company is announced there, subscription needed), a credit-data service such as Creditinfo or Keldan (paid lists of new registrations with ÍSAT codes), or the register's own search by address if you work one business district at a time.</li>
+      <li><b>Look each one up</b> on skatturinn.is and note the five things: date, address, ÍSAT, VAT, owners.</li>
+      <li><b>Sort</b> into green, yellow, red using the cheat-sheet and the address test.</li>
+      <li><b>Add the greens</b> to the CRM under "Nýskráð fyrirtæki" with the address, ÍSAT code and registration date filled in, so the flyer list and the call list are the same list.</li>
+      <li><b>Post the flyers</b> to the Póstfang address, marked to the company name.</li>
+      <li><b>Every month, re-check the yellows.</b> New VAT number or new address with a floor number means it has moved into premises. Send.</li>
+    </ol>
+  </div>
+
+  <div class="col">
+    <h2 id="rules">Rules to keep in mind</h2>
+    <div class="note warn">
+      <p><b>Register terms of use.</b> Skatturinn's terms say you may not copy, distribute, rent, sell or publish material built from the register search. Looking companies up one by one for your own mailing is the normal public use. Scraping the whole register, or selling the list on, is not. Keep your list in the CRM and do not pass it around.</p>
+      <p><b>Mailing companies is allowed.</b> The Þjóðskrá opt-out mark ("bannmerking") protects private people, not companies. Still print a line on the flyer saying how to be taken off the list, and honour it.</p>
+      <p><b>Privacy.</b> The owners' names are personal data. Use them only to address the envelope and to call. Do not print or share the owner lists.</p>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2 id="sources">Sources</h2>
+    <ul class="src">
+      <li>Statistics Iceland, table FYR03001 "Nýskráningar og gjaldþrot fyrirtækja eftir mánuðum, bálkum atvinnugreina og rekstrarform 2008–2026": <a href="https://px.hagstofa.is/pxis/pxweb/is/Atvinnuvegir/Atvinnuvegir__fyrirtaeki__skradfyrirtaeki__2_skraningar/FYR03001.px" target="_blank" rel="noopener">px.hagstofa.is › FYR03001</a> (monthly figures and sector counts above).</li>
+      <li>Statistics Iceland, table FYR03020 "Nýskráningar og gjaldþrot hlutafélaga og einkahlutafélaga eftir sveitarfélögum og landsvæðum 2008–2025" (capital-region share: 2,083 of 2,923 in 2025).</li>
+      <li>Statistics Iceland news: <a href="https://statice.is/publications/news-archive/enterprises/new-registrations-and-company-bankruptcies-in-the-2nd-quarter-of-2026" target="_blank" rel="noopener">Q2 2026</a> (854 registrations, 754 ehf.) and <a href="https://statice.is/publications/news-archive/enterprises/new-registrations-and-company-bankruptcies-in-the-1st-quarter-of-2026" target="_blank" rel="noopener">Q1 2026</a> (993 registrations, 898 ehf.).</li>
+      <li>Company register search: <a href="https://www.skatturinn.is/fyrirtaekjaskra/leit/" target="_blank" rel="noopener">skatturinn.is/fyrirtaekjaskra/leit</a>. Example entries: Advania Ísland ehf. (5902697199) and Þrif Verk ehf. (6309260330), screenshots taken 12 October 2026.</li>
+      <li>ÍSAT 2008 sector codes: <a href="https://www.skatturinn.is/fyrirtaekjaskra/thjonusta/isat-2008/" target="_blank" rel="noopener">skatturinn.is › ÍSAT 2008</a>.</li>
+      <li>Register terms of use: <a href="https://www.skatturinn.is/notkunarskilmalar" target="_blank" rel="noopener">skatturinn.is/notkunarskilmalar</a>.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function () {
+  var data = [
+    ["Builders, electricians, plumbers", 527, "maybe"],
+    ["Holding and investment companies", 426, "skip"],
+    ["Shops, garages, wholesale", 367, "send"],
+    ["Lawyers, accountants, consultants", 362, "maybe"],
+    ["Property companies", 314, "skip"],
+    ["Software, media, IT", 308, "maybe"],
+    ["Rental, staffing, cleaning", 215, "maybe"],
+    ["Hotels, restaurants, cafés", 176, "send"],
+    ["Clinics, dentists, care", 167, "send"],
+    ["Arts, sport, gyms", 121, "maybe"],
+    ["Manufacturing, workshops", 104, "send"],
+    ["Farming, fishing", 103, "skip"],
+    ["Transport, couriers", 82, "send"],
+    ["Hairdressers, beauty, other services", 75, "send"],
+    ["Schools, courses", 72, "send"],
+    ["Utilities, mining, unknown", 13, "skip"]
+  ];
+  var W = 1000, rowH = 34, labelW = 330, padR = 70, top = 10;
+  var H = top + data.length * rowH + 10;
+  var max = 550, plotW = W - labelW - padR;
+  var fill = { send: "var(--series-send)", maybe: "var(--series-maybe)", skip: "var(--series-skip)" };
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" font-family="Atkinson Hyperlegible, Arial, sans-serif">';
+  [0, 100, 200, 300, 400, 500].forEach(function (g) {
+    var x = labelW + g / max * plotW;
+    s += '<line x1="' + x + '" y1="' + top + '" x2="' + x + '" y2="' + (H - 10) + '" stroke="var(--line)" stroke-width="1"/>';
+  });
+  data.forEach(function (d, i) {
+    var y = top + i * rowH, w = d[1] / max * plotW;
+    s += '<title></title>';
+    s += '<text x="' + (labelW - 12) + '" y="' + (y + rowH / 2 + 5) + '" text-anchor="end" font-size="15" fill="var(--fg)">' + d[0] + '</text>';
+    s += '<rect x="' + labelW + '" y="' + (y + 7) + '" width="' + w + '" height="' + (rowH - 14) + '" rx="4" fill="' + fill[d[2]] + '"><title>' + d[0] + ': ' + d[1] + ' new companies</title></rect>';
+    s += '<text x="' + (labelW + w + 8) + '" y="' + (y + rowH / 2 + 5) + '" font-size="14" fill="var(--fg-2)" font-variant-numeric="tabular-nums">' + d[1] + '</text>';
+  });
+  s += '</svg>';
+  document.getElementById("sectorChart").innerHTML = s.replace(/<title><\/title>/g, "");
+
+  var tier = document.getElementById("c-tier"), region = document.getElementById("c-region"),
+      months = document.getElementById("c-months"), spare = document.getElementById("c-spare"), out = document.getElementById("c-out");
+  function calc() {
+    var m = Math.max(1, Number(months.value) || 1), sp = Math.max(0, Number(spare.value) || 0);
+    var n = Number(tier.value) * Number(region.value) * m * (1 + sp / 100);
+    var r = Math.ceil(n / 10) * 10;
+    out.innerHTML = r.toLocaleString("en") + " flyers<small>for " + m + (m === 1 ? " month" : " months") + ", including " + sp + "% spare</small>";
+  }
+  [tier, region, months, spare].forEach(function (el) { el.addEventListener("input", calc); el.addEventListener("change", calc); });
+  calc();
+})();
+</script>
