@@ -29,9 +29,11 @@ OFFER STATUS
   Múrbúðin declined a joint offer but is fine sharing the brochure.
 
 AD DRAFT (ad/)
-  litamalun-svif.html  source, 200x200 mm (194 mm trim + 3 mm bleed), fonts in ../fonts, images in ../img
-  litamalun-svif.pdf   print PDF, 200x200 mm
-  litamalun-svif.png   2363x2363 px (300 dpi) preview
-  img/litamalun-logo.svg  logo traced from the 168 px web PNG; good enough for a proof, replace with the client's vector before print
+  litamalun-svif.html           source, 200x200 mm page = 194 mm trim + 3 mm bleed on every side, safe area 8 mm inside trim
+  litamalun-svif-bleed.pdf      send THIS to print: 200x200 mm with bleed, no marks
+  litamalun-svif-cropmarks.pdf  212x212 mm proof with crop marks at the trim line
+  litamalun-svif.png            2363x2363 px (300 dpi) preview of the bleed page
+  img/litamalun-logo.svg        logo traced from the 168 px web PNG; fine for a proof, replace with the client's vector before print
+  img/qr-litamalun.svg          QR -> https://www.litamalun.is/?utm_source=svif (error correction H)
   The offer in the red box (frí litaráðgjöf + 10%) is a PROPOSAL; Gústaf has not confirmed any offer.
-  Re-render: cd ad && node <path>/render.js litamalun-svif.html litamalun-svif  (needs playwright + chromium)
+  Re-render: cd ad && node render.js litamalun-svif.html litamalun-svif   (needs: npm i playwright, chromium at /opt/pw-browsers/chromium)

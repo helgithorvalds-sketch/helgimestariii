@@ -31,10 +31,10 @@ h1 em{font-style:normal;color:var(--blue)}
 .trust span::before{content:"";display:inline-block;width:2.2mm;height:2.2mm;border-radius:50%;background:var(--red);margin-right:1.6mm;vertical-align:0.1mm}
 
 /* painter cutout */
-.painter{position:absolute;right:4mm;top:10mm;width:84mm;height:auto;z-index:2}
+.painter{position:absolute;right:-2mm;top:10mm;width:86mm;height:auto;z-index:2}
 
 /* lower content on the blue field */
-.lower{position:absolute;left:11mm;right:11mm;top:107mm;height:68mm;color:#fff;display:grid;grid-template-columns:1fr 66mm;column-gap:8mm;z-index:3}
+.lower{position:absolute;left:11mm;right:11mm;top:107mm;height:66mm;color:#fff;display:grid;grid-template-columns:1fr 66mm;column-gap:8mm;z-index:3}
 .benefits{list-style:none;margin:0;padding:0;display:grid;gap:2.4mm;align-content:start}
 .benefits li{display:grid;grid-template-columns:6.5mm 1fr;column-gap:2.5mm;align-items:start;font-size:9pt;line-height:1.3}
 .benefits li b{display:block;font-family:var(--display);font-weight:700;font-size:10pt}
@@ -50,20 +50,33 @@ h1 em{font-style:normal;color:var(--blue)}
 .proof{display:grid;gap:2mm;align-content:start}
 .proof h3{margin:0;font-family:var(--display);font-weight:700;font-size:8pt;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f7}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm;position:relative}
-.pair img{width:100%;height:22mm;object-fit:cover;display:block;border-radius:1mm;outline:.5mm solid rgba(255,255,255,.9)}
+.pair img{width:100%;height:30mm;object-fit:cover;display:block;border-radius:1mm;outline:.5mm solid rgba(255,255,255,.9)}
 .pair .lbl{position:absolute;top:1.5mm;font-family:var(--display);font-weight:800;font-size:6.5pt;letter-spacing:.1em;text-transform:uppercase;padding:.8mm 1.8mm;border-radius:.8mm;background:rgba(31,36,48,.85);color:#fff}
 .pair .lbl.after{background:var(--red)}
 .pair .l1{left:1.5mm}.pair .l2{left:calc(50% + 2.25mm)}
 .pair .cap{grid-column:1/-1;font-size:7.5pt;color:#dbe7f8;margin-top:-1mm}
+.qr{display:grid;grid-template-columns:21mm 1fr;column-gap:3.5mm;align-items:center;margin-top:2.5mm}
+.qrbox{background:#fff;padding:1.6mm;border-radius:1.2mm;width:21mm;height:21mm}
+.qrbox img{display:block;width:100%;height:100%}
+.qrtext{font-size:8pt;line-height:1.35;color:#dbe7f8}
+.qrtext b{display:block;font-family:var(--display);font-weight:700;font-size:9.5pt;color:#fff;margin-bottom:.8mm}
 
 /* contact strip */
-.contact{position:absolute;left:11mm;right:11mm;bottom:9mm;z-index:4;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;border-top:.35mm solid rgba(255,255,255,.45);padding-top:2.6mm}
+.contact{position:absolute;left:11mm;right:11mm;bottom:11mm;z-index:4;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;border-top:.35mm solid rgba(255,255,255,.45);padding-top:2.6mm}
 .contact .phone{font-family:var(--display);font-weight:800;font-size:19pt;line-height:1;letter-spacing:-.01em}
 .contact .phone small{display:block;font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f7;margin-bottom:1.2mm}
 .contact .addr{text-align:right;font-size:8.5pt;line-height:1.4}
 .contact .addr b{font-family:var(--display);font-weight:700;font-size:11pt}
 
 /* trim guide (hidden in output, toggle with body.guides) */
+body.marks{background:#fff;padding:6mm;width:212mm;height:212mm}
+body.marks .page{outline:none}
+body.marks .mark{position:absolute;width:5mm;height:5mm;z-index:20}
+body.marks .mark::before,body.marks .mark::after{content:"";position:absolute;background:#000}
+body.marks .mark::before{width:5mm;height:.15mm}
+body.marks .mark::after{width:.15mm;height:5mm}
+.mark{display:none}
+body.marks .mark{display:block}
 body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dashed rgba(255,0,0,.6);pointer-events:none;z-index:9}
 </style>
 </head>
@@ -95,14 +108,13 @@ body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dash
     <div class="proof">
       <h3>Fyrir og eftir · verk okkar</h3>
       <div class="pair">
-        <img src="../img/hverfisgata.jpg" alt=""><img src="../img/hverfisgataeftir_1.jpg" alt="">
-        <span class="lbl l1">Fyrir</span><span class="lbl after l2">Eftir</span>
-        <span class="cap">Hverfisgata, timburhús að utan</span>
-      </div>
-      <div class="pair">
         <img src="../img/bakkastadir.jpg" alt=""><img src="../img/bakkastadireftir_1.jpg" alt="">
         <span class="lbl l1">Fyrir</span><span class="lbl after l2">Eftir</span>
         <span class="cap">Bakkastaðir, steinhús að utan</span>
+      </div>
+      <div class="qr">
+        <div class="qrbox"><img src="../img/qr-litamalun.svg" alt="QR: litamalun.is"></div>
+        <div class="qrtext"><b>Skannaðu og fáðu tilboð</b>Beint á litamalun.is, þar sendir þú okkur línu um verkið.</div>
       </div>
     </div>
   </div>
