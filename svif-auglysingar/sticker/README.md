@@ -16,7 +16,7 @@ Fjórar útgáfur, hver með `.html` (hönnunin), `.pdf` (prentskjal) og `.png` 
 | `sticker-svif-G-ljos` | **Ljóst gler** (byggt á E, engin ljósmynd) – mjúkir ljóshringir í bakgrunni, þrjár glerflísar (útihurð, bað, stofa) fyrir ofan frostaða spjaldið |
 | `sticker-svif-H-birta` | **Dagsbirta** (byggt á E, engin ljósmynd) – skáhallandi ljósbönd eins og sól í gegnum glugga, stór yfirlýsing „Þú sérð út. Enginn sér inn.“ |
 | `sticker-svif-J-hf-ska` | **Skáskorið gler** (byggt á E) – bakgrunnur gerður í Higgsfield (gpt_image_2_5, `assets/hf-bg-1.png`): frostað gler skorið með skáhallandi glærum rákum sem sýna bjarta stofu. Textinn er HTML svo letrið prentist rétt |
-| `sticker-svif-K-ljos-mynd` | **Ljóst gler með mynd** – eins og G, en mynd í hægri dálki spjaldsins (58 × ~62 mm) í stað afsláttarkassans; afslátturinn og tilboðið (án kóða) koma í stað inngangstextans undir fyrirsögninni, listinn þar undir og skrefin neðst, QR-kóði (`assets/qr-sticker.svg`, vísar á https://sticker.is, gerður með segno) í fætinum. Myndin á að vera IMG_0913.JPG frá Kristófer; `assets/grof.jpg` er staðgengill þar til hún berst (breyta `src` á `.shot img`) |
+| `sticker-svif-K-ljos-mynd` | **Ljóst gler með mynd** – eins og G, en mynd í hægri dálki spjaldsins (58 × ~62 mm) í stað afsláttarkassans; afslátturinn og tilboðið (án kóða) koma í stað inngangstextans undir fyrirsögninni, listinn þar undir og skrefin neðst, QR-kóði (`assets/qr-sticker.svg`, vísar á https://sticker.is, gerður með segno) í fætinum. Myndin á að vera IMG_0913.JPG frá Kristófer; `assets/grof.jpg` er staðgengill þar til hún berst (breyta `src` á `.shot img`). **Lokaútgáfa til samþykktar; prentskjöl í `svif-v2/sticker/`** |
 | `hf-ad-1.png`, `hf-ad-2.png` | Heilar auglýsingar sem Higgsfield teiknaði sjálft út frá E (2048 px, raster-texti með smávillum, aðeins hugmyndir, ekki prentskjöl) |
 | `sticker-svif-I-dokk` | **Dökkt gler** (byggt á E, engin ljósmynd) – djúpt teal gler með glóandi ljóshringjum, hvít yfirlýsing yfir ljósu spjaldi |
 
@@ -55,4 +55,5 @@ Afsláttur og kóði eru breytanleg efst í `sticker-svif.html`:
 ```sh
 node render.mjs <mappa> <úttak-án-endingar>   # notar Playwright + Chromium
 node render-one.mjs <skrá.html> <úttak-án-endingar>   # ein tiltekin útgáfa
+node render-print.mjs <skrá.html> <úttaksmappa> <grunnnafn>   # prentútkeyrsla: 194 mm skorið + 3 mm bleed = 200 mm PDF (sjá svif-v2/sticker/)
 ```
