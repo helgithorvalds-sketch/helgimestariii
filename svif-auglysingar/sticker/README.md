@@ -15,6 +15,8 @@ Fjórar útgáfur, hver með `.html` (hönnunin), `.pdf` (prentskjal) og `.png` 
 | `sticker-svif-F-tviskipt` | **Tvískipt** – bein lárétt skipting: efri hluti án filmu, neðri hluti með filmu. „Þú sérð út. Enginn sér inn.“ |
 | `sticker-svif-G-ljos` | **Ljóst gler** (byggt á E, engin ljósmynd) – mjúkir ljóshringir í bakgrunni, þrjár glerflísar (útihurð, bað, stofa) fyrir ofan frostaða spjaldið |
 | `sticker-svif-H-birta` | **Dagsbirta** (byggt á E, engin ljósmynd) – skáhallandi ljósbönd eins og sól í gegnum glugga, stór yfirlýsing „Þú sérð út. Enginn sér inn.“ |
+| `sticker-svif-J-hf-ska` | **Skáskorið gler** (byggt á E) – bakgrunnur gerður í Higgsfield (gpt_image_2_5, `assets/hf-bg-1.png`): frostað gler skorið með skáhallandi glærum rákum sem sýna bjarta stofu. Textinn er HTML svo letrið prentist rétt |
+| `hf-ad-1.png`, `hf-ad-2.png` | Heilar auglýsingar sem Higgsfield teiknaði sjálft út frá E (2048 px, raster-texti með smávillum, aðeins hugmyndir, ekki prentskjöl) |
 | `sticker-svif-I-dokk` | **Dökkt gler** (byggt á E, engin ljósmynd) – djúpt teal gler með glóandi ljóshringjum, hvít yfirlýsing yfir ljósu spjaldi |
 
 `common.css` er sameiginlegt fyrir A–I og `panel.css` fyrir G–I (spjaldið úr E). Bakgrunnsmyndirnar fyrir G–I eru búnar til með `python3 make-bg.py` (Pillow), engin ljósmynd. Afsláttur og kóði eru stilltir efst í `common.css` (fyrir A–F) og í `sticker-svif.html` (grunnútgáfan).
