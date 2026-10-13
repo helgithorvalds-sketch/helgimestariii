@@ -10,63 +10,76 @@ import { cn } from "@/lib/utils";
  * Blaðsíðan er eitt SVG (1200×1200) svo hún skalast og prentast sem heild.
  * Fyrirtækin eru flokkuð í svæði í húsinu (ZONES) – eitt merki á svæði, fyrirtækin talin upp undir.
  *
- *  - flat.marker / iso.marker: punktur á myndinni (hnit í 1200×1200 SVG-inu; húsið situr í BOX fyrir neðan)
- *  - flat.route: línan frá punkti að merkingu í 2D (síðasti punkturinn er þar sem merkingin situr)
- *  - iso.side:   hvorum megin merkingin er í 3D (línan er reiknuð sjálfkrafa)
- *  - companies:  [nafn, blaðsíða, vefur?]
+ *  - flat.marker:  punktur á 2D myndinni (hnit í 1200×1200 SVG-inu; húsið situr í BOX fyrir neðan)
+ *  - flat.route:   línan frá punkti að merkingu í 2D (síðasti punkturinn er þar sem merkingin situr)
+ *  - iso.<útgáfa>: punktur og hlið (left/right) fyrir hverja 3D mynd – línan er reiknuð sjálfkrafa
+ *  - companies:    [nafn, blaðsíða, vefur?]
+ *
+ * Fyrirtækin eru þau sem eiga tilbúna auglýsingu í svif-auglysingar/ (13. okt. 2026) auk Straumlindar.
  */
 
 type Pt = [number, number];
 type Side = "left" | "right";
-type Variant = "flat" | "iso";
+type Variant = "flat" | "paper" | "glass" | "cel" | "clay";
+type Iso = Exclude<Variant, "flat">;
 type Fx = "sparkle" | "charge" | "steam" | "pipe";
 
 type Zone = {
   id: string;
   title: string;
-  companies: [string, number, string?][];
+  companies: [string, number | string, string?][];
   fx?: Fx;
   flat: { marker: Pt; route: Pt[] };
-  iso: { marker: Pt; side: Side };
+  iso: Record<Iso, { marker: Pt; side: Side }>;
 };
+
+// Útgáfur af húsinu – mynd og heiti á hnappi
+const VARIANTS: { id: Variant; label: string; img: string }[] = [
+  { id: "flat", label: "2D", img: "/svif-hus-2d.webp" },
+  { id: "paper", label: "Pappír", img: "/svif-hus-paper.webp" },
+  { id: "glass", label: "Gler", img: "/svif-hus-glass.webp" },
+  { id: "cel", label: "Teiknað", img: "/svif-hus-cel.webp" },
+  { id: "clay", label: "Leir", img: "/svif-hus-3d.webp" },
+];
 
 // Kassinn sem húsmyndin er felld í (myndirnar eru skornar að húsinu, "meet" miðjar þær í kassanum)
 const BOX = { x: 290, y: 400, w: 620, h: 560 } as const;
 const LEFT_X = 270;
 const RIGHT_X = 930;
-const SLOT = 105;
-const SLOT0: Record<Side, number> = { left: 520, right: 550 };
-// neðri brún hússins í hvorri mynd (fyrir skuggann)
-const HOUSE_BOTTOM: Record<Variant, number> = { flat: 864, iso: 921 };
+const SLOT = 115;
+const SLOT0: Record<Side, number> = { left: 500, right: 560 };
+// neðri brún 2D hússins (fyrir skuggann)
+const HOUSE_BOTTOM_FLAT = 864;
 
 const ZONES: Zone[] = [
-  { id: "thak", title: "Þak & efni",
-    companies: [["Múrbúðin", 2, "https://www.murbudin.is"], ["Fagafl", 3, "https://www.fagafl.is"], ["Áltak", 4, "https://altak.is"]],
-    flat: { marker: [514, 559], route: [[514, 559], [480, 559], [480, 520], [LEFT_X, 520]] }, iso: { marker: [477, 531], side: "left" } },
-  { id: "gluggar", title: "Gluggar & hurðir", fx: "sparkle",
-    companies: [["Gluggavinir", 5, "https://gluggavinir.is"], ["Gardinur", 6, "https://gardinur.is"], ["KORA", 7, "https://kora.is"], ["sticker.is", 8, "https://sticker.is"]],
-    flat: { marker: [530, 609], route: [[530, 609], [500, 609], [500, 625], [LEFT_X, 625]] }, iso: { marker: [424, 619], side: "left" } },
+  { id: "efni", title: "Þak, múr & málun",
+    companies: [["Múrbúðin", 2, "https://www.murbudin.is"], ["Litamálun", 3, "https://litamalun.is"], ["Steindi", "4–5", "https://www.steindi.is"]],
+    flat: { marker: [514, 559], route: [[514, 559], [480, 559], [480, 500], [LEFT_X, 500]] },
+    iso: { paper: { marker: [541, 506], side: "left" }, glass: { marker: [610, 472], side: "left" }, cel: { marker: [590, 490], side: "left" }, clay: { marker: [477, 531], side: "left" } } },
+  { id: "gluggar", title: "Gluggar & gler", fx: "sparkle",
+    companies: [["Gluggavinir", 6, "https://gluggavinir.is"], ["Íspan", 7, "https://ispan.is"], ["Gardínur", 8, "https://gardinur.is"], ["sticker.is", 9, "https://sticker.is"], ["KORA", 10, "https://kora.is"]],
+    flat: { marker: [530, 609], route: [[530, 609], [LEFT_X, 609]] },
+    iso: { paper: { marker: [344, 587], side: "left" }, glass: { marker: [519, 558], side: "left" }, cel: { marker: [449, 564], side: "left" }, clay: { marker: [424, 619], side: "left" } } },
   { id: "rafmagn", title: "Rafmagn & rafbíll", fx: "charge",
-    companies: [["Straumlind", 9, "https://straumlind.is"], ["Ísorka", 10, "https://isorka.is"]],
-    flat: { marker: [421, 755], route: [[421, 755], [400, 755], [400, 730], [LEFT_X, 730]] }, iso: { marker: [833, 750], side: "right" } },
+    companies: [["Straumlind", 11, "https://straumlind.is"], ["Ísorka", 12, "https://isorka.is"]],
+    flat: { marker: [421, 755], route: [[421, 755], [400, 755], [400, 735], [LEFT_X, 735]] },
+    iso: { paper: { marker: [758, 784], side: "right" }, glass: { marker: [845, 670], side: "right" }, cel: { marker: [831, 771], side: "right" }, clay: { marker: [833, 750], side: "right" } } },
   { id: "eldhus", title: "Eldhús & tæki",
-    companies: [["HTH", 11, "https://hth.is"], ["Ormsson", 12, "https://ormsson.is"]],
-    flat: { marker: [502, 783], route: [[502, 783], [502, 835], [LEFT_X, 835]] }, iso: { marker: [477, 734], side: "left" } },
-  { id: "vidhald", title: "Múr & málun",
-    companies: [["Litamálun", 13], ["Steindi", 14, "https://www.steindi.is"], ["más", 15]],
-    flat: { marker: [539, 832], route: [[539, 832], [539, 940], [LEFT_X, 940]] }, iso: { marker: [520, 869], side: "left" } },
+    companies: [["Ormsson · HTH", "13–14", "https://ormsson.is"]],
+    flat: { marker: [502, 783], route: [[502, 783], [502, 850], [LEFT_X, 850]] },
+    iso: { paper: { marker: [392, 710], side: "left" }, glass: { marker: [501, 649], side: "left" }, cel: { marker: [632, 719], side: "right" }, clay: { marker: [477, 734], side: "left" } } },
   { id: "bad", title: "Bað & lagnir", fx: "pipe",
-    companies: [["HK Lagnir", 16], ["Baðlínan", 17, "https://badlinan.is"], ["Stífluþjónustan", 18, "https://ja.is/stiflu-og-myndavelathjonustan/"]],
-    flat: { marker: [651, 646], route: [[651, 646], [690, 646], [690, 550], [RIGHT_X, 550]] }, iso: { marker: [645, 606], side: "right" } },
-  { id: "oryggi", title: "Lásar & tryggingar",
-    companies: [["lásar.is", 19, "https://lasar.is"], ["VÍS", 20, "https://www.vis.is"]],
-    flat: { marker: [720, 771], route: [[720, 771], [760, 771], [760, 655], [RIGHT_X, 655]] }, iso: { marker: [602, 825], side: "right" } },
-  { id: "gardur", title: "Garður & pottur", fx: "steam",
-    companies: [["Heitirpottar.is", 21, "https://www.heitirpottar.is"]],
-    flat: { marker: [804, 786], route: [[804, 786], [804, 760], [RIGHT_X, 760]] }, iso: { marker: [377, 784], side: "left" } },
+    companies: [["HK Lagnir", 15, "https://hklagnir.is"]],
+    flat: { marker: [651, 646], route: [[651, 646], [690, 646], [690, 560], [RIGHT_X, 560]] },
+    iso: { paper: { marker: [541, 621], side: "right" }, glass: { marker: [665, 564], side: "right" }, cel: { marker: [635, 606], side: "right" }, clay: { marker: [645, 606], side: "right" } } },
+  { id: "oryggi", title: "Öryggi & tryggingar",
+    companies: [["lásar.is", 19, "https://lasar.is"], ["VÍS", 20, "https://www.vis.is"], ["Maus", "21–22", "https://maus.is"]],
+    flat: { marker: [720, 771], route: [[720, 771], [760, 771], [760, 680], [RIGHT_X, 680]] },
+    iso: { paper: { marker: [497, 801], side: "left" }, glass: { marker: [635, 740], side: "right" }, cel: { marker: [568, 808], side: "right" }, clay: { marker: [602, 825], side: "right" } } },
   { id: "golf", title: "Gólf & flísar",
-    companies: [["Parki", 22, "https://parki.is"], ["Heit gólf", 23, "https://www.heitgolf.is"], ["MS lagnir", 24], ["MJ Lausnir", 25, "https://mjlausnir.is"]],
-    flat: { marker: [626, 811], route: [[626, 811], [626, 865], [RIGHT_X, 865]] }, iso: { marker: [620, 781], side: "right" } },
+    companies: [["Parki", 16, "https://parki.is"], ["Heit gólf", 17, "https://www.heitgolf.is"], ["MJ Lausnir", 18, "https://mjlausnir.is"]],
+    flat: { marker: [626, 811], route: [[626, 811], [RIGHT_X, 811]] },
+    iso: { paper: { marker: [568, 791], side: "right" }, glass: { marker: [647, 698], side: "right" }, cel: { marker: [510, 759], side: "left" }, clay: { marker: [620, 781], side: "right" } } },
 ];
 
 const HEADLINE = "AFSLÆTTIR, AFSLÆTTIR OG MEIRI AFSLÆTTIR";
@@ -91,14 +104,14 @@ const star = (cx: number, cy: number, r: number) => {
 
 const toPath = (pts: Pt[]) => pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]} ${p[1]}`).join(" ");
 
-/** Línur og merkingarstaðir reiknaðir sjálfkrafa (3D myndin). */
-function autoLayout(list: Zone[]): Record<string, Pt[]> {
+/** Línur og merkingarstaðir reiknaðir sjálfkrafa (3D myndirnar). */
+function autoLayout(list: Zone[], v: Iso): Record<string, Pt[]> {
   const out: Record<string, Pt[]> = {};
   (["left", "right"] as Side[]).forEach((side) => {
-    const items = list.filter((z) => z.iso.side === side).sort((a, b) => a.iso.marker[1] - b.iso.marker[1]);
+    const items = list.filter((z) => z.iso[v].side === side).sort((a, b) => a.iso[v].marker[1] - b.iso[v].marker[1]);
     const anchorX = side === "left" ? LEFT_X : RIGHT_X;
     items.forEach((z, i) => {
-      const [mx, my] = z.iso.marker;
+      const [mx, my] = z.iso[v].marker;
       const labelY = SLOT0[side] + i * SLOT;
       const k = side === "left" ? items.length - 1 - i : i;
       const busX = side === "left" ? LEFT_X + 40 + k * 18 : RIGHT_X - 40 - k * 18;
@@ -167,9 +180,9 @@ export default function SvifHus() {
   const [variant, setVariant] = useState<Variant>("flat");
   const [run, setRun] = useState(0);
 
-  const isoRoutes = useMemo(() => autoLayout(ZONES), []);
-  const img = variant === "flat" ? "/svif-hus-2d.webp" : "/svif-hus-3d.webp";
-  const markerOf = (z: Zone): Pt => (variant === "flat" ? z.flat.marker : z.iso.marker);
+  const isoRoutes = useMemo(() => (variant === "flat" ? {} : autoLayout(ZONES, variant)), [variant]);
+  const img = VARIANTS.find((v) => v.id === variant)!.img;
+  const markerOf = (z: Zone): Pt => (variant === "flat" ? z.flat.marker : z.iso[variant].marker);
   const routeOf = (z: Zone): Pt[] => (variant === "flat" ? z.flat.route : isoRoutes[z.id]);
 
   return (
@@ -184,13 +197,13 @@ export default function SvifHus() {
         </Button>
         <div className="flex items-center gap-2">
           <div className="inline-flex rounded-full border border-[hsl(var(--ink)/0.2)] p-0.5 bg-white/60">
-            {(["flat", "iso"] as Variant[]).map((v) => (
+            {VARIANTS.map((v) => (
               <button
-                key={v}
-                onClick={() => { setVariant(v); setActive(null); setRun((n) => n + 1); }}
-                className={cn("px-3 h-7 rounded-full text-xs font-bold tracking-wide transition-colors", variant === v ? "bg-[hsl(var(--ink))] text-white" : "text-[hsl(var(--ink))] hover:bg-[hsl(var(--ink)/0.08)]")}
+                key={v.id}
+                onClick={() => { setVariant(v.id); setActive(null); setRun((n) => n + 1); }}
+                className={cn("px-2.5 sm:px-3 h-7 rounded-full text-xs font-bold tracking-wide transition-colors", variant === v.id ? "bg-[hsl(var(--ink))] text-white" : "text-[hsl(var(--ink))] hover:bg-[hsl(var(--ink)/0.08)]")}
               >
-                {v === "flat" ? "2D" : "3D"}
+                {v.label}
               </button>
             ))}
           </div>
@@ -241,7 +254,7 @@ export default function SvifHus() {
 
             {/* húsið */}
             {variant === "flat" && (
-              <ellipse cx="600" cy={HOUSE_BOTTOM.flat + 4} rx="300" ry="12" fill="hsl(var(--ink))" fillOpacity="0.08" filter="url(#soft)" className="house-shadow" />
+              <ellipse cx="600" cy={HOUSE_BOTTOM_FLAT + 4} rx="300" ry="12" fill="hsl(var(--ink))" fillOpacity="0.08" filter="url(#soft)" className="house-shadow" />
             )}
             <g clipPath="url(#houseClip)">
               <image href={img} x={BOX.x} y={BOX.y} width={BOX.w} height={BOX.h} className="house-img" preserveAspectRatio="xMidYMid meet" />
