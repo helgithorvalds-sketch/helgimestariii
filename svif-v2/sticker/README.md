@@ -1,4 +1,6 @@
-# Sticker.is – SVIF auglýsing, útgáfa K (lokaútgáfa til samþykktar)
+# Sticker.is – SVIF auglýsing, útgáfa K
+
+**Staða: KLÁRT** – samþykkt af Helga 13.10.2026. Bíður aðeins staðfestingar Kristófers á afslætti, orðalagi og mynd (sjá neðst).
 
 Frumskrár og allar hugmyndir (A–K) eru í `svif-auglysingar/sticker/`; þessi mappa geymir aðeins prentútkeyrsluna.
 
