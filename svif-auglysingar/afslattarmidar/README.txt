@@ -1,10 +1,12 @@
-SVIF afsláttarmiðar – útgáfa 3 (13. okt. 2026)
+SVIF afsláttarmiðar – útgáfa 4 (13. okt. 2026)
 
-Miðar: 86 × 42 mm skurður (2:1 eins og fyrirmyndirnar). Í midar/ eru tvær skrár á hvert fyrirtæki:
-  *_bleed_300dpi.png   = 92 × 48 mm með 3 mm blæðingu (fyrir prentsmiðju)
-  *_skurdur_300dpi.png = 86 × 42 mm skorið, með hálfhringlaga hökum á hliðunum (gegnsæ hök)
-Baksíða: sex miðar í 2×3 grind á 19,4 cm síðu í bláa SVIF-þemanu, punktalína utan um hvern miða.
-Kynningarsíða: miðarnir bognir á hring í 3D, SVIF-þema (ljós grunnur, rúðunet, blár hnappur), hökin sjást á miðunum.
+Miðar: 88 × 50 mm skurður (stækkaðir í útgáfu 4 svo þeir fylli baksíðuna). Í midar/ eru tvær skrár á hvert fyrirtæki:
+  *_bleed_300dpi.png   = 94 × 56 mm með 3 mm blæðingu (fyrir prentsmiðju)
+  *_skurdur_300dpi.png = 88 × 50 mm skorið, með hálfhringlaga hökum á hliðunum (gegnsæ hök)
+Baksíða: sex miðar í 2×3 grind sem fyllir 19,4 cm síðuna, punktalína utan um hvern miða.
+Kynningarsíða: miðarnir bognir á stærri hring í 3D, SVIF-þema, stuttur texti, enginn blár hnappur (textalína neðst).
+
+Breytingar í útgáfu 4: Íspan-merkið er nú í réttum litum (blátt/grænblátt á hvítum reit) í stað svarts; allir miðar stækkaðir.
 
 Breytingar frá útgáfu 2:
   Ormsson  – endurhannaður: hvítur grunnur, AEG-eldhúsmyndin sést, raunverulegt ORMSSON-orðmerki og HTH-merki,

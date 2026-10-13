@@ -10,17 +10,16 @@ html,body{margin:0;background:#fff}
   background-image:linear-gradient(rgba(70,90,160,.10) .2mm,transparent .2mm),linear-gradient(90deg,rgba(70,90,160,.10) .2mm,transparent .2mm);background-size:8mm 8mm;background-position:3mm 3mm}
 .sq{position:absolute;width:2.6mm;height:2.6mm;border:.3mm solid #8ea4d8}
 .sq.f{background:#a9bbe6;border:0}
-.eyebrow{position:absolute;left:0;right:0;top:16mm;text-align:center;font-family:Montserrat;font-weight:700;font-size:8pt;letter-spacing:.22em;text-transform:uppercase;color:#3d67c4}
-h1{position:absolute;left:14mm;right:14mm;top:21mm;margin:0;text-align:center;font-family:Montserrat;font-weight:800;font-size:32pt;line-height:1.02;letter-spacing:-.02em;color:#1f2135}
-h1 span{display:block;font-weight:500;font-size:11pt;letter-spacing:0;margin-top:2.4mm;color:#3f4660;font-family:"Open Sans";line-height:1.4;padding:0 12mm}
-.scene{position:absolute;left:0;top:0;width:200mm;height:200mm;perspective:440mm;perspective-origin:50% 45%}
-.ring{position:absolute;left:100mm;top:108mm;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-24deg)}
+.eyebrow{position:absolute;left:0;right:0;top:17mm;text-align:center;font-family:Montserrat;font-weight:700;font-size:8pt;letter-spacing:.22em;text-transform:uppercase;color:#3d67c4}
+h1{position:absolute;left:14mm;right:14mm;top:22.5mm;margin:0;text-align:center;font-family:Montserrat;font-weight:800;font-size:38pt;line-height:1;letter-spacing:-.02em;color:#1f2135}
+h1 span{display:block;font-weight:500;font-size:11.5pt;letter-spacing:0;margin-top:3mm;color:#3f4660;font-family:"Open Sans";line-height:1.4}
+.scene{position:absolute;left:0;top:0;width:200mm;height:200mm;perspective:520mm;perspective-origin:50% 48%}
+.ring{position:absolute;left:100mm;top:112mm;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-20deg)}
 .card{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
-.sl{position:absolute;top:-15.75mm;left:0;height:31.5mm;background-repeat:no-repeat;background-size:65mm 31.5mm;backface-visibility:hidden}
-.ground{position:absolute;left:50%;top:153mm;width:160mm;height:22mm;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(61,103,196,.22),rgba(61,103,196,0) 68%)}
-.foot{position:absolute;left:14mm;right:14mm;bottom:14mm;display:flex;align-items:center;justify-content:center}
-.foot .pill{display:flex;align-items:center;gap:3mm;background:#3d67c4;color:#fff;border-radius:999px;padding:3.2mm 6.5mm;font-family:Montserrat;font-weight:700;font-size:10pt;box-shadow:0 1mm 3mm rgba(61,103,196,.25)}
-.foot .pill svg{width:5mm;height:5mm;flex:none}
+.sl{position:absolute;top:-21mm;left:0;height:42mm;background-repeat:no-repeat;background-size:74mm 42mm;backface-visibility:hidden}
+.ground{position:absolute;left:50%;top:160mm;width:176mm;height:26mm;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(61,103,196,.22),rgba(61,103,196,0) 68%)}
+.foot{position:absolute;left:14mm;right:14mm;bottom:15mm;text-align:center;font-family:Montserrat;font-weight:700;font-size:11pt;color:#1f2135}
+.foot b{color:#3d67c4}
 body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dashed rgba(255,0,0,.6);pointer-events:none;z-index:9}
 </style></head>
 <body>
@@ -31,14 +30,14 @@ body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dash
   <div class="sq" style="right:16mm;top:128mm"></div><div class="sq f" style="right:24mm;top:146mm;width:1.6mm;height:1.6mm"></div>
   <div class="sq f" style="left:14mm;bottom:14mm;width:1.8mm;height:1.8mm"></div><div class="sq" style="right:14mm;bottom:14mm"></div>
   <div class="eyebrow">Sértilboð fyrir nýja húseigendur</div>
-  <h1>Afsláttarmiðar<span>Nokkur fyrirtækjanna í bókinni taka á móti nýjum húseigendum með sérstökum afslætti. Klipptu miðana út og taktu þá með.</span></h1>
+  <h1>Afsláttarmiðar<span>Sex fyrirtæki í bókinni bjóða nýjum húseigendum afslátt.</span></h1>
   <div class="ground"></div>
   <div class="scene"><div class="ring" id="ring"></div></div>
-  <div class="foot"><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Alla afsláttarmiðana finnur þú aftast í bókinni</div></div>
+  <div class="foot">Alla afsláttarmiðana finnur þú <b>aftast í bókinni</b></div>
 </div>
 <script>
 (function(){
-  const R=67, W=65, H=31.5, N=18;
+  const R=78, W=74, H=42, N=18;
   const cards=[['parki',0],['sticker',62],['ispan',124],['ormsson',180],['gardinur',-124],['maus',-62]];
   const ring=document.getElementById('ring');
   const sw=W/N, dAng=(sw/R)*180/Math.PI, chord=2*R*Math.sin((sw/R)/2);
