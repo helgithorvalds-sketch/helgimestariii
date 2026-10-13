@@ -2,139 +2,126 @@
 <html lang="is">
 <head>
 <meta charset="utf-8">
-<title>SVIF afsláttarmiðar – liggjandi</title>
+<title>SVIF afsláttarmiðar – liggjandi v3</title>
 <style>
-/* Coupon: 86 × 42 mm trim (2:1, like the reference vouchers), +3 mm bleed = 92 × 48 mm. Safe zone 5 mm inside trim. */
+/* Coupon: 86 × 42 mm trim (2:1), +3 mm bleed = 92 × 48 mm. Safe zone 5 mm inside trim (8 mm from bleed edge). */
 @font-face{font-family:"Montserrat";src:url("../../../litamalun-assets/fonts/Montserrat.ttf") format("truetype");font-weight:100 900}
 @font-face{font-family:"Open Sans";src:url("../../../litamalun-assets/fonts/OpenSans.ttf") format("truetype");font-weight:300 800}
 *{box-sizing:border-box}
 html,body{margin:0;background:#9a9a9a}
-body{display:flex;flex-wrap:wrap;gap:8mm;padding:8mm;font-family:"Open Sans",sans-serif}
-.c{position:relative;width:92mm;height:48mm;overflow:hidden;background:#fff;color:#1b1b1f;font-size:6.6pt;line-height:1.3}
+body{display:flex;flex-wrap:wrap;gap:8mm;padding:8mm;font-family:"Open Sans",sans-serif;width:230mm}
+.c{position:relative;width:92mm;height:48mm;overflow:hidden;background:#fff;color:#1b1b1f;font-size:6.6pt;line-height:1.3;
+   /* real half-circle notches on the trim edge (3 mm in from the bleed edge) */
+   mask:radial-gradient(circle 2.6mm at 3mm 24mm,transparent 98%,#000 100%),radial-gradient(circle 2.6mm at 89mm 24mm,transparent 98%,#000 100%);
+   mask-composite:intersect;-webkit-mask-composite:source-in}
 .c *{min-width:0}
-.mont{font-family:Montserrat}
-.ey{font-family:Montserrat;font-weight:700;font-size:5.4pt;letter-spacing:.14em;text-transform:uppercase}
+.ey{font-family:Montserrat;font-weight:700;font-size:5.4pt;letter-spacing:.14em;text-transform:uppercase;line-height:1.2}
 .big{font-family:Montserrat;font-weight:800;line-height:.9;letter-spacing:-.025em}
-.big small{display:block;font-size:7pt;letter-spacing:.16em;font-weight:800;margin-top:.9mm}
-.lead{font-family:Montserrat;font-weight:700;font-size:6.6pt;line-height:1.25}
+.big small{display:block;font-size:7pt;letter-spacing:.16em;font-weight:800;margin-top:1mm;text-transform:uppercase}
+.lead{font-family:Montserrat;font-weight:700;font-size:6.4pt;line-height:1.25}
 .terms{font-size:5.8pt;line-height:1.3;opacity:.85}
-.svif{position:absolute;font-family:Montserrat;font-weight:800;font-size:5.2pt;letter-spacing:.16em;padding:.8mm 1.6mm;border-radius:.6mm}
-.notch{position:absolute;top:21.5mm;width:5mm;height:5mm;border-radius:50%;background:#9a9a9a}
-.notch.nl{left:-2.5mm}.notch.nr{right:-2.5mm}
+.svif{position:absolute;font-family:Montserrat;font-weight:800;font-size:5.2pt;letter-spacing:.16em;padding:.8mm 1.6mm;border-radius:.6mm;line-height:1.1}
 .ph{position:absolute;overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
-.badge{position:absolute;width:15mm;height:15mm;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:Montserrat;font-weight:800;line-height:1.05}
-.badge b{font-size:7.4pt}.badge span{font-size:4.6pt;letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-top:.5mm}
-.foot{position:absolute;bottom:8mm;display:flex;align-items:baseline;gap:2.5mm;font-size:5.4pt;line-height:1.2;white-space:nowrap}
+.foot{position:absolute;bottom:8mm;display:flex;align-items:baseline;gap:2.2mm;font-size:5.4pt;line-height:1.2;white-space:nowrap}
 .foot .web{font-family:Montserrat;font-weight:800;font-size:6.6pt}
+.foot.col{flex-direction:column;align-items:flex-start;gap:.2mm;bottom:7.6mm}
 
-/* 1 PARKI — photo left with arrow-shaped edge, white right (reference: gift voucher) */
+/* 1 PARKI — photo left with arrow-shaped edge, white right */
 #parki .ph{left:0;top:0;width:44mm;height:48mm;clip-path:polygon(0 0,36mm 0,44mm 50%,36mm 100%,0 100%)}
 #parki .logo{position:absolute;left:8mm;top:8mm;width:16mm;height:auto;box-shadow:0 .6mm 2mm rgba(0,0,0,.3)}
 #parki .bar{position:absolute;left:8mm;bottom:8mm;background:#1b1b1f;color:#fff;font-family:Montserrat;font-weight:700;font-size:4.8pt;letter-spacing:.14em;padding:1mm 1.8mm;text-transform:uppercase}
-#parki .r{position:absolute;left:48mm;right:8mm;top:8mm;text-align:right}
+#parki .r{position:absolute;left:48mm;right:8mm;top:13.5mm;text-align:right}
 #parki .ey{color:#e8681b}
 #parki .big{color:#1b1b1f;font-size:23pt;margin-top:.8mm}
 #parki .big small{color:#e8681b}
 #parki .lead{margin-top:1.4mm}
 #parki .terms{margin-top:.8mm}
 #parki .svif{right:8mm;top:8mm;background:#e8681b;color:#fff}
-#parki .r .ey{margin-top:5mm}
 #parki .foot{left:48mm;right:8mm;justify-content:flex-end;text-align:right}
 #parki .foot .web{color:#e8681b}
 
-/* 2 ÍSPAN — dark blue, photo in a slanted panel, circle badge (reference: big sale banner) */
+/* 2 ÍSPAN — dark blue with a light diagonal, photo right in a slanted panel, logo + 20% side by side */
 #ispan{background:#0f2f5c;color:#fff}
-#ispan .stripe{position:absolute;left:-10mm;top:-10mm;width:30mm;height:80mm;background:#1557a6;transform:rotate(20deg);opacity:.9}
-#ispan .stripe.b{left:30mm;width:5mm;opacity:.35}
-#ispan .ph{left:34mm;top:0;width:38mm;height:48mm;clip-path:polygon(9mm 0,100% 0,29mm 100%,0 100%)}
-#ispan .logo{position:absolute;left:8mm;top:8mm;width:14mm;height:auto}
-#ispan .l{position:absolute;left:8mm;top:24.5mm;width:27mm}
-#ispan .l .lead{color:#fff;font-size:6.2pt}
-#ispan .l .terms{color:#cfe0f7;margin-top:1mm}
-#ispan .badge{right:9mm;top:7mm;background:#0e9aa7;color:#fff;width:17mm;height:17mm}
-#ispan .badge b{font-size:9.5pt}
-#ispan .r{position:absolute;right:8mm;top:25.5mm;width:24mm;text-align:right}
-#ispan .r .ey{color:#9fd8de}
-#ispan .r .lead{font-size:6.2pt;margin-top:.6mm}
-#ispan .svif{left:8mm;bottom:8mm;background:#fff;color:#0f2f5c}
-#ispan .foot{right:8mm;bottom:8mm;color:#fff;background:rgba(15,47,92,.88);padding:1.2mm 2mm;border-radius:.6mm}
+#ispan .stripe{position:absolute;left:-14mm;top:-10mm;width:26mm;height:80mm;background:#1557a6;transform:rotate(20deg)}
+#ispan .stripe.b{left:14mm;width:3mm;opacity:.35}
+#ispan .ph{right:0;top:0;width:40mm;height:48mm;clip-path:polygon(9mm 0,100% 0,100% 100%,0 100%)}
+#ispan .logo{position:absolute;left:8mm;top:8mm;width:13mm;height:auto}
+#ispan .big{position:absolute;left:24mm;top:7.6mm;font-size:24pt;color:#fff}
+#ispan .big small{color:#7fd3da}
+#ispan .l{position:absolute;left:8mm;top:23.5mm;width:42mm}
+#ispan .l .ey{color:#7fd3da}
+#ispan .l .lead{margin-top:1mm;color:#fff}
+#ispan .svif{right:8mm;top:8mm;background:#fff;color:#0f2f5c}
+#ispan .foot{left:8mm;color:#cfe0f7}
 #ispan .foot .web{color:#fff}
 
-/* 3 ORMSSON — full dark photo with a frosted panel (reference: café voucher) */
-#ormsson{background:#111;color:#fff}
-#ormsson .ph{inset:0;width:92mm;height:48mm}
-#ormsson .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.15),rgba(0,0,0,.55) 60%,rgba(0,0,0,.75))}
-#ormsson .panel{position:absolute;left:8mm;top:8mm;width:40mm;height:32mm;background:rgba(255,255,255,.88);color:#141414;padding:3mm 3.2mm;box-sizing:border-box}
-#ormsson .panel .brands{display:flex;gap:1.2mm;align-items:center}
-#ormsson .hth{background:#d8232a;color:#fff;font-family:Montserrat;font-weight:800;font-size:6pt;padding:.7mm 1.4mm;border-radius:.5mm}
-#ormsson .aeg{background:#141414;color:#fff;font-family:Montserrat;font-weight:800;font-size:6pt;padding:.7mm 1.4mm;border-radius:.5mm;letter-spacing:.08em}
-#ormsson .panel .big{font-size:12.5pt;line-height:1;margin-top:2mm;color:#141414}
-#ormsson .panel .big em{font-style:normal;color:#d8232a}
-#ormsson .panel .terms{margin-top:1.4mm;color:#333;opacity:1}
-#ormsson .r{position:absolute;left:52mm;right:8mm;top:9mm}
-#ormsson .r .ey{color:#ff8a8f}
-#ormsson .r .big{font-size:13pt;line-height:.98;margin-top:1mm;color:#fff}
-#ormsson .r .terms{color:#e5e5e5;margin-top:1.4mm}
-#ormsson .svif{right:8mm;top:8mm;background:#fff;color:#141414}
-#ormsson .r .ey{margin-top:5mm}
-#ormsson .foot{left:52mm;right:8mm;color:#ddd;flex-direction:column;align-items:flex-start;gap:.4mm}
-#ormsson .foot .web{color:#fff;letter-spacing:.12em}
+/* 3 ORMSSON — white, AEG kitchen photo left behind a slanted edge with HTH-red lining, real wordmark + HTH mark */
+#ormsson{background:#fff;color:#1b1b1f}
+#ormsson .lining{position:absolute;left:0;top:0;width:45mm;height:48mm;background:#c8102e;clip-path:polygon(0 0,100% 0,36mm 100%,0 100%)}
+#ormsson .ph{left:0;top:0;width:43.3mm;height:48mm;clip-path:polygon(0 0,100% 0,34.3mm 100%,0 100%)}
+#ormsson .word{position:absolute;left:46.5mm;top:8.7mm;width:23mm;height:auto}
+#ormsson .hth{position:absolute;right:8mm;top:7.4mm;width:6.4mm;height:6.4mm;background:#c8102e;border-radius:.8mm;display:flex;align-items:center;justify-content:center}
+#ormsson .hth img{width:4.8mm;height:auto;display:block}
+#ormsson .r{position:absolute;left:46.5mm;right:8mm;top:15.8mm}
+#ormsson .ph img{object-position:32% 50%}
+#ormsson .ey{color:#c8102e}
+#ormsson .big{font-size:20pt;margin-top:.8mm;color:#1b1b1f}
+#ormsson .big small{color:#c8102e}
+#ormsson .lead{margin-top:1.1mm;font-size:6.1pt;white-space:nowrap}
+#ormsson .svif{left:8mm;top:8mm;background:#fff;color:#1b1b1f}
+#ormsson .foot{left:46.5mm;color:#4b4b50}
+#ormsson .foot .web{color:#1b1b1f}
 
-/* 4 STICKER — light frosted background, photo right in a slanted panel (reference: big sale light banner) */
-#sticker{background:linear-gradient(160deg,#f1f7f7,#d7e9eb 60%,#eaf3f3);color:#1b1b1f}
-#sticker .stripe{position:absolute;right:-6mm;top:-10mm;width:4mm;height:80mm;background:#1f8c8e;opacity:.18;transform:rotate(-20deg)}
-#sticker .ph{right:0;top:0;width:36mm;height:48mm;clip-path:polygon(10mm 0,100% 0,100% 100%,0 100%)}
-#sticker .logo{position:absolute;left:8mm;top:8mm;width:19mm;height:auto}
-#sticker .tag{position:absolute;left:8mm;top:15.5mm;font-family:Montserrat;font-weight:700;font-size:4.6pt;letter-spacing:.12em;text-transform:uppercase;color:#1f8c8e}
-#sticker .l{position:absolute;left:8mm;top:19.5mm;width:46mm}
-#sticker .big{color:#1f8c8e;font-size:22pt}
+/* 4 STICKER — light teal, photo as a tilted sticker with white edge */
+#sticker{background:linear-gradient(160deg,#f3f8f8,#d9eaec 60%,#ecf4f4);color:#1b1b1f}
+#sticker .ph{right:9.5mm;top:8.5mm;width:32mm;height:30mm;border-radius:2.2mm;border:1.1mm solid #fff;transform:rotate(-5deg);box-shadow:0 1mm 2.4mm rgba(0,0,0,.22)}
+#sticker .ph .svif{position:absolute;left:1.6mm;bottom:1.6mm;background:#1f8c8e;color:#fff}
+#sticker .logo{position:absolute;left:8mm;top:8mm;width:18mm;height:auto}
+#sticker .tag{position:absolute;left:8mm;top:15.4mm;font-family:Montserrat;font-weight:700;font-size:4.6pt;letter-spacing:.12em;text-transform:uppercase;color:#1f8c8e}
+#sticker .l{position:absolute;left:8mm;top:19mm;width:40mm}
+#sticker .big{color:#1f8c8e;font-size:21pt}
 #sticker .big small{color:#1b1b1f}
-#sticker .lead{margin-top:1.2mm;width:44mm}
-#sticker .badge{right:9mm;top:7mm;background:#fff;color:#1f8c8e;box-shadow:0 .6mm 2mm rgba(0,0,0,.18)}
-#sticker .svif{right:8mm;bottom:8mm;background:#1f8c8e;color:#fff}
-#sticker .foot{left:8mm;width:46mm;justify-content:space-between}
+#sticker .lead{margin-top:1.2mm;width:40mm}
+#sticker .foot{left:8mm}
 #sticker .foot .web{color:#1f8c8e}
 
-/* 5 GARDÍNUR — photo left, warm right (reference: gift voucher, second card) */
-#gardinur{background:#f1ece4}
-#gardinur .ph{left:0;top:0;width:40mm;height:48mm;clip-path:polygon(0 0,33mm 0,40mm 50%,33mm 100%,0 100%)}
-#gardinur .brand{position:absolute;left:8mm;top:8mm;background:rgba(255,255,255,.92);padding:1mm 1.8mm;border-radius:.5mm;font-family:Montserrat;font-weight:800;font-size:6pt;letter-spacing:.06em;color:#3b2f24}
-#gardinur .brand small{display:block;font-weight:600;font-size:4.2pt;letter-spacing:.14em;text-transform:uppercase;color:#8a7a68;margin-top:.2mm}
-#gardinur .r{position:absolute;left:44mm;right:8mm;top:8mm}
+/* 5 GARDÍNUR — warm beige, photo in an arched window on the left, real gardinur.is logo */
+#gardinur{background:#f1ece4;color:#3b2f24}
+#gardinur .arch{position:absolute;left:7.2mm;top:6.2mm;width:28.6mm;height:34.6mm;border:.35mm solid #c9b9a2;border-radius:14.3mm 14.3mm 1.6mm 1.6mm}
+#gardinur .ph{left:8.6mm;top:7.6mm;width:25.8mm;height:31.8mm;border-radius:12.9mm 12.9mm 1mm 1mm}
+#gardinur .logo{position:absolute;left:41mm;top:7.6mm;height:8.6mm;width:auto}
+#gardinur .r{position:absolute;left:41mm;right:8mm;top:18.8mm}
 #gardinur .ey{color:#8a6a3f}
-#gardinur .big{color:#3b2f24;font-size:14.5pt;margin-top:.8mm;line-height:.95}
-#gardinur .big small{color:#8a6a3f;font-size:6.5pt}
-#gardinur .lead{margin-top:1.4mm;color:#3b2f24}
-#gardinur .terms{margin-top:.8mm;color:#5a4a3a}
+#gardinur .big{color:#3b2f24;font-size:13pt;margin-top:.8mm;line-height:.95}
+#gardinur .big small{color:#8a6a3f;font-size:6.4pt;letter-spacing:.1em}
 #gardinur .svif{right:8mm;top:8mm;background:#3b2f24;color:#fff}
-#gardinur .r .ey{margin-top:5mm}
-#gardinur .foot{left:44mm;right:8mm;justify-content:space-between;color:#5a4a3a}
+#gardinur .foot{left:41mm;color:#6b5a48}
 #gardinur .foot .web{color:#3b2f24}
 
-/* 6 MAUS — dark with red diagonal stripes, photo left, badge (reference: furniture banner top) */
+/* 6 MAUS — dark with red diagonal stripes, photo left, real Maus logo */
 #maus{background:#1a1a1d;color:#fff}
-#maus .stripe{position:absolute;left:38mm;top:-14mm;width:6mm;height:80mm;background:#d9252b;transform:rotate(22deg)}
-#maus .stripe.b{left:46mm;width:2mm;opacity:.6}
-#maus .stripe.c{left:-4mm;width:26mm;background:#d9252b;opacity:1}
-#maus .ph{left:0;top:0;width:34mm;height:48mm;clip-path:polygon(0 0,100% 0,24mm 100%,0 100%)}
-#maus .wordmark{position:absolute;left:52mm;top:8mm;font-family:Montserrat;font-weight:800;font-size:10pt;letter-spacing:.06em;line-height:1}
-#maus .wordmark small{display:block;font-size:4.4pt;letter-spacing:.14em;font-weight:700;margin-top:.6mm;opacity:.85}
-#maus .r{position:absolute;left:52mm;right:8mm;top:17mm}
-#maus .big{color:#fff;font-size:22pt}
+#maus .stripe{position:absolute;left:36mm;top:-14mm;width:6mm;height:80mm;background:#d9252b;transform:rotate(22deg)}
+#maus .stripe.b{left:44mm;width:2mm;opacity:.6}
+#maus .stripe.w{left:-6mm;width:26mm;background:#d9252b;opacity:1}
+#maus .ph{left:0;top:0;width:32mm;height:48mm;clip-path:polygon(0 0,100% 0,22mm 100%,0 100%)}
+#maus .ph img{width:125%;height:125%;margin:-14% 0 0 -12%}
+#maus .logo{position:absolute;left:46mm;top:8mm;width:24mm;height:auto}
+#maus .r{position:absolute;left:46mm;right:8mm;top:17.4mm}
+#maus .ey{color:#ff6b70}
+#maus .big{color:#fff;font-size:19pt;margin-top:.8mm}
 #maus .big small{color:#ff6b70}
-#maus .lead{margin-top:1.2mm;color:#fff;font-size:6.2pt}
-#maus .badge{left:25mm;top:29mm;background:#d9252b;color:#fff;width:13mm;height:13mm;box-shadow:0 .6mm 2mm rgba(0,0,0,.4)}
-#maus .svif{right:8mm;top:8mm;background:#fff;color:#d9252b}
-#maus .foot{left:52mm;right:8mm;justify-content:space-between;color:#ddd}
+#maus .lead{margin-top:1mm;color:#fff;font-size:6.2pt}
+#maus .svif{right:8mm;top:8.2mm;background:#fff;color:#d9252b}
+#maus .foot{left:46mm;color:#d4d4d8}
 #maus .foot .web{color:#fff}
 </style>
 </head>
 <body>
 
 <div class="c" id="parki">
-  <div class="ph"><img src="src/parki_photo.jpg" alt="" style="object-position:30% 50%"></div>
-  <img class="logo" src="src/parki_logo.png" alt="Parki Interiors">
+  <div class="ph"><img src="myndir/parki_photo.jpg" alt="" style="object-position:30% 50%"></div>
+  <img class="logo" src="myndir/parki_logo.png" alt="Parki Interiors">
   <div class="bar">Parki Interiors</div>
   <div class="svif">SVIF</div>
   <div class="r">
@@ -144,83 +131,69 @@ body{display:flex;flex-wrap:wrap;gap:8mm;padding:8mm;font-family:"Open Sans",san
     <div class="terms">Lagervörur · framvísaðu miðanum</div>
   </div>
   <div class="foot"><span>Gildir til 31. des. 2026</span><span class="web">parki.is</span></div>
-  <div class="notch nl"></div><div class="notch nr"></div>
 </div>
 
 <div class="c" id="ispan">
   <div class="stripe"></div><div class="stripe b"></div>
-  <div class="ph"><img src="src/ispan_02.jpg" alt=""></div>
-  <img class="logo" src="src/ispan_logo_white.png" alt="Íspan Glerborg">
+  <div class="ph"><img src="myndir/ispan_02.jpg" alt=""></div>
+  <img class="logo" src="myndir/ispan_logo_white.png" alt="Íspan Glerborg">
+  <div class="big">20%<small>Afsláttur</small></div>
   <div class="l">
-    <div class="lead">Gler og speglar, íslensk framleiðsla.</div>
-    <div class="terms">Einangrunar- og sturtugler.</div>
-  </div>
-  <div class="badge"><b>20%</b><span>Afsláttur</span></div>
-  <div class="r">
     <div class="ey">Fyrir nýja húseigendur</div>
+    <div class="lead">af gleri, speglum og sturtugleri. Íslensk framleiðsla.</div>
   </div>
   <div class="svif">SVIF</div>
-  <div class="foot"><span class="web">ispan.is</span><span>54 54 300 · Nefndu SVIF · Gildir til 31.12.2026</span></div>
-  <div class="notch nl"></div><div class="notch nr"></div>
+  <div class="foot"><span class="web">ispan.is</span><span>54 54 300 · Gildir til 31.12.2026</span></div>
 </div>
 
 <div class="c" id="ormsson">
-  <div class="ph"><img src="src/aeg_kitchen.jpg" alt="" style="object-position:70% 50%"></div>
-  <div class="panel">
-    <div class="brands"><span class="hth">HTH</span><span class="aeg">AEG</span></div>
-    <div class="big">Frí ráðgjöf <em>hjá HTH</em></div>
-    <div class="terms">Bókaðu tíma hjá innréttingaráðgjafa á hth.ormsson.is og sýndu miðann.</div>
-  </div>
+  <div class="lining"></div>
+  <div class="ph"><img src="myndir/aeg_kitchen.jpg" alt="" style="object-position:32% 50%"></div>
   <div class="svif">SVIF</div>
+  <img class="word" src="myndir/ormsson_logo_dark.png" alt="Ormsson">
+  <div class="hth"><img src="myndir/hth_mark_white.png" alt="HTH"></div>
   <div class="r">
     <div class="ey">Fyrir nýja húseigendur</div>
-    <div class="big">Sértilboð á AEG tækjum</div>
-    <div class="terms">Sýndu miðann í verslun.</div>
+    <div class="big">20%<small>Afsláttur</small></div>
+    <div class="lead">af AEG tækjum og HTH innréttingum.</div>
   </div>
-  <div class="foot"><span class="web">ORMSSON</span><span>Lágmúla 8 · Gildir til 31. des. 2026</span></div>
-  <div class="notch nl"></div><div class="notch nr"></div>
+  <div class="foot col"><span class="web">ormsson.is</span><span>Lágmúla 8 · Gildir til 31.12.2026</span></div>
 </div>
 
 <div class="c" id="sticker">
-  <div class="stripe"></div>
-  <div class="ph"><img src="src/sticker_window.png" alt=""></div>
-  <img class="logo" src="src/sticker_logo.png" alt="Sticker.is">
+  <div class="ph"><img src="myndir/sticker_window.png" alt=""><div class="svif">SVIF</div></div>
+  <img class="logo" src="myndir/sticker_logo.png" alt="Sticker.is">
   <div class="tag">Filmur · merkingar · límmiðar</div>
   <div class="l">
     <div class="big">25%<small>Afsláttur</small></div>
-    <div class="lead">af öllum filmum og uppsetningu. Nefndu SVIF.</div>
+    <div class="lead">af filmum og uppsetningu. Frí mæling heim.</div>
   </div>
-  <div class="badge"><b>Frí</b><span>mæling</span></div>
-  <div class="svif">SVIF</div>
-  <div class="foot"><span class="web">sticker.is</span><span>775 2945 · Gildir til 31. des. 2026</span></div>
-  <div class="notch nl"></div><div class="notch nr"></div>
+  <div class="foot"><span class="web">sticker.is</span><span>775 2945 · Gildir til 31.12.2026</span></div>
 </div>
 
 <div class="c" id="gardinur">
-  <div class="ph"><img src="src/gardinur_photo.png" alt=""></div>
-  <div class="brand">gardinur.is<small>Íslensk framleiðsla</small></div>
+  <div class="arch"></div>
+  <div class="ph"><img src="myndir/gardinur_photo.png" alt="" style="object-position:60% 50%"></div>
+  <img class="logo" src="myndir/gardinur_logo.png" alt="gardinur.is">
   <div class="svif">SVIF</div>
   <div class="r">
     <div class="ey">Fyrir nýja húseigendur</div>
-    <div class="big">Frí mátaka heim<small>og frí sýnishorn</small></div>
-    <div class="lead">Rimla-, rúllu- og strimlagardínur. Nefndu SVIF.</div>
+    <div class="big">Frí mátaka<br>heim til þín<small>og frí sýnishorn</small></div>
   </div>
-  <div class="foot"><span class="web">gardinur.is</span><span>519 6888 · Gildir til 31. des. 2026</span></div>
-  <div class="notch nl"></div><div class="notch nr"></div>
+  <div class="foot col"><span class="web">gardinur.is</span><span>519 6888 · Gildir til 31.12.2026</span></div>
 </div>
 
 <div class="c" id="maus">
-  <div class="stripe c"></div><div class="stripe"></div><div class="stripe b"></div>
-  <div class="ph"><img src="src/maus_photo.png" alt=""></div>
-  <div class="badge"><b>Nýir</b><span>húseigendur</span></div>
-  <div class="wordmark">MAUS<small>Á Íslandi · Rekk Import</small></div>
+  <div class="stripe w"></div><div class="stripe"></div><div class="stripe b"></div>
+  <div class="ph"><img src="myndir/maus_photo.png" alt="" style="object-position:50% 40%"></div>
+  <img class="logo" src="myndir/maus_logo_white.png" alt="Maus">
   <div class="svif">SVIF</div>
   <div class="r">
+    <div class="ey">Fyrir nýja húseigendur</div>
     <div class="big">20%<small>Afsláttur</small></div>
-    <div class="lead">af öllum eldvarnarbúnaði. Nefndu heimilisfangið.</div>
+    <div class="lead">af öllum eldvarnarbúnaði.</div>
   </div>
-  <div class="foot"><span class="web">maus.is</span><span>780 2200 · Gildir til 31.12.2026</span></div>
-  <div class="notch nl"></div><div class="notch nr"></div>
+  <div class="foot col"><span class="web">maus.is</span><span>780 2200 · Gildir til 31.12.2026</span></div>
 </div>
 
 </body>
