@@ -1,4 +1,5 @@
-SVIF flettibók – 3D mockup, útgáfa 3 (13. okt. 2026)
+SVIF flettibók – 3D mockup, útgáfa 4 (13. okt. 2026)
+Auglýsingasíðurnar eru nú með hvíta SVIF-rammanum (sjá prentskrar/med_hvitum_ramma/).
 
 Opna index.html í vafra (eða keyra "npx serve" í möppunni). Örvatakkar, smellur á bókina eða strjúka flettir.
 2D/3D hnappur efst til hægri, "Byrja aftur" neðst. Blöðin eru stíf (engar ræmulínur), skuggi fellur á síðurnar undir,
