@@ -1,0 +1,196 @@
+<!doctype html><html lang="is"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>SVIF velkomstbók</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&display=swap">
+<style>
+/* Layout: one 3D book centred on a lilac grid "desk" (the cover's own grid), controls pinned below, header pinned top-left. */
+:root{
+  --grunnur:#E9E7F2; --grunnur-dypri:#D9D6E8; --rud:rgba(90,96,140,.10); --blek:#2B2836; --blek-mjukt:#7B7690;
+  --pappir:#FFFFFF; --skuggi:rgba(43,40,54,.32); --hnappur:#FFFFFF; --hnappur-blek:#2B2836; --hnappur-virkur:#2B2836; --hnappur-virkur-blek:#FFFFFF;
+  --display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --grunnur:#221F2C; --grunnur-dypri:#17151F; --rud:rgba(170,175,220,.07); --blek:#EDEBF5; --blek-mjukt:#8E88A6;
+    --skuggi:rgba(0,0,0,.6); --hnappur:#312E3F; --hnappur-blek:#EDEBF5; --hnappur-virkur:#EDEBF5; --hnappur-virkur-blek:#2B2836; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --grunnur:#221F2C; --grunnur-dypri:#17151F; --rud:rgba(170,175,220,.07); --blek:#EDEBF5; --blek-mjukt:#8E88A6;
+  --skuggi:rgba(0,0,0,.6); --hnappur:#312E3F; --hnappur-blek:#EDEBF5; --hnappur-virkur:#EDEBF5; --hnappur-virkur-blek:#2B2836; color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    linear-gradient(var(--rud) 1px,transparent 1px) 0 0/28px 28px,
+    linear-gradient(90deg,var(--rud) 1px,transparent 1px) 0 0/28px 28px,
+    radial-gradient(120% 90% at 50% 30%,var(--grunnur) 0%,var(--grunnur-dypri) 100%);
+  color:var(--blek);font-family:var(--display);overflow:hidden;user-select:none;-webkit-user-select:none;
+}
+.haus{position:fixed;left:28px;top:calc(22px + env(safe-area-inset-top,0px));z-index:50}
+.haus .merki{font-weight:700;font-size:15px;letter-spacing:.30em}
+.haus .undir{font-size:11px;letter-spacing:.14em;color:var(--blek-mjukt);margin-top:3px;text-transform:uppercase}
+
+.stilling{position:fixed;right:28px;top:calc(22px + env(safe-area-inset-top,0px));z-index:50;display:flex;gap:8px}
+.pilla{display:flex;background:var(--hnappur);border-radius:999px;padding:3px;box-shadow:0 2px 10px rgba(20,17,30,.14)}
+.pilla button{border:0;background:transparent;color:var(--hnappur-blek);font:600 12px/1 var(--display);letter-spacing:.06em;padding:8px 13px;border-radius:999px;cursor:pointer}
+.pilla button[aria-pressed="true"]{background:var(--hnappur-virkur);color:var(--hnappur-virkur-blek)}
+.pilla button:focus-visible{outline:2px solid var(--blek);outline-offset:2px}
+
+.svid{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;perspective:2600px}
+:root{--p:min(42vw,64vh)}
+.halli{transform-style:preserve-3d;transform:rotateX(10deg);transition:transform .8s ease}
+body.flatt .halli{transform:none}
+body.flatt .svid{perspective:none}
+.bok{position:relative;width:calc(var(--p)*2);height:var(--p);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.4,.1,.2,1)}
+
+.golfskuggi{position:absolute;left:50%;top:calc(100% + 3.5vh);width:calc(var(--p)*1.75);height:calc(var(--p)*.15);
+  transform:translateX(-50%) rotateX(84deg);border-radius:50%;background:radial-gradient(closest-side,var(--skuggi),transparent 72%);filter:blur(6px);pointer-events:none}
+body.flatt .golfskuggi{display:none}
+
+/* paper stack under the right-hand and left-hand pile, so the closed book looks like a block of pages */
+.stafli{position:absolute;top:2px;width:var(--p);height:var(--p);pointer-events:none;border-radius:2px;background:var(--pappir);
+  box-shadow:1px 1px 0 #e9e9ee,2px 2px 0 #fff,3px 3px 0 #e6e6eb,4px 4px 0 #fff,5px 5px 0 #e3e3e8,6px 6px 0 #fff,7px 7px 0 #e0e0e5,0 14px 28px rgba(20,17,30,.22)}
+.stafli.h{left:50%}
+.stafli.v{right:50%;box-shadow:-1px 1px 0 #e9e9ee,-2px 2px 0 #fff,-3px 3px 0 #e6e6eb,-4px 4px 0 #fff,-5px 5px 0 #e3e3e8,-6px 6px 0 #fff,-7px 7px 0 #e0e0e5,0 14px 28px rgba(20,17,30,.22)}
+.stafli.falinn{opacity:0}
+
+.blad{position:absolute;left:50%;top:0;width:var(--p);height:var(--p);transform-style:preserve-3d;transform-origin:left center;transition:transform 1s cubic-bezier(.35,.08,.22,1)}
+.blad.flett{transform:rotateY(-180deg)}
+.flotur{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--pappir);overflow:hidden;border-radius:2px;box-shadow:0 1px 3px rgba(20,17,30,.18)}
+.flotur img{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
+.bak{transform:rotateY(180deg)}
+.skuggi-kjolur{position:absolute;inset:0;pointer-events:none}
+.fram-sk{background:linear-gradient(90deg,rgba(20,17,30,.16) 0%,rgba(20,17,30,.04) 5%,transparent 11%,transparent 88%,rgba(255,255,255,.10) 100%)}
+.bak-sk{background:linear-gradient(270deg,rgba(20,17,30,.16) 0%,rgba(20,17,30,.04) 5%,transparent 11%,transparent 88%,rgba(255,255,255,.10) 100%)}
+
+/* glossy laminated cover: a soft specular band that slides across as the cover opens, plus a hard rim light */
+.kapa{box-shadow:0 2px 6px rgba(20,17,30,.25),inset 0 0 0 1px rgba(255,255,255,.55)}
+.gljai{position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(108deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.42) 47%,rgba(255,255,255,.14) 53%,rgba(255,255,255,0) 62%) 0 0/230% 100% no-repeat,
+    radial-gradient(70% 45% at 18% 8%,rgba(255,255,255,.28),rgba(255,255,255,0) 70%),
+    linear-gradient(180deg,rgba(255,255,255,.08),rgba(20,17,30,.06));
+  background-position:100% 0,0 0,0 0;transition:background-position 1.2s cubic-bezier(.35,.08,.22,1);mix-blend-mode:screen}
+.blad.flett .gljai{background-position:0 0,0 0,0 0}
+.bak .gljai{background-position:0 0,0 0,0 0}
+.blad.flett .bak .gljai{background-position:100% 0,0 0,0 0}
+.gljai.lett{background:
+    linear-gradient(108deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.22) 48%,rgba(255,255,255,0) 58%) 0 0/230% 100% no-repeat,
+    linear-gradient(180deg,rgba(255,255,255,.05),rgba(20,17,30,.04));background-position:100% 0,0 0}
+
+.smellisvaedi{position:absolute;top:0;height:100%;width:50%;z-index:40;cursor:pointer}
+#vinstriSm{left:0}#haegriSm{right:0}
+
+.stjorn{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:14px}
+.hnappur{height:44px;min-width:44px;padding:0 14px;border-radius:999px;border:none;cursor:pointer;background:var(--hnappur);color:var(--hnappur-blek);font:600 13px/1 var(--display);letter-spacing:.04em;
+  box-shadow:0 2px 10px rgba(20,17,30,.18);transition:transform .15s,opacity .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.hnappur.hringur{width:44px;padding:0;font-size:18px}
+.hnappur:hover{transform:translateY(-2px)}
+.hnappur:focus-visible{outline:2px solid var(--blek);outline-offset:2px}
+.hnappur[disabled]{opacity:.3;cursor:default;transform:none}
+.teljari{font-size:13px;letter-spacing:.12em;color:var(--blek-mjukt);min-width:120px;text-align:center;font-variant-numeric:tabular-nums}
+.visbending{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:12px;letter-spacing:.1em;color:var(--blek-mjukt);z-index:50;transition:opacity .6s;white-space:nowrap}
+.visbending.falin{opacity:0}
+@media (prefers-reduced-motion: reduce){.blad,.bok,.gljai,.halli{transition-duration:.15s}}
+@media (max-width:700px){
+  :root{--p:min(46vw,58vh)}
+  .haus{left:16px}.stilling{right:16px}
+  .haus .undir{display:none}
+  .teljari{min-width:0;font-size:11px}
+}
+</style>
+
+<div class="haus">
+  <div class="merki">SVIF</div>
+  <div class="undir">Velkomstbók — prufuflettu</div>
+</div>
+<div class="stilling">
+  <div class="pilla" role="group" aria-label="Sýn">
+    <button type="button" id="sjon2d" aria-pressed="false">2D</button>
+    <button type="button" id="sjon3d" aria-pressed="true">3D</button>
+  </div>
+</div>
+
+<div class="svid">
+  <div class="halli">
+    <div class="bok" id="bok">
+      <div class="golfskuggi"></div>
+      <div class="stafli v falinn" id="stafliV"></div>
+      <div class="stafli h" id="stafliH"></div>
+      <div id="blod"></div>
+      <div class="smellisvaedi" id="vinstriSm" aria-hidden="true"></div>
+      <div class="smellisvaedi" id="haegriSm" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<div class="visbending" id="visbending">Smelltu á bókina eða notaðu örvatakkana til að fletta</div>
+<div class="stjorn">
+  <button class="hnappur hringur" id="afturHn" type="button" aria-label="Fyrri opna">‹</button>
+  <div class="teljari" id="teljari">Forsíða</div>
+  <button class="hnappur hringur" id="framHn" type="button" aria-label="Næsta opna">›</button>
+  <button class="hnappur" id="byrjaHn" type="button">Byrja aftur</button>
+</div>
+
+<script>
+(function(){
+  // 26 síður = 13 blöð. Síða 0 forsíða (gljáandi kápa), 1 yfirlit (innan á kápu), 2 afsláttarmiðar, 3 Um SVIF,
+  // 4–23 auglýsingar, 24 afsláttarmiðar aftast (innan á bakkápu), 25 bakkápa (gljáandi).
+  const heiti=['Forsíða','Yfirlit','Afsláttarmiðar','Um SVIF','Múrbúðin','Gluggavinir','Íspan','Gardínur','Kora','Sticker','Ísorka','Maus','Maus','HTH','Ormsson','Litamálun','Steindi','Steindi','HK Lagnir','Lásar.is','VÍS','Parki','Heit gólf','MJ Lausnir','Afsláttarmiðar','Bakkápa'];
+  const S=heiti.length, N=S/2;
+  const bok=document.getElementById('bok'), blodHolf=document.getElementById('blod');
+  const blod=[];
+  for(let i=0;i<N;i++){
+    const f=2*i, b=2*i+1;
+    const el=document.createElement('div'); el.className='blad'; el.id='blad'+i;
+    const kapa=(i===0||i===N-1);
+    el.innerHTML=
+      `<div class="flotur fram${i===0?' kapa':''}"><img src="sidur/sida_${String(f).padStart(2,'0')}.jpg" alt="${heiti[f]}"><div class="skuggi-kjolur fram-sk"></div>${i===0?'<div class="gljai"></div>':''}</div>`+
+      `<div class="flotur bak${i===N-1?' kapa':''}"><img src="sidur/sida_${String(b).padStart(2,'0')}.jpg" alt="${heiti[b]}"><div class="skuggi-kjolur bak-sk"></div>${i===N-1?'<div class="gljai"></div>':(i===0?'<div class="gljai lett"></div>':'')}</div>`;
+    blodHolf.appendChild(el); blod.push(el);
+  }
+  const teljari=document.getElementById('teljari'), afturHn=document.getElementById('afturHn'), framHn=document.getElementById('framHn');
+  const visbending=document.getElementById('visbending'), stafliV=document.getElementById('stafliV'), stafliH=document.getElementById('stafliH');
+  let flett=0, hreyft=false;
+
+  function uppfaera(){
+    for(let i=0;i<N;i++){
+      const erFlett=i<flett;
+      blod[i].classList.toggle('flett',erFlett);
+      blod[i].style.zIndex=erFlett?(i+1):(N-i);
+    }
+    let x='0';
+    if(flett===0) x='calc(-1 * 25%)'; else if(flett===N) x='25%';
+    bok.style.transform='translateX('+x+')';
+    stafliV.classList.toggle('falinn',flett===0);
+    stafliH.classList.toggle('falinn',flett===N);
+    if(flett===0) teljari.textContent='Forsíða';
+    else if(flett===N) teljari.textContent='Bakkápa';
+    else teljari.textContent=heiti[2*flett-1]+' · '+heiti[2*flett];
+    afturHn.disabled=flett===0; framHn.disabled=flett===N;
+  }
+  function snerti(){ if(!hreyft){hreyft=true;visbending.classList.add('falin');} }
+  function fram(){ if(flett<N){flett++;snerti();uppfaera();} }
+  function aftur(){ if(flett>0){flett--;snerti();uppfaera();} }
+
+  document.getElementById('haegriSm').addEventListener('click',fram);
+  document.getElementById('vinstriSm').addEventListener('click',aftur);
+  framHn.addEventListener('click',fram); afturHn.addEventListener('click',aftur);
+  document.getElementById('byrjaHn').addEventListener('click',()=>{flett=0;uppfaera();});
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();fram();}
+    if(e.key==='ArrowLeft'){e.preventDefault();aftur();}
+    if(e.key==='Home'){flett=0;uppfaera();}
+  });
+  const b2=document.getElementById('sjon2d'), b3=document.getElementById('sjon3d');
+  function sjon(flatt){ document.body.classList.toggle('flatt',flatt); b2.setAttribute('aria-pressed',String(flatt)); b3.setAttribute('aria-pressed',String(!flatt)); }
+  b2.addEventListener('click',()=>sjon(true)); b3.addEventListener('click',()=>sjon(false));
+  // strjúka á síma
+  let x0=null;
+  document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(dx<-40)fram(); else if(dx>40)aftur(); });
+  uppfaera();
+})();
+</script>
+</body></html>
