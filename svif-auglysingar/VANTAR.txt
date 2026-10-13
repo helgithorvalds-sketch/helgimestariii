@@ -1,14 +1,8 @@
 Vantar enn (13. okt. 2026)
 
-Ispan       Hanna sendi auglýsinguna 2. og 5. okt. ("RE: Hlutföll"). Viðhengin eru 24–30 MB og
-            Gmail-tengingin hér ræður ekki við skrár yfir ~8 MB. Vista "Mikið úrval af gleri og
-            speglum (1940 x 1940 px).png" beint úr Gmail í þessa möppu sem Ispan.png.
-Parki       Steini sendi prentskjöl 29. sept. ("Svif", með og án blæðingar), 10,6 MB. Sama vandamál.
-            Vista úr Gmail sem Parki.pdf / Parki.png.
-Isorka      Isorka.png hér er útgáfan frá 9. okt. Tómas sendi uppfærða útgáfu 12. okt.
-            ("Nýjir fasteignaeigendur 19.4cm (1).png", 9,3 MB). Vista hana úr Gmail yfir Isorka.png.
-Sticker     KOMIÐ 13. okt. (Sticker.png, 2000 px). Vantar aðeins prentskrá með blæðingu ef hún er til.
 Straumlind  Engin hönnun komin.
 
+Allt annað er komið. Ispan.svg, Parki_194x194_noBleed.pdf og Ormsson-PDF eru í prentskrar/.
+Parki-skráin er án blæðingar; Steini sendi líka útgáfu með blæðingu 29. sept. ef prentsmiðjan vill hana.
 Hárupplausn af síðum 1. útgáfu (Maus, Kora, HK, Gardínur, MJ, Steindi, Heit gólf) er í prent-PDF
 bæklingsins sem þú sendir 3.–4. sept. ("Bæklingur - Svif", 32 MB). Myndirnar hér eru 1000 px úr flettibókinni.
