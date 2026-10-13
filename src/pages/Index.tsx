@@ -12,7 +12,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin, Home } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -563,6 +563,10 @@ export default function Index() {
             <Button variant="outline" onClick={() => navigate("/fyrirtaekjabok")} className="gap-2 shadow-sm relative">
               <Building2 className="w-4 h-4" />
               Fyrirtækjabókin
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-hus")} className="gap-2 shadow-sm relative">
+              <Home className="w-4 h-4" />
+              Svif húsið
             </Button>
 
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">

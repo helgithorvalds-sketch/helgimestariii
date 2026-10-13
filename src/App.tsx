@@ -12,6 +12,7 @@ import SvifFyrirtæki from "./pages/SvifFyrirtæki";
 import SvifListi from "./pages/SvifListi";
 import SvifAkureyri from "./pages/SvifAkureyri";
 import Fyrirtaekjabok from "./pages/Fyrirtaekjabok";
+import SvifHus from "./pages/SvifHus";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/svif-listi" element={<SvifListi />} />
           <Route path="/svif-akureyri" element={<SvifAkureyri />} />
           <Route path="/fyrirtaekjabok" element={<Fyrirtaekjabok />} />
+          <Route path="/svif-hus" element={<SvifHus />} />
 
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
