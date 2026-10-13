@@ -34,35 +34,33 @@ h1 em{font-style:normal;color:var(--blue)}
 .painter{position:absolute;right:-2mm;top:10mm;width:86mm;height:auto;z-index:2}
 
 /* lower content on the blue field */
-.lower{position:absolute;left:11mm;right:11mm;top:107mm;height:66mm;color:#fff;display:grid;grid-template-columns:1fr 66mm;column-gap:8mm;z-index:3}
-.benefits{list-style:none;margin:0;padding:0;display:grid;gap:2.4mm;align-content:start}
+.lower{position:absolute;left:11mm;right:11mm;top:104.5mm;height:58mm;color:#fff;display:grid;grid-template-columns:1fr 74mm;column-gap:7mm;z-index:3}
+.benefits{list-style:none;margin:0;padding:0;display:grid;gap:2mm;align-content:start}
 .benefits li{display:grid;grid-template-columns:6.5mm 1fr;column-gap:2.5mm;align-items:start;font-size:9pt;line-height:1.3}
 .benefits li b{display:block;font-family:var(--display);font-weight:700;font-size:10pt}
 .benefits li i{display:block;width:6.5mm;height:6.5mm;border-radius:50%;background:#fff;color:var(--blue);font-style:normal;font-weight:800;font-family:var(--display);font-size:10pt;line-height:6.5mm;text-align:center;margin-top:.5mm}
 
-.offer{margin-top:4.5mm;background:var(--red);color:#fff;padding:3.4mm 4.5mm 3.6mm;border-radius:1.5mm;position:relative}
+.offer{margin-top:3.8mm;background:var(--red);color:#fff;padding:3.4mm 4.5mm 3.6mm;border-radius:1.5mm;position:relative}
 .offer .tag{font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#ffd9d1}
-.offer .big{font-family:var(--display);font-weight:800;font-size:16pt;line-height:1.05;margin:1mm 0 1.2mm}
-.offer .fine{font-size:8pt;line-height:1.35;color:#fff}
+.offer .big{font-family:var(--display);font-weight:800;font-size:15pt;line-height:1.05;margin:1mm 0 1.2mm}
+.offer .fine{font-size:7.6pt;white-space:nowrap;line-height:1.35;color:#fff}
 .offer .fine b{font-weight:700}
 .offer::after{content:"SVIF";position:absolute;right:-3mm;top:-4.2mm;transform:rotate(6deg);background:var(--yellow);color:var(--ink);font-family:var(--display);font-weight:800;font-size:8pt;letter-spacing:.1em;padding:1.6mm 2.6mm;border-radius:1mm;box-shadow:0 .6mm 1.2mm rgba(0,0,0,.25)}
 
-.proof{display:grid;gap:2mm;align-content:start}
+.proof{display:grid;gap:2.2mm;align-content:start}
 .proof h3{margin:0;font-family:var(--display);font-weight:700;font-size:8pt;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f7}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm;position:relative}
-.pair img{width:100%;height:30mm;object-fit:cover;display:block;border-radius:1mm;outline:.5mm solid rgba(255,255,255,.9)}
+.pair img{width:100%;height:36mm;object-fit:cover;display:block;border-radius:1mm;outline:.5mm solid rgba(255,255,255,.9)}
 .pair .lbl{position:absolute;top:1.5mm;font-family:var(--display);font-weight:800;font-size:6.5pt;letter-spacing:.1em;text-transform:uppercase;padding:.8mm 1.8mm;border-radius:.8mm;background:rgba(31,36,48,.85);color:#fff}
 .pair .lbl.after{background:var(--red)}
 .pair .l1{left:1.5mm}.pair .l2{left:calc(50% + 2.25mm)}
 .pair .cap{grid-column:1/-1;font-size:7.5pt;color:#dbe7f8;margin-top:-1mm}
-.qr{display:grid;grid-template-columns:21mm 1fr;column-gap:3.5mm;align-items:center;margin-top:2.5mm}
-.qrbox{background:#fff;padding:1.6mm;border-radius:1.2mm;width:21mm;height:21mm}
-.qrbox img{display:block;width:100%;height:100%}
-.qrtext{font-size:8pt;line-height:1.35;color:#dbe7f8}
-.qrtext b{display:block;font-family:var(--display);font-weight:700;font-size:9.5pt;color:#fff;margin-bottom:.8mm}
 
 /* contact strip */
-.contact{position:absolute;left:11mm;right:11mm;bottom:11mm;z-index:4;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;border-top:.35mm solid rgba(255,255,255,.45);padding-top:2.6mm}
+.contact{position:absolute;left:11mm;right:11mm;bottom:11mm;z-index:4;display:flex;justify-content:space-between;align-items:center;color:#fff;border-top:.35mm solid rgba(255,255,255,.45);padding-top:3mm}
+.contact .right{display:flex;align-items:center;gap:4mm}
+.qrbox{background:#fff;padding:1.4mm;border-radius:1.2mm;width:19mm;height:19mm;flex:none}
+.qrbox img{display:block;width:100%;height:100%}
 .contact .phone{font-family:var(--display);font-weight:800;font-size:19pt;line-height:1;letter-spacing:-.01em}
 .contact .phone small{display:block;font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f7;margin-bottom:1.2mm}
 .contact .addr{text-align:right;font-size:8.5pt;line-height:1.4}
@@ -102,7 +100,7 @@ body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dash
       <div class="offer">
         <div class="tag">Tilboð fyrir nýja húseigendur</div>
         <div class="big">Frí litaráðgjöf og 10% afsláttur</div>
-        <div class="fine">af fyrstu málningarvinnu innan 6 mánaða frá kaupum. <b>Nefndu SVIF</b> þegar þú hefur samband.</div>
+        <div class="fine">af fyrstu málningarvinnu innan 6 mánaða frá kaupum. <b>Nefndu SVIF.</b></div>
       </div>
     </div>
     <div class="proof">
@@ -112,16 +110,15 @@ body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dash
         <span class="lbl l1">Fyrir</span><span class="lbl after l2">Eftir</span>
         <span class="cap">Bakkastaðir, steinhús að utan</span>
       </div>
-      <div class="qr">
-        <div class="qrbox"><img src="../img/qr-litamalun.svg" alt="QR: litamalun.is"></div>
-        <div class="qrtext"><b>Skannaðu og fáðu tilboð</b>Beint á litamalun.is, þar sendir þú okkur línu um verkið.</div>
-      </div>
     </div>
   </div>
 
   <div class="contact">
     <div class="phone"><small>Hringdu eða sendu línu</small>770 1400</div>
-    <div class="addr"><b>litamalun.is</b><br>malun@litamalun.is<br>Lyngháls 5, 110 Reykjavík</div>
+    <div class="right">
+      <div class="addr"><b>litamalun.is</b><br>malun@litamalun.is<br>Lyngháls 5, 110 Reykjavík</div>
+      <div class="qrbox"><img src="../img/qr-litamalun.svg" alt="QR: litamalun.is"></div>
+    </div>
   </div>
 </div>
 </body>
