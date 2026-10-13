@@ -1,5 +1,5 @@
 SVIF flettibók – 3D mockup, útgáfa 4 (13. okt. 2026)
-Auglýsingasíðurnar eru nú með hvíta SVIF-rammanum (sjá prentskrar/med_hvitum_ramma/).
+Nýju auglýsingarnar (Parki, Íspan, Sticker, Ísorka, Lásar, Ormsson) eru með 6 mm hvíta rammann eins og í 1. útgáfu; hinar óbreyttar.
 
 Opna index.html í vafra (eða keyra "npx serve" í möppunni). Örvatakkar, smellur á bókina eða strjúka flettir.
 2D/3D hnappur efst til hægri, "Byrja aftur" neðst. Blöðin eru stíf (engar ræmulínur), skuggi fellur á síðurnar undir,
