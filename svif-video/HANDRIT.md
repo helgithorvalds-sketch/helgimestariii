@@ -1,23 +1,21 @@
-# SVIF – handrit að kynningarmyndbandi (64 sek.)
+# SVIF – handrit að kynningarmyndbandi (64 sek.), útgáfa 2
 
-Ein samfelld myndavélarhreyfing í gegnum hvíta „leir“-borg (í anda viðmiðunarmyndarinnar), með SVIF-bláum lit sem eina áherslulitnum. Engin klipp: hver sena rennur yfir í þá næstu.
+Ein samfelld myndavélarhreyfing í gegnum hvíta „leir“-borg, SVIF-blár sem eini áherslulitur. Engin klipp. Bókin er teiknuð í stíl SVIF-forsíðunnar (rúðustrikaður pappír, línuteiknuð hús, SVIF-merkið með þakinu yfir I-inu).
 
-| Tími | Kafli | Mynd | Texti á skjá | Tillaga að talsetningu |
-|---|---|---|---|---|
-| 0–6 s | 01 Heimilið | Borgin rís upp úr grunnplötunni, myndavélin svífur niður að einu húsi. | **Á hverjum degi fær einhver lyklana að nýju heimili.** | „Á hverjum degi fær einhver á höfuðborgarsvæðinu lyklana að nýju heimili.“ |
-| 6–11 s | 01 Heimilið | „SELT“-skilti sprettur upp, blár hringur púlsar undir húsinu, nýju eigendurnir ganga að dyrunum með kassa. | **Til hamingju. Nú byrjar vinnan.** | „Til hamingju. En nú byrjar vinnan.“ |
-| 11–18 s | 02 Verkefnin | Myndavélin hringsólar um húsið, verkefnin svífa upp: Framkvæmdir, Viðhald, Málun, **Hitakerfi** (blátt), Gólfefni … | **Allt þarf að gerast í einu.** | „Framkvæmdir, viðhald, hitakerfi. Allt sem fylgir því að koma sér almennilega fyrir, á sama tíma.“ |
-| 18–26 s | 03 Kerfið | Myndavélin lyftir sér yfir borgina. Bláir hringir kvikna á heimilum þar sem fólk var að kaupa og línur tengjast SVIF-kerfinu. Teljari: ný kaup greind. | **Við finnum heimilin þar sem fólk var að kaupa.** | „Kerfið okkar greinir ný fasteignakaup og finnur heimilin þar sem fólk var að kaupa.“ |
-| 26–35 s | 04 Dreifingin | Myndavélin eltir sendibíl um göturnar; bæklingar fljúga að hverju merktu heimili. Teljari upp í 1.200–1.500. | **SVIF berst beint inn um lúguna.** Í samstarfi við Póstdreifingu. | „Í samstarfi við Póstdreifingu berst SVIF beint heim: 1.200 til 1.500 bæklingar á þremur mánuðum.“ |
-| 35–43 s | 05 Bæklingurinn | Síðasti bæklingurinn lyftist upp, stækkar og opnast. Reiturinn **Hitalausnir – Laust** glóir. | **Eitt fyrirtæki í hverjum flokki.** / **Flokkur hitalausna er enn laus.** | „Eitt fyrirtæki í hverjum flokki. Og flokkur hitalausna er enn laus.“ |
-| 43–50 s | 06 Sértilboð | Grá, venjuleg auglýsing dettur út úr mynd. „−15%“-stimpill smellur á SVIF. | **Auglýsingu er hent. Sértilboð er geymt.** | „Venjulegri auglýsingu er hent. Sértilboð er geymt þar til þörfin kemur.“ |
-| 50–57 s | 07 Verð | Bæklingurinn lokast og svífur aftur inn í húsið; myndavélin dregur sig upp. Verðspjald: 1 síða 70.000 kr., 2 síður 100.000 kr. á mánuði, allt innifalið. | **Allt frá hönnun til dreifingar.** | „Hönnun, 3D-sýnishorn, prentun og dreifing: allt innifalið, frá 70.000 krónum á mánuði.“ |
-| 57–64 s | 08 SVIF | Öll borgin, heimili kvikna eitt af öðru. Lokaspjald. | **SVIF.** Rétta fólkið, á réttu augnabliki. svif.is · 853 5147 | „SVIF. Rétta fólkið, á réttu augnabliki.“ |
+| Tími | Kafli | Mynd | Texti á skjá |
+|---|---|---|---|
+| 0–6 s | 01 Heimilið | Borgin rís upp úr grunnplötunni, myndavélin svífur niður að einu húsi sem stendur eitt á sinni lóð. | **Á hverjum degi fær einhver lyklana að nýju heimili.** |
+| 6–14 s | 02 Verkefnin | „SELT“-skilti, blár hringur púlsar, nýju eigendurnir ganga inn með kassa. Verkefnin svífa upp í kringum húsið: Tryggingar, Internet, Rafmagn, Málun, Viðhald, Hitakerfi, Framkvæmdir, Gólfefni, Flutningar, Þrif, Garðurinn. | **En nýju heimili fylgja ótal verkefni.** |
+| 14–22 s | 03 Bókin | SVIF-bókin birtist fyrir framan húsið og verkefnin fljúga inn í hana. Bókin lyftist svo upp og rennur inn í SVIF-kerfið. | **Þess vegna bjuggum við til SVIF.** Bók fyrir nýja húseigendur, með öllu sem nýtt heimili þarf. |
+| 22–30 s | 04 Kerfið | Kerfið kviknar, bláar línur teygja sig út til heimila þar sem fólk var að kaupa og hvert heimili kviknar blátt. | **Kerfið okkar finnur heimilin þar sem fólk var að kaupa.** |
+| 30–44 s | 05 Dreifingin | Sendibíll ekur rólega um göturnar og ber bók á hvert blátt heimili. Teljari: 1.200–1.500 bækur á þriggja mánaða tímabili. | **Við berum SVIF heim til nýrra húseigenda.** / **Beint inn um lúguna, á réttum tíma.** |
+| 44–56 s | 06 Flokkarnir | Síðasta bókin lyftist upp og opnast; flokkarnir lýsast upp einn af öðrum. Bókin lokast og fer inn í húsið. | **Eitt fyrirtæki í hverjum flokki.** / **Allt sem nýtt heimili þarf, á einum stað.** |
+| 56–64 s | 07 SVIF | Myndavélin dregur sig upp yfir alla borgina, fleiri heimili kvikna. | **SVIF.** Rétta fólkið, á réttu augnabliki. svif.is |
 
-## Tónlist og hljóð (tillaga)
-Myndbandið er án hljóðs. Rólegt, bjart „ambient/minimal piano“ lag um 100 BPM passar taktinum. Létt „whoosh“ við 6 s (fókus á húsið), 19 s (lyfting), 34 s (bæklingurinn) og 50 s (útdráttur), og mjúkt „pop“ þegar hringirnir kvikna.
+## Tónlist
+Frumsamin með `music.py`: rólegt, bjart píanó- og „pad“-lag í D-dúr, 96 BPM. Létt „whoosh“ við hverja senuskiptingu og fínlegir klukkuhljómar þegar heimilin kvikna.
 
 ## Skrár
-- `svif-motion.html`: hreyfimyndin sjálf (Three.js), spilanleg í vafra með tímalínu.
-- `capture.mjs`: tekur myndina upp ramma fyrir ramma í 1920×1080 / 30 fps MP4.
-  `node capture.mjs svif.mp4 0 64 30`
+- `svif-motion.html`: hreyfimyndin sjálf (Three.js), spilanleg í vafra með tímalínu og hljóði.
+- `capture.mjs`: tekur myndina upp ramma fyrir ramma, `node capture.mjs út.mp4 0 64 30`.
+- `music.py` / `music.mp3`: tónlistin.
