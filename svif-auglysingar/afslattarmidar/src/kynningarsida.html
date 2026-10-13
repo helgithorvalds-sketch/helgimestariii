@@ -17,7 +17,8 @@ h1 span{display:block;font-weight:500;font-size:11.5pt;letter-spacing:0;margin-t
 .ring{position:absolute;left:100mm;top:112mm;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-20deg)}
 .card{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
 .sl{position:absolute;top:-21mm;left:0;height:42mm;background-repeat:no-repeat;background-size:74mm 42mm;backface-visibility:hidden}
-.ground{position:absolute;left:50%;top:160mm;width:176mm;height:26mm;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(61,103,196,.22),rgba(61,103,196,0) 68%)}
+.ground{position:absolute;left:50%;top:158mm;width:180mm;height:30mm;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(31,33,53,.34),rgba(31,33,53,.12) 40%,rgba(31,33,53,0) 70%)}
+.innri{position:absolute;left:50%;top:112mm;width:150mm;height:36mm;transform:translateX(-50%) translateY(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(31,33,53,.18),rgba(31,33,53,0) 70%)}
 .foot{position:absolute;left:14mm;right:14mm;bottom:15mm;text-align:center;font-family:Montserrat;font-weight:700;font-size:11pt;color:#1f2135}
 .foot b{color:#3d67c4}
 body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dashed rgba(255,0,0,.6);pointer-events:none;z-index:9}
@@ -31,7 +32,7 @@ body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dash
   <div class="sq f" style="left:14mm;bottom:14mm;width:1.8mm;height:1.8mm"></div><div class="sq" style="right:14mm;bottom:14mm"></div>
   <div class="eyebrow">Sértilboð fyrir nýja húseigendur</div>
   <h1>Afsláttarmiðar<span>Sex fyrirtæki í bókinni bjóða nýjum húseigendum afslátt.</span></h1>
-  <div class="ground"></div>
+  <div class="ground"></div><div class="innri"></div>
   <div class="scene"><div class="ring" id="ring"></div></div>
   <div class="foot">Alla afsláttarmiðana finnur þú <b>aftast í bókinni</b></div>
 </div>
@@ -51,8 +52,9 @@ body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dash
       s.style.backgroundImage=`url(out/${name}_tex.png)`;
       s.style.backgroundPosition=`-${(back?(N-1-i):i)*sw}mm 0`;
       s.style.transform=`rotateY(${ang}deg) translateZ(${R}mm)`+(back?' rotateY(180deg)':'');
-      const shade=Math.min(0.30, Math.abs(Math.sin((ang)*Math.PI/180))*0.34);
-      s.style.boxShadow=`inset 0 0 0 100mm rgba(20,24,50,${back?shade*0.9+0.06:shade})`;
+      const shade=Math.min(0.55, Math.abs(Math.sin((ang)*Math.PI/180))*0.62);
+      const inside=back?0.16:0;
+      s.style.boxShadow=`inset 0 0 0 100mm rgba(20,24,50,${Math.min(.7,shade+inside)}), 0 2.5mm 4mm rgba(20,24,50,${back?.08:.22})`;
       card.appendChild(s);
     }
     ring.appendChild(card);

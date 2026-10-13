@@ -2,7 +2,7 @@
 <title>SVIF velkomstbók</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&display=swap">
 <style>
-/* Layout: one 3D book on a lilac grid desk (the cover's own grid); pages curl in strips, covers are laminated and overhang the block. */
+/* Layout: one 3D book on a lilac grid desk (the cover's own grid); rigid sheets that turn with live shading, laminated covers that overhang the block. */
 :root{
   --grunnur:#E9E7F2; --grunnur-dypri:#D9D6E8; --rud:rgba(90,96,140,.10); --blek:#2B2836; --blek-mjukt:#7B7690;
   --pappir:#FFFFFF; --pappir-kantur:#e4e4ea; --skuggi:rgba(43,40,54,.34); --hnappur:#FFFFFF; --hnappur-blek:#2B2836; --hnappur-virkur:#2B2836; --hnappur-virkur-blek:#FFFFFF;
@@ -47,8 +47,8 @@ body.flatt .svid{perspective:none}
   transform:translateX(-50%) rotateX(84deg);border-radius:50%;background:radial-gradient(closest-side,var(--skuggi),transparent 72%);filter:blur(8px);pointer-events:none}
 body.flatt .golfskuggi{display:none}
 
-/* page block: the pile of sheets under each side, drawn flat just behind the pages (stacked edge lines + a striped fore-edge) */
-.blokk{position:absolute;top:0;width:var(--p);height:var(--p);pointer-events:none;transform:translateZ(-1px)}
+/* page block under each side: stacked edge lines + striped fore-edges, flat, always behind the sheets */
+.blokk{position:absolute;top:0;width:var(--p);height:var(--p);pointer-events:none;z-index:0}
 .blokk.h{left:50%}.blokk.v{right:50%}
 .blokk .topp{position:absolute;inset:0;background:var(--pappir);border-radius:1px;
   box-shadow:1px 1px 0 var(--pappir-kantur),2px 2px 0 #fff,3px 3px 0 var(--pappir-kantur),4px 4px 0 #fff,5px 5px 0 var(--pappir-kantur),6px 6px 0 #fff,7px 7px 0 var(--pappir-kantur),8px 8px 0 #fff,9px 9px 0 var(--pappir-kantur),0 16px 30px rgba(20,17,30,.22)}
@@ -59,22 +59,28 @@ body.flatt .golfskuggi{display:none}
 .blokk .kantur{position:absolute;top:0;left:100%;width:var(--th);height:100%;transform-origin:top left;transform:skewY(-42deg) translateY(1px);
   background:repeating-linear-gradient(90deg,#f7f7f9 0 1px,#d9d9e1 1px 2px);opacity:.95}
 .blokk.v .kantur{left:auto;right:100%;transform-origin:top right;transform:skewY(42deg) translateY(1px)}
-.blokk .skuggi{display:none}
+/* shadow the turning sheet casts on the page it is leaving / landing on */
+.kast{position:absolute;top:0;width:50%;height:100%;pointer-events:none;opacity:0;z-index:30}
+.kast.h{left:50%;background:linear-gradient(90deg,rgba(20,17,30,.45),rgba(20,17,30,.08) 45%,transparent 80%)}
+.kast.v{left:0;background:linear-gradient(270deg,rgba(20,17,30,.45),rgba(20,17,30,.08) 45%,transparent 80%)}
 
-/* a sheet: root strip at the spine, further strips nested inside it so the page can bend */
+/* a sheet: one rigid element, front and back faces */
 .blad{position:absolute;left:50%;top:0;width:var(--p);height:var(--p);transform-style:preserve-3d;transform-origin:left center}
-.r{position:absolute;top:0;height:100%;transform-style:preserve-3d;transform-origin:left center}
-.r .f,.r .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--pappir) no-repeat;background-size:var(--p) var(--p)}
-.r .b{transform:rotateY(180deg)}
-.r .sk{position:absolute;inset:0;pointer-events:none;background:#141020;opacity:0}
-.r .gl{position:absolute;inset:0;pointer-events:none;background:#fff;opacity:0;mix-blend-mode:screen}
+.flotur{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--pappir);overflow:hidden;border-radius:1.5px;box-shadow:0 1px 3px rgba(20,17,30,.18)}
+.flotur img{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
+.bak{transform:rotateY(180deg)}
+.sk,.gl{position:absolute;inset:0;pointer-events:none;opacity:0}
+.sk{background:linear-gradient(90deg,rgba(20,17,30,.55),rgba(20,17,30,.25) 40%,rgba(20,17,30,.12))}
+.bak .sk{background:linear-gradient(270deg,rgba(20,17,30,.55),rgba(20,17,30,.25) 40%,rgba(20,17,30,.12))}
+.gl{background:linear-gradient(112deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.9) 46%,rgba(255,255,255,.3) 54%,rgba(255,255,255,0) 72%);mix-blend-mode:screen}
+.bak .gl{background:linear-gradient(248deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.9) 46%,rgba(255,255,255,.3) 54%,rgba(255,255,255,0) 72%)}
+.flotur::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(20,17,30,.22) 0%,rgba(20,17,30,.05) 6%,transparent 14%)}
+.bak::after{background:linear-gradient(270deg,rgba(20,17,30,.22) 0%,rgba(20,17,30,.05) 6%,transparent 14%)}
+/* laminated covers: slightly larger than the block, hard rim light, resting sheen */
 .blad.kapa{width:calc(var(--p)*1.015);height:calc(var(--p)*1.03);top:calc(var(--p)*-.015)}
-.blad.kapa .f,.blad.kapa .b{background-size:calc(var(--p)*1.015) calc(var(--p)*1.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
-.blad .f::after,.blad .b::after{content:"";position:absolute;inset:0;pointer-events:none}
-.blad .f::after{background:linear-gradient(90deg,rgba(20,17,30,.22) 0%,rgba(20,17,30,.05) 6%,transparent 14%)}
-.blad .b::after{background:linear-gradient(270deg,rgba(20,17,30,.22) 0%,rgba(20,17,30,.05) 6%,transparent 14%)}
-.blad.kapa .f::after,.blad.kapa .b::after{background:linear-gradient(90deg,rgba(20,17,30,.10),transparent 10%),linear-gradient(118deg,rgba(255,255,255,0) 28%,rgba(255,255,255,.5) 42%,rgba(255,255,255,.16) 49%,rgba(255,255,255,0) 60%)}
-.blad.kapa .b::after{background:linear-gradient(270deg,rgba(20,17,30,.10),transparent 10%),linear-gradient(242deg,rgba(255,255,255,0) 28%,rgba(255,255,255,.5) 42%,rgba(255,255,255,.16) 49%,rgba(255,255,255,0) 60%)}
+.blad.kapa .flotur{box-shadow:0 2px 6px rgba(20,17,30,.25),inset 0 0 0 1px rgba(255,255,255,.5)}
+.blad.kapa .flotur.lam::after{background:linear-gradient(90deg,rgba(20,17,30,.10),transparent 10%),linear-gradient(118deg,rgba(255,255,255,0) 28%,rgba(255,255,255,.5) 42%,rgba(255,255,255,.16) 49%,rgba(255,255,255,0) 60%),linear-gradient(180deg,rgba(255,255,255,.06),rgba(20,17,30,.05))}
+.blad.kapa .flotur.lam.bak::after{background:linear-gradient(270deg,rgba(20,17,30,.10),transparent 10%),linear-gradient(242deg,rgba(255,255,255,0) 28%,rgba(255,255,255,.5) 42%,rgba(255,255,255,.16) 49%,rgba(255,255,255,0) 60%),linear-gradient(180deg,rgba(255,255,255,.06),rgba(20,17,30,.05))}
 
 .smellisvaedi{position:absolute;top:0;height:100%;width:50%;z-index:40;cursor:pointer}
 #vinstriSm{left:0}#haegriSm{right:0}
@@ -114,6 +120,7 @@ body.flatt .golfskuggi{display:none}
       <div class="golfskuggi"></div>
       <div class="blokk v" id="blokkV"><div class="topp"></div><div class="kantur"></div><div class="botn"></div></div>
       <div class="blokk h" id="blokkH"><div class="topp"></div><div class="kantur"></div><div class="botn"></div></div>
+      <div class="kast v" id="kastV"></div><div class="kast h" id="kastH"></div>
       <div class="smellisvaedi" id="vinstriSm" aria-hidden="true"></div>
       <div class="smellisvaedi" id="haegriSm" aria-hidden="true"></div>
     </div>
@@ -130,77 +137,46 @@ body.flatt .golfskuggi{display:none}
 
 <script>
 (function(){
-  // 26 síður = 13 blöð. 0 forsíða, 1 yfirlit (innan á kápu), 2 Um SVIF, 3 afsláttarmiðar, 4–23 auglýsingar,
-  // 24 afsláttarmiðarnir sex (innan á bakkápu), 25 bakkápa.
-  const heiti=['Forsíða','Yfirlit','Um SVIF','Afsláttarmiðar','Múrbúðin','Gluggavinir','Íspan','Gardínur','Kora','Sticker','Ísorka','Maus','Maus','HTH','Ormsson','Litamálun','Steindi','Steindi','HK Lagnir','Lásar.is','VÍS','Parki','Heit gólf','MJ Lausnir','Afsláttarmiðar','Bakkápa'];
-  const S=heiti.length, N=S/2, K=12;           // K = ræmur á blað (beygjan)
-  const bok=document.getElementById('bok'), blodHolf=bok;
-  const blod=[]; // {el, strips:[], angle, kapa}
+  // 26 síður = 13 blöð. 0 forsíða, 1 yfirlit (innan á kápu), 2 afsláttarmiðar í 3D, 3–22 auglýsingar (bestu tilboðin fyrst),
+  // 23 Um SVIF, 24 afsláttarmiðarnir sex til að klippa út (innan á bakkápu), 25 bakkápa.
+  const heiti=['Forsíða','Yfirlit','Afsláttarmiðar','Parki','Íspan','Maus','Maus','Sticker','Litamálun','Kora','HK Lagnir','HTH','Ormsson','Gluggavinir','Múrbúðin','VÍS','Gardínur','Steindi','Steindi','Ísorka','Lásar.is','Heit gólf','MJ Lausnir','Um SVIF','Afsláttarmiðar','Bakkápa'];
+  const S=heiti.length, N=S/2;
+  const bok=document.getElementById('bok');
   const mynd=i=>`sidur/sida_${String(i).padStart(2,'0')}.jpg`;
-
+  const blod=[];
+  const fyrsta=document.getElementById('kastV');
   for(let i=0;i<N;i++){
     const kapa=(i===0||i===N-1);
     const el=document.createElement('div'); el.className='blad'+(kapa?' kapa':''); el.id='blad'+i;
-    const strips=[]; let parent=el;
-    for(let k=0;k<K;k++){
-      const r=document.createElement('div'); r.className='r';
-      const w=`calc(${kapa?'var(--p)*1.015':'var(--p)'} / ${K})`;
-      r.style.width=`calc(${w} + 0.6px)`; r.style.left=(k===0?'0':w);
-      const f=document.createElement('div'); f.className='f'; f.style.backgroundImage=`url(${mynd(2*i)})`; f.style.backgroundPosition=`calc(-${k} * ${w}) 0`;
-      const b=document.createElement('div'); b.className='b'; b.style.backgroundImage=`url(${mynd(2*i+1)})`; b.style.backgroundPosition=`calc(-${K-1-k} * ${w}) 0`;
-      const skf=document.createElement('div'); skf.className='sk'; const skb=document.createElement('div'); skb.className='sk';
-      const glf=document.createElement('div'); glf.className='gl'; const glb=document.createElement('div'); glb.className='gl';
-      f.appendChild(skf); f.appendChild(glf); b.appendChild(skb); b.appendChild(glb);
-      r.appendChild(f); r.appendChild(b); parent.appendChild(r); parent=r;
-      strips.push({r,skf,skb,glf,glb,w,k,f,b});
-    }
-    blodHolf.appendChild(el); blod.push({el,strips,angle:0,kapa});
+    el.innerHTML=
+      `<div class="flotur fram${i===0?' lam':''}"><img src="${mynd(2*i)}" alt="${heiti[2*i]}"><div class="sk"></div>${i===0?'<div class="gl"></div>':''}</div>`+
+      `<div class="flotur bak${i===N-1?' lam':''}"><img src="${mynd(2*i+1)}" alt="${heiti[2*i+1]}"><div class="sk"></div>${i===N-1?'<div class="gl"></div>':''}</div>`;
+    bok.insertBefore(el, fyrsta);
+    blod.push({el,kapa,skf:el.querySelector('.fram .sk'),skb:el.querySelector('.bak .sk'),glf:el.querySelector('.fram .gl'),glb:el.querySelector('.bak .gl')});
   }
-
   const teljari=document.getElementById('teljari'), afturHn=document.getElementById('afturHn'), framHn=document.getElementById('framHn');
   const visbending=document.getElementById('visbending'), blokkV=document.getElementById('blokkV'), blokkH=document.getElementById('blokkH');
-  let flett=0, hreyft=false, busy=false, anim=null; // anim: 'fram' | 'aftur' meðan blað er á hreyfingu
+  const kastV=document.getElementById('kastV'), kastH=document.getElementById('kastH');
+  let flett=0, hreyft=false, busy=false, anim=null;
 
-  const EPS=0.2; // px dýptarbil milli blaða svo 3D-röðunin sé rétt
-  function flatt(b,on){
-    if(b.flat===on) return; b.flat=on;
-    const s0=b.strips[0], full=b.kapa?'calc(var(--p)*1.015)':'var(--p)';
-    s0.r.style.width=on?full:`calc(${s0.w} + 0.6px)`;
-    s0.f.style.backgroundPosition=on?'0 0':`calc(-0 * ${s0.w}) 0`;
-    s0.b.style.backgroundPosition=on?'0 0':`calc(-${K-1} * ${s0.w}) 0`;
-    for(let k=1;k<K;k++) b.strips[k].r.style.display=on?'none':'';
-  }
-  function setja(b, theta, bend){
-    // theta: 0 (hægra megin) … 180 (vinstra megin). bend: auka-snúningur sem dreifist á ræmurnar (beygja).
-    b.angle=theta; flatt(b, bend===0 && (theta===0||theta===180));
-    const per=bend/(K-1);
-    for(let k=0;k<K;k++){
-      const s=b.strips[k];
-      const a=(k===0)?-theta:-per;
-      s.r.style.transform=`rotateY(${a}deg)`;
-      // heimshorn ræmunnar
-      const world=theta+per*k;                       // 0 = liggur flöt hægra megin, 180 = flöt vinstra megin
-      const tilt=Math.sin(world*Math.PI/180);        // 1 = stendur lóðrétt
-      const skuggi=Math.min(b.kapa?.2:.3, tilt*(b.kapa?.2:.3));
-      s.skf.style.opacity=skuggi; s.skb.style.opacity=skuggi*.9;
-      if(b.kapa){
-        // gljái: ljós frá efra vinstra, speglast skarpt þegar kápan hallar
-        const g=Math.pow(Math.max(0,Math.cos((world-34)*Math.PI/180)),10)*.6;
-        const g2=Math.pow(Math.max(0,Math.cos((world-146)*Math.PI/180)),10)*.6;
-        s.glf.style.opacity=g; s.glb.style.opacity=g2;
-      }
-    }
+  function setja(b, theta){
+    // theta: 0 = liggur hægra megin, 180 = liggur vinstra megin
+    b.el.style.transform=`rotateY(${-theta}deg)`;
+    const tilt=Math.sin(theta*Math.PI/180);              // 1 = stendur lóðrétt
+    const d=b.kapa?.5:.8;
+    b.skf.style.opacity=tilt*d; b.skb.style.opacity=tilt*d;
+    if(b.glf){ b.glf.style.opacity=Math.pow(Math.max(0,Math.cos((theta-34)*Math.PI/180)),9)*.9*(theta>2?1:0); }
+    if(b.glb){ b.glb.style.opacity=Math.pow(Math.max(0,Math.cos((theta-146)*Math.PI/180)),9)*.9*(theta<178?1:0); }
   }
   function stada(){
     for(let i=0;i<N;i++){
       const b=blod[i], erFlett=i<flett;
-      if(!b.busy){ setja(b, erFlett?180:0, 0); b.el.style.transform=`translateZ(${(erFlett?(i+1):(N-i))*EPS}px)`; }
+      if(!b.busy) setja(b, erFlett?180:0);
       b.el.style.zIndex=erFlett?(i+1):(N-i);
     }
     let x='0';
     if(flett===0) x='calc(-1 * 25%)'; else if(flett===N) x='25%';
     bok.style.transform='translateX('+x+')';
-    // þykkt blokkanna eftir fjölda blaða hvorum megin
     const th=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--th'))||14;
     const vs=flett-(anim==='fram'?1:0), hs=N-flett-(anim==='aftur'?1:0);
     const v=Math.max(0,vs-1), h=Math.max(0,hs-1);
@@ -211,19 +187,19 @@ body.flatt .golfskuggi{display:none}
     else teljari.textContent=heiti[2*flett-1]+' · '+heiti[2*flett];
     afturHn.disabled=flett===0; framHn.disabled=flett===N;
   }
-  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fletta(b, fra, til, done){
-    const dur=reduced?180:(b.kapa?1250:1050), t0=performance.now();
-    b.busy=true; b.el.style.zIndex=N+2; b.el.style.transform=`translateZ(${(N+2)*EPS}px)`;
-    const amp=b.kapa?10:26;                       // kápan er stíf, blöðin beygjast meira
+    const dur=reduced?160:(b.kapa?1200:950), t0=performance.now();
+    b.busy=true; b.el.style.zIndex=N+2;
     function rammi(now){
       const t=Math.min(1,(now-t0)/dur), e=ease(t);
       const theta=fra+(til-fra)*e;
-      const dir=til>fra?1:-1;
-      const bend=dir*amp*Math.sin(Math.PI*t)*(1-.35*Math.sin(Math.PI*t)); // mest beygja um miðbik, lítil í endana
-      setja(b, theta, bend);
-      if(t<1) requestAnimationFrame(rammi); else { b.busy=false; setja(b,til,0); done(); }
+      setja(b, theta);
+      // skuggi á síðurnar undir: fellur á þá hlið sem blaðið hallar yfir
+      const s=Math.sin(theta*Math.PI/180);
+      kastH.style.opacity=(theta<90?s:0)*.8; kastV.style.opacity=(theta>=90?s:0)*.8;
+      if(t<1) requestAnimationFrame(rammi); else { b.busy=false; setja(b,til); kastH.style.opacity=0; kastV.style.opacity=0; done(); }
     }
     requestAnimationFrame(rammi);
   }
@@ -238,7 +214,7 @@ body.flatt .golfskuggi{display:none}
   document.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();fram();}
     if(e.key==='ArrowLeft'){e.preventDefault();aftur();}
-    if(e.key==='Home'){flett=0;stada();}
+    if(e.key==='Home'){ if(!busy){flett=0;stada();} }
   });
   const b2=document.getElementById('sjon2d'), b3=document.getElementById('sjon3d');
   function sjon(flatt){ document.body.classList.toggle('flatt',flatt); b2.setAttribute('aria-pressed',String(flatt)); b3.setAttribute('aria-pressed',String(!flatt)); }
@@ -246,8 +222,6 @@ body.flatt .golfskuggi{display:none}
   let x0=null;
   document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
   document.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(dx<-40)fram(); else if(dx>40)aftur(); });
-  // forhlaða næstu síður
-  for(let i=0;i<S;i++){ const im=new Image(); im.src=mynd(i); }
   stada();
 })();
 </script>

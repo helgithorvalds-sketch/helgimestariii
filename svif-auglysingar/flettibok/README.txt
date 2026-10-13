@@ -1,15 +1,16 @@
-SVIF flettibók – 3D mockup, útgáfa 2 (13. okt. 2026)
-Blöðin beygjast þegar flett er, kápan er gljáandi og stendur aðeins út fyrir blokkina, blaðbunkinn sést á hliðunum.
+SVIF flettibók – 3D mockup, útgáfa 3 (13. okt. 2026)
 
 Opna index.html í vafra (eða keyra "npx serve" í möppunni). Örvatakkar, smellur á bókina eða strjúka flettir.
-2D/3D hnappur efst til hægri, "Byrja aftur" neðst.
+2D/3D hnappur efst til hægri, "Byrja aftur" neðst. Blöðin eru stíf (engar ræmulínur), skuggi fellur á síðurnar undir,
+kápan er gljáandi og stendur aðeins út fyrir blaðbunkann sem sést á hliðunum.
 
 Síðuröð (sidur/sida_NN.jpg, 1100 px):
-  00 forsíða (gljáandi kápa)        01 yfirlit – húsið með blaðsíðutölum (innan á kápu)
-  02 Um SVIF                        03 afsláttarmiðar – kynning
-  04–23 auglýsingar: Múrbúðin, Gluggavinir, Íspan, Gardínur, Kora, Sticker, Ísorka, Maus ×2, HTH, Ormsson AEG,
-        Litamálun, Steindi ×2, HK Lagnir, Lásar.is, VÍS, Parki, Heit gólf, MJ Lausnir
-  24 afsláttarmiðar – allir sex miðarnir (innan á bakkápu)   25 bakkápa (svif.is + QR, gljáandi)
+  00 forsíða (gljáandi kápa)              01 yfirlit – húsið með blaðsíðutölum (innan á kápu)
+  02 afsláttarmiðar – 3D kynningarsíða    03–22 auglýsingar, bestu tilboðin og stærstu fyrirtækin fyrst:
+       Parki, Íspan, Maus ×2, Sticker, Litamálun, Kora, HK Lagnir, HTH, Ormsson AEG, Gluggavinir, Múrbúðin, VÍS,
+       Gardínur, Steindi ×2, Ísorka, Lásar.is, Heit gólf, MJ Lausnir
+  23 Um SVIF (Af hverju SVIF?)            24 afsláttarmiðarnir sex til að klippa út (innan á bakkápu)
+  25 bakkápa (svif.is + QR, gljáandi)
 
 Vantar enn auglýsingar frá: Fagafl, Áltak, Straumlind, Baðlínan, Stífluþjónustan, Heitirpottar, más, MS lagnir.
 Til að skipta út síðu: setja nýja mynd (ferningur) í sidur/ með sama nafni. Fjöldi síðna þarf að vera slétt tala (heiti-listinn í index.html).
