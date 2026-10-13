@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>SVIF afsláttarmiðar – kynningarsíða</title>
+<style>
+@font-face{font-family:"Montserrat";src:url("../../../litamalun-assets/fonts/Montserrat.ttf") format("truetype");font-weight:100 900}
+@font-face{font-family:"Open Sans";src:url("../../../litamalun-assets/fonts/OpenSans.ttf") format("truetype");font-weight:300 800}
+@page{size:200mm 200mm;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff}
+.page{position:relative;width:200mm;height:200mm;overflow:hidden;font-family:"Open Sans",sans-serif;color:#1b1b1f;
+  background:radial-gradient(110% 80% at 50% 25%,#fafafb 0%,#eceef1 50%,#d6d9df 100%)}
+.eyebrow{position:absolute;left:0;right:0;top:15mm;text-align:center;font-family:Montserrat;font-weight:700;font-size:8pt;letter-spacing:.22em;text-transform:uppercase;color:#6b7280}
+h1{position:absolute;left:14mm;right:14mm;top:20mm;margin:0;text-align:center;font-family:Montserrat;font-weight:800;font-size:30pt;line-height:1.05;letter-spacing:-.02em;color:#1b1b1f}
+h1 span{display:block;font-weight:500;font-size:12.5pt;letter-spacing:0;margin-top:1.5mm;color:#374151}
+.scene{position:absolute;left:0;top:0;width:200mm;height:200mm;perspective:440mm;perspective-origin:50% 45%}
+.ring{position:absolute;left:100mm;top:104mm;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-24deg)}
+.card{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
+.sl{position:absolute;top:-15.75mm;left:0;height:31.5mm;background-repeat:no-repeat;background-size:65mm 31.5mm;backface-visibility:hidden}
+.ground{position:absolute;left:50%;top:150mm;width:160mm;height:22mm;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(20,24,40,.28),rgba(20,24,40,0) 68%)}
+.foot{position:absolute;left:14mm;right:14mm;bottom:15mm;display:flex;align-items:center;justify-content:center}
+.foot .pill{display:flex;align-items:center;gap:3mm;background:#1b1b1f;color:#fff;border-radius:999px;padding:3.2mm 6mm;font-family:Montserrat;font-weight:700;font-size:10pt}
+.foot .pill svg{width:5mm;height:5mm;flex:none}
+.sub{position:absolute;left:14mm;right:14mm;bottom:9mm;text-align:center;font-size:7.5pt;color:#6b7280}
+body.guides .page::after{content:"";position:absolute;inset:3mm;border:.2mm dashed rgba(255,0,0,.6);pointer-events:none;z-index:9}
+</style></head>
+<body>
+<div class="page">
+  <div class="eyebrow">Sértilboð fyrir nýja húseigendur</div>
+  <h1>Afsláttarmiðar<span>Sex fyrirtæki, sex tilboð, aðeins fyrir þig</span></h1>
+  <div class="ground"></div>
+  <div class="scene"><div class="ring" id="ring"></div></div>
+  <div class="foot"><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Alla afsláttarmiðana finnur þú aftast í bæklingnum</div></div>
+  <div class="sub">Klipptu miðann út og framvísaðu honum, eða nefndu SVIF þegar þú hefur samband.</div>
+</div>
+<script>
+(function(){
+  const R=67, W=65, H=31.5, N=18;             // mm: ring radius, card width/height, slices per card
+  const cards=[['parki',0],['sticker',62],['ispan',124],['ormsson',180],['gardinur',-124],['maus',-62]];
+  const ring=document.getElementById('ring');
+  const sw=W/N, dAng=(sw/R)*180/Math.PI, chord=2*R*Math.sin((sw/R)/2);
+  for(const [name,a0] of cards){
+    const back = Math.abs(a0)>95;
+    const card=document.createElement('div'); card.className='card';
+    for(let i=0;i<N;i++){
+      const s=document.createElement('div'); s.className='sl';
+      const ang=a0-(W/2/R)*180/Math.PI+(i+0.5)*dAng;
+      s.style.width=(chord+0.4)+'mm'; s.style.marginLeft=(-(chord+0.4)/2)+'mm';
+      s.style.backgroundImage=`url(out2/${name}_trim.png)`;
+      s.style.backgroundPosition=`-${(back?(N-1-i):i)*sw}mm 0`;
+      s.style.transform=`rotateY(${ang}deg) translateZ(${R}mm)`+(back?' rotateY(180deg)':'');
+      // shading: darker toward the sides
+      const shade=Math.min(0.42, Math.abs(Math.sin((ang)*Math.PI/180))*0.5);
+      s.style.boxShadow=`inset 0 0 0 100mm rgba(10,12,20,${back?shade*0.9+0.08:shade})`;
+      card.appendChild(s);
+    }
+    ring.appendChild(card);
+  }
+})();
+</script>
+</body></html>
