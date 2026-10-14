@@ -35,7 +35,18 @@ node scripts/render.mjs                                      # frames → out/fr
 node scripts/render.mjs --encode                             # → out/COWI_DDG_film.mp4
 ```
 
-Open `index.html` through any static server to scrub: `window.renderFrame(t)`.
+## Watch it live in a browser
+
+The film runs in real time in any modern browser (a computer with a graphics card is best):
+
+```sh
+cd video/cowi-ddg
+npm install
+npx serve .            # or: python3 -m http.server 3000
+```
+
+Open `http://localhost:3000/index.html?play` and click **Play film**.
+Space = pause, ← / → = seek 3 s, R = restart. Add `&ao=0&msaa=0` if it runs slowly.
 
 ## Sources
 

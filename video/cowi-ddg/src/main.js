@@ -774,5 +774,58 @@ window.debugShot = (t, look, anchor, off, toff, fov = 35) => {
 };
 window.DURATION = DURATION;
 window.FPS = FPS;
+
+// ------------------------------------------------------------------ live playback: index.html?play
+// Plays the film in real time with music. Space = pause, ←/→ = seek 3 s, R = restart.
+if ('play' in Q) {
+  const stage = $('stage');
+  document.documentElement.style.cssText = 'width:100vw;height:100vh;background:#000';
+  document.body.style.cssText = 'width:100vw;height:100vh;background:#000;overflow:hidden';
+  const fit = () => {
+    const k = Math.min(innerWidth / W, innerHeight / H);
+    stage.style.cssText = `position:fixed;width:${W}px;height:${H}px;left:${(innerWidth - W * k) / 2}px;top:${(innerHeight - H * k) / 2}px;transform:scale(${k});transform-origin:0 0;overflow:hidden`;
+  };
+  fit();
+  addEventListener('resize', fit);
+  const audio = new Audio('assets/music.mp3');
+  audio.preload = 'auto';
+  const gate = document.createElement('div');
+  gate.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.75);font:700 34px Inter,sans-serif;color:#1c2b54;cursor:pointer;z-index:10';
+  gate.innerHTML = `<div style="text-align:center"><div style="width:96px;height:96px;border-radius:50%;background:#f04e23;margin:0 auto 24px;display:flex;align-items:center;justify-content:center"><div style="margin-left:8px;border-left:34px solid #fff;border-top:22px solid transparent;border-bottom:22px solid transparent"></div></div>Play film<div style="font:500 18px Inter,sans-serif;color:#5b6478;margin-top:10px">Space pause · ← → seek · R restart</div></div>`;
+  document.body.appendChild(gate);
+  const bar = document.createElement('div');
+  bar.style.cssText = 'position:fixed;left:0;bottom:0;height:4px;background:#f04e23;z-index:9;width:0';
+  document.body.appendChild(bar);
+  let playing = false, clock = 0, last = 0;
+  const seek = (t) => {
+    clock = clamp(t, 0, DURATION);
+    audio.currentTime = clock;
+  };
+  const toggle = () => {
+    playing = !playing;
+    if (playing) { audio.currentTime = clock; audio.play().catch(() => {}); } else audio.pause();
+  };
+  gate.onclick = () => { gate.remove(); seek(0); toggle(); };
+  addEventListener('keydown', (e) => {
+    if (gate.isConnected) return;
+    if (e.code === 'Space') toggle();
+    if (e.code === 'ArrowRight') seek(clock + 3);
+    if (e.code === 'ArrowLeft') seek(clock - 3);
+    if (e.code === 'KeyR') seek(0);
+  });
+  const loop = (now) => {
+    const dt = last ? (now - last) / 1000 : 0;
+    last = now;
+    if (playing) {
+      // Follow the music when it is running so picture and sound stay in sync.
+      clock = !audio.paused && audio.readyState >= 2 ? audio.currentTime : clock + dt;
+      if (clock >= DURATION) { clock = DURATION; playing = false; audio.pause(); }
+    }
+    frame(clock);
+    bar.style.width = `${(clock / DURATION) * 100}%`;
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+}
 window.ready = true;
 document.title = 'ready';
