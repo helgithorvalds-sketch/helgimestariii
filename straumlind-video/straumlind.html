@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Straumlind – sama rafmagn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&display=swap">
+<style>
+/* One fixed 16:9 stage (1920×1080) scaled to fit, slim transport bar beneath.
+   Look: white clay models on an endless white plane, every scene built up from nothing.
+   Accents come from the Straumlind bolt: cyan for electricity and data, orange for Straumlind itself. */
+:root {
+  --paper: #eef1f3;
+  --ink: #0b3446;        /* deep version of the wordmark navy #00506e */
+  --ink-soft: #4f6873;
+  --signal: #00a7bd;     /* cyan from the bolt, a touch deeper for text */
+  --signal-rgb: 0,167,189;
+  --hot: #ff7800;        /* orange from the bolt */
+  --frame: #dfe4e7;
+  --font: "Montserrat", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; margin: 0; }
+[hidden] { display: none !important; }
+body { background: var(--frame); color: var(--ink); font-family: var(--font); overflow: hidden; }
+#app { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-inline: 16px; box-sizing: border-box; }
+#viewport { position: relative; width: 100%; flex: 0 0 auto; overflow: hidden; border-radius: 14px; box-shadow: 0 30px 80px -30px rgba(11,52,70,.35), 0 0 0 1px rgba(11,52,70,.06); background: var(--paper); }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; background: var(--paper); }
+#gl { position: absolute; inset: 0; width: 1920px; height: 1080px; display: block; }
+.vignette { position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 62% 58% at 8% 100%, rgba(238,241,243,.95), rgba(238,241,243,0) 72%),
+    radial-gradient(ellipse 120% 90% at 50% 50%, rgba(11,52,70,0) 62%, rgba(11,52,70,.08) 100%); }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: .045; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+
+.brand { position: absolute; left: 110px; top: 84px; display: flex; align-items: center; gap: 22px; }
+.brand svg { height: 30px; width: auto; display: block; }
+.brand .tag { font-size: 19px; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; padding-left: 22px; border-left: 1.5px solid rgba(11,52,70,.18); }
+
+.chapters { position: absolute; right: 110px; top: 90px; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.chapters .bars { display: flex; gap: 8px; }
+.chapters .bar { width: 46px; height: 4px; border-radius: 2px; background: rgba(11,52,70,.12); overflow: hidden; }
+.chapters .bar i { display: block; height: 100%; width: 0; background: var(--signal); }
+.chapters .name { font-size: 18px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+.chapters .name b { color: var(--signal); font-weight: 800; margin-right: 12px; }
+
+.cap { position: absolute; left: 110px; bottom: 100px; width: 1060px; opacity: 0; }
+.cap .eb { display: flex; align-items: center; gap: 14px; font-size: 20px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--signal); margin-bottom: 22px; }
+.cap .eb::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 6px rgba(var(--signal-rgb),.16); }
+.cap .ti { margin: 0; font-weight: 800; font-size: 76px; line-height: 1.04; letter-spacing: -.035em; color: var(--ink); text-wrap: balance; }
+.cap .ti .hl { color: var(--hot); }
+.cap .su { margin: 24px 0 0; font-size: 29px; line-height: 1.38; color: var(--ink-soft); font-weight: 500; max-width: 920px; }
+.w { display: inline-block; white-space: pre; will-change: transform, opacity, filter; }
+
+#pins { position: absolute; inset: 0; pointer-events: none; }
+.pill { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 13px 24px 13px 18px; border-radius: 999px; background: rgba(255,255,255,.97); color: var(--ink); font-size: 24px; font-weight: 700; white-space: nowrap; box-shadow: 0 14px 34px -10px rgba(11,52,70,.28), 0 0 0 1px rgba(11,52,70,.06); opacity: 0; }
+.pill i { width: 12px; height: 12px; border-radius: 50%; background: var(--signal); flex: 0 0 auto; }
+.pill.hot i { background: var(--hot); }
+.pill.hot { color: #fff; background: var(--hot); }
+.pill.hot i { background: #fff; }
+.pill.muted { color: var(--ink-soft); }
+.pill.muted i { background: #b8c3ca; }
+.pill small { font-size: 18px; font-weight: 600; color: var(--ink-soft); margin-left: 4px; }
+.pill.hot small { color: rgba(255,255,255,.85); }
+.tag3 { position: absolute; left: 0; top: 0; padding: 18px 26px; border-radius: 18px; background: rgba(255,255,255,.96); box-shadow: 0 18px 40px -14px rgba(11,52,70,.3), 0 0 0 1px rgba(11,52,70,.06); opacity: 0; white-space: nowrap; }
+.tag3 small { display: block; font-size: 16px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--signal); }
+.tag3 strong { display: block; font-size: 50px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; margin-top: 6px; line-height: 1.05; }
+.tag3 span { display: block; font-size: 19px; color: var(--ink-soft); font-weight: 600; margin-top: 4px; }
+.tag3.hot small { color: var(--hot); }
+.tag3.hot strong { color: var(--hot); }
+
+.stat { position: absolute; right: 110px; top: 190px; text-align: right; opacity: 0; }
+.stat strong { display: block; font-weight: 900; font-size: 190px; letter-spacing: -.06em; line-height: .9; color: var(--hot); font-variant-numeric: tabular-nums; }
+.stat span { display: block; margin-top: 16px; font-size: 27px; font-weight: 700; color: var(--ink); }
+.stat em { font-style: normal; color: var(--ink-soft); font-weight: 600; }
+
+.note { position: absolute; right: 110px; bottom: 58px; font-size: 15px; font-weight: 600; color: rgba(79,104,115,.85); opacity: 0; text-align: right; max-width: 760px; line-height: 1.4; }
+
+.end { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; padding-top: 330px; box-sizing: border-box; }
+.end .wm svg { height: 70px; width: auto; display: block; }
+.end .line { margin-top: 40px; font-weight: 800; font-size: 60px; letter-spacing: -.035em; color: var(--ink); }
+.end .line b { color: var(--hot); font-weight: 800; }
+.end .web { margin-top: 26px; display: inline-flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 800; color: var(--signal); }
+.end .web::before { content: ""; width: 13px; height: 13px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 7px rgba(var(--signal-rgb),.16); }
+
+#loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--ink-soft); background: var(--paper); letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+
+#controls { display: flex; align-items: center; gap: 14px; width: 100%; box-sizing: border-box; }
+#controls button { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: #fff; cursor: pointer; display: grid; place-items: center; }
+#controls button.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(11,52,70,.25); }
+#controls button:focus-visible, #scrub:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+#controls svg { width: 18px; height: 18px; fill: currentColor; }
+#scrub { flex: 1 1 auto; min-width: 0; accent-color: var(--signal); }
+#time { flex: 0 0 auto; font-size: 14px; font-weight: 700; color: var(--ink-soft); font-variant-numeric: tabular-nums; min-width: 92px; text-align: right; }
+.capture #app { padding: 0; gap: 0; }
+.capture #viewport { border-radius: 0; box-shadow: none; }
+.capture #controls { display: none; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="viewport">
+    <div id="stage">
+      <canvas id="gl" width="1920" height="1080"></canvas>
+      <div class="vignette"></div>
+      <div id="pins"></div>
+      <header class="brand" id="brand"><span class="logo-slot"></span><span class="tag">Sama rafmagn, bara ódýrara</span></header>
+      <nav class="chapters" id="chapters" aria-label="Kaflar"><div class="bars"></div><div class="name"></div></nav>
+      <div id="caps"></div>
+      <div class="stat" id="stat"><strong>0%</strong><span></span></div>
+      <div class="note" id="note"></div>
+      <div class="end" id="end">
+        <div class="wm logo-slot"></div>
+        <div class="line">Sama rafmagn, <b>bara ódýrara.</b></div>
+        <div class="web">straumlind.is</div>
+      </div>
+      <div id="flash"></div>
+      <div class="grain"></div>
+      <div id="loading">Hleð inn…</div>
+    </div>
+  </div>
+  <div id="controls">
+    <button id="play" type="button" aria-label="Spila eða gera hlé"><svg viewBox="0 0 24 24" id="playIcon"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+    <button id="mute" type="button" class="ghost" aria-label="Hljóð af eða á"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M4 9h4l5-4v14l-5-4H4z"/></svg></button>
+    <input id="scrub" type="range" min="0" max="80" step="0.01" value="0" aria-label="Tímalína">
+    <div id="time">0:00</div>
+  </div>
+  <audio id="music" src="music.mp3" preload="auto"></audio>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+
+/* ================= facts (checked, see HANDRIT.md for sources) ================= */
+const DATA = window.__DATA = {
+  sl: 10.54,             // Straumlind, fast verð heimili, kr/kWst m. vsk
+  night: 7.03,           // næturverð 23–07
+  others: [              // the three largest sellers (about 65% of the market), general household price, kr/kWst m. vsk
+    ['Orkusalan', 12.97], ['HS Orka', 12.18], ['Orka náttúrunnar', 11.41],
+  ],
+  usage: 4500,           // kWst á ári, venjulegt heimili
+  ev: 2500,              // kWst á ári fyrir rafbíl
+  source: 'Almennt verð á raforku til heimila m. vsk. hjá þremur stærstu raforkusölunum, skv. verðskrám þeirra og aurbjorg.is, október 2026. Dreifing og flutningur eru ekki meðtalin.',
+};
+const AVG = DATA.others.reduce((s,o)=>s+o[1],0)/DATA.others.length;
+const PCT_AVG = Math.round((1-DATA.sl/AVG)*100);
+const MAXP = Math.max(...DATA.others.map(o=>o[1]));
+const PCT_MAX = Math.round((1-DATA.sl/MAXP)*100);
+const SAVE_YEAR = Math.round((MAXP-DATA.sl)*DATA.usage/100)*100;
+
+const W = 1920, H = 1080;
+const CAPTURE = location.hash.includes('capture');
+if (CAPTURE) document.documentElement.classList.add('capture');
+
+/* ---------- helpers ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rand = mulberry32(20261014);
+const R = (a,b)=>a+(b-a)*rand();
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const eout=t=>1-Math.pow(1-t,3);
+const esine=t=>-(Math.cos(Math.PI*t)-1)/2;
+const eback=t=>{const c1=1.6,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+const CYAN = new THREE.Color('#00bdd0'), ORANGE = new THREE.Color('#ff7800');
+const fmtN=n=>Math.round(n).toLocaleString('de-DE');
+const fmtK=n=>n.toFixed(2).replace('.',',');
+
+/* ---------- the timeline: one set (scene) after another, each built from nothing ---------- */
+const SETS = {
+  city:   {a:0,    b:9.4},
+  grid:   {a:9.4,  b:22.6},
+  chart:  {a:22.6, b:34.6},
+  lean:   {a:34.6, b:41.8},
+  ai:     {a:41.8, b:50.4},
+  homes:  {a:50.4, b:61.0},
+  growth: {a:61.0, b:68.4},
+  sw:     {a:68.4, b:75.0},
+  end:    {a:75.0, b:81.0},
+};
+const DUR = 81;
+const EXIT = .75;   // how long before a set ends its pieces start to sink back into the floor
+const setAt = t => { for(const [k,s] of Object.entries(SETS)) if(t>=s.a && t<s.b) return k; return 'end'; };
+
+/* ---------- renderer ---------- */
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: CAPTURE, powerPreference: 'high-performance' });
+renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const BG = new THREE.Color('#eef1f3');
+scene.background = BG;
+scene.fog = new THREE.Fog(BG, 160, 520);
+const camera = new THREE.PerspectiveCamera(30, W/H, 0.5, 1400);
+
+scene.add(new THREE.HemisphereLight('#ffffff', '#c3ccd3', 1.4));
+const sun = new THREE.DirectionalLight('#fffdf8', 2.9);
+sun.position.set(-70, 130, 55);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -95, right: 95, top: 95, bottom: -95, near: 20, far: 330 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.05; sun.shadow.radius = 2.2;
+scene.add(sun, sun.target);
+
+/* ---------- textures ---------- */
+function canvasTex(w,h,draw,{repeat=false}={}){
+  const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d'); draw(g,w,h);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8;
+  if(repeat){t.wrapS=t.wrapT=THREE.RepeatWrapping;} return t;
+}
+const texGround = canvasTex(256,256,(g,w,h)=>{ g.fillStyle='#eef1f3'; g.fillRect(0,0,w,h); g.strokeStyle='rgba(120,140,155,.10)'; g.lineWidth=2; g.strokeRect(0,0,w,h); g.strokeStyle='rgba(120,140,155,.05)'; g.lineWidth=1; g.beginPath(); g.moveTo(w/2,0); g.lineTo(w/2,h); g.moveTo(0,h/2); g.lineTo(w,h/2); g.stroke(); },{repeat:true});
+texGround.repeat.set(160,160);
+const texGroove = canvasTex(128,128,(g)=>{g.fillStyle='#ffffff';g.fillRect(0,0,128,128);g.fillStyle='#e1e6eb';g.fillRect(0,0,7,128);},{repeat:true});
+const texGrid = canvasTex(128,128,(g)=>{g.fillStyle='#ffffff';g.fillRect(0,0,128,128);g.fillStyle='#e0e6ea';g.fillRect(22,28,84,64);g.fillStyle='#f3f6f8';g.fillRect(22,28,84,8);},{repeat:true});
+const glowTexOf = (rgb)=>canvasTex(256,256,(g)=>{const r=g.createRadialGradient(128,128,0,128,128,128);r.addColorStop(0,`rgba(${rgb},.5)`);r.addColorStop(.45,`rgba(${rgb},.16)`);r.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=r;g.fillRect(0,0,256,256);});
+const texGlow = glowTexOf('0,189,208'), texGlowHot = glowTexOf('255,120,0');
+const texBlob = canvasTex(128,128,(g)=>{const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(20,40,55,.3)');r.addColorStop(1,'rgba(20,40,55,0)');g.fillStyle=r;g.fillRect(0,0,128,128);});
+
+/* ---------- materials ---------- */
+const M = {
+  ground: new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:1, map:texGround }),
+  block:  new THREE.MeshStandardMaterial({ color:'#f6f8f9', roughness:.95 }),
+  white:  new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:.88 }),
+  groove: new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:.88, map:texGroove }),
+  grid:   new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:.88, map:texGrid }),
+  detail: new THREE.MeshStandardMaterial({ color:'#e4e9ed', roughness:.9 }),
+  base:   new THREE.MeshStandardMaterial({ color:'#e9eef1', roughness:.6 }),
+  dash:   new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:1 }),
+  tree:   new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:1 }),
+  wire:   new THREE.MeshStandardMaterial({ color:'#9fb0bb', roughness:.6 }),
+  cyan:   new THREE.MeshStandardMaterial({ color:'#00bdd0', roughness:.5 }),
+  cyanSoft: new THREE.MeshStandardMaterial({ color:'#8fe1ea', roughness:.7 }),
+  orange: new THREE.MeshStandardMaterial({ color:'#ff7800', roughness:.55 }),
+  orangeSoft: new THREE.MeshStandardMaterial({ color:'#ffc08a', roughness:.7 }),
+  navy:   new THREE.MeshStandardMaterial({ color:'#1d4a5e', roughness:.6 }),
+  dark:   new THREE.MeshStandardMaterial({ color:'#3a4a55', roughness:.6 }),
+  water:  new THREE.MeshStandardMaterial({ color:'#a9e4ec', roughness:.25, metalness:.0 }),
+  winLit: new THREE.MeshBasicMaterial({ color:'#ffe2b8', toneMapped:false }),
+  glowC:  new THREE.MeshBasicMaterial({ color:'#00bdd0', toneMapped:false }),
+  glowO:  new THREE.MeshBasicMaterial({ color:'#ff7800', toneMapped:false }),
+};
+const edgeMat = new THREE.LineBasicMaterial({ color:'#c3ccd4', transparent:true, opacity:.75 });
+function outline(geo, grp, angle=20){ const l=new THREE.LineSegments(new THREE.EdgesGeometry(geo, angle), edgeMat); grp.add(l); return l; }
+function mesh(geo, mat, grp, {shadow=true, edges=false}={}){ const m=new THREE.Mesh(geo,mat); m.castShadow=m.receiveShadow=shadow; grp.add(m); if(edges) outline(geo,grp); return m; }
+function uvBox(geo,w,h,d,u=3){ const uv=geo.attributes.uv; const dims=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]]; for(let f=0;f<6;f++) for(let k=0;k<4;k++){const i=f*4+k; uv.setXY(i,uv.getX(i)*dims[f][0]/u,uv.getY(i)*dims[f][1]/u);} return geo; }
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(2400,2400).rotateX(-Math.PI/2), M.ground);
+ground.receiveShadow = true; scene.add(ground);
+
+/* ---------- the build-up system ----------
+   Every piece knows the windows (start, exit) in which it stands. It grows from the floor at the start
+   and sinks back into it at the exit, so each scene starts from an empty plane. */
+const ITEMS=[], LINES=[], FLOWS=[], PINS=[];
+const SET_GROUPS={};
+for(const k of Object.keys(SETS)){ const g=new THREE.Group(); g.name=k; scene.add(g); SET_GROUPS[k]=g; }
+function win(set, at, stag=0){ const s=SETS[set]; return {s:s.a+at, e:s.b-EXIT+stag}; }
+function rise(o, wins, {dur=.85, mode='y', ease=eback}={}){ o.userData.base=o.scale.clone(); ITEMS.push({o,wins:[].concat(wins),dur,mode,ease}); return o; }
+function kOf(it,t){ for(const w of it.wins){ if(t>=w.s-.02 && t<=w.e+.5){ return it.ease(prog(t,w.s,w.s+it.dur))*(1-eio(prog(t,w.e,w.e+.42))); } } return 0; }
+function updItems(t){
+  for(const it of ITEMS){ const k=kOf(it,t); const b=it.o.userData.base; it.o.visible=k>.002; if(!it.o.visible) continue;
+    if(it.mode==='y') it.o.scale.set(b.x,Math.max(1e-4,b.y*k),b.z); else it.o.scale.set(b.x*Math.max(1e-4,k),b.y*Math.max(1e-4,k),b.z*Math.max(1e-4,k)); }
+}
+// a tube drawn along a curve from one end to the other
+function drawTube(curve, grp, wins, {r=.12, mat=M.glowC, dur=1.2, seg=80}={}){
+  const geo=new THREE.TubeGeometry(curve,seg,r,6,false); const m=new THREE.Mesh(geo,mat); m.renderOrder=3; grp.add(m);
+  LINES.push({m,count:geo.index.count,wins:[].concat(wins),dur}); return m;
+}
+function updLines(t){ for(const l of LINES){ let g=0,o=0; for(const w of l.wins){ if(t>=w.s&&t<=w.e+.5){ g=eio(prog(t,w.s,w.s+l.dur)); o=1-eio(prog(t,w.e,w.e+.4)); break; } }
+  l.m.visible=g>0&&o>0; if(l.m.visible){ l.m.geometry.setDrawRange(0,Math.floor(l.count*g/6)*6); l.m.scale.setScalar(1); if(l.m.material.transparent) l.m.material.opacity=o; else if(o<1){ l.m.geometry.setDrawRange(Math.floor(l.count*(1-o)/6)*6, l.count); } } } }
+// glowing dots that flow along a curve (electricity)
+const dotGeo=new THREE.SphereGeometry(.26,14,10);
+function flow(curve, grp, wins, {n=4, speed=.5, mat=M.glowC, size=1, delay=1.2}={}){
+  const dots=[]; for(let i=0;i<n;i++){ const d=new THREE.Mesh(dotGeo,mat); d.scale.setScalar(size); d.renderOrder=4; grp.add(d); dots.push(d); }
+  FLOWS.push({curve,dots,wins:[].concat(wins),speed,delay,size}); }
+function updFlows(t){ for(const f of FLOWS){ let on=0, ws=null; for(const w of f.wins){ if(t>=w.s+f.delay&&t<=w.e+.3){ on=1-prog(t,w.e,w.e+.3); ws=w; break; } }
+  f.dots.forEach((d,i)=>{ d.visible=on>0; if(!d.visible) return; const u=((t-ws.s)*f.speed+i/f.dots.length)%1; d.position.copy(f.curve.getPointAt(u)); d.scale.setScalar(f.size*on*Math.min(1,u*8,(1-u)*8)); }); } }
+// screen-space labels attached to 3D points
+const pinsEl=document.getElementById('pins');
+function pin(html, pos, a, b, {cls='pill', dx=0, dy=0, follow=null, side='c'}={}){ const el=document.createElement('div'); el.className=cls; el.innerHTML=html; pinsEl.appendChild(el); const p={el,pos,a,b,dx,dy,follow,side}; PINS.push(p); return p; }
+const _v=new THREE.Vector3();
+function toScreen(v){ _v.copy(v).project(camera); return {x:(_v.x+1)/2*W, y:(1-_v.y)/2*H, ok:_v.z<1}; }
+function updPins(t){ for(const p of PINS){ const vis=t>p.a-.05&&t<p.b+.4; if(!vis){ p.el.style.opacity=0; continue; }
+  const pos=p.follow?p.follow(t):p.pos; const s=toScreen(pos); const e=eback(prog(t,p.a,p.a+.5)), o=clamp(prog(t,p.a,p.a+.25))*(1-eio(prog(t,p.b,p.b+.35)));
+  const tx = p.side==='l'?'-100%':p.side==='r'?'0%':'-50%';
+  p.el.style.opacity=s.ok?o.toFixed(3):0; p.el.style.transform=`translate3d(${(s.x+p.dx).toFixed(1)}px,${(s.y+p.dy+(1-e)*18).toFixed(1)}px,0) translate(${tx},-50%) scale(${(.7+.3*e).toFixed(3)})`; } }
+
+/* ---------- reusable models ---------- */
+function house(x,z,rot,grp,{s=1,door=M.detail,roof=M.white,lit=false}={}){
+  const g=new THREE.Group(); g.position.set(x,0,z); g.rotation.y=rot; grp.add(g);
+  const w=3.8*s,d=4.4*s,wh=2.5*s,rh=1.7*s;
+  mesh(new THREE.BoxGeometry(d,wh,w).translate(0,wh/2,0),M.white,g,{edges:true});
+  const sh=new THREE.Shape(); sh.moveTo(-w/2-.25,0); sh.lineTo(w/2+.25,0); sh.lineTo(0,rh); sh.closePath();
+  const rg=new THREE.ExtrudeGeometry(sh,{depth:d+.4,bevelEnabled:false}); rg.translate(0,0,-(d+.4)/2); rg.rotateY(Math.PI/2); rg.translate(0,wh,0);
+  mesh(rg,roof,g,{edges:true});
+  mesh(new THREE.BoxGeometry(d+.14,.3,w+.14).translate(0,.15,0),M.base,g);
+  const winM = lit?M.winLit:M.detail;
+  for(const sd of [-1,1]){ const a=mesh(new THREE.BoxGeometry(.7*s,.7*s,.08),winM,g,{shadow:false}); a.position.set(sd*1.1*s,1.45*s,w/2+.03); const b=a.clone(); b.position.z=-w/2-.03; g.add(b); }
+  for(const sd of [-1,1]){ const a=mesh(new THREE.BoxGeometry(.08,.7*s,.7*s),winM,g,{shadow:false}); a.position.set(-d/2-.03,1.45*s,sd*1.15*s); }
+  mesh(new THREE.BoxGeometry(.5,1.1,.5).translate(0,.55,0),M.white,g).position.set(.9*s,wh+.6*s,.7*s);
+  mesh(new THREE.BoxGeometry(.08,1.35*s,.8*s).translate(0,.675*s,0),door,g).position.set(-d/2-.03,0,0);
+  g.userData.h = wh+rh; g.userData.win = winM;
+  return g;
+}
+function tower(x,z,w,d,h,kind,grp){
+  const g=new THREE.Group(); g.position.set(x,0,z); grp.add(g);
+  const geo=uvBox(new THREE.BoxGeometry(w,h,d),w,h,d,kind==='grid'?2.6:2.2).translate(0,h/2,0);
+  const side = kind==='grid'?M.grid:kind==='groove'?M.groove:M.white;
+  const m=new THREE.Mesh(geo,[side,side,M.white,M.white,side,side]); m.castShadow=m.receiveShadow=true; g.add(m); outline(geo,g);
+  const parts=[new THREE.BoxGeometry(w+.32,.34,d+.32).translate(0,h+.02,0)];
+  if(rand()<.6) parts.push(new THREE.BoxGeometry(R(1.4,2.6),.9,R(1.2,2.2)).translate(R(-w/4,w/4),h+.45,R(-d/4,d/4)));
+  const dm=new THREE.Mesh(mergeGeometries(parts),M.white); dm.castShadow=dm.receiveShadow=true; g.add(dm);
+  if(h>5) mesh(new THREE.BoxGeometry(w+.08,1.1,d+.08).translate(0,.55,0),M.base,g);
+  g.userData.h=h; return g;
+}
+function cylTower(x,z,r,h,grp){
+  const g=new THREE.Group(); g.position.set(x,0,z); grp.add(g);
+  const geo=new THREE.CylinderGeometry(r,r,h,48,1).translate(0,h/2,0);
+  const uv=geo.attributes.uv; for(let i=0;i<49*2;i++) uv.setXY(i,uv.getX(i)*2*Math.PI*r/2.2,uv.getY(i)*h/2.2);
+  const m=new THREE.Mesh(geo,[M.groove,M.white,M.white]); m.castShadow=m.receiveShadow=true; g.add(m); outline(geo,g,12);
+  mesh(new THREE.CylinderGeometry(r+.18,r+.18,.34,48).translate(0,h+.02,0),M.white,g);
+  g.userData.h=h; return g;
+}
+const foliageGeo = (()=>{ let g=new THREE.IcosahedronGeometry(1,3); g.deleteAttribute('normal'); g.deleteAttribute('uv'); g=mergeVertices(g); const p=g.attributes.position, v=new THREE.Vector3();
+  for(let i=0;i<p.count;i++){ v.fromBufferAttribute(p,i); const n=1+.1*Math.sin(v.x*5.3+v.y*3.1)*Math.sin(v.z*4.9+v.x*2.3)+.06*Math.sin(v.y*12+v.z*9.5); v.multiplyScalar(n); p.setXYZ(i,v.x,v.y,v.z);} g.computeVertexNormals(); return g; })();
+function tree(x,z,s,grp){ const g=new THREE.Group(); g.position.set(x,0,z); grp.add(g);
+  mesh(new THREE.CylinderGeometry(.09,.12,1.4*s,8).translate(0,.7*s,0),M.white,g);
+  const f=mesh(foliageGeo,M.tree,g); f.scale.setScalar(s); f.position.y=1.3*s+s*.4; return g; }
+function person(grp,mat){ const g=new THREE.Group(); grp.add(g); mesh(new THREE.CapsuleGeometry(.26,.62,4,12).translate(0,.57,0),mat,g); mesh(new THREE.SphereGeometry(.22,18,12).translate(0,1.32,0),mat,g);
+  const sh=new THREE.Mesh(new THREE.PlaneGeometry(1.3,1.3).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:texBlob,transparent:true,depthWrite:false})); sh.position.y=.015; g.add(sh); return g; }
+const ringGeo = new THREE.RingGeometry(.9,1,96).rotateX(-Math.PI/2);
+const flatPlane = new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2);
+function ping(x,z,r,grp,{hot=false}={}){ const g=new THREE.Group(); g.position.set(x,.06,z); grp.add(g);
+  const col=hot?ORANGE:CYAN;
+  const rings=[0,1,2].map(()=>{const m=new THREE.Mesh(ringGeo,new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0,depthWrite:false,toneMapped:false})); m.renderOrder=3; g.add(m); return m;});
+  const glow=new THREE.Mesh(flatPlane,new THREE.MeshBasicMaterial({map:hot?texGlowHot:texGlow,transparent:true,opacity:0,depthWrite:false,toneMapped:false})); glow.position.y=.02; glow.renderOrder=2; g.add(glow);
+  return {g,rings,glow,r}; }
+function updPing(p,t,on,{speed=.5,spread=1.5}={}){ p.g.visible=on>.002; if(!p.g.visible) return;
+  for(let k=0;k<3;k++){ const w=((t*speed+k/3)%1+1)%1; const r=p.r*(1+w*spread); p.rings[k].scale.set(r,1,r); p.rings[k].material.opacity=on*(1-w)*Math.min(1,w*8)*.95; }
+  const gs=p.r*5; p.glow.scale.set(gs,1,gs); p.glow.material.opacity=on*.9; }
+
+/* ================= SET 1 + 7: the city (built from roads up, comes back for growth) ================= */
+const CITY = SET_GROUPS.city;  // shared by the city and growth sets
+const PITCH=22, BLK=17.5, NB=7;
+const ROADS=[]; for(let i=0;i<=NB;i++) ROADS.push((i-NB/2)*PITCH);
+const cityHomes=[];
+const cityWins = d => [win('city',.9+d,(d*.08)), win('growth',.2+d*.45,(d*.08))];
+const wave = (x,z)=>Math.hypot(x+30,z+30)/120*2.6;
+{
+  const cats=[];
+  for(let i=0;i<NB;i++) for(let j=0;j<NB;j++){
+    const cx=(i-(NB-1)/2)*PITCH, cz=(j-(NB-1)/2)*PITCH, di=Math.abs(i-3), dj=Math.abs(j-3);
+    const bm=new THREE.Mesh(new RoundedBoxGeometry(BLK,.6,BLK,2,.3),M.block); bm.position.set(cx,0,cz); bm.receiveShadow=true; CITY.add(bm);
+    rise(bm, cityWins(wave(cx,cz)*.6), {dur:.6, ease:eout});
+    let type; const r=rand();
+    if(i===4&&j===3) type='station';
+    else if(di<=1&&dj<=1) type='towers';
+    else type = r<.46?'houses':r<.74?'apartments':r<.86?'park':'mid';
+    const d0=wave(cx,cz)+.25;
+    const add=(o,extra=0)=>rise(o,cityWins(d0+extra+R(0,.3)),{dur:.95});
+    if(type==='towers'){
+      for(const ox of [-4.4,4.4]) for(const oz of [-4.4,4.4]){ const x=cx+ox, z=cz+oz, q=rand();
+        if(q<.18) add(cylTower(x,z,R(2.6,3.1),R(12,22),CITY)); else add(tower(x,z,R(5,6.6),R(5,6.6),R(10,26),q<.6?'groove':'grid',CITY)); }
+    } else if(type==='apartments'){
+      const alongX=rand()<.5; for(const o of [-4.3,4.3]){ const w=alongX?R(13,15):R(5.4,6), d=alongX?R(5.4,6):R(13,15); add(tower(cx+(alongX?0:o),cz+(alongX?o:0),w,d,R(5,10),rand()<.5?'grid':'groove',CITY)); }
+    } else if(type==='houses'){
+      for(const ox of [-5.6,0,5.6]) for(const oz of [-5.6,0,5.6]){ if(ox===0&&oz===0){ add(tree(cx,cz,R(.8,1),CITY)); continue; }
+        const fr = ox<0?0: ox>0?Math.PI : (oz<0?Math.PI/2:-Math.PI/2); const h=house(cx+ox,cz+oz,fr,CITY,{s:.92}); add(h); cityHomes.push({x:cx+ox,z:cz+oz,g:h}); }
+    } else if(type==='park'){
+      for(let k=0;k<16;k++){ const a=rand()*6.28, rr=Math.sqrt(rand())*7.4; add(tree(cx+Math.cos(a)*rr,cz+Math.sin(a)*rr,R(.6,1.1),CITY),.2); }
+    } else if(type==='mid'){
+      add(tower(cx-3.6,cz-3.6,R(6,8),R(6,8),R(4,8),'grid',CITY)); add(tower(cx+4.2,cz+3,R(5,7),R(7,10),R(3.5,6),'groove',CITY));
+    } else if(type==='station'){
+      // the substation: where the city's power lines start
+      const st=new THREE.Group(); st.position.set(cx,0,cz); CITY.add(st);
+      mesh(new RoundedBoxGeometry(9,.5,9,2,.2).translate(0,.25,0),M.base,st);
+      for(const [x,z] of [[-2.4,-2.4],[2.4,-2.4],[-2.4,2.4],[2.4,2.4]]){ mesh(new THREE.CylinderGeometry(.9,.9,2.6,24).translate(x,1.8,z),M.white,st,{edges:true}); mesh(new THREE.CylinderGeometry(.35,.35,.9,16).translate(x,3.5,z),M.cyan,st); }
+      mesh(new THREE.BoxGeometry(2.4,3.6,2.4).translate(0,2.3,0),M.white,st,{edges:true});
+      mesh(new THREE.BoxGeometry(2.5,.5,2.5).translate(0,3.2,0),M.cyan,st);
+      add(st,-.2);
+    }
+  }
+}
+const STATION = V(PITCH*.5*2-PITCH*1, 4.2, 0).set((4-(NB-1)/2)*PITCH, 4.2, (3-(NB-1)/2)*PITCH);
+// road dashes, drawn in from the corner like a road-marking machine
+const dashes=[]; for(const c of ROADS){ for(let s=ROADS[0];s<=ROADS[NB];s+=2.6){ if(ROADS.some(r=>Math.abs(r-s)<2.5)) continue; dashes.push([c,s,0],[s,c,1]); } }
+dashes.sort((a,b)=>Math.hypot(a[0]+80,a[1]+80)-Math.hypot(b[0]+80,b[1]+80));
+const dashIM=new THREE.InstancedMesh(new THREE.BoxGeometry(1.2,.03,.16),M.glowC,dashes.length);
+{ const m4=new THREE.Matrix4(), q0=new THREE.Quaternion(), q90=new THREE.Quaternion().setFromAxisAngle(V(0,1,0),Math.PI/2);
+  dashes.forEach(([c,s,r],i)=>{ m4.compose(r?V(s,.02,c):V(c,.02,s),r?q0:q90,V(1,1,1)); dashIM.setMatrixAt(i,m4); }); CITY.add(dashIM); }
+// rollers that paint the roads (like the reference: little machines leaving a trail)
+const rollers=[0,1,2].map(k=>{ const g=new THREE.Group(); CITY.add(g); mesh(new THREE.CylinderGeometry(.55,.55,1.6,20).rotateX(Math.PI/2),M.white,g,{edges:true}).position.y=.55; mesh(new RoundedBoxGeometry(1.6,1.1,1.4,2,.2).translate(-1.2,.9,0),M.white,g); mesh(new THREE.BoxGeometry(.5,.12,1.45).translate(-1.2,1.5,0),M.cyan,g); return g; });
+// power lines from the substation to the homes, lit as the scene ends
+const cityLines=[];
+{ const homesBy=cityHomes.map(h=>({...h,d:Math.hypot(h.x-STATION.x,h.z-STATION.z)})).sort((a,b)=>a.d-b.d);
+  const pick=[]; for(const h of homesBy){ if(pick.every(p=>Math.hypot(p.x-h.x,p.z-h.z)>13)) pick.push(h); if(pick.length>=10) break; }
+  pick.forEach((h,k)=>{ const end=V(h.x,3.2,h.z); const mid=V(lerp(STATION.x,h.x,.5),9+h.d*.08,lerp(STATION.z,h.z,.5));
+    const c=new THREE.QuadraticBezierCurve3(STATION.clone(),mid,end);
+    drawTube(c,CITY,[win('city',5.6+k*.12),win('growth',2.4+k*.08)],{r:.13,dur:1});
+    flow(c,CITY,[win('city',5.6+k*.12),win('growth',2.4+k*.08)],{n:3,speed:.55,mat:M.glowC,size:.9,delay:1});
+    cityLines.push(h); });
+}
+// customers lighting up across the city in the growth set
+const custPings = cityHomes.slice().sort((a,b)=>Math.hypot(a.x-STATION.x,a.z-STATION.z)-Math.hypot(b.x-STATION.x,b.z-STATION.z)).map((h,k)=>{ const p=ping(h.x,h.z,2.4,CITY); p.act=SETS.growth.a+1.4+k*.045 + (k%3)*.05; return p; });
+
+/* ================= SET 2: same power, same wires ================= */
+const GRID = SET_GROUPS.grid;
+const DAM_X=-46;
+{ const g=new THREE.Group(); g.position.set(DAM_X,0,0); GRID.add(g);
+  // reservoir, dam wall, power house
+  const res=new THREE.Mesh(new THREE.BoxGeometry(18,1.2,40).translate(-11,.6,0),M.water); res.receiveShadow=true; g.add(res); rise(res,win('grid',.2),{dur:.8,ease:eout});
+  const hill=new THREE.Group(); g.add(hill);
+  for(const z of [-24,24]){ mesh(new RoundedBoxGeometry(22,6,8,3,1.4).translate(-9,3,z),M.white,hill,{edges:true}); }
+  rise(hill,win('grid',.15));
+  const wall=new THREE.Group(); g.add(wall);
+  const ws=new THREE.Shape(); ws.moveTo(0,0); ws.lineTo(4.6,0); ws.lineTo(1.6,8); ws.lineTo(0,8); ws.closePath();
+  const wg=new THREE.ExtrudeGeometry(ws,{depth:40,bevelEnabled:false}).translate(0,0,-20); mesh(wg,M.white,wall,{edges:true}); wall.position.x=-2;
+  mesh(new THREE.BoxGeometry(2.2,.4,40.4).translate(-1.2,8.2,0),M.white,wall);
+  rise(wall,win('grid',.35),{dur:1});
+  const ph=tower(6,0,7,10,5,'groove',g); rise(ph,win('grid',.6));
+  for(const z of [-2.5,0,2.5]){ const p=mesh(new THREE.CylinderGeometry(.5,.5,7,16).rotateZ(Math.PI/2.6).translate(1.4,3.6,z),M.white,g,{edges:true}); rise(p,win('grid',.7),{mode:'all'}); }
+  const tr=new THREE.Group(); tr.position.set(12.5,0,0); g.add(tr); mesh(new THREE.BoxGeometry(3,3.4,3).translate(0,1.7,0),M.white,tr,{edges:true}); mesh(new THREE.BoxGeometry(3.1,.5,3.1).translate(0,3.2,0),M.cyan,tr); rise(tr,win('grid',.8));
+}
+function pylon(x,z,grp,at){ const g=new THREE.Group(); g.position.set(x,0,z); grp.add(g);
+  const legs=new THREE.CylinderGeometry(.35,1.6,13,4,1,true).rotateY(Math.PI/4).translate(0,6.5,0); const m=new THREE.Mesh(legs,new THREE.MeshStandardMaterial({color:'#ffffff',roughness:.85,side:THREE.DoubleSide})); m.castShadow=true; g.add(m); outline(legs,g,1);
+  for(const [y,w] of [[4,1.2],[8,.8]]){ mesh(new THREE.BoxGeometry(w*2.3,.12,.12).translate(0,y,0),M.white,g); mesh(new THREE.BoxGeometry(.12,.12,w*2.3).translate(0,y,0),M.white,g); }
+  mesh(new THREE.BoxGeometry(.3,.3,7).translate(0,11.6,0),M.white,g,{edges:true}); mesh(new THREE.BoxGeometry(.3,.3,4.6).translate(0,9.4,0),M.white,g,{edges:true});
+  for(const zz of [-3.2,3.2]) mesh(new THREE.CylinderGeometry(.12,.12,.8,8).translate(0,11.1,zz),M.cyan,g);
+  rise(g,win('grid',at),{dur:.9}); return g; }
+const PYX=[-30,-14,2,18];
+PYX.forEach((x,i)=>pylon(x,0,GRID,1.0+i*.22));
+const gridWins = (at)=>win('grid',at);
+const wireCurves=[];
+for(const zz of [-3.2,3.2]){
+  const pts=[V(DAM_X+12.5,3.2,0), ...PYX.map(x=>V(x,10.7,zz))];
+  for(let i=0;i<pts.length-1;i++){ const a=pts[i], b=pts[i+1]; const mid=a.clone().lerp(b,.5); mid.y-=1.6; const c=new THREE.QuadraticBezierCurve3(a,mid,b); wireCurves.push(c);
+    drawTube(c,GRID,gridWins(2.0+i*.28),{r:.07,mat:M.wire,dur:.6,seg:40}); flow(c,GRID,gridWins(2.0+i*.28),{n:2,speed:.9,size:.75,delay:.7}); }
+}
+// substation + three homes, each buying from a different seller
+const SUBX=32;
+{ const st=new THREE.Group(); st.position.set(SUBX,0,0); GRID.add(st); mesh(new RoundedBoxGeometry(7,.5,7,2,.2).translate(0,.25,0),M.base,st); for(const z of [-1.6,1.6]){ mesh(new THREE.CylinderGeometry(.8,.8,2.4,22).translate(0,1.7,z),M.white,st,{edges:true}); mesh(new THREE.CylinderGeometry(.3,.3,.8,14).translate(0,3.3,z),M.cyan,st);} rise(st,win('grid',2.9)); }
+for(const zz of [-3.2,3.2]){ const a=V(18,10.7,zz), b=V(SUBX,3.6,zz*.5); const mid=a.clone().lerp(b,.5); mid.y-=1; const c=new THREE.QuadraticBezierCurve3(a,mid,b); drawTube(c,GRID,gridWins(3.1),{r:.07,mat:M.wire,dur:.5,seg:30}); flow(c,GRID,gridWins(3.1),{n:2,speed:.9,size:.75,delay:.5}); }
+const GH=[{z:-12,name:'Raforkusali A',cls:'pill muted'},{z:0,name:'Raforkusali B',cls:'pill muted'},{z:12,name:'Straumlind',cls:'pill hot'}];
+GH.forEach((h,k)=>{ const x=SUBX+16; const g=house(x,h.z,Math.PI,GRID,{s:1.15,door:k===2?M.orange:M.detail,lit:true}); rise(g,win('grid',3.2+k*.2));
+  for(let j=0;j<5;j++) rise(tree(x+5+R(-1,1),h.z+R(-3.5,3.5),R(.6,.9),GRID),win('grid',3.5+k*.2+j*.05));
+  const a=V(SUBX+1.5,3.4,0), b=V(x-2.6,2.2,h.z); const c=new THREE.QuadraticBezierCurve3(a,V(lerp(a.x,b.x,.5),5.4,lerp(a.z,b.z,.5)),b);
+  drawTube(c,GRID,gridWins(3.9+k*.15),{r:.1,dur:.6,seg:30}); flow(c,GRID,gridWins(3.9+k*.15),{n:3,speed:.7,size:.8,delay:.6});
+  h.ping=ping(x,h.z,3.3,GRID,{hot:k===2});
+  pin(`<i></i>${h.name}`, V(x,6.6,h.z), SETS.grid.a+6.2+k*.35, SETS.grid.a+9.6, {cls:h.cls});
+});
+pin('<i></i>Sama virkjun', V(DAM_X+4,10.5,0), SETS.grid.a+1.6, SETS.grid.a+6.0);
+pin('<i></i>Sömu línur', V(-6,14.2,0), SETS.grid.a+2.6, SETS.grid.a+6.0);
+pin('<i></i>Sama dreifiveita', V(SUBX,6.4,0), SETS.grid.a+3.6, SETS.grid.a+6.0);
+// the bill: splits into the part you can't change and the part you can
+const BILL={w:8,h:10.2,px:880,py:1122};
+const BH=[BILL.h*2/3, BILL.h/3];
+const BILL_P = V(SUBX+8,10,12);
+const billGrp=new THREE.Group(); GRID.add(billGrp); billGrp.position.copy(BILL_P);
+let billTop, billBot;
+
+/* ================= SET 3: the price chart ================= */
+const CHART = SET_GROUPS.chart;
+const ROWS = [...DATA.others.map(o=>({name:o[0],p:o[1]})), {name:'Straumlind',p:DATA.sl,sl:true}].sort((a,b)=>b.p-a.p);
+const BAR_W=5.6, BAR_GAP=3.6, HS=1.55;
+const chartX = i => (i-(ROWS.length-1)/2)*(BAR_W+BAR_GAP);
+{ const plate=new THREE.Mesh(new RoundedBoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+6,.8,14,2,.35),M.block); plate.position.y=.4; plate.receiveShadow=true; CHART.add(plate); rise(plate,win('chart',.15),{dur:.6,ease:eout});
+  // baseline grid lines on the plate (every 5 kr)
+  for(let v=5; v<=15; v+=5){ const l=new THREE.Mesh(new THREE.BoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+4,.04,.04),M.detail); l.position.set(0,.8+v*HS,-BAR_W/2-.6); CHART.add(l); rise(l,win('chart',.5+v*.02),{mode:'all',ease:eout}); }
+}
+ROWS.forEach((r,i)=>{ const h=r.p*HS; const g=new THREE.Group(); g.position.set(chartX(i),.8,0); CHART.add(g);
+  const geo=new RoundedBoxGeometry(BAR_W,h,BAR_W,3,.35).translate(0,h/2,0);
+  mesh(geo,r.sl?M.orange:M.white,g,{edges:!r.sl});
+  if(r.sl){ const cap=mesh(new RoundedBoxGeometry(BAR_W+.06,.6,BAR_W+.06,2,.2).translate(0,h-.3,0),M.cyan,g); }
+  r.at = r.sl ? 3.7 : .7+i*.32; r.g=g; r.h=h;
+  rise(g,win('chart',r.at),{dur:r.sl?1.1:.9, ease: r.sl?eback:eout});
+  pin(`${r.sl?'<i></i>':''}${r.name}`, V(chartX(i),.8,BAR_W/2+2.2), SETS.chart.a+r.at+.2, SETS.chart.b-EXIT-.1, {cls: r.sl?'pill hot':'pill muted'});
+  r.valPin = pin(`<b>${fmtK(r.p)}</b><small>kr.</small>`, V(chartX(i),.8+h+1.6,0), SETS.chart.a+r.at+.6, SETS.chart.b-EXIT-.1, {cls: r.sl?'pill hot':'pill'});
+});
+// the average line, then the gap between it and Straumlind
+const avgLine=new THREE.Mesh(new THREE.BoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+3,.14,.14),M.glowC); avgLine.position.set(0,.8+AVG*HS,BAR_W/2+.3); CHART.add(avgLine);
+rise(avgLine,win('chart',5.4),{mode:'all',dur:.7,ease:eout}); avgLine.userData.sx=true;
+const slIdx=ROWS.findIndex(r=>r.sl);
+const gap=new THREE.Group(); gap.position.set(chartX(slIdx)+BAR_W/2+.9,.8+DATA.sl*HS,BAR_W/2+.3); CHART.add(gap);
+{ const gh=(AVG-DATA.sl)*HS; mesh(new THREE.BoxGeometry(.14,gh,.14).translate(0,gh/2,0),M.glowO,gap); mesh(new THREE.BoxGeometry(.7,.14,.14),M.glowO,gap); mesh(new THREE.BoxGeometry(.7,.14,.14).translate(0,gh,0),M.glowO,gap); }
+rise(gap,win('chart',6.2),{dur:.6});
+pin(`<i></i>Meðalverð þriggja stærstu <b style="margin-left:6px">${fmtK(AVG)}</b><small>kr.</small>`, V(chartX(0)-BAR_W/2,.8+AVG*HS,BAR_W/2+.3), SETS.chart.a+5.6, SETS.chart.b-EXIT-.1, {cls:'pill', side:'r', dy:40});
+
+/* ================= SET 4: lean by design ================= */
+const LEAN = SET_GROUPS.lean;
+{ // a traditional energy company: power plants, a large headquarters, many layers
+  const big=new THREE.Group(); big.position.set(-14,0,0); LEAN.add(big);
+  const layers=[[16,4.2,'groove'],[14,4.2,'grid'],[12,4.2,'groove'],[10,4.2,'grid'],[8,4.2,'groove']];
+  let y=0; layers.forEach(([s,h,k],i)=>{ const t=tower(0,0,s,s,h,k,big); t.position.y=y; t.userData.y=y; rise(t,win('lean',.4+i*.28),{dur:.7}); y+=h; });
+  const bigTop=y;
+  const plant=tower(-12,10,6,8,5,'groove',LEAN); plant.position.x=-26; rise(plant,win('lean',.3));
+  const stack=cylTower(-30,6,1.2,12,LEAN); rise(stack,win('lean',.5));
+  pin('<i></i>Hefðbundið orkufyrirtæki', V(-14,22.5,0), SETS.lean.a+.6, SETS.lean.a+3.8, {cls:'pill'});
+  pin('<i></i>Straumlind', V(16,6.4,0), SETS.lean.a+3.4, SETS.lean.b-EXIT-.1, {cls:'pill hot'});
+  ['Eigin virkjanir','Stórar höfuðstöðvar','Mörg lög af yfirbyggingu'].forEach((s,i)=>pin(`<i></i>${s}`, V(-14+9.4,2.1+i*4.2*1.5,8.4), SETS.lean.a+.9+i*.35, SETS.lean.a+3.6, {cls:'pill muted', side:'r'}));
+  // Straumlind: a small studio, a few experts, software doing the heavy lifting
+  const small=new THREE.Group(); small.position.set(16,0,0); LEAN.add(small);
+  mesh(new RoundedBoxGeometry(9,.4,9,2,.15).translate(0,.2,0),M.base,small);
+  mesh(new THREE.BoxGeometry(6,3.4,5).translate(0,2,0),M.white,small,{edges:true});
+  mesh(new THREE.BoxGeometry(6.1,.5,5.1).translate(0,3.6,0),M.orange,small);
+  const scr=mesh(new THREE.BoxGeometry(.08,1.4,2.4).translate(-3.05,2.2,0),M.glowC,small,{shadow:false});
+  rise(small,win('lean',3.2),{dur:.9});
+  for(let k=0;k<8;k++){ const a=k/8*Math.PI*1.2+Math.PI*.9; const p=person(LEAN,k%2?M.cyan:M.orange); p.position.set(16+Math.cos(a)*6.4,0,Math.sin(a)*6.4+.6); rise(p,win('lean',3.6+k*.08),{mode:'all',dur:.6}); }
+}
+
+/* ================= SET 5: software + AI forecasting ================= */
+const AI = SET_GROUPS.ai;
+const HOURS=24;
+// a typical day in Iceland: low at night, morning step, evening peak
+const demand = h => .42 + .28*Math.exp(-Math.pow((h-8.5)/2.2,2)) + .5*Math.exp(-Math.pow((h-18.5)/2.6,2)) + .12*Math.sin(h/24*Math.PI*2-1.2)*.5 + .18*clamp((h-6)/4)*(1-clamp((h-22)/2));
+const price = h => .35 + .55*Math.exp(-Math.pow((h-9)/2.6,2)) + .7*Math.exp(-Math.pow((h-18.2)/2.2,2));
+const CH_W=46, CH_H=13;
+const hx = h => -CH_W/2 + (h+.5)/HOURS*CH_W;
+{ const plate=new THREE.Mesh(new RoundedBoxGeometry(CH_W+5,.7,12,2,.3),M.block); plate.position.y=.35; plate.receiveShadow=true; AI.add(plate); rise(plate,win('ai',.1),{dur:.6,ease:eout});
+  for(let h=0;h<HOURS;h++){ const v=demand(h)*CH_H; const b=new THREE.Mesh(new RoundedBoxGeometry(1.36,v,1.36,2,.12).translate(0,v/2,0),M.white); b.position.set(hx(h),.7,0); b.castShadow=b.receiveShadow=true; AI.add(b); outline(b.geometry,b); rise(b,win('ai',.35+h*.035),{dur:.7}); }
+  // the forecast: a cyan line the system draws a little ahead of time
+  const pts=[]; for(let i=0;i<=96;i++){ const h=i/4-.5; pts.push(V(hx(h),.7+demand(clamp(h,0,23))*CH_H+1.1,1.1)); }
+  const fc=new THREE.CatmullRomCurve3(pts); drawTube(fc,AI,win('ai',1.6),{r:.16,dur:2.2,seg:200});
+  // the moments it buys: low-price hours glow orange
+  [2,3,4,13,14,23].forEach((h,k)=>{ const m=new THREE.Mesh(new THREE.SphereGeometry(.55,20,14),M.glowO); m.position.set(hx(h),.7+demand(h)*CH_H+1.1,1.1); AI.add(m); rise(m,win('ai',4.6+k*.14),{mode:'all',dur:.5}); });
+}
+const BRAIN = V(-4,20.5,-6);
+const brain=new THREE.Group(); brain.position.copy(BRAIN); AI.add(brain);
+{ mesh(new THREE.SphereGeometry(2.2,48,32),new THREE.MeshStandardMaterial({color:'#ffffff',roughness:.35,emissive:'#d8f6fa',emissiveIntensity:.3}),brain,{shadow:false});
+  mesh(new THREE.SphereGeometry(1.1,32,20),M.glowC,brain,{shadow:false});
+  brain.userData.rings=[0,1].map(k=>{const m=new THREE.Mesh(new THREE.TorusGeometry(3.6+k*1.5,.09,8,96),new THREE.MeshBasicMaterial({color:CYAN,toneMapped:false})); brain.add(m); return m;});
+  const gl=new THREE.Sprite(new THREE.SpriteMaterial({map:texGlow,transparent:true,depthWrite:false,toneMapped:false})); gl.scale.set(22,22,1); brain.add(gl);
+  rise(brain,win('ai',.9),{mode:'all',dur:.8}); }
+[0,6,12,18,23].forEach((h,k)=>{ const end=V(hx(h),.7+demand(h)*CH_H+1.4,1.1); const c=new THREE.QuadraticBezierCurve3(BRAIN.clone(),V(lerp(BRAIN.x,end.x,.4),BRAIN.y-2,0),end); drawTube(c,AI,win('ai',1.3+k*.12),{r:.06,dur:.8,seg:40}); flow(c,AI,win('ai',1.3+k*.12),{n:2,speed:.7,size:.6,delay:.8}); });
+pin('<i></i>Spá um notkun', V(hx(18.5),.7+demand(18.5)*CH_H+3.4,1), SETS.ai.a+2.8, SETS.ai.b-EXIT-.2);
+pin('<i></i>Keypt á heildsölumarkaði', V(hx(3),.7+demand(3)*CH_H+3.2,1), SETS.ai.a+4.9, SETS.ai.b-EXIT-.2, {cls:'pill hot'});
+
+/* ================= SET 6: two identical homes ================= */
+const HOMES = SET_GROUPS.homes;
+const HX=[-11,11];
+const homes2 = HX.map((x,k)=>{ const plate=new THREE.Mesh(new RoundedBoxGeometry(17,.6,17,2,.3),M.block); plate.position.set(x,.3,0); plate.receiveShadow=true; HOMES.add(plate); rise(plate,win('homes',.15+k*.15),{dur:.6,ease:eout});
+  const h=house(x+1,0,Math.PI*1.12,HOMES,{s:1.6,lit:true,door:k?M.orange:M.detail}); h.position.y=.6; rise(h,win('homes',.4+k*.15));
+  for(let j=0;j<4;j++){ const t=tree(x+R(-7,-4.5),R(-6.5,6.5),R(.7,1),HOMES); t.position.y=.6; rise(t,win('homes',.6+k*.15+j*.06)); }
+  const drive=new THREE.Mesh(new THREE.BoxGeometry(7,.06,3.4),M.base); drive.position.set(x+4.6,.62,5.4); HOMES.add(drive); rise(drive,win('homes',.5+k*.15),{mode:'all',ease:eout});
+  return {x,h}; });
+// an electric car pulls in to the Straumlind home at night rate
+const car=new THREE.Group(); HOMES.add(car);
+{ mesh(new RoundedBoxGeometry(3.6,1.0,1.75,3,.35).translate(0,.75,0),M.white,car,{edges:false}); mesh(new RoundedBoxGeometry(2.1,.8,1.6,3,.3).translate(-.2,1.45,0),M.white,car); mesh(new THREE.BoxGeometry(1.9,.55,1.62).translate(-.2,1.5,0),M.dark,car,{shadow:false});
+  for(const x of [-1.15,1.15]) for(const z of [-.84,.84]) mesh(new THREE.CylinderGeometry(.36,.36,.24,20).rotateX(Math.PI/2).translate(x,.38,z),M.dark,car);
+  mesh(new THREE.BoxGeometry(3.62,.14,1.77).translate(0,.62,0),M.cyan,car);
+  const sh=new THREE.Mesh(new THREE.PlaneGeometry(5,2.8).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:texBlob,transparent:true,depthWrite:false})); sh.position.y=.02; car.add(sh); }
+const CAR_IN = SETS.homes.a+5.6;
+const plug = new THREE.CatmullRomCurve3([V(HX[1]+1.6,1.6,2.2),V(HX[1]+2.4,.8,3.6),V(HX[1]+3.2,1.1,4.6)]);
+drawTube(plug,HOMES,win('homes',7.2),{r:.08,dur:.6,seg:30}); flow(plug,HOMES,win('homes',7.2),{n:2,speed:.9,size:.6,delay:.5});
+const homeTags = HX.map((x,k)=>pin(`<small>${k?'Straumlind':'Stærsti raforkusalinn'}</small><strong>0 kr.</strong><span>orka á ári · ${fmtN(DATA.usage)} kWst</span>`, V(x,12.5,-2), SETS.homes.a+1.6, SETS.homes.b-EXIT-.15, {cls:k?'tag3 hot':'tag3'}));
+pin(`<i></i>Næturverð <b style="margin-left:6px">${fmtK(DATA.night)}</b><small>kr./kWst</small>`, V(HX[1]+5,4.4,6.6), SETS.homes.a+7.6, SETS.homes.b-EXIT-.15, {cls:'pill', side:'r'});
+
+/* ================= SET 8: switching takes a minute ================= */
+const SW = SET_GROUPS.sw;
+const CARD={w:9,h:11.2,px:900,py:1120};
+const cards=[];
+for(let k=0;k<3;k++){ const g=new THREE.Group(); g.position.set((k-1)*12,7.2,0); SW.add(g);
+  const slab=new THREE.Mesh(new RoundedBoxGeometry(CARD.w+.5,CARD.h+.5,.5,3,.22),M.white); slab.position.z=-.3; slab.castShadow=true; g.add(slab);
+  const face=new THREE.Mesh(new THREE.PlaneGeometry(CARD.w,CARD.h),new THREE.MeshBasicMaterial({toneMapped:false})); face.position.z=-.04; g.add(face);
+  const st=new THREE.Mesh(new THREE.BoxGeometry(3,.4,2.4),M.base); st.position.set(0,-CARD.h/2-.55,-.3); g.add(st);
+  rise(g,win('sw',.5+k*.55),{mode:'all',dur:.8}); cards.push({g,face}); }
+const swLine = new THREE.CatmullRomCurve3([V(-12,1.4,-.4),V(-6,1.0,-.4),V(0,1.4,-.4),V(6,1.0,-.4),V(12,1.4,-.4)]);
+drawTube(swLine,SW,win('sw',2.4),{r:.09,dur:1.4,seg:80}); flow(swLine,SW,win('sw',2.4),{n:4,speed:.4,size:.6,delay:1});
+
+/* ================= SET 9: the bolt ================= */
+const END = SET_GROUPS.end;
+const LOGO_SVG=`<svg role="img" aria-label="Straumlind" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84.19 9.81"><path fill="#00bdd0" d="M10.12,0V4.69A5.12,5.12,0,0,1,5,9.81H4.86l2.52-6H5.05L6,0Z"/><path fill="#ff7800" d="M0,9.81V5.12A5.12,5.12,0,0,1,5.12,0h.14L2.74,6H5.07l-1,3.82Z"/><path fill="#00506e" d="M13.47,6.29h.84a1.14,1.14,0,0,0,.48.92A2.26,2.26,0,0,0,16,7.5c1.12,0,1.68-.38,1.68-1.13a1,1,0,0,0-.32-.76,2,2,0,0,0-1-.34l-.87-.1c-1.27-.16-1.91-.74-1.91-1.75a1.63,1.63,0,0,1,.65-1.37A2.87,2.87,0,0,1,16,1.57a2.77,2.77,0,0,1,1.7.46,1.92,1.92,0,0,1,.72,1.39h-.83a1.13,1.13,0,0,0-.44-.85A2,2,0,0,0,16,2.29a2,2,0,0,0-1.18.28.91.91,0,0,0-.39.79.89.89,0,0,0,.3.71,1.86,1.86,0,0,0,1,.34l.92.11c1.29.17,1.93.77,1.93,1.79a1.67,1.67,0,0,1-.68,1.42,3.08,3.08,0,0,1-1.89.5,2.94,2.94,0,0,1-1.82-.49A1.9,1.9,0,0,1,13.47,6.29Z"/><path fill="#00506e" d="M23.4,2.42V8.18h-.85V2.42H20.44V1.65h5.07v.77Z"/><path fill="#00506e" d="M28.54,5.4V8.18h-.86V1.65h2.84a2.55,2.55,0,0,1,1.66.48,1.72,1.72,0,0,1,.57,1.39,1.76,1.76,0,0,1-.37,1.17,1.79,1.79,0,0,1-1.06.62l1.62,2.87H32L30.43,5.4Zm2-.75a1.53,1.53,0,0,0,1-.28,1,1,0,0,0,.33-.85,1,1,0,0,0-.35-.83,1.69,1.69,0,0,0-1.05-.27H28.54V4.65Z"/><path fill="#00506e" d="M36.25,6.7l-.59,1.48h-.9l2.73-6.53h.72L41,8.18H40l-.6-1.48Zm1.6-4L36.54,6h2.61Z"/><path fill="#00506e" d="M42.94,5.84V1.65h.86V5.78a1.73,1.73,0,0,0,3.46,0V1.65h.87V5.84a2.25,2.25,0,0,1-.69,1.76,3.2,3.2,0,0,1-3.81,0A2.25,2.25,0,0,1,42.94,5.84Z"/><path fill="#00506e" d="M57.37,8.18h-.86V3.24L54.44,6.88h-.6L51.77,3.24V8.18h-.86V1.65h.86l2.37,4.24,2.37-4.24h.86Z"/><path fill="#00506e" d="M61,1.65V7.41h3.66v.77H60.15V1.65Z"/><path fill="#00506e" d="M68,1.65V8.18h-.86V1.65Z"/><path fill="#00506e" d="M76.27,8.18h-.86l-3.74-5V8.18h-.86V1.65h.86l3.74,5.06V1.65h.86Z"/><path fill="#00506e" d="M81.46,1.65a2.76,2.76,0,0,1,2,.71,2.89,2.89,0,0,1,.71,2.12v.86a2.85,2.85,0,0,1-.72,2.12,2.72,2.72,0,0,1-2,.72H79.05V1.65Zm1.41,5.26a2.28,2.28,0,0,0,.46-1.55V4.53a2.41,2.41,0,0,0-.46-1.6,1.82,1.82,0,0,0-1.41-.51H79.91v5h1.55A1.85,1.85,0,0,0,82.87,6.91Z"/></svg>`;
+const boltParts=[];
+let LOGO_FULL='';
+
+/* ================= camera keys per set ================= */
+const KEYS = {
+  city: [[0,V(-150,190,210),V(0,0,0)],[3.4,V(-96,104,128),V(0,4,0)],[6.6,V(-70,70,96),V(4,6,4)],[9.4,V(-56,52,70),V(10,6,2)]],
+  grid: [[0,V(-104,48,84),V(-40,4,0)],[2.4,V(-56,42,88),V(-18,5,0)],[5.0,V(-4,40,86),V(8,6,0)],[7.4,V(30,30,66),V(42,4,2)],[10,V(30,24,58),V(44,4,4)],[13.2,V(26,22,54),V(42,4,4)]],
+  chart: [[0,V(-34,38,96),V(6,6,0)],[4.0,V(-6,30,90),V(8,7,0)],[7.2,V(20,26,80),V(10,8,0)],[12,V(26,24,74),V(10,8,0)]],
+  lean: [[0,V(-50,44,90),V(-4,9,0)],[3.4,V(-16,36,86),V(2,8,0)],[7.2,V(12,28,70),V(6,5,0)]],
+  ai: [[0,V(-34,30,64),V(0,10,0)],[3.6,V(-8,26,60),V(0,11,0)],[8.6,V(18,20,50),V(-4,10,0)]],
+  homes:[[0,V(-40,36,70),V(0,5,0)],[4.0,V(0,22,50),V(0,5,0)],[7.0,V(18,15,34),V(9,4,2)],[10.6,V(22,13,28),V(10,4,2)]],
+  growth:[[0,V(-58,52,72),V(10,6,2)],[4,V(-90,110,140),V(0,0,0)],[7.4,V(-120,150,170),V(0,0,0)]],
+  sw: [[0,V(-10,11.5,54),V(2,3.2,0)],[3.4,V(-2,10.5,51),V(3,3,0)],[6.6,V(4,10,49),V(3,3.2,0)]],
+  end: [[0,V(0,8,50),V(0,4.6,0)],[6,V(0,8,47),V(0,4.6,0)]],
+};
+const camCurves={};
+for(const [k,keys] of Object.entries(KEYS)){ const s=SETS[k]; const kk=keys.map(q=>[s.a+q[0],q[1],q[2]]);
+  camCurves[k]={keys:kk,p:new THREE.CatmullRomCurve3(kk.map(q=>q[1]),false,'centripetal'),t:new THREE.CatmullRomCurve3(kk.map(q=>q[2]),false,'centripetal')}; }
+function camAt(t){ const k=setAt(t); const c=camCurves[k]; const kk=c.keys; const n=kk.length; let i=0; while(i<n-2&&t>kk[i+1][0]) i++;
+  let u=clamp((t-kk[i][0])/(kk[i+1][0]-kk[i][0])); u=esine(u); const par=(i+u)/(n-1);
+  return {p:c.p.getPoint(par), t:c.t.getPoint(par)}; }
+
+/* ================= captions ================= */
+const H1 = n => `<span class="hl">${n}</span>`;
+const CAPS=[
+  {a:.8, b:4.4, eb:'Straumlind', t:'Sama rafmagn.'},
+  {a:4.6, b:9.0, eb:'Spurningin', t:`Hvernig getur það verið allt að ${PCT_MAX}% ódýrara?`, s:'Förum yfir það, skref fyrir skref.'},
+  {a:10.0,b:15.4, eb:'Rafmagnið', t:'Allir fá sama rafmagnið, eftir sömu línunum.', s:'Úr sömu virkjunum, í gegnum sömu dreifiveitu, inn á sama mælinn.'},
+  {a:15.8,b:22.0, eb:'Reikningurinn', t:'Eini munurinn er hver selur þér orkuna.', s:'Flutningur og dreifing kosta það sama hjá öllum. Orkusalann velur þú.'},
+  {a:23.2,b:28.4, eb:'Verðið', t:'Stærstu raforkusalarnir á móti Straumlind.', s:`${fmtK(DATA.sl)} kr. á kílóvattstund. Sama verð allan sólarhringinn.`},
+  {a:28.8,b:34.2, eb:'Verðið', t:`${PCT_AVG}% undir meðalverði þeirra stærstu.`, s:`Og ${PCT_MAX}% undir almennu verði stærsta raforkusalans.`},
+  {a:35.2,b:41.4, eb:'Hvernig?', t:'Engar virkjanir. Lágmarks yfirbygging.', s:'Átta sérfræðingar og hugbúnaður sem vinnur verkin.'},
+  {a:42.4,b:46.2, eb:'Gervigreind', t:'Eigin hugbúnaður spáir fyrir um notkunina.', s:'Hverja klukkustund, viku fram í tímann.'},
+  {a:46.4,b:50.2, eb:'Gervigreind', t:'Orkan er keypt í heildsölu, á réttum tíma.', s:'Sparnaðurinn skilar sér beint til þín.'},
+  {a:51.0,b:56.2, eb:'Heimilið', t:'Sama heimili. Sama notkun.', s:`${fmtN(DATA.usage)} kWst á ári, eins og venjuleg íbúð. Um ${fmtN(SAVE_YEAR)} kr. minna á ári en hjá stærsta raforkusalanum.`},
+  {a:56.4,b:60.8, eb:'Rafbíllinn', t:'Hlaðið á nóttunni fyrir enn minna.', s:'Næturverð frá kl. 23 til 07.'},
+  {a:61.6,b:68.2, eb:'Vöxturinn', t:'Úr 28 milljónum í 2,1 milljarð.', s:'Velta Straumlindar frá fyrsta árinu 2021 til 2024. Heimili, fyrirtæki og sveitarfélög hafa skipt.'},
+  {a:69.0,b:74.8, eb:'Að skipta', t:'Það tekur eina mínútu að skipta.', s:'Ókeypis og engin binding. Rafmagnið fer aldrei af.'},
+];
+const capsEl=document.getElementById('caps');
+const capEls=CAPS.map(c=>{ const el=document.createElement('div'); el.className='cap';
+  const words=(s,cls)=>{ const out=[]; const tmp=document.createElement('div'); tmp.innerHTML=s; tmp.childNodes.forEach(n=>{ const hl=n.nodeType===1; (n.textContent).split(' ').forEach(w=>{ if(w) out.push({w,hl}); }); }); return out.map((o,i,a)=>`<span class="w ${cls}${o.hl?' hl':''}">${o.w}${i<a.length-1?' ':''}</span>`).join(''); };
+  el.innerHTML=`<div class="eb">${c.eb}</div><h1 class="ti">${words(c.t,'tw')}</h1>${c.s?`<p class="su">${words(c.s,'sw')}</p>`:''}`;
+  capsEl.appendChild(el); return {el, eb:el.querySelector('.eb'), tw:[...el.querySelectorAll('.tw')], sw:[...el.querySelectorAll('.sw')]}; });
+// number words in captions in orange
+capEls.forEach(e=>e.tw.forEach(w=>{ if(/\d/.test(w.textContent)) w.classList.add('hl'); }));
+const CHAPTERS=[['city','Rafmagn'],['grid','Sama rafmagn'],['chart','Verðið'],['lean','Hvernig'],['ai','Gervigreind'],['homes','Sparnaður'],['growth','Vöxtur'],['sw','Skipta'],['end','Straumlind']];
+const chBars=document.querySelector('#chapters .bars'), chName=document.querySelector('#chapters .name');
+const barEls=CHAPTERS.map(()=>{const b=document.createElement('div'); b.className='bar'; b.innerHTML='<i></i>'; chBars.appendChild(b); return b.firstChild;});
+const statEl=document.getElementById('stat'), statNum=statEl.querySelector('strong'), statSub=statEl.querySelector('span');
+const noteEl=document.getElementById('note'); noteEl.textContent=DATA.source;
+const endEl=document.getElementById('end'), endParts=[...endEl.children];
+const brandEl=document.getElementById('brand'), chaptersEl=document.getElementById('chapters');
+const flashEl=document.getElementById('flash');
+
+function wordAnim(els,t,a,b,stag=.05,base=0){
+  els.forEach((w,i)=>{ const st=a+base+i*stag; const p=eout(prog(t,st,st+.55)); const q=eio(prog(t,b-.45,b));
+    w.style.opacity=(p*(1-q)).toFixed(3); w.style.transform=`translate3d(0,${((1-p)*44-q*22).toFixed(1)}px,0)`; w.style.filter=(p<1||q>0)?`blur(${((1-p)*10+q*6).toFixed(1)}px)`:'none'; });
+}
+function updOverlay(t){
+  CAPS.forEach((c,k)=>{ const e=capEls[k]; const vis=t>c.a-.1&&t<c.b+.1; e.el.style.opacity=vis?1:0; if(!vis) return;
+    const ep=eout(prog(t,c.a,c.a+.4)), eq=eio(prog(t,c.b-.4,c.b)); e.eb.style.opacity=(ep*(1-eq)).toFixed(3); e.eb.style.transform=`translateX(${((1-ep)*-24).toFixed(1)}px)`;
+    wordAnim(e.tw,t,c.a,c.b,.05,.08); wordAnim(e.sw,t,c.a,c.b,.022,.08+e.tw.length*.05+.1); });
+  const ci=CHAPTERS.findIndex(c=>c[0]===setAt(t));
+  barEls.forEach((b,i)=>{ const s=SETS[CHAPTERS[i][0]]; b.style.width=(clamp((t-s.a)/(s.b-s.a))*100).toFixed(1)+'%'; });
+  chName.innerHTML=`<b>${String(ci+1).padStart(2,'0')}</b>${CHAPTERS[ci][1]}`;
+  const endOn=prog(t,SETS.end.a+.2,SETS.end.a+.7); chaptersEl.style.opacity=(Math.min(prog(t,.4,1.2),1-endOn)).toFixed(3); brandEl.style.opacity=(Math.min(prog(t,.2,1),1-endOn)).toFixed(3);
+  // the big number: hook, then the chart verdict
+  let sOn=0, sv=0, sub='';
+  const h1=env(t,4.9,9.0); const h2=env(t,SETS.chart.a+6.6,SETS.chart.b-.5);
+  if(h1>0){ sOn=h1; sv=PCT_MAX*eout(prog(t,4.9,6.4)); sub='<em>ódýrara en hjá</em> stærsta raforkusalanum'; }
+  if(h2>0){ sOn=h2; sv=PCT_AVG*eout(prog(t,SETS.chart.a+6.6,SETS.chart.a+8)); sub='<em>undir meðalverði</em> þriggja stærstu'; }
+  // growth: revenue year by year (vb.is / Straumlind)
+  const h3=env(t,SETS.growth.a+1.0,SETS.growth.b-.5);
+  if(h3>0){ const REV=[['2021','28 m.'],['2022','408 m.'],['2023','1,1 ma.'],['2024','2,1 ma.']]; const i=Math.min(3,Math.floor(prog(t,SETS.growth.a+1.0,SETS.growth.a+4.6)*4));
+    sOn=h3; statNum.textContent=REV[i][1]; statSub.innerHTML=`<em>velta Straumlindar</em> ${REV[i][0]}`; }
+  else statNum.textContent=`${Math.round(sv)}%`;
+  statEl.style.opacity=sOn.toFixed(3); statEl.style.transform=`translateY(${((1-eout(clamp(sOn)))*24).toFixed(1)}px)`; if(h3<=0) statSub.innerHTML=sub;
+  noteEl.style.opacity=(env(t,SETS.chart.a+1,SETS.chart.b-.4)*.95).toFixed(3);
+  // yearly cost counters for the two homes
+  const cu=eout(prog(t,SETS.homes.a+2.0,SETS.homes.a+4.4));
+  homeTags.forEach((p,k)=>{ const v=(k?DATA.sl:MAXP)*DATA.usage*cu; p.el.querySelector('strong').textContent=`${fmtN(Math.round(v/100)*100)} kr.`; });
+  // the end card
+  endEl.style.opacity=t>SETS.end.a+1.4?1:0;
+  endParts.forEach((p,i)=>{ const st=SETS.end.a+1.6+i*.4; const e=eout(prog(t,st,st+.9)); p.style.opacity=e.toFixed(3); p.style.transform=`translateY(${((1-e)*36).toFixed(1)}px)`; p.style.filter=e<1?`blur(${((1-e)*10).toFixed(1)}px)`:'none'; });
+  // a soft white wipe at each cut
+  let fl=0; for(const s of Object.values(SETS)){ if(s.a>0){ fl=Math.max(fl,1-Math.abs(t-s.a)/.22); } } flashEl.style.opacity=(clamp(fl)*.55).toFixed(3);
+}
+const env=(t,a,b,fi=.5,fo=.5)=>Math.min(eio(prog(t,a,a+fi)),1-eio(prog(t,b-fo,b)));
+
+/* ================= render ================= */
+const UP=V(0,1,0);
+function faceCam(obj){ obj.quaternion.copy(camera.quaternion); }
+function render(t){
+  t=clamp(t,0,DUR-1e-3);
+  const cur=setAt(t);
+  const c=camAt(t); camera.position.copy(c.p); camera.lookAt(c.t);
+  camera.fov = cur==='homes'||cur==='sw'||cur==='end' ? 28 : 30; camera.updateProjectionMatrix(); camera.updateMatrixWorld();
+  for(const [k,g] of Object.entries(SET_GROUPS)) g.visible = k===cur || (k==='city' && cur==='growth');
+  sun.target.position.copy(c.t).setY(0); sun.position.copy(sun.target.position).add(V(-70,130,55)); sun.shadow.camera.updateProjectionMatrix();
+
+  updItems(t); updLines(t); updFlows(t);
+
+  // city: road-marking machines, dashes drawn in
+  { const s=SETS.city, g=SETS.growth; let n=0;
+    if(cur==='city'){ n=Math.floor(dashes.length*eio(prog(t,s.a+.1,s.a+3.2))*(1-prog(t,s.b-EXIT,s.b-.3))); }
+    else if(cur==='growth'){ n=Math.floor(dashes.length*eio(prog(t,g.a,g.a+1.2))*(1-prog(t,g.b-EXIT,g.b-.3))); }
+    dashIM.count=n; dashIM.visible=n>0;
+    rollers.forEach((r,k)=>{ const u=prog(t,s.a+.1+k*.25,s.a+3.4+k*.25); r.visible=cur==='city'&&u>0&&u<1; if(!r.visible) return; const lane=ROADS[[2,4,6][k]]; const along=lerp(ROADS[0]-6,ROADS[NB]+6,eio(u));
+      if(k===1){ r.position.set(along,0,lane); r.rotation.y=0; } else { r.position.set(lane,0,along); r.rotation.y=-Math.PI/2; } });
+    custPings.forEach((p,k)=>{ updPing(p,t,cur==='growth'?clamp(prog(t,p.act,p.act+.5))*(1-prog(t,g.b-EXIT,g.b-.3)):0,{speed:.5,spread:1.2}); });
+  }
+  // grid: the three homes' rings, the bill
+  GH.forEach((h,k)=>updPing(h.ping,t,cur==='grid'?env(t,SETS.grid.a+4.4+k*.15,SETS.grid.b-EXIT):0,{speed:.45,spread:1.2}));
+  if(billTop){ const s=SETS.grid; const ap=prog(t,s.a+9.2,s.a+10.1), sp=eio(prog(t,s.a+11.0,s.a+12.0)), out=1-eio(prog(t,s.b-EXIT,s.b-.3));
+    billGrp.visible=cur==='grid'&&ap>0; billGrp.scale.setScalar(Math.max(1e-3,.82*eback(ap)*out));
+    faceCam(billGrp); billGrp.position.set(6.4,.6+(1-eout(ap))*-3+Math.sin(t*1.4)*.08,-26).applyMatrix4(camera.matrixWorld);
+    billTop.position.set(-sp*.9, BILL.h/2-BH[0]/2+sp*.55, 0); billBot.position.set(sp*.9, -BILL.h/2+BH[1]/2-sp*.55, 0); billBot.rotation.z=-sp*.06; billTop.rotation.z=sp*.04;
+    billBot.userData.glow.material.opacity = sp*(.75+.25*Math.sin(t*6)); }
+  // chart: the average line grows sideways
+  // ai: brain spin
+  brain.position.y=BRAIN.y+Math.sin(t*1.3)*.4; brain.userData.rings[0].rotation.set(Math.PI/2+.3*Math.sin(t*.7),t*.7,0); brain.userData.rings[1].rotation.set(Math.PI/2.4,-t*.5,.4);
+  // homes: the car
+  { const u=eio(prog(t,CAR_IN,CAR_IN+1.8)); car.visible=cur==='homes'&&t>CAR_IN-.1&&t<SETS.homes.b-.3; car.position.set(HX[1]+4.6+lerp(22,0,u),.62,5.4); car.rotation.y=Math.PI; car.scale.setScalar(Math.max(1e-3,1-eio(prog(t,SETS.homes.b-EXIT,SETS.homes.b-.35)))); }
+  // switch cards face the camera a little
+  cards.forEach((c,k)=>{ c.g.rotation.y = -(k-1)*.12 + Math.sin(t*.8+k)*.02; c.g.position.y = 7.2 + Math.sin(t*1.1+k*1.3)*.12; });
+  // end: the two halves of the bolt fly together
+  if(boltParts.length){ const s=SETS.end; const u=eio(prog(t,s.a+.1,s.a+1.3)); boltParts.forEach((b,k)=>{ const sd=k?1:-1; b.position.set(sd*lerp(14,0,u)+b.userData.off.x, b.userData.off.y+lerp(-6,0,u)*(k?1:-1)*.3, 0); b.rotation.z=sd*lerp(.9,0,u); b.rotation.y=lerp(sd*1.2,0,u) + Math.sin(t*.9)*.05*prog(t,s.a+1.3,s.a+2); });
+    END.position.y = 9.6 + Math.sin(t*1.1)*.12; }
+
+  renderer.shadowMap.needsUpdate=true;
+  renderer.render(scene,camera);
+  updPins(t); updOverlay(t);
+}
+
+/* ================= sound cues ================= */
+function soundEvents(){
+  const ev=[]; const add=(k,t,x={})=>ev.push({k,t:+t.toFixed(3),...x});
+  for(const [k,s] of Object.entries(SETS)) if(s.a>0) add('cut',s.a,{set:k});
+  add('rise',SETS.city.a+1.0); add('lines',SETS.city.a+5.6); add('stat',4.9);
+  add('rise',SETS.grid.a+.3); add('lines',SETS.grid.a+2.0); GH.forEach((h,k)=>add('pill',SETS.grid.a+6.2+k*.35,{i:k})); add('bill',SETS.grid.a+9.3); add('split',SETS.grid.a+11.0);
+  ROWS.forEach((r,i)=>add(r.sl?'hero':'bar',SETS.chart.a+r.at+.15,{i})); add('avg',SETS.chart.a+5.4); add('stat',SETS.chart.a+6.6);
+  for(let i=0;i<5;i++) add('bar',SETS.lean.a+.4+i*.28,{i}); add('hero',SETS.lean.a+3.2); for(let k=0;k<8;k++) add('pop',SETS.lean.a+3.6+k*.08,{i:k});
+  add('rise',SETS.ai.a+.35); add('node',SETS.ai.a+.9); add('lines',SETS.ai.a+1.6); [0,1,2,3,4,5].forEach(k=>add('buy',SETS.ai.a+4.6+k*.14,{i:k}));
+  add('rise',SETS.homes.a+.4); add('count',SETS.homes.a+2.0); add('save',SETS.homes.a+4.4); add('car',CAR_IN); add('plug',SETS.homes.a+7.2);
+  custPings.filter((p,k)=>k%3===0).forEach((p,k)=>add('found',p.act,{i:k}));
+  [0,1,2].forEach(k=>add('card',SETS.sw.a+.5+k*.55,{i:k}));
+  add('bolt',SETS.end.a+1.25); add('end',SETS.end.a+1.6);
+  return {dur:DUR, sets:SETS, events:ev.sort((a,b)=>a.t-b.t)};
+}
+window.__events = soundEvents;
+
+/* ================= boot: things drawn on canvas need the fonts first ================= */
+const F='"Montserrat", sans-serif', INK='#0b3446', SOFT='#4f6873', SIG='#00a7bd', HOT='#ff7800';
+function rr(g,x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); }
+function wrap(g,text,x,y,maxW,lh){ const words=text.split(' '); let line=''; for(const w of words){ const test=line?line+' '+w:w; if(g.measureText(test).width>maxW&&line){ g.fillText(line,x,y); line=w; y+=lh; } else line=test; } g.fillText(line,x,y); return y; }
+function gridPaper(g,w,h){ g.fillStyle='#fbfcfd'; g.fillRect(0,0,w,h); g.strokeStyle='rgba(110,140,155,.12)'; g.lineWidth=1.4; g.beginPath(); for(let x=0;x<=w;x+=44){g.moveTo(x+.5,0);g.lineTo(x+.5,h);} for(let y=0;y<=h;y+=44){g.moveTo(0,y+.5);g.lineTo(w,y+.5);} g.stroke(); }
+async function init(){
+  try { await Promise.race([Promise.all([400,500,600,700,800,900].map(w=>document.fonts.load(`${w} 60px "Montserrat"`))), new Promise(r=>setTimeout(r,5000))]); } catch(e){}
+  // logo: the bolt from the real mark + the wordmark paths
+  LOGO_FULL = LOGO_SVG;
+  document.querySelector('.brand .logo-slot').innerHTML=LOGO_FULL;
+  // under the 3D bolt only the wordmark is needed
+  const tmp=document.createElement('div'); tmp.innerHTML=LOGO_FULL; const sv=tmp.firstChild; sv.querySelectorAll('path').forEach((p,i)=>{ if(i<2) p.remove(); }); sv.setAttribute('viewBox','13 0 71.19 9.81');
+  document.querySelector('.end .logo-slot').appendChild(sv);
+  // the 3D bolt
+  { const data=new SVGLoader().parse(LOGO_FULL); const mats=[M.cyan,M.orange].map(m=>{ const c=m.clone(); c.side=THREE.DoubleSide; return c; });
+    data.paths.slice(0,2).forEach((p,k)=>{ const shapes=SVGLoader.createShapes(p); const geo=new THREE.ExtrudeGeometry(shapes,{depth:2.2,bevelEnabled:true,bevelThickness:.35,bevelSize:.25,bevelSegments:4,curveSegments:24});
+      geo.scale(1,-1,1); geo.computeBoundingBox(); geo.translate(-5.06,4.9,-1.1); geo.computeVertexNormals();
+      const m=new THREE.Mesh(geo,mats[k]); m.castShadow=true; const g=new THREE.Group(); g.add(m); END.add(g); g.userData.off=V(0,0,0); g.scale.setScalar(1); boltParts.push(g); });
+    END.scale.setScalar(.62); END.position.set(0,9.4,0);
+  }
+  // the bill
+  const billCanvas=(top)=>canvasTex(BILL.px,Math.round(BILL.py*(top?2/3:1/3)),(g,w,h)=>{ g.fillStyle=top?'#f3f5f7':'#ffffff'; g.fillRect(0,0,w,h); g.strokeStyle='rgba(11,52,70,.14)'; g.lineWidth=3; g.strokeRect(1.5,1.5,w-3,h-3);
+    if(top){ g.fillStyle=SOFT; g.font=`800 30px ${F}`; g.letterSpacing='5px'; g.fillText('RAFMAGNSREIKNINGUR',60,84); g.letterSpacing='0px';
+      g.fillStyle=INK; g.font=`800 62px ${F}`; g.fillText('Flutningur og dreifing',60,190);
+      g.fillStyle=SOFT; g.font=`600 36px ${F}`; wrap(g,'Greitt til dreifiveitunnar þinnar. Sama upphæð, sama hver selur þér orkuna.',60,260,w-120,48);
+      g.fillStyle='#c9d3da'; g.font=`900 150px ${F}`; g.fillText('⅔',w-190,h-60);
+      rr(g,60,h-130,460,70,35); g.fillStyle='#dfe5ea'; g.fill(); g.fillStyle=INK; g.font=`700 30px ${F}`; g.fillText('Um ⅔ · sama hjá öllum',96,h-84); }
+    else { g.fillStyle=SIG; g.font=`800 28px ${F}`; g.letterSpacing='5px'; g.fillText('ÞÚ VELUR',60,82); g.letterSpacing='0px';
+      g.fillStyle=INK; g.font=`800 62px ${F}`; g.fillText('Raforkan sjálf',60,170);
+      g.fillStyle='rgba(255,120,0,.25)'; g.font=`900 150px ${F}`; g.fillText('⅓',w-170,h-70);
+      rr(g,60,h-130,440,70,35); g.fillStyle=HOT; g.fill(); g.fillStyle='#fff'; g.font=`700 30px ${F}`; g.fillText('Um ⅓ · hér sparar þú',96,h-84); } });
+  const half=(top)=>{ const hh=BH[top?0:1]; const g=new THREE.Group(); const p=new THREE.Mesh(new THREE.PlaneGeometry(BILL.w,hh),new THREE.MeshBasicMaterial({map:billCanvas(top),toneMapped:false})); g.add(p);
+    const back=new THREE.Mesh(new THREE.BoxGeometry(BILL.w+.2,hh+.2,.12),M.white); back.position.z=-.08; g.add(back);
+    const glow=new THREE.Mesh(new THREE.PlaneGeometry(BILL.w+1.4,hh+1.4),new THREE.MeshBasicMaterial({map:canvasTex(256,160,(gg,w,h)=>{gg.shadowColor='rgba(255,120,0,1)';gg.shadowBlur=26;gg.strokeStyle='rgba(255,120,0,1)';gg.lineWidth=7;rr(gg,22,22,w-44,h-44,10);gg.stroke();gg.stroke();}),transparent:true,depthWrite:false,toneMapped:false,opacity:0})); glow.position.z=.02; g.add(glow); g.userData.glow=glow; billGrp.add(g); return g; };
+  billTop=half(true); billBot=half(false);
+  // switching cards, in the site's own words
+  const STEPS=[['01','Skráðu þig með rafrænum skilríkjum','Þú velur vöru og staðfestir. Engin pappírsvinna.','id'],['02','Við sjáum um allt ferlið','Við látum núverandi raforkusala vita. Þú þarft ekkert að gera.','swap'],['03','Þú fylgist með á Mínum síðum','Notkun, reikningar og upprunaábyrgð á einum stað.','chart']];
+  STEPS.forEach(([n,ti,su,ic],k)=>{ cards[k].face.material.map=canvasTex(CARD.px,CARD.py,(g,w,h)=>{ gridPaper(g,w,h); g.strokeStyle='rgba(11,52,70,.25)'; g.lineWidth=2; g.strokeRect(36,36,w-72,h-72);
+    g.fillStyle=HOT; g.font=`900 150px ${F}`; g.fillText(n,80,230);
+    // line icon in the book style
+    g.save(); g.translate(w-230,150); g.strokeStyle=SIG; g.lineWidth=7; g.lineCap='round'; g.lineJoin='round'; g.beginPath();
+    if(ic==='id'){ rr(g,-55,-90,110,180,20); g.stroke(); g.beginPath(); g.arc(0,-15,26,0,Math.PI*2); g.moveTo(-34,50); g.quadraticCurveTo(0,10,34,50); }
+    if(ic==='swap'){ g.moveTo(-70,-30); g.lineTo(60,-30); g.moveTo(35,-55); g.lineTo(62,-30); g.lineTo(35,-5); g.moveTo(70,40); g.lineTo(-60,40); g.moveTo(-35,15); g.lineTo(-62,40); g.lineTo(-35,65); }
+    if(ic==='chart'){ g.moveTo(-70,70); g.lineTo(70,70); for(const [x,hh] of [[-45,50],[-5,90],[35,130]]){ g.rect(x,70-hh,26,hh); } }
+    g.stroke(); g.restore();
+    g.fillStyle=INK; g.font=`800 64px ${F}`; let y=wrap(g,ti,80,420,w-160,76);
+    g.fillStyle=SOFT; g.font=`600 40px ${F}`; wrap(g,su,80,y+100,w-160,54);
+    g.strokeStyle='rgba(0,167,189,.9)'; g.lineWidth=4; g.beginPath(); g.moveTo(80,h-150); g.lineTo(200,h-150); g.stroke(); g.fillStyle=SIG; g.font=`800 34px ${F}`; g.fillText(['Ein mínúta','Engin binding á skiptin','Allt á einum stað'][k],80,h-90); }); });
+  document.getElementById('loading').hidden=true;
+}
+
+/* ================= playback ================= */
+const viewport=document.getElementById('viewport'), stage=document.getElementById('stage');
+const scrub=document.getElementById('scrub'), timeEl=document.getElementById('time'), playBtn=document.getElementById('play'), playIcon=document.getElementById('playIcon');
+const music=document.getElementById('music'), muteBtn=document.getElementById('mute');
+let playing=false, T=0, last=0, muted=false;
+const ICON_PLAY='<path d="M7 4.5v15l13-7.5z"/>', ICON_PAUSE='<path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/>';
+const mmss=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+scrub.max=DUR;
+function layout(){
+  if(CAPTURE){ viewport.style.width=W+'px'; viewport.style.height=H+'px'; stage.style.transform='none'; renderer.setPixelRatio(1.5); renderer.setSize(W,H,false); return; }
+  const avW=document.getElementById('app').clientWidth-32, avH=window.innerHeight-80;
+  const s=Math.min(avW/W, avH/H); viewport.style.width=(W*s)+'px'; viewport.style.height=(H*s)+'px'; stage.style.transform=`scale(${s})`;
+  const q=clamp(s*(window.devicePixelRatio||1),.5,1); renderer.setSize(Math.round(W*q),Math.round(H*q),false);
+  document.getElementById('controls').style.width=(W*s)+'px';
+}
+function syncAudio(){ try{ if(Math.abs(music.currentTime-T)>.25) music.currentTime=T; }catch(e){} }
+function setPlaying(p){ playing=p; playIcon.innerHTML=p?ICON_PAUSE:ICON_PLAY; last=performance.now(); if(p&&!muted){ syncAudio(); music.play().catch(()=>{}); } else music.pause(); }
+function tick(now){ if(playing){ T+=Math.min(.1,(now-last)/1000); last=now; if(T>=DUR){T=DUR; setPlaying(false);} render(T); scrub.value=T; timeEl.textContent=`${mmss(T)} / ${mmss(DUR)}`; } requestAnimationFrame(tick); }
+playBtn.addEventListener('click',()=>{ if(T>=DUR) T=0; setPlaying(!playing); });
+muteBtn.addEventListener('click',()=>{ muted=!muted; muteBtn.style.opacity=muted?.45:1; if(muted) music.pause(); else if(playing){ syncAudio(); music.play().catch(()=>{}); } });
+scrub.addEventListener('input',()=>{ T=parseFloat(scrub.value); render(T); syncAudio(); timeEl.textContent=`${mmss(T)} / ${mmss(DUR)}`; });
+window.addEventListener('resize',()=>{ layout(); render(T); });
+window.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){ e.preventDefault(); playBtn.click(); } });
+
+window.__ready = (async()=>{ layout(); await init(); render(0); timeEl.textContent=`0:00 / ${mmss(DUR)}`;
+  if(CAPTURE) return true; requestAnimationFrame(tick); return true; })();
+window.__seek = (t)=>{ render(t); return true; };
+</script>
+</body>
+</html>
