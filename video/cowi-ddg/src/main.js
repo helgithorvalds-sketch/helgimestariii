@@ -382,6 +382,7 @@ function cityState(t) {
   U.uOrange.value = t >= T.s6 && t < T.s9 ? 0 : 1;
   C.dotU.uDotSize.value = t >= T.s6 && t < T.s7 ? 0 : t >= T.s7 && t < T.s9 ? 0.55 : t >= T.s10 && t < T.s10 + 1.2 ? 0.55 : 1.6;
   for (const pass of [cCompA.gtao, cCompB.gtao].filter(Boolean)) pass.blendIntensity = smooth(seg(t, 16.6, 17.6));
+  C.heroDot.userData.enabled = t >= T.s7 && t < T.wipe1;
   // Permit marker ring.
   C.ringMat.opacity = win(t, 16.8, 22.0, 0.6, 0.6) * 0.95;
   C.ring.scale.setScalar(1 + 0.04 * Math.sin(t * 4));
@@ -547,7 +548,10 @@ function renderDk() {
 // ------------------------------------------------------------------ overlays
 function updateOverlays(t, ctx) {
   updateCaption(t);
-  op(el.bug, win(t, 1.0, T.end - 0.2, 1.0, 0.6) * (t > T.s9 && t < T.s10 ? 0 : 1) * (t > T.wipe0 && t < T.s9 ? 0.0 : 1));
+  // Corner logo: hidden inside the 360° photo and the viewer UI (which has its own logo).
+  const bugHidden = t > T.wipe0 && t < T.s10 + 0.8;
+  const bugBack = t >= T.s10 + 0.8 ? smooth(seg(t, T.s10 + 0.8, T.s10 + 1.3)) : 1;
+  op(el.bug, win(t, 1.0, T.end - 0.2, 1.0, 0.6) * (bugHidden ? 0 : bugBack));
 
   // Permit card near the house (S4).
   {

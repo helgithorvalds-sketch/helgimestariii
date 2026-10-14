@@ -571,6 +571,14 @@ export function buildCity(data) {
   ring.position.set(hero.x, 0.3, hero.z - 0);
   root.add(ring);
 
+  // The photo dot in front of the house that the camera dives into (S7).
+  const heroDotMat = new THREE.MeshBasicMaterial({ color: COWI.orange, toneMapped: false });
+  const heroDot = accent(new THREE.Mesh(new THREE.SphereGeometry(0.55, 96, 48), heroDotMat), heroDotMat);
+  heroDot.position.set(hero.roadPoint[0], 0.6, hero.roadPoint[1]);
+  heroDot.userData.onlyIn = 'clay';
+  heroDot.userData.enabled = false;
+  root.add(heroDot);
+
   // ---------- hero street dressing: lamp posts + parked cars
   const sLens = polyLengths(hero.street.p);
   const sTotal = sLens[sLens.length - 1];
@@ -661,7 +669,7 @@ export function buildCity(data) {
   root.add(forest.group);
 
   return {
-    scene, root, U, dotU, hero, house, ring, ringMat, route, routeLens, routeU, siteCar, ddg,
+    scene, root, U, dotU, hero, house, heroDot, ring, ringMat, route, routeLens, routeU, siteCar, ddg,
     streetLens: sLens, streetTotal: sTotal, chaseDots, forest, buildingsMesh, dotsCount: dotD.length,
     treeCount: n,
   };
