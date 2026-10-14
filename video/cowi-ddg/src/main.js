@@ -18,9 +18,10 @@ export const FPS = 30;
 export const DURATION = 68;
 const W = 1920, H = 1080;
 const Q = Object.fromEntries(new URLSearchParams(location.search));
-const MSAA = Q.msaa !== undefined ? +Q.msaa : 4;
-const SHADOW = Q.shadow !== undefined ? +Q.shadow : 4096;
-const AO = Q.ao !== '0';
+const LITE = !!window.__STANDALONE && Q.hq === undefined;
+const MSAA = Q.msaa !== undefined ? +Q.msaa : LITE ? 0 : 4;
+const SHADOW = Q.shadow !== undefined ? +Q.shadow : LITE ? 2048 : 4096;
+const AO = Q.ao !== undefined ? Q.ao !== '0' : !LITE;
 const $ = (id) => document.getElementById(id);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -45,6 +46,7 @@ THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars
 );
 
 async function loadJSON(url) {
+  if (window.__DATA && window.__DATA[url]) return window.__DATA[url];
   const r = await fetch(url);
   return r.json();
 }
@@ -777,7 +779,7 @@ window.FPS = FPS;
 
 // ------------------------------------------------------------------ live playback: index.html?play
 // Plays the film in real time with music. Space = pause, ←/→ = seek 3 s, R = restart.
-if ('play' in Q) {
+if ('play' in Q || window.__STANDALONE) {
   const stage = $('stage');
   document.documentElement.style.cssText = 'width:100vw;height:100vh;background:#000';
   document.body.style.cssText = 'width:100vw;height:100vh;background:#000;overflow:hidden';
@@ -787,14 +789,14 @@ if ('play' in Q) {
   };
   fit();
   addEventListener('resize', fit);
-  const audio = new Audio('assets/music.mp3');
+  const audio = new Audio(window.__MUSIC || 'assets/music.mp3');
   audio.preload = 'auto';
   const gate = document.createElement('div');
   gate.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.75);font:700 34px Inter,sans-serif;color:#1c2b54;cursor:pointer;z-index:10';
   gate.innerHTML = `<div style="text-align:center"><div style="width:96px;height:96px;border-radius:50%;background:#f04e23;margin:0 auto 24px;display:flex;align-items:center;justify-content:center"><div style="margin-left:8px;border-left:34px solid #fff;border-top:22px solid transparent;border-bottom:22px solid transparent"></div></div>Play film<div style="font:500 18px Inter,sans-serif;color:#5b6478;margin-top:10px">Space pause · ← → seek · R restart</div></div>`;
   document.body.appendChild(gate);
   const bar = document.createElement('div');
-  bar.style.cssText = 'position:fixed;left:0;bottom:0;height:4px;background:#f04e23;z-index:9;width:0';
+  bar.style.cssText = 'position:fixed;left:0;bottom:0;height:6px;background:#f04e23;z-index:9;width:0';
   document.body.appendChild(bar);
   let playing = false, clock = 0, last = 0;
   const seek = (t) => {
@@ -806,6 +808,12 @@ if ('play' in Q) {
     if (playing) { audio.currentTime = clock; audio.play().catch(() => {}); } else audio.pause();
   };
   gate.onclick = () => { gate.remove(); seek(0); toggle(); };
+  // Tap/click the picture to pause or resume; tap the progress strip area to seek.
+  document.addEventListener('pointerdown', (e) => {
+    if (gate.isConnected) return;
+    if (e.clientY > innerHeight - 40) seek((e.clientX / innerWidth) * DURATION);
+    else toggle();
+  });
   addEventListener('keydown', (e) => {
     if (gate.isConnected) return;
     if (e.code === 'Space') toggle();
