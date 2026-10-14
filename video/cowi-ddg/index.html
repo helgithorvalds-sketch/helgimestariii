@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>COWI DDG Film</title>
+<style>
+  @font-face { font-family: Inter; font-weight: 400; src: url(node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2) format('woff2'); }
+  @font-face { font-family: Inter; font-weight: 500; src: url(node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2) format('woff2'); }
+  @font-face { font-family: Inter; font-weight: 600; src: url(node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2) format('woff2'); }
+  @font-face { font-family: Inter; font-weight: 700; src: url(node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: Inter; font-weight: 800; src: url(node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2) format('woff2'); }
+  :root {
+    --orange: #f04e23; --ocean: #1c2b54; --grass: #31b18f; --sky: #d2eaf7; --sand: #efe1d6;
+    --ink: #1c2b54; --muted: #5b6478; --line: #e3e5ea;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #f3f3f1; font-family: Inter, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  #stage { position: absolute; inset: 0; overflow: hidden; }
+  #desk { position: absolute; inset: 0; opacity: 0; background: linear-gradient(180deg, #eef0f3, #e4e7ec); }
+  canvas#c { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+  .layer { position: absolute; inset: 0; pointer-events: none; }
+
+  /* Captions: one line, lower left */
+  #caption { position: absolute; left: 96px; bottom: 92px; display: flex; align-items: stretch; opacity: 0; }
+  #caption .bar { width: 6px; background: var(--orange); border-radius: 3px; margin-right: 22px; }
+  #caption .txt { font-size: 44px; font-weight: 650; letter-spacing: -0.015em; line-height: 1.2; padding: 18px 30px 20px 0; color: var(--ink); }
+  #caption .card { display: flex; background: rgba(255,255,255,0.86); backdrop-filter: blur(14px); border-radius: 14px; padding-left: 22px; box-shadow: 0 18px 50px rgba(28,43,84,0.12); }
+
+  #bug { position: absolute; right: 80px; top: 64px; width: 128px; opacity: 0; }
+
+  /* Permit card */
+  #permit { position: absolute; width: 430px; background: #fff; border-radius: 16px; box-shadow: 0 30px 80px rgba(28,43,84,0.22); padding: 26px 28px 24px; opacity: 0; transform-origin: 0 100%; }
+  #permit .k { font-size: 15px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); }
+  #permit h3 { font-size: 30px; font-weight: 700; margin: 8px 0 4px; letter-spacing: -0.01em; }
+  #permit .addr { font-size: 19px; color: var(--muted); }
+  #permit .row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  #permit .chip { font-size: 16px; font-weight: 600; padding: 8px 12px; border-radius: 999px; background: #f2f3f6; color: var(--ink); }
+  #permit .status { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 18px; font-weight: 600; }
+  #permit .dot { width: 12px; height: 12px; border-radius: 50%; background: #e3a008; }
+  #permit .leader { position: absolute; left: 40px; bottom: -64px; width: 2px; height: 64px; background: var(--ink); opacity: 0.6; }
+
+  #clock { position: absolute; left: 50%; top: 84px; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; background: var(--ocean); color: #fff; border-radius: 999px; padding: 16px 30px 16px 22px; opacity: 0; box-shadow: 0 20px 60px rgba(28,43,84,0.3); }
+  #clock svg { width: 40px; height: 40px; }
+  #clock .t { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  #clock .l { font-size: 18px; font-weight: 500; opacity: 0.75; }
+
+  /* Callouts with leader lines */
+  .callout { position: absolute; opacity: 0; font-size: 20px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .callout .lbl { background: rgba(255,255,255,0.92); padding: 10px 16px; border-radius: 10px; box-shadow: 0 10px 30px rgba(28,43,84,0.15); display: inline-flex; align-items: center; gap: 10px; }
+  .callout .lbl i { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); display: inline-block; }
+  svg#leaders { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+
+  /* 360 viewer HUD */
+  #hud { position: absolute; inset: 0; opacity: 0; }
+  #hud .chip360 { position: absolute; left: 64px; top: 60px; display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 12px 18px; font-size: 20px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+  #hud .chip360 b { color: var(--orange); }
+  #hud .compass { position: absolute; left: 50%; top: 52px; transform: translateX(-50%); width: 560px; height: 46px; overflow: hidden; background: rgba(255,255,255,0.82); border-radius: 23px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+  #hud .compass .tape { position: absolute; top: 0; height: 46px; display: flex; align-items: center; font-size: 17px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  #hud .compass .tape span { display: inline-block; width: 70px; text-align: center; }
+  #hud .compass .needle { position: absolute; left: 50%; top: 6px; width: 2px; height: 34px; background: var(--orange); }
+  #hud .cross { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 2px solid rgba(255,255,255,0.85); border-radius: 50%; }
+  #date { position: absolute; right: 64px; bottom: 60px; background: rgba(28,43,84,0.9); color: #fff; padding: 14px 20px; border-radius: 12px; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; opacity: 0; display: flex; gap: 12px; align-items: center; }
+  #date i { width: 10px; height: 10px; background: var(--orange); border-radius: 50%; display: inline-block; }
+  #split { position: absolute; top: 0; bottom: 0; width: 4px; margin-left: -2px; background: #fff; opacity: 0; box-shadow: 0 0 24px rgba(0,0,0,0.25); }
+  #split .knob { position: absolute; top: 50%; left: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--ocean); font-weight: 800; }
+  .yr { position: absolute; top: 56px; font-size: 30px; font-weight: 800; background: rgba(255,255,255,0.92); padding: 10px 20px; border-radius: 12px; opacity: 0; letter-spacing: -0.01em; box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+  .yr small { font-size: 18px; font-weight: 600; color: var(--muted); margin-left: 8px; }
+
+  /* Big title in the panorama */
+  #title { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; opacity: 0; }
+  #title .t { display: inline-block; font-size: 84px; font-weight: 800; letter-spacing: -0.025em; color: #fff; text-shadow: 0 6px 40px rgba(0,0,0,0.35); }
+  #title .s { display: block; margin-top: 10px; font-size: 26px; font-weight: 600; color: #fff; opacity: 0.92; text-shadow: 0 4px 24px rgba(0,0,0,0.4); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* Caseworker desktop */
+  #ui { position: absolute; inset: 0; opacity: 0; }
+  #ui .top { position: absolute; left: 0; right: 0; top: 0; height: 84px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 36px; gap: 28px; }
+  #ui .brand { width: 104px; }
+  #ui .appname { font-size: 20px; font-weight: 700; color: var(--ink); border-left: 1px solid var(--line); padding-left: 24px; }
+  #ui .search { margin-left: 30px; width: 620px; height: 52px; border-radius: 12px; border: 2px solid var(--line); display: flex; align-items: center; padding: 0 18px; gap: 12px; font-size: 21px; font-weight: 500; color: var(--ink); background: #fafbfc; }
+  #ui .search .caret { width: 2px; height: 26px; background: var(--orange); }
+  #ui .search svg { width: 22px; height: 22px; }
+  #ui .user { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 18px; color: var(--muted); }
+  #ui .user .av { width: 40px; height: 40px; border-radius: 50%; background: var(--sand); }
+  #ui .side { position: absolute; right: 36px; top: 120px; width: 470px; bottom: 60px; background: #fff; border-radius: 18px; box-shadow: 0 20px 60px rgba(28,43,84,0.1); padding: 32px; }
+  #ui .side .k { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); }
+  #ui .side h3 { font-size: 32px; font-weight: 750; margin: 10px 0 6px; letter-spacing: -0.01em; }
+  #ui .side .addr { font-size: 19px; color: var(--muted); }
+  #ui .side .meta { margin-top: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #ui .side .meta div { background: #f5f6f8; border-radius: 12px; padding: 14px 16px; font-size: 16px; color: var(--muted); }
+  #ui .side .meta b { display: block; font-size: 20px; color: var(--ink); margin-top: 4px; }
+  #ui .checks { margin-top: 26px; display: flex; flex-direction: column; gap: 14px; }
+  #ui .check { display: flex; align-items: center; gap: 14px; font-size: 19px; font-weight: 600; opacity: 0; }
+  #ui .check .b { width: 30px; height: 30px; border-radius: 8px; background: var(--grass); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+  #ui .approve { position: absolute; left: 32px; right: 32px; bottom: 32px; height: 70px; border-radius: 14px; background: var(--ocean); color: #fff; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 24px; font-weight: 700; }
+  #ui .stamp { position: absolute; left: 50%; bottom: 140px; transform: translateX(-50%) rotate(-8deg); border: 5px solid var(--grass); color: var(--grass); font-size: 46px; font-weight: 800; letter-spacing: 0.08em; padding: 8px 28px; border-radius: 14px; opacity: 0; background: rgba(255,255,255,0.9); }
+  #ui .pane { position: absolute; left: 36px; top: 120px; width: 1342px; height: 755px; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(28,43,84,0.14); }
+  #ui .panebar { position: absolute; left: 36px; top: 885px; width: 1342px; display: flex; gap: 12px; align-items: center; font-size: 17px; color: var(--muted); }
+  #ui .panebar .p { background: #fff; border-radius: 10px; padding: 10px 16px; font-weight: 600; color: var(--ink); box-shadow: 0 6px 20px rgba(28,43,84,0.08); }
+  #ui .panebar .p.on { background: var(--ocean); color: #fff; }
+  #ui .pin { position: absolute; width: 44px; height: 58px; opacity: 0; }
+  #mapchip { position: absolute; left: 60px; top: 144px; background: #fff; border-radius: 12px; padding: 10px 16px; font-size: 17px; font-weight: 700; opacity: 0; box-shadow: 0 8px 24px rgba(28,43,84,0.12); }
+
+  /* End card */
+  #end { position: absolute; inset: 0; background: #fff; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  #end .logo { width: 560px; }
+  #end .tag { margin-top: 44px; font-size: 30px; font-weight: 650; color: var(--ink); letter-spacing: -0.005em; opacity: 0; }
+  #end .tag2 { margin-top: 12px; font-size: 21px; font-weight: 500; color: var(--muted); opacity: 0; letter-spacing: 0.02em; }
+  #end .rule { width: 0; height: 4px; background: var(--orange); border-radius: 2px; margin-top: 40px; }
+  #fade { position: absolute; inset: 0; background: #fff; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="desk"></div>
+  <canvas id="c" width="1920" height="1080"></canvas>
+  <div id="ui" class="layer">
+    <div class="top">
+      <div class="brand" id="uiLogo"></div>
+      <div class="appname">Panoramic Viewer</div>
+      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="#5b6478" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span id="typed"></span><span class="caret" id="caret"></span></div>
+      <div class="user"><span>Building Department · Silkeborg Municipality</span><div class="av"></div></div>
+    </div>
+    <div class="side">
+      <div class="k">Building permit · Case 2026-0412</div>
+      <h3>New carport, 32 m²</h3>
+      <div class="addr">Eksempelvej 7, 8600 Silkeborg</div>
+      <div class="meta">
+        <div>Street photo<b id="photoDate">—</b></div>
+        <div>Distance to site<b>0 km</b></div>
+        <div>Photo position<b>RTK GPS</b></div>
+        <div>Coverage<b>360°</b></div>
+      </div>
+      <div class="checks">
+        <div class="check" id="ck1"><span class="b">✓</span>Carport matches drawings</div>
+        <div class="check" id="ck2"><span class="b">✓</span>Distance to boundary OK</div>
+        <div class="check" id="ck3"><span class="b">✓</span>No site visit needed</div>
+      </div>
+      <div class="stamp" id="stamp">APPROVED</div>
+      <div class="approve" id="approveBtn">Approve permit</div>
+    </div>
+    <div class="panebar"><span class="p" id="tabMap">Map</span><span class="p" id="tabPhoto">Street photo</span><span class="p">Aerial</span><span class="p">Oblique</span><span style="margin-left:auto">Measurements are approximate · within 20 m</span></div>
+    <div id="mapchip">Street photos · 2026</div>
+    <svg class="pin" id="pin" viewBox="0 0 44 58"><path d="M22 2C11 2 3 10.5 3 21c0 14 19 34 19 34s19-20 19-34C41 10.5 33 2 22 2z" fill="#f04e23" stroke="#fff" stroke-width="3"/><circle cx="22" cy="21" r="7" fill="#fff"/></svg>
+  </div>
+  <div id="hud" class="layer">
+    <div class="chip360"><b>360°</b> Danmarks Digitale Gadefoto</div>
+    <div class="compass"><div class="tape" id="tape"></div><div class="needle"></div></div>
+    <div class="cross"></div>
+  </div>
+  <div id="split" class="layer" style="right:auto"><div class="knob">⇆</div></div>
+  <div class="yr" id="yrL">2024<small>May</small></div>
+  <div class="yr" id="yrR">2026<small>May</small></div>
+  <div id="date"><i></i><span id="dateTxt"></span></div>
+  <svg id="leaders" class="layer"></svg>
+  <div class="callout" id="co1"><span class="lbl"><i></i>360° camera · 6 lenses</span></div>
+  <div class="callout" id="co2"><span class="lbl"><i></i>RTK GPS antenna</span></div>
+  <div class="callout" id="co3"><span class="lbl"><i></i>1 photo every 7 m</span></div>
+  <div class="callout" id="co4"><span class="lbl"><i style="background:var(--grass)"></i>Backpack 360° camera</span></div>
+  <div id="permit">
+    <div class="k">Building permit application</div>
+    <h3>New carport, 32 m²</h3>
+    <div class="addr">Eksempelvej 7, 8600 Silkeborg</div>
+    <div class="row"><span class="chip">Garage / carport</span><span class="chip">Case 2026-0412</span></div>
+    <div class="status"><span class="dot"></span>Site visit required</div>
+    <div class="leader"></div>
+  </div>
+  <div id="clock"><svg viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="3"><circle cx="20" cy="20" r="16"/><path id="hand" d="M20 20 L20 9" stroke="#f04e23"/></svg><div><div class="t" id="clockT">0 min</div><div class="l">Round trip for one site visit</div></div></div>
+  <div id="title"><span class="t">Danmarks Digitale Gadefoto</span><span class="s">Denmark's Digital Street Photos</span></div>
+  <div id="caption"><div class="card"><div class="bar"></div><div class="txt" id="capTxt"></div></div></div>
+  <div id="bug"></div>
+  <div id="end"><div class="logo" id="endLogo"></div><div class="rule" id="endRule"></div><div class="tag" id="endTag">Danmarks Digitale Gadefoto</div><div class="tag2" id="endTag2">Every street in Denmark · in 360° · every 2 years</div></div>
+  <div id="fade"></div>
+</div>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
