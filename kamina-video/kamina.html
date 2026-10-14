@@ -15,8 +15,8 @@
   --paper: #eef0f3;
   --ink: #141821;
   --ink-soft: #545b69;
-  --signal: #ee7a2f;     /* accent: swap for the company colour */
-  --signal-rgb: 238,122,47;
+  --signal: #0a8ff0;     /* accent: Augnablik blue (logo runs #05CAFF → #1b46c9) */
+  --signal-rgb: 10,143,240;
   --frame: #dfe2e7;
   --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -39,7 +39,16 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
 .brand { position: absolute; left: 110px; top: 84px; display: flex; align-items: center; gap: 20px; }
 .brand .name { font-family: var(--display); font-weight: 800; font-size: 36px; letter-spacing: -.02em; }
 .brand .tag { font-size: 21px; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; }
-.brand .name:not(:empty) + .tag { padding-left: 20px; border-left: 1.5px solid rgba(20,24,33,.18); }
+.logo { display: inline-flex; align-items: center; gap: 14px; }
+.logo .eye { width: 64px; height: 38px; }
+.logo .wm { display: flex; flex-direction: column; line-height: 1; }
+.logo .wm b { font-family: var(--body); font-weight: 700; font-size: 32px; letter-spacing: -.01em; color: var(--ink); }
+.logo .wm small { margin-top: 5px; font-size: 11.5px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--ink); }
+.brand .tag { padding-left: 20px; border-left: 1.5px solid rgba(20,24,33,.18); }
+.big-logo { margin-top: 44px; gap: 22px; }
+.big-logo .eye { width: 118px; height: 69px; }
+.big-logo .wm b { font-size: 60px; }
+.big-logo .wm small { font-size: 20px; margin-top: 8px; }
 
 .chapters { position: absolute; right: 110px; top: 92px; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
 .chapters .bars { display: flex; gap: 8px; }
@@ -91,13 +100,13 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
       <canvas id="gl" width="1920" height="1080"></canvas>
       <div class="vignette"></div>
       <div id="pins"></div>
-      <header class="brand" id="brand"><span class="name" id="brandName"></span><span class="tag">Uppsetning á reykröri fyrir kamínu</span></header>
+      <header class="brand" id="brand"><span class="logo"><svg class="eye" viewBox="0 0 120 70" aria-hidden="true"><defs><linearGradient id="ag1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#05CAFF"/><stop offset="1" stop-color="#1b46c9"/></linearGradient></defs><path d="M3 35 Q60 -14 117 35 Q60 84 3 35Z" fill="url(#ag1)"/><circle cx="60" cy="35" r="21" fill="#fff"/><circle cx="60" cy="35" r="17" fill="url(#ag1)"/><path d="M54 25 L72 35 L54 45Z" fill="#fff"/></svg><span class="wm"><b>Augnablik</b><small>Kvikmyndagerð</small></span></span><span class="tag">Uppsetning á reykröri fyrir kamínu</span></header>
       <nav class="chapters" id="chapters" aria-label="Kaflar"><div class="bars"></div><div class="name"></div></nav>
       <div id="caps"></div>
       <div class="end" id="end">
         <div class="big">Tilbúið.</div>
         <div class="line">Reykrörið er komið upp og kamínan er klár í notkun.</div>
-        <div class="who" id="endName"></div>
+        <div class="logo big-logo"><svg class="eye" viewBox="0 0 120 70" aria-hidden="true"><defs><linearGradient id="ag2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#05CAFF"/><stop offset="1" stop-color="#1b46c9"/></linearGradient></defs><path d="M3 35 Q60 -14 117 35 Q60 84 3 35Z" fill="url(#ag2)"/><circle cx="60" cy="35" r="21" fill="#fff"/><circle cx="60" cy="35" r="17" fill="url(#ag2)"/><path d="M54 25 L72 35 L54 45Z" fill="#fff"/></svg><span class="wm"><b>Augnablik</b><small>Kvikmyndagerð</small></span></div>
       </div>
       <div class="grain"></div>
       <div id="loading">Hleð inn húsinu…</div>
@@ -123,14 +132,12 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 /* ---------- brand: fill in the company name and colour ---------- */
-const BRAND = { name: '', accent: '#ee7a2f' };
+const BRAND = { name: 'Augnablik', accent: '#0a8ff0' };
 
 const W = 1920, H = 1080, DUR = 102;
 const CAPTURE = location.hash.includes('capture');
 if (CAPTURE) document.documentElement.classList.add('capture');
 { const c=new THREE.Color(BRAND.accent); const r=document.documentElement.style; r.setProperty('--signal',BRAND.accent); r.setProperty('--signal-rgb',`${Math.round(c.r*255)},${Math.round(c.g*255)},${Math.round(c.b*255)}`); }
-document.getElementById('brandName').textContent = BRAND.name;
-document.getElementById('endName').textContent = BRAND.name;
 
 /* ---------- helpers ---------- */
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
@@ -183,6 +190,9 @@ const ACC=new THREE.Color(BRAND.accent);
 const accRGB=`${Math.round(ACC.r*255)},${Math.round(ACC.g*255)},${Math.round(ACC.b*255)}`;
 const texGlow=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,128,0,128,128,128);r.addColorStop(0,`rgba(${accRGB},.55)`);r.addColorStop(.45,`rgba(${accRGB},.16)`);r.addColorStop(1,`rgba(${accRGB},0)`);g.fillStyle=r;g.fillRect(0,0,256,256);});
 const texFire=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,150,0,128,140,128);r.addColorStop(0,'rgba(255,214,140,1)');r.addColorStop(.35,'rgba(255,140,50,.85)');r.addColorStop(1,'rgba(255,90,20,0)');g.fillStyle=r;g.fillRect(0,0,256,256);});
+const texBoards=(a,b)=>canvasTex(256,256,(g,w,h)=>{ g.fillStyle=a; g.fillRect(0,0,w,h); g.fillStyle=b; for(let k=0;k<4;k++){ g.fillRect(0,k*64,w,2); g.fillRect(((k*97)%4)*64+20,k*64,2,64); } },{repeat:true});
+const texClad=canvasTex(128,128,(g,w,h)=>{ g.fillStyle='#fbfbfc'; g.fillRect(0,0,w,h); g.fillStyle='#e8ebf0'; g.fillRect(0,0,5,h); },{repeat:true});
+const texArt=canvasTex(256,180,(g,w,h)=>{ g.fillStyle='#f1f2f4'; g.fillRect(0,0,w,h); g.strokeStyle='#b8c0cc'; g.lineWidth=3; g.beginPath(); g.moveTo(10,150); g.bezierCurveTo(70,60,120,140,170,80); g.lineTo(246,40); g.stroke(); g.fillStyle='rgba(5,140,230,.35)'; g.beginPath(); g.arc(190,55,18,0,7); g.fill(); });
 const texSeam=canvasTex(128,128,g=>{g.fillStyle='#f4f5f8';g.fillRect(0,0,128,128);g.fillStyle='#dfe3ea';g.fillRect(0,0,6,128);},{repeat:true});
 
 /* blueprint sheet under the house, as in the reference: faint grid, plan outlines and dimension lines */
@@ -211,7 +221,17 @@ const M={
   white:new THREE.MeshStandardMaterial({color:'#ffffff',roughness:.9}),
   wall:new THREE.MeshStandardMaterial({color:'#fbfbfc',roughness:.92}),
   base:new THREE.MeshStandardMaterial({color:'#e8ebf0',roughness:.8}),
-  floor:new THREE.MeshStandardMaterial({color:'#efe6da',roughness:.85}),
+  floor:new THREE.MeshStandardMaterial({map:texBoards('#eadbc6','#dcc9ae'),roughness:.8}),
+  deck:new THREE.MeshStandardMaterial({map:texBoards('#e4d4bd','#d3bfa2'),roughness:.9}),
+  clad:new THREE.MeshStandardMaterial({map:texClad,roughness:.9}),
+  wood:new THREE.MeshStandardMaterial({color:'#dcc19c',roughness:.8}),
+  woodLight:new THREE.MeshStandardMaterial({color:'#e8d6bb',roughness:.75}),
+  stone:new THREE.MeshStandardMaterial({color:'#dfe1e4',roughness:.5}),
+  cushion:new THREE.MeshStandardMaterial({color:'#d9dde5',roughness:.95}),
+  leaf:new THREE.MeshStandardMaterial({color:'#d6dfd2',roughness:1}),
+  art:new THREE.MeshStandardMaterial({map:texArt,roughness:.9}),
+  path:new THREE.MeshStandardMaterial({color:'#e6e8ec',roughness:1}),
+  dark:new THREE.MeshStandardMaterial({color:'#4a505c',roughness:.6}),
   rug:new THREE.MeshStandardMaterial({color:'#e3e6ec',roughness:1}),
   soft:new THREE.MeshStandardMaterial({color:'#e9ecf1',roughness:.95}),
   win:new THREE.MeshStandardMaterial({color:'#dfe6ef',roughness:.25}),
@@ -246,52 +266,120 @@ const sheet=new THREE.Mesh(new THREE.PlaneGeometry(SHEET,SHEET),M.sheet); sheet.
 /* ---------- the house ---------- */
 const house=new THREE.Group(); scene.add(house);
 mesh(new RoundedBoxGeometry(2*HX+1.2,.3,2*HZ+1.2,2,.08),M.base,house,{y:GY+.15});
-mesh(new THREE.BoxGeometry(2*HX,.04,2*HZ),M.floor,house,{y:.02,edge:false});
-// steps up to the open front
-for(let k=0;k<2;k++) mesh(new THREE.BoxGeometry(2.4,.15,.42),M.white,house,{x:2.6,y:GY+.075+k*.15,z:HZ+.6+.42*(1-k)+.21});
-// back wall with windows
-mesh(new THREE.BoxGeometry(2*HX+.2,HW,.2),M.wall,house,{y:HW/2,z:-HZ});
-for(const x of [-3.2,2.9]){ mesh(new THREE.BoxGeometry(1.6,1.3,.04),M.win,house,{x,y:1.55,z:-HZ+.12,shadow:false}); }
-// gable walls
+{ const g=new THREE.BoxGeometry(2*HX,.04,2*HZ); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*2*HX/.9,uv.getY(i)*2*HZ/.9); mesh(g,M.floor,house,{y:.02,edge:false}); }
+// deck and steps in front of the glazed living room
+{ const g=new THREE.BoxGeometry(6.4,.12,1.6); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*6.4/.9,uv.getY(i)*1.6/.9); mesh(g,M.deck,house,{x:1.6,y:-.06,z:HZ+.9}); }
+for(let k=0;k<2;k++) mesh(new THREE.BoxGeometry(1.8,.12,.36),M.deck,house,{x:3.4,y:GY+.06+k*.12,z:HZ+1.7+.36*(1-k)+.18});
+// outdoor chairs + low table on the deck
+for(const x of [3.9,4.7]){ const c=new THREE.Group(); c.position.set(x,0,HZ+1.05); house.add(c); mesh(new RoundedBoxGeometry(.6,.3,.6,2,.05),M.soft,c,{y:.15}); mesh(new RoundedBoxGeometry(.6,.4,.12,2,.04),M.soft,c,{y:.4,z:.26}); }
+mesh(new THREE.CylinderGeometry(.22,.22,.32,24),M.white,house,{x:4.3,y:.16,z:HZ+.55});
+
+// exterior walls: vertical timber cladding, framed windows
+function windowIn(parent,{x=0,y=1.5,z=0,w=1.4,h=1.3,axis='z'}){   // frame + glass + sill, set into a wall
+  const fx=axis==='z'?w:.26, fz=axis==='z'?.26:w;
+  mesh(new THREE.BoxGeometry(axis==='z'?w:.08,h,axis==='z'?.08:w),M.win,parent,{x,y,z,shadow:false,edge:false});
+  for(const d of [-1,1]){ mesh(new THREE.BoxGeometry(axis==='z'?.07:fx,h+.07,axis==='z'?fz:.07),M.white,parent,{x:axis==='z'?x+d*w/2:x,y,z:axis==='z'?z:z+d*w/2,edge:false}); }
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(axis==='z'?w+.07:fx,.07,axis==='z'?fz:w+.07),M.white,parent,{x,y:y+d*h/2,z,edge:false});
+  mesh(new THREE.BoxGeometry(axis==='z'?w+.2:.34,.05,axis==='z'?.34:w+.2),M.white,parent,{x,y:y-h/2-.04,z});
+  mesh(new THREE.BoxGeometry(axis==='z'?.04:fx,h,axis==='z'?fz:.04),M.white,parent,{x,y,z,edge:false});   // mullion
+}
+{ const g=new THREE.BoxGeometry(2*HX+.2,HW,.2); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*(2*HX)/.16,uv.getY(i)); mesh(g,M.clad,house,{y:HW/2,z:-HZ}); }
+for(const x of [-3.0,-.4,3.1]) windowIn(house,{x,z:-HZ,w:1.3,h:1.15,y:1.6});
 const gableShape=new THREE.Shape(); gableShape.moveTo(-HZ,0); gableShape.lineTo(HZ,0); gableShape.lineTo(0,HZ*TAN); gableShape.closePath();
 for(const sx of [-1,1]){
-  mesh(new THREE.BoxGeometry(.2,HW,2*HZ),M.wall,house,{x:sx*HX,y:HW/2});
+  const g=new THREE.BoxGeometry(.2,HW,2*HZ); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*(2*HZ)/.16,uv.getY(i)); mesh(g,M.clad,house,{x:sx*HX,y:HW/2});
   const gg=new THREE.ExtrudeGeometry(gableShape,{depth:.2,bevelEnabled:false}); gg.rotateY(Math.PI/2); gg.translate(-.1,0,0);
-  mesh(gg,M.wall,house,{x:sx*HX,y:HW});
-  mesh(new THREE.BoxGeometry(.04,1.5,1.9),M.win,house,{x:sx*(HX+.12),y:1.5,z:-1.2,shadow:false});
+  { const uv=gg.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)/.16,uv.getY(i)/2); }
+  mesh(gg,M.clad,house,{x:sx*HX,y:HW});
+  windowIn(house,{x:sx*HX,z:-1.8,w:1.5,h:1.3,y:1.5,axis:'x'}); windowIn(house,{x:sx*HX,z:1.9,w:1.0,h:1.3,y:1.5,axis:'x'});
+  windowIn(house,{x:sx*HX,z:0,w:.7,h:.7,y:HW+.75,axis:'x'});
+  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(.24,HW,.24),M.white,house,{x:sx*HX,y:HW/2,z:sz*HZ});   // corner boards
 }
-// open, glazed front: thin frame, glass you can see straight through
+// open, glazed front: slim frame, glass you can see straight through
 const front=new THREE.Mesh(new THREE.BoxGeometry(2*HX,HW,.03),M.frontGlass); front.position.set(0,HW/2,HZ); front.renderOrder=2; house.add(front); outline(front,house,edgeSoft);
-for(const x of [-HX,-3.4,1.7,HX]) mesh(new THREE.BoxGeometry(.1,HW,.12),M.white,house,{x,y:HW/2,z:HZ});
-mesh(new THREE.BoxGeometry(2*HX+.1,.14,.16),M.white,house,{y:HW-.07,z:HZ});
-mesh(new THREE.BoxGeometry(2*HX+.1,.1,.16),M.white,house,{y:.07,z:HZ});
+for(const x of [-3.4,1.7]) mesh(new THREE.BoxGeometry(.08,HW,.1),M.white,house,{x,y:HW/2,z:HZ});
+mesh(new THREE.BoxGeometry(2*HX+.1,.12,.14),M.white,house,{y:HW-.06,z:HZ});
+mesh(new THREE.BoxGeometry(2*HX+.1,.08,.14),M.white,house,{y:.06,z:HZ});
+mesh(new THREE.BoxGeometry(2*HX,.035,.08),M.white,house,{y:2.15,z:HZ,edge:false});        // transom bar
 
-// roof: far slope solid with standing seams, near slope opened up (rafters + glass) so the flue stays visible
+// roof: far slope and the ends of the near slope finished in standing seam; the middle of the near slope is opened up
+// to its timber (rafters + battens behind glass), like the cut-away in the reference, so the flue stays visible
 const L_SLOPE=(HZ+OVER)/COS, RW=2*HX+2*OVER;
+const CUT0=-3.75, CUT1=.75;
 function slope(sign){ const g=new THREE.Group(); g.position.set(0,RU,0); g.rotation.x=sign*TH; house.add(g); return g; }
+function seamSlab(parent,x0,x1,z0,z1){ const w=x1-x0, l=Math.abs(z1-z0); const geo=new THREE.BoxGeometry(w,RT,l); const uv=geo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*w/.6,uv.getY(i));
+  mesh(geo,[M.white,M.white,M.seam,M.white,M.white,M.white],parent,{x:(x0+x1)/2,y:RT/2,z:(z0+z1)/2}); }
 const farS=slope(-1);
-{ const geo=new THREE.BoxGeometry(RW,RT,L_SLOPE); const uv=geo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*RW/.6,uv.getY(i));
-  const m=mesh(geo,[M.white,M.white,M.seam,M.white,M.white,M.white],farS,{y:RT/2,z:-L_SLOPE/2}); }
+seamSlab(farS,-RW/2,RW/2,0,-L_SLOPE);
 mesh(new THREE.BoxGeometry(RW,.32,.08),M.white,farS,{y:RT/2-.04,z:-L_SLOPE});
 const nearS=slope(1);
-{ const panel=new THREE.Mesh(new THREE.BoxGeometry(RW,RT,L_SLOPE),M.roofGlass); panel.position.set(0,RT/2,L_SLOPE/2); panel.renderOrder=3; nearS.add(panel); outline(panel,nearS,edgeSoft);
-  for(let x=-HX-OVER+.25; x<=HX+OVER-.1; x+=1.2){ if(Math.abs(x-AX)<.42) continue; mesh(new THREE.BoxGeometry(.07,RT*.82,L_SLOPE-.06),M.white,nearS,{x,y:RT*.41,z:L_SLOPE/2}); }
-  for(const x of [AX-.38,AX+.38]) mesh(new THREE.BoxGeometry(.07,RT*.82,L_SLOPE-.06),M.white,nearS,{x,y:RT*.41,z:L_SLOPE/2});   // rafters each side of the opening
+seamSlab(nearS,-RW/2,CUT0,0,L_SLOPE); seamSlab(nearS,CUT1,RW/2,0,L_SLOPE);
+{ const panel=new THREE.Mesh(new THREE.BoxGeometry(CUT1-CUT0,.02,L_SLOPE),M.roofGlass); panel.position.set((CUT0+CUT1)/2,RT-.01,L_SLOPE/2); panel.renderOrder=3; nearS.add(panel); outline(panel,nearS,edgeSoft);
+  for(let x=CUT0+.12; x<CUT1; x+=.8){ if(Math.abs(x-AX)<.45) continue; mesh(new THREE.BoxGeometry(.07,RT*.8,L_SLOPE-.06),M.wood,nearS,{x,y:RT*.4,z:L_SLOPE/2}); }
+  for(const x of [AX-.36,AX+.36]) mesh(new THREE.BoxGeometry(.07,RT*.8,L_SLOPE-.06),M.wood,nearS,{x,y:RT*.4,z:L_SLOPE/2});   // trimmers each side of the flue
+  for(let s2=.25; s2<L_SLOPE-.1; s2+=.42){ if(Math.abs(s2-AZ/COS)<.32) { for(const [x0,x1] of [[CUT0,AX-.25],[AX+.25,CUT1]]) mesh(new THREE.BoxGeometry(x1-x0,.04,.07),M.woodLight,nearS,{x:(x0+x1)/2,y:RT*.8+.02,z:s2,edge:false}); continue; }
+    mesh(new THREE.BoxGeometry(CUT1-CUT0,.04,.07),M.woodLight,nearS,{x:(CUT0+CUT1)/2,y:RT*.8+.02,z:s2,edge:false}); }   // battens
   mesh(new THREE.BoxGeometry(RW,.32,.08),M.white,nearS,{y:RT/2-.04,z:L_SLOPE});                         // fascia
   for(const sx of [-1,1]) mesh(new THREE.BoxGeometry(.08,RT+.04,L_SLOPE),M.white,nearS,{x:sx*RW/2,y:RT/2,z:L_SLOPE/2});  // verge
 }
+// gutters and downpipes
+for(const sz of [-1,1]){ const zE=sz*(HZ+OVER+.09), yE=HW-OVER*TAN-.12;
+  mesh(new THREE.CylinderGeometry(.08,.08,RW,20,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateX(sz>0?0:Math.PI),M.white,house,{y:yE,z:zE,edge:false});
+  for(const sx of [-1,1]) mesh(new THREE.CylinderGeometry(.04,.04,yE-GY,12),M.white,house,{x:sx*(HX+.25),y:(yE+GY)/2,z:zE,edge:false}); }
 // ridge cap
 const ridgeShape=new THREE.Shape(); ridgeShape.moveTo(-.3,-.02); ridgeShape.lineTo(0,.16); ridgeShape.lineTo(.3,-.02); ridgeShape.lineTo(.3,-.06); ridgeShape.lineTo(0,.11); ridgeShape.lineTo(-.3,-.06); ridgeShape.closePath();
 { const rg=new THREE.ExtrudeGeometry(ridgeShape,{depth:RW+.04,bevelEnabled:false}); rg.rotateY(Math.PI/2); rg.translate(-(RW+.04)/2,0,0); mesh(rg,M.white,house,{y:RIDGE_TOP}); }
 
-// interior: rug, sofa, coffee table, shelf, plant, kitchen bench
-mesh(new THREE.BoxGeometry(2.6,.02,2.0),M.rug,house,{x:.6,y:.05,z:1.4,edge:false});
-const sofa=new THREE.Group(); sofa.position.set(2.5,0,1.2); house.add(sofa);
-mesh(new RoundedBoxGeometry(.9,.42,2.2,2,.08),M.soft,sofa,{y:.25}); mesh(new RoundedBoxGeometry(.22,.75,2.2,2,.08),M.soft,sofa,{x:.36,y:.42}); for(const z of [-1.05,1.05]) mesh(new RoundedBoxGeometry(.9,.55,.16,2,.06),M.soft,sofa,{y:.3,z});
-mesh(new RoundedBoxGeometry(1.0,.06,.6,2,.02),M.white,house,{x:.7,y:.4,z:1.3}); for(const [x,z] of [[.3,1.05],[1.1,1.05],[.3,1.55],[1.1,1.55]]) mesh(new THREE.CylinderGeometry(.025,.025,.37,8),M.white,house,{x,y:.19,z,edge:false});
-mesh(new THREE.BoxGeometry(2.6,.9,.6),M.white,house,{x:-3.0,y:.45,z:-3.55}); mesh(new THREE.BoxGeometry(2.6,.05,.64),M.base,house,{x:-3.0,y:.92,z:-3.55});
-mesh(new THREE.BoxGeometry(1.8,1.6,.34),M.white,house,{x:2.6,y:.8,z:-3.72}); for(const y of [.55,1.05]) mesh(new THREE.BoxGeometry(1.7,.03,.3),M.base,house,{x:2.6,y,z:-3.68,edge:false});
-mesh(new THREE.CylinderGeometry(.18,.14,.4,20),M.white,house,{x:4.4,y:.2,z:-3.4}); mesh(new THREE.IcosahedronGeometry(.42,2),M.tree,house,{x:4.4,y:.75,z:-3.4,edge:false});
+/* interior: rooms behind, open living room in front with the stove */
+const PH=2.45;   // partitions stop short of the sloped ceiling, like a cut model
+function wall(x0,z0,x1,z1,gaps=[]){ // straight partition along x or z, with door openings [from,to] along its length
+  const alongX=Math.abs(x1-x0)>Math.abs(z1-z0), a0=alongX?x0:z0, a1=alongX?x1:z1; let cur=a0; const segs=[];
+  for(const [g0,g1] of [...gaps,[a1,a1]]){ if(g0>cur) segs.push([cur,g0]); if(g1<a1){ mesh(new THREE.BoxGeometry(alongX?g1-g0:.12,PH-2.1,alongX?.12:g1-g0),M.wall,house,{x:alongX?(g0+g1)/2:x0,y:2.1+(PH-2.1)/2,z:alongX?z0:(g0+g1)/2}); } cur=g1; }
+  for(const [s0,s1] of segs) mesh(new THREE.BoxGeometry(alongX?s1-s0:.12,PH,alongX?.12:s1-s0),M.wall,house,{x:alongX?(s0+s1)/2:x0,y:PH/2,z:alongX?z0:(s0+s1)/2});
+}
+wall(1.2,-HZ+.1,1.2,-.5,[[-2.0,-1.1]]);            // bedroom | kitchen
+wall(1.2,-.5,HX-.1,-.5,[[3.7,4.55]]);               // bedroom | living room
+wall(-HX+.1,-1.3,-2.3,-1.3);                        // short wall behind the kitchen island zone
+// kitchen along the back wall
+mesh(new THREE.BoxGeometry(3.6,.88,.62),M.white,house,{x:-2.9,y:.44,z:-HZ+.42}); mesh(new THREE.BoxGeometry(3.66,.05,.66),M.stone,house,{x:-2.9,y:.905,z:-HZ+.42});
+for(let k=0;k<6;k++) mesh(new THREE.BoxGeometry(.01,.7,.55),M.base,house,{x:-4.65+k*.6,y:.45,z:-HZ+.43,edge:false});
+mesh(new THREE.BoxGeometry(.7,2.1,.66),M.white,house,{x:-.75,y:1.05,z:-HZ+.43});                         // tall fridge unit
+mesh(new THREE.BoxGeometry(2.4,.6,.36),M.white,house,{x:-3.4,y:2.0,z:-HZ+.28});                           // wall cabinets
+mesh(new THREE.BoxGeometry(.5,.02,.38),M.steel,house,{x:-2.4,y:.935,z:-HZ+.42,edge:false});               // sink
+// dining table, chairs, pendant
+mesh(new RoundedBoxGeometry(1.7,.05,.9,2,.02),M.woodLight,house,{x:-.4,y:.76,z:-2.3});
+for(const [x,z] of [[-1.1,-2.6],[.3,-2.6],[-1.1,-2.0],[.3,-2.0]]) mesh(new THREE.CylinderGeometry(.025,.025,.74,8),M.woodLight,house,{x,y:.37,z,edge:false});
+for(const [x,z,r] of [[-.9,-2.95,0],[.1,-2.95,0],[-.9,-1.65,Math.PI],[.1,-1.65,Math.PI]]){ const c=new THREE.Group(); c.position.set(x,0,z); c.rotation.y=r; house.add(c);
+  mesh(new RoundedBoxGeometry(.42,.05,.42,2,.02),M.woodLight,c,{y:.46}); mesh(new RoundedBoxGeometry(.42,.42,.04,2,.02),M.woodLight,c,{y:.7,z:-.19}); for(const [lx,lz] of [[-.18,-.18],[.18,-.18],[-.18,.18],[.18,.18]]) mesh(new THREE.CylinderGeometry(.015,.015,.45,6),M.woodLight,c,{x:lx,y:.22,z:lz,edge:false}); }
+mesh(new THREE.CylinderGeometry(.006,.006,1.3,6),M.dark,house,{x:-.4,y:3.15,z:-2.3,edge:false}); mesh(new THREE.ConeGeometry(.24,.2,32,1,true),M.white,house,{x:-.4,y:2.45,z:-2.3,edge:false});
+// bedroom
+mesh(new RoundedBoxGeometry(1.7,.42,2.1,2,.06),M.white,house,{x:3.1,y:.21,z:-2.85}); mesh(new RoundedBoxGeometry(1.66,.12,1.5,2,.05),M.soft,house,{x:3.1,y:.47,z:-2.5});
+mesh(new RoundedBoxGeometry(1.8,.9,.1,2,.03),M.woodLight,house,{x:3.1,y:.55,z:-3.88});
+for(const x of [2.0,4.2]) mesh(new RoundedBoxGeometry(.45,.45,.4,2,.03),M.woodLight,house,{x,y:.225,z:-3.7});
+for(const x of [2.0,4.2]){ mesh(new THREE.CylinderGeometry(.09,.13,.18,20),M.white,house,{x,y:.54,z:-3.7,edge:false}); }
+mesh(new THREE.BoxGeometry(.6,2.1,1.6),M.white,house,{x:HX-.42,y:1.05,z:-1.5});                           // wardrobe
+// living room: sofa facing the stove, armchair, rug, coffee table, floor lamp, shelves, plants, log basket
+mesh(new THREE.BoxGeometry(3.0,.02,2.2),M.rug,house,{x:.75,y:.05,z:1.5,edge:false});
+const sofa=new THREE.Group(); sofa.position.set(2.6,0,1.4); house.add(sofa);
+mesh(new RoundedBoxGeometry(.95,.42,2.3,3,.1),M.soft,sofa,{y:.25}); mesh(new RoundedBoxGeometry(.24,.78,2.3,3,.1),M.soft,sofa,{x:.36,y:.44}); for(const z of [-1.08,1.08]) mesh(new RoundedBoxGeometry(.95,.58,.18,3,.08),M.soft,sofa,{y:.32,z});
+for(const z of [-.55,.55]) mesh(new RoundedBoxGeometry(.2,.42,.62,3,.08),M.cushion,sofa,{x:.2,y:.62,z});
+mesh(new THREE.BoxGeometry(.9,.12,2.3),M.base,sofa,{y:.06,edge:false});
+const arm=new THREE.Group(); arm.position.set(-.1,0,3.0); arm.rotation.y=-.6; house.add(arm);
+mesh(new RoundedBoxGeometry(.8,.4,.8,3,.1),M.soft,arm,{y:.24}); mesh(new RoundedBoxGeometry(.8,.66,.18,3,.08),M.soft,arm,{y:.42,z:-.32}); for(const x of [-.36,.36]) mesh(new RoundedBoxGeometry(.14,.52,.8,3,.06),M.soft,arm,{x,y:.32});
+mesh(new THREE.CylinderGeometry(.42,.42,.05,40),M.woodLight,house,{x:.9,y:.42,z:1.5}); mesh(new THREE.CylinderGeometry(.06,.1,.38,16),M.woodLight,house,{x:.9,y:.2,z:1.5,edge:false});
+mesh(new THREE.BoxGeometry(.22,.04,.3),M.cushion,house,{x:.82,y:.46,z:1.42,edge:false}); mesh(new THREE.CylinderGeometry(.06,.05,.14,16),M.white,house,{x:1.05,y:.51,z:1.62,edge:false});
+mesh(new THREE.CylinderGeometry(.14,.14,.03,24),M.dark,house,{x:3.5,y:.03,z:3.2,edge:false}); mesh(new THREE.CylinderGeometry(.012,.012,1.5,8),M.dark,house,{x:3.5,y:.78,z:3.2,edge:false}); mesh(new THREE.ConeGeometry(.22,.26,32,1,true),M.white,house,{x:3.5,y:1.58,z:3.2,edge:false});
+// shelving on the left gable wall, books
+mesh(new THREE.BoxGeometry(.34,2.0,1.8),M.white,house,{x:-HX+.3,y:1.0,z:1.1});
+for(let r=0;r<4;r++) for(let k=0;k<7;k++){ if((r*7+k)%5===3) continue; const h=.22+((r*3+k*7)%5)*.025; mesh(new THREE.BoxGeometry(.24,h,.05+((k+r)%3)*.02),(r+k)%4===0?M.cushion:M.base,house,{x:-HX+.3,y:.12+r*.5+h/2,z:.35+k*.22,edge:false}); }
+// plants
+function plant(x,z,s=1){ mesh(new THREE.CylinderGeometry(.16*s,.12*s,.34*s,20),M.white,house,{x,y:.17*s,z}); for(let k=0;k<5;k++){ const a=k*1.26; mesh(new THREE.IcosahedronGeometry(.2*s,1),M.leaf,house,{x:x+Math.cos(a)*.12*s,y:(.5+((k*7)%3)*.12)*s,z:z+Math.sin(a)*.12*s,edge:false}); } }
+plant(-4.4,3.3,1.2); plant(4.5,.1,1.1); plant(-1.8,-.9,.9);
+// log basket and a small stack of wood by the stove
+mesh(new THREE.CylinderGeometry(.24,.2,.32,24,1,true),M.woodLight,house,{x:AX+.95,y:.16,z:AZ+.15});
+for(let k=0;k<5;k++) mesh(new THREE.CylinderGeometry(.045,.045,.42,10).rotateZ(Math.PI/2),M.wood,house,{x:AX+.95,y:.2+(k>2?.09:0),z:AZ+.03+(k%3)*.09-(k>2?-.045:0),edge:false});
+// pictures on the walls
+for(const [x,z,w,h] of [[-.6,-1.24,.7,.5],[2.4,-.42,1.0,.6]]) { mesh(new THREE.BoxGeometry(w,h,.03),M.white,house,{x,y:1.55,z}); mesh(new THREE.BoxGeometry(w-.14,h-.14,.035),M.art,house,{x,y:1.55,z,edge:false}); }
 
 // the stove (dark) on its hearth, facing the open front
 const STOVE=new THREE.Group(); STOVE.position.set(AX,0,AZ); house.add(STOVE);
@@ -308,8 +396,16 @@ const fireLight=new THREE.PointLight('#ff9a4a',0,5,1.6); fireLight.position.set(
 
 // garden: a few clay trees and shrubs, kept clear of the work area on the right
 function tree(x,z,s){ mesh(new THREE.CylinderGeometry(.07*s,.1*s,1.3*s,10),M.trunk,scene,{x,y:GY+.65*s,z,edge:false}); mesh(new THREE.IcosahedronGeometry(.9*s,3),M.tree,scene,{x,y:GY+1.75*s,z,edge:false}); }
-for(const [x,z,s] of [[-7.6,-3.2,1.2],[-8.4,1.6,1.0],[-6.9,4.9,.85],[-3.6,-7.2,1.15],[2.6,-7.4,1.0],[6.8,-6.0,1.2],[-9.6,-6.4,1.3]]) tree(x,z,s);
-for(const [x,z,s] of [[-4.2,5.6,.45],[-3.2,5.8,.38],[-1.0,5.7,.4],[5.9,-3.6,.4],[-6.2,-1.4,.42]]) mesh(new THREE.IcosahedronGeometry(s,2),M.tree,scene,{x,y:GY+s*.75,z,edge:false});
+for(const [x,z,s] of [[-7.6,-3.2,1.2],[-8.8,-5.2,1.0],[-3.6,-7.2,1.15],[2.6,-7.4,1.0],[6.8,-6.0,1.2],[-9.6,-6.4,1.3]]) tree(x,z,s);
+// driveway and a car on the left, like in the reference
+mesh(new THREE.BoxGeometry(3.2,.02,9),M.path,scene,{x:-7.9,y:GY+.01,z:1.0,edge:false});
+{ const car=new THREE.Group(); car.position.set(-7.9,GY,-1.2); scene.add(car);
+  mesh(new RoundedBoxGeometry(1.8,.62,4.3,3,.18),M.white,car,{y:.52}); mesh(new RoundedBoxGeometry(1.6,.55,2.3,3,.2),M.white,car,{y:1.02,z:.15});
+  for(const sx of [-1,1]) mesh(new THREE.BoxGeometry(.02,.4,1.9),M.win,car,{x:sx*.805,y:1.04,z:.15,edge:false});
+  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(1.4,.38,.02),M.win,car,{y:1.03,z:.15+sz*1.13,edge:false});
+  for(const [x,z] of [[-.88,-1.35],[.88,-1.35],[-.88,1.35],[.88,1.35]]) mesh(new THREE.CylinderGeometry(.33,.33,.22,24).rotateZ(Math.PI/2),M.dark,car,{x,y:.33,z,edge:false}); }
+for(let k=0;k<7;k++) mesh(new RoundedBoxGeometry(1.1,.7,.7,2,.25),M.tree,scene,{x:-1.0-k*1.15,y:GY+.35,z:-6.2});
+for(const [x,z,s] of [[-5.6,4.9,.42],[-4.9,5.2,.34],[5.9,-3.6,.4],[-6.2,-1.4,.42]]) mesh(new THREE.IcosahedronGeometry(s,2),M.tree,scene,{x,y:GY+s*.75,z,edge:false});
 
 /* ---------- parts, laid out by the house from the start (nothing pops in) ---------- */
 // flue pipe: lying on the ground; main length + the piece that is cut off

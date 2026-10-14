@@ -1,6 +1,6 @@
-# Reykrör fyrir kamínu – handrit að leiðbeiningamyndbandi (102 sek.), útgáfa 1
+# Reykrör fyrir kamínu – handrit að leiðbeiningamyndbandi fyrir Augnablik (102 sek.), útgáfa 2
 
-Ein samfelld myndavélarhreyfing, engin klipp. Hvítt „leir“-hús á teikningarblaði (eins og viðmiðunarmynd 2), með opinni glerframhlið og opnu þaki (sperrur + gler) svo það sést inn. Hlutirnir eru í raunlitum (svört kamína og rör, stálhólkur og plata) og einn áherslulitur (appelsínugulur, `BRAND.accent`) er notaður fyrir mælingar, merkingar og það sem er í fókus.
+Ein samfelld myndavélarhreyfing, engin klipp. Fullbúið hvítt „leir“-hús á teikningarblaði (eins og viðmiðunarmynd 2): viðarklæðning, gluggar með körmum, þakrennur, pallur, bíll í innkeyrslu. Inni eru herbergi: stofa með kamínu, sófa, hægindastól, bókahillu og plöntum; eldhús og borðstofa; svefnherbergi. Glerframhlið og opinn kafli í þakinu (viðarsperrur og lektur undir gleri) sýna leiðina frá kamínu upp úr þaki. Hlutirnir eru í raunlitum (svört kamína og rör, stálhólkur og plata) og blár litur Augnabliks (`#0a8ff0`, merkið fer úr `#05CAFF` í `#1b46c9`) er notaður fyrir mælingar, merkingar og það sem er í fókus. Merki Augnabliks (augað með „play“-þríhyrningi) er efst til vinstri og á lokaspjaldinu.
 
 **Ekkert birtist úr engu:** rörið, kraginn, hólkurinn með plötunni og kastventillinn liggja tilbúin við húsið frá fyrsta ramma og eru færð á sinn stað. Tappinn sem sagaður er úr þakinu og afskurðurinn af rörinu verða eftir á jörðinni.
 
@@ -25,7 +25,7 @@ Ein samfelld myndavélarhreyfing, engin klipp. Hvítt „leir“-hús á teiknin
 Málin (3,37 m, 0,29 m, 30°, 1,85 m, ≈4,4 m) eru dæmi reiknuð út frá líkaninu, ekki raunmál.
 
 ## Opið
-- Nafn, merki og litur fyrirtækisins: fyllt inn í `BRAND` efst í `kamina.html` (nafnið birtist efst og í lokin).
+- Merkið er endurteiknað sem SVG eftir merkinu á augnablik.is; skipta má út fyrir upprunalegu skrána ef hún fæst.
 - Endurgjöfin í Google-skjalinu var ekki aðgengileg (krefst innskráningar).
 
 ## Skrár
