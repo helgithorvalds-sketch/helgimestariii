@@ -275,7 +275,7 @@ function house(gx,gz,rot,hero=false){
   const step=new THREE.Mesh(new THREE.BoxGeometry(.5,.16,1.1).translate(0,.08,0),M.white); step.position.set(-d/2-.25,0,0); step.receiveShadow=true; grp.add(step);
   for(const sd of [-1,1]){ const win=new THREE.Mesh(new THREE.BoxGeometry(.7,.7,.08),M.detail); win.position.set(sd*1.1*s,1.45*s,w/2+.03); grp.add(win); const win2=win.clone(); win2.position.z=-w/2-.03; grp.add(win2); }
   const ch=new THREE.Mesh(new THREE.BoxGeometry(.5,1.1,.5).translate(0,.55,0),M.white); ch.position.set(.9,wh+.6,.7); ch.castShadow=true; grp.add(ch);
-  const door=new THREE.Mesh(new THREE.BoxGeometry(.08,1.35,.8).translate(0,.675,0), hero?M.blue:M.detail); door.position.set(-d/2-.03,0,0); grp.add(door);
+  const door=new THREE.Mesh(new THREE.BoxGeometry(.06,1.3,.8).translate(0,.65,0), hero?M.blue:M.detail); door.position.set(-d/2-.11,.3,0); grp.add(door);  // stands on the plinth, clear of its front face
   for(const sd of [-1,1]){const win=new THREE.Mesh(new THREE.BoxGeometry(.08,.7,.7),M.detail); win.position.set(-d/2-.03,1.45*s,sd*1.15*s); grp.add(win);}
   city.add(grp); addRiser(grp,gx,gz);
   const b={x:gx,z:gz,w:d,d:w,h:wh+rh,type:'house',grp,rot}; buildings.push(b); return b;
