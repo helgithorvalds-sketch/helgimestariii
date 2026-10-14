@@ -20,7 +20,11 @@ await page.goto('file://' + path.join(here,'svif-motion.html') + '#capture');
 if (await page.evaluate(() => typeof window.__ready) !== 'object') { await page.waitForFunction(() => typeof window.__ready === 'object', null, { timeout: 30000 }); }
 await page.evaluate(() => window.__ready);
 await page.evaluate(() => document.fonts.ready);
-if (out.startsWith('frames:')) {
+if (out.startsWith('events:')) {
+  const ev = await page.evaluate(() => window.__events());
+  (await import('node:fs')).writeFileSync(out.slice(7), JSON.stringify(ev, null, 1));
+  console.log('events', ev.events.length);
+} else if (out.startsWith('frames:')) {
   const dir = out.slice(7);
   for (const t of process.argv.slice(3).map(Number)) {
     await page.evaluate(t => window.__seek(t), t);
