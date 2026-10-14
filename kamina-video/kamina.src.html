@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reykrör fyrir kamínu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+/* One fixed 16:9 stage (1920×1080) scaled to fit, slim transport bar beneath.
+   Look: a finished white model house shown as an architect's section (cut faces hatched, the cut-away part left
+   as construction lines), real-coloured parts, and Augnablikk orange for measuring and focus. */
+:root {
+  --paper: #eff1f4;
+  --ink: #21223f;        /* Augnablikk navy */
+  --ink-soft: #565a72;
+  --signal: #c84d28;     /* Augnablikk orange */
+  --signal-rgb: 200,77,40;
+  --frame: #e0e3e8;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; margin: 0; }
+[hidden] { display: none !important; }
+body { background: var(--frame); color: var(--ink); font-family: var(--body); overflow: hidden; }
+#app { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); box-sizing: border-box; }
+#viewport { position: relative; width: 100%; flex: 0 0 auto; overflow: hidden; border-radius: 14px; box-shadow: 0 30px 80px -30px rgba(33,34,63,.35), 0 0 0 1px rgba(33,34,63,.06); background: var(--paper); }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; background: var(--paper); }
+#gl { position: absolute; inset: 0; width: 1920px; height: 1080px; display: block; }
+.vignette { position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 62% 58% at 10% 100%, rgba(239,241,244,.94), rgba(239,241,244,0) 72%),
+    radial-gradient(ellipse 120% 90% at 50% 50%, rgba(33,34,63,0) 62%, rgba(33,34,63,.08) 100%); }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: .045; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+.brand { position: absolute; left: 110px; top: 86px; display: flex; align-items: center; gap: 22px; }
+.brand img { height: 26px; width: auto; display: block; }
+.brand .tag { font-size: 21px; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; padding-left: 22px; border-left: 1.5px solid rgba(33,34,63,.18); }
+
+.chapters { position: absolute; right: 110px; top: 92px; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.chapters .bars { display: flex; gap: 8px; }
+.chapters .bar { width: 56px; height: 4px; border-radius: 2px; background: rgba(33,34,63,.12); overflow: hidden; }
+.chapters .bar i { display: block; height: 100%; width: 0; background: var(--signal); }
+.chapters .name { font-size: 19px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.chapters .name b { color: var(--signal); font-weight: 700; margin-right: 12px; }
+
+.cap { position: absolute; left: 110px; bottom: 100px; width: 1000px; opacity: 0; }
+.cap .eb { display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--signal); margin-bottom: 20px; }
+.cap .eb .num { display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; box-sizing: border-box; border-radius: 22px; background: var(--signal); color: #fff; letter-spacing: 0; font-size: 22px; }
+.cap .eb .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 6px rgba(var(--signal-rgb),.16); }
+.cap .ti { margin: 0; font-family: var(--display); font-weight: 700; font-size: 72px; line-height: 1.02; letter-spacing: -.026em; color: var(--ink); text-wrap: balance; font-variation-settings: "opsz" 96; }
+.cap .su { margin: 24px 0 0; font-size: 30px; line-height: 1.38; color: var(--ink-soft); font-weight: 500; max-width: 880px; text-wrap: pretty; }
+.w { display: inline-block; white-space: pre; will-change: transform, opacity, filter; }
+
+#pins { position: absolute; inset: 0; pointer-events: none; }
+.pill { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 12px 22px 12px 16px; border-radius: 999px; background: rgba(255,255,255,.96); color: var(--ink); font-size: 24px; font-weight: 600; white-space: nowrap; box-shadow: 0 14px 34px -10px rgba(33,34,63,.28), 0 0 0 1px rgba(33,34,63,.06); opacity: 0; }
+.pill i { width: 11px; height: 11px; border-radius: 50%; background: var(--signal); }
+.pill.dim { background: var(--signal); color: #fff; font-family: var(--display); font-weight: 700; font-size: 28px; padding: 9px 20px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; box-shadow: 0 12px 30px -10px rgba(var(--signal-rgb),.55); }
+.pill.dim small { font-family: var(--body); font-size: 18px; font-weight: 600; opacity: .9; letter-spacing: .02em; }
+.pill.ghost { background: rgba(255,255,255,.92); border: 2px dashed rgba(var(--signal-rgb),.9); box-shadow: none; }
+
+.end { position: absolute; left: 110px; bottom: 110px; opacity: 0; }
+.end .big { font-family: var(--display); font-weight: 750; font-size: 120px; letter-spacing: -.035em; line-height: 1; }
+.end .line { margin-top: 30px; font-size: 34px; font-weight: 500; color: var(--ink-soft); }
+.end-logo { position: absolute; left: 110px; top: 90px; height: 300px; width: auto; opacity: 0; }
+
+#loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--ink-soft); background: var(--paper); letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
+
+#controls { display: flex; align-items: center; gap: 14px; width: 100%; box-sizing: border-box; }
+#controls button { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: #fff; cursor: pointer; display: grid; place-items: center; }
+#controls button.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(33,34,63,.25); }
+#controls button:focus-visible, #scrub:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+#controls svg { width: 18px; height: 18px; fill: currentColor; }
+#scrub { flex: 1 1 auto; min-width: 0; accent-color: var(--signal); }
+#time { flex: 0 0 auto; font-size: 14px; font-weight: 600; color: var(--ink-soft); font-variant-numeric: tabular-nums; min-width: 92px; text-align: right; }
+.capture #app { padding: 0; gap: 0; }
+.capture #viewport { border-radius: 0; box-shadow: none; }
+.capture #controls { display: none; }
+@media (prefers-reduced-motion: reduce) { .w { will-change: auto; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="viewport">
+    <div id="stage">
+      <canvas id="gl" width="1920" height="1080"></canvas>
+      <div class="vignette"></div>
+      <div id="pins"></div>
+      <header class="brand" id="brand"><img src="data:image/svg+xml;base64,__WM__" alt="Augnablikk"><span class="tag">Uppsetning á reykröri fyrir kamínu</span></header>
+      <nav class="chapters" id="chapters" aria-label="Kaflar"><div class="bars"></div><div class="name"></div></nav>
+      <div id="caps"></div>
+      <div class="end" id="end">
+        <div class="big">Tilbúið.</div>
+        <div class="line">Reykrörið er komið upp og kamínan er klár í notkun.</div>
+      </div>
+      <img class="end-logo" id="endLogo" src="data:image/svg+xml;base64,__LG__" alt="Augnablikk">
+      <div class="grain"></div>
+      <div id="loading">Hleð inn húsinu…</div>
+    </div>
+  </div>
+  <div id="controls">
+    <button id="play" type="button" aria-label="Spila eða gera hlé"><svg viewBox="0 0 24 24" id="playIcon"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+    <button id="mute" type="button" class="ghost" aria-label="Hljóð af eða á"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M4 9h4l5-4v14l-5-4H4z"/></svg></button>
+    <input id="scrub" type="range" min="0" max="102" step="0.01" value="0" aria-label="Tímalína">
+    <div id="time">0:00 / 1:42</div>
+  </div>
+  <audio id="music" src="music.mp3" preload="auto"></audio>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const W = 1920, H = 1080, DUR = 102;
+const CAPTURE = location.hash.includes('capture');
+if (CAPTURE) document.documentElement.classList.add('capture');
+
+/* ---------- helpers ---------- */
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const eout=t=>1-Math.pow(1-t,3);
+const esine=t=>-(Math.cos(Math.PI*t)-1)/2;
+const eback=t=>{const c1=1.5,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const env=(t,a,b,fi=.5,fo=.5)=>Math.min(eio(prog(t,a,a+fi)),1-eio(prog(t,b-fo,b)));
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+const UP=V(0,1,0);
+const fmt=(x,d=2)=>x.toFixed(d).replace('.',',');
+
+/* ---------- dimensions of the model (metres) ---------- */
+const HX=5, HZ=4, OVER=.45, HW=2.7;                 // half length, half width, eave overhang, wall height
+const TH=Math.PI/6, TAN=Math.tan(TH), COS=Math.cos(TH), SIN=Math.sin(TH);   // 30° roof pitch
+const RT=.25, TV=RT/COS;                            // roof thickness (perpendicular / vertical)
+const RU=HW+HZ*TAN;                                 // ridge, underside
+const under=z=>RU-Math.abs(z)*TAN, top=z=>under(z)+TV;
+const RIDGE_TOP=top(0);
+const CUTX=-2.3;                                    // the house is cut here: everything at x < CUTX is shown only as construction lines
+const AX=-1.5, AZ=1.6;                              // stove flue axis
+const OUT_Y=1.0;                                    // top of the stove outlet
+const PIPE_BOT=.92, PIPE_TOP=RIDGE_TOP+.06, PIPE_LEN=PIPE_TOP-PIPE_BOT;
+const ROOF_AT=top(AZ), CEIL_AT=under(AZ);
+const SLV_BOT=CEIL_AT-.14;
+const GY=-.3;
+const N_SLOPE=V(0,COS,SIN), D_SLOPE=V(0,-SIN,COS), X_AX=V(1,0,0);
+const P_TOP=V(AX,ROOF_AT,AZ), P_CEIL=V(AX,CEIL_AT,AZ);
+const S_HOLE=AZ/COS, R_HOLE=.205;                   // hole centre along the slope, radius
+
+/* ---------- renderer ---------- */
+const canvas=document.getElementById('gl');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:CAPTURE});
+renderer.setPixelRatio(1);
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.08;
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();
+const BG=new THREE.Color('#eff1f4'); scene.background=BG; scene.fog=new THREE.Fog(BG,42,100);
+const camera=new THREE.PerspectiveCamera(32,W/H,.1,300);
+camera.setViewOffset(W,H,-250,95,W,H);             // subject up and to the right, clear of the captions
+scene.add(new THREE.HemisphereLight('#ffffff','#c4c8d4',1.3));
+const sun=new THREE.DirectionalLight('#fffaf3',2.8); sun.position.set(-12,18,10); sun.castShadow=true;
+sun.shadow.mapSize.set(4096,4096); Object.assign(sun.shadow.camera,{left:-16,right:16,top:16,bottom:-16,near:1,far:60});
+sun.shadow.bias=-.0004; sun.shadow.normalBias=.03; sun.shadow.radius=2.5; scene.add(sun,sun.target);
+const fill=new THREE.DirectionalLight('#eef1ff',.6); fill.position.set(8,6,-8); scene.add(fill);
+const fill2=new THREE.DirectionalLight('#fff8f2',.7); fill2.position.set(-14,3,4); scene.add(fill2);
+
+function canvasTex(w,h,draw,{repeat=false}={}){ const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d'); draw(g,w,h);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8; if(repeat) t.wrapS=t.wrapT=THREE.RepeatWrapping; return t; }
+const ACC=new THREE.Color('#c84d28'), ACC_RGB='200,77,40';
+const texGlow=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,128,0,128,128,128);r.addColorStop(0,`rgba(${ACC_RGB},.5)`);r.addColorStop(.45,`rgba(${ACC_RGB},.14)`);r.addColorStop(1,`rgba(${ACC_RGB},0)`);g.fillStyle=r;g.fillRect(0,0,256,256);});
+const texFire=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,150,0,128,140,128);r.addColorStop(0,'rgba(255,214,140,1)');r.addColorStop(.35,'rgba(255,140,50,.85)');r.addColorStop(1,'rgba(255,90,20,0)');g.fillStyle=r;g.fillRect(0,0,256,256);});
+const texSeam=canvasTex(128,128,g=>{g.fillStyle='#f3f4f7';g.fillRect(0,0,128,128);g.fillStyle='#dde1e8';g.fillRect(0,0,7,128);},{repeat:true}); texSeam.repeat.set(1/.55,1);
+const texBoards=(a,b)=>canvasTex(256,256,(g,w,h)=>{ g.fillStyle=a; g.fillRect(0,0,w,h); g.fillStyle=b; for(let k=0;k<4;k++){ g.fillRect(0,k*64,w,2); g.fillRect(((k*97)%4)*64+20,k*64,2,64); } },{repeat:true});
+const texClad=canvasTex(128,128,(g,w,h)=>{ g.fillStyle='#fbfbfc'; g.fillRect(0,0,w,h); g.fillStyle='#e7eaf0'; g.fillRect(0,0,5,h); },{repeat:true});
+const texHatch=canvasTex(256,256,(g,w,h)=>{ g.fillStyle='#e7e9ef'; g.fillRect(0,0,w,h); g.strokeStyle='#bcc1ce'; g.lineWidth=3; g.beginPath(); for(let k=-w;k<w*2;k+=26){ g.moveTo(k,h); g.lineTo(k+h,0); } g.stroke(); },{repeat:true});
+const texArt=canvasTex(256,180,(g,w,h)=>{ g.fillStyle='#f1f2f4'; g.fillRect(0,0,w,h); g.strokeStyle='#b8bdca'; g.lineWidth=3; g.beginPath(); g.moveTo(10,150); g.bezierCurveTo(70,60,120,140,170,80); g.lineTo(246,40); g.stroke(); g.fillStyle=`rgba(${ACC_RGB},.45)`; g.beginPath(); g.arc(190,55,18,0,7); g.fill(); });
+
+/* blueprint sheet under the house */
+const SHEET=36;
+const texSheet=canvasTex(3072,3072,(g,w,h)=>{
+  const s=w/SHEET, X=x=>(x+SHEET/2)*s, Z=z=>(z+SHEET/2)*s;
+  g.fillStyle='#f6f7f9'; g.fillRect(0,0,w,h);
+  g.strokeStyle='rgba(110,118,150,.10)'; g.lineWidth=2; g.beginPath(); for(let k=0;k<=SHEET*2;k++){const p=k*s/2; g.moveTo(p,0);g.lineTo(p,h);g.moveTo(0,p);g.lineTo(w,p);} g.stroke();
+  g.strokeStyle='rgba(60,64,100,.30)'; g.lineWidth=5;
+  const rect=(x0,z0,x1,z1)=>g.strokeRect(X(x0),Z(z0),X(x1)-X(x0),Z(z1)-Z(z0));
+  rect(-5,-4,5,4); g.setLineDash([22,16]); rect(-5.45,-4.45,5.45,4.45); g.setLineDash([]);
+  g.lineWidth=3; rect(1.2,-4,5,-.5); rect(-5,-4,1.2,-.5);
+  rect(8,-14,14,-8); rect(10.5,-14,14,-11); rect(-15,-15,-8.5,-9.5); rect(9,9.5,15,15); rect(-15,10,-10,15);
+  g.strokeStyle='rgba(60,64,100,.26)'; g.lineWidth=3;
+  const dimH=(x0,x1,z)=>{g.beginPath();g.moveTo(X(x0),Z(z));g.lineTo(X(x1),Z(z));for(const x of [x0,x1]){g.moveTo(X(x)-12,Z(z)+12);g.lineTo(X(x)+12,Z(z)-12);g.moveTo(X(x),Z(z)-26);g.lineTo(X(x),Z(z)+26);}g.stroke();};
+  const dimV=(z0,z1,x)=>{g.beginPath();g.moveTo(X(x),Z(z0));g.lineTo(X(x),Z(z1));for(const z of [z0,z1]){g.moveTo(X(x)-12,Z(z)+12);g.lineTo(X(x)+12,Z(z)-12);g.moveTo(X(x)-26,Z(z));g.lineTo(X(x)+26,Z(z));}g.stroke();};
+  dimH(-5,5,-6.2); dimV(-4,4,6.4); dimH(8,14,-15); dimV(-15,-9.5,-16);
+  g.fillStyle='rgba(60,64,100,.48)'; g.font='600 46px "Instrument Sans", Arial'; g.textAlign='center';
+  g.fillText('10 000',X(0),Z(-6.2)-22); g.save(); g.translate(X(6.4)+22,Z(0)); g.rotate(Math.PI/2); g.fillText('8 000',0,0); g.restore();
+});
+
+/* ---------- materials ---------- */
+const M={
+  sheet:new THREE.MeshStandardMaterial({map:texSheet,roughness:1}),
+  ground:new THREE.MeshStandardMaterial({color:'#eceef2',roughness:1}),
+  white:new THREE.MeshStandardMaterial({color:'#ffffff',roughness:.9}),
+  wall:new THREE.MeshStandardMaterial({color:'#fbfbfc',roughness:.92}),
+  clad:new THREE.MeshStandardMaterial({map:texClad,roughness:.9}),
+  hatch:new THREE.MeshStandardMaterial({map:texHatch,roughness:1,side:THREE.DoubleSide}),
+  base:new THREE.MeshStandardMaterial({color:'#e7eaef',roughness:.8}),
+  floor:new THREE.MeshStandardMaterial({map:texBoards('#eadbc6','#dcc9ae'),roughness:.8}),
+  deck:new THREE.MeshStandardMaterial({map:texBoards('#e4d4bd','#d3bfa2'),roughness:.9}),
+  wood:new THREE.MeshStandardMaterial({color:'#dcc19c',roughness:.8}),
+  woodLight:new THREE.MeshStandardMaterial({color:'#e8d6bb',roughness:.75}),
+  stone:new THREE.MeshStandardMaterial({color:'#dfe1e4',roughness:.5}),
+  rug:new THREE.MeshStandardMaterial({color:'#e2e4ea',roughness:1}),
+  soft:new THREE.MeshStandardMaterial({color:'#e8e9ee',roughness:.95}),
+  cushion:new THREE.MeshStandardMaterial({color:'#d6d9e2',roughness:.95}),
+  accentSoft:new THREE.MeshStandardMaterial({color:'#e3b7a6',roughness:.95}),
+  leaf:new THREE.MeshStandardMaterial({color:'#d4ddd0',roughness:1}),
+  art:new THREE.MeshStandardMaterial({map:texArt,roughness:.9}),
+  path:new THREE.MeshStandardMaterial({color:'#e5e7eb',roughness:1}),
+  dark:new THREE.MeshStandardMaterial({color:'#4a4d63',roughness:.6}),
+  glass:new THREE.MeshStandardMaterial({color:'#cfd8e3',roughness:.15,metalness:.1}),
+  seam:new THREE.MeshStandardMaterial({map:texSeam,roughness:.85}),
+  stove:new THREE.MeshStandardMaterial({color:'#2b2d3a',roughness:.55,metalness:.25}),
+  door:new THREE.MeshStandardMaterial({color:'#17181f',roughness:.15,metalness:.1}),
+  hearth:new THREE.MeshStandardMaterial({color:'#e0dedb',roughness:.9}),
+  pipe:new THREE.MeshStandardMaterial({color:'#33353f',roughness:.42,metalness:.3}),
+  steel:new THREE.MeshStandardMaterial({color:'#c9ced7',roughness:.38,metalness:.35}),
+  steelDark:new THREE.MeshStandardMaterial({color:'#8c93a0',roughness:.4,metalness:.35}),
+  inner:new THREE.MeshStandardMaterial({color:'#2a2c36',roughness:.9,side:THREE.BackSide}),
+  acc:new THREE.MeshBasicMaterial({color:ACC,toneMapped:false}),
+  accT:new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:1,depthWrite:false}),
+  ghost:new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false}),
+  plumb:new THREE.MeshBasicMaterial({color:'#3a3d52',transparent:true,opacity:1}),
+  tree:new THREE.MeshStandardMaterial({color:'#ffffff',roughness:1}),
+  trunk:new THREE.MeshStandardMaterial({color:'#eceff3',roughness:1}),
+};
+const edgeMat=new THREE.LineBasicMaterial({color:'#bcc2cf',transparent:true,opacity:.8});
+const lineMat=new THREE.LineBasicMaterial({color:'#9097ab',transparent:true,opacity:.42});
+function outline(mesh,parent=mesh.parent,mat=edgeMat,angle=25){ const l=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry,angle),mat); l.position.copy(mesh.position); l.quaternion.copy(mesh.quaternion); l.scale.copy(mesh.scale); parent.add(l); return l; }
+function mesh(geo,mat,parent,{x=0,y=0,z=0,shadow=true,edge=true,edgeM=edgeMat}={}){ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=m.receiveShadow=shadow; parent.add(m); if(edge) outline(m,parent,edgeM); return m; }
+function uvScale(geo,su,sv){ const uv=geo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*su,uv.getY(i)*sv); return geo; }
+// a box that starts at the section cut: its -x face is hatched like a cut on a drawing
+function cutBox(x1,y0,y1,z0,z1,mat,parent){ const w=x1-CUTX,h=y1-y0,d=z1-z0; const g=new THREE.BoxGeometry(w,h,d);
+  const uv=g.attributes.uv; for(let i=4;i<8;i++) uv.setXY(i,uv.getX(i)*d/.6,uv.getY(i)*h/.6);
+  return mesh(g,[mat,M.hatch,mat,mat,mat,mat],parent,{x:(CUTX+x1)/2,y:(y0+y1)/2,z:(z0+z1)/2}); }
+
+/* ---------- ground + blueprint ---------- */
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(400,400),M.ground); ground.rotation.x=-Math.PI/2; ground.position.y=GY-.01; ground.receiveShadow=true; scene.add(ground);
+const sheet=new THREE.Mesh(new THREE.PlaneGeometry(SHEET,SHEET),M.sheet); sheet.rotation.x=-Math.PI/2; sheet.position.y=GY; sheet.receiveShadow=true; scene.add(sheet);
+
+/* ---------- the house (section) ---------- */
+const house=new THREE.Group(); scene.add(house);
+cutBox(HX+.6,GY,-.02,-HZ-.6,HZ+.6,M.base,house);                                    // plinth
+cutBox(HX,-.02,.04,-HZ,HZ,M.floor,house);
+// floor boards: repeat on the top face
+{ const g=new THREE.PlaneGeometry(HX-CUTX,2*HZ); uvScale(g,(HX-CUTX)/.9,2*HZ/.9); const m=new THREE.Mesh(g,M.floor); m.rotation.x=-Math.PI/2; m.position.set((HX+CUTX)/2,.042,0); m.receiveShadow=true; house.add(m); }
+// back wall: timber cladding outside, framed windows
+cutBox(HX,0,HW,-HZ-.1,-HZ+.1,M.clad,house); uvScale(house.children[house.children.length-2].geometry,1,1);
+{ const w=house.children[house.children.length-2]; const g=w.geometry; const uv=g.attributes.uv; for(const f of [0,2,3,4,5]) for(let k=0;k<4;k++){ const i=f*4+k; uv.setXY(i,uv.getX(i)*(HX-CUTX)/.16,uv.getY(i)); } }
+function windowZ(x,z,w,h,y,dir=1){ // frame + glass + sill in a wall facing ±z
+  mesh(new THREE.BoxGeometry(w,h,.05),M.glass,house,{x,y,z,shadow:false,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(.07,h+.07,.26),M.white,house,{x:x+d*w/2,y,z,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(w+.07,.07,.26),M.white,house,{x,y:y+d*h/2,z,edge:false});
+  mesh(new THREE.BoxGeometry(.04,h,.24),M.white,house,{x,y,z,edge:false});
+  mesh(new THREE.BoxGeometry(w+.2,.05,.36),M.white,house,{x,y:y-h/2-.04,z:z+dir*.06}); }
+function windowX(x,z,w,h,y){
+  mesh(new THREE.BoxGeometry(.05,h,w),M.glass,house,{x,y,z,shadow:false,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(.26,h+.07,.07),M.white,house,{x,y,z:z+d*w/2,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(.26,.07,w+.07),M.white,house,{x,y:y+d*h/2,z,edge:false});
+  mesh(new THREE.BoxGeometry(.24,h,.04),M.white,house,{x,y,z,edge:false});
+  mesh(new THREE.BoxGeometry(.36,.05,w+.2),M.white,house,{x:x+.06,y:y-h/2-.04,z}); }
+for(const x of [-.6,3.1]) windowZ(x,-HZ,1.3,1.15,1.6,-1);
+// front wall with openings: a big window by the stove, a glazed door to the deck, a window by the sofa
+{ const z0=HZ-.1,z1=HZ+.1, ops=[[-1.95,-.35,.45,2.25],[.7,2.5,0,2.25],[3.2,4.5,.75,2.0]];
+  let cur=CUTX; const segs=[];
+  for(const [a,b,y0,y1] of ops){ segs.push([cur,a]); cur=b; mesh(new THREE.BoxGeometry(b-a,HW-y1,.2),M.clad,house,{x:(a+b)/2,y:(y1+HW)/2,z:HZ}); if(y0>0) mesh(new THREE.BoxGeometry(b-a,y0,.2),M.clad,house,{x:(a+b)/2,y:y0/2,z:HZ}); }
+  segs.push([cur,HX]);
+  for(const [a,b] of segs){ if(a===CUTX) cutBox(b,0,HW,z0,z1,M.clad,house); else mesh(new THREE.BoxGeometry(b-a,HW,.2),M.clad,house,{x:(a+b)/2,y:HW/2,z:HZ}); }
+  windowZ(-1.15,HZ,1.6,1.8,1.35); windowZ(3.85,HZ,1.3,1.25,1.375);
+  mesh(new THREE.BoxGeometry(1.8,2.25,.05),M.glass,house,{x:1.6,y:1.125,z:HZ,shadow:false,edge:false});
+  for(const x of [.7,1.6,2.5]) mesh(new THREE.BoxGeometry(.07,2.25,.26),M.white,house,{x,y:1.125,z:HZ,edge:false});
+  mesh(new THREE.BoxGeometry(1.87,.07,.26),M.white,house,{x:1.6,y:2.25,z:HZ,edge:false}); }
+// gable wall (+x) with windows; corner boards
+{ const g=new THREE.BoxGeometry(.2,HW,2*HZ); uvScale(g,2*HZ/.16,1); mesh(g,M.clad,house,{x:HX,y:HW/2});
+  const sh=new THREE.Shape(); sh.moveTo(-HZ,0); sh.lineTo(HZ,0); sh.lineTo(0,HZ*TAN); sh.closePath();
+  const gg=new THREE.ExtrudeGeometry(sh,{depth:.2,bevelEnabled:false}); gg.rotateY(Math.PI/2); gg.translate(-.1,0,0); uvScale(gg,1/.16,.5); mesh(gg,M.clad,house,{x:HX,y:HW});
+  windowX(HX,-1.8,1.5,1.3,1.5); windowX(HX,1.9,1.0,1.3,1.5); windowX(HX,0,.7,.7,HW+.75);
+  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(.24,HW,.24),M.white,house,{x:HX,y:HW/2,z:sz*HZ}); }
+// deck, steps, outdoor chairs
+{ const g=new THREE.BoxGeometry(5.8,.12,1.6); uvScale(g,5.8/.9,1.6/.9); mesh(g,M.deck,house,{x:2.0,y:-.06,z:HZ+.9}); }
+for(let k=0;k<2;k++) mesh(new THREE.BoxGeometry(1.8,.12,.36),M.deck,house,{x:1.6,y:GY+.06+k*.12,z:HZ+1.7+.36*(1-k)+.18});
+for(const x of [3.7,4.5]){ const c=new THREE.Group(); c.position.set(x,0,HZ+1.05); house.add(c); mesh(new RoundedBoxGeometry(.6,.3,.6,2,.05),M.soft,c,{y:.15}); mesh(new RoundedBoxGeometry(.6,.4,.12,2,.04),M.soft,c,{y:.4,z:.26}); }
+
+// roof: solid, standing seam on top, white ceiling below; the near slope carries a real round hole that the
+// roof plug fills until it is cut out
+const L_SLOPE=(HZ+OVER)/COS, RX1=HX+OVER;
+const slopeQ=s=>new THREE.Quaternion().setFromAxisAngle(X_AX,s*TH);
+function slope(sign){ const g=new THREE.Group(); g.position.set(0,RU,0); g.quaternion.copy(slopeQ(sign)); house.add(g); return g; }
+function slabFromShape(shape,parent,{seam=true}={}){
+  const g=new THREE.ExtrudeGeometry(shape,{depth:RT,bevelEnabled:false,curveSegments:48}); g.rotateX(Math.PI/2); g.translate(0,RT,0);
+  const m=new THREE.Mesh(g,[M.white,M.white]); m.castShadow=m.receiveShadow=true; parent.add(m); outline(m,parent,edgeMat,30);
+  if(seam){ const sg=new THREE.ShapeGeometry(shape,48); sg.rotateX(Math.PI/2); const uv=sg.attributes.uv; const p=sg.attributes.position; for(let i=0;i<uv.count;i++) uv.setXY(i,p.getX(i),p.getZ(i)); const s=new THREE.Mesh(sg,M.seam); s.material.side=THREE.DoubleSide; s.position.y=RT+.003; s.receiveShadow=true; s.rotation.x=0; s.scale.set(1,1,1); parent.add(s); }
+  return m; }
+// shapes are drawn in (x, s) where s runs down the slope from the ridge; rotateX(+90°) maps shape-y to +z
+const farS=slope(-1);
+{ const sh=new THREE.Shape(); sh.moveTo(CUTX,0); sh.lineTo(RX1,0); sh.lineTo(RX1,-L_SLOPE); sh.lineTo(CUTX,-L_SLOPE); sh.closePath(); slabFromShape(sh,farS); }
+mesh(new THREE.BoxGeometry(RX1-CUTX,.32,.08),M.white,farS,{x:(RX1+CUTX)/2,y:RT/2-.04,z:-L_SLOPE});
+const nearS=slope(1);
+{ const sh=new THREE.Shape(); sh.moveTo(CUTX,0); sh.lineTo(CUTX,L_SLOPE); sh.lineTo(RX1,L_SLOPE); sh.lineTo(RX1,0); sh.closePath();
+  const hole=new THREE.Path(); hole.absarc(AX,S_HOLE,R_HOLE,0,Math.PI*2,true); sh.holes.push(hole); slabFromShape(sh,nearS);
+  mesh(new THREE.BoxGeometry(RX1-CUTX,.32,.08),M.white,nearS,{x:(RX1+CUTX)/2,y:RT/2-.04,z:L_SLOPE}); }
+// hatched caps where the roof is cut
+for(const sign of [-1,1]){ const q=slopeQ(sign); const pts=[[0,0],[0,sign*L_SLOPE],[RT,sign*L_SLOPE],[RT,0]].map(([yl,zl])=>V(0,yl,zl).applyQuaternion(q).add(V(0,RU,0)));
+  const sh=new THREE.Shape(pts.map(p=>new THREE.Vector2(p.z,p.y))); const g=new THREE.ShapeGeometry(sh); g.rotateY(-Math.PI/2); uvScale(g,1/.6,1/.6);
+  const uv=g.attributes.uv,p=g.attributes.position; for(let i=0;i<uv.count;i++) uv.setXY(i,p.getZ(i)/.6,p.getY(i)/.6);
+  const m=new THREE.Mesh(g,M.hatch); m.position.x=CUTX-.003; house.add(m); }
+// the roof plug: same slab and seam as the roof, built where the hole is
+const plug=new THREE.Group(); scene.add(plug);
+{ const sh=new THREE.Shape(); sh.absarc(AX,S_HOLE,R_HOLE-.003,0,Math.PI*2,false);
+  const inner=new THREE.Group(); inner.position.set(-AX,0,-S_HOLE); plug.add(inner); slabFromShape(sh,inner); }
+const PLUG0=V(AX,RU,0).add(V(0,0,S_HOLE).applyQuaternion(slopeQ(1)));        // hole centre on the ceiling side
+const qNear=slopeQ(1), qNearInv=qNear.clone().invert();
+// gutters and downpipes
+for(const sz of [-1,1]){ const zE=sz*(HZ+OVER+.09), yE=HW-OVER*TAN-.12;
+  mesh(new THREE.CylinderGeometry(.08,.08,RX1-CUTX,20,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateX(sz>0?0:Math.PI),M.white,house,{x:(RX1+CUTX)/2,y:yE,z:zE,edge:false});
+  mesh(new THREE.CylinderGeometry(.04,.04,yE-GY,12),M.white,house,{x:HX+.25,y:(yE+GY)/2,z:zE,edge:false}); }
+// ridge cap; the piece above the flue lifts so the plate can slide under it
+const ridgeShape=new THREE.Shape(); ridgeShape.moveTo(-.3,-.02); ridgeShape.lineTo(0,.16); ridgeShape.lineTo(.3,-.02); ridgeShape.lineTo(.3,-.06); ridgeShape.lineTo(0,.11); ridgeShape.lineTo(-.3,-.06); ridgeShape.closePath();
+function ridgePiece(x0,x1,parent){ const rg=new THREE.ExtrudeGeometry(ridgeShape,{depth:x1-x0,bevelEnabled:false}); rg.rotateY(Math.PI/2); rg.translate(x0,0,0); return mesh(rg,M.white,parent,{y:RIDGE_TOP}); }
+const RC0=AX-.62, RC1=AX+.62;
+ridgePiece(CUTX,RC0-.005,house); ridgePiece(RC1+.005,RX1,house);
+const capG=new THREE.Group(); scene.add(capG); ridgePiece(RC0,RC1,capG);
+
+// interior walls (stop short of the sloped ceiling, like a cut model)
+const PH=2.45;
+mesh(new THREE.BoxGeometry(.12,PH,HZ-.6),M.wall,house,{x:1.2,y:PH/2,z:-HZ/2-.25+.05});
+for(const [a,b] of [[1.26,3.7],[4.55,HX-.1]]) mesh(new THREE.BoxGeometry(b-a,PH,.12),M.wall,house,{x:(a+b)/2,y:PH/2,z:-.5});
+mesh(new THREE.BoxGeometry(.85,PH-2.1,.12),M.wall,house,{x:4.125,y:2.1+(PH-2.1)/2,z:-.5});
+// kitchen on the back wall
+mesh(new THREE.BoxGeometry(3.1,.88,.62),M.white,house,{x:-.55,y:.44,z:-HZ+.42}); mesh(new THREE.BoxGeometry(3.16,.05,.66),M.stone,house,{x:-.55,y:.905,z:-HZ+.42});
+for(let k=0;k<5;k++) mesh(new THREE.BoxGeometry(.01,.7,.55),M.base,house,{x:-1.85+k*.62,y:.45,z:-HZ+.43,edge:false});
+mesh(new THREE.BoxGeometry(.5,.02,.38),M.steel,house,{x:-1.2,y:.935,z:-HZ+.42,edge:false});
+mesh(new THREE.BoxGeometry(2.2,.6,.36),M.white,house,{x:-.9,y:2.0,z:-HZ+.28});
+mesh(new THREE.BoxGeometry(.7,2.1,.66),M.white,house,{x:.75,y:1.05,z:-HZ+.43});
+// dining table, chairs, pendant
+mesh(new RoundedBoxGeometry(1.6,.05,.9,2,.02),M.woodLight,house,{x:-.55,y:.76,z:-1.95});
+for(const [x,z] of [[-1.2,-2.25],[.1,-2.25],[-1.2,-1.65],[.1,-1.65]]) mesh(new THREE.CylinderGeometry(.025,.025,.74,8),M.woodLight,house,{x,y:.37,z,edge:false});
+for(const [x,z,r] of [[-1.0,-2.6,0],[-.1,-2.6,0],[-1.0,-1.3,Math.PI],[-.1,-1.3,Math.PI]]){ const c=new THREE.Group(); c.position.set(x,0,z); c.rotation.y=r; house.add(c);
+  mesh(new RoundedBoxGeometry(.42,.05,.42,2,.02),M.woodLight,c,{y:.46}); mesh(new RoundedBoxGeometry(.42,.42,.04,2,.02),M.woodLight,c,{y:.7,z:-.19}); for(const [lx,lz] of [[-.18,-.18],[.18,-.18],[-.18,.18],[.18,.18]]) mesh(new THREE.CylinderGeometry(.015,.015,.45,6),M.woodLight,c,{x:lx,y:.22,z:lz,edge:false}); }
+mesh(new THREE.CylinderGeometry(.006,.006,1.1,6),M.dark,house,{x:-.55,y:3.0,z:-1.95,edge:false}); mesh(new THREE.ConeGeometry(.24,.2,32,1,true),M.white,house,{x:-.55,y:2.4,z:-1.95,edge:false});
+// bedroom
+mesh(new RoundedBoxGeometry(1.7,.42,2.1,2,.06),M.white,house,{x:3.1,y:.21,z:-2.85}); mesh(new RoundedBoxGeometry(1.66,.12,1.5,2,.05),M.soft,house,{x:3.1,y:.47,z:-2.5});
+mesh(new RoundedBoxGeometry(1.5,.08,.5,2,.03),M.accentSoft,house,{x:3.1,y:.55,z:-1.95});
+mesh(new RoundedBoxGeometry(1.8,.9,.1,2,.03),M.woodLight,house,{x:3.1,y:.55,z:-3.88});
+for(const x of [2.0,4.2]){ mesh(new RoundedBoxGeometry(.45,.45,.4,2,.03),M.woodLight,house,{x,y:.225,z:-3.7}); mesh(new THREE.CylinderGeometry(.09,.13,.18,20),M.white,house,{x,y:.54,z:-3.7,edge:false}); }
+mesh(new THREE.BoxGeometry(.6,2.1,1.5),M.white,house,{x:HX-.42,y:1.05,z:-1.5});
+// living room
+mesh(new THREE.BoxGeometry(3.0,.02,2.2),M.rug,house,{x:.75,y:.055,z:1.5,edge:false});
+const sofa=new THREE.Group(); sofa.position.set(2.6,0,1.4); house.add(sofa);
+mesh(new RoundedBoxGeometry(.95,.42,2.3,3,.1),M.soft,sofa,{y:.25}); mesh(new RoundedBoxGeometry(.24,.78,2.3,3,.1),M.soft,sofa,{x:.36,y:.44}); for(const z of [-1.08,1.08]) mesh(new RoundedBoxGeometry(.95,.58,.18,3,.08),M.soft,sofa,{y:.32,z});
+mesh(new RoundedBoxGeometry(.2,.42,.62,3,.08),M.accentSoft,sofa,{x:.2,y:.62,z:-.55}); mesh(new RoundedBoxGeometry(.2,.42,.62,3,.08),M.cushion,sofa,{x:.2,y:.62,z:.55});
+const arm=new THREE.Group(); arm.position.set(-.1,0,3.1); arm.rotation.y=-.6; house.add(arm);
+mesh(new RoundedBoxGeometry(.8,.4,.8,3,.1),M.soft,arm,{y:.24}); mesh(new RoundedBoxGeometry(.8,.66,.18,3,.08),M.soft,arm,{y:.42,z:-.32}); for(const x of [-.36,.36]) mesh(new RoundedBoxGeometry(.14,.52,.8,3,.06),M.soft,arm,{x,y:.32});
+mesh(new THREE.CylinderGeometry(.42,.42,.05,40),M.woodLight,house,{x:.9,y:.42,z:1.5}); mesh(new THREE.CylinderGeometry(.06,.1,.38,16),M.woodLight,house,{x:.9,y:.2,z:1.5,edge:false});
+mesh(new THREE.BoxGeometry(.22,.04,.3),M.cushion,house,{x:.82,y:.46,z:1.42,edge:false}); mesh(new THREE.CylinderGeometry(.06,.05,.14,16),M.white,house,{x:1.05,y:.51,z:1.62,edge:false});
+mesh(new THREE.CylinderGeometry(.14,.14,.03,24),M.dark,house,{x:3.5,y:.03,z:3.3,edge:false}); mesh(new THREE.CylinderGeometry(.012,.012,1.5,8),M.dark,house,{x:3.5,y:.78,z:3.3,edge:false}); mesh(new THREE.ConeGeometry(.22,.26,32,1,true),M.white,house,{x:3.5,y:1.58,z:3.3,edge:false});
+// sideboard and books along the partition
+mesh(new THREE.BoxGeometry(2.2,.6,.4),M.white,house,{x:2.5,y:.3,z:-.24});
+for(let k=0;k<9;k++){ const h=.2+((k*7)%4)*.03; mesh(new THREE.BoxGeometry(.05+((k*3)%3)*.02,h,.24),k%4===0?M.accentSoft:M.cushion,house,{x:1.7+k*.09,y:.6+h/2,z:-.24,edge:false}); }
+for(const [x,z,w,h] of [[2.6,-.42,1.0,.6]]){ mesh(new THREE.BoxGeometry(w,h,.03),M.white,house,{x,y:1.55,z:z+.03}); mesh(new THREE.BoxGeometry(w-.14,h-.14,.035),M.art,house,{x,y:1.55,z:z+.035,edge:false}); }
+function plant(x,z,s=1){ mesh(new THREE.CylinderGeometry(.16*s,.12*s,.34*s,20),M.white,house,{x,y:.17*s,z}); for(let k=0;k<5;k++){ const a=k*1.26; mesh(new THREE.IcosahedronGeometry(.2*s,1),M.leaf,house,{x:x+Math.cos(a)*.12*s,y:(.5+((k*7)%3)*.12)*s,z:z+Math.sin(a)*.12*s,edge:false}); } }
+plant(4.5,3.4,1.15); plant(-1.9,-.9,.9); plant(4.55,.15,.9);
+// log basket by the stove
+mesh(new THREE.CylinderGeometry(.24,.2,.32,24,1,true),M.woodLight,house,{x:AX+.95,y:.2,z:AZ+.15});
+for(let k=0;k<5;k++) mesh(new THREE.CylinderGeometry(.045,.045,.42,10).rotateZ(Math.PI/2),M.wood,house,{x:AX+.95,y:.24+(k>2?.09:0),z:AZ+.06+(k%3)*.09-(k>2?.045:0),edge:false});
+
+// the stove (dark) on its hearth
+const STOVE=new THREE.Group(); STOVE.position.set(AX,.04,AZ); house.add(STOVE);
+mesh(new THREE.BoxGeometry(1.15,.035,1.0),M.hearth,STOVE,{y:.02,z:.12});
+for(const [x,z] of [[-.26,-.2],[.26,-.2],[-.26,.2],[.26,.2]]) mesh(new THREE.BoxGeometry(.05,.14,.05),M.stove,STOVE,{x,y:.11,z,edge:false});
+mesh(new RoundedBoxGeometry(.62,.74,.5,2,.03),M.stove,STOVE,{y:.18+.37,edge:false});
+mesh(new RoundedBoxGeometry(.66,.04,.54,2,.015),M.stove,STOVE,{y:.94,edge:false});
+mesh(new THREE.CylinderGeometry(.088,.088,.04,40),M.stove,STOVE,{y:OUT_Y-.06,edge:false});
+mesh(new THREE.BoxGeometry(.44,.4,.02),M.door,STOVE,{y:.56,z:.255,edge:false});
+mesh(new THREE.BoxGeometry(.03,.12,.03),M.steelDark,STOVE,{x:.19,y:.56,z:.28,edge:false});
+const fire=new THREE.Mesh(new THREE.PlaneGeometry(.4,.36),new THREE.MeshBasicMaterial({map:texFire,transparent:true,opacity:0,toneMapped:false,depthWrite:false})); fire.position.set(0,.54,.267); STOVE.add(fire);
+const fireGlow=new THREE.Mesh(new THREE.PlaneGeometry(2.2,2.2),new THREE.MeshBasicMaterial({map:texFire,transparent:true,opacity:0,toneMapped:false,depthWrite:false,blending:THREE.AdditiveBlending})); fireGlow.rotation.x=-Math.PI/2; fireGlow.position.set(0,.05,.9); STOVE.add(fireGlow);
+const fireLight=new THREE.PointLight('#ff9a4a',0,5,1.6); fireLight.position.set(0,.6,.6); STOVE.add(fireLight);
+
+// construction lines, as on a drawing: the part of the house that is cut away, plus level and corner lines
+{ const P=[]; const L=(a,b)=>P.push(...a,...b);
+  const xs=[-HX,CUTX];
+  for(const y of [0,HW]) for(const z of [-HZ,HZ]) L([-HX,y,z],[CUTX,y,z]);
+  for(const z of [-HZ,HZ]) L([-HX,0,z],[-HX,HW,z]);
+  L([-HX,0,-HZ],[-HX,0,HZ]); L([-HX,HW,-HZ],[-HX,HW,HZ]);
+  L([-HX-OVER,RIDGE_TOP,0],[CUTX,RIDGE_TOP,0]);
+  for(const s of [-1,1]){ L([-HX-OVER,RIDGE_TOP,0],[-HX-OVER,top(HZ+OVER),s*(HZ+OVER)]); L([-HX-OVER,top(HZ+OVER),s*(HZ+OVER)],[CUTX,top(HZ+OVER),s*(HZ+OVER)]); }
+  for(const [x,z] of [[-HX,-HZ],[-HX,HZ],[HX,-HZ],[HX,HZ]]) L([x,GY,z],[x,7.6,z]);
+  for(const y of [HW,RIDGE_TOP]) { L([-HX-1.6,y,HZ+.9],[HX+1.6,y,HZ+.9]); L([HX+.9,y,-HZ-1.6],[HX+.9,y,HZ+1.6]); }
+  L([-HX-1.6,0,HZ+.9],[HX+1.6,0,HZ+.9]);
+  for(const x of [-HX,0,HX]) L([x,7.0,HZ+.9],[x,7.6,HZ+.9]);
+  L([-HX,7.3,HZ+.9],[HX,7.3,HZ+.9]);
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(P,3)); scene.add(new THREE.LineSegments(g,lineMat)); }
+
+// garden
+function tree(x,z,s){ mesh(new THREE.CylinderGeometry(.07*s,.1*s,1.3*s,10),M.trunk,scene,{x,y:GY+.65*s,z,edge:false}); mesh(new THREE.IcosahedronGeometry(.9*s,3),M.tree,scene,{x,y:GY+1.75*s,z,edge:false}); }
+for(const [x,z,s] of [[7.4,-3.0,1.2],[8.6,2.0,1.0],[3.5,-7.4,1.1],[-1.8,-7.6,1.15],[-8.6,-5.4,1.3],[-10.2,1.5,1.0],[9.4,-6.8,1.25]]) tree(x,z,s);
+for(let k=0;k<6;k++) mesh(new RoundedBoxGeometry(1.1,.7,.7,2,.25),M.tree,scene,{x:4.4-k*1.15,y:GY+.35,z:-6.3});
+mesh(new THREE.BoxGeometry(3.2,.02,7),M.path,scene,{x:7.6,y:GY+.01,z:1.2,edge:false});
+{ const car=new THREE.Group(); car.position.set(7.6,GY,.6); scene.add(car);
+  mesh(new RoundedBoxGeometry(1.8,.62,4.3,3,.18),M.white,car,{y:.52}); mesh(new RoundedBoxGeometry(1.6,.55,2.3,3,.2),M.white,car,{y:1.02,z:.15});
+  for(const sx of [-1,1]) mesh(new THREE.BoxGeometry(.02,.4,1.9),M.glass,car,{x:sx*.805,y:1.04,z:.15,edge:false});
+  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(1.4,.38,.02),M.glass,car,{y:1.03,z:.15+sz*1.13,edge:false});
+  for(const [x,z] of [[-.88,-1.35],[.88,-1.35],[-.88,1.35],[.88,1.35]]) mesh(new THREE.CylinderGeometry(.33,.33,.22,24).rotateZ(Math.PI/2),M.dark,car,{x,y:.33,z,edge:false}); }
+
+/* ---------- the finished parts, laid out in front of the house from the start ---------- */
+// flue pipe, cut to length, collar already welded on
+const PIPE0=V(-7.7,GY+.075,7.3);                                   // bottom end, lying along +x
+const qLying=new THREE.Quaternion().setFromAxisAngle(V(0,0,1),-Math.PI/2);
+const pipeG=new THREE.Group(); scene.add(pipeG);
+mesh(new THREE.CylinderGeometry(.075,.075,PIPE_LEN,48).translate(0,PIPE_LEN/2,0),M.pipe,pipeG,{edge:false});
+const TIP=PIPE_LEN-.06;
+mesh(new THREE.LatheGeometry([new THREE.Vector2(.077,0),new THREE.Vector2(.2,0),new THREE.Vector2(.2,.012),new THREE.Vector2(.09,.02),new THREE.Vector2(.083,.07),new THREE.Vector2(.077,.07)],64).translate(0,TIP,0),M.steelDark,pipeG,{edge:false});
+// insulation sleeve fixed in its roof plate, resting on a trestle at roof pitch
+const SL_LO=SLV_BOT-ROOF_AT, SL_HI=RIDGE_TOP-ROOF_AT;
+const asmG=new THREE.Group(); scene.add(asmG);
+mesh(new THREE.CylinderGeometry(.17,.17,SL_HI-SL_LO,56,1,true).translate(0,(SL_HI+SL_LO)/2,0),M.steel,asmG,{edge:false});
+mesh(new THREE.CylinderGeometry(.1,.1,SL_HI-SL_LO,40,1,true).translate(0,(SL_HI+SL_LO)/2,0),M.inner,asmG,{edge:false});
+mesh(new THREE.RingGeometry(.1,.17,56).rotateX(-Math.PI/2).translate(0,SL_HI,0),M.steel,asmG,{edge:false});
+mesh(new THREE.RingGeometry(.1,.17,56).rotateX(Math.PI/2).translate(0,SL_LO,0),M.steel,asmG,{edge:false});
+for(const y of [SL_LO+.06,SL_HI-.06]) mesh(new THREE.TorusGeometry(.172,.008,8,56).rotateX(Math.PI/2).translate(0,y,0),M.steelDark,asmG,{edge:false});
+const PL_UP=(AZ-.05)/COS, PL_DN=.5/COS;
+{ const inner=new THREE.Group(); inner.quaternion.copy(qNear); asmG.add(inner);
+  const p=mesh(new THREE.BoxGeometry(.95,.014,PL_UP+PL_DN),M.steel,inner,{y:.007,z:(PL_DN-PL_UP)/2,edge:false}); outline(p,inner,new THREE.LineBasicMaterial({color:'#8f96a4'}),30);
+  mesh(new THREE.BoxGeometry(.95,.05,.02),M.steel,inner,{y:.025,z:PL_DN,edge:false});
+  for(const [x,s] of [[-.38,-PL_UP+.14],[.38,-PL_UP+.14],[-.38,PL_DN-.1],[.38,PL_DN-.1],[-.38,-PL_UP/2],[.38,-PL_UP/2]]) mesh(new THREE.CylinderGeometry(.018,.018,.02,12).translate(x,.02,s),M.steelDark,inner,{edge:false}); }
+const ASM0=V(-1.4,GY+1.0,7.5), ASM1=P_TOP.clone().addScaledVector(N_SLOPE,.004);
+for(const [z,hgt] of [[ASM0.z-1.2,ASM0.y-GY+(1.2-.0)*TAN-.02],[ASM0.z+.42,ASM0.y-GY-.42*TAN-.02]]){ mesh(new THREE.BoxGeometry(1.15,.06,.1),M.white,scene,{x:ASM0.x,y:GY+hgt-.03,z}); for(const sx of [-.5,.5]) mesh(new THREE.BoxGeometry(.06,hgt-.06,.1),M.white,scene,{x:ASM0.x+sx,y:GY+(hgt-.06)/2,z}); }
+// rain cap (kastventill)
+const cowl=new THREE.Group(); scene.add(cowl);
+mesh(new THREE.CylinderGeometry(.071,.071,.12,40).translate(0,.06,0),M.pipe,cowl,{edge:false});
+mesh(new THREE.CylinderGeometry(.09,.09,.18,40).translate(0,.2,0),M.pipe,cowl,{edge:false});
+for(let k=0;k<4;k++){ const a=k*Math.PI/2+.4; mesh(new THREE.BoxGeometry(.02,.14,.02).translate(Math.cos(a)*.075,.36,Math.sin(a)*.075),M.pipe,cowl,{edge:false}); }
+mesh(new THREE.ConeGeometry(.23,.13,48).translate(0,.5,0),M.pipe,cowl,{edge:false});
+const COWL0=V(.3,GY,7.0);
+const PLUG_REST=V(1.3,GY+.002,7.6);
+const workPad=new THREE.Mesh(new THREE.PlaneGeometry(10,3.4),new THREE.MeshStandardMaterial({color:'#e9ebf0',roughness:1})); workPad.rotation.x=-Math.PI/2; workPad.position.set(-3.4,GY+.003,7.4); workPad.receiveShadow=true; scene.add(workPad); outline(workPad,scene,edgeMat);
+
+/* ---------- measuring graphics ---------- */
+const _d=new THREE.Vector3(), _p=new THREE.Vector3(), _q=new THREE.Quaternion();
+function bar(r,mat=M.accT){ const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,1,12).translate(0,.5,0),mat); m.visible=false; scene.add(m); return m; }
+function setBar(m,a,b,g=1){ const d=_d.copy(b).sub(a); const len=d.length(); if(len<1e-6||g<=0){m.visible=false;return;} m.visible=true; m.position.copy(a); m.quaternion.setFromUnitVectors(UP,d.normalize()); m.scale.set(1,Math.max(1e-4,len*g),1); }
+const MEAS_END=61.4;                                 // measurements stay up until the installation starts
+function dimension(a,b,off){ const m=new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
+  const o={a,b,off,mat:m,main:bar(.014,m),ext:[bar(.007,m),bar(.007,m)],heads:[0,1].map(()=>{const c=new THREE.Mesh(new THREE.ConeGeometry(.045,.13,16),m); c.visible=false; scene.add(c); return c;})};
+  o.A=a.clone().add(off); o.B=b.clone().add(off); o.mid=o.A.clone().lerp(o.B,.5); return o; }
+function drawDim(o,t,a,b=MEAS_END){ const on=env(t,a,b,.35,.6); o.mat.opacity=on; const g=eio(prog(t,a+.15,a+1.1)); const ge=eout(prog(t,a,a+.5)); const vis=on>0?1:0;
+  const ofl=o.off.length(), on1=o.off.clone().normalize();
+  setBar(o.ext[0],o.a.clone().addScaledVector(on1,.06),o.a.clone().addScaledVector(on1,ofl+.1),ge*vis);
+  setBar(o.ext[1],o.b.clone().addScaledVector(on1,.06),o.b.clone().addScaledVector(on1,ofl+.1),ge*vis);
+  const A=o.mid.clone().lerp(o.A,g), B=o.mid.clone().lerp(o.B,g); setBar(o.main,A,B,vis);
+  const dir=_d.copy(o.B).sub(o.A).normalize();
+  o.heads[0].visible=o.heads[1].visible=vis>0&&g>.05; o.heads[0].position.copy(A).addScaledVector(dir,.065); o.heads[0].quaternion.setFromUnitVectors(UP,dir.clone().negate());
+  o.heads[1].position.copy(B).addScaledVector(dir,-.065); o.heads[1].quaternion.setFromUnitVectors(UP,dir); }
+const fadeMat=()=>new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
+
+// step 1: plumb line + bob, drill through the roof, marker pin on top
+const plumbLine=bar(.011,M.plumb); const bob=new THREE.Mesh(new THREE.ConeGeometry(.045,.13,20).rotateX(Math.PI),M.acc); bob.visible=false; scene.add(bob);
+const drill=bar(.013,M.acc);
+const pin=new THREE.Group(); scene.add(pin); { const s=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.34,10).translate(0,.17,0),M.steelDark); const h=new THREE.Mesh(new THREE.SphereGeometry(.05,20,14),M.acc); h.position.y=.36; pin.add(s,h); pin.visible=false; }
+const pinGlow=new THREE.Mesh(new THREE.PlaneGeometry(1.1,1.1),new THREE.MeshBasicMaterial({map:texGlow,transparent:true,depthWrite:false,toneMapped:false,opacity:0})); pinGlow.quaternion.copy(qNear).multiply(new THREE.Quaternion().setFromAxisAngle(X_AX,-Math.PI/2)); pinGlow.position.copy(P_TOP).addScaledVector(N_SLOPE,.01); scene.add(pinGlow);
+// step 2: from the stove outlet up through the roof; roof thickness — both drawn just in front of the section cut
+const dim2=dimension(V(AX,OUT_Y,AZ),V(AX,ROOF_AT,AZ),V(CUTX-AX-.35,0,.3));
+const dim2b=dimension(V(AX,under(AZ-.3),AZ-.3),V(AX,top(AZ-.3),AZ-.3),V(CUTX-AX-.35,0,0));
+// step 3: roof pitch, drawn on the section where the roof meets the front wall
+const PE=V(CUTX-.06,HW,HZ+.1);
+const pitchMat=fadeMat(); const pitchH=bar(.012,pitchMat), pitchS=bar(.012,pitchMat);
+const arcPts=[]; for(let i=0;i<=40;i++){ const a=TH*i/40; arcPts.push(V(PE.x,PE.y+Math.sin(a)*1.25,PE.z-Math.cos(a)*1.25)); }
+const arcM=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arcPts),60,.012,8,false),pitchMat); arcM.visible=false; scene.add(arcM);
+const arcCount=arcM.geometry.index.count;
+const arcWedge=new THREE.Mesh(new THREE.CircleGeometry(1.25,40,0,TH),new THREE.MeshBasicMaterial({color:ACC,transparent:true,opacity:0,depthWrite:false,toneMapped:false,side:THREE.DoubleSide})); arcWedge.rotation.y=Math.PI/2; arcWedge.position.copy(PE); scene.add(arcWedge);
+// step 4: along the roof from the ridge down to the marker
+const dim4=dimension(V(AX,top(0),0).addScaledVector(N_SLOPE,.03),P_TOP.clone().addScaledVector(N_SLOPE,.03),V(-.5,0,0));
+// step 5: level line at ridge height, ghost of the pipe, pipe length
+const dashMat=fadeMat(); const dashes=[]; for(let i=0;i<12;i++) dashes.push(bar(.011,dashMat));
+const DASH_A=V(AX,RIDGE_TOP,-.1), DASH_B=V(AX,RIDGE_TOP,AZ+.9);
+const ghostPipe=new THREE.Mesh(new THREE.CylinderGeometry(.078,.078,1,32,1,true).translate(0,.5,0),M.ghost); ghostPipe.position.set(AX,PIPE_BOT,AZ); scene.add(ghostPipe); ghostPipe.visible=false;
+const dim5=dimension(V(AX,PIPE_BOT,AZ),V(AX,RIDGE_TOP,AZ),V(CUTX-AX-1.05,0,.3));
+// step 7: the same length shown on the finished pipe
+const dim7=dimension(PIPE0.clone(),PIPE0.clone().add(V(PIPE_LEN,0,0)),V(0,0,-.45));
+// step 8: optional damper section, shown as a ghost
+const damperG=new THREE.Group(); damperG.position.set(AX,0,AZ); scene.add(damperG);
+const dMat=new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
+const dMatS=new THREE.MeshStandardMaterial({color:'#3a3d48',roughness:.4,metalness:.3,transparent:true,opacity:0});
+{ damperG.add(new THREE.Mesh(new THREE.CylinderGeometry(.078,.078,1.0,40,1,true).translate(0,OUT_Y+.5,0),dMat));
+  damperG.add(new THREE.Mesh(new THREE.CylinderGeometry(.092,.092,.14,40).translate(0,OUT_Y+1.0,0),dMatS));
+  const flap=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.01,32),dMatS); flap.position.y=OUT_Y+.48; damperG.add(flap); damperG.userData.flap=flap;
+  damperG.add(new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.36,8).rotateX(Math.PI/2).translate(0,OUT_Y+.48,.13),dMatS));
+  const knob=new THREE.Mesh(new THREE.SphereGeometry(.028,12,10),dMatS); knob.position.set(0,OUT_Y+.48,.31); damperG.add(knob); }
+damperG.visible=false;
+// hole saw cut line
+const cutPts=[]; for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; cutPts.push(P_TOP.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE).addScaledVector(N_SLOPE,.012)); }
+const sawM=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(cutPts,true),96,.011,8,true),M.accT); sawM.visible=false; scene.add(sawM);
+const sawCount=sawM.geometry.index.count;
+const sparkMat=new THREE.MeshBasicMaterial({color:'#ffb35c',toneMapped:false});
+const sparks=[]; for(let i=0;i<14;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(.014,6,4),sparkMat); m.visible=false; scene.add(m); const a=i*2.399, e=.3+((i*37)%10)/14; sparks.push({m,dir:V(Math.cos(a)*Math.cos(e),Math.sin(e)+.4,Math.sin(a)*Math.cos(e)),sp:.9+((i*53)%7)/6}); }
+const smoke=[]; for(let i=0;i<9;i++){ const m=new THREE.MeshStandardMaterial({color:'#f2f3f6',roughness:1,transparent:true,opacity:0,depthWrite:false}); const s=new THREE.Mesh(new THREE.IcosahedronGeometry(.16,2),m); s.visible=false; scene.add(s); smoke.push(s); }
+const focus=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:texGlow,transparent:true,depthWrite:false,toneMapped:false,opacity:0})); focus.rotation.x=-Math.PI/2; scene.add(focus);
+
+/* ---------- timeline ---------- */
+const TL={ plumb:11.8, drill:14.4, pin:15.9, dim2:19.6, dim2b:21.6, pitch:25.8, dim4:31.2, dash:36.9, ghost:37.6, dim5:39.2, sum:41.6,
+  asm:45.0, pipe:52.8, dim7:54.0, damper:62.0,
+  saw:69.2, plugOut:71.2, plugSet:73.6, capUp:74.0, asmLift:74.6, asmSet:78.0, capDown:78.3, pipeLift:80.8, pipeSet:87.4,
+  cowlLift:88.6, cowlSet:91.6, fire:94.4, end:95.6 };
+const CAM=[
+  [0,[-21,12,24],[-1.5,1.8,2.4]],
+  [5.8,[-15.5,7.6,17.6],[-1.6,1.6,3.0]],
+  [10.6,[-14.6,7.0,16.8],[-1.8,1.4,3.4]],
+  [12.4,[-11.8,4.6,10.4],[-1.6,3.1,1.3]],
+  [18.6,[-11.4,4.7,10.1],[-1.6,3.15,1.3]],
+  [19.8,[-12.2,4.5,10.8],[-1.9,3.1,1.4]],
+  [24.8,[-12.0,4.6,10.6],[-1.9,3.15,1.4]],
+  [26.2,[-8.6,3.3,8.4],[-2.4,3.2,2.6]],
+  [29.8,[-8.4,3.3,8.2],[-2.4,3.25,2.5]],
+  [31.2,[-6.6,9.8,7.6],[-1.7,4.7,.9]],
+  [35.8,[-6.4,9.7,7.4],[-1.7,4.7,.9]],
+  [37.0,[-11.6,4.4,10.4],[-1.8,3.2,1.5]],
+  [41.4,[-11.4,4.5,10.2],[-1.8,3.25,1.5]],
+  [43.6,[-12.6,5.4,11.6],[-1.8,3.3,1.6]],
+  [45.4,[-4.6,3.3,13.0],[-1.3,.9,7.3]],
+  [51.6,[-3.8,3.2,12.8],[-1.3,.9,7.3]],
+  [52.8,[-7.4,3.0,12.6],[-5.2,.3,7.2]],
+  [60.8,[-6.6,3.0,12.6],[-5.3,.3,7.2]],
+  [61.8,[-6.2,2.5,5.2],[-1.5,1.55,1.6]],
+  [67.8,[-6.0,2.6,5.4],[-1.5,1.55,1.6]],
+  [69.0,[-6.0,9.0,7.2],[-1.7,4.5,1.4]],
+  [73.0,[-5.8,8.9,7.0],[-1.7,4.5,1.4]],
+  [74.8,[-12,10,14.5],[-1.8,5.0,3.4]],
+  [79.4,[-7.6,9.0,9.8],[-1.6,4.9,1.4]],
+  [81.0,[-17,11.5,20],[-3.4,6.2,3.6]],
+  [87.6,[-12.5,9,15.5],[-1.8,5.0,1.8]],
+  [88.8,[-5.4,8.4,7.2],[-1.6,5.9,1.6]],
+  [93.8,[-5.2,8.2,7.0],[-1.6,5.8,1.6]],
+  [95.4,[-9.4,4.6,9.6],[-1.2,2.4,1.4]],
+  [DUR,[-19,11,21],[0,2.3,0]],
+].map(([t,p,q])=>({t,p:V(...p),q:V(...q)}));
+function camAt(t){ let i=0; while(i<CAM.length-2&&t>CAM[i+1].t) i++; const a=CAM[i], b=CAM[i+1]; const u=esine(prog(t,a.t,b.t));
+  camera.position.copy(a.p).lerp(b.p,u); camera.lookAt(_p.copy(a.q).lerp(b.q,u)); }
+
+/* ---------- overlay ---------- */
+const CAPS=[
+  {a:.9,b:5.6, eb:'Leiðbeiningar', t:'Svona er reykrör sett upp fyrir kamínu.', s:'Frá fyrstu mælingu að kastventli, skref fyrir skref.'},
+  {a:6.4,b:10.8, eb:'Áður en byrjað er', t:'Kamínan er komin á sinn endanlega stað.', s:'Reykrörið, hólkurinn og kastventillinn bíða tilbúin við húsið.'},
+  {a:11.6,b:18.8, n:'1', eb:'Mæling', t:'Lóðlína frá miðju kamínunnar upp í loft.', s:'Borað er lóðrétt gat upp í gegnum þakið. Þá er kominn fastur punktur til að mæla út frá uppi á þaki.'},
+  {a:19.4,b:24.8, n:'2', eb:'Mæling', t:'Mælt frá kamínunni upp í þak.', s:'Munið að taka þykkt þaksins með.'},
+  {a:25.6,b:29.8, n:'3', eb:'Mæling', t:'Þakhallinn mældur.', s:'Platan undir hólknum er smíðuð eftir hallanum.'},
+  {a:30.8,b:35.8, n:'4', eb:'Mæling', t:'Mælt frá mæni niður að miðjupunktinum.', s:'Þar kemur rörið upp úr þakinu.'},
+  {a:36.6,b:44.0, n:'5', eb:'Mæling', t:'Lengd reykrörsins mæld.', s:'Frá kamínunni upp í hæð mænisins. Nákvæmast er að mæla eftir að hólkurinn er kominn í, en það má líka mæla gróflega og stytta rörið á staðnum.'},
+  {a:44.8,b:51.8, n:'6', eb:'Smíði', t:'Einangrunarhólkurinn smíðaður.', s:'Hann er festur í plötu sem leggst á þakið og nær upp undir mæni, yfirleitt ofan á þakklæðninguna.'},
+  {a:52.6,b:60.8, n:'7', eb:'Smíði', t:'Rörið skorið í rétta lengd.', s:'Á það er soðinn kragi sem sest utan um hólkinn og heldur rörinu.'},
+  {a:61.6,b:67.8, n:'8', eb:'Smíði · ef þess er óskað', t:'Trekkspjald.', s:'Stuttur leggur með spjaldi kemur upp úr kamínunni. Samtengi tengir hann við rörið.'},
+  {a:68.6,b:73.6, n:'A', eb:'Uppsetning', t:'Gat sagað í þakið.', s:'Út frá miðjupunktinum sem var mældur.'},
+  {a:74.0,b:79.8, n:'A', eb:'Uppsetning', t:'Hólkurinn settur í gatið.', s:'Hann er festur í þakið og undir mæni.'},
+  {a:80.6,b:87.8, n:'B', eb:'Uppsetning', t:'Rörinu rennt í gegnum hólkinn.', s:'Alla leið ofan í kamínuna. Kraginn sest á hólkinn og heldur rörinu.'},
+  {a:88.6,b:93.8, n:'C', eb:'Uppsetning', t:'Kastventillinn settur ofan á.'},
+];
+const CHAPTERS=[[0,11.2,'Undirbúningur'],[11.2,44.2,'Mæling'],[44.2,68.2,'Smíði'],[68.2,94.6,'Uppsetning'],[94.6,DUR,'Tilbúið']];
+const capsEl=document.getElementById('caps');
+const capEls=CAPS.map(c=>{ const el=document.createElement('div'); el.className='cap';
+  const wordsHtml=(s,cls)=>s.split(' ').map((w,i,a)=>`<span class="w ${cls}">${w}${i<a.length-1?' ':''}</span>`).join('');
+  el.innerHTML=`<div class="eb">${c.n?`<span class="num">${c.n}</span>`:'<span class="dot"></span>'}${c.eb}</div><h1 class="ti">${wordsHtml(c.t,'tw')}</h1>${c.s?`<p class="su">${wordsHtml(c.s,'sw')}</p>`:''}`;
+  capsEl.appendChild(el); return {el,eb:el.querySelector('.eb'),tw:[...el.querySelectorAll('.tw')],sw:[...el.querySelectorAll('.sw')]}; });
+const chBars=document.querySelector('#chapters .bars'), chName=document.querySelector('#chapters .name');
+const barEls=CHAPTERS.map(()=>{const b=document.createElement('div'); b.className='bar'; b.innerHTML='<i></i>'; chBars.appendChild(b); return b.firstChild;});
+
+const pinsEl=document.getElementById('pins');
+const LABELS=[
+  {t:'Kamína', p:()=>V(AX,1.3,AZ+.2), a:6.8,b:10.8, dx:-60},
+  {t:'Reykrör', p:()=>V(-5.4,.3,7.3), a:7.3,b:10.8},
+  {t:'Hólkur og plata', p:()=>V(-1.4,2.3,6.6), a:7.7,b:10.8},
+  {t:'Kastventill', p:()=>V(.3,.75,7.0), a:8.1,b:10.8, dx:40},
+  {t:'Miðja kamínunnar', p:()=>V(AX,OUT_Y+.05,AZ), a:13.0,b:18.6, dx:160, dy:10},
+  {t:'Stýripunktur', p:()=>V(AX,ROOF_AT+.45,AZ), a:16.4,b:18.6, dx:40},
+  {t:fmt(ROOF_AT-OUT_Y)+' m', k:'dim', p:()=>dim2.mid, a:TL.dim2+.9,b:MEAS_END, dx:-80},
+  {t:`${fmt(TV)} m <small>þykkt þaks</small>`, k:'dim', p:()=>dim2b.mid, a:TL.dim2b+.8,b:MEAS_END, dx:-150, dy:60},
+  {t:'30°', k:'dim', p:()=>PE.clone().add(V(0,.35,-1.55)), a:TL.pitch+1.4,b:MEAS_END},
+  {t:fmt(AZ/COS)+' m', k:'dim', p:()=>dim4.mid, a:TL.dim4+.9,b:MEAS_END, dx:-80},
+  {t:`≈ ${fmt(PIPE_LEN,1)} m <small>lengd rörs</small>`, k:'dim', p:()=>dim5.mid, a:TL.dim5+.9,b:MEAS_END, dx:-130},
+  {t:'Hæð mænis', p:()=>V(AX,RIDGE_TOP+.12,AZ+.9), a:TL.dash+.8,b:44.0, dx:90},
+  {t:'Einangrunarhólkur', p:()=>ASM0.clone().add(V(0,SL_HI+.25,0)), a:45.6,b:51.6, dx:60},
+  {t:'Plata í sama halla og þakið', p:()=>ASM0.clone().add(V(0,.75,-1.2)), a:46.6,b:51.6, dx:-40},
+  {t:'Nær upp undir mæni', k:'ghost', p:()=>ASM0.clone().add(V(0,.95,-1.6)), a:48.0,b:51.6, dx:-60, dy:-10},
+  {t:`${fmt(PIPE_LEN,2)} m`, k:'dim', p:()=>dim7.mid, a:TL.dim7+.9,b:60.6},
+  {t:"Kragi soðinn á", p:()=>PIPE0.clone().add(V(TIP,.32,0)), a:55.8,b:60.6, dx:-90},
+  {t:'Trekkspjald', k:'ghost', p:()=>V(AX,OUT_Y+.48,AZ+.31), a:TL.damper+.6,b:67.6, dx:-150},
+  {t:'Samtengi', k:'ghost', p:()=>V(AX,OUT_Y+1.0,AZ), a:TL.damper+1.2,b:67.6, dx:-140},
+  {t:'Mænir lyftur', p:()=>V(AX,RIDGE_TOP+.75,0), a:TL.capUp+.3,b:TL.asmSet, dx:-60},
+  {t:'Kraginn sest á hólkinn', p:()=>V(AX,RIDGE_TOP+.2,AZ), a:TL.pipeSet-.1,b:87.7, dx:-210},
+];
+const labelEls=LABELS.map(l=>{ const el=document.createElement('div'); el.className='pill'+(l.k?' '+l.k:''); el.innerHTML=(l.k==='dim'?'':'<i></i>')+l.t; pinsEl.appendChild(el); return el; });
+const _v=new THREE.Vector3();
+function toScreen(v){ _v.copy(v).project(camera); return {x:(_v.x+1)/2*W, y:(1-_v.y)/2*H, ok:_v.z<1}; }
+function wordAnim(els,t,a,b,stag=.055,base=0){ els.forEach((w,i)=>{ const st=a+base+i*stag; const p=eout(prog(t,st,st+.7)); const q=eio(prog(t,b-.5,b));
+  w.style.opacity=(p*(1-q)).toFixed(3); w.style.transform=`translate3d(0,${((1-p)*40-q*20).toFixed(1)}px,0)`; w.style.filter=(p<1||q>0)?`blur(${((1-p)*9+q*6).toFixed(1)}px)`:'none'; }); }
+const endEl=document.getElementById('end'), endParts=[...endEl.children], endLogo=document.getElementById('endLogo');
+const brandEl=document.getElementById('brand'), chaptersEl=document.getElementById('chapters');
+function updateOverlay(t){
+  CAPS.forEach((c,k)=>{ const e=capEls[k]; const vis=t>c.a-.1&&t<c.b+.1; e.el.style.opacity=vis?1:0; if(!vis) return;
+    const ep=eout(prog(t,c.a,c.a+.5)), eq=eio(prog(t,c.b-.5,c.b)); e.eb.style.opacity=(ep*(1-eq)).toFixed(3); e.eb.style.transform=`translateX(${((1-ep)*-24).toFixed(1)}px)`;
+    wordAnim(e.tw,t,c.a,c.b,.06,.1); wordAnim(e.sw,t,c.a,c.b,.022,.1+e.tw.length*.06+.15); });
+  let ci=CHAPTERS.findIndex(c=>t>=c[0]&&t<c[1]); if(ci<0) ci=CHAPTERS.length-1;
+  barEls.forEach((b,i)=>{ const c=CHAPTERS[i]; b.style.width=(clamp((t-c[0])/(c[1]-c[0]))*100).toFixed(1)+'%'; });
+  chName.innerHTML=`<b>${String(ci+1).padStart(2,'0')}</b>${CHAPTERS[ci][2]}`;
+  const endOn=prog(t,TL.end-.3,TL.end+.3); chaptersEl.style.opacity=(1-endOn).toFixed(3); brandEl.style.opacity=(Math.min(prog(t,.2,1),1-endOn)).toFixed(3);
+  LABELS.forEach((l,i)=>{ const el=labelEls[i]; const on=env(t,l.a,l.b,.35,.4); if(on<=0){ el.style.opacity=0; return; }
+    const s=toScreen(l.p()); const p=eback(prog(t,l.a,l.a+.5));
+    el.style.opacity=s.ok?on.toFixed(3):0; el.style.transform=`translate3d(${(s.x+(l.dx||0)).toFixed(1)}px,${(s.y-(l.dy??34)).toFixed(1)}px,0) translate(-50%,-50%) scale(${(.7+.3*p).toFixed(3)})`; });
+  endEl.style.opacity=t>TL.end-.2?1:0;
+  endParts.forEach((p,i)=>{ const st=TL.end+.1+i*.45; const e=eout(prog(t,st,st+1)); p.style.opacity=e.toFixed(3); p.style.transform=`translateY(${((1-e)*40).toFixed(1)}px)`; p.style.filter=e<1?`blur(${((1-e)*10).toFixed(1)}px)`:'none'; });
+  { const e=eout(prog(t,TL.end+1.0,TL.end+2.2)); endLogo.style.opacity=e.toFixed(3); endLogo.style.transform=`translateY(${((1-e)*30).toFixed(1)}px)`; }
+}
+
+/* ---------- motion helpers: lift straight up, travel above everything, come straight down ---------- */
+function travel(a,b,u,hTop){
+  const up=eio(prog(u,0,.32)), across=eio(prog(u,.3,.7)), down=eio(prog(u,.72,1));
+  const y = u<.71 ? lerp(a.y,hTop,up) : lerp(hTop,b.y,down);
+  return V(lerp(a.x,b.x,across), y, lerp(a.z,b.z,across)); }
+const qId=new THREE.Quaternion();
+
+/* ---------- scene update ---------- */
+function render(t){
+  t=clamp(t,0,DUR);
+  camAt(t);
+
+  // step 1
+  const pg=eio(prog(t,TL.plumb,TL.plumb+1.5)), pOn=1-prog(t,MEAS_END-.6,MEAS_END);
+  M.plumb.opacity=pOn; const bobY=lerp(CEIL_AT-.02,OUT_Y+.075,pg);
+  setBar(plumbLine,V(AX,bobY,AZ),V(AX,CEIL_AT,AZ),(t>TL.plumb&&pOn>0)?1:0); bob.visible=t>TL.plumb&&pOn>0; bob.position.set(AX,bobY,AZ);
+  const dg=prog(t,TL.drill,TL.drill+1.1), dr=prog(t,TL.drill+1.2,TL.drill+1.6);
+  setBar(drill,V(AX,CEIL_AT,AZ),V(AX,lerp(CEIL_AT,ROOF_AT+.14,eio(dg)),AZ),(t>TL.drill&&dr<1)?1-dr:0);
+
+  // roof plug: in place until the hole is sawn, then lifted out along the roof normal and carried to the ground
+  const lift=eout(prog(t,TL.plugOut,TL.plugOut+.6));
+  const liftP=PLUG0.clone().addScaledVector(N_SLOPE,lift*.45);
+  const pu=prog(t,TL.plugOut+.6,TL.plugSet);
+  plug.position.copy(pu>0?travel(liftP,PLUG_REST,pu,6.4):liftP);
+  plug.quaternion.copy(qNear).slerp(qId,eio(prog(pu,.3,.7)));
+  // marker pin sits on the plug
+  const pinUp=eback(prog(t,TL.pin,TL.pin+.6));
+  pin.visible=t>TL.pin; pin.scale.set(1,Math.max(1e-3,pinUp),1);
+  _q.copy(plug.quaternion).multiply(qNearInv);
+  pin.position.copy(V(0,RT,0).applyQuaternion(plug.quaternion).add(plug.position)); pin.quaternion.copy(_q);
+  pinGlow.material.opacity=.9*env(t,TL.pin,36,.4,.6)+.9*env(t,TL.saw-.4,TL.plugOut,.3,.3);
+
+  // step 2..5 measurements
+  drawDim(dim2,t,TL.dim2); drawDim(dim2b,t,TL.dim2b);
+  { const on=env(t,TL.pitch,MEAS_END,.4,.6); pitchMat.opacity=on; const g=eio(prog(t,TL.pitch,TL.pitch+.9)), v=on>0?1:0;
+    setBar(pitchH,PE,PE.clone().add(V(0,0,-1.9*g)),v); setBar(pitchS,PE,PE.clone().add(V(0,SIN*1.9*g,-COS*1.9*g)),v);
+    arcM.visible=on>0; arcM.geometry.setDrawRange(0,Math.floor(arcCount*eio(prog(t,TL.pitch+.6,TL.pitch+1.6))/6)*6);
+    arcWedge.material.opacity=.16*on*eio(prog(t,TL.pitch+.8,TL.pitch+1.8)); }
+  drawDim(dim4,t,TL.dim4);
+  { const on=env(t,TL.dash,MEAS_END,.3,.6); dashMat.opacity=on; dashes.forEach((d,i)=>{ const u0=i/dashes.length, u1=(i+.55)/dashes.length; const g=prog(t,TL.dash+i*.07,TL.dash+i*.07+.25);
+      setBar(d,DASH_A.clone().lerp(DASH_B,u0),DASH_A.clone().lerp(DASH_B,lerp(u0,u1,g)),g>0&&on>0?1:0); });
+    const gg=eio(prog(t,TL.ghost,TL.ghost+1.6)); ghostPipe.visible=gg>0&&on>0; ghostPipe.scale.set(1,Math.max(1e-3,PIPE_LEN*gg),1); M.ghost.opacity=.26*on; }
+  drawDim(dim5,t,TL.dim5);
+  drawDim(dim7,t,TL.dim7,60.8);
+
+  // step 8: damper ghost
+  { const on=env(t,TL.damper,67.8,.6,.6); damperG.visible=on>0; dMat.opacity=.32*on; dMatS.opacity=.95*on; damperG.userData.flap.rotation.x=.2+.9*(.5+.5*Math.sin((t-TL.damper)*1.6)); }
+
+  // installation A: saw, plug out, ridge cap up, sleeve + plate in, ridge cap down
+  sawM.visible=t>TL.saw&&t<TL.plugOut+.5; sawM.geometry.setDrawRange(0,Math.floor(sawCount*eio(prog(t,TL.saw,TL.saw+1.8))/6)*6);
+  { let any=false; const at=P_TOP.clone().addScaledVector(N_SLOPE,.02);
+    sparks.forEach((s,i)=>{ const on=t>TL.saw&&t<TL.saw+1.8; s.m.visible=on; if(!on) return; any=true; const k=eio(prog(t,TL.saw,TL.saw+1.8)); const a=k*Math.PI*2;
+      const c=at.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE); const u=((t-TL.saw)*2.6+i/14)%1;
+      s.m.position.copy(c).addScaledVector(s.dir,u*.3*s.sp); s.m.position.y-=u*u*.22; s.m.scale.setScalar(1-u); }); }
+  const cu=eio(prog(t,TL.capUp,TL.capUp+.9)), cd=eio(prog(t,TL.capDown,TL.capDown+1.0));
+  { const k=cu*(1-cd); const slide=eio(prog(t,TL.capUp+.5,TL.capUp+1.3))*(1-eio(prog(t,TL.capDown-.2,TL.capDown+.6)));
+    capG.position.set(slide*1.45,k*.5,0); }
+  const au=prog(t,TL.asmLift,TL.asmSet);
+  asmG.position.copy(au>0?travel(ASM0,ASM1,au,6.9):ASM0);
+
+  // installation B: pipe lifts, stands up in the open, travels above the roof and slides straight down
+  { const u=prog(t,TL.pipeLift,TL.pipeSet); let pp=PIPE0.clone(), pq=qLying.clone();
+    const HOVER=V(AX,RIDGE_TOP+.75,AZ);
+    if(u>0){ const r=eio(prog(u,.0,.32)); pq=qLying.clone().slerp(qId,r);
+      const rise=V(PIPE0.x,lerp(PIPE0.y,3.4,eio(prog(u,0,.3))),PIPE0.z);                        // stand up in front of the house
+      const hi=V(PIPE0.x,RIDGE_TOP+.75,PIPE0.z);
+      if(u<.3) pp=rise; else if(u<.42) pp=rise.lerp(hi,eio(prog(u,.3,.42))).setY(lerp(3.4,RIDGE_TOP+.75,eio(prog(u,.3,.42))));
+      else if(u<.72) pp=V(lerp(PIPE0.x,HOVER.x,eio(prog(u,.42,.72))),RIDGE_TOP+.75,lerp(PIPE0.z,HOVER.z,eio(prog(u,.42,.72))));
+      else pp=V(AX,lerp(RIDGE_TOP+.75,PIPE_BOT,eio(prog(u,.74,1))),AZ);
+      if(u>=.3) pq=qId.clone(); }
+    pipeG.position.copy(pp); pipeG.quaternion.copy(pq); }
+  // installation C: cowl
+  { const u=prog(t,TL.cowlLift,TL.cowlSet); cowl.position.copy(u>0?travel(COWL0,V(AX,PIPE_TOP-.12,AZ),u,PIPE_TOP+1.2):COWL0); }
+  // fire + smoke
+  const fo=prog(t,TL.fire,TL.fire+1.5), fl=.82+.1*Math.sin(t*17)+.08*Math.sin(t*29+1);
+  fire.material.opacity=fo*fl; fireGlow.material.opacity=.45*fo*fl; fireLight.intensity=6*fo*fl;
+  smoke.forEach((s,i)=>{ const u=((t-TL.fire-1.2)*.32+i/smoke.length)%1; const on=t>TL.fire+1.2+i*.25; s.visible=on; if(!on) return;
+    s.position.set(AX+Math.sin(u*3+i)*.12+u*.5,PIPE_TOP+.55+u*2.6,AZ-u*.2); s.scale.setScalar(.5+u*2.2); s.material.opacity=.55*Math.sin(Math.PI*u)*prog(t,TL.fire+1.2,TL.fire+2.4); });
+  // soft glow under whatever is in focus
+  { let fp=null, fs=1, fo2=0;
+    if(t>6.6&&t<10.8){ fp=V(AX,.07,AZ+.1); fs=1.8; fo2=env(t,6.6,10.8); }
+    else if(t>44.6&&t<51.8){ fp=V(ASM0.x,GY+.01,ASM0.z-.3); fs=3.2; fo2=env(t,44.6,51.8); }
+    else if(t>52.4&&t<60.8){ fp=V(PIPE0.x+PIPE_LEN/2,GY+.01,PIPE0.z); fs=5.0; fo2=env(t,52.4,60.8); }
+    else if(t>TL.fire){ fp=V(AX,.07,AZ+.1); fs=2.4; fo2=prog(t,TL.fire,TL.fire+1.4)*.6; }
+    focus.visible=!!fp; if(fp){ focus.position.copy(fp); focus.scale.setScalar(fs); focus.material.opacity=fo2*.3; } }
+
+  renderer.render(scene,camera);
+  updateOverlay(t);
+}
+
+/* ---------- sound cues ---------- */
+function soundEvents(){
+  const ev=[];
+  CAPS.forEach((c,i)=>ev.push({k:'step',t:c.a,i}));
+  for(const t of [7.3,7.7,8.1]) ev.push({k:'part',t});
+  ev.push({k:'plumb',t:TL.plumb+1.5},{k:'drill',t:TL.drill},{k:'pin',t:TL.pin+.3});
+  for(const k of ['dim2','dim2b','dim4','dim5','dim7']) ev.push({k:'dim',t:TL[k]+1.0});
+  ev.push({k:'dim',t:TL.pitch+1.5},{k:'dash',t:TL.dash});
+  for(const t of [45.6,46.6,48.0,55.8]) ev.push({k:'part',t});
+  ev.push({k:'ghost',t:TL.damper+.4},{k:'saw',t:TL.saw},{k:'lift',t:TL.plugOut},{k:'place',t:TL.plugSet});
+  ev.push({k:'lift',t:TL.capUp},{k:'lift',t:TL.asmLift},{k:'place',t:TL.asmSet},{k:'place',t:TL.capDown+1.0},{k:'lift',t:TL.pipeLift},{k:'slide',t:TL.pipeLift+.74*(TL.pipeSet-TL.pipeLift)},{k:'land',t:TL.pipeSet});
+  ev.push({k:'lift',t:TL.cowlLift},{k:'land',t:TL.cowlSet},{k:'fire',t:TL.fire},{k:'end',t:TL.end+.1});
+  return {dur:DUR, tl:TL, events:ev.sort((a,b)=>a.t-b.t)};
+}
+window.__events=soundEvents;
+
+/* ---------- playback ---------- */
+const viewport=document.getElementById('viewport'), stage=document.getElementById('stage');
+const scrub=document.getElementById('scrub'), timeEl=document.getElementById('time'), playBtn=document.getElementById('play'), playIcon=document.getElementById('playIcon');
+const music=document.getElementById('music'), muteBtn=document.getElementById('mute');
+let playing=false, T=0, last=0, muted=false;
+const ICON_PLAY='<path d="M7 4.5v15l13-7.5z"/>', ICON_PAUSE='<path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/>';
+const mmss=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+scrub.max=DUR; timeEl.textContent=`0:00 / ${mmss(DUR)}`;
+function layout(){
+  if(CAPTURE){ viewport.style.width=W+'px'; viewport.style.height=H+'px'; stage.style.transform='none'; renderer.setPixelRatio(window.__px||1.5); renderer.setSize(W,H,false); return; }
+  const avW=document.getElementById('app').clientWidth-32, avH=window.innerHeight-80;
+  const s=Math.min(avW/W,avH/H); viewport.style.width=(W*s)+'px'; viewport.style.height=(H*s)+'px'; stage.style.transform=`scale(${s})`;
+  const q=clamp(s*(window.devicePixelRatio||1),.5,1); renderer.setSize(Math.round(W*q),Math.round(H*q),false);
+  document.getElementById('controls').style.width=(W*s)+'px';
+}
+function syncAudio(){ try{ if(Math.abs(music.currentTime-T)>.25) music.currentTime=T; }catch(e){} }
+function setPlaying(p){ playing=p; playIcon.innerHTML=p?ICON_PAUSE:ICON_PLAY; last=performance.now(); if(p&&!muted){ syncAudio(); music.play().catch(()=>{}); } else music.pause(); }
+function tick(now){ if(playing){ T+=Math.min(.1,(now-last)/1000); last=now; if(T>=DUR){T=DUR; setPlaying(false);} render(T); scrub.value=T; timeEl.textContent=`${mmss(T)} / ${mmss(DUR)}`; } requestAnimationFrame(tick); }
+playBtn.addEventListener('click',()=>{ if(T>=DUR) T=0; setPlaying(!playing); });
+muteBtn.addEventListener('click',()=>{ muted=!muted; muteBtn.style.opacity=muted?.45:1; if(muted) music.pause(); else if(playing){ syncAudio(); music.play().catch(()=>{}); } });
+scrub.addEventListener('input',()=>{ T=parseFloat(scrub.value); render(T); syncAudio(); timeEl.textContent=`${mmss(T)} / ${mmss(DUR)}`; });
+window.addEventListener('resize',()=>{ layout(); render(T); });
+window.addEventListener('keydown',e=>{ if(e.code==='Space'&&e.target===document.body){ e.preventDefault(); playBtn.click(); } });
+
+window.__ready=(async()=>{ layout();
+  try{ await Promise.race([Promise.all([document.fonts.load('700 100px "Bricolage Grotesque"'),document.fonts.load('750 100px "Bricolage Grotesque"'),document.fonts.load('600 40px "Instrument Sans"'),document.fonts.load('500 40px "Instrument Sans"'),document.fonts.load('700 40px "Instrument Sans"')]),new Promise(r=>setTimeout(r,4000))]); }catch(e){}
+  document.getElementById('loading').hidden=true; render(0);
+  if(CAPTURE) return true; T=0; render(T); requestAnimationFrame(tick); return true; })();
+window.__seek=(t)=>{ render(t); return true; };
+</script>
+</body>
+</html>

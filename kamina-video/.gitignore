@@ -1,5 +1,7 @@
 node_modules/
 frames/
 seg*.mp4
+seg*.log
 silent.mp4
 music.wav
+list.txt

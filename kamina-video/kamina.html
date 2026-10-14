@@ -9,15 +9,15 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&display=swap">
 <style>
 /* One fixed 16:9 stage (1920×1080) scaled to fit, slim transport bar beneath.
-   Look: white clay model house on a blueprint sheet, see-through front and roof,
-   the parts in their real colours (black pipe, steel sleeve) and one accent for measuring and focus. */
+   Look: a finished white model house shown as an architect's section (cut faces hatched, the cut-away part left
+   as construction lines), real-coloured parts, and Augnablikk orange for measuring and focus. */
 :root {
-  --paper: #eef0f3;
-  --ink: #141821;
-  --ink-soft: #545b69;
-  --signal: #0a8ff0;     /* accent: Augnablik blue (logo runs #05CAFF → #1b46c9) */
-  --signal-rgb: 10,143,240;
-  --frame: #dfe2e7;
+  --paper: #eff1f4;
+  --ink: #21223f;        /* Augnablikk navy */
+  --ink-soft: #565a72;
+  --signal: #c84d28;     /* Augnablikk orange */
+  --signal-rgb: 200,77,40;
+  --frame: #e0e3e8;
   --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
   color-scheme: light;
@@ -25,34 +25,24 @@
 html, body { height: 100%; margin: 0; }
 [hidden] { display: none !important; }
 body { background: var(--frame); color: var(--ink); font-family: var(--body); overflow: hidden; }
-#app { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-inline: 16px; box-sizing: border-box; }
-#viewport { position: relative; width: 100%; flex: 0 0 auto; overflow: hidden; border-radius: 14px; box-shadow: 0 30px 80px -30px rgba(20,24,33,.35), 0 0 0 1px rgba(20,24,33,.06); background: var(--paper); }
+#app { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); box-sizing: border-box; }
+#viewport { position: relative; width: 100%; flex: 0 0 auto; overflow: hidden; border-radius: 14px; box-shadow: 0 30px 80px -30px rgba(33,34,63,.35), 0 0 0 1px rgba(33,34,63,.06); background: var(--paper); }
 #stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; background: var(--paper); }
 #gl { position: absolute; inset: 0; width: 1920px; height: 1080px; display: block; }
 .vignette { position: absolute; inset: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 62% 58% at 10% 100%, rgba(238,240,243,.94), rgba(238,240,243,0) 72%),
-    radial-gradient(ellipse 120% 90% at 50% 50%, rgba(20,24,33,0) 62%, rgba(20,24,33,.08) 100%); }
+    radial-gradient(ellipse 62% 58% at 10% 100%, rgba(239,241,244,.94), rgba(239,241,244,0) 72%),
+    radial-gradient(ellipse 120% 90% at 50% 50%, rgba(33,34,63,0) 62%, rgba(33,34,63,.08) 100%); }
 .grain { position: absolute; inset: 0; pointer-events: none; opacity: .045; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 
-.brand { position: absolute; left: 110px; top: 84px; display: flex; align-items: center; gap: 20px; }
-.brand .name { font-family: var(--display); font-weight: 800; font-size: 36px; letter-spacing: -.02em; }
-.brand .tag { font-size: 21px; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; }
-.logo { display: inline-flex; align-items: center; gap: 14px; }
-.logo .eye { width: 64px; height: 38px; }
-.logo .wm { display: flex; flex-direction: column; line-height: 1; }
-.logo .wm b { font-family: var(--body); font-weight: 700; font-size: 32px; letter-spacing: -.01em; color: var(--ink); }
-.logo .wm small { margin-top: 5px; font-size: 11.5px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--ink); }
-.brand .tag { padding-left: 20px; border-left: 1.5px solid rgba(20,24,33,.18); }
-.big-logo { margin-top: 44px; gap: 22px; }
-.big-logo .eye { width: 118px; height: 69px; }
-.big-logo .wm b { font-size: 60px; }
-.big-logo .wm small { font-size: 20px; margin-top: 8px; }
+.brand { position: absolute; left: 110px; top: 86px; display: flex; align-items: center; gap: 22px; }
+.brand img { height: 26px; width: auto; display: block; }
+.brand .tag { font-size: 21px; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; padding-left: 22px; border-left: 1.5px solid rgba(33,34,63,.18); }
 
 .chapters { position: absolute; right: 110px; top: 92px; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
 .chapters .bars { display: flex; gap: 8px; }
-.chapters .bar { width: 56px; height: 4px; border-radius: 2px; background: rgba(20,24,33,.12); overflow: hidden; }
+.chapters .bar { width: 56px; height: 4px; border-radius: 2px; background: rgba(33,34,63,.12); overflow: hidden; }
 .chapters .bar i { display: block; height: 100%; width: 0; background: var(--signal); }
 .chapters .name { font-size: 19px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
 .chapters .name b { color: var(--signal); font-weight: 700; margin-right: 12px; }
@@ -66,24 +56,22 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
 .w { display: inline-block; white-space: pre; will-change: transform, opacity, filter; }
 
 #pins { position: absolute; inset: 0; pointer-events: none; }
-.pill { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 12px 22px 12px 16px; border-radius: 999px; background: rgba(255,255,255,.96); color: var(--ink); font-size: 24px; font-weight: 600; white-space: nowrap; box-shadow: 0 14px 34px -10px rgba(20,24,33,.28), 0 0 0 1px rgba(20,24,33,.06); opacity: 0; }
+.pill { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 12px 22px 12px 16px; border-radius: 999px; background: rgba(255,255,255,.96); color: var(--ink); font-size: 24px; font-weight: 600; white-space: nowrap; box-shadow: 0 14px 34px -10px rgba(33,34,63,.28), 0 0 0 1px rgba(33,34,63,.06); opacity: 0; }
 .pill i { width: 11px; height: 11px; border-radius: 50%; background: var(--signal); }
-.pill.dim { background: var(--signal); color: #fff; font-family: var(--display); font-weight: 700; font-size: 30px; padding: 10px 22px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; box-shadow: 0 14px 34px -10px rgba(var(--signal-rgb),.6); }
-.pill.dim small { font-family: var(--body); font-size: 19px; font-weight: 600; opacity: .9; letter-spacing: .02em; }
-.pill.ghost { background: rgba(255,255,255,.9); border: 2px dashed rgba(var(--signal-rgb),.9); box-shadow: none; }
+.pill.dim { background: var(--signal); color: #fff; font-family: var(--display); font-weight: 700; font-size: 28px; padding: 9px 20px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; box-shadow: 0 12px 30px -10px rgba(var(--signal-rgb),.55); }
+.pill.dim small { font-family: var(--body); font-size: 18px; font-weight: 600; opacity: .9; letter-spacing: .02em; }
+.pill.ghost { background: rgba(255,255,255,.92); border: 2px dashed rgba(var(--signal-rgb),.9); box-shadow: none; }
 
 .end { position: absolute; left: 110px; bottom: 110px; opacity: 0; }
 .end .big { font-family: var(--display); font-weight: 750; font-size: 120px; letter-spacing: -.035em; line-height: 1; }
 .end .line { margin-top: 30px; font-size: 34px; font-weight: 500; color: var(--ink-soft); }
-.end .who { margin-top: 34px; display: inline-flex; align-items: center; gap: 16px; font-family: var(--display); font-size: 40px; font-weight: 800; color: var(--ink); }
-.end .who::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 7px rgba(var(--signal-rgb),.16); }
-.end .who:empty { display: none; }
+.end-logo { position: absolute; left: 110px; top: 90px; height: 300px; width: auto; opacity: 0; }
 
 #loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--ink-soft); background: var(--paper); letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
 
 #controls { display: flex; align-items: center; gap: 14px; width: 100%; box-sizing: border-box; }
 #controls button { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--ink); color: #fff; cursor: pointer; display: grid; place-items: center; }
-#controls button.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(20,24,33,.25); }
+#controls button.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(33,34,63,.25); }
 #controls button:focus-visible, #scrub:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
 #controls svg { width: 18px; height: 18px; fill: currentColor; }
 #scrub { flex: 1 1 auto; min-width: 0; accent-color: var(--signal); }
@@ -91,6 +79,7 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
 .capture #app { padding: 0; gap: 0; }
 .capture #viewport { border-radius: 0; box-shadow: none; }
 .capture #controls { display: none; }
+@media (prefers-reduced-motion: reduce) { .w { will-change: auto; } }
 </style>
 </head>
 <body>
@@ -100,14 +89,14 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
       <canvas id="gl" width="1920" height="1080"></canvas>
       <div class="vignette"></div>
       <div id="pins"></div>
-      <header class="brand" id="brand"><span class="logo"><svg class="eye" viewBox="0 0 120 70" aria-hidden="true"><defs><linearGradient id="ag1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#05CAFF"/><stop offset="1" stop-color="#1b46c9"/></linearGradient></defs><path d="M3 35 Q60 -14 117 35 Q60 84 3 35Z" fill="url(#ag1)"/><circle cx="60" cy="35" r="21" fill="#fff"/><circle cx="60" cy="35" r="17" fill="url(#ag1)"/><path d="M54 25 L72 35 L54 45Z" fill="#fff"/></svg><span class="wm"><b>Augnablik</b><small>Kvikmyndagerð</small></span></span><span class="tag">Uppsetning á reykröri fyrir kamínu</span></header>
+      <header class="brand" id="brand"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTIwLjM4IDEyNC43MiI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogI2M4NGQyODsKICAgICAgfQoKICAgICAgLmNscy0yIHsKICAgICAgICBmaWxsOiAjMjEyMjNmOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8ZyBpZD0iXzAiIGRhdGEtbmFtZT0iMCI+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNzcuNCwzLjE4bDQ5LjE1LDExOC4zNmgtMzEuNzZsLTkuMTktMjMuMjRoLTQ1LjgxbC04LjY5LDIzLjI0SDBMNDkuNjUsMy4xOGgyNy43NVpNNDcuOTgsNzUuNGgyOS43NmwtMTQuNzEtNDAuNjMtMTUuMDUsNDAuNjNaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTEzMi41Nyw3Ni45VjMuMThoMjguNDJ2NzEuMzljMCwxMi43MSw2LjE5LDI0LjQxLDIyLjIzLDI0LjQxczIyLjIzLTExLjcsMjIuMjMtMjQuNDFWMy4xOGgyOC41OXY3My43MmMwLDI4LjQyLTIwLjA2LDQ3LjgxLTUwLjk5LDQ3Ljgxcy01MC40OS0xOS4zOS01MC40OS00Ny44MVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjUxLjU5LDYyLjE5YzAtMzcuOTUsMjguMDktNjIuMTksNjQuMi02Mi4xOSwxOC41NiwwLDM1Ljc4LDYuMTksNDUuNjQsMTUuNzJsLTE4LjA2LDIwLjU2Yy01LjUyLTYuMzUtMTUuMDUtMTEuMDMtMjYuNTgtMTEuMDMtMjAuMDYsMC0zNC43NywxNS43MS0zNC43NywzNi45NXMxMi44NywzNy4yOCwzNi4xMSwzNy4yOGM2LjY5LDAsMTIuODctMSwxNy44OS0zLjE4di0yMS41N2gtMjIuNTd2LTIzLjA3aDQ4LjgydjYyLjY5Yy0xMS41NCw2LjAyLTI3LjQyLDEwLjItNDUuNjQsMTAuMi0zNy43OCwwLTY1LjAzLTI1LjA4LTY1LjAzLTYyLjM2WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zODUuNjYsMTIxLjU0VjMuMThoMzIuNmw0Ny40OCw3Ny4yNGguNWwtLjY3LTc3LjI0aDI3Ljc1djExOC4zNmgtMzIuNDNsLTQ3LjY1LTc3LjRoLS41bC42Nyw3Ny40aC0yNy43NVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNTgwLjU5LDMuMThsNDkuMTUsMTE4LjM2aC0zMS43NmwtOS4yLTIzLjI0aC00NS44MWwtOC42OSwyMy4yNGgtMzEuMUw1NTIuODQsMy4xOGgyNy43NVpNNTUxLjE3LDc1LjRoMjkuNzZsLTE0LjcxLTQwLjYzLTE1LjA0LDQwLjYzWiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik02MzkuNiwxMjEuNTRWMy4xOGg0Ny4xNGMxOC4zOSwwLDQwLjI5LDYuNTIsNDAuMjksMzAuNDMsMCwxMy4wNC03Ljg2LDIxLjczLTE5LjM5LDI1LjU4di4zM2MxMy41NCwyLjM0LDI0LjI0LDEyLjA0LDI0LjI0LDI3LjU5LDAsMjUuNzUtMjIuNTcsMzQuNDQtNDUuMTQsMzQuNDRoLTQ3LjE0Wk02NjcuMTgsNTAuMzJoMTUuMzhjMTAuNywwLDE2Ljg4LTQuNTEsMTYuODgtMTIuODdzLTYuMTgtMTEuNTMtMTguMjItMTEuNTNoLTE0LjA0djI0LjQxWk02NjcuMTgsOTguNDdoMTYuMDVjOS4wMywwLDIwLjA2LTIuNTEsMjAuMDYtMTQuMDQsMC05Ljg2LTguMDItMTMuMDQtMjAuMjMtMTMuMDRoLTE1Ljg4djI3LjA4WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik03NTAuNzYsMTIxLjU0VjMuMThoMjguNzV2OTMuNDVoNDUuODF2MjQuOTFoLTc0LjU2WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04MzguNjksMTIxLjU0VjMuMThoMjguNzV2MTE4LjM2aC0yOC43NVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNODkxLjg1LDEyMS41NFYzLjE4aDI4LjA5djQ4LjE1aC41bDQyLjMtNDguMTVoMzUuNzhsLTUwLjk5LDU0LjUsNTQsNjMuODZoLTM3LjI4bC00My45Ny01NC41aC0uMzR2NTQuNWgtMjguMDlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEwMTAuNzEsMTIxLjU0VjMuMThoMjguMDl2NDguMTVoLjVsNDIuMy00OC4xNWgzNS43N2wtNTAuOTksNTQuNSw1NCw2My44NmgtMzcuMjhsLTQzLjk3LTU0LjVoLS4zM3Y1NC41aC0yOC4wOVoiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" alt="Augnablikk"><span class="tag">Uppsetning á reykröri fyrir kamínu</span></header>
       <nav class="chapters" id="chapters" aria-label="Kaflar"><div class="bars"></div><div class="name"></div></nav>
       <div id="caps"></div>
       <div class="end" id="end">
         <div class="big">Tilbúið.</div>
         <div class="line">Reykrörið er komið upp og kamínan er klár í notkun.</div>
-        <div class="logo big-logo"><svg class="eye" viewBox="0 0 120 70" aria-hidden="true"><defs><linearGradient id="ag2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#05CAFF"/><stop offset="1" stop-color="#1b46c9"/></linearGradient></defs><path d="M3 35 Q60 -14 117 35 Q60 84 3 35Z" fill="url(#ag2)"/><circle cx="60" cy="35" r="21" fill="#fff"/><circle cx="60" cy="35" r="17" fill="url(#ag2)"/><path d="M54 25 L72 35 L54 45Z" fill="#fff"/></svg><span class="wm"><b>Augnablik</b><small>Kvikmyndagerð</small></span></div>
       </div>
+      <img class="end-logo" id="endLogo" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTIwLjM4IDEyNTcuMDkiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6IG5vbmU7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogIzljOWM5YjsKICAgICAgfQoKICAgICAgLmNscy0zIHsKICAgICAgICBmaWxsOiAjYzg0ZDI4OwogICAgICB9CgogICAgICAuY2xzLTQgewogICAgICAgIGZpbGw6ICMyMTIyM2Y7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJfMCIgZGF0YS1uYW1lPSIwIj4KICAgIDxnPgogICAgICA8Zz4KICAgICAgICA8ZyBpZD0iUE9MWUxJTkUiPgogICAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNOTMxLjYyLDgyMC45NGMtOS40MiwyNC4xMS0zNi41OSwzNi4wMy02MC43MSwyNi42MS0yLjc1LTEuMDctNS40LTIuNDEtNy45MS0zLjk5bDIwLjg0LTE4Ljc2LDQ2LjE4LTQxLjU4YzUuOCwxMS43OSw2LjM4LDI1LjQ4LDEuNiwzNy43MloiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9IlBPTFlMSU5FLTIiIGRhdGEtbmFtZT0iUE9MWUxJTkUiPgogICAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNOTEyLjkxLDc2NC4yMmwtNDYuMTcsNDEuNTgtMjAuODUsMTguNzdjLTcuMTctMTQuNi02LjI2LTMxLjg3LDIuNC00NS42MywxMS4wNS0xNy41NiwzMS44My0yNS4yOCw1MC45Mi0yMC41NS4wMSwwLC4wMiwwLC4wMywwLDEuMTMuMjgsMi4yNS42LDMuMzUuOTYuMTkuMDcuMzguMTMuNTcuMi40My4xNC44Ni4zLDEuMjguNDYuMDguMDIuMTYuMDUuMjMuMDguNTUuMjEsMS4wOS40MywxLjYyLjY2LjQuMTcuNzkuMzQsMS4xOC41Mi4zMi4xNC42NC4yOS45NS40NS40NC4yMS44OC40MywxLjMyLjY3LjQ0LjIzLjg5LjQ3LDEuMzMuNzMuNjIuMzQsMS4yMy43MSwxLjg0LDEuMDlaIi8+CiAgICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04OTkuMjQsNzU4LjRjMS4xMi4yNywyLjI0LjU5LDMuMzUuOTYtMS4xLS4zNi0yLjIyLS42OC0zLjM1LS45NloiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9IlBPTFlMSU5FLTMiIGRhdGEtbmFtZT0iUE9MWUxJTkUiPgogICAgICAgICAgPHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjcxOS4wMyAyNTQuNjggMzkzLjUyIDI1NC42OCA1MjMuNjUgMTI2Ljg2IDUyMy42NSAwIDU4OC44OSAwIDU4OC44OSAxMjYuODYgNzE5LjAzIDI1NC42OCIvPgogICAgICAgIDwvZz4KICAgICAgICA8ZyBpZD0iUE9MWUxJTkUtNCIgZGF0YS1uYW1lPSJQT0xZTElORSI+CiAgICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0yNzQuNDgsODI0LjU3bC0yMC44NS0xOC43Ny00Ni4xNy00MS41OGMxNC40LTkuMDYsMzIuNTktOS42LDQ3LjUxLTEuNDEsMjEuOTcsMTIuMDUsMzAuNTYsMzkuMjYsMTkuNTEsNjEuNzZaIi8+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJQT0xZTElORS01IiBkYXRhLW5hbWU9IlBPTFlMSU5FIj4KICAgICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTI1Ny4zNyw4NDMuNTZjLTIuNSwxLjU4LTUuMTUsMi45Mi03LjkxLDMuOTktMTIuMjQsNC43OC0yNS45Miw0LjItMzcuNzItMS41OS0yMy4yMy0xMS40Mi0zMi44LTM5LjUxLTIxLjM5LTYyLjc0bDQ2LjE4LDQxLjU4LDIwLjg0LDE4Ljc2WiIvPgogICAgICAgIDwvZz4KICAgICAgICA8ZyBpZD0iUE9MWUxJTkUtNiIgZGF0YS1uYW1lPSJQT0xZTElORSI+CiAgICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0zMDYuOTgsMTAwNS4zMXY0OC4yOGMwLDE0LjU5LTExLjgzLDI2LjQxLTI2LjQyLDI2LjQxcy0yNi40MS0xMS44Mi0yNi40MS0yNi40MXYtMTQuNzFoLTQzLjQ2djE0LjcxYzAsMTQuNTktMTEuODMsMjYuNDEtMjYuNDIsMjYuNDFzLTI2LjQyLTExLjgyLTI2LjQyLTI2LjQxdi00OC4yOGMwLTE4LjgyLDE1LjI2LTM0LjA4LDM0LjA5LTM0LjA4aDQuMjZ2LTExNC42OGMxNS41NiwxMC43MSwzNS4wNiwxMy45OCw1My4yNiw4Ljk0LDYuODQtMS44OSwxMy4zMi00LjkxLDE5LjE3LTguOTR2MTE0LjY4aDQuMjZjMTguODMsMCwzNC4wOSwxNS4yNiwzNC4wOSwzNC4wOFoiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9IlBPTFlMSU5FLTciIGRhdGEtbmFtZT0iUE9MWUxJTkUiPgogICAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNOTYyLjUyLDEwMDUuMzF2NDguMjhjMCwxNC41OS0xMS44MywyNi40MS0yNi40MiwyNi40MXMtMjYuNDEtMTEuODItMjYuNDEtMjYuNDF2LTE0LjcxaC00My40NnYxNC43MWMwLDE0LjU5LTExLjgzLDI2LjQxLTI2LjQyLDI2LjQxcy0yNi40Mi0xMS44Mi0yNi40Mi0yNi40MXYtNDguMjhjMC0xOC44MiwxNS4yNi0zNC4wOCwzNC4wOS0zNC4wOGg0LjI2di0xMTQuNjhjNS44NSw0LjAzLDEyLjMzLDcuMDUsMTkuMTcsOC45NCwxOC4yMSw1LjA0LDM3LjcsMS43Nyw1My4yNi04Ljk0djExNC42OGg0LjI3YzE4LjgyLDAsMzQuMDgsMTUuMjYsMzQuMDgsMzQuMDhaIi8+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJBUkMiPgogICAgICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNOTA4LjQyLDc2MS43M2MtLjMyLS4xNi0uNjMtLjMxLS45NS0uNDUiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9IkFSQy0yIiBkYXRhLW5hbWU9IkFSQyI+CiAgICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04MTcuMjksNjE3LjQ2Yy0xMi43MS03LjA5LTI3LjAyLTEwLjgtNDEuNTctMTAuOGwtMTE5LjUyLjA4di00OC4xM2g2OS4zNmMxMC40Ny00OC45NywxOC43Ny05OC4zOSwyNC44OS0xNDguMS43NS02LjEsMS4zNi0xMi4yMSwxLjg1LTE4LjM0LDIuMjEtMjcuODcsMS42OC01NS45MS0xLjYxLTgzLjctMS4zOC0xMS42OS03LjU0LTIyLjI5LTE3LjAxLTI5LjI4aC0zMzMuMDJjLTkuNDcsNi45OS0xNS42MiwxNy41OS0xNy4wMSwyOS4yOC00LDMzLjktMy45Miw2OC4xNi4yNCwxMDIuMDQsNi4xMiw0OS43MSwxNC40Miw5OS4xMywyNC44OSwxNDguMWg1NS4zOXY0OC4xM2wtMTE5LjUxLS4wOGMtMTQuNTUsMC0yOC44NywzLjcxLTQxLjU3LDEwLjgtNDkuNzQsMjcuNzUtODUuOTYsNzQuNjMtMTAwLjIzLDEyOS43NywxNi45LTguODIsMzYuODYtOS42Myw1NC40My0yLjIxLDYuNywyLjgzLDEyLjg3LDYuNzksMTguMjQsMTEuNjksMTAuODktMzIuODYsMzMuOS02MC4zMyw2NC4zNS03Ni44MmwyMS41MSwzMDcuNjZoMzk3LjU5bDIxLjUxLTMwNy42NmMzMC40NSwxNi40OSw1My40Niw0My45Niw2NC4zNSw3Ni44Miw1LjM3LTQuOSwxMS41NC04Ljg2LDE4LjI0LTExLjY5LDE3LjU3LTcuNDIsMzcuNTMtNi42MSw1NC40NCwyLjIxLTE0LjI4LTU1LjE0LTUwLjUtMTAyLjAyLTEwMC4yMy0xMjkuNzdaTTY0NC4wOSwzMzIuNTJjMjguMjQsMCw1MS4xMywyMi44OSw1MS4xMyw1MS4xM3MtMjIuODksNTEuMTMtNTEuMTMsNTEuMTMtNTEuMTMtMjIuOS01MS4xMy01MS4xMywyMi45LTUxLjEzLDUxLjEzLTUxLjEzWk02MTguMzEsNDcyLjM1djM4LjE4aC0xMTcuNDF2LTM4LjE4aDExNy40MVpNNDMxLjA1LDM4My42NWMwLTI4LjI0LDIyLjg5LTUxLjEzLDUxLjEzLTUxLjEzczUxLjEzLDIyLjg5LDUxLjEzLDUxLjEzLTIyLjg5LDUxLjEzLTUxLjEzLDUxLjEzLTUxLjEzLTIyLjktNTEuMTMtNTEuMTNaTTcxOS4wMyw5MjQuMDJoLTMwNS4wN3YtMTcuMDVoMzA1LjA3djE3LjA1Wk03MTkuMDMsODgxLjQxaC0zMDUuMDd2LTE3LjA1aDMwNS4wN3YxNy4wNVpNNzE5LjAzLDgzOC44aC0zMDUuMDd2LTE3LjA0aDMwNS4wN3YxNy4wNFpNNzE5LjAzLDc5Ni4xOWgtMzA1LjA3di0xNy4wNGgzMDUuMDd2MTcuMDRaTTcxOS4wMyw3NTMuNThoLTMwNS4wN3YtMTcuMDRoMzA1LjA3djE3LjA0Wk03MTkuMDMsNzEwLjk3aC0zMDUuMDd2LTE3LjA0aDMwNS4wN3YxNy4wNFoiLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgaWQ9IkNJUkNMRSI+CiAgICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik01MjQuMjMsMzgzLjY1YzAsMTEuNzYtOS41NCwyMS4zLTIxLjMxLDIxLjNzLTIxLjMtOS41NC0yMS4zLTIxLjMsOS41My0yMS4zMSwyMS4zLTIxLjMxLDIxLjMxLDkuNTQsMjEuMzEsMjEuMzFaIi8+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJDSVJDTEUtMiIgZGF0YS1uYW1lPSJDSVJDTEUiPgogICAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNjg2LjE0LDM4My42NWMwLDExLjc2LTkuNTQsMjEuMy0yMS4zMSwyMS4zcy0yMS4zLTkuNTQtMjEuMy0yMS4zLDkuNTQtMjEuMzEsMjEuMy0yMS4zMSwyMS4zMSw5LjU0LDIxLjMxLDIxLjMxWiIvPgogICAgICAgIDwvZz4KICAgICAgPC9nPgogICAgICA8Zz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik03Ny40LDExMzUuNTVsNDkuMTUsMTE4LjM2aC0zMS43NmwtOS4xOS0yMy4yNGgtNDUuODFsLTguNjksMjMuMjRIMGw0OS42NS0xMTguMzZoMjcuNzVaTTQ3Ljk4LDEyMDcuNzhoMjkuNzZsLTE0LjcxLTQwLjYzLTE1LjA1LDQwLjYzWiIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTEzMi41NywxMjA5LjI4di03My43MmgyOC40MnY3MS4zOWMwLDEyLjcxLDYuMTksMjQuNDEsMjIuMjMsMjQuNDFzMjIuMjMtMTEuNywyMi4yMy0yNC40MXYtNzEuMzloMjguNTl2NzMuNzJjMCwyOC40Mi0yMC4wNiw0Ny44MS01MC45OSw0Ny44MXMtNTAuNDktMTkuMzktNTAuNDktNDcuODFaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMjUxLjU5LDExOTQuNTdjMC0zNy45NSwyOC4wOS02Mi4xOSw2NC4yLTYyLjE5LDE4LjU2LDAsMzUuNzgsNi4xOSw0NS42NCwxNS43MmwtMTguMDYsMjAuNTZjLTUuNTItNi4zNS0xNS4wNS0xMS4wMy0yNi41OC0xMS4wMy0yMC4wNiwwLTM0Ljc3LDE1LjcxLTM0Ljc3LDM2Ljk1czEyLjg3LDM3LjI4LDM2LjExLDM3LjI4YzYuNjksMCwxMi44Ny0xLDE3Ljg5LTMuMTh2LTIxLjU3aC0yMi41N3YtMjMuMDdoNDguODJ2NjIuNjljLTExLjU0LDYuMDItMjcuNDIsMTAuMi00NS42NCwxMC4yLTM3Ljc4LDAtNjUuMDMtMjUuMDgtNjUuMDMtNjIuMzZaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMzg1LjY2LDEyNTMuOTJ2LTExOC4zNmgzMi42bDQ3LjQ4LDc3LjI0aC41bC0uNjctNzcuMjRoMjcuNzV2MTE4LjM2aC0zMi40M2wtNDcuNjUtNzcuNGgtLjVsLjY3LDc3LjRoLTI3Ljc1WiIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTU4MC41OSwxMTM1LjU1bDQ5LjE1LDExOC4zNmgtMzEuNzZsLTkuMi0yMy4yNGgtNDUuODFsLTguNjksMjMuMjRoLTMxLjFsNDkuNjUtMTE4LjM2aDI3Ljc1Wk01NTEuMTcsMTIwNy43OGgyOS43NmwtMTQuNzEtNDAuNjMtMTUuMDQsNDAuNjNaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy00IiBkPSJNNjM5LjYsMTI1My45MnYtMTE4LjM2aDQ3LjE0YzE4LjM5LDAsNDAuMjksNi41Miw0MC4yOSwzMC40MywwLDEzLjA0LTcuODYsMjEuNzMtMTkuMzksMjUuNTh2LjMzYzEzLjU0LDIuMzQsMjQuMjQsMTIuMDQsMjQuMjQsMjcuNTksMCwyNS43NS0yMi41NywzNC40NC00NS4xNCwzNC40NGgtNDcuMTRaTTY2Ny4xOCwxMTgyLjdoMTUuMzhjMTAuNywwLDE2Ljg4LTQuNTEsMTYuODgtMTIuODdzLTYuMTgtMTEuNTMtMTguMjItMTEuNTNoLTE0LjA0djI0LjQxWk02NjcuMTgsMTIzMC44NWgxNi4wNWM5LjAzLDAsMjAuMDYtMi41MSwyMC4wNi0xNC4wNCwwLTkuODYtOC4wMi0xMy4wNC0yMC4yMy0xMy4wNGgtMTUuODh2MjcuMDhaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy00IiBkPSJNNzUwLjc2LDEyNTMuOTJ2LTExOC4zNmgyOC43NXY5My40NWg0NS44MXYyNC45MWgtNzQuNTZaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy00IiBkPSJNODM4LjY5LDEyNTMuOTJ2LTExOC4zNmgyOC43NXYxMTguMzZoLTI4Ljc1WiIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTg5MS44NSwxMjUzLjkydi0xMTguMzZoMjguMDl2NDguMTVoLjVsNDIuMy00OC4xNWgzNS43OGwtNTAuOTksNTQuNSw1NCw2My44NmgtMzcuMjhsLTQzLjk3LTU0LjVoLS4zNHY1NC41aC0yOC4wOVoiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0xMDEwLjcxLDEyNTMuOTJ2LTExOC4zNmgyOC4wOXY0OC4xNWguNWw0Mi4zLTQ4LjE1aDM1Ljc3bC01MC45OSw1NC41LDU0LDYzLjg2aC0zNy4yOGwtNDMuOTctNTQuNWgtLjMzdjU0LjVoLTI4LjA5WiIvPgogICAgICA8L2c+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4=" alt="Augnablikk">
       <div class="grain"></div>
       <div id="loading">Hleð inn húsinu…</div>
     </div>
@@ -131,13 +120,9 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-/* ---------- brand: fill in the company name and colour ---------- */
-const BRAND = { name: 'Augnablik', accent: '#0a8ff0' };
-
 const W = 1920, H = 1080, DUR = 102;
 const CAPTURE = location.hash.includes('capture');
 if (CAPTURE) document.documentElement.classList.add('capture');
-{ const c=new THREE.Color(BRAND.accent); const r=document.documentElement.style; r.setProperty('--signal',BRAND.accent); r.setProperty('--signal-rgb',`${Math.round(c.r*255)},${Math.round(c.g*255)},${Math.round(c.b*255)}`); }
 
 /* ---------- helpers ---------- */
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
@@ -159,14 +144,16 @@ const RT=.25, TV=RT/COS;                            // roof thickness (perpendic
 const RU=HW+HZ*TAN;                                 // ridge, underside
 const under=z=>RU-Math.abs(z)*TAN, top=z=>under(z)+TV;
 const RIDGE_TOP=top(0);
+const CUTX=-2.3;                                    // the house is cut here: everything at x < CUTX is shown only as construction lines
 const AX=-1.5, AZ=1.6;                              // stove flue axis
 const OUT_Y=1.0;                                    // top of the stove outlet
-const PIPE_BOT=.92, PIPE_TOP=RIDGE_TOP+.06, PIPE_LEN=PIPE_TOP-PIPE_BOT, OFFCUT=.3;
+const PIPE_BOT=.92, PIPE_TOP=RIDGE_TOP+.06, PIPE_LEN=PIPE_TOP-PIPE_BOT;
 const ROOF_AT=top(AZ), CEIL_AT=under(AZ);
-const SLV_BOT=CEIL_AT-.14;                          // sleeve runs from just under the ceiling up to ridge height
-const GY=-.3;                                       // ground level
+const SLV_BOT=CEIL_AT-.14;
+const GY=-.3;
 const N_SLOPE=V(0,COS,SIN), D_SLOPE=V(0,-SIN,COS), X_AX=V(1,0,0);
 const P_TOP=V(AX,ROOF_AT,AZ), P_CEIL=V(AX,CEIL_AT,AZ);
+const S_HOLE=AZ/COS, R_HOLE=.205;                   // hole centre along the slope, radius
 
 /* ---------- renderer ---------- */
 const canvas=document.getElementById('gl');
@@ -175,43 +162,44 @@ renderer.setPixelRatio(1);
 renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.08;
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 const scene=new THREE.Scene();
-const BG=new THREE.Color('#eef0f3'); scene.background=BG; scene.fog=new THREE.Fog(BG,40,95);
+const BG=new THREE.Color('#eff1f4'); scene.background=BG; scene.fog=new THREE.Fog(BG,42,100);
 const camera=new THREE.PerspectiveCamera(32,W/H,.1,300);
-camera.setViewOffset(W,H,-250,95,W,H);             // keeps the subject up and to the right, clear of the captions
-scene.add(new THREE.HemisphereLight('#ffffff','#c3c9d4',1.3));
-const sun=new THREE.DirectionalLight('#fffaf3',2.9); sun.position.set(-9,18,12); sun.castShadow=true;
+camera.setViewOffset(W,H,-250,95,W,H);             // subject up and to the right, clear of the captions
+scene.add(new THREE.HemisphereLight('#ffffff','#c4c8d4',1.3));
+const sun=new THREE.DirectionalLight('#fffaf3',2.8); sun.position.set(-12,18,10); sun.castShadow=true;
 sun.shadow.mapSize.set(4096,4096); Object.assign(sun.shadow.camera,{left:-16,right:16,top:16,bottom:-16,near:1,far:60});
 sun.shadow.bias=-.0004; sun.shadow.normalBias=.03; sun.shadow.radius=2.5; scene.add(sun,sun.target);
-const fill=new THREE.DirectionalLight('#eef3ff',.55); fill.position.set(12,6,-6); scene.add(fill);
+const fill=new THREE.DirectionalLight('#eef1ff',.6); fill.position.set(8,6,-8); scene.add(fill);
+const fill2=new THREE.DirectionalLight('#fff8f2',.7); fill2.position.set(-14,3,4); scene.add(fill2);
 
 function canvasTex(w,h,draw,{repeat=false}={}){ const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d'); draw(g,w,h);
   const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=8; if(repeat) t.wrapS=t.wrapT=THREE.RepeatWrapping; return t; }
-const ACC=new THREE.Color(BRAND.accent);
-const accRGB=`${Math.round(ACC.r*255)},${Math.round(ACC.g*255)},${Math.round(ACC.b*255)}`;
-const texGlow=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,128,0,128,128,128);r.addColorStop(0,`rgba(${accRGB},.55)`);r.addColorStop(.45,`rgba(${accRGB},.16)`);r.addColorStop(1,`rgba(${accRGB},0)`);g.fillStyle=r;g.fillRect(0,0,256,256);});
+const ACC=new THREE.Color('#c84d28'), ACC_RGB='200,77,40';
+const texGlow=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,128,0,128,128,128);r.addColorStop(0,`rgba(${ACC_RGB},.5)`);r.addColorStop(.45,`rgba(${ACC_RGB},.14)`);r.addColorStop(1,`rgba(${ACC_RGB},0)`);g.fillStyle=r;g.fillRect(0,0,256,256);});
 const texFire=canvasTex(256,256,g=>{const r=g.createRadialGradient(128,150,0,128,140,128);r.addColorStop(0,'rgba(255,214,140,1)');r.addColorStop(.35,'rgba(255,140,50,.85)');r.addColorStop(1,'rgba(255,90,20,0)');g.fillStyle=r;g.fillRect(0,0,256,256);});
+const texSeam=canvasTex(128,128,g=>{g.fillStyle='#f3f4f7';g.fillRect(0,0,128,128);g.fillStyle='#dde1e8';g.fillRect(0,0,7,128);},{repeat:true}); texSeam.repeat.set(1/.55,1);
 const texBoards=(a,b)=>canvasTex(256,256,(g,w,h)=>{ g.fillStyle=a; g.fillRect(0,0,w,h); g.fillStyle=b; for(let k=0;k<4;k++){ g.fillRect(0,k*64,w,2); g.fillRect(((k*97)%4)*64+20,k*64,2,64); } },{repeat:true});
-const texClad=canvasTex(128,128,(g,w,h)=>{ g.fillStyle='#fbfbfc'; g.fillRect(0,0,w,h); g.fillStyle='#e8ebf0'; g.fillRect(0,0,5,h); },{repeat:true});
-const texArt=canvasTex(256,180,(g,w,h)=>{ g.fillStyle='#f1f2f4'; g.fillRect(0,0,w,h); g.strokeStyle='#b8c0cc'; g.lineWidth=3; g.beginPath(); g.moveTo(10,150); g.bezierCurveTo(70,60,120,140,170,80); g.lineTo(246,40); g.stroke(); g.fillStyle='rgba(5,140,230,.35)'; g.beginPath(); g.arc(190,55,18,0,7); g.fill(); });
-const texSeam=canvasTex(128,128,g=>{g.fillStyle='#f4f5f8';g.fillRect(0,0,128,128);g.fillStyle='#dfe3ea';g.fillRect(0,0,6,128);},{repeat:true});
+const texClad=canvasTex(128,128,(g,w,h)=>{ g.fillStyle='#fbfbfc'; g.fillRect(0,0,w,h); g.fillStyle='#e7eaf0'; g.fillRect(0,0,5,h); },{repeat:true});
+const texHatch=canvasTex(256,256,(g,w,h)=>{ g.fillStyle='#e7e9ef'; g.fillRect(0,0,w,h); g.strokeStyle='#bcc1ce'; g.lineWidth=3; g.beginPath(); for(let k=-w;k<w*2;k+=26){ g.moveTo(k,h); g.lineTo(k+h,0); } g.stroke(); },{repeat:true});
+const texArt=canvasTex(256,180,(g,w,h)=>{ g.fillStyle='#f1f2f4'; g.fillRect(0,0,w,h); g.strokeStyle='#b8bdca'; g.lineWidth=3; g.beginPath(); g.moveTo(10,150); g.bezierCurveTo(70,60,120,140,170,80); g.lineTo(246,40); g.stroke(); g.fillStyle=`rgba(${ACC_RGB},.45)`; g.beginPath(); g.arc(190,55,18,0,7); g.fill(); });
 
-/* blueprint sheet under the house, as in the reference: faint grid, plan outlines and dimension lines */
-const SHEET=34;
+/* blueprint sheet under the house */
+const SHEET=36;
 const texSheet=canvasTex(3072,3072,(g,w,h)=>{
   const s=w/SHEET, X=x=>(x+SHEET/2)*s, Z=z=>(z+SHEET/2)*s;
-  g.fillStyle='#f7f8fa'; g.fillRect(0,0,w,h);
-  g.strokeStyle='rgba(120,132,160,.10)'; g.lineWidth=2; g.beginPath(); for(let k=0;k<=SHEET*2;k++){const p=k*s/2; g.moveTo(p,0);g.lineTo(p,h);g.moveTo(0,p);g.lineTo(w,p);} g.stroke();
-  g.strokeStyle='rgba(84,94,118,.32)'; g.lineWidth=5;
+  g.fillStyle='#f6f7f9'; g.fillRect(0,0,w,h);
+  g.strokeStyle='rgba(110,118,150,.10)'; g.lineWidth=2; g.beginPath(); for(let k=0;k<=SHEET*2;k++){const p=k*s/2; g.moveTo(p,0);g.lineTo(p,h);g.moveTo(0,p);g.lineTo(w,p);} g.stroke();
+  g.strokeStyle='rgba(60,64,100,.30)'; g.lineWidth=5;
   const rect=(x0,z0,x1,z1)=>g.strokeRect(X(x0),Z(z0),X(x1)-X(x0),Z(z1)-Z(z0));
-  rect(-13.5,7,-6.5,12.5); rect(-13.5,7,-10.5,10); rect(-10.5,7,-6.5,12.5); rect(7,-12.5,13.5,-7); rect(9.5,-12.5,13.5,-9.5); rect(-13.5,-12.5,-8,-8);
-  g.lineWidth=3; rect(-12.8,7.6,-11.2,9.4); rect(7.6,-11.8,9,-8);
-  g.strokeStyle='rgba(84,94,118,.28)'; g.lineWidth=3;
+  rect(-5,-4,5,4); g.setLineDash([22,16]); rect(-5.45,-4.45,5.45,4.45); g.setLineDash([]);
+  g.lineWidth=3; rect(1.2,-4,5,-.5); rect(-5,-4,1.2,-.5);
+  rect(8,-14,14,-8); rect(10.5,-14,14,-11); rect(-15,-15,-8.5,-9.5); rect(9,9.5,15,15); rect(-15,10,-10,15);
+  g.strokeStyle='rgba(60,64,100,.26)'; g.lineWidth=3;
   const dimH=(x0,x1,z)=>{g.beginPath();g.moveTo(X(x0),Z(z));g.lineTo(X(x1),Z(z));for(const x of [x0,x1]){g.moveTo(X(x)-12,Z(z)+12);g.lineTo(X(x)+12,Z(z)-12);g.moveTo(X(x),Z(z)-26);g.lineTo(X(x),Z(z)+26);}g.stroke();};
   const dimV=(z0,z1,x)=>{g.beginPath();g.moveTo(X(x),Z(z0));g.lineTo(X(x),Z(z1));for(const z of [z0,z1]){g.moveTo(X(x)-12,Z(z)+12);g.lineTo(X(x)+12,Z(z)-12);g.moveTo(X(x)-26,Z(z));g.lineTo(X(x)+26,Z(z));}g.stroke();};
-  dimH(-5.3,5.3,-5.6); dimV(-4.3,4.3,-6.4); dimH(-13.5,-6.5,13.3); dimV(-12.5,-7,14.2); dimH(7,13.5,-13.3);
-  g.fillStyle='rgba(84,94,118,.5)'; g.font='600 46px "Instrument Sans", Arial'; g.textAlign='center';
-  g.fillText('10 600',X(0),Z(-5.6)-22); g.save(); g.translate(X(-6.4)-22,Z(0)); g.rotate(-Math.PI/2); g.fillText('8 600',0,0); g.restore();
-  g.fillText('7 000',X(-10),Z(13.3)-22);
+  dimH(-5,5,-6.2); dimV(-4,4,6.4); dimH(8,14,-15); dimV(-15,-9.5,-16);
+  g.fillStyle='rgba(60,64,100,.48)'; g.font='600 46px "Instrument Sans", Arial'; g.textAlign='center';
+  g.fillText('10 000',X(0),Z(-6.2)-22); g.save(); g.translate(X(6.4)+22,Z(0)); g.rotate(Math.PI/2); g.fillText('8 000',0,0); g.restore();
 });
 
 /* ---------- materials ---------- */
@@ -220,336 +208,347 @@ const M={
   ground:new THREE.MeshStandardMaterial({color:'#eceef2',roughness:1}),
   white:new THREE.MeshStandardMaterial({color:'#ffffff',roughness:.9}),
   wall:new THREE.MeshStandardMaterial({color:'#fbfbfc',roughness:.92}),
-  base:new THREE.MeshStandardMaterial({color:'#e8ebf0',roughness:.8}),
+  clad:new THREE.MeshStandardMaterial({map:texClad,roughness:.9}),
+  hatch:new THREE.MeshStandardMaterial({map:texHatch,roughness:1,side:THREE.DoubleSide}),
+  base:new THREE.MeshStandardMaterial({color:'#e7eaef',roughness:.8}),
   floor:new THREE.MeshStandardMaterial({map:texBoards('#eadbc6','#dcc9ae'),roughness:.8}),
   deck:new THREE.MeshStandardMaterial({map:texBoards('#e4d4bd','#d3bfa2'),roughness:.9}),
-  clad:new THREE.MeshStandardMaterial({map:texClad,roughness:.9}),
   wood:new THREE.MeshStandardMaterial({color:'#dcc19c',roughness:.8}),
   woodLight:new THREE.MeshStandardMaterial({color:'#e8d6bb',roughness:.75}),
   stone:new THREE.MeshStandardMaterial({color:'#dfe1e4',roughness:.5}),
-  cushion:new THREE.MeshStandardMaterial({color:'#d9dde5',roughness:.95}),
-  leaf:new THREE.MeshStandardMaterial({color:'#d6dfd2',roughness:1}),
+  rug:new THREE.MeshStandardMaterial({color:'#e2e4ea',roughness:1}),
+  soft:new THREE.MeshStandardMaterial({color:'#e8e9ee',roughness:.95}),
+  cushion:new THREE.MeshStandardMaterial({color:'#d6d9e2',roughness:.95}),
+  accentSoft:new THREE.MeshStandardMaterial({color:'#e3b7a6',roughness:.95}),
+  leaf:new THREE.MeshStandardMaterial({color:'#d4ddd0',roughness:1}),
   art:new THREE.MeshStandardMaterial({map:texArt,roughness:.9}),
-  path:new THREE.MeshStandardMaterial({color:'#e6e8ec',roughness:1}),
-  dark:new THREE.MeshStandardMaterial({color:'#4a505c',roughness:.6}),
-  rug:new THREE.MeshStandardMaterial({color:'#e3e6ec',roughness:1}),
-  soft:new THREE.MeshStandardMaterial({color:'#e9ecf1',roughness:.95}),
-  win:new THREE.MeshStandardMaterial({color:'#dfe6ef',roughness:.25}),
+  path:new THREE.MeshStandardMaterial({color:'#e5e7eb',roughness:1}),
+  dark:new THREE.MeshStandardMaterial({color:'#4a4d63',roughness:.6}),
+  glass:new THREE.MeshStandardMaterial({color:'#cfd8e3',roughness:.15,metalness:.1}),
   seam:new THREE.MeshStandardMaterial({map:texSeam,roughness:.85}),
-  roofGlass:new THREE.MeshStandardMaterial({color:'#e7ecf3',roughness:.4,transparent:true,opacity:.26,depthWrite:false,side:THREE.DoubleSide}),
-  frontGlass:new THREE.MeshStandardMaterial({color:'#e3eaf3',roughness:.2,transparent:true,opacity:.16,depthWrite:false,side:THREE.DoubleSide}),
-  disc:new THREE.MeshStandardMaterial({color:'#f0f2f6',roughness:.8}),
-  hole:new THREE.MeshBasicMaterial({color:'#2a2e36',transparent:true,opacity:0,depthWrite:false}),
-  stove:new THREE.MeshStandardMaterial({color:'#2b2f37',roughness:.55,metalness:.25}),
-  door:new THREE.MeshStandardMaterial({color:'#171a20',roughness:.15,metalness:.1}),
-  hearth:new THREE.MeshStandardMaterial({color:'#e2e0dc',roughness:.9}),
-  pipe:new THREE.MeshStandardMaterial({color:'#343840',roughness:.42,metalness:.3}),
-  steel:new THREE.MeshStandardMaterial({color:'#c9cfd8',roughness:.38,metalness:.35}),
-  steelDark:new THREE.MeshStandardMaterial({color:'#8d95a1',roughness:.4,metalness:.35}),
-  inner:new THREE.MeshStandardMaterial({color:'#2a2e35',roughness:.9,side:THREE.BackSide}),
+  stove:new THREE.MeshStandardMaterial({color:'#2b2d3a',roughness:.55,metalness:.25}),
+  door:new THREE.MeshStandardMaterial({color:'#17181f',roughness:.15,metalness:.1}),
+  hearth:new THREE.MeshStandardMaterial({color:'#e0dedb',roughness:.9}),
+  pipe:new THREE.MeshStandardMaterial({color:'#33353f',roughness:.42,metalness:.3}),
+  steel:new THREE.MeshStandardMaterial({color:'#c9ced7',roughness:.38,metalness:.35}),
+  steelDark:new THREE.MeshStandardMaterial({color:'#8c93a0',roughness:.4,metalness:.35}),
+  inner:new THREE.MeshStandardMaterial({color:'#2a2c36',roughness:.9,side:THREE.BackSide}),
   acc:new THREE.MeshBasicMaterial({color:ACC,toneMapped:false}),
   accT:new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:1,depthWrite:false}),
   ghost:new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false}),
-  plumb:new THREE.MeshBasicMaterial({color:'#3a3f4a',transparent:true,opacity:1}),
+  plumb:new THREE.MeshBasicMaterial({color:'#3a3d52',transparent:true,opacity:1}),
   tree:new THREE.MeshStandardMaterial({color:'#ffffff',roughness:1}),
   trunk:new THREE.MeshStandardMaterial({color:'#eceff3',roughness:1}),
 };
-const edgeMat=new THREE.LineBasicMaterial({color:'#bfc6d3',transparent:true,opacity:.8});
-const edgeSoft=new THREE.LineBasicMaterial({color:'#aab3c2',transparent:true,opacity:.55});
+const edgeMat=new THREE.LineBasicMaterial({color:'#bcc2cf',transparent:true,opacity:.8});
+const lineMat=new THREE.LineBasicMaterial({color:'#9097ab',transparent:true,opacity:.42});
 function outline(mesh,parent=mesh.parent,mat=edgeMat,angle=25){ const l=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry,angle),mat); l.position.copy(mesh.position); l.quaternion.copy(mesh.quaternion); l.scale.copy(mesh.scale); parent.add(l); return l; }
 function mesh(geo,mat,parent,{x=0,y=0,z=0,shadow=true,edge=true,edgeM=edgeMat}={}){ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=m.receiveShadow=shadow; parent.add(m); if(edge) outline(m,parent,edgeM); return m; }
+function uvScale(geo,su,sv){ const uv=geo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*su,uv.getY(i)*sv); return geo; }
+// a box that starts at the section cut: its -x face is hatched like a cut on a drawing
+function cutBox(x1,y0,y1,z0,z1,mat,parent){ const w=x1-CUTX,h=y1-y0,d=z1-z0; const g=new THREE.BoxGeometry(w,h,d);
+  const uv=g.attributes.uv; for(let i=4;i<8;i++) uv.setXY(i,uv.getX(i)*d/.6,uv.getY(i)*h/.6);
+  return mesh(g,[mat,M.hatch,mat,mat,mat,mat],parent,{x:(CUTX+x1)/2,y:(y0+y1)/2,z:(z0+z1)/2}); }
 
 /* ---------- ground + blueprint ---------- */
 const ground=new THREE.Mesh(new THREE.PlaneGeometry(400,400),M.ground); ground.rotation.x=-Math.PI/2; ground.position.y=GY-.01; ground.receiveShadow=true; scene.add(ground);
 const sheet=new THREE.Mesh(new THREE.PlaneGeometry(SHEET,SHEET),M.sheet); sheet.rotation.x=-Math.PI/2; sheet.position.y=GY; sheet.receiveShadow=true; scene.add(sheet);
 
-/* ---------- the house ---------- */
+/* ---------- the house (section) ---------- */
 const house=new THREE.Group(); scene.add(house);
-mesh(new RoundedBoxGeometry(2*HX+1.2,.3,2*HZ+1.2,2,.08),M.base,house,{y:GY+.15});
-{ const g=new THREE.BoxGeometry(2*HX,.04,2*HZ); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*2*HX/.9,uv.getY(i)*2*HZ/.9); mesh(g,M.floor,house,{y:.02,edge:false}); }
-// deck and steps in front of the glazed living room
-{ const g=new THREE.BoxGeometry(6.4,.12,1.6); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*6.4/.9,uv.getY(i)*1.6/.9); mesh(g,M.deck,house,{x:1.6,y:-.06,z:HZ+.9}); }
-for(let k=0;k<2;k++) mesh(new THREE.BoxGeometry(1.8,.12,.36),M.deck,house,{x:3.4,y:GY+.06+k*.12,z:HZ+1.7+.36*(1-k)+.18});
-// outdoor chairs + low table on the deck
-for(const x of [3.9,4.7]){ const c=new THREE.Group(); c.position.set(x,0,HZ+1.05); house.add(c); mesh(new RoundedBoxGeometry(.6,.3,.6,2,.05),M.soft,c,{y:.15}); mesh(new RoundedBoxGeometry(.6,.4,.12,2,.04),M.soft,c,{y:.4,z:.26}); }
-mesh(new THREE.CylinderGeometry(.22,.22,.32,24),M.white,house,{x:4.3,y:.16,z:HZ+.55});
+cutBox(HX+.6,GY,-.02,-HZ-.6,HZ+.6,M.base,house);                                    // plinth
+cutBox(HX,-.02,.04,-HZ,HZ,M.floor,house);
+// floor boards: repeat on the top face
+{ const g=new THREE.PlaneGeometry(HX-CUTX,2*HZ); uvScale(g,(HX-CUTX)/.9,2*HZ/.9); const m=new THREE.Mesh(g,M.floor); m.rotation.x=-Math.PI/2; m.position.set((HX+CUTX)/2,.042,0); m.receiveShadow=true; house.add(m); }
+// back wall: timber cladding outside, framed windows
+cutBox(HX,0,HW,-HZ-.1,-HZ+.1,M.clad,house); uvScale(house.children[house.children.length-2].geometry,1,1);
+{ const w=house.children[house.children.length-2]; const g=w.geometry; const uv=g.attributes.uv; for(const f of [0,2,3,4,5]) for(let k=0;k<4;k++){ const i=f*4+k; uv.setXY(i,uv.getX(i)*(HX-CUTX)/.16,uv.getY(i)); } }
+function windowZ(x,z,w,h,y,dir=1){ // frame + glass + sill in a wall facing ±z
+  mesh(new THREE.BoxGeometry(w,h,.05),M.glass,house,{x,y,z,shadow:false,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(.07,h+.07,.26),M.white,house,{x:x+d*w/2,y,z,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(w+.07,.07,.26),M.white,house,{x,y:y+d*h/2,z,edge:false});
+  mesh(new THREE.BoxGeometry(.04,h,.24),M.white,house,{x,y,z,edge:false});
+  mesh(new THREE.BoxGeometry(w+.2,.05,.36),M.white,house,{x,y:y-h/2-.04,z:z+dir*.06}); }
+function windowX(x,z,w,h,y){
+  mesh(new THREE.BoxGeometry(.05,h,w),M.glass,house,{x,y,z,shadow:false,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(.26,h+.07,.07),M.white,house,{x,y,z:z+d*w/2,edge:false});
+  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(.26,.07,w+.07),M.white,house,{x,y:y+d*h/2,z,edge:false});
+  mesh(new THREE.BoxGeometry(.24,h,.04),M.white,house,{x,y,z,edge:false});
+  mesh(new THREE.BoxGeometry(.36,.05,w+.2),M.white,house,{x:x+.06,y:y-h/2-.04,z}); }
+for(const x of [-.6,3.1]) windowZ(x,-HZ,1.3,1.15,1.6,-1);
+// front wall with openings: a big window by the stove, a glazed door to the deck, a window by the sofa
+{ const z0=HZ-.1,z1=HZ+.1, ops=[[-1.95,-.35,.45,2.25],[.7,2.5,0,2.25],[3.2,4.5,.75,2.0]];
+  let cur=CUTX; const segs=[];
+  for(const [a,b,y0,y1] of ops){ segs.push([cur,a]); cur=b; mesh(new THREE.BoxGeometry(b-a,HW-y1,.2),M.clad,house,{x:(a+b)/2,y:(y1+HW)/2,z:HZ}); if(y0>0) mesh(new THREE.BoxGeometry(b-a,y0,.2),M.clad,house,{x:(a+b)/2,y:y0/2,z:HZ}); }
+  segs.push([cur,HX]);
+  for(const [a,b] of segs){ if(a===CUTX) cutBox(b,0,HW,z0,z1,M.clad,house); else mesh(new THREE.BoxGeometry(b-a,HW,.2),M.clad,house,{x:(a+b)/2,y:HW/2,z:HZ}); }
+  windowZ(-1.15,HZ,1.6,1.8,1.35); windowZ(3.85,HZ,1.3,1.25,1.375);
+  mesh(new THREE.BoxGeometry(1.8,2.25,.05),M.glass,house,{x:1.6,y:1.125,z:HZ,shadow:false,edge:false});
+  for(const x of [.7,1.6,2.5]) mesh(new THREE.BoxGeometry(.07,2.25,.26),M.white,house,{x,y:1.125,z:HZ,edge:false});
+  mesh(new THREE.BoxGeometry(1.87,.07,.26),M.white,house,{x:1.6,y:2.25,z:HZ,edge:false}); }
+// gable wall (+x) with windows; corner boards
+{ const g=new THREE.BoxGeometry(.2,HW,2*HZ); uvScale(g,2*HZ/.16,1); mesh(g,M.clad,house,{x:HX,y:HW/2});
+  const sh=new THREE.Shape(); sh.moveTo(-HZ,0); sh.lineTo(HZ,0); sh.lineTo(0,HZ*TAN); sh.closePath();
+  const gg=new THREE.ExtrudeGeometry(sh,{depth:.2,bevelEnabled:false}); gg.rotateY(Math.PI/2); gg.translate(-.1,0,0); uvScale(gg,1/.16,.5); mesh(gg,M.clad,house,{x:HX,y:HW});
+  windowX(HX,-1.8,1.5,1.3,1.5); windowX(HX,1.9,1.0,1.3,1.5); windowX(HX,0,.7,.7,HW+.75);
+  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(.24,HW,.24),M.white,house,{x:HX,y:HW/2,z:sz*HZ}); }
+// deck, steps, outdoor chairs
+{ const g=new THREE.BoxGeometry(5.8,.12,1.6); uvScale(g,5.8/.9,1.6/.9); mesh(g,M.deck,house,{x:2.0,y:-.06,z:HZ+.9}); }
+for(let k=0;k<2;k++) mesh(new THREE.BoxGeometry(1.8,.12,.36),M.deck,house,{x:1.6,y:GY+.06+k*.12,z:HZ+1.7+.36*(1-k)+.18});
+for(const x of [3.7,4.5]){ const c=new THREE.Group(); c.position.set(x,0,HZ+1.05); house.add(c); mesh(new RoundedBoxGeometry(.6,.3,.6,2,.05),M.soft,c,{y:.15}); mesh(new RoundedBoxGeometry(.6,.4,.12,2,.04),M.soft,c,{y:.4,z:.26}); }
 
-// exterior walls: vertical timber cladding, framed windows
-function windowIn(parent,{x=0,y=1.5,z=0,w=1.4,h=1.3,axis='z'}){   // frame + glass + sill, set into a wall
-  const fx=axis==='z'?w:.26, fz=axis==='z'?.26:w;
-  mesh(new THREE.BoxGeometry(axis==='z'?w:.08,h,axis==='z'?.08:w),M.win,parent,{x,y,z,shadow:false,edge:false});
-  for(const d of [-1,1]){ mesh(new THREE.BoxGeometry(axis==='z'?.07:fx,h+.07,axis==='z'?fz:.07),M.white,parent,{x:axis==='z'?x+d*w/2:x,y,z:axis==='z'?z:z+d*w/2,edge:false}); }
-  for(const d of [-1,1]) mesh(new THREE.BoxGeometry(axis==='z'?w+.07:fx,.07,axis==='z'?fz:w+.07),M.white,parent,{x,y:y+d*h/2,z,edge:false});
-  mesh(new THREE.BoxGeometry(axis==='z'?w+.2:.34,.05,axis==='z'?.34:w+.2),M.white,parent,{x,y:y-h/2-.04,z});
-  mesh(new THREE.BoxGeometry(axis==='z'?.04:fx,h,axis==='z'?fz:.04),M.white,parent,{x,y,z,edge:false});   // mullion
-}
-{ const g=new THREE.BoxGeometry(2*HX+.2,HW,.2); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*(2*HX)/.16,uv.getY(i)); mesh(g,M.clad,house,{y:HW/2,z:-HZ}); }
-for(const x of [-3.0,-.4,3.1]) windowIn(house,{x,z:-HZ,w:1.3,h:1.15,y:1.6});
-const gableShape=new THREE.Shape(); gableShape.moveTo(-HZ,0); gableShape.lineTo(HZ,0); gableShape.lineTo(0,HZ*TAN); gableShape.closePath();
-for(const sx of [-1,1]){
-  const g=new THREE.BoxGeometry(.2,HW,2*HZ); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*(2*HZ)/.16,uv.getY(i)); mesh(g,M.clad,house,{x:sx*HX,y:HW/2});
-  const gg=new THREE.ExtrudeGeometry(gableShape,{depth:.2,bevelEnabled:false}); gg.rotateY(Math.PI/2); gg.translate(-.1,0,0);
-  { const uv=gg.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)/.16,uv.getY(i)/2); }
-  mesh(gg,M.clad,house,{x:sx*HX,y:HW});
-  windowIn(house,{x:sx*HX,z:-1.8,w:1.5,h:1.3,y:1.5,axis:'x'}); windowIn(house,{x:sx*HX,z:1.9,w:1.0,h:1.3,y:1.5,axis:'x'});
-  windowIn(house,{x:sx*HX,z:0,w:.7,h:.7,y:HW+.75,axis:'x'});
-  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(.24,HW,.24),M.white,house,{x:sx*HX,y:HW/2,z:sz*HZ});   // corner boards
-}
-// open, glazed front: slim frame, glass you can see straight through
-const front=new THREE.Mesh(new THREE.BoxGeometry(2*HX,HW,.03),M.frontGlass); front.position.set(0,HW/2,HZ); front.renderOrder=2; house.add(front); outline(front,house,edgeSoft);
-for(const x of [-3.4,1.7]) mesh(new THREE.BoxGeometry(.08,HW,.1),M.white,house,{x,y:HW/2,z:HZ});
-mesh(new THREE.BoxGeometry(2*HX+.1,.12,.14),M.white,house,{y:HW-.06,z:HZ});
-mesh(new THREE.BoxGeometry(2*HX+.1,.08,.14),M.white,house,{y:.06,z:HZ});
-mesh(new THREE.BoxGeometry(2*HX,.035,.08),M.white,house,{y:2.15,z:HZ,edge:false});        // transom bar
-
-// roof: far slope and the ends of the near slope finished in standing seam; the middle of the near slope is opened up
-// to its timber (rafters + battens behind glass), like the cut-away in the reference, so the flue stays visible
-const L_SLOPE=(HZ+OVER)/COS, RW=2*HX+2*OVER;
-const CUT0=-3.75, CUT1=.75;
-function slope(sign){ const g=new THREE.Group(); g.position.set(0,RU,0); g.rotation.x=sign*TH; house.add(g); return g; }
-function seamSlab(parent,x0,x1,z0,z1){ const w=x1-x0, l=Math.abs(z1-z0); const geo=new THREE.BoxGeometry(w,RT,l); const uv=geo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*w/.6,uv.getY(i));
-  mesh(geo,[M.white,M.white,M.seam,M.white,M.white,M.white],parent,{x:(x0+x1)/2,y:RT/2,z:(z0+z1)/2}); }
+// roof: solid, standing seam on top, white ceiling below; the near slope carries a real round hole that the
+// roof plug fills until it is cut out
+const L_SLOPE=(HZ+OVER)/COS, RX1=HX+OVER;
+const slopeQ=s=>new THREE.Quaternion().setFromAxisAngle(X_AX,s*TH);
+function slope(sign){ const g=new THREE.Group(); g.position.set(0,RU,0); g.quaternion.copy(slopeQ(sign)); house.add(g); return g; }
+function slabFromShape(shape,parent,{seam=true}={}){
+  const g=new THREE.ExtrudeGeometry(shape,{depth:RT,bevelEnabled:false,curveSegments:48}); g.rotateX(Math.PI/2); g.translate(0,RT,0);
+  const m=new THREE.Mesh(g,[M.white,M.white]); m.castShadow=m.receiveShadow=true; parent.add(m); outline(m,parent,edgeMat,30);
+  if(seam){ const sg=new THREE.ShapeGeometry(shape,48); sg.rotateX(Math.PI/2); const uv=sg.attributes.uv; const p=sg.attributes.position; for(let i=0;i<uv.count;i++) uv.setXY(i,p.getX(i),p.getZ(i)); const s=new THREE.Mesh(sg,M.seam); s.material.side=THREE.DoubleSide; s.position.y=RT+.003; s.receiveShadow=true; s.rotation.x=0; s.scale.set(1,1,1); parent.add(s); }
+  return m; }
+// shapes are drawn in (x, s) where s runs down the slope from the ridge; rotateX(+90°) maps shape-y to +z
 const farS=slope(-1);
-seamSlab(farS,-RW/2,RW/2,0,-L_SLOPE);
-mesh(new THREE.BoxGeometry(RW,.32,.08),M.white,farS,{y:RT/2-.04,z:-L_SLOPE});
+{ const sh=new THREE.Shape(); sh.moveTo(CUTX,0); sh.lineTo(RX1,0); sh.lineTo(RX1,-L_SLOPE); sh.lineTo(CUTX,-L_SLOPE); sh.closePath(); slabFromShape(sh,farS); }
+mesh(new THREE.BoxGeometry(RX1-CUTX,.32,.08),M.white,farS,{x:(RX1+CUTX)/2,y:RT/2-.04,z:-L_SLOPE});
 const nearS=slope(1);
-seamSlab(nearS,-RW/2,CUT0,0,L_SLOPE); seamSlab(nearS,CUT1,RW/2,0,L_SLOPE);
-{ const panel=new THREE.Mesh(new THREE.BoxGeometry(CUT1-CUT0,.02,L_SLOPE),M.roofGlass); panel.position.set((CUT0+CUT1)/2,RT-.01,L_SLOPE/2); panel.renderOrder=3; nearS.add(panel); outline(panel,nearS,edgeSoft);
-  for(let x=CUT0+.12; x<CUT1; x+=.8){ if(Math.abs(x-AX)<.45) continue; mesh(new THREE.BoxGeometry(.07,RT*.8,L_SLOPE-.06),M.wood,nearS,{x,y:RT*.4,z:L_SLOPE/2}); }
-  for(const x of [AX-.36,AX+.36]) mesh(new THREE.BoxGeometry(.07,RT*.8,L_SLOPE-.06),M.wood,nearS,{x,y:RT*.4,z:L_SLOPE/2});   // trimmers each side of the flue
-  for(let s2=.25; s2<L_SLOPE-.1; s2+=.42){ if(Math.abs(s2-AZ/COS)<.32) { for(const [x0,x1] of [[CUT0,AX-.25],[AX+.25,CUT1]]) mesh(new THREE.BoxGeometry(x1-x0,.04,.07),M.woodLight,nearS,{x:(x0+x1)/2,y:RT*.8+.02,z:s2,edge:false}); continue; }
-    mesh(new THREE.BoxGeometry(CUT1-CUT0,.04,.07),M.woodLight,nearS,{x:(CUT0+CUT1)/2,y:RT*.8+.02,z:s2,edge:false}); }   // battens
-  mesh(new THREE.BoxGeometry(RW,.32,.08),M.white,nearS,{y:RT/2-.04,z:L_SLOPE});                         // fascia
-  for(const sx of [-1,1]) mesh(new THREE.BoxGeometry(.08,RT+.04,L_SLOPE),M.white,nearS,{x:sx*RW/2,y:RT/2,z:L_SLOPE/2});  // verge
-}
+{ const sh=new THREE.Shape(); sh.moveTo(CUTX,0); sh.lineTo(CUTX,L_SLOPE); sh.lineTo(RX1,L_SLOPE); sh.lineTo(RX1,0); sh.closePath();
+  const hole=new THREE.Path(); hole.absarc(AX,S_HOLE,R_HOLE,0,Math.PI*2,true); sh.holes.push(hole); slabFromShape(sh,nearS);
+  mesh(new THREE.BoxGeometry(RX1-CUTX,.32,.08),M.white,nearS,{x:(RX1+CUTX)/2,y:RT/2-.04,z:L_SLOPE}); }
+// hatched caps where the roof is cut
+for(const sign of [-1,1]){ const q=slopeQ(sign); const pts=[[0,0],[0,sign*L_SLOPE],[RT,sign*L_SLOPE],[RT,0]].map(([yl,zl])=>V(0,yl,zl).applyQuaternion(q).add(V(0,RU,0)));
+  const sh=new THREE.Shape(pts.map(p=>new THREE.Vector2(p.z,p.y))); const g=new THREE.ShapeGeometry(sh); g.rotateY(-Math.PI/2); uvScale(g,1/.6,1/.6);
+  const uv=g.attributes.uv,p=g.attributes.position; for(let i=0;i<uv.count;i++) uv.setXY(i,p.getZ(i)/.6,p.getY(i)/.6);
+  const m=new THREE.Mesh(g,M.hatch); m.position.x=CUTX-.003; house.add(m); }
+// the roof plug: same slab and seam as the roof, built where the hole is
+const plug=new THREE.Group(); scene.add(plug);
+{ const sh=new THREE.Shape(); sh.absarc(AX,S_HOLE,R_HOLE-.003,0,Math.PI*2,false);
+  const inner=new THREE.Group(); inner.position.set(-AX,0,-S_HOLE); plug.add(inner); slabFromShape(sh,inner); }
+const PLUG0=V(AX,RU,0).add(V(0,0,S_HOLE).applyQuaternion(slopeQ(1)));        // hole centre on the ceiling side
+const qNear=slopeQ(1), qNearInv=qNear.clone().invert();
 // gutters and downpipes
 for(const sz of [-1,1]){ const zE=sz*(HZ+OVER+.09), yE=HW-OVER*TAN-.12;
-  mesh(new THREE.CylinderGeometry(.08,.08,RW,20,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateX(sz>0?0:Math.PI),M.white,house,{y:yE,z:zE,edge:false});
-  for(const sx of [-1,1]) mesh(new THREE.CylinderGeometry(.04,.04,yE-GY,12),M.white,house,{x:sx*(HX+.25),y:(yE+GY)/2,z:zE,edge:false}); }
-// ridge cap
+  mesh(new THREE.CylinderGeometry(.08,.08,RX1-CUTX,20,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateX(sz>0?0:Math.PI),M.white,house,{x:(RX1+CUTX)/2,y:yE,z:zE,edge:false});
+  mesh(new THREE.CylinderGeometry(.04,.04,yE-GY,12),M.white,house,{x:HX+.25,y:(yE+GY)/2,z:zE,edge:false}); }
+// ridge cap; the piece above the flue lifts so the plate can slide under it
 const ridgeShape=new THREE.Shape(); ridgeShape.moveTo(-.3,-.02); ridgeShape.lineTo(0,.16); ridgeShape.lineTo(.3,-.02); ridgeShape.lineTo(.3,-.06); ridgeShape.lineTo(0,.11); ridgeShape.lineTo(-.3,-.06); ridgeShape.closePath();
-{ const rg=new THREE.ExtrudeGeometry(ridgeShape,{depth:RW+.04,bevelEnabled:false}); rg.rotateY(Math.PI/2); rg.translate(-(RW+.04)/2,0,0); mesh(rg,M.white,house,{y:RIDGE_TOP}); }
+function ridgePiece(x0,x1,parent){ const rg=new THREE.ExtrudeGeometry(ridgeShape,{depth:x1-x0,bevelEnabled:false}); rg.rotateY(Math.PI/2); rg.translate(x0,0,0); return mesh(rg,M.white,parent,{y:RIDGE_TOP}); }
+const RC0=AX-.62, RC1=AX+.62;
+ridgePiece(CUTX,RC0-.005,house); ridgePiece(RC1+.005,RX1,house);
+const capG=new THREE.Group(); scene.add(capG); ridgePiece(RC0,RC1,capG);
 
-/* interior: rooms behind, open living room in front with the stove */
-const PH=2.45;   // partitions stop short of the sloped ceiling, like a cut model
-function wall(x0,z0,x1,z1,gaps=[]){ // straight partition along x or z, with door openings [from,to] along its length
-  const alongX=Math.abs(x1-x0)>Math.abs(z1-z0), a0=alongX?x0:z0, a1=alongX?x1:z1; let cur=a0; const segs=[];
-  for(const [g0,g1] of [...gaps,[a1,a1]]){ if(g0>cur) segs.push([cur,g0]); if(g1<a1){ mesh(new THREE.BoxGeometry(alongX?g1-g0:.12,PH-2.1,alongX?.12:g1-g0),M.wall,house,{x:alongX?(g0+g1)/2:x0,y:2.1+(PH-2.1)/2,z:alongX?z0:(g0+g1)/2}); } cur=g1; }
-  for(const [s0,s1] of segs) mesh(new THREE.BoxGeometry(alongX?s1-s0:.12,PH,alongX?.12:s1-s0),M.wall,house,{x:alongX?(s0+s1)/2:x0,y:PH/2,z:alongX?z0:(s0+s1)/2});
-}
-wall(1.2,-HZ+.1,1.2,-.5,[[-2.0,-1.1]]);            // bedroom | kitchen
-wall(1.2,-.5,HX-.1,-.5,[[3.7,4.55]]);               // bedroom | living room
-wall(-HX+.1,-1.3,-2.3,-1.3);                        // short wall behind the kitchen island zone
-// kitchen along the back wall
-mesh(new THREE.BoxGeometry(3.6,.88,.62),M.white,house,{x:-2.9,y:.44,z:-HZ+.42}); mesh(new THREE.BoxGeometry(3.66,.05,.66),M.stone,house,{x:-2.9,y:.905,z:-HZ+.42});
-for(let k=0;k<6;k++) mesh(new THREE.BoxGeometry(.01,.7,.55),M.base,house,{x:-4.65+k*.6,y:.45,z:-HZ+.43,edge:false});
-mesh(new THREE.BoxGeometry(.7,2.1,.66),M.white,house,{x:-.75,y:1.05,z:-HZ+.43});                         // tall fridge unit
-mesh(new THREE.BoxGeometry(2.4,.6,.36),M.white,house,{x:-3.4,y:2.0,z:-HZ+.28});                           // wall cabinets
-mesh(new THREE.BoxGeometry(.5,.02,.38),M.steel,house,{x:-2.4,y:.935,z:-HZ+.42,edge:false});               // sink
+// interior walls (stop short of the sloped ceiling, like a cut model)
+const PH=2.45;
+mesh(new THREE.BoxGeometry(.12,PH,HZ-.6),M.wall,house,{x:1.2,y:PH/2,z:-HZ/2-.25+.05});
+for(const [a,b] of [[1.26,3.7],[4.55,HX-.1]]) mesh(new THREE.BoxGeometry(b-a,PH,.12),M.wall,house,{x:(a+b)/2,y:PH/2,z:-.5});
+mesh(new THREE.BoxGeometry(.85,PH-2.1,.12),M.wall,house,{x:4.125,y:2.1+(PH-2.1)/2,z:-.5});
+// kitchen on the back wall
+mesh(new THREE.BoxGeometry(3.1,.88,.62),M.white,house,{x:-.55,y:.44,z:-HZ+.42}); mesh(new THREE.BoxGeometry(3.16,.05,.66),M.stone,house,{x:-.55,y:.905,z:-HZ+.42});
+for(let k=0;k<5;k++) mesh(new THREE.BoxGeometry(.01,.7,.55),M.base,house,{x:-1.85+k*.62,y:.45,z:-HZ+.43,edge:false});
+mesh(new THREE.BoxGeometry(.5,.02,.38),M.steel,house,{x:-1.2,y:.935,z:-HZ+.42,edge:false});
+mesh(new THREE.BoxGeometry(2.2,.6,.36),M.white,house,{x:-.9,y:2.0,z:-HZ+.28});
+mesh(new THREE.BoxGeometry(.7,2.1,.66),M.white,house,{x:.75,y:1.05,z:-HZ+.43});
 // dining table, chairs, pendant
-mesh(new RoundedBoxGeometry(1.7,.05,.9,2,.02),M.woodLight,house,{x:-.4,y:.76,z:-2.3});
-for(const [x,z] of [[-1.1,-2.6],[.3,-2.6],[-1.1,-2.0],[.3,-2.0]]) mesh(new THREE.CylinderGeometry(.025,.025,.74,8),M.woodLight,house,{x,y:.37,z,edge:false});
-for(const [x,z,r] of [[-.9,-2.95,0],[.1,-2.95,0],[-.9,-1.65,Math.PI],[.1,-1.65,Math.PI]]){ const c=new THREE.Group(); c.position.set(x,0,z); c.rotation.y=r; house.add(c);
+mesh(new RoundedBoxGeometry(1.6,.05,.9,2,.02),M.woodLight,house,{x:-.55,y:.76,z:-1.95});
+for(const [x,z] of [[-1.2,-2.25],[.1,-2.25],[-1.2,-1.65],[.1,-1.65]]) mesh(new THREE.CylinderGeometry(.025,.025,.74,8),M.woodLight,house,{x,y:.37,z,edge:false});
+for(const [x,z,r] of [[-1.0,-2.6,0],[-.1,-2.6,0],[-1.0,-1.3,Math.PI],[-.1,-1.3,Math.PI]]){ const c=new THREE.Group(); c.position.set(x,0,z); c.rotation.y=r; house.add(c);
   mesh(new RoundedBoxGeometry(.42,.05,.42,2,.02),M.woodLight,c,{y:.46}); mesh(new RoundedBoxGeometry(.42,.42,.04,2,.02),M.woodLight,c,{y:.7,z:-.19}); for(const [lx,lz] of [[-.18,-.18],[.18,-.18],[-.18,.18],[.18,.18]]) mesh(new THREE.CylinderGeometry(.015,.015,.45,6),M.woodLight,c,{x:lx,y:.22,z:lz,edge:false}); }
-mesh(new THREE.CylinderGeometry(.006,.006,1.3,6),M.dark,house,{x:-.4,y:3.15,z:-2.3,edge:false}); mesh(new THREE.ConeGeometry(.24,.2,32,1,true),M.white,house,{x:-.4,y:2.45,z:-2.3,edge:false});
+mesh(new THREE.CylinderGeometry(.006,.006,1.1,6),M.dark,house,{x:-.55,y:3.0,z:-1.95,edge:false}); mesh(new THREE.ConeGeometry(.24,.2,32,1,true),M.white,house,{x:-.55,y:2.4,z:-1.95,edge:false});
 // bedroom
 mesh(new RoundedBoxGeometry(1.7,.42,2.1,2,.06),M.white,house,{x:3.1,y:.21,z:-2.85}); mesh(new RoundedBoxGeometry(1.66,.12,1.5,2,.05),M.soft,house,{x:3.1,y:.47,z:-2.5});
+mesh(new RoundedBoxGeometry(1.5,.08,.5,2,.03),M.accentSoft,house,{x:3.1,y:.55,z:-1.95});
 mesh(new RoundedBoxGeometry(1.8,.9,.1,2,.03),M.woodLight,house,{x:3.1,y:.55,z:-3.88});
-for(const x of [2.0,4.2]) mesh(new RoundedBoxGeometry(.45,.45,.4,2,.03),M.woodLight,house,{x,y:.225,z:-3.7});
-for(const x of [2.0,4.2]){ mesh(new THREE.CylinderGeometry(.09,.13,.18,20),M.white,house,{x,y:.54,z:-3.7,edge:false}); }
-mesh(new THREE.BoxGeometry(.6,2.1,1.6),M.white,house,{x:HX-.42,y:1.05,z:-1.5});                           // wardrobe
-// living room: sofa facing the stove, armchair, rug, coffee table, floor lamp, shelves, plants, log basket
-mesh(new THREE.BoxGeometry(3.0,.02,2.2),M.rug,house,{x:.75,y:.05,z:1.5,edge:false});
+for(const x of [2.0,4.2]){ mesh(new RoundedBoxGeometry(.45,.45,.4,2,.03),M.woodLight,house,{x,y:.225,z:-3.7}); mesh(new THREE.CylinderGeometry(.09,.13,.18,20),M.white,house,{x,y:.54,z:-3.7,edge:false}); }
+mesh(new THREE.BoxGeometry(.6,2.1,1.5),M.white,house,{x:HX-.42,y:1.05,z:-1.5});
+// living room
+mesh(new THREE.BoxGeometry(3.0,.02,2.2),M.rug,house,{x:.75,y:.055,z:1.5,edge:false});
 const sofa=new THREE.Group(); sofa.position.set(2.6,0,1.4); house.add(sofa);
 mesh(new RoundedBoxGeometry(.95,.42,2.3,3,.1),M.soft,sofa,{y:.25}); mesh(new RoundedBoxGeometry(.24,.78,2.3,3,.1),M.soft,sofa,{x:.36,y:.44}); for(const z of [-1.08,1.08]) mesh(new RoundedBoxGeometry(.95,.58,.18,3,.08),M.soft,sofa,{y:.32,z});
-for(const z of [-.55,.55]) mesh(new RoundedBoxGeometry(.2,.42,.62,3,.08),M.cushion,sofa,{x:.2,y:.62,z});
-mesh(new THREE.BoxGeometry(.9,.12,2.3),M.base,sofa,{y:.06,edge:false});
-const arm=new THREE.Group(); arm.position.set(-.1,0,3.0); arm.rotation.y=-.6; house.add(arm);
+mesh(new RoundedBoxGeometry(.2,.42,.62,3,.08),M.accentSoft,sofa,{x:.2,y:.62,z:-.55}); mesh(new RoundedBoxGeometry(.2,.42,.62,3,.08),M.cushion,sofa,{x:.2,y:.62,z:.55});
+const arm=new THREE.Group(); arm.position.set(-.1,0,3.1); arm.rotation.y=-.6; house.add(arm);
 mesh(new RoundedBoxGeometry(.8,.4,.8,3,.1),M.soft,arm,{y:.24}); mesh(new RoundedBoxGeometry(.8,.66,.18,3,.08),M.soft,arm,{y:.42,z:-.32}); for(const x of [-.36,.36]) mesh(new RoundedBoxGeometry(.14,.52,.8,3,.06),M.soft,arm,{x,y:.32});
 mesh(new THREE.CylinderGeometry(.42,.42,.05,40),M.woodLight,house,{x:.9,y:.42,z:1.5}); mesh(new THREE.CylinderGeometry(.06,.1,.38,16),M.woodLight,house,{x:.9,y:.2,z:1.5,edge:false});
 mesh(new THREE.BoxGeometry(.22,.04,.3),M.cushion,house,{x:.82,y:.46,z:1.42,edge:false}); mesh(new THREE.CylinderGeometry(.06,.05,.14,16),M.white,house,{x:1.05,y:.51,z:1.62,edge:false});
-mesh(new THREE.CylinderGeometry(.14,.14,.03,24),M.dark,house,{x:3.5,y:.03,z:3.2,edge:false}); mesh(new THREE.CylinderGeometry(.012,.012,1.5,8),M.dark,house,{x:3.5,y:.78,z:3.2,edge:false}); mesh(new THREE.ConeGeometry(.22,.26,32,1,true),M.white,house,{x:3.5,y:1.58,z:3.2,edge:false});
-// shelving on the left gable wall, books
-mesh(new THREE.BoxGeometry(.34,2.0,1.8),M.white,house,{x:-HX+.3,y:1.0,z:1.1});
-for(let r=0;r<4;r++) for(let k=0;k<7;k++){ if((r*7+k)%5===3) continue; const h=.22+((r*3+k*7)%5)*.025; mesh(new THREE.BoxGeometry(.24,h,.05+((k+r)%3)*.02),(r+k)%4===0?M.cushion:M.base,house,{x:-HX+.3,y:.12+r*.5+h/2,z:.35+k*.22,edge:false}); }
-// plants
+mesh(new THREE.CylinderGeometry(.14,.14,.03,24),M.dark,house,{x:3.5,y:.03,z:3.3,edge:false}); mesh(new THREE.CylinderGeometry(.012,.012,1.5,8),M.dark,house,{x:3.5,y:.78,z:3.3,edge:false}); mesh(new THREE.ConeGeometry(.22,.26,32,1,true),M.white,house,{x:3.5,y:1.58,z:3.3,edge:false});
+// sideboard and books along the partition
+mesh(new THREE.BoxGeometry(2.2,.6,.4),M.white,house,{x:2.5,y:.3,z:-.24});
+for(let k=0;k<9;k++){ const h=.2+((k*7)%4)*.03; mesh(new THREE.BoxGeometry(.05+((k*3)%3)*.02,h,.24),k%4===0?M.accentSoft:M.cushion,house,{x:1.7+k*.09,y:.6+h/2,z:-.24,edge:false}); }
+for(const [x,z,w,h] of [[2.6,-.42,1.0,.6]]){ mesh(new THREE.BoxGeometry(w,h,.03),M.white,house,{x,y:1.55,z:z+.03}); mesh(new THREE.BoxGeometry(w-.14,h-.14,.035),M.art,house,{x,y:1.55,z:z+.035,edge:false}); }
 function plant(x,z,s=1){ mesh(new THREE.CylinderGeometry(.16*s,.12*s,.34*s,20),M.white,house,{x,y:.17*s,z}); for(let k=0;k<5;k++){ const a=k*1.26; mesh(new THREE.IcosahedronGeometry(.2*s,1),M.leaf,house,{x:x+Math.cos(a)*.12*s,y:(.5+((k*7)%3)*.12)*s,z:z+Math.sin(a)*.12*s,edge:false}); } }
-plant(-4.4,3.3,1.2); plant(4.5,.1,1.1); plant(-1.8,-.9,.9);
-// log basket and a small stack of wood by the stove
-mesh(new THREE.CylinderGeometry(.24,.2,.32,24,1,true),M.woodLight,house,{x:AX+.95,y:.16,z:AZ+.15});
-for(let k=0;k<5;k++) mesh(new THREE.CylinderGeometry(.045,.045,.42,10).rotateZ(Math.PI/2),M.wood,house,{x:AX+.95,y:.2+(k>2?.09:0),z:AZ+.03+(k%3)*.09-(k>2?-.045:0),edge:false});
-// pictures on the walls
-for(const [x,z,w,h] of [[-.6,-1.24,.7,.5],[2.4,-.42,1.0,.6]]) { mesh(new THREE.BoxGeometry(w,h,.03),M.white,house,{x,y:1.55,z}); mesh(new THREE.BoxGeometry(w-.14,h-.14,.035),M.art,house,{x,y:1.55,z,edge:false}); }
+plant(4.5,3.4,1.15); plant(-1.9,-.9,.9); plant(4.55,.15,.9);
+// log basket by the stove
+mesh(new THREE.CylinderGeometry(.24,.2,.32,24,1,true),M.woodLight,house,{x:AX+.95,y:.2,z:AZ+.15});
+for(let k=0;k<5;k++) mesh(new THREE.CylinderGeometry(.045,.045,.42,10).rotateZ(Math.PI/2),M.wood,house,{x:AX+.95,y:.24+(k>2?.09:0),z:AZ+.06+(k%3)*.09-(k>2?.045:0),edge:false});
 
-// the stove (dark) on its hearth, facing the open front
-const STOVE=new THREE.Group(); STOVE.position.set(AX,0,AZ); house.add(STOVE);
-mesh(new THREE.BoxGeometry(1.15,.035,1.0),M.hearth,STOVE,{y:.06,z:.12});
-for(const [x,z] of [[-.26,-.2],[.26,-.2],[-.26,.2],[.26,.2]]) mesh(new THREE.BoxGeometry(.05,.14,.05),M.stove,STOVE,{x,y:.08+.07,z,edge:false});
-mesh(new RoundedBoxGeometry(.62,.78,.5,2,.03),M.stove,STOVE,{y:.22+.39,edge:false});
-mesh(new RoundedBoxGeometry(.66,.04,.54,2,.015),M.stove,STOVE,{y:.98,edge:false});
-mesh(new THREE.CylinderGeometry(.088,.088,.04,40),M.stove,STOVE,{y:OUT_Y-.02,edge:false});
-const doorM=mesh(new THREE.BoxGeometry(.44,.4,.02),M.door,STOVE,{y:.62,z:.255,edge:false});
-mesh(new THREE.BoxGeometry(.03,.12,.03),M.steelDark,STOVE,{x:.19,y:.62,z:.28,edge:false});
-const fire=new THREE.Mesh(new THREE.PlaneGeometry(.4,.36),new THREE.MeshBasicMaterial({map:texFire,transparent:true,opacity:0,toneMapped:false,depthWrite:false})); fire.position.set(0,.6,.267); STOVE.add(fire);
-const fireGlow=new THREE.Mesh(new THREE.PlaneGeometry(2.2,2.2),new THREE.MeshBasicMaterial({map:texFire,transparent:true,opacity:0,toneMapped:false,depthWrite:false,blending:THREE.AdditiveBlending})); fireGlow.rotation.x=-Math.PI/2; fireGlow.position.set(0,.08,.9); STOVE.add(fireGlow);
+// the stove (dark) on its hearth
+const STOVE=new THREE.Group(); STOVE.position.set(AX,.04,AZ); house.add(STOVE);
+mesh(new THREE.BoxGeometry(1.15,.035,1.0),M.hearth,STOVE,{y:.02,z:.12});
+for(const [x,z] of [[-.26,-.2],[.26,-.2],[-.26,.2],[.26,.2]]) mesh(new THREE.BoxGeometry(.05,.14,.05),M.stove,STOVE,{x,y:.11,z,edge:false});
+mesh(new RoundedBoxGeometry(.62,.74,.5,2,.03),M.stove,STOVE,{y:.18+.37,edge:false});
+mesh(new RoundedBoxGeometry(.66,.04,.54,2,.015),M.stove,STOVE,{y:.94,edge:false});
+mesh(new THREE.CylinderGeometry(.088,.088,.04,40),M.stove,STOVE,{y:OUT_Y-.06,edge:false});
+mesh(new THREE.BoxGeometry(.44,.4,.02),M.door,STOVE,{y:.56,z:.255,edge:false});
+mesh(new THREE.BoxGeometry(.03,.12,.03),M.steelDark,STOVE,{x:.19,y:.56,z:.28,edge:false});
+const fire=new THREE.Mesh(new THREE.PlaneGeometry(.4,.36),new THREE.MeshBasicMaterial({map:texFire,transparent:true,opacity:0,toneMapped:false,depthWrite:false})); fire.position.set(0,.54,.267); STOVE.add(fire);
+const fireGlow=new THREE.Mesh(new THREE.PlaneGeometry(2.2,2.2),new THREE.MeshBasicMaterial({map:texFire,transparent:true,opacity:0,toneMapped:false,depthWrite:false,blending:THREE.AdditiveBlending})); fireGlow.rotation.x=-Math.PI/2; fireGlow.position.set(0,.05,.9); STOVE.add(fireGlow);
 const fireLight=new THREE.PointLight('#ff9a4a',0,5,1.6); fireLight.position.set(0,.6,.6); STOVE.add(fireLight);
 
-// garden: a few clay trees and shrubs, kept clear of the work area on the right
-function tree(x,z,s){ mesh(new THREE.CylinderGeometry(.07*s,.1*s,1.3*s,10),M.trunk,scene,{x,y:GY+.65*s,z,edge:false}); mesh(new THREE.IcosahedronGeometry(.9*s,3),M.tree,scene,{x,y:GY+1.75*s,z,edge:false}); }
-for(const [x,z,s] of [[-7.6,-3.2,1.2],[-8.8,-5.2,1.0],[-3.6,-7.2,1.15],[2.6,-7.4,1.0],[6.8,-6.0,1.2],[-9.6,-6.4,1.3]]) tree(x,z,s);
-// driveway and a car on the left, like in the reference
-mesh(new THREE.BoxGeometry(3.2,.02,9),M.path,scene,{x:-7.9,y:GY+.01,z:1.0,edge:false});
-{ const car=new THREE.Group(); car.position.set(-7.9,GY,-1.2); scene.add(car);
-  mesh(new RoundedBoxGeometry(1.8,.62,4.3,3,.18),M.white,car,{y:.52}); mesh(new RoundedBoxGeometry(1.6,.55,2.3,3,.2),M.white,car,{y:1.02,z:.15});
-  for(const sx of [-1,1]) mesh(new THREE.BoxGeometry(.02,.4,1.9),M.win,car,{x:sx*.805,y:1.04,z:.15,edge:false});
-  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(1.4,.38,.02),M.win,car,{y:1.03,z:.15+sz*1.13,edge:false});
-  for(const [x,z] of [[-.88,-1.35],[.88,-1.35],[-.88,1.35],[.88,1.35]]) mesh(new THREE.CylinderGeometry(.33,.33,.22,24).rotateZ(Math.PI/2),M.dark,car,{x,y:.33,z,edge:false}); }
-for(let k=0;k<7;k++) mesh(new RoundedBoxGeometry(1.1,.7,.7,2,.25),M.tree,scene,{x:-1.0-k*1.15,y:GY+.35,z:-6.2});
-for(const [x,z,s] of [[-5.6,4.9,.42],[-4.9,5.2,.34],[5.9,-3.6,.4],[-6.2,-1.4,.42]]) mesh(new THREE.IcosahedronGeometry(s,2),M.tree,scene,{x,y:GY+s*.75,z,edge:false});
+// construction lines, as on a drawing: the part of the house that is cut away, plus level and corner lines
+{ const P=[]; const L=(a,b)=>P.push(...a,...b);
+  const xs=[-HX,CUTX];
+  for(const y of [0,HW]) for(const z of [-HZ,HZ]) L([-HX,y,z],[CUTX,y,z]);
+  for(const z of [-HZ,HZ]) L([-HX,0,z],[-HX,HW,z]);
+  L([-HX,0,-HZ],[-HX,0,HZ]); L([-HX,HW,-HZ],[-HX,HW,HZ]);
+  L([-HX-OVER,RIDGE_TOP,0],[CUTX,RIDGE_TOP,0]);
+  for(const s of [-1,1]){ L([-HX-OVER,RIDGE_TOP,0],[-HX-OVER,top(HZ+OVER),s*(HZ+OVER)]); L([-HX-OVER,top(HZ+OVER),s*(HZ+OVER)],[CUTX,top(HZ+OVER),s*(HZ+OVER)]); }
+  for(const [x,z] of [[-HX,-HZ],[-HX,HZ],[HX,-HZ],[HX,HZ]]) L([x,GY,z],[x,7.6,z]);
+  for(const y of [HW,RIDGE_TOP]) { L([-HX-1.6,y,HZ+.9],[HX+1.6,y,HZ+.9]); L([HX+.9,y,-HZ-1.6],[HX+.9,y,HZ+1.6]); }
+  L([-HX-1.6,0,HZ+.9],[HX+1.6,0,HZ+.9]);
+  for(const x of [-HX,0,HX]) L([x,7.0,HZ+.9],[x,7.6,HZ+.9]);
+  L([-HX,7.3,HZ+.9],[HX,7.3,HZ+.9]);
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(P,3)); scene.add(new THREE.LineSegments(g,lineMat)); }
 
-/* ---------- parts, laid out by the house from the start (nothing pops in) ---------- */
-// flue pipe: lying on the ground; main length + the piece that is cut off
-const P0=V(7.2,GY+.075,-2.0);
+// garden
+function tree(x,z,s){ mesh(new THREE.CylinderGeometry(.07*s,.1*s,1.3*s,10),M.trunk,scene,{x,y:GY+.65*s,z,edge:false}); mesh(new THREE.IcosahedronGeometry(.9*s,3),M.tree,scene,{x,y:GY+1.75*s,z,edge:false}); }
+for(const [x,z,s] of [[7.4,-3.0,1.2],[8.6,2.0,1.0],[3.5,-7.4,1.1],[-1.8,-7.6,1.15],[-8.6,-5.4,1.3],[-10.2,1.5,1.0],[9.4,-6.8,1.25]]) tree(x,z,s);
+for(let k=0;k<6;k++) mesh(new RoundedBoxGeometry(1.1,.7,.7,2,.25),M.tree,scene,{x:4.4-k*1.15,y:GY+.35,z:-6.3});
+mesh(new THREE.BoxGeometry(3.2,.02,7),M.path,scene,{x:7.6,y:GY+.01,z:1.2,edge:false});
+{ const car=new THREE.Group(); car.position.set(7.6,GY,.6); scene.add(car);
+  mesh(new RoundedBoxGeometry(1.8,.62,4.3,3,.18),M.white,car,{y:.52}); mesh(new RoundedBoxGeometry(1.6,.55,2.3,3,.2),M.white,car,{y:1.02,z:.15});
+  for(const sx of [-1,1]) mesh(new THREE.BoxGeometry(.02,.4,1.9),M.glass,car,{x:sx*.805,y:1.04,z:.15,edge:false});
+  for(const sz of [-1,1]) mesh(new THREE.BoxGeometry(1.4,.38,.02),M.glass,car,{y:1.03,z:.15+sz*1.13,edge:false});
+  for(const [x,z] of [[-.88,-1.35],[.88,-1.35],[-.88,1.35],[.88,1.35]]) mesh(new THREE.CylinderGeometry(.33,.33,.22,24).rotateZ(Math.PI/2),M.dark,car,{x,y:.33,z,edge:false}); }
+
+/* ---------- the finished parts, laid out in front of the house from the start ---------- */
+// flue pipe, cut to length, collar already welded on
+const PIPE0=V(-7.7,GY+.075,7.3);                                   // bottom end, lying along +x
+const qLying=new THREE.Quaternion().setFromAxisAngle(V(0,0,1),-Math.PI/2);
 const pipeG=new THREE.Group(); scene.add(pipeG);
-const partEdge=()=>new THREE.LineBasicMaterial({color:'#9aa3b1',transparent:true,opacity:.0});
-const pipeMain=mesh(new THREE.CylinderGeometry(.075,.075,PIPE_LEN,48,1,false).translate(0,PIPE_LEN/2,0),M.pipe,pipeG,{edge:false});
-const offcut=mesh(new THREE.CylinderGeometry(.075,.075,OFFCUT,48).rotateX(Math.PI/2),M.pipe,scene,{edge:false});
-const OFF0=V(P0.x,P0.y,P0.z+PIPE_LEN+OFFCUT/2), OFF1=V(P0.x+.42,P0.y,P0.z+PIPE_LEN+OFFCUT/2+.95);
-const cutRing=new THREE.Mesh(new THREE.TorusGeometry(.083,.009,10,64),M.accT); cutRing.rotation.x=0; scene.add(cutRing); cutRing.position.set(P0.x,P0.y,P0.z+PIPE_LEN); cutRing.visible=false;
-// collar (welded onto the top of the pipe in step 7)
-const collarGeo=new THREE.LatheGeometry([new THREE.Vector2(.077,0),new THREE.Vector2(.2,0),new THREE.Vector2(.2,.012),new THREE.Vector2(.09,.02),new THREE.Vector2(.083,.07),new THREE.Vector2(.077,.07)],64);
-const collar=mesh(collarGeo,M.steelDark,scene,{edge:false});
-const COL0=V(7.95,GY+.001,3.35);
-// insulation sleeve and its roof plate (plate sits on a trestle at roof pitch, so it reads as "on the roof" already)
-const SL_LO=SLV_BOT-ROOF_AT, SL_HI=RIDGE_TOP-ROOF_AT;                // sleeve extent relative to the plate point
-const sleeveG=new THREE.Group(); scene.add(sleeveG);
-mesh(new THREE.CylinderGeometry(.17,.17,SL_HI-SL_LO,56,1,true).translate(0,(SL_HI+SL_LO)/2,0),M.steel,sleeveG,{edge:false});
-mesh(new THREE.CylinderGeometry(.1,.1,SL_HI-SL_LO,40,1,true).translate(0,(SL_HI+SL_LO)/2,0),M.inner,sleeveG,{edge:false});
-mesh(new THREE.RingGeometry(.1,.17,56).rotateX(-Math.PI/2).translate(0,SL_HI,0),M.steel,sleeveG,{edge:false});
-mesh(new THREE.RingGeometry(.1,.17,56).rotateX(Math.PI/2).translate(0,SL_LO,0),M.steel,sleeveG,{edge:false});
-for(const y of [SL_LO+.06,SL_HI-.06]) mesh(new THREE.TorusGeometry(.172,.008,8,56).rotateX(Math.PI/2).translate(0,y,0),M.steelDark,sleeveG,{edge:false});
-const plateG=new THREE.Group(); scene.add(plateG);
-const PL_UP=(AZ-.06)/COS, PL_DN=.5/COS;
-{ const inner=new THREE.Group(); inner.rotation.x=TH; plateG.add(inner);
-  const p=mesh(new THREE.BoxGeometry(.95,.014,PL_UP+PL_DN),M.steel,inner,{y:.007,z:(PL_DN-PL_UP)/2,edge:false}); outline(p,inner,new THREE.LineBasicMaterial({color:'#8f98a6'}),30);
-  mesh(new THREE.BoxGeometry(.95,.05,.02),M.steel,inner,{y:.025,z:PL_DN,edge:false}); }
-const screws=[]; for(const [x,s] of [[-.38,-PL_UP+.12],[.38,-PL_UP+.12],[-.38,PL_DN-.1],[.38,PL_DN-.1],[-.38,-PL_UP/2],[.38,-PL_UP/2]]){ const m=new THREE.Mesh(new THREE.SphereGeometry(.03,12,8),M.accT.clone()); m.userData.local=V(x,0,0).addScaledVector(N_SLOPE,.02).addScaledVector(D_SLOPE,s); m.visible=false; scene.add(m); screws.push(m); }
-const ASM0=V(9.7,GY+.95,.3), ASM1=P_TOP.clone().addScaledVector(N_SLOPE,.008);
-const SLV0=V(8.85,GY-SL_LO,1.55);
-// trestle under the plate
-for(const [z,hgt] of [[-.95,ASM0.y-GY+(.3+.95)*TAN-.02],[.72,ASM0.y-GY-(.72-.3)*TAN-.02]]){ mesh(new THREE.BoxGeometry(1.15,.06,.1),M.white,scene,{x:ASM0.x,y:GY+hgt-.03,z}); for(const sx of [-.5,.5]) mesh(new THREE.BoxGeometry(.06,hgt-.06,.1),M.white,scene,{x:ASM0.x+sx,y:GY+(hgt-.06)/2,z}); }
+mesh(new THREE.CylinderGeometry(.075,.075,PIPE_LEN,48).translate(0,PIPE_LEN/2,0),M.pipe,pipeG,{edge:false});
+const TIP=PIPE_LEN-.06;
+mesh(new THREE.LatheGeometry([new THREE.Vector2(.077,0),new THREE.Vector2(.2,0),new THREE.Vector2(.2,.012),new THREE.Vector2(.09,.02),new THREE.Vector2(.083,.07),new THREE.Vector2(.077,.07)],64).translate(0,TIP,0),M.steelDark,pipeG,{edge:false});
+// insulation sleeve fixed in its roof plate, resting on a trestle at roof pitch
+const SL_LO=SLV_BOT-ROOF_AT, SL_HI=RIDGE_TOP-ROOF_AT;
+const asmG=new THREE.Group(); scene.add(asmG);
+mesh(new THREE.CylinderGeometry(.17,.17,SL_HI-SL_LO,56,1,true).translate(0,(SL_HI+SL_LO)/2,0),M.steel,asmG,{edge:false});
+mesh(new THREE.CylinderGeometry(.1,.1,SL_HI-SL_LO,40,1,true).translate(0,(SL_HI+SL_LO)/2,0),M.inner,asmG,{edge:false});
+mesh(new THREE.RingGeometry(.1,.17,56).rotateX(-Math.PI/2).translate(0,SL_HI,0),M.steel,asmG,{edge:false});
+mesh(new THREE.RingGeometry(.1,.17,56).rotateX(Math.PI/2).translate(0,SL_LO,0),M.steel,asmG,{edge:false});
+for(const y of [SL_LO+.06,SL_HI-.06]) mesh(new THREE.TorusGeometry(.172,.008,8,56).rotateX(Math.PI/2).translate(0,y,0),M.steelDark,asmG,{edge:false});
+const PL_UP=(AZ-.05)/COS, PL_DN=.5/COS;
+{ const inner=new THREE.Group(); inner.quaternion.copy(qNear); asmG.add(inner);
+  const p=mesh(new THREE.BoxGeometry(.95,.014,PL_UP+PL_DN),M.steel,inner,{y:.007,z:(PL_DN-PL_UP)/2,edge:false}); outline(p,inner,new THREE.LineBasicMaterial({color:'#8f96a4'}),30);
+  mesh(new THREE.BoxGeometry(.95,.05,.02),M.steel,inner,{y:.025,z:PL_DN,edge:false});
+  for(const [x,s] of [[-.38,-PL_UP+.14],[.38,-PL_UP+.14],[-.38,PL_DN-.1],[.38,PL_DN-.1],[-.38,-PL_UP/2],[.38,-PL_UP/2]]) mesh(new THREE.CylinderGeometry(.018,.018,.02,12).translate(x,.02,s),M.steelDark,inner,{edge:false}); }
+const ASM0=V(-1.4,GY+1.0,7.5), ASM1=P_TOP.clone().addScaledVector(N_SLOPE,.004);
+for(const [z,hgt] of [[ASM0.z-1.2,ASM0.y-GY+(1.2-.0)*TAN-.02],[ASM0.z+.42,ASM0.y-GY-.42*TAN-.02]]){ mesh(new THREE.BoxGeometry(1.15,.06,.1),M.white,scene,{x:ASM0.x,y:GY+hgt-.03,z}); for(const sx of [-.5,.5]) mesh(new THREE.BoxGeometry(.06,hgt-.06,.1),M.white,scene,{x:ASM0.x+sx,y:GY+(hgt-.06)/2,z}); }
 // rain cap (kastventill)
 const cowl=new THREE.Group(); scene.add(cowl);
 mesh(new THREE.CylinderGeometry(.071,.071,.12,40).translate(0,.06,0),M.pipe,cowl,{edge:false});
 mesh(new THREE.CylinderGeometry(.09,.09,.18,40).translate(0,.2,0),M.pipe,cowl,{edge:false});
 for(let k=0;k<4;k++){ const a=k*Math.PI/2+.4; mesh(new THREE.BoxGeometry(.02,.14,.02).translate(Math.cos(a)*.075,.36,Math.sin(a)*.075),M.pipe,cowl,{edge:false}); }
 mesh(new THREE.ConeGeometry(.23,.13,48).translate(0,.5,0),M.pipe,cowl,{edge:false});
-const COWL0=V(8.95,GY,3.45);
-// the roof plug that the hole saw takes out
-const disc=new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,RT,40),M.disc); disc.castShadow=true; scene.add(disc); const discEdge=outline(disc,scene,edgeMat);
-const qSlope=new THREE.Quaternion().setFromAxisAngle(X_AX,TH);
-const DISC0=P_TOP.clone().addScaledVector(N_SLOPE,-RT/2+.003), DISC1=V(6.3,GY+RT/2,4.15);
-const holeM=new THREE.Mesh(new THREE.CircleGeometry(.19,48),M.hole); holeM.quaternion.copy(qSlope).multiply(new THREE.Quaternion().setFromAxisAngle(X_AX,-Math.PI/2)); holeM.position.copy(P_TOP).addScaledVector(N_SLOPE,.006); holeM.renderOrder=4; scene.add(holeM);
+const COWL0=V(.3,GY,7.0);
+const PLUG_REST=V(1.3,GY+.002,7.6);
+const workPad=new THREE.Mesh(new THREE.PlaneGeometry(10,3.4),new THREE.MeshStandardMaterial({color:'#e9ebf0',roughness:1})); workPad.rotation.x=-Math.PI/2; workPad.position.set(-3.4,GY+.003,7.4); workPad.receiveShadow=true; scene.add(workPad); outline(workPad,scene,edgeMat);
 
 /* ---------- measuring graphics ---------- */
+const _d=new THREE.Vector3(), _p=new THREE.Vector3(), _q=new THREE.Quaternion();
 function bar(r,mat=M.accT){ const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,1,12).translate(0,.5,0),mat); m.visible=false; scene.add(m); return m; }
 function setBar(m,a,b,g=1){ const d=_d.copy(b).sub(a); const len=d.length(); if(len<1e-6||g<=0){m.visible=false;return;} m.visible=true; m.position.copy(a); m.quaternion.setFromUnitVectors(UP,d.normalize()); m.scale.set(1,Math.max(1e-4,len*g),1); }
-const _d=new THREE.Vector3(), _p=new THREE.Vector3(), _q=new THREE.Quaternion();
-// A dimension line: extension lines, the main line growing out from its middle, arrow heads, like on a drawing.
+const MEAS_END=61.4;                                 // measurements stay up until the installation starts
 function dimension(a,b,off){ const m=new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
   const o={a,b,off,mat:m,main:bar(.014,m),ext:[bar(.007,m),bar(.007,m)],heads:[0,1].map(()=>{const c=new THREE.Mesh(new THREE.ConeGeometry(.045,.13,16),m); c.visible=false; scene.add(c); return c;})};
   o.A=a.clone().add(off); o.B=b.clone().add(off); o.mid=o.A.clone().lerp(o.B,.5); return o; }
-function drawDim(o,t,a,b){ const on=env(t,a,b,.35,.45); o.mat.opacity=on; const g=eio(prog(t,a+.15,a+1.1)); const ge=eout(prog(t,a,a+.5));
+function drawDim(o,t,a,b=MEAS_END){ const on=env(t,a,b,.35,.6); o.mat.opacity=on; const g=eio(prog(t,a+.15,a+1.1)); const ge=eout(prog(t,a,a+.5)); const vis=on>0?1:0;
   const ofl=o.off.length(), on1=o.off.clone().normalize();
-  setBar(o.ext[0],o.a.clone().addScaledVector(on1,.06),o.a.clone().addScaledVector(on1,ofl+.1),ge*(on>0?1:0));
-  setBar(o.ext[1],o.b.clone().addScaledVector(on1,.06),o.b.clone().addScaledVector(on1,ofl+.1),ge*(on>0?1:0));
-  const A=o.mid.clone().lerp(o.A,g), B=o.mid.clone().lerp(o.B,g); setBar(o.main,A,B,on>0?1:0);
+  setBar(o.ext[0],o.a.clone().addScaledVector(on1,.06),o.a.clone().addScaledVector(on1,ofl+.1),ge*vis);
+  setBar(o.ext[1],o.b.clone().addScaledVector(on1,.06),o.b.clone().addScaledVector(on1,ofl+.1),ge*vis);
+  const A=o.mid.clone().lerp(o.A,g), B=o.mid.clone().lerp(o.B,g); setBar(o.main,A,B,vis);
   const dir=_d.copy(o.B).sub(o.A).normalize();
-  o.heads[0].visible=o.heads[1].visible=on>0&&g>.05; o.heads[0].position.copy(A).addScaledVector(dir,.065); o.heads[0].quaternion.setFromUnitVectors(UP,dir.clone().negate());
-  o.heads[1].position.copy(B).addScaledVector(dir,-.065); o.heads[1].quaternion.setFromUnitVectors(UP,dir); return g; }
+  o.heads[0].visible=o.heads[1].visible=vis>0&&g>.05; o.heads[0].position.copy(A).addScaledVector(dir,.065); o.heads[0].quaternion.setFromUnitVectors(UP,dir.clone().negate());
+  o.heads[1].position.copy(B).addScaledVector(dir,-.065); o.heads[1].quaternion.setFromUnitVectors(UP,dir); }
+const fadeMat=()=>new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
 
 // step 1: plumb line + bob, drill through the roof, marker pin on top
 const plumbLine=bar(.011,M.plumb); const bob=new THREE.Mesh(new THREE.ConeGeometry(.045,.13,20).rotateX(Math.PI),M.acc); bob.visible=false; scene.add(bob);
-const ceilDot=new THREE.Mesh(new THREE.CircleGeometry(.06,32),M.accT); ceilDot.quaternion.copy(holeM.quaternion); ceilDot.position.copy(P_CEIL).addScaledVector(N_SLOPE,-.01); ceilDot.visible=false; scene.add(ceilDot);
 const drill=bar(.013,M.acc);
 const pin=new THREE.Group(); scene.add(pin); { const s=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.34,10).translate(0,.17,0),M.steelDark); const h=new THREE.Mesh(new THREE.SphereGeometry(.05,20,14),M.acc); h.position.y=.36; pin.add(s,h); pin.visible=false; }
-const pinGlow=new THREE.Mesh(new THREE.PlaneGeometry(1.2,1.2),new THREE.MeshBasicMaterial({map:texGlow,transparent:true,depthWrite:false,toneMapped:false,opacity:0})); pinGlow.quaternion.copy(holeM.quaternion); pinGlow.position.copy(P_TOP).addScaledVector(N_SLOPE,.01); scene.add(pinGlow);
-// step 2: stove outlet up to the roof surface, and the roof thickness
-const dim2=dimension(V(AX,OUT_Y,AZ),V(AX,ROOF_AT,AZ),V(.75,0,0));
-const dim2b=dimension(V(AX-.2,CEIL_AT,AZ),V(AX-.2,ROOF_AT,AZ),V(-.55,0,0));
-// step 3: roof pitch, drawn on the gable end
-const PE=V(HX+.16,HW,HZ);                              // eave corner on the gable face
-const pitchH=bar(.012); const pitchS=bar(.012);
+const pinGlow=new THREE.Mesh(new THREE.PlaneGeometry(1.1,1.1),new THREE.MeshBasicMaterial({map:texGlow,transparent:true,depthWrite:false,toneMapped:false,opacity:0})); pinGlow.quaternion.copy(qNear).multiply(new THREE.Quaternion().setFromAxisAngle(X_AX,-Math.PI/2)); pinGlow.position.copy(P_TOP).addScaledVector(N_SLOPE,.01); scene.add(pinGlow);
+// step 2: from the stove outlet up through the roof; roof thickness — both drawn just in front of the section cut
+const dim2=dimension(V(AX,OUT_Y,AZ),V(AX,ROOF_AT,AZ),V(CUTX-AX-.35,0,.3));
+const dim2b=dimension(V(AX,under(AZ-.3),AZ-.3),V(AX,top(AZ-.3),AZ-.3),V(CUTX-AX-.35,0,0));
+// step 3: roof pitch, drawn on the section where the roof meets the front wall
+const PE=V(CUTX-.06,HW,HZ+.1);
+const pitchMat=fadeMat(); const pitchH=bar(.012,pitchMat), pitchS=bar(.012,pitchMat);
 const arcPts=[]; for(let i=0;i<=40;i++){ const a=TH*i/40; arcPts.push(V(PE.x,PE.y+Math.sin(a)*1.25,PE.z-Math.cos(a)*1.25)); }
-const arcM=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arcPts),60,.012,8,false),M.accT); arcM.visible=false; scene.add(arcM);
-const arcWedge=new THREE.Mesh(new THREE.CircleGeometry(1.25,40,0,TH),new THREE.MeshBasicMaterial({color:ACC,transparent:true,opacity:0,depthWrite:false,toneMapped:false,side:THREE.DoubleSide}));
-arcWedge.rotation.y=Math.PI/2; arcWedge.rotation.z=0; arcWedge.position.copy(PE); arcWedge.scale.x=-1; scene.add(arcWedge);
+const arcM=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(arcPts),60,.012,8,false),pitchMat); arcM.visible=false; scene.add(arcM);
+const arcCount=arcM.geometry.index.count;
+const arcWedge=new THREE.Mesh(new THREE.CircleGeometry(1.25,40,0,TH),new THREE.MeshBasicMaterial({color:ACC,transparent:true,opacity:0,depthWrite:false,toneMapped:false,side:THREE.DoubleSide})); arcWedge.rotation.y=Math.PI/2; arcWedge.position.copy(PE); scene.add(arcWedge);
 // step 4: along the roof from the ridge down to the marker
-const RIDGE_PT=V(AX,RIDGE_TOP,0);
-const dim4=dimension(V(AX,top(.0),0).addScaledVector(N_SLOPE,.03),P_TOP.clone().addScaledVector(N_SLOPE,.03),V(-.62,0,0));
-// step 5: level line from the ridge, ghost of the pipe, and the pipe length
-const dashes=[]; for(let i=0;i<12;i++){ dashes.push(bar(.011)); }
+const dim4=dimension(V(AX,top(0),0).addScaledVector(N_SLOPE,.03),P_TOP.clone().addScaledVector(N_SLOPE,.03),V(-.5,0,0));
+// step 5: level line at ridge height, ghost of the pipe, pipe length
+const dashMat=fadeMat(); const dashes=[]; for(let i=0;i<12;i++) dashes.push(bar(.011,dashMat));
 const DASH_A=V(AX,RIDGE_TOP,-.1), DASH_B=V(AX,RIDGE_TOP,AZ+.9);
 const ghostPipe=new THREE.Mesh(new THREE.CylinderGeometry(.078,.078,1,32,1,true).translate(0,.5,0),M.ghost); ghostPipe.position.set(AX,PIPE_BOT,AZ); scene.add(ghostPipe); ghostPipe.visible=false;
-const dim5=dimension(V(AX,PIPE_BOT,AZ),V(AX,RIDGE_TOP,AZ),V(.78,0,0));
+const dim5=dimension(V(AX,PIPE_BOT,AZ),V(AX,RIDGE_TOP,AZ),V(CUTX-AX-1.05,0,.3));
+// step 7: the same length shown on the finished pipe
+const dim7=dimension(PIPE0.clone(),PIPE0.clone().add(V(PIPE_LEN,0,0)),V(0,0,-.45));
 // step 8: optional damper section, shown as a ghost
 const damperG=new THREE.Group(); damperG.position.set(AX,0,AZ); scene.add(damperG);
 const dMat=new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
-const dMatS=new THREE.MeshStandardMaterial({color:'#3a3f48',roughness:.4,metalness:.3,transparent:true,opacity:0});
+const dMatS=new THREE.MeshStandardMaterial({color:'#3a3d48',roughness:.4,metalness:.3,transparent:true,opacity:0});
 { damperG.add(new THREE.Mesh(new THREE.CylinderGeometry(.078,.078,1.0,40,1,true).translate(0,OUT_Y+.5,0),dMat));
-  const c=new THREE.Mesh(new THREE.CylinderGeometry(.092,.092,.14,40).translate(0,OUT_Y+1.0,0),dMatS); damperG.add(c);
-  const flap=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.01,32),dMatS); flap.position.y=OUT_Y+.48; flap.rotation.z=.6; damperG.add(flap); damperG.userData.flap=flap;
-  const rod=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.36,8).rotateZ(Math.PI/2).translate(.13,OUT_Y+.48,0),dMatS); damperG.add(rod);
-  const knob=new THREE.Mesh(new THREE.SphereGeometry(.028,12,10),dMatS); knob.position.set(.31,OUT_Y+.48,0); damperG.add(knob); }
+  damperG.add(new THREE.Mesh(new THREE.CylinderGeometry(.092,.092,.14,40).translate(0,OUT_Y+1.0,0),dMatS));
+  const flap=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.01,32),dMatS); flap.position.y=OUT_Y+.48; damperG.add(flap); damperG.userData.flap=flap;
+  damperG.add(new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.36,8).rotateX(Math.PI/2).translate(0,OUT_Y+.48,.13),dMatS));
+  const knob=new THREE.Mesh(new THREE.SphereGeometry(.028,12,10),dMatS); knob.position.set(0,OUT_Y+.48,.31); damperG.add(knob); }
 damperG.visible=false;
 // hole saw cut line
-const cutPts=[]; for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; cutPts.push(P_TOP.clone().addScaledVector(X_AX,Math.cos(a)*.2).addScaledVector(D_SLOPE,Math.sin(a)*.2).addScaledVector(N_SLOPE,.012)); }
+const cutPts=[]; for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; cutPts.push(P_TOP.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE).addScaledVector(N_SLOPE,.012)); }
 const sawM=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(cutPts,true),96,.011,8,true),M.accT); sawM.visible=false; scene.add(sawM);
 const sawCount=sawM.geometry.index.count;
-// sparks (cutting, welding)
 const sparkMat=new THREE.MeshBasicMaterial({color:'#ffb35c',toneMapped:false});
 const sparks=[]; for(let i=0;i<14;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(.014,6,4),sparkMat); m.visible=false; scene.add(m); const a=i*2.399, e=.3+((i*37)%10)/14; sparks.push({m,dir:V(Math.cos(a)*Math.cos(e),Math.sin(e)+.4,Math.sin(a)*Math.cos(e)),sp:.9+((i*53)%7)/6}); }
-function sparkBurst(t,t0,dur,at){ let any=false; sparks.forEach((s,i)=>{ const u=((t-t0)*2.6+i/14)%1; const on=t>t0&&t<t0+dur; if(!on){return;} any=true; s.m.visible=true; s.m.position.copy(at).addScaledVector(s.dir,u*.32*s.sp); s.m.position.y-=u*u*.25; s.m.scale.setScalar(1-u); }); return any; }
-// smoke from the cowl at the end
-const smokeMat=[]; const smoke=[]; for(let i=0;i<9;i++){ const m=new THREE.MeshStandardMaterial({color:'#f2f3f6',roughness:1,transparent:true,opacity:0,depthWrite:false}); const s=new THREE.Mesh(new THREE.IcosahedronGeometry(.16,2),m); s.visible=false; scene.add(s); smoke.push(s); }
-// glow under the active part
+const smoke=[]; for(let i=0;i<9;i++){ const m=new THREE.MeshStandardMaterial({color:'#f2f3f6',roughness:1,transparent:true,opacity:0,depthWrite:false}); const s=new THREE.Mesh(new THREE.IcosahedronGeometry(.16,2),m); s.visible=false; scene.add(s); smoke.push(s); }
 const focus=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:texGlow,transparent:true,depthWrite:false,toneMapped:false,opacity:0})); focus.rotation.x=-Math.PI/2; scene.add(focus);
 
 /* ---------- timeline ---------- */
-const TL={ plumb:11.8, drill:14.4, pin:15.9, dim2:19.6, dim2b:21.6, pitch:25.8, dim4:31.2, dash:36.9, ghost:37.6, dim5:39.2,
-  slvLift:45.6, slvSet:48.0, cut:53.0, offcut:54.6, collar:55.6, weld:57.9, damper:62.0,
-  saw:69.2, discOut:71.4, asmLift:74.2, asmSet:77.4, screws:78.0, pipeLift:81.0, pipeUp:84.0, pipeDown:84.8, pipeSet:87.4,
-  cowlLift:88.8, cowlSet:91.4, fire:94.4, end:95.6 };
+const TL={ plumb:11.8, drill:14.4, pin:15.9, dim2:19.6, dim2b:21.6, pitch:25.8, dim4:31.2, dash:36.9, ghost:37.6, dim5:39.2, sum:41.6,
+  asm:45.0, pipe:52.8, dim7:54.0, damper:62.0,
+  saw:69.2, plugOut:71.2, plugSet:73.6, capUp:74.0, asmLift:74.6, asmSet:78.0, capDown:78.3, pipeLift:80.8, pipeSet:87.4,
+  cowlLift:88.6, cowlSet:91.6, fire:94.4, end:95.6 };
 const CAM=[
-  [0,[21,12.5,24],[1.4,1.6,0]],
-  [5.8,[15.5,8.2,17.5],[2.2,1.5,.4]],
-  [10.6,[14.6,7.6,16.4],[2.4,1.5,.4]],
-  [12.4,[5.4,3.0,12.6],[-1.5,2.85,1.6]],
-  [18.6,[5.2,3.1,12.2],[-1.5,2.9,1.6]],
-  [19.8,[5.8,2.9,12.8],[-1.4,2.85,1.6]],
-  [24.8,[5.7,3.0,12.6],[-1.4,2.9,1.6]],
-  [26.2,[12.8,4.6,8.6],[5.2,3.3,2.6]],
-  [29.8,[12.5,4.6,8.3],[5.2,3.35,2.5]],
-  [31.2,[3.0,9.6,8.4],[-1.7,4.7,.9]],
-  [35.8,[2.8,9.5,8.1],[-1.7,4.7,.9]],
-  [37.0,[6.6,3.7,15.4],[-1.3,3.45,1.4]],
-  [43.8,[6.4,3.8,15.0],[-1.3,3.5,1.4]],
-  [45.2,[14.6,4.3,6.7],[9.3,.85,0]],
-  [51.8,[14.3,4.2,6.4],[9.3,.85,0]],
-  [52.8,[12.4,3.6,7.8],[7.5,0,1.2]],
-  [60.8,[12.2,3.6,7.5],[7.5,0,1.2]],
-  [61.8,[2.9,2.6,7.2],[-1.4,1.45,1.6]],
-  [67.8,[2.8,2.6,7.0],[-1.4,1.5,1.6]],
-  [69.0,[2.6,8.6,7.6],[-1.6,4.45,1.5]],
-  [73.4,[2.5,8.5,7.4],[-1.6,4.45,1.5]],
-  [75.2,[10.5,8.5,13.5],[2.6,3.0,.8]],
-  [79.8,[5.2,8.2,9.8],[-1.4,4.5,1.2]],
-  [81.4,[15,10.8,20.5],[1.6,5.8,.8]],
-  [87.8,[11,7.8,16],[-1.0,4.2,1.2]],
-  [88.8,[2.0,7.4,6.4],[-1.5,5.35,1.4]],
-  [93.8,[1.9,7.3,6.2],[-1.5,5.35,1.4]],
-  [95.4,[8.2,5.2,12.0],[-1.1,2.6,1.4]],
-  [DUR,[19,11,22.5],[.6,2.4,0]],
+  [0,[-21,12,24],[-1.5,1.8,2.4]],
+  [5.8,[-15.5,7.6,17.6],[-1.6,1.6,3.0]],
+  [10.6,[-14.6,7.0,16.8],[-1.8,1.4,3.4]],
+  [12.4,[-11.8,4.6,10.4],[-1.6,3.1,1.3]],
+  [18.6,[-11.4,4.7,10.1],[-1.6,3.15,1.3]],
+  [19.8,[-12.2,4.5,10.8],[-1.9,3.1,1.4]],
+  [24.8,[-12.0,4.6,10.6],[-1.9,3.15,1.4]],
+  [26.2,[-8.6,3.3,8.4],[-2.4,3.2,2.6]],
+  [29.8,[-8.4,3.3,8.2],[-2.4,3.25,2.5]],
+  [31.2,[-6.6,9.8,7.6],[-1.7,4.7,.9]],
+  [35.8,[-6.4,9.7,7.4],[-1.7,4.7,.9]],
+  [37.0,[-11.6,4.4,10.4],[-1.8,3.2,1.5]],
+  [41.4,[-11.4,4.5,10.2],[-1.8,3.25,1.5]],
+  [43.6,[-12.6,5.4,11.6],[-1.8,3.3,1.6]],
+  [45.4,[-4.6,3.3,13.0],[-1.3,.9,7.3]],
+  [51.6,[-3.8,3.2,12.8],[-1.3,.9,7.3]],
+  [52.8,[-7.4,3.0,12.6],[-5.2,.3,7.2]],
+  [60.8,[-6.6,3.0,12.6],[-5.3,.3,7.2]],
+  [61.8,[-6.2,2.5,5.2],[-1.5,1.55,1.6]],
+  [67.8,[-6.0,2.6,5.4],[-1.5,1.55,1.6]],
+  [69.0,[-6.0,9.0,7.2],[-1.7,4.5,1.4]],
+  [73.0,[-5.8,8.9,7.0],[-1.7,4.5,1.4]],
+  [74.8,[-12,10,14.5],[-1.8,5.0,3.4]],
+  [79.4,[-7.6,9.0,9.8],[-1.6,4.9,1.4]],
+  [81.0,[-17,11.5,20],[-3.4,6.2,3.6]],
+  [87.6,[-12.5,9,15.5],[-1.8,5.0,1.8]],
+  [88.8,[-5.4,8.4,7.2],[-1.6,5.9,1.6]],
+  [93.8,[-5.2,8.2,7.0],[-1.6,5.8,1.6]],
+  [95.4,[-9.4,4.6,9.6],[-1.2,2.4,1.4]],
+  [DUR,[-19,11,21],[0,2.3,0]],
 ].map(([t,p,q])=>({t,p:V(...p),q:V(...q)}));
 function camAt(t){ let i=0; while(i<CAM.length-2&&t>CAM[i+1].t) i++; const a=CAM[i], b=CAM[i+1]; const u=esine(prog(t,a.t,b.t));
   camera.position.copy(a.p).lerp(b.p,u); camera.lookAt(_p.copy(a.q).lerp(b.q,u)); }
@@ -562,7 +561,7 @@ const CAPS=[
   {a:19.4,b:24.8, n:'2', eb:'Mæling', t:'Mælt frá kamínunni upp í þak.', s:'Munið að taka þykkt þaksins með.'},
   {a:25.6,b:29.8, n:'3', eb:'Mæling', t:'Þakhallinn mældur.', s:'Platan undir hólknum er smíðuð eftir hallanum.'},
   {a:30.8,b:35.8, n:'4', eb:'Mæling', t:'Mælt frá mæni niður að miðjupunktinum.', s:'Þar kemur rörið upp úr þakinu.'},
-  {a:36.6,b:43.8, n:'5', eb:'Mæling', t:'Lengd reykrörsins mæld.', s:'Frá kamínunni upp í hæð mænisins. Nákvæmast er að mæla eftir að hólkurinn er kominn í, en það má líka mæla gróflega og stytta rörið á staðnum.'},
+  {a:36.6,b:44.0, n:'5', eb:'Mæling', t:'Lengd reykrörsins mæld.', s:'Frá kamínunni upp í hæð mænisins. Nákvæmast er að mæla eftir að hólkurinn er kominn í, en það má líka mæla gróflega og stytta rörið á staðnum.'},
   {a:44.8,b:51.8, n:'6', eb:'Smíði', t:'Einangrunarhólkurinn smíðaður.', s:'Hann er festur í plötu sem leggst á þakið og nær upp undir mæni, yfirleitt ofan á þakklæðninguna.'},
   {a:52.6,b:60.8, n:'7', eb:'Smíði', t:'Rörið skorið í rétta lengd.', s:'Á það er soðinn kragi sem sest utan um hólkinn og heldur rörinu.'},
   {a:61.6,b:67.8, n:'8', eb:'Smíði · ef þess er óskað', t:'Trekkspjald.', s:'Stuttur leggur með spjaldi kemur upp úr kamínunni. Samtengi tengir hann við rörið.'},
@@ -580,37 +579,36 @@ const capEls=CAPS.map(c=>{ const el=document.createElement('div'); el.className=
 const chBars=document.querySelector('#chapters .bars'), chName=document.querySelector('#chapters .name');
 const barEls=CHAPTERS.map(()=>{const b=document.createElement('div'); b.className='bar'; b.innerHTML='<i></i>'; chBars.appendChild(b); return b.firstChild;});
 
-// labels pinned to points in the scene
 const pinsEl=document.getElementById('pins');
 const LABELS=[
-  {t:'Kamína', p:()=>V(AX,1.35,AZ+.2), a:6.8,b:10.8, dx:-40},
-  {t:'Reykrör', p:()=>V(7.2,.35,-.6), a:7.3,b:10.8},
-  {t:'Hólkur og plata', p:()=>V(9.7,1.95,-.6), a:7.7,b:10.8},
-  {t:'Kragi', p:()=>V(7.95,.1,3.35), a:8.1,b:10.8, dy:30},
-  {t:'Kastventill', p:()=>V(8.95,.45,3.45), a:8.5,b:10.8},
-  {t:'Miðja kamínunnar', p:()=>V(AX,OUT_Y+.05,AZ), a:13.0,b:18.6, dx:-170, dy:40},
-  {t:'Stýripunktur', p:()=>V(AX,ROOF_AT+.45,AZ), a:16.4,b:18.6, dx:-40},
-  {t:fmt(ROOF_AT-OUT_Y)+' m', k:'dim', p:()=>dim2.mid, a:TL.dim2+.9,b:24.6, dx:110},
-  {t:`${fmt(TV)} m <small>þykkt þaks</small>`, k:'dim', p:()=>dim2b.mid, a:TL.dim2b+.8,b:24.6, dx:-150},
-  {t:'30°', k:'dim', p:()=>PE.clone().add(V(0,.32,-1.55)), a:TL.pitch+1.4,b:29.6},
-  {t:fmt(AZ/COS)+' m', k:'dim', p:()=>dim4.mid, a:TL.dim4+.9,b:35.6, dx:-90},
-  {t:'Mænir', p:()=>V(AX-.9,RIDGE_TOP+.3,0), a:TL.dim4+.2,b:35.6},
-  {t:'Hæð mænis', p:()=>V(AX,RIDGE_TOP+.12,AZ+.9), a:TL.dash+.8,b:43.6, dx:90},
-  {t:`≈ ${fmt(PIPE_LEN,1)} m <small>lengd rörs</small>`, k:'dim', p:()=>dim5.mid, a:TL.dim5+.9,b:43.6, dx:150},
-  {t:'Plata', p:()=>V(9.7,1.95,-.6), a:45.4,b:51.6},
-  {t:'Einangrunarhólkur', p:()=>sleeveG.position.clone().add(V(0,SL_HI+.25,0)), a:45.8,b:51.6, dx:60},
-  {t:'Skorið hér', k:'dim', p:()=>V(P0.x,P0.y+.2,P0.z+PIPE_LEN), a:TL.cut-.2,b:TL.offcut+.8},
-  {t:'Kragi', p:()=>collar.position.clone().add(V(0,.3,0)), a:TL.weld-.6,b:60.6},
-  {t:'Trekkspjald', k:'ghost', p:()=>V(AX+.31,OUT_Y+.48,AZ), a:TL.damper+.6,b:67.6, dx:130},
-  {t:'Samtengi', k:'ghost', p:()=>V(AX+.09,OUT_Y+1.0,AZ), a:TL.damper+1.2,b:67.6, dx:130},
-  {t:'Kraginn sest á hólkinn', p:()=>V(AX,RIDGE_TOP+.2,AZ), a:TL.pipeSet-.1,b:87.7, dx:200},
+  {t:'Kamína', p:()=>V(AX,1.3,AZ+.2), a:6.8,b:10.8, dx:-60},
+  {t:'Reykrör', p:()=>V(-5.4,.3,7.3), a:7.3,b:10.8},
+  {t:'Hólkur og plata', p:()=>V(-1.4,2.3,6.6), a:7.7,b:10.8},
+  {t:'Kastventill', p:()=>V(.3,.75,7.0), a:8.1,b:10.8, dx:40},
+  {t:'Miðja kamínunnar', p:()=>V(AX,OUT_Y+.05,AZ), a:13.0,b:18.6, dx:160, dy:10},
+  {t:'Stýripunktur', p:()=>V(AX,ROOF_AT+.45,AZ), a:16.4,b:18.6, dx:40},
+  {t:fmt(ROOF_AT-OUT_Y)+' m', k:'dim', p:()=>dim2.mid, a:TL.dim2+.9,b:MEAS_END, dx:-80},
+  {t:`${fmt(TV)} m <small>þykkt þaks</small>`, k:'dim', p:()=>dim2b.mid, a:TL.dim2b+.8,b:MEAS_END, dx:-150, dy:60},
+  {t:'30°', k:'dim', p:()=>PE.clone().add(V(0,.35,-1.55)), a:TL.pitch+1.4,b:MEAS_END},
+  {t:fmt(AZ/COS)+' m', k:'dim', p:()=>dim4.mid, a:TL.dim4+.9,b:MEAS_END, dx:-80},
+  {t:`≈ ${fmt(PIPE_LEN,1)} m <small>lengd rörs</small>`, k:'dim', p:()=>dim5.mid, a:TL.dim5+.9,b:MEAS_END, dx:-130},
+  {t:'Hæð mænis', p:()=>V(AX,RIDGE_TOP+.12,AZ+.9), a:TL.dash+.8,b:44.0, dx:90},
+  {t:'Einangrunarhólkur', p:()=>ASM0.clone().add(V(0,SL_HI+.25,0)), a:45.6,b:51.6, dx:60},
+  {t:'Plata í sama halla og þakið', p:()=>ASM0.clone().add(V(0,.75,-1.2)), a:46.6,b:51.6, dx:-40},
+  {t:'Nær upp undir mæni', k:'ghost', p:()=>ASM0.clone().add(V(0,.95,-1.6)), a:48.0,b:51.6, dx:-60, dy:-10},
+  {t:`${fmt(PIPE_LEN,2)} m`, k:'dim', p:()=>dim7.mid, a:TL.dim7+.9,b:60.6},
+  {t:"Kragi soðinn á", p:()=>PIPE0.clone().add(V(TIP,.32,0)), a:55.8,b:60.6, dx:-90},
+  {t:'Trekkspjald', k:'ghost', p:()=>V(AX,OUT_Y+.48,AZ+.31), a:TL.damper+.6,b:67.6, dx:-150},
+  {t:'Samtengi', k:'ghost', p:()=>V(AX,OUT_Y+1.0,AZ), a:TL.damper+1.2,b:67.6, dx:-140},
+  {t:'Mænir lyftur', p:()=>V(AX,RIDGE_TOP+.75,0), a:TL.capUp+.3,b:TL.asmSet, dx:-60},
+  {t:'Kraginn sest á hólkinn', p:()=>V(AX,RIDGE_TOP+.2,AZ), a:TL.pipeSet-.1,b:87.7, dx:-210},
 ];
 const labelEls=LABELS.map(l=>{ const el=document.createElement('div'); el.className='pill'+(l.k?' '+l.k:''); el.innerHTML=(l.k==='dim'?'':'<i></i>')+l.t; pinsEl.appendChild(el); return el; });
 const _v=new THREE.Vector3();
 function toScreen(v){ _v.copy(v).project(camera); return {x:(_v.x+1)/2*W, y:(1-_v.y)/2*H, ok:_v.z<1}; }
 function wordAnim(els,t,a,b,stag=.055,base=0){ els.forEach((w,i)=>{ const st=a+base+i*stag; const p=eout(prog(t,st,st+.7)); const q=eio(prog(t,b-.5,b));
   w.style.opacity=(p*(1-q)).toFixed(3); w.style.transform=`translate3d(0,${((1-p)*40-q*20).toFixed(1)}px,0)`; w.style.filter=(p<1||q>0)?`blur(${((1-p)*9+q*6).toFixed(1)}px)`:'none'; }); }
-const endEl=document.getElementById('end'), endParts=[...endEl.children];
+const endEl=document.getElementById('end'), endParts=[...endEl.children], endLogo=document.getElementById('endLogo');
 const brandEl=document.getElementById('brand'), chaptersEl=document.getElementById('chapters');
 function updateOverlay(t){
   CAPS.forEach((c,k)=>{ const e=capEls[k]; const vis=t>c.a-.1&&t<c.b+.1; e.el.style.opacity=vis?1:0; if(!vis) return;
@@ -620,126 +618,115 @@ function updateOverlay(t){
   barEls.forEach((b,i)=>{ const c=CHAPTERS[i]; b.style.width=(clamp((t-c[0])/(c[1]-c[0]))*100).toFixed(1)+'%'; });
   chName.innerHTML=`<b>${String(ci+1).padStart(2,'0')}</b>${CHAPTERS[ci][2]}`;
   const endOn=prog(t,TL.end-.3,TL.end+.3); chaptersEl.style.opacity=(1-endOn).toFixed(3); brandEl.style.opacity=(Math.min(prog(t,.2,1),1-endOn)).toFixed(3);
-  LABELS.forEach((l,i)=>{ const el=labelEls[i]; const on=env(t,l.a,l.b,.35,.35); if(on<=0){ el.style.opacity=0; return; }
+  LABELS.forEach((l,i)=>{ const el=labelEls[i]; const on=env(t,l.a,l.b,.35,.4); if(on<=0){ el.style.opacity=0; return; }
     const s=toScreen(l.p()); const p=eback(prog(t,l.a,l.a+.5));
     el.style.opacity=s.ok?on.toFixed(3):0; el.style.transform=`translate3d(${(s.x+(l.dx||0)).toFixed(1)}px,${(s.y-(l.dy??34)).toFixed(1)}px,0) translate(-50%,-50%) scale(${(.7+.3*p).toFixed(3)})`; });
   endEl.style.opacity=t>TL.end-.2?1:0;
   endParts.forEach((p,i)=>{ const st=TL.end+.1+i*.45; const e=eout(prog(t,st,st+1)); p.style.opacity=e.toFixed(3); p.style.transform=`translateY(${((1-e)*40).toFixed(1)}px)`; p.style.filter=e<1?`blur(${((1-e)*10).toFixed(1)}px)`:'none'; });
+  { const e=eout(prog(t,TL.end+1.0,TL.end+2.2)); endLogo.style.opacity=e.toFixed(3); endLogo.style.transform=`translateY(${((1-e)*30).toFixed(1)}px)`; }
 }
 
-/* ---------- scene update ---------- */
-const qLying=new THREE.Quaternion().setFromAxisAngle(X_AX,Math.PI/2);
+/* ---------- motion helpers: lift straight up, travel above everything, come straight down ---------- */
+function travel(a,b,u,hTop){
+  const up=eio(prog(u,0,.32)), across=eio(prog(u,.3,.7)), down=eio(prog(u,.72,1));
+  const y = u<.71 ? lerp(a.y,hTop,up) : lerp(hTop,b.y,down);
+  return V(lerp(a.x,b.x,across), y, lerp(a.z,b.z,across)); }
 const qId=new THREE.Quaternion();
-const PIPE_UP=V(AX,5.75,AZ);                           // pipe hovering upright above the sleeve
-function hop(a,b,u,h){ return a.clone().lerp(b,u).add(V(0,Math.sin(Math.PI*u)*h,0)); }
+
+/* ---------- scene update ---------- */
 function render(t){
   t=clamp(t,0,DUR);
   camAt(t);
 
-  // step 1: plumb line comes down from the ceiling to the centre of the outlet, then the drill, then the marker
-  const pg=eio(prog(t,TL.plumb,TL.plumb+1.5)), pOn=1-prog(t,18.4,19.0);
+  // step 1
+  const pg=eio(prog(t,TL.plumb,TL.plumb+1.5)), pOn=1-prog(t,MEAS_END-.6,MEAS_END);
   M.plumb.opacity=pOn; const bobY=lerp(CEIL_AT-.02,OUT_Y+.075,pg);
-  setBar(plumbLine,V(AX,bobY,AZ),V(AX,CEIL_AT,AZ),(t>TL.plumb&&pOn>0)?1:0); bob.visible=t>TL.plumb&&pOn>0; bob.position.set(AX,bobY,AZ); bob.material.opacity=pOn;
-  ceilDot.visible=t>TL.plumb+1.4&&t<44; ceilDot.scale.setScalar(eback(prog(t,TL.plumb+1.4,TL.plumb+1.9))+.0001);
+  setBar(plumbLine,V(AX,bobY,AZ),V(AX,CEIL_AT,AZ),(t>TL.plumb&&pOn>0)?1:0); bob.visible=t>TL.plumb&&pOn>0; bob.position.set(AX,bobY,AZ);
   const dg=prog(t,TL.drill,TL.drill+1.1), dr=prog(t,TL.drill+1.2,TL.drill+1.6);
   setBar(drill,V(AX,CEIL_AT,AZ),V(AX,lerp(CEIL_AT,ROOF_AT+.14,eio(dg)),AZ),(t>TL.drill&&dr<1)?1-dr:0);
-  // marker pin rides on the plug until the hole is cut, then travels away with it
+
+  // roof plug: in place until the hole is sawn, then lifted out along the roof normal and carried to the ground
+  const lift=eout(prog(t,TL.plugOut,TL.plugOut+.6));
+  const liftP=PLUG0.clone().addScaledVector(N_SLOPE,lift*.45);
+  const pu=prog(t,TL.plugOut+.6,TL.plugSet);
+  plug.position.copy(pu>0?travel(liftP,PLUG_REST,pu,6.4):liftP);
+  plug.quaternion.copy(qNear).slerp(qId,eio(prog(pu,.3,.7)));
+  // marker pin sits on the plug
   const pinUp=eback(prog(t,TL.pin,TL.pin+.6));
-  // disc (roof plug)
-  const discU=eio(prog(t,TL.discOut,TL.discOut+2.2)), discLift=eout(prog(t,TL.discOut,TL.discOut+.6));
-  let dpos=DISC0.clone().addScaledVector(N_SLOPE,discLift*.35);
-  if(discU>0) dpos=hop(DISC0.clone().addScaledVector(N_SLOPE,.35),DISC1,discU,1.6);
-  disc.position.copy(dpos); disc.quaternion.copy(qSlope).slerp(qId,discU); discEdge.position.copy(disc.position); discEdge.quaternion.copy(disc.quaternion);
-  disc.visible = t>TL.saw;               // until the cut it is just part of the glass roof
-  discEdge.visible = disc.visible;
-  M.hole.opacity=.85*prog(t,TL.discOut,TL.discOut+.4)*(1-prog(t,TL.asmSet-.4,TL.asmSet));
-  pin.visible=t>TL.pin&&t<TL.discOut+2.4; pin.scale.set(1,Math.max(1e-3,pinUp),1);
-  if(t<TL.discOut){ pin.position.copy(P_TOP); pin.quaternion.identity(); } else { pin.position.copy(disc.position).addScaledVector(_d.copy(N_SLOPE).applyQuaternion(_q.copy(qSlope).invert()).applyQuaternion(disc.quaternion),RT/2); pin.quaternion.copy(disc.quaternion).multiply(_q.copy(qSlope).invert()); }
-  pin.visible = pin.visible && discU<.98;
-  pinGlow.material.opacity=.9*env(t,TL.pin,36,.4,.6)+.9*env(t,TL.saw-.4,TL.discOut,.3,.3);
+  pin.visible=t>TL.pin; pin.scale.set(1,Math.max(1e-3,pinUp),1);
+  _q.copy(plug.quaternion).multiply(qNearInv);
+  pin.position.copy(V(0,RT,0).applyQuaternion(plug.quaternion).add(plug.position)); pin.quaternion.copy(_q);
+  pinGlow.material.opacity=.9*env(t,TL.pin,36,.4,.6)+.9*env(t,TL.saw-.4,TL.plugOut,.3,.3);
 
-  // step 2
-  drawDim(dim2,t,TL.dim2,24.8); drawDim(dim2b,t,TL.dim2b,24.8);
-  // step 3: pitch
-  { const g=eio(prog(t,TL.pitch,TL.pitch+.9)), on=env(t,TL.pitch,29.8,.4,.5)>0?1:0;
-    setBar(pitchH,PE,PE.clone().add(V(0,0,-1.9*g)),on); setBar(pitchS,PE,PE.clone().add(V(0,SIN*1.9*g,-COS*1.9*g)),on); }
-  // (materials for the pitch graphic share one fading material)
-  pitchMat.opacity=env(t,TL.pitch,29.8,.4,.5);
-  pitchH.material=pitchS.material=arcM.material=pitchMat;
-  arcM.visible=pitchMat.opacity>0; arcM.geometry.setDrawRange(0,Math.floor(arcCount*eio(prog(t,TL.pitch+.6,TL.pitch+1.6))/6)*6);
-  arcWedge.material.opacity=.18*pitchMat.opacity*eio(prog(t,TL.pitch+.8,TL.pitch+1.8));
-  // step 4
-  drawDim(dim4,t,TL.dim4,35.8);
-  // step 5
-  { const on=env(t,TL.dash,43.8,.3,.5); dashes.forEach((d,i)=>{ const u0=i/dashes.length, u1=(i+.55)/dashes.length; const g=prog(t,TL.dash+i*.07,TL.dash+i*.07+.25);
-      d.material=dashMat; setBar(d,DASH_A.clone().lerp(DASH_B,u0),DASH_A.clone().lerp(DASH_B,lerp(u0,u1,g)),g>0&&on>0?1:0); }); dashMat.opacity=on;
-    const gg=eio(prog(t,TL.ghost,TL.ghost+1.6)); ghostPipe.visible=gg>0&&on>0; ghostPipe.scale.set(1,Math.max(1e-3,(PIPE_TOP-PIPE_BOT)*gg),1); M.ghost.opacity=.28*on; }
-  drawDim(dim5,t,TL.dim5,43.8);
-
-  // step 6: sleeve goes into the plate
-  const su=eio(prog(t,TL.slvLift,TL.slvSet)); let spos;
-  if(t<TL.asmLift) spos = su<1 ? hop(SLV0,ASM0,su,1.5) : ASM0.clone();
-  const au=eio(prog(t,TL.asmLift,TL.asmSet)); const apos=hop(ASM0,ASM1,au,3.2);
-  plateG.position.copy(apos); if(t>=TL.asmLift) spos=apos.clone();
-  sleeveG.position.copy(spos);
-  screws.forEach((s,i)=>{ const f1=env(t,TL.slvSet+.3+i*.12,TL.slvSet+1.6+i*.12,.15,.5), f2=env(t,TL.screws+i*.12,TL.screws+1.3+i*.12,.15,.5); s.visible=f1+f2>0; s.position.copy(plateG.position).add(s.userData.local); s.material.opacity=Math.max(f1,f2); s.scale.setScalar(1+Math.max(f1,f2)*.5); });
-
-  // step 7: cut the pipe, the offcut slides off, collar goes on and is welded
-  cutRing.visible=t>TL.cut-.2&&t<TL.offcut+.4; cutRing.scale.setScalar(.6+.4*eback(prog(t,TL.cut-.2,TL.cut+.3)));
-  const ou=eio(prog(t,TL.offcut,TL.offcut+1.0)); offcut.position.copy(OFF0).lerp(OFF1,ou); offcut.rotation.set(Math.PI/2,0,0);
-  // pipe transform
-  let pq=qLying.clone(), pp=P0.clone();
-  const lu=eio(prog(t,TL.pipeLift,TL.pipeUp));
-  if(lu>0){ pp=hop(P0,PIPE_UP,lu,3.2); pq=qLying.clone().slerp(qId,eio(prog(t,TL.pipeLift+.5,TL.pipeUp))); }
-  const du=eio(prog(t,TL.pipeDown,TL.pipeSet)); if(du>0){ pp=PIPE_UP.clone().lerp(V(AX,PIPE_BOT,AZ),du); pq=qId.clone(); }
-  pipeG.position.copy(pp); pipeG.quaternion.copy(pq);
-  // collar
-  const cu=eio(prog(t,TL.collar,TL.collar+1.4)), cs=eio(prog(t,TL.collar+1.3,TL.weld-.2));
-  const tipLocal=PIPE_LEN-.07;
-  if(t<TL.weld-.2){ const tip=P0.clone().add(V(0,0,tipLocal)); const pre=tip.clone().add(V(0,0,.75));
-    collar.position.copy(cu<1?hop(COL0,pre,cu,.9):pre.lerp(tip,cs)); collar.quaternion.copy(qId).slerp(qLying,cu); }
-  else { collar.position.copy(V(0,tipLocal,0).applyQuaternion(pq).add(pp)); collar.quaternion.copy(pq); }
-  sparkBurst(t,TL.cut,1.2,V(P0.x,P0.y+.06,P0.z+PIPE_LEN)) || sparkBurst(t,TL.weld,1.3,V(P0.x,P0.y+.1,P0.z+tipLocal)) || sparks.forEach(s=>s.m.visible=false);
+  // step 2..5 measurements
+  drawDim(dim2,t,TL.dim2); drawDim(dim2b,t,TL.dim2b);
+  { const on=env(t,TL.pitch,MEAS_END,.4,.6); pitchMat.opacity=on; const g=eio(prog(t,TL.pitch,TL.pitch+.9)), v=on>0?1:0;
+    setBar(pitchH,PE,PE.clone().add(V(0,0,-1.9*g)),v); setBar(pitchS,PE,PE.clone().add(V(0,SIN*1.9*g,-COS*1.9*g)),v);
+    arcM.visible=on>0; arcM.geometry.setDrawRange(0,Math.floor(arcCount*eio(prog(t,TL.pitch+.6,TL.pitch+1.6))/6)*6);
+    arcWedge.material.opacity=.16*on*eio(prog(t,TL.pitch+.8,TL.pitch+1.8)); }
+  drawDim(dim4,t,TL.dim4);
+  { const on=env(t,TL.dash,MEAS_END,.3,.6); dashMat.opacity=on; dashes.forEach((d,i)=>{ const u0=i/dashes.length, u1=(i+.55)/dashes.length; const g=prog(t,TL.dash+i*.07,TL.dash+i*.07+.25);
+      setBar(d,DASH_A.clone().lerp(DASH_B,u0),DASH_A.clone().lerp(DASH_B,lerp(u0,u1,g)),g>0&&on>0?1:0); });
+    const gg=eio(prog(t,TL.ghost,TL.ghost+1.6)); ghostPipe.visible=gg>0&&on>0; ghostPipe.scale.set(1,Math.max(1e-3,PIPE_LEN*gg),1); M.ghost.opacity=.26*on; }
+  drawDim(dim5,t,TL.dim5);
+  drawDim(dim7,t,TL.dim7,60.8);
 
   // step 8: damper ghost
-  { const on=env(t,TL.damper,67.8,.6,.6); damperG.visible=on>0; dMat.opacity=.32*on; dMatS.opacity=.95*on; damperG.userData.flap.rotation.z=.2+.9*(.5+.5*Math.sin((t-TL.damper)*1.6)); }
+  { const on=env(t,TL.damper,67.8,.6,.6); damperG.visible=on>0; dMat.opacity=.32*on; dMatS.opacity=.95*on; damperG.userData.flap.rotation.x=.2+.9*(.5+.5*Math.sin((t-TL.damper)*1.6)); }
 
-  // installation A: hole saw
-  sawM.visible=t>TL.saw&&t<TL.discOut+.6; sawM.geometry.setDrawRange(0,Math.floor(sawCount*eio(prog(t,TL.saw,TL.saw+1.8))/6)*6); M.accT.opacity=1;
-  // cowl
-  const wu=eio(prog(t,TL.cowlLift,TL.cowlSet)); cowl.position.copy(hop(COWL0,V(AX,PIPE_TOP-.12+.0,AZ),wu,2.6).add(V(0,(1-eout(prog(t,TL.cowlSet-.6,TL.cowlSet)))*(wu>.7?.0:0),0)));
+  // installation A: saw, plug out, ridge cap up, sleeve + plate in, ridge cap down
+  sawM.visible=t>TL.saw&&t<TL.plugOut+.5; sawM.geometry.setDrawRange(0,Math.floor(sawCount*eio(prog(t,TL.saw,TL.saw+1.8))/6)*6);
+  { let any=false; const at=P_TOP.clone().addScaledVector(N_SLOPE,.02);
+    sparks.forEach((s,i)=>{ const on=t>TL.saw&&t<TL.saw+1.8; s.m.visible=on; if(!on) return; any=true; const k=eio(prog(t,TL.saw,TL.saw+1.8)); const a=k*Math.PI*2;
+      const c=at.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE); const u=((t-TL.saw)*2.6+i/14)%1;
+      s.m.position.copy(c).addScaledVector(s.dir,u*.3*s.sp); s.m.position.y-=u*u*.22; s.m.scale.setScalar(1-u); }); }
+  const cu=eio(prog(t,TL.capUp,TL.capUp+.9)), cd=eio(prog(t,TL.capDown,TL.capDown+1.0));
+  { const k=cu*(1-cd); const slide=eio(prog(t,TL.capUp+.5,TL.capUp+1.3))*(1-eio(prog(t,TL.capDown-.2,TL.capDown+.6)));
+    capG.position.set(slide*1.45,k*.5,0); }
+  const au=prog(t,TL.asmLift,TL.asmSet);
+  asmG.position.copy(au>0?travel(ASM0,ASM1,au,6.9):ASM0);
+
+  // installation B: pipe lifts, stands up in the open, travels above the roof and slides straight down
+  { const u=prog(t,TL.pipeLift,TL.pipeSet); let pp=PIPE0.clone(), pq=qLying.clone();
+    const HOVER=V(AX,RIDGE_TOP+.75,AZ);
+    if(u>0){ const r=eio(prog(u,.0,.32)); pq=qLying.clone().slerp(qId,r);
+      const rise=V(PIPE0.x,lerp(PIPE0.y,3.4,eio(prog(u,0,.3))),PIPE0.z);                        // stand up in front of the house
+      const hi=V(PIPE0.x,RIDGE_TOP+.75,PIPE0.z);
+      if(u<.3) pp=rise; else if(u<.42) pp=rise.lerp(hi,eio(prog(u,.3,.42))).setY(lerp(3.4,RIDGE_TOP+.75,eio(prog(u,.3,.42))));
+      else if(u<.72) pp=V(lerp(PIPE0.x,HOVER.x,eio(prog(u,.42,.72))),RIDGE_TOP+.75,lerp(PIPE0.z,HOVER.z,eio(prog(u,.42,.72))));
+      else pp=V(AX,lerp(RIDGE_TOP+.75,PIPE_BOT,eio(prog(u,.74,1))),AZ);
+      if(u>=.3) pq=qId.clone(); }
+    pipeG.position.copy(pp); pipeG.quaternion.copy(pq); }
+  // installation C: cowl
+  { const u=prog(t,TL.cowlLift,TL.cowlSet); cowl.position.copy(u>0?travel(COWL0,V(AX,PIPE_TOP-.12,AZ),u,PIPE_TOP+1.2):COWL0); }
   // fire + smoke
   const fo=prog(t,TL.fire,TL.fire+1.5), fl=.82+.1*Math.sin(t*17)+.08*Math.sin(t*29+1);
   fire.material.opacity=fo*fl; fireGlow.material.opacity=.45*fo*fl; fireLight.intensity=6*fo*fl;
   smoke.forEach((s,i)=>{ const u=((t-TL.fire-1.2)*.32+i/smoke.length)%1; const on=t>TL.fire+1.2+i*.25; s.visible=on; if(!on) return;
     s.position.set(AX+Math.sin(u*3+i)*.12+u*.5,PIPE_TOP+.55+u*2.6,AZ-u*.2); s.scale.setScalar(.5+u*2.2); s.material.opacity=.55*Math.sin(Math.PI*u)*prog(t,TL.fire+1.2,TL.fire+2.4); });
-
-  // focus glow on the ground under whatever is being worked on
+  // soft glow under whatever is in focus
   { let fp=null, fs=1, fo2=0;
-    if(t>6.6&&t<10.8){ fp=V(AX,.08,AZ+.1); fs=1.8; fo2=env(t,6.6,10.8); }
-    else if(t>44.6&&t<51.8){ fp=V(9.4,GY+.01,.5); fs=3.6; fo2=env(t,44.6,51.8); }
-    else if(t>52.4&&t<60.8){ fp=V(7.3,GY+.01,1.9); fs=3.4; fo2=env(t,52.4,60.8); }
-    else if(t>TL.fire){ fp=V(AX,.08,AZ+.1); fs=2.4; fo2=prog(t,TL.fire,TL.fire+1.4)*.6; }
-    focus.visible=!!fp; if(fp){ focus.position.copy(fp); focus.scale.setScalar(fs); focus.material.opacity=fo2*.32; } }
+    if(t>6.6&&t<10.8){ fp=V(AX,.07,AZ+.1); fs=1.8; fo2=env(t,6.6,10.8); }
+    else if(t>44.6&&t<51.8){ fp=V(ASM0.x,GY+.01,ASM0.z-.3); fs=3.2; fo2=env(t,44.6,51.8); }
+    else if(t>52.4&&t<60.8){ fp=V(PIPE0.x+PIPE_LEN/2,GY+.01,PIPE0.z); fs=5.0; fo2=env(t,52.4,60.8); }
+    else if(t>TL.fire){ fp=V(AX,.07,AZ+.1); fs=2.4; fo2=prog(t,TL.fire,TL.fire+1.4)*.6; }
+    focus.visible=!!fp; if(fp){ focus.position.copy(fp); focus.scale.setScalar(fs); focus.material.opacity=fo2*.3; } }
 
   renderer.render(scene,camera);
   updateOverlay(t);
 }
-const pitchMat=new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
-const dashMat=new THREE.MeshBasicMaterial({color:ACC,toneMapped:false,transparent:true,opacity:0,depthWrite:false});
-const arcCount=arcM.geometry.index.count;
 
-/* ---------- sound cues: exact times of what happens on screen ---------- */
+/* ---------- sound cues ---------- */
 function soundEvents(){
   const ev=[];
   CAPS.forEach((c,i)=>ev.push({k:'step',t:c.a,i}));
-  ev.push({k:'part',t:7.3},{k:'part',t:7.7},{k:'part',t:8.1},{k:'part',t:8.5});
+  for(const t of [7.3,7.7,8.1]) ev.push({k:'part',t});
   ev.push({k:'plumb',t:TL.plumb+1.5},{k:'drill',t:TL.drill},{k:'pin',t:TL.pin+.3});
-  for(const k of ['dim2','dim2b','dim4','dim5']) ev.push({k:'dim',t:TL[k]+1.0});
+  for(const k of ['dim2','dim2b','dim4','dim5','dim7']) ev.push({k:'dim',t:TL[k]+1.0});
   ev.push({k:'dim',t:TL.pitch+1.5},{k:'dash',t:TL.dash});
-  ev.push({k:'place',t:TL.slvSet},{k:'cut',t:TL.cut},{k:'slide',t:TL.offcut},{k:'place',t:TL.collar+1.4},{k:'weld',t:TL.weld});
-  ev.push({k:'ghost',t:TL.damper+.4},{k:'saw',t:TL.saw},{k:'lift',t:TL.discOut},{k:'place',t:TL.discOut+2.2});
-  ev.push({k:'lift',t:TL.asmLift},{k:'place',t:TL.asmSet},{k:'lift',t:TL.pipeLift},{k:'slide',t:TL.pipeDown},{k:'land',t:TL.pipeSet});
+  for(const t of [45.6,46.6,48.0,55.8]) ev.push({k:'part',t});
+  ev.push({k:'ghost',t:TL.damper+.4},{k:'saw',t:TL.saw},{k:'lift',t:TL.plugOut},{k:'place',t:TL.plugSet});
+  ev.push({k:'lift',t:TL.capUp},{k:'lift',t:TL.asmLift},{k:'place',t:TL.asmSet},{k:'place',t:TL.capDown+1.0},{k:'lift',t:TL.pipeLift},{k:'slide',t:TL.pipeLift+.74*(TL.pipeSet-TL.pipeLift)},{k:'land',t:TL.pipeSet});
   ev.push({k:'lift',t:TL.cowlLift},{k:'land',t:TL.cowlSet},{k:'fire',t:TL.fire},{k:'end',t:TL.end+.1});
   return {dur:DUR, tl:TL, events:ev.sort((a,b)=>a.t-b.t)};
 }
