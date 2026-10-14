@@ -329,7 +329,7 @@ function tower(x,z,w,d,h,kind,grp){
   if(rand()<.6) parts.push(new THREE.BoxGeometry(R(1.4,2.6),.9,R(1.2,2.2)).translate(R(-w/4,w/4),h+.45,R(-d/4,d/4)));
   const dm=new THREE.Mesh(mergeGeometries(parts),M.white); dm.castShadow=dm.receiveShadow=true; g.add(dm);
   if(h>5) mesh(new THREE.BoxGeometry(w+.08,1.1,d+.08).translate(0,.55,0),M.base,g);
-  g.userData.h=h; return g;
+  if(grp===CITY) SOLIDS.push({x,z,hw:w/2+.6,hd:d/2+.6,h:h+1.6}); g.userData.h=h; return g;
 }
 function cylTower(x,z,r,h,grp){
   const g=new THREE.Group(); g.position.set(x,0,z); grp.add(g);
@@ -337,7 +337,7 @@ function cylTower(x,z,r,h,grp){
   const uv=geo.attributes.uv; for(let i=0;i<49*2;i++) uv.setXY(i,uv.getX(i)*2*Math.PI*r/2.2,uv.getY(i)*h/2.2);
   const m=new THREE.Mesh(geo,[M.groove,M.white,M.white]); m.castShadow=m.receiveShadow=true; g.add(m); outline(geo,g,12);
   mesh(new THREE.CylinderGeometry(r+.18,r+.18,.34,48).translate(0,h+.02,0),M.white,g);
-  g.userData.h=h; return g;
+  if(grp===CITY) SOLIDS.push({x,z,hw:r+.6,hd:r+.6,h:h+1.6}); g.userData.h=h; return g;
 }
 const foliageGeo = (()=>{ let g=new THREE.IcosahedronGeometry(1,3); g.deleteAttribute('normal'); g.deleteAttribute('uv'); g=mergeVertices(g); const p=g.attributes.position, v=new THREE.Vector3();
   for(let i=0;i<p.count;i++){ v.fromBufferAttribute(p,i); const n=1+.1*Math.sin(v.x*5.3+v.y*3.1)*Math.sin(v.z*4.9+v.x*2.3)+.06*Math.sin(v.y*12+v.z*9.5); v.multiplyScalar(n); p.setXYZ(i,v.x,v.y,v.z);} g.computeVertexNormals(); return g; })();
@@ -361,7 +361,7 @@ function updPing(p,t,on,{speed=.5,spread=1.5}={}){ p.g.visible=on>.002; if(!p.g.
 const CITY = SET_GROUPS.city;  // shared by the city and growth sets
 const PITCH=22, BLK=17.5, NB=7;
 const ROADS=[]; for(let i=0;i<=NB;i++) ROADS.push((i-NB/2)*PITCH);
-const cityHomes=[];
+const cityHomes=[], SOLIDS=[];  // SOLIDS: boxes lines must clear
 const cityWins = d => [win('city',.9+d,(d*.08)), win('growth',.2+d*.45,(d*.08))];
 const wave = (x,z)=>Math.hypot(x+30,z+30)/120*2.6;
 {
@@ -411,9 +411,12 @@ const rollers=[0,1,2].map(k=>{ const g=new THREE.Group(); CITY.add(g); mesh(new 
 // power lines from the substation to the homes, lit as the scene ends
 const cityLines=[];
 { const homesBy=cityHomes.map(h=>({...h,d:Math.hypot(h.x-STATION.x,h.z-STATION.z)})).sort((a,b)=>a.d-b.d);
-  const pick=[]; for(const h of homesBy){ if(pick.every(p=>Math.hypot(p.x-h.x,p.z-h.z)>13)) pick.push(h); if(pick.length>=10) break; }
-  pick.forEach((h,k)=>{ const end=V(h.x,3.2,h.z); const mid=V(lerp(STATION.x,h.x,.5),9+h.d*.08,lerp(STATION.z,h.z,.5));
-    const c=new THREE.QuadraticBezierCurve3(STATION.clone(),mid,end);
+  // a line is used only if every point on it clears every building (nothing passes through anything)
+  const clears=c=>{ for(let i=2;i<=58;i++){ const q=c.getPoint(i/60); for(const b of SOLIDS){ if(Math.abs(q.x-b.x)<b.hw&&Math.abs(q.z-b.z)<b.hd&&q.y<b.h) return false; } } return true; };
+  const curveTo=h=>new THREE.QuadraticBezierCurve3(STATION.clone(),V(lerp(STATION.x,h.x,.5),26,lerp(STATION.z,h.z,.5)),V(h.x,3.2,h.z));
+  const pick=[]; for(const h of homesBy){ if(pick.every(p=>Math.hypot(p.x-h.x,p.z-h.z)>13) && clears(curveTo(h))) pick.push(h); if(pick.length>=10) break; }
+  window.__lines=pick.length;
+  pick.forEach((h,k)=>{ const c=curveTo(h);
     drawTube(c,CITY,[win('city',5.6+k*.12),win('growth',2.4+k*.08)],{r:.13,dur:1});
     flow(c,CITY,[win('city',5.6+k*.12),win('growth',2.4+k*.08)],{n:3,speed:.55,mat:M.glowC,size:.9,delay:1});
     cityLines.push(h); });
@@ -479,29 +482,31 @@ let billTop, billBot;
 /* ================= SET 3: the price chart ================= */
 const CHART = SET_GROUPS.chart;
 const ROWS = [...DATA.others.map(o=>({name:o[0],p:o[1]})), {name:'Straumlind',p:DATA.sl,sl:true}].sort((a,b)=>b.p-a.p);
-const BAR_W=5.6, BAR_GAP=3.6, HS=1.55;
+const BAR_W=5.6, BAR_GAP=4.6, HS=1.55;
 const chartX = i => (i-(ROWS.length-1)/2)*(BAR_W+BAR_GAP);
-{ const plate=new THREE.Mesh(new RoundedBoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+6,.8,14,2,.35),M.block); plate.position.y=.4; plate.receiveShadow=true; CHART.add(plate); rise(plate,win('chart',.15),{dur:.6,ease:eout});
+{ const plate=new THREE.Mesh(new RoundedBoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+6,.8,20,2,.35),M.block); plate.position.set(0,.4,3); plate.receiveShadow=true; CHART.add(plate); rise(plate,win('chart',.15),{dur:.6,ease:eout});
   // baseline grid lines on the plate (every 5 kr)
   for(let v=5; v<=15; v+=5){ const l=new THREE.Mesh(new THREE.BoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+4,.04,.04),M.detail); l.position.set(0,.8+v*HS,-BAR_W/2-.6); CHART.add(l); rise(l,win('chart',.5+v*.02),{mode:'all',ease:eout}); }
 }
 ROWS.forEach((r,i)=>{ const h=r.p*HS; const g=new THREE.Group(); g.position.set(chartX(i),.8,0); CHART.add(g);
-  const geo=new RoundedBoxGeometry(BAR_W,h,BAR_W,3,.35).translate(0,h/2,0);
+  // Straumlind's cyan cap is stacked on the bar, never overlapping it (overlapping faces flicker)
+  const bh = r.sl ? h-.6 : h;
+  const geo=new RoundedBoxGeometry(BAR_W,bh,BAR_W,3,.3).translate(0,bh/2,0);
   mesh(geo,r.sl?M.orange:M.white,g,{edges:!r.sl});
-  if(r.sl){ const cap=mesh(new RoundedBoxGeometry(BAR_W+.06,.6,BAR_W+.06,2,.2).translate(0,h-.3,0),M.cyan,g); }
+  if(r.sl){ mesh(new RoundedBoxGeometry(BAR_W,.6,BAR_W,2,.25).translate(0,bh+.3,0),M.cyan,g); }
   r.at = r.sl ? 3.7 : .7+i*.32; r.g=g; r.h=h;
   rise(g,win('chart',r.at),{dur:r.sl?1.1:.9, ease: r.sl?eback:eout});
-  pin(`${r.sl?'<i></i>':''}${r.name}`, V(chartX(i),.8,BAR_W/2+2.2), SETS.chart.a+r.at+.2, SETS.chart.b-EXIT-.1, {cls: r.sl?'pill hot':'pill muted'});
-  r.valPin = pin(`<b>${fmtK(r.p)}</b><small>kr.</small>`, V(chartX(i),.8+h+1.6,0), SETS.chart.a+r.at+.6, SETS.chart.b-EXIT-.1, {cls: r.sl?'pill hot':'pill'});
+  const lab=new THREE.Mesh(new THREE.PlaneGeometry(BAR_W+BAR_GAP-.8,4.6),new THREE.MeshBasicMaterial({transparent:true,toneMapped:false,depthWrite:false})); lab.rotation.x=-Math.PI/2; lab.position.set(chartX(i),.83,BAR_W/2+4.4); CHART.add(lab); r.lab=lab;
+  rise(lab,win('chart',r.at+.25),{mode:'all',dur:.6,ease:eout});
 });
 // the average line, then the gap between it and Straumlind
-const avgLine=new THREE.Mesh(new THREE.BoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+3,.14,.14),M.glowC); avgLine.position.set(0,.8+AVG*HS,BAR_W/2+.3); CHART.add(avgLine);
+const avgLine=new THREE.Mesh(new THREE.BoxGeometry(ROWS.length*(BAR_W+BAR_GAP)+3,.14,.14),M.glowC); avgLine.position.set(0,.8+AVG*HS,-BAR_W/2-.5); CHART.add(avgLine);
 rise(avgLine,win('chart',5.4),{mode:'all',dur:.7,ease:eout}); avgLine.userData.sx=true;
 const slIdx=ROWS.findIndex(r=>r.sl);
-const gap=new THREE.Group(); gap.position.set(chartX(slIdx)+BAR_W/2+.9,.8+DATA.sl*HS,BAR_W/2+.3); CHART.add(gap);
+const gap=new THREE.Group(); gap.position.set(chartX(slIdx)+BAR_W/2+1.2,.8+DATA.sl*HS,-BAR_W/2-.5); CHART.add(gap);
 { const gh=(AVG-DATA.sl)*HS; mesh(new THREE.BoxGeometry(.14,gh,.14).translate(0,gh/2,0),M.glowO,gap); mesh(new THREE.BoxGeometry(.7,.14,.14),M.glowO,gap); mesh(new THREE.BoxGeometry(.7,.14,.14).translate(0,gh,0),M.glowO,gap); }
 rise(gap,win('chart',6.2),{dur:.6});
-pin(`<i></i>Meðalverð þriggja stærstu <b style="margin-left:6px">${fmtK(AVG)}</b><small>kr.</small>`, V(chartX(0)-BAR_W/2,.8+AVG*HS,BAR_W/2+.3), SETS.chart.a+5.6, SETS.chart.b-EXIT-.1, {cls:'pill', side:'r', dy:40});
+pin(`<i></i>Meðalverð þriggja stærstu <b style="margin-left:6px">${fmtK(AVG)}</b><small>kr.</small>`, V((ROWS.length*(BAR_W+BAR_GAP)+3)/2+1,.8+AVG*HS,-BAR_W/2-.5), SETS.chart.a+5.6, SETS.chart.b-EXIT-.1, {cls:'pill', side:'r'});
 
 /* ================= SET 4: lean by design ================= */
 const LEAN = SET_GROUPS.lean;
@@ -581,7 +586,7 @@ for(let k=0;k<3;k++){ const g=new THREE.Group(); g.position.set((k-1)*12,7.2,0);
   const face=new THREE.Mesh(new THREE.PlaneGeometry(CARD.w,CARD.h),new THREE.MeshBasicMaterial({toneMapped:false})); face.position.z=-.04; g.add(face);
   const st=new THREE.Mesh(new THREE.BoxGeometry(3,.4,2.4),M.base); st.position.set(0,-CARD.h/2-.55,-.3); g.add(st);
   rise(g,win('sw',.5+k*.55),{mode:'all',dur:.8}); cards.push({g,face}); }
-const swLine = new THREE.CatmullRomCurve3([V(-12,1.4,-.4),V(-6,1.0,-.4),V(0,1.4,-.4),V(6,1.0,-.4),V(12,1.4,-.4)]);
+const swLine = new THREE.CatmullRomCurve3([V(-17,.12,3.2),V(-6,.12,3.4),V(6,.12,3.4),V(17,.12,3.2)]);
 drawTube(swLine,SW,win('sw',2.4),{r:.09,dur:1.4,seg:80}); flow(swLine,SW,win('sw',2.4),{n:4,speed:.4,size:.6,delay:1});
 
 /* ================= SET 9: the bolt ================= */
@@ -594,7 +599,7 @@ let LOGO_FULL='';
 const KEYS = {
   city: [[0,V(-150,190,210),V(0,0,0)],[3.4,V(-96,104,128),V(0,4,0)],[6.6,V(-70,70,96),V(4,6,4)],[9.4,V(-56,52,70),V(10,6,2)]],
   grid: [[0,V(-104,48,84),V(-40,4,0)],[2.4,V(-56,42,88),V(-18,5,0)],[5.0,V(-4,40,86),V(8,6,0)],[7.4,V(30,30,66),V(42,4,2)],[10,V(30,24,58),V(44,4,4)],[13.2,V(26,22,54),V(42,4,4)]],
-  chart: [[0,V(-34,38,96),V(6,6,0)],[4.0,V(-6,30,90),V(8,7,0)],[7.2,V(20,26,80),V(10,8,0)],[12,V(26,24,74),V(10,8,0)]],
+  chart: [[0,V(-30,66,96),V(2,4,4)],[4.0,V(-8,60,92),V(4,5,4)],[7.2,V(14,56,86),V(6,5.5,5)],[12,V(18,54,82),V(6,5.5,5)]],
   lean: [[0,V(-50,44,90),V(-4,9,0)],[3.4,V(-16,36,86),V(2,8,0)],[7.2,V(12,28,70),V(6,5,0)]],
   ai: [[0,V(-34,30,64),V(0,10,0)],[3.6,V(-8,26,60),V(0,11,0)],[8.6,V(18,20,50),V(-4,10,0)]],
   homes:[[0,V(-40,36,70),V(0,5,0)],[4.0,V(0,22,50),V(0,5,0)],[7.0,V(18,15,34),V(9,4,2)],[10.6,V(22,13,28),V(10,4,2)]],
@@ -623,7 +628,7 @@ const CAPS=[
   {a:46.4,b:50.2, eb:'Gervigreind', t:'Orkan er keypt í heildsölu, á réttum tíma.', s:'Sparnaðurinn skilar sér beint til þín.'},
   {a:51.0,b:56.2, eb:'Heimilið', t:'Sama heimili. Sama notkun.', s:`${fmtN(DATA.usage)} kWst á ári, eins og venjuleg íbúð. Um ${fmtN(SAVE_YEAR)} kr. minna á ári en hjá stærsta raforkusalanum.`},
   {a:56.4,b:60.8, eb:'Rafbíllinn', t:'Hlaðið á nóttunni fyrir enn minna.', s:'Næturverð frá kl. 23 til 07.'},
-  {a:61.6,b:68.2, eb:'Vöxturinn', t:'Úr 28 milljónum í 2,1 milljarð.', s:'Velta Straumlindar frá fyrsta árinu 2021 til 2024. Heimili, fyrirtæki og sveitarfélög hafa skipt.'},
+  {a:61.6,b:68.2, eb:'Um allt land', t:'Heimili og fyrirtæki um allt land hafa skipt.', s:'Líka sveitarfélög, eins og Akureyri og Vestmannaeyjar.'},
   {a:69.0,b:74.8, eb:'Að skipta', t:'Það tekur eina mínútu að skipta.', s:'Ókeypis og engin binding. Rafmagnið fer aldrei af.'},
 ];
 const capsEl=document.getElementById('caps');
@@ -656,15 +661,11 @@ function updOverlay(t){
   const endOn=prog(t,SETS.end.a+.2,SETS.end.a+.7); chaptersEl.style.opacity=(Math.min(prog(t,.4,1.2),1-endOn)).toFixed(3); brandEl.style.opacity=(Math.min(prog(t,.2,1),1-endOn)).toFixed(3);
   // the big number: hook, then the chart verdict
   let sOn=0, sv=0, sub='';
-  const h1=env(t,4.9,9.0); const h2=env(t,SETS.chart.a+6.6,SETS.chart.b-.5);
+  const h1=env(t,4.9,9.0); const h2=0;
   if(h1>0){ sOn=h1; sv=PCT_MAX*eout(prog(t,4.9,6.4)); sub='<em>ódýrara en hjá</em> stærsta raforkusalanum'; }
   if(h2>0){ sOn=h2; sv=PCT_AVG*eout(prog(t,SETS.chart.a+6.6,SETS.chart.a+8)); sub='<em>undir meðalverði</em> þriggja stærstu'; }
-  // growth: revenue year by year (vb.is / Straumlind)
-  const h3=env(t,SETS.growth.a+1.0,SETS.growth.b-.5);
-  if(h3>0){ const REV=[['2021','28 m.'],['2022','408 m.'],['2023','1,1 ma.'],['2024','2,1 ma.']]; const i=Math.min(3,Math.floor(prog(t,SETS.growth.a+1.0,SETS.growth.a+4.6)*4));
-    sOn=h3; statNum.textContent=REV[i][1]; statSub.innerHTML=`<em>velta Straumlindar</em> ${REV[i][0]}`; }
-  else statNum.textContent=`${Math.round(sv)}%`;
-  statEl.style.opacity=sOn.toFixed(3); statEl.style.transform=`translateY(${((1-eout(clamp(sOn)))*24).toFixed(1)}px)`; if(h3<=0) statSub.innerHTML=sub;
+  statNum.textContent=`${Math.round(sv)}%`;
+  statEl.style.opacity=sOn.toFixed(3); statEl.style.transform=`translateY(${((1-eout(clamp(sOn)))*24).toFixed(1)}px)`; statSub.innerHTML=sub;
   noteEl.style.opacity=(env(t,SETS.chart.a+1,SETS.chart.b-.4)*.95).toFixed(3);
   // yearly cost counters for the two homes
   const cu=eout(prog(t,SETS.homes.a+2.0,SETS.homes.a+4.4));
@@ -714,7 +715,9 @@ function render(t){
   // switch cards face the camera a little
   cards.forEach((c,k)=>{ c.g.rotation.y = -(k-1)*.12 + Math.sin(t*.8+k)*.02; c.g.position.y = 7.2 + Math.sin(t*1.1+k*1.3)*.12; });
   // end: the two halves of the bolt fly together
-  if(boltParts.length){ const s=SETS.end; const u=eio(prog(t,s.a+.1,s.a+1.3)); boltParts.forEach((b,k)=>{ const sd=k?1:-1; b.position.set(sd*lerp(14,0,u)+b.userData.off.x, b.userData.off.y+lerp(-6,0,u)*(k?1:-1)*.3, 0); b.rotation.z=sd*lerp(.9,0,u); b.rotation.y=lerp(sd*1.2,0,u) + Math.sin(t*.9)*.05*prog(t,s.a+1.3,s.a+2); });
+  if(boltParts.length){ const s=SETS.end; boltParts.forEach((b,k)=>{ const u=eout(prog(t,s.a+.05+k*.12,s.a+1.25)); const sd=k?-1:1;  // part 0 is cyan (right), part 1 orange (left)
+      b.position.set(sd*lerp(16,0,u),0,0); b.visible=u>0; });
+    const lock=prog(t,s.a+1.25,s.a+1.7); END.rotation.y = -.35*(1-eout(prog(t,s.a,s.a+1.25))) + Math.sin(Math.max(0,t-s.a-1.25)*.8)*.08*lock;
     END.position.y = 9.6 + Math.sin(t*1.1)*.12; }
 
   renderer.shadowMap.needsUpdate=true;
@@ -754,7 +757,7 @@ async function init(){
   document.querySelector('.end .logo-slot').appendChild(sv);
   // the 3D bolt
   { const data=new SVGLoader().parse(LOGO_FULL); const mats=[M.cyan,M.orange].map(m=>{ const c=m.clone(); c.side=THREE.DoubleSide; return c; });
-    data.paths.slice(0,2).forEach((p,k)=>{ const shapes=SVGLoader.createShapes(p); const geo=new THREE.ExtrudeGeometry(shapes,{depth:2.2,bevelEnabled:true,bevelThickness:.35,bevelSize:.25,bevelSegments:4,curveSegments:24});
+    data.paths.slice(0,2).forEach((p,k)=>{ const shapes=SVGLoader.createShapes(p); const geo=new THREE.ExtrudeGeometry(shapes,{depth:2.2,bevelEnabled:true,bevelThickness:.3,bevelSize:.12,bevelSegments:4,curveSegments:24});
       geo.scale(1,-1,1); geo.computeBoundingBox(); geo.translate(-5.06,4.9,-1.1); geo.computeVertexNormals();
       const m=new THREE.Mesh(geo,mats[k]); m.castShadow=false; const g=new THREE.Group(); g.add(m); END.add(g); g.userData.off=V(0,0,0); g.scale.setScalar(1); boltParts.push(g); });
     END.scale.setScalar(.62); END.position.set(0,9.4,0);
@@ -774,6 +777,7 @@ async function init(){
     const back=new THREE.Mesh(new THREE.BoxGeometry(BILL.w+.2,hh+.2,.12),M.white); back.position.z=-.08; g.add(back);
     const glow=new THREE.Mesh(new THREE.PlaneGeometry(BILL.w+1.4,hh+1.4),new THREE.MeshBasicMaterial({map:canvasTex(256,160,(gg,w,h)=>{gg.shadowColor='rgba(255,120,0,1)';gg.shadowBlur=26;gg.strokeStyle='rgba(255,120,0,1)';gg.lineWidth=7;rr(gg,22,22,w-44,h-44,10);gg.stroke();gg.stroke();}),transparent:true,depthWrite:false,toneMapped:false,opacity:0})); glow.position.z=.02; g.add(glow); g.userData.glow=glow; billGrp.add(g); return g; };
   billTop=half(true); billBot=half(false);
+  ROWS.forEach(r=>{ r.lab.material.map=canvasTex(800,400,(g,w,h)=>{ g.textAlign='center'; g.textBaseline='alphabetic'; g.fillStyle=r.sl?HOT:INK; g.font=`800 70px ${F}`; g.fillText(r.name,w/2,150); g.font=`900 110px ${F}`; g.fillStyle=r.sl?HOT:'#2a5263'; g.fillText(`${fmtK(r.p)} kr.`,w/2,290); }); r.lab.material.needsUpdate=true; });
   // switching cards, in the site's own words
   const STEPS=[['01','Skráðu þig með rafrænum skilríkjum','Þú velur vöru og staðfestir. Engin pappírsvinna.','id'],['02','Við sjáum um allt ferlið','Við látum núverandi raforkusala vita. Þú þarft ekkert að gera.','swap'],['03','Þú fylgist með á Mínum síðum','Notkun, reikningar og upprunaábyrgð á einum stað.','chart']];
   STEPS.forEach(([n,ti,su,ic],k)=>{ cards[k].face.material.map=canvasTex(CARD.px,CARD.py,(g,w,h)=>{ gridPaper(g,w,h); g.strokeStyle='rgba(11,52,70,.25)'; g.lineWidth=2; g.strokeRect(36,36,w-72,h-72);

@@ -19,6 +19,20 @@ Sniðmát: `template/` í þessari möppu (afrit af `svif-video/` í repo-inu). 
 - **Skjátextar** neðst til vinstri, orð birtast eitt af öðru með blur/lyftingu; lítill „eyebrow“ í bláu, kaflavísir efst til hægri.
 - **2D efni inni í 3D-heiminum** (bókin, auglýsingar) er teiknað á canvas í **línustíl SVIF-bókarinnar**: rúðustrikaður pappír, þunnur rammi, línuteiknuð hús/hlutir, blá áhersla.
 
+### Ekkert má skarast eða fara í gegnum annað (regla notandans)
+
+Notandanum finnst það „glitch“ þegar hlutir fara í gegnum hvorn annan eða merkingar lenda ofan á hvor annarri. Athugaðu þetta í **hverjum** yfirlitsramma áður en tekið er upp:
+
+- **Hreyfing:** tveir hlutir mega aldrei fara í gegnum hvorn annan á leið sinni. Dæmi: helmingar Straumlind-eldingarinnar renna beint inn frá hliðunum. Það virkar því hver lína appelsínugula helmingsins liggur vinstra megin við þann bláa. Enginn snúningur og ekkert „overshoot“ (`eout`, ekki `eback`) þegar hlutir mætast. Ef hreyfing á að vera skemmtilegri, snúðu öllum samsetta hlutnum eftir að hann hefur læst saman.
+- **Línur og rafmagnslínur:** reiknaðu ferilinn og prófaðu hvern punkt á honum gegn kössum bygginganna (`SOLIDS`). Notaðu bara línur sem sleppa við allt. Línur sem renna eftir gólfi fara fyrir framan fætur eða standa, ekki í gegnum þá.
+- **Fletir sem skarast blikka (z-fighting):** staflaðu hlutum (lok ofan á súlu) í stað þess að láta þá ganga inn í hvorn annan.
+- **Merkingar (HTML-pillur) mega ekki lenda á hvor annarri, á línum eða á skjátextanum.**
+  - Þegar súlur eru þéttar, skrifaðu nafn og gildi á gólfplötuna fyrir framan hverja súlu. Hafðu myndavélina nógu hátt (um 30–35°) til að það sé læsilegt.
+  - Viðmiðunarlínur (t.d. meðaltal) fara **fyrir aftan** súlurnar og merkingin þeirra við enda línunnar, laus við stóru töluna.
+  - Merkingar sem eru festar í 3D-punkt fara af skjánum þegar myndavélin færist nær. Láttu þær hverfa áður en það gerist.
+- **Skuggar:** skuggi sem fellur bak við texta á lokaspjaldi lítur út eins og strik í gegnum orðin. Slökktu á skugganum (`castShadow=false`).
+- Ekki setja tvennt á sama stað á skjánum á sama tíma: stóra talan, merkingar og skjátexti eiga hvert sitt svæði.
+
 ## 2. Orðalag og innihald (reglur notandans)
 
 - Allt á **íslensku**, náttúrulegt mál.
@@ -90,6 +104,15 @@ Allar tímasetningar eru í hlutnum `TL` og `KEYS` (myndavél) í `svif-motion.h
    Senda **litlu útgáfuna** (undir 30 MB) til notandans; sú stóra fer í repo.
 6. Uppfæra gagnvirku útgáfuna (artifact, sama slóð): `svif-motion.html` með `music.mp3` sem fylgiskrá. Slóð: https://claude.ai/artifact/29iKekSHZFGnUvZyQYVta4
 7. Uppfæra `HANDRIT.md`, commit og push á vinnugreinina.
+
+## 5b. Önnur myndbönd sem hafa verið gerð
+- `svif-video/` (SVIF, ein samfelld taka).
+- `kamina-video/` (Augnablik, leiðbeiningar).
+- `straumlind-video/` (Straumlind, 81 sek.).
+  - Hraðari, í köflum. Hver kafli byrjar á tómri plötu og byggist upp (`rise()` með glugga per kafla).
+  - Staðreyndir í `DATA` efst og heimildir í `HANDRIT.md`.
+  - Athugaðu alltaf fullyrðingar notandans: „20% ódýrari en allir“ stóðst ekki og var leiðrétt í „allt að 19%“ miðað við stærsta raforkusalann.
+  - Notandinn vildi ekki veltutölur í myndbandinu.
 
 ## 6. Samskipti við notandann
 

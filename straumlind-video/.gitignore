@@ -1,6 +1,10 @@
 node_modules/
 frames/
 seg*.mp4
+old_seg*.mp4
+fix*.mp4
 silent.mp4
 music.wav
 log*.txt
+list.txt
+parts/

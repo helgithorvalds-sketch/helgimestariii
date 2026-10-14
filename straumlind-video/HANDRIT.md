@@ -8,13 +8,13 @@ Litir úr merki Straumlindar: **blágrænn `#00bdd0`** fyrir rafmagn og gögn, *
 |---|---|---|---|
 | 0–9,4 | 01 Rafmagn | Tóm plata; litlar vélar mála vegina, borgin rís í bylgju, blágrænar línur frá spennistöð út í hús. | **Sama rafmagn.** → **Hvernig getur það verið allt að 19% ódýrara?** (stór tala: 19% ódýrara en hjá stærsta raforkusalanum) |
 | 9,4–22,6 | 02 Sama rafmagn | Virkjun og lón rísa, möstur, línur teiknast, rafeindir streyma til spennistöðvar og þriggja eins húsa („Raforkusali A“, „B“, „Straumlind“). Reikningurinn birtist og klofnar: ⅔ flutningur og dreifing, ⅓ orkan. | **Allir fá sama rafmagnið, eftir sömu línunum.** / **Eini munurinn er hver selur þér orkuna.** |
-| 22,6–34,6 | 03 Verðið | 3D-súlurit: þrír stærstu raforkusalarnir og Straumlind, meðaltalslína og bil. | **Stærstu raforkusalarnir á móti Straumlind.** / **14% undir meðalverði þeirra stærstu.** Og 19% undir almennu verði stærsta raforkusalans. (heimild neðst í horni) |
+| 22,6–34,6 | 03 Verðið | 3D-súlurit: þrír stærstu raforkusalarnir og Straumlind. Nafn og verð standa á plötunni fyrir framan hverja súlu, meðaltalslínan liggur fyrir aftan súlurnar. | **Stærstu raforkusalarnir á móti Straumlind.** / **14% undir meðalverði þeirra stærstu.** Og 19% undir almennu verði stærsta raforkusalans. (heimild neðst í horni) |
 | 34,6–41,8 | 04 Hvernig | Hefðbundið orkufyrirtæki (virkjanir, höfuðstöðvar, lög af yfirbyggingu) á móti litlu húsi Straumlindar með átta manns. | **Engar virkjanir. Lágmarks yfirbygging.** Átta sérfræðingar og hugbúnaður sem vinnur verkin. |
 | 41,8–50,4 | 05 Gervigreind | Notkun dagsins sem súlur, gervigreindarhnöttur dregur spálínu, appelsínugulir punktar þar sem keypt er. | **Eigin hugbúnaður spáir fyrir um notkunina.** Hverja klukkustund, viku fram í tímann. / **Orkan er keypt í heildsölu, á réttum tíma.** |
 | 50,4–61 | 06 Sparnaður | Tvö eins hús, teljarar telja árlegan orkukostnað (4.500 kWst): 58.400 kr. hjá stærsta raforkusalanum vs 47.400 kr. hjá Straumlind. Rafbíll ekur inn og hleður, næturverð 7,03 kr. | **Sama heimili. Sama notkun.** Um 10.900 kr. minna á ári … / **Hlaðið á nóttunni fyrir enn minna.** |
-| 61–68,4 | 07 Vöxtur | Borgin rís aftur, heimili kvikna um alla borg; velta telur 28 m. → 408 m. → 1,1 ma. → 2,1 ma. | **Úr 28 milljónum í 2,1 milljarð.** |
+| 61–68,4 | 07 Um allt land | Borgin rís aftur, heimili kvikna um alla borg. | **Heimili og fyrirtæki um allt land hafa skipt.** Líka sveitarfélög, eins og Akureyri og Vestmannaeyjar. |
 | 68,4–75 | 08 Skipta | Þrjú spjöld í 3D, skrefin af straumlind.is. | **Það tekur eina mínútu að skipta.** Ókeypis og engin binding. Rafmagnið fer aldrei af. |
-| 75–81 | Lok | Eldingin í tveimur hlutum flýgur saman. | STRAUMLIND / **Sama rafmagn, bara ódýrara.** / straumlind.is |
+| 75–81 | Lok | Helmingar eldingarinnar renna beint saman frá hliðunum (fara aldrei í gegnum hvorn annan), merkið snýst svo sem ein heild. | STRAUMLIND / **Sama rafmagn, bara ódýrara.** / straumlind.is |
 
 ## Staðreyndaprófun (14. okt. 2026)
 
@@ -49,16 +49,7 @@ Straumlind segir sjálf (grein 7. ágúst 2026) „um 20% lægra en almennt ver�
   - eigin hugbúnaður, gervigreind og sjálfvirkni
   - átta starfsmenn, lítil yfirbygging
 - **Að skipta:** ókeypis, með rafrænum skilríkjum, engin binding (þriggja vikna uppsagnarfrestur). Straumlind lætur fyrri sala vita.
-- **Velta:**
-
-  | Ár | Velta | Heimild |
-  |---|---|---|
-  | 2021 | 28 m. kr. | Straumlind |
-  | 2022 | 408 m. kr. | Straumlind |
-  | 2023 | um 1,1 ma. kr. | vb.is, 31. ágúst 2025 |
-  | 2024 | um 2,1 ma. kr. (hagnaður 52 m.) | vb.is, 31. ágúst 2025 |
-
-  Fjöldi viðskiptavina er ekki opinber.
+- **Velta:** fór úr 28 m. kr. (2021) í um 2,1 ma. kr. (2024) samkvæmt vb.is. Notandinn vildi ekki sýna veltu í myndbandinu. Fjöldi viðskiptavina er ekki opinber.
 
 **Heimildir:**
 - straumlind.is (/vorur, /spurtogsvarad, /samningur, /umstraumlind, /frodleikur)
