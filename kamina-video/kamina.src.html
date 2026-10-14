@@ -421,9 +421,10 @@ mesh(new THREE.BoxGeometry(3.2,.02,7),M.path,scene,{x:7.6,y:GY+.01,z:1.2,edge:fa
 
 /* ---------- the finished parts, laid out in front of the house from the start ---------- */
 // flue pipe, cut to length, collar already welded on
-const PIPE0=V(-7.7,GY+.075,7.3);                                   // bottom end, lying along +x
+const PIPE0=V(-7.7,GY+.235,7.3);                                   // bottom end, lying along +x on two blocks (the collar clears the ground)
 const qLying=new THREE.Quaternion().setFromAxisAngle(V(0,0,1),-Math.PI/2);
 const pipeG=new THREE.Group(); scene.add(pipeG);
+for(const x of [PIPE0.x+.7,PIPE0.x+PIPE_LEN-.9]) mesh(new THREE.BoxGeometry(.14,.16,.32),M.woodLight,scene,{x,y:GY+.08,z:PIPE0.z});
 mesh(new THREE.CylinderGeometry(.075,.075,PIPE_LEN,48).translate(0,PIPE_LEN/2,0),M.pipe,pipeG,{edge:false});
 const TIP=PIPE_LEN-.06;
 mesh(new THREE.LatheGeometry([new THREE.Vector2(.077,0),new THREE.Vector2(.2,0),new THREE.Vector2(.2,.012),new THREE.Vector2(.09,.02),new THREE.Vector2(.083,.07),new THREE.Vector2(.077,.07)],64).translate(0,TIP,0),M.steelDark,pipeG,{edge:false});
@@ -533,8 +534,8 @@ const CAM=[
   [37.0,[-11.6,4.4,10.4],[-1.8,3.2,1.5]],
   [41.4,[-11.4,4.5,10.2],[-1.8,3.25,1.5]],
   [43.6,[-12.6,5.4,11.6],[-1.8,3.3,1.6]],
-  [45.4,[-4.6,3.3,13.0],[-1.3,.9,7.3]],
-  [51.6,[-3.8,3.2,12.8],[-1.3,.9,7.3]],
+  [45.4,[1.6,3.4,13.2],[-1.6,.9,7.2]],
+  [51.6,[2.2,3.3,12.9],[-1.6,.9,7.2]],
   [52.8,[-7.4,3.0,12.6],[-5.2,.3,7.2]],
   [60.8,[-6.6,3.0,12.6],[-5.3,.3,7.2]],
   [61.8,[-6.2,2.5,5.2],[-1.5,1.55,1.6]],
@@ -593,9 +594,8 @@ const LABELS=[
   {t:fmt(AZ/COS)+' m', k:'dim', p:()=>dim4.mid, a:TL.dim4+.9,b:MEAS_END, dx:-80},
   {t:`≈ ${fmt(PIPE_LEN,1)} m <small>lengd rörs</small>`, k:'dim', p:()=>dim5.mid, a:TL.dim5+.9,b:MEAS_END, dx:-130},
   {t:'Hæð mænis', p:()=>V(AX,RIDGE_TOP+.12,AZ+.9), a:TL.dash+.8,b:44.0, dx:90},
-  {t:'Einangrunarhólkur', p:()=>ASM0.clone().add(V(0,SL_HI+.25,0)), a:45.6,b:51.6, dx:60},
-  {t:'Plata í sama halla og þakið', p:()=>ASM0.clone().add(V(0,.75,-1.2)), a:46.6,b:51.6, dx:-40},
-  {t:'Nær upp undir mæni', k:'ghost', p:()=>ASM0.clone().add(V(0,.95,-1.6)), a:48.0,b:51.6, dx:-60, dy:-10},
+  {t:'Einangrunarhólkur', p:()=>ASM0.clone().add(V(0,SL_HI+.2,0)), a:45.6,b:51.6, dx:-150},
+  {t:'Plata í sama halla og þakið', p:()=>ASM0.clone().add(V(.45,.02,.25)), a:46.6,b:51.6, dx:190, dy:-20},
   {t:`${fmt(PIPE_LEN,2)} m`, k:'dim', p:()=>dim7.mid, a:TL.dim7+.9,b:60.6},
   {t:"Kragi soðinn á", p:()=>PIPE0.clone().add(V(TIP,.32,0)), a:55.8,b:60.6, dx:-90},
   {t:'Trekkspjald', k:'ghost', p:()=>V(AX,OUT_Y+.48,AZ+.31), a:TL.damper+.6,b:67.6, dx:-150},
@@ -724,7 +724,7 @@ function soundEvents(){
   ev.push({k:'plumb',t:TL.plumb+1.5},{k:'drill',t:TL.drill},{k:'pin',t:TL.pin+.3});
   for(const k of ['dim2','dim2b','dim4','dim5','dim7']) ev.push({k:'dim',t:TL[k]+1.0});
   ev.push({k:'dim',t:TL.pitch+1.5},{k:'dash',t:TL.dash});
-  for(const t of [45.6,46.6,48.0,55.8]) ev.push({k:'part',t});
+  for(const t of [45.6,46.6,55.8]) ev.push({k:'part',t});
   ev.push({k:'ghost',t:TL.damper+.4},{k:'saw',t:TL.saw},{k:'lift',t:TL.plugOut},{k:'place',t:TL.plugSet});
   ev.push({k:'lift',t:TL.capUp},{k:'lift',t:TL.asmLift},{k:'place',t:TL.asmSet},{k:'place',t:TL.capDown+1.0},{k:'lift',t:TL.pipeLift},{k:'slide',t:TL.pipeLift+.74*(TL.pipeSet-TL.pipeLift)},{k:'land',t:TL.pipeSet});
   ev.push({k:'lift',t:TL.cowlLift},{k:'land',t:TL.cowlSet},{k:'fire',t:TL.fire},{k:'end',t:TL.end+.1});
