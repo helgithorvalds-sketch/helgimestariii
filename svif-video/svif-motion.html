@@ -597,7 +597,7 @@ function paintPages(){
   pageTex.left = canvasTex(CW,CH,(g,w,h)=>{
     paper(g,w,h);
     g.fillStyle=SIG; g.font=`700 30px ${FONT_B}`; g.letterSpacing='6px'; g.fillText('SVIF',90,170); g.letterSpacing='0px';
-    g.fillStyle=DEEP; g.font=`750 92px ${FONT_D}`; let y=wrap(g,'Allt sem nýtt heimili þarf, á einum stað.',90,290,900,96);
+    g.fillStyle=DEEP; g.font=`750 92px ${FONT_D}`; let y=wrap(g,'Allt sem nýir húseigendur þurfa, á einum stað.',90,290,900,96);
     g.fillStyle='#4a5470'; g.font=`500 38px ${FONT_B}`; y=wrap(g,'Í þessari bók finnurðu eitt fyrirtæki í hverjum flokki, valið fyrir nýja húseigendur á höfuðborgarsvæðinu.',90,y+90,880,54);
     const steps=['Finndu flokkinn sem þig vantar','Hafðu samband við fyrirtækið','Geymdu bókina við höndina'];
     let sy=y+110; steps.forEach((st,i)=>{ g.fillStyle='#ffffff'; rr(g,90,sy,900,96,22); g.fill(); g.strokeStyle='rgba(60,69,96,.16)'; g.lineWidth=2; g.stroke(); g.fillStyle=SIG; g.beginPath(); g.arc(146,sy+48,26,0,Math.PI*2); g.fill(); g.fillStyle='#fff'; g.font=`700 30px ${FONT_B}`; g.textAlign='center'; g.fillText(String(i+1),146,sy+59); g.textAlign='left'; g.fillStyle=DEEP; g.font=`600 34px ${FONT_B}`; g.fillText(st,196,sy+60); sy+=118; });
@@ -695,7 +695,7 @@ const CAPS=[
   {a:36.6,b:42.8, eb:'Dreifingin', t:'Við berum bókina heim til nýrra húseigenda.', s:'Í samstarfi við Póstdreifingu.'},
   {a:43.2,b:49.8, eb:'Dreifingin', t:'Beint inn um lúguna, á réttum tíma.', s:'Þegar fólk er að koma sér fyrir og þarf mest á þjónustunni að halda.'},
   {a:52.6,b:56.6, eb:'Bókin', t:'Eitt fyrirtæki í hverjum flokki.'},
-  {a:56.9,b:61.9, eb:'Bókin', t:'Allt sem nýtt heimili þarf, á einum stað.', s:'Nýir húseigendur finna réttu fyrirtækin um leið og þörfin kemur.'},
+  {a:56.9,b:61.9, eb:'Bókin', t:'Allt sem nýir húseigendur þurfa, á einum stað.', s:'Nýir húseigendur finna réttu fyrirtækin um leið og þörfin kemur.'},
 ];
 const capsEl=document.getElementById('caps');
 const capEls=CAPS.map(c=>{ const el=document.createElement('div'); el.className='cap';
