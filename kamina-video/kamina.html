@@ -153,7 +153,8 @@ const SLV_BOT=CEIL_AT-.14;
 const GY=-.3;
 const N_SLOPE=V(0,COS,SIN), D_SLOPE=V(0,-SIN,COS), X_AX=V(1,0,0);
 const P_TOP=V(AX,ROOF_AT,AZ), P_CEIL=V(AX,CEIL_AT,AZ);
-const S_HOLE=AZ/COS, R_HOLE=.205;                   // hole centre along the slope, radius
+const S_HOLE=(AZ-RT/2*SIN)/COS, R_HOLE=.27;        // hole centre along the slope: its axis meets the vertical flue axis mid-way through the roof
+const H_TOP=V(AX,RU+RT*COS-S_HOLE*SIN,RT*SIN+S_HOLE*COS);   // centre of the hole on the roof surface
 
 /* ---------- renderer ---------- */
 const canvas=document.getElementById('gl');
@@ -326,6 +327,7 @@ const plug=new THREE.Group(); scene.add(plug);
   const inner=new THREE.Group(); inner.position.set(-AX,0,-S_HOLE); plug.add(inner); slabFromShape(sh,inner); }
 const PLUG0=V(AX,RU,0).add(V(0,0,S_HOLE).applyQuaternion(slopeQ(1)));        // hole centre on the ceiling side
 const qNear=slopeQ(1), qNearInv=qNear.clone().invert();
+const PIN_LOCAL=P_TOP.clone().sub(PLUG0).applyQuaternion(qNearInv);   // the drilled marker, in the plug's own frame
 // gutters and downpipes
 for(const sz of [-1,1]){ const zE=sz*(HZ+OVER+.09), yE=HW-OVER*TAN-.12;
   mesh(new THREE.CylinderGeometry(.08,.08,RX1-CUTX,20,1,false,0,Math.PI).rotateZ(Math.PI/2).rotateX(sz>0?0:Math.PI),M.white,house,{x:(RX1+CUTX)/2,y:yE,z:zE,edge:false});
@@ -506,7 +508,7 @@ const dMatS=new THREE.MeshStandardMaterial({color:'#3a3d48',roughness:.4,metalne
   const knob=new THREE.Mesh(new THREE.SphereGeometry(.028,12,10),dMatS); knob.position.set(0,OUT_Y+.48,.31); damperG.add(knob); }
 damperG.visible=false;
 // hole saw cut line
-const cutPts=[]; for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; cutPts.push(P_TOP.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE).addScaledVector(N_SLOPE,.012)); }
+const cutPts=[]; for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; cutPts.push(H_TOP.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE).addScaledVector(N_SLOPE,.012)); }
 const sawM=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(cutPts,true),96,.011,8,true),M.accT); sawM.visible=false; scene.add(sawM);
 const sawCount=sawM.geometry.index.count;
 const sparkMat=new THREE.MeshBasicMaterial({color:'#ffb35c',toneMapped:false});
@@ -655,7 +657,7 @@ function render(t){
   const pinUp=eback(prog(t,TL.pin,TL.pin+.6));
   pin.visible=t>TL.pin; pin.scale.set(1,Math.max(1e-3,pinUp),1);
   _q.copy(plug.quaternion).multiply(qNearInv);
-  pin.position.copy(V(0,RT,0).applyQuaternion(plug.quaternion).add(plug.position)); pin.quaternion.copy(_q);
+  pin.position.copy(PIN_LOCAL).applyQuaternion(plug.quaternion).add(plug.position); pin.quaternion.copy(_q);
   pinGlow.material.opacity=.9*env(t,TL.pin,36,.4,.6)+.9*env(t,TL.saw-.4,TL.plugOut,.3,.3);
 
   // step 2..5 measurements
@@ -676,7 +678,7 @@ function render(t){
 
   // installation A: saw, plug out, ridge cap up, sleeve + plate in, ridge cap down
   sawM.visible=t>TL.saw&&t<TL.plugOut+.5; sawM.geometry.setDrawRange(0,Math.floor(sawCount*eio(prog(t,TL.saw,TL.saw+1.8))/6)*6);
-  { let any=false; const at=P_TOP.clone().addScaledVector(N_SLOPE,.02);
+  { let any=false; const at=H_TOP.clone().addScaledVector(N_SLOPE,.02);
     sparks.forEach((s,i)=>{ const on=t>TL.saw&&t<TL.saw+1.8; s.m.visible=on; if(!on) return; any=true; const k=eio(prog(t,TL.saw,TL.saw+1.8)); const a=k*Math.PI*2;
       const c=at.clone().addScaledVector(X_AX,Math.cos(a)*R_HOLE).addScaledVector(D_SLOPE,Math.sin(a)*R_HOLE); const u=((t-TL.saw)*2.6+i/14)%1;
       s.m.position.copy(c).addScaledVector(s.dir,u*.3*s.sp); s.m.position.y-=u*u*.22; s.m.scale.setScalar(1-u); }); }
