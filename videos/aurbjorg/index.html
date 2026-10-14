@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<title>Aurbjörg – kynningarmyndband</title>
+<style>
+  :root{
+    --blue:#2C98FF;      /* logo blue (logo-blue.svg) */
+    --navy:#0a1e44;      /* aurbjorg.is headings */
+    --navy2:#143a85;
+    --ink:#1e2939;
+    --muted:#6a7282;
+    --line:#e2e8f0;
+    --bg:#f4f8ff;
+    --green:#00bb7f;
+    --red:#ff6568;
+    --amber:#f99c00;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg)}
+  body{font-family:'Inter',sans-serif;color:var(--navy);-webkit-font-smoothing:antialiased}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden;
+    background:radial-gradient(1200px 700px at 50% 45%,#ffffff 0%,var(--bg) 70%)}
+  #dots{position:absolute;inset:-40px;opacity:.55;
+    background-image:radial-gradient(#cfe0f7 1.6px,transparent 1.7px);background-size:44px 44px}
+  .scene{position:absolute;inset:0;opacity:0}
+  .abs{position:absolute}
+  .center{left:50%;top:50%;transform:translate(-50%,-50%)}
+  h1.title{position:absolute;left:0;right:0;top:90px;text-align:center;font-size:68px;font-weight:800;letter-spacing:-2px;color:var(--navy)}
+  .sub{position:absolute;left:0;right:0;text-align:center;font-size:30px;font-weight:500;color:var(--muted)}
+  .hl{color:var(--blue)}
+  .card{position:absolute;background:#fff;border:1px solid var(--line);border-radius:28px;
+    box-shadow:0 20px 50px -18px rgba(20,58,133,.25),0 2px 6px rgba(20,58,133,.06)}
+  .src{position:absolute;left:0;right:0;bottom:44px;text-align:center;font-size:20px;color:#90a1b9;font-weight:500}
+
+  /* S1 */
+  #s1logo{position:absolute;left:50%;top:430px;width:820px;transform:translate(-50%,-50%)}
+  #s1ring{position:absolute;left:50%;top:430px;border-radius:50%;border:3px solid var(--blue);transform:translate(-50%,-50%)}
+  #s1tag{position:absolute;left:0;right:0;top:600px;text-align:center;font-size:52px;font-weight:700;letter-spacing:-1px}
+  #s1tag span{display:inline-block;margin:0 9px}
+  #s1pill{position:absolute;left:50%;top:735px;transform:translateX(-50%);padding:14px 30px;border-radius:999px;
+    background:#e7f2ff;color:var(--navy2);font-size:26px;font-weight:600}
+
+  /* S2 problem cards */
+  .pcard{width:440px;height:150px;display:flex;align-items:center;gap:24px;padding:0 30px}
+  .pcard img{width:86px;height:86px}
+  .pcard .q{font-size:29px;font-weight:700;line-height:1.2;color:var(--navy)}
+  .pcard .badge{position:absolute;right:-16px;top:-16px;width:52px;height:52px;border-radius:50%;background:var(--red);
+    color:#fff;font-weight:800;font-size:32px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px -6px rgba(255,101,104,.7)}
+
+  /* S3 gauges */
+  .gauge{position:absolute;top:270px;width:560px;height:620px;display:flex;flex-direction:column;align-items:center}
+  .gauge svg{width:420px;height:420px}
+  .gauge .val{position:absolute;top:150px;width:420px;text-align:center;font-size:104px;font-weight:800;letter-spacing:-3px}
+  .gauge .val small{font-size:56px;font-weight:700}
+  .gauge .lab{margin-top:22px;font-size:40px;font-weight:700}
+  .gauge .chip{margin-top:16px;padding:10px 24px;border-radius:999px;background:#ffe9ea;color:#e40014;font-size:26px;font-weight:700}
+
+  /* S4 chart */
+  #chart{position:absolute;left:150px;top:250px;width:1060px;height:660px}
+  .bar{position:absolute;bottom:0;width:132px;border-radius:16px 16px 6px 6px}
+  .bval{position:absolute;width:132px;text-align:center;font-size:36px;font-weight:800}
+  .gridl{position:absolute;left:70px;right:0;height:0;border-top:2px dashed #dbe5f3}
+  .gridt{position:absolute;left:0;width:60px;text-align:right;font-size:22px;color:#90a1b9;font-weight:600;transform:translateY(-50%)}
+  #gap{position:absolute;width:0;border-left:4px solid var(--navy)}
+  #gapLabel{position:absolute;padding:12px 22px;border-radius:16px;background:var(--navy);color:#fff;font-size:30px;font-weight:800;white-space:nowrap}
+  #callout{left:1290px;top:430px;width:500px;padding:40px 44px}
+  #callout .k{font-size:24px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px}
+  #callout .a{font-size:36px;font-weight:700;margin-top:16px;line-height:1.25}
+  #callout .big{font-size:76px;font-weight:800;color:var(--green);letter-spacing:-3px;margin-top:26px;white-space:nowrap}
+  #callout .b{font-size:30px;font-weight:600;color:var(--ink)}
+
+  /* S5 */
+  #s5logo{position:absolute;left:50%;top:400px;width:640px;transform:translate(-50%,-50%)}
+  #s5txt{position:absolute;left:0;right:0;top:560px;text-align:center;font-size:62px;font-weight:800;letter-spacing:-1.5px;line-height:1.2}
+
+  /* S6 hub */
+  #hub{position:absolute;left:810px;top:440px;width:300px;height:300px;border-radius:50%;background:#fff;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 14px rgba(44,152,255,.12),0 30px 70px -20px rgba(20,58,133,.45)}
+  #hub img{width:230px}
+  .node{width:430px;height:128px;display:flex;align-items:center;gap:22px;padding:0 26px}
+  .node img{width:80px;height:80px}
+  .node .n{font-size:30px;font-weight:800}
+  .node .d{font-size:21px;font-weight:500;color:var(--muted);margin-top:4px}
+
+  /* S7 results */
+  .rcard{top:280px;width:540px;height:610px;padding:44px;display:flex;flex-direction:column}
+  .rcard .ic{position:absolute;right:36px;top:30px;width:96px;height:96px}
+  .rcard .num{font-size:76px;font-weight:800;letter-spacing:-3px;color:var(--green);white-space:nowrap;margin-top:40px}
+  .rcard .num small{font-size:46px;letter-spacing:-1px}
+  .rcard .desc{font-size:30px;font-weight:600;line-height:1.3;margin-top:14px;color:var(--ink)}
+  .rcard .who{margin-top:auto;font-size:24px;font-weight:600;color:var(--muted)}
+  .rcard .stars{color:var(--amber);font-size:30px;letter-spacing:4px}
+  .mini{display:flex;gap:18px;align-items:flex-end;height:110px;margin-top:26px;margin-bottom:44px}
+  .mini div{border-radius:10px 10px 4px 4px;width:110px;position:relative}
+  .mini span{position:absolute;bottom:-34px;left:0;right:0;text-align:center;font-size:20px;color:var(--muted);font-weight:600}
+
+  /* S8 CTA */
+  #s8{background:linear-gradient(135deg,#2C98FF 0%,#155dfc 55%,#143a85 100%)}
+  #s8logo{position:absolute;left:50%;top:360px;width:720px;transform:translate(-50%,-50%)}
+  #s8tag{position:absolute;left:0;right:0;top:500px;text-align:center;color:#fff;font-size:54px;font-weight:700;letter-spacing:-1px}
+  #s8btn{position:absolute;left:50%;top:640px;transform:translateX(-50%);background:#fff;color:var(--navy2);
+    font-size:36px;font-weight:800;padding:26px 60px;border-radius:999px;box-shadow:0 20px 50px -10px rgba(0,0,0,.35)}
+  #s8url{position:absolute;left:0;right:0;top:800px;text-align:center;color:#dbeafe;font-size:38px;font-weight:600;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="dots"></div>
+
+  <!-- S1: logo + tagline -->
+  <section class="scene" id="s1">
+    <div id="s1ring"></div>
+    <img id="s1logo" src="assets/logo-blue.svg">
+    <div id="s1tag"></div>
+    <div id="s1pill"></div>
+  </section>
+
+  <!-- S2: the problem – everything is scattered -->
+  <section class="scene" id="s2">
+    <h1 class="title" id="s2t"></h1>
+    <div id="pcards"></div>
+    <div class="sub" id="s2sub" style="top:960px"></div>
+  </section>
+
+  <!-- S3: costs are rising -->
+  <section class="scene" id="s3">
+    <h1 class="title" id="s3t"></h1>
+    <div class="gauge" id="g1" style="left:300px"></div>
+    <div class="gauge" id="g2" style="left:1060px"></div>
+    <div class="src" id="s3src"></div>
+  </section>
+
+  <!-- S4: same money, different return -->
+  <section class="scene" id="s4">
+    <h1 class="title" id="s4t" style="top:70px"></h1>
+    <div class="sub" id="s4sub" style="top:170px"></div>
+    <div id="chart"></div>
+    <div class="card" id="callout"></div>
+    <div class="src" id="s4src"></div>
+  </section>
+
+  <!-- S5: the turn -->
+  <section class="scene" id="s5">
+    <img id="s5logo" src="assets/logo-blue.svg">
+    <div id="s5txt"></div>
+  </section>
+
+  <!-- S6: the solution layer -->
+  <section class="scene" id="s6">
+    <h1 class="title" id="s6t" style="top:60px"></h1>
+    <svg id="links" class="abs" width="1920" height="1080" style="left:0;top:0"></svg>
+    <div id="nodes"></div>
+    <div id="hub"><img src="assets/logo-blue.svg"></div>
+    <div class="sub" id="s6sub" style="top:990px"></div>
+  </section>
+
+  <!-- S7: results -->
+  <section class="scene" id="s7">
+    <h1 class="title" id="s7t" style="top:80px"></h1>
+    <div class="sub" id="s7sub" style="top:185px"></div>
+    <div id="rcards"></div>
+  </section>
+
+  <!-- S8: CTA -->
+  <section class="scene" id="s8">
+    <img id="s8logo" src="assets/logo-white.svg">
+    <div id="s8tag"></div>
+    <div id="s8btn"></div>
+    <div id="s8url">aurbjorg.is</div>
+  </section>
+</div>
+
+<script>
+/* ---------- copy (all facts from aurbjorg.is, okt. 2026) ---------- */
+const COPY = {
+  is: {
+    tag: ['Fjármálalausn','sem','sparar','þér','tíma','og','peninga'],
+    pill: 'Aurbjörg Plús',
+    s2t: 'Fjármál heimilisins eru <span class="hl">á víð og dreif</span>',
+    q: ['Er ég með besta lánið?','Hvert fara launin?','Hvað kostar rafmagnið?','Hvað er eignin mín virði?','Er ég í réttum lífeyrissjóði?','Hvaða bankareikningur er bestur?'],
+    s2sub: 'Lán, útgjöld, rafmagn, fasteign, lífeyrir og sparnaður — hvert á sínum stað.',
+    s3t: 'Á meðan <span class="hl">hækkar kostnaðurinn</span>',
+    g: ['Verðbólga','Stýrivextir'],
+    s3src: 'Markaðurinn · október 2026 · aurbjorg.is',
+    s4t: 'Sömu peningar. <span class="hl">Ólík ávöxtun.</span>',
+    s4sub: 'Óbundnir bankareikningar (1 mán. til 1 árs) frá öllum bönkum',
+    gap: 'prósentustig',
+    callK: 'Dæmi',
+    callA: '5.000.000 kr. á sparireikningi',
+    callB: 'á ári — eftir því hvar þú geymir peningana',
+    s4src: 'Vextir af bankareikningum · október 2026 · aurbjorg.is',
+    s5: 'Aurbjörg finnur <span class="hl">tækifæri</span><br>í fjármálum heimilisins',
+    s6t: 'Allt á <span class="hl">einum stað</span>',
+    nodes: [
+      ['refinancing','Lánskjaravaktin','Lætur þig vita af betri lánum'],
+      ['finances','Dagleg fjármál','Sjáðu hvert launin fara'],
+      ['zap','Rafmagn','Óháður samanburður á raforkuverði'],
+      ['bank','Bankareikningar','Finndu besta reikninginn'],
+      ['pension-optimizer','Lífeyrisbestun','Hvenær vilt þú hætta að vinna?'],
+      ['house-stars','Verðmat','Uppfært markaðsvirði eignar'],
+    ],
+    s6sub: 'Samanburður  ·  Reiknivélar  ·  Vöktun',
+    s7t: 'Raunverulegur <span class="hl">sparnaður</span>',
+    s7sub: 'Úr umsögnum viðskiptavina Aurbjargar',
+    r: [
+      {pre:'',suf:' kr.',to:1500000,dec:0,desc:'sparað á líftíma lánsins með endurfjármögnun',who:'Sindri',ic:'refinancing'},
+      {pre:'',suf:'%',to:15,dec:0,desc:'lægri rafmagnsreikningur — um 50.000 kr. á ári',who:'Anna',bars:['Áður','Eftir'],ic:'zap'},
+      {pre:'',suf:'%',to:5,dec:0,desc:'sparað í hugsanlegri verðlækkun við sölu á húsinu',who:'Sigga',ic:'house-stars'},
+    ],
+    s8tag: 'Láttu Aurbjörgu standa vaktina',
+    s8btn: 'Komdu í áskrift',
+  },
+  en: {
+    tag: ['A','financial','solution','that','saves','you','time','and','money'],
+    pill: 'Aurbjörg Plús',
+    s2t: 'Household finances are <span class="hl">all over the place</span>',
+    q: ['Do I have the best loan?','Where does my salary go?','What does my electricity cost?','What is my home worth?','Am I in the right pension fund?','Which bank account is best?'],
+    s2sub: 'Loans, spending, electricity, property, pensions and savings — all in different places.',
+    s3t: 'Meanwhile, <span class="hl">costs keep rising</span>',
+    g: ['Inflation','Policy rate'],
+    s3src: 'The market · October 2026 · aurbjorg.is',
+    s4t: 'Same money. <span class="hl">Different return.</span>',
+    s4sub: 'Unlocked bank accounts (1 month to 1 year) across all Icelandic banks',
+    gap: 'percentage points',
+    callK: 'Example',
+    callA: 'ISK 5,000,000 in a savings account',
+    callB: 'per year — depending on where you keep it',
+    s4src: 'Bank account rates · October 2026 · aurbjorg.is',
+    s5: 'Aurbjörg finds <span class="hl">opportunities</span><br>in your household finances',
+    s6t: 'Everything in <span class="hl">one place</span>',
+    nodes: [
+      ['refinancing','Loan Watch','Alerts you to better loans'],
+      ['finances','Daily finances','See where your salary goes'],
+      ['zap','Electricity','Independent price comparison'],
+      ['bank','Bank accounts','Find the best account for you'],
+      ['pension-optimizer','Pension optimizer','When do you want to retire?'],
+      ['house-stars','Valuation','Up-to-date market value'],
+    ],
+    s6sub: 'Comparisons  ·  Calculators  ·  Monitoring',
+    s7t: 'Real <span class="hl">savings</span>',
+    s7sub: 'From Aurbjörg customer reviews',
+    r: [
+      {pre:'ISK ',suf:'',to:1500000,dec:0,desc:'saved over the life of the loan by refinancing',who:'Sindri',ic:'refinancing'},
+      {pre:'',suf:'%',to:15,dec:0,desc:'lower electricity bill — about ISK 50,000 a year',who:'Anna',bars:['Before','After'],ic:'zap'},
+      {pre:'',suf:'%',to:5,dec:0,desc:'saved in a potential price cut when selling the house',who:'Sigga',ic:'house-stars'},
+    ],
+    s8tag: 'Let Aurbjörg keep watch for you',
+    s8btn: 'Subscribe today',
+  }
+};
+const LANG = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'is';
+const C = COPY[LANG];
+const fmt = (v, dec=0) => LANG === 'is'
+  ? v.toLocaleString('de-DE',{minimumFractionDigits:dec,maximumFractionDigits:dec})   // 1.500.000 / 5,90
+  : v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+const pct = v => fmt(v,2) + (LANG==='is' ? ' %' : '%');
+
+/* ---------- easing / timing helpers ---------- */
+const cl = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
+const P  = (t,s,d) => cl((t-s)/d);
+const eo = x => 1-Math.pow(1-x,3);
+const eio= x => x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2;
+const back = x => { const c1=1.70158,c3=c1+1; return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2); };
+const win = (t,a,b,fi=.45,fo=.45) => Math.min(eo(P(t,a,fi)), 1-eio(P(t,b-fo,fo)));
+const $ = id => document.getElementById(id);
+const set = (el,o,tf) => { el.style.opacity=o; if(tf!==undefined) el.style.transform=tf; };
+
+/* ---------- build DOM ---------- */
+$('s1tag').innerHTML = C.tag.map(w=>`<span>${w}</span>`).join('');
+$('s1pill').textContent = C.pill;
+$('s2t').innerHTML = C.s2t; $('s2sub').textContent = C.s2sub;
+const ICON = ['refinancing','finances','zap','house-stars','pension-optimizer','bank'];
+const PPOS = [[150,250,-4],[1330,240,3],[90,560,2],[1390,560,-3],[300,790,-2],[1180,800,4]];
+$('pcards').innerHTML = C.q.map((q,i)=>`<div class="card pcard" id="pc${i}" style="left:${PPOS[i][0]}px;top:${PPOS[i][1]}px">
+  <img src="assets/${ICON[i]}.png"><div class="q">${q}</div><div class="badge">?</div></div>`).join('');
+
+$('s3t').innerHTML = C.s3t; $('s3src').textContent = C.s3src;
+const GAUGES = [{v:5.90,d:0.30,col:'#ff6568'},{v:8.00,d:0.25,col:'#2C98FF'}];
+GAUGES.forEach((g,i)=>{ $('g'+(i+1)).innerHTML = `
+  <svg viewBox="0 0 420 420"><circle cx="210" cy="210" r="180" fill="none" stroke="#e3ebf7" stroke-width="34"/>
+  <circle id="ga${i}" cx="210" cy="210" r="180" fill="none" stroke="${g.col}" stroke-width="34" stroke-linecap="round"
+   transform="rotate(-90 210 210)" stroke-dasharray="${2*Math.PI*180}" stroke-dashoffset="${2*Math.PI*180}"/></svg>
+  <div class="val" id="gv${i}"></div><div class="lab">${C.g[i]}</div>
+  <div class="chip" id="gc${i}">▲ +${fmt(g.d,2)}${LANG==='is'?' %':'%'}</div>`; });
+
+$('s4t').innerHTML = C.s4t; $('s4sub').textContent = C.s4sub; $('s4src').textContent = C.s4src;
+const RATES = [7.76,7.66,7.12,6.80,5.70];               // aurbjorg.is "Bankareikningar – frá öllum bönkum"
+const CH = {h:600, max:8, x0:120, step:190};
+let chart = '';
+[0,2,4,6,8].forEach(v=>{ const y=CH.h - v/CH.max*CH.h;
+  chart += `<div class="gridl" style="top:${y}px"></div><div class="gridt" style="top:${y}px">${v}%</div>`; });
+RATES.forEach((r,i)=>{ const col = i===0 ? '#2C98FF' : i===RATES.length-1 ? '#ff6568' : '#b9d6fb';
+  chart += `<div class="bar" id="b${i}" style="left:${CH.x0+i*CH.step}px;background:${col};bottom:${660-CH.h}px"></div>
+            <div class="bval" id="bv${i}" style="left:${CH.x0+i*CH.step}px"></div>`; });
+chart += `<div id="gap"></div><div id="gapLabel"></div>`;
+$('chart').innerHTML = chart;
+const GAP = RATES[0]-RATES[RATES.length-1];               // 2,06 prósentustig
+const EXAMPLE = Math.round(5000000*GAP/100);              // 103.000 kr.
+$('callout').innerHTML = `<div class="k">${C.callK}</div><div class="a">${C.callA}</div>
+  <div class="big" id="cbig"></div><div class="b">${C.callB}</div>`;
+
+$('s5txt').innerHTML = C.s5;
+$('s6t').innerHTML = C.s6t; $('s6sub').textContent = C.s6sub;
+const HUB = {x:960,y:590};
+const NPOS = [[-655,-250],[0,-330],[655,-250],[-655,190],[0,290],[655,190]].map(([dx,dy])=>[HUB.x+dx,HUB.y+dy]);
+$('nodes').innerHTML = C.nodes.map(([ic,n,d],i)=>`<div class="card node" id="nd${i}" style="left:${NPOS[i][0]-215}px;top:${NPOS[i][1]-64}px">
+  <img src="assets/${ic}.png"><div><div class="n">${n}</div><div class="d">${d}</div></div></div>`).join('');
+$('links').innerHTML = NPOS.map(([x,y],i)=>{ const L=Math.hypot(x-HUB.x,y-HUB.y);
+  return `<line id="ln${i}" x1="${HUB.x}" y1="${HUB.y}" x2="${x}" y2="${y}" stroke="#2C98FF" stroke-width="5" stroke-linecap="round"
+    stroke-dasharray="${L}" stroke-dashoffset="${L}" opacity=".45"/>
+    <circle id="pu${i}" r="11" fill="#2C98FF"/>`; }).join('');
+
+$('s7t').innerHTML = C.s7t; $('s7sub').innerHTML = C.s7sub + ' &nbsp;<span style="color:#f99c00">★★★★★</span>';
+$('rcards').innerHTML = C.r.map((r,i)=>`<div class="card rcard" id="rc${i}" style="left:${135+i*570}px">
+  <img class="ic" src="assets/${r.ic}.png"><div class="stars">★★★★★</div><div class="num" id="rn${i}"></div><div class="desc">${r.desc}</div>
+  ${r.bars ? `<div class="mini"><div id="mb0" style="background:#ffd5d6"><span>${r.bars[0]}</span></div><div id="mb1" style="background:#00bb7f"><span>${r.bars[1]}</span></div></div>` : ''}
+  <div class="who">— ${r.who}</div></div>`).join('');
+
+$('s8tag').textContent = C.s8tag; $('s8btn').textContent = C.s8btn;
+
+/* ---------- timeline ---------- */
+const DURATION = 41;
+const S = { s1:[0,4.6], s2:[4.4,10.6], s3:[10.4,15.6], s4:[15.4,23.0], s5:[22.8,26.0], s6:[25.8,32.4], s7:[32.2,37.4], s8:[37.2,41.6] };
+
+function render(t){
+  for (const [id,[a,b]] of Object.entries(S)) $(id).style.opacity = (id==='s8') ? (t>=a?1:0) : win(t,a,b);
+  $('dots').style.transform = `translate(${-(t*6)%44}px,${-(t*3)%44}px)`;
+
+  /* S1 */
+  { const k = back(P(t,.25,1.0)); set($('s1logo'), eo(P(t,.25,.6)), `translate(-50%,-50%) scale(${.6+.4*k})`);
+    const rp = eo(P(t,.3,1.6)), r = 200+900*rp; const ring=$('s1ring');
+    ring.style.width=ring.style.height=r+'px'; ring.style.opacity = .5*(1-rp);
+    [...$('s1tag').children].forEach((w,i)=>{ const q=eo(P(t,1.3+i*.12,.5)); set(w,q,`translateY(${(1-q)*30}px)`); });
+    const q=eo(P(t,2.5,.5)); set($('s1pill'),q,`translateX(-50%) translateY(${(1-q)*20}px)`);
+    if (t>3.9) $('s1').style.transform=`translateY(${-eio(P(t,3.9,.7))*60}px)`; else $('s1').style.transform=''; }
+
+  /* S2 */
+  { const q=eo(P(t,4.6,.6)); set($('s2t'),q,`translateY(${(1-q)*-30}px)`);
+    C.q.forEach((_,i)=>{ const st=5.1+i*.42, k=P(t,st,.55), [,,rot]=PPOS[i];
+      const fl = Math.sin(t*1.6+i*1.3)*7, sc = k>0 ? back(k) : 0;
+      set($('pc'+i), eo(P(t,st,.3)), `translateY(${fl}px) rotate(${rot}deg) scale(${.4+.6*sc})`); });
+    const s=eo(P(t,8.0,.6)); set($('s2sub'),s,`translateY(${(1-s)*20}px)`); }
+
+  /* S3 */
+  { const q=eo(P(t,10.6,.6)); set($('s3t'),q,`translateY(${(1-q)*-30}px)`);
+    GAUGES.forEach((g,i)=>{ const st=11.0+i*.45, k=eio(P(t,st,1.8)), circ=2*Math.PI*180;
+      set($('g'+(i+1)), eo(P(t,st,.4)), `translateY(${(1-eo(P(t,st,.6)))*40}px)`);
+      $('ga'+i).setAttribute('stroke-dashoffset', circ*(1-k*g.v/10));
+      $('gv'+i).innerHTML = fmt(g.v*k,2)+'<small>%</small>';
+      const c=back(P(t,st+1.9,.5)); set($('gc'+i), cl(c), `scale(${.5+.5*c})`); });
+    set($('s3src'), eo(P(t,12.5,.6))); }
+
+  /* S4 */
+  { const q=eo(P(t,15.6,.6)); set($('s4t'),q,`translateY(${(1-q)*-30}px)`);
+    set($('s4sub'),eo(P(t,16.0,.6)));
+    RATES.forEach((r,i)=>{ const k=eio(P(t,16.3+i*.22,1.2)), h=r/CH.max*CH.h*k;
+      $('b'+i).style.height=h+'px';
+      const bv=$('bv'+i); bv.textContent=pct(r*k); bv.style.bottom=(660-CH.h)+h+14+'px'; bv.style.opacity=eo(P(t,16.3+i*.22,.3)); });
+    const yTop=CH.h - RATES[0]/CH.max*CH.h, yBot=CH.h - RATES[4]/CH.max*CH.h, gx=CH.x0+4*CH.step+170;
+    const g=eio(P(t,18.4,.7)), gap=$('gap');
+    gap.style.left=gx+'px'; gap.style.top=yTop+'px'; gap.style.height=(yBot-yTop)*g+'px'; gap.style.opacity=g>0?1:0;
+    const gl=$('gapLabel'), gq=back(P(t,18.9,.5));
+    gl.textContent = `${fmt(GAP,2)} ${C.gap}`; gl.style.left=(gx+26)+'px'; gl.style.top=((yTop+yBot)/2-32)+'px';
+    set(gl, cl(gq), `translateX(${(1-gq)*-20}px) scale(${.6+.4*gq})`);
+    const cq=eo(P(t,19.6,.6)); set($('callout'),cq,`translateX(${(1-cq)*60}px)`);
+    $('cbig').textContent = (LANG==='is' ? fmt(EXAMPLE*eio(P(t,20.0,1.6)))+' kr.' : 'ISK '+fmt(EXAMPLE*eio(P(t,20.0,1.6))));
+    set($('s4src'), eo(P(t,17,.6))); }
+
+  /* S5 */
+  { const k=back(P(t,23.0,.8)); set($('s5logo'), eo(P(t,23.0,.4)), `translate(-50%,-50%) scale(${.7+.3*k})`);
+    const q=eo(P(t,23.6,.7)); set($('s5txt'),q,`translateY(${(1-q)*30}px)`);
+    if (t>25.3) $('s5').style.transform=`scale(${1+eio(P(t,25.3,.7))*.15})`; else $('s5').style.transform=''; }
+
+  /* S6 */
+  { const q=eo(P(t,26.0,.6)); set($('s6t'),q,`translateY(${(1-q)*-30}px)`);
+    const h=back(P(t,26.0,.7)); set($('hub'), eo(P(t,26.0,.3)), `scale(${.3+.7*h})`);
+    NPOS.forEach(([x,y],i)=>{ const st=26.6+i*.3, L=Math.hypot(x-HUB.x,y-HUB.y), lk=eio(P(t,st,.6));
+      $('ln'+i).setAttribute('stroke-dashoffset', L*(1-lk));
+      const nk=P(t,st+.35,.5); set($('nd'+i), eo(cl(nk*2)), `scale(${.5+.5*back(nk)})`);
+      const pu=$('pu'+i), ph=((t-(st+.8))*.55 + i*.17)%1;
+      if (t<st+.8) { pu.setAttribute('opacity',0); }
+      else { pu.setAttribute('opacity', Math.sin(ph*Math.PI));
+        pu.setAttribute('cx', x+(HUB.x-x)*ph); pu.setAttribute('cy', y+(HUB.y-y)*ph); } });
+    const pulse = t>27.5 ? 1+.03*Math.sin((t-27.5)*4) : 1;
+    if (t>26.7) $('hub').style.transform=`scale(${pulse})`;
+    set($('s6sub'), eo(P(t,28.8,.6))); }
+
+  /* S7 */
+  { const q=eo(P(t,32.4,.6)); set($('s7t'),q,`translateY(${(1-q)*-30}px)`);
+    set($('s7sub'), eo(P(t,32.8,.6)));
+    C.r.forEach((r,i)=>{ const st=33.0+i*.35, k=eo(P(t,st,.6));
+      set($('rc'+i), k, `translateY(${(1-k)*60}px)`);
+      $('rn'+i).innerHTML = (r.pre?`<small>${r.pre}</small>`:'') + fmt(r.to*eio(P(t,st+.2,1.6)),r.dec) + (r.suf.length>1?`<small>${r.suf}</small>`:r.suf); });
+    const mb=eio(P(t,34.0,1.0)); if ($('mb0')) { $('mb0').style.height=110*mb+'px'; $('mb1').style.height=110*.85*mb+'px'; } }
+
+  /* S8 */
+  { const c=eio(P(t,37.2,.9)); $('s8').style.clipPath=`circle(${c*1200}px at 50% 50%)`;
+    const k=back(P(t,37.8,.8)); set($('s8logo'), eo(P(t,37.8,.4)), `translate(-50%,-50%) scale(${.7+.3*k})`);
+    const q=eo(P(t,38.3,.6)); set($('s8tag'),q,`translateY(${(1-q)*30}px)`);
+    const b=back(P(t,38.8,.6)); set($('s8btn'), cl(b), `translateX(-50%) scale(${.6+.4*b})`);
+    set($('s8url'), eo(P(t,39.2,.6))); }
+}
+
+window.DURATION = DURATION; window.render = render;
+/* preview mode: plays in real time when opened in a browser */
+if (!new URLSearchParams(location.search).has('render')) {
+  const t0 = performance.now(); (function loop(){ render(((performance.now()-t0)/1000) % DURATION); requestAnimationFrame(loop); })();
+} else render(0);
+</script>
+</body>
+</html>
