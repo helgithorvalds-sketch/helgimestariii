@@ -98,7 +98,7 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
       </header>
       <nav class="chapters" id="chapters" aria-label="Kaflar"><div class="bars"></div><div class="name"></div></nav>
       <div id="caps"></div>
-      <div class="count" id="count"><strong>0</strong><span>bækur <em>á þriggja mánaða tímabili</em></span></div>
+      <div class="count" id="count"><strong>0</strong><span>bækur <em>í hverjum mánuði</em></span></div>
       <div class="end" id="end">
         <div class="logo">SV<span class="i">I<svg viewBox="0 0 40 16" aria-hidden="true"><path d="M3 14 L20 3 L37 14" fill="none" stroke="#8ea2ea" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>F</div>
         <div class="line">Rétta fólkið, á réttu augnabliki.</div>
@@ -126,7 +126,7 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
 <script type="module">
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { mergeVertices, mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const W = 1920, H = 1080, DUR = 70;
 const CAPTURE = location.hash.includes('capture');
@@ -152,7 +152,7 @@ const canvas = document.getElementById('gl');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: CAPTURE, powerPreference: 'high-performance' });
 renderer.setPixelRatio(1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.12;
+renderer.toneMappingExposure = 1.1;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = false;
@@ -163,13 +163,13 @@ scene.background = BG;
 scene.fog = new THREE.Fog(BG, 240, 680);
 const camera = new THREE.PerspectiveCamera(32, W/H, 0.5, 1400);
 
-scene.add(new THREE.HemisphereLight('#ffffff', '#c3cbda', 1.55));
-const sun = new THREE.DirectionalLight('#fffdf8', 2.7);
+scene.add(new THREE.HemisphereLight('#ffffff', '#bcc5d6', 1.35));
+const sun = new THREE.DirectionalLight('#fffdf8', 3.05);
 sun.position.set(-80, 140, 60);
 sun.castShadow = true;
 sun.shadow.mapSize.set(4096, 4096);
 Object.assign(sun.shadow.camera, { left: -110, right: 110, top: 110, bottom: -110, near: 20, far: 360 });
-sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.05; sun.shadow.radius = 5;
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.05; sun.shadow.radius = 2.2;
 scene.add(sun, sun.target);
 
 /* ---------- textures ---------- */
@@ -196,6 +196,7 @@ const M = {
   groove: new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:.88, map:texGroove }),
   grid:   new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:.88, map:texGrid }),
   detail: new THREE.MeshStandardMaterial({ color:'#e6eaf1', roughness:.9 }),
+  base:   new THREE.MeshStandardMaterial({ color:'#eaeef5', roughness:.6 }),
   path:   new THREE.MeshStandardMaterial({ color:'#eceff5', roughness:1 }),
   dash:   new THREE.MeshStandardMaterial({ color:'#fafbfc', roughness:1 }),
   tree:   new THREE.MeshStandardMaterial({ color:'#ffffff', roughness:1 }),
@@ -220,6 +221,11 @@ function uvBox(geo,w,h,d,u=3){
   const uv=geo.attributes.uv; const dims=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]];
   for(let f=0;f<6;f++) for(let k=0;k<4;k++){const i=f*4+k; uv.setXY(i,uv.getX(i)*dims[f][0]/u,uv.getY(i)*dims[f][1]/u);} return geo;
 }
+const rd = mulberry32(5150);          // details only: keeps the layout RNG untouched
+const RD = (a,b)=>a+(b-a)*rd();
+const edgeMat = new THREE.LineBasicMaterial({ color:'#c4cbd9', transparent:true, opacity:.75 });
+function outline(geo, grp, angle=20){ const l=new THREE.LineSegments(new THREE.EdgesGeometry(geo, angle), edgeMat); grp.add(l); return l; }
+function detailMesh(parts, grp, mat=M.white){ if(!parts.length) return; const m=new THREE.Mesh(mergeGeometries(parts), mat); m.castShadow=m.receiveShadow=true; grp.add(m); outline(m.geometry, grp, 30); }
 function addRiser(obj, x, z, extra=0){
   const d=Math.hypot(x+20,z+20); obj.userData.delay = .15 + d/150*2.4 + rand()*.35 + extra; risers.push(obj);
 }
@@ -228,6 +234,21 @@ function tower(gx,gz,w,d,h,kind){
   const geo=uvBox(new THREE.BoxGeometry(w,h,d),w,h,d, kind==='grid'?2.6:2.2).translate(0,h/2,0);
   const side = kind==='grid'?M.grid:kind==='groove'?M.groove:M.white;
   const m=new THREE.Mesh(geo,[side,side,M.white,M.white,side,side]); m.castShadow=m.receiveShadow=true; grp.add(m);
+  outline(geo, grp);
+  const parts=[];
+  parts.push(new THREE.BoxGeometry(w+.32,.34,d+.32).translate(0,h+.02,0));                        // cornice
+  if(h>5){ const base=new THREE.Mesh(new THREE.BoxGeometry(w+.08,1.1,d+.08).translate(0,.55,0),M.base); base.receiveShadow=true; grp.add(base); }
+  if(kind==='grid' && h<15 && h>5){                                                               // balconies on the long faces
+    const alongX = w>=d, len = alongX?w:d, depth = alongX?d:w;
+    for(let y=2.6; y<h-1.2; y+=2.6) for(let x=-len/2+1.6; x<=len/2-1.6; x+=3.2) for(const sd of [-1,1]){
+      const g=alongX? new THREE.BoxGeometry(1.7,.14,.75).translate(x,y,sd*(depth/2+.37)) : new THREE.BoxGeometry(.75,.14,1.7).translate(sd*(depth/2+.37),y,x);
+      parts.push(g);
+      const rail=alongX? new THREE.BoxGeometry(1.7,.42,.05).translate(x,y+.28,sd*(depth/2+.73)) : new THREE.BoxGeometry(.05,.42,1.7).translate(sd*(depth/2+.73),y+.28,x);
+      parts.push(rail);
+    }
+  }
+  if(h>14 && rd()<.6){ parts.push(new THREE.BoxGeometry(.18,RD(2.5,4.5),.18).translate(RD(-w/3,w/3),h+2,RD(-d/3,d/3))); }  // antenna
+  detailMesh(parts, grp);
   if(rand()<.7){ const uw=R(1.4,2.6), ud=R(1.2,2.2); const u=new THREE.Mesh(new THREE.BoxGeometry(uw,.9,ud).translate(0,.45,0),M.detail); u.position.set(R(-w/4,w/4),h,R(-d/4,d/4)); u.castShadow=true; grp.add(u); }
   city.add(grp); addRiser(grp,gx,gz); return grp;
 }
@@ -236,6 +257,9 @@ function cylTower(gx,gz,r,h){
   const geo=new THREE.CylinderGeometry(r,r,h,56,1).translate(0,h/2,0);
   const uv=geo.attributes.uv; for(let i=0;i<57*2;i++) uv.setXY(i,uv.getX(i)*2*Math.PI*r/2.2,uv.getY(i)*h/2.2);
   const m=new THREE.Mesh(geo,[M.groove,M.white,M.white]); m.castShadow=m.receiveShadow=true; grp.add(m);
+  outline(geo, grp, 12);
+  detailMesh([new THREE.CylinderGeometry(r+.18,r+.18,.34,56).translate(0,h+.02,0), new THREE.CylinderGeometry(r*.55,r*.55,1.2,32).translate(0,h+.6,0)], grp);
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(r+.05,r+.05,1.1,56).translate(0,.55,0),M.base); grp.add(base);
   city.add(grp); addRiser(grp,gx,gz); return grp;
 }
 function house(gx,gz,rot,hero=false){
@@ -246,6 +270,10 @@ function house(gx,gz,rot,hero=false){
   const sh=new THREE.Shape(); sh.moveTo(-w/2-.25,0); sh.lineTo(w/2+.25,0); sh.lineTo(0,rh); sh.closePath();
   const rg=new THREE.ExtrudeGeometry(sh,{depth:d+.4,bevelEnabled:false}); rg.translate(0,0,-(d+.4)/2); rg.rotateY(Math.PI/2);
   const roof=new THREE.Mesh(rg,M.white); roof.position.y=wh; roof.castShadow=roof.receiveShadow=true; grp.add(roof);
+  outline(body.geometry, grp); const rl=outline(rg, grp); rl.position.y=wh;
+  const plinth=new THREE.Mesh(new THREE.BoxGeometry(d+.14,.3,w+.14).translate(0,.15,0),M.base); grp.add(plinth);
+  const step=new THREE.Mesh(new THREE.BoxGeometry(.5,.16,1.1).translate(0,.08,0),M.white); step.position.set(-d/2-.25,0,0); step.receiveShadow=true; grp.add(step);
+  for(const sd of [-1,1]){ const win=new THREE.Mesh(new THREE.BoxGeometry(.7,.7,.08),M.detail); win.position.set(sd*1.1*s,1.45*s,w/2+.03); grp.add(win); const win2=win.clone(); win2.position.z=-w/2-.03; grp.add(win2); }
   const ch=new THREE.Mesh(new THREE.BoxGeometry(.5,1.1,.5).translate(0,.55,0),M.white); ch.position.set(.9,wh+.6,.7); ch.castShadow=true; grp.add(ch);
   const door=new THREE.Mesh(new THREE.BoxGeometry(.08,1.35,.8).translate(0,.675,0), hero?M.blue:M.detail); door.position.set(-d/2-.03,0,0); grp.add(door);
   for(const sd of [-1,1]){const win=new THREE.Mesh(new THREE.BoxGeometry(.08,.7,.7),M.detail); win.position.set(-d/2-.03,1.45*s,sd*1.15*s); grp.add(win);}
@@ -310,10 +338,21 @@ for(const bd of blockDefs){
 }
 // road dashes
 {
-  const dashes=[]; for(const c of ROADS){ for(let s=-91;s<=91;s+=3){ if(ROADS.some(r=>Math.abs(r-s)<4.2)) continue; dashes.push([c,s]); } }
+  const dashes=[]; for(const c of ROADS){ for(let s=-91;s<=91;s+=3){ if(ROADS.some(r=>Math.abs(r-s)<6.4)) continue; dashes.push([c,s]); } }
   const g=new THREE.BoxGeometry(1.3,.02,.16); const im=new THREE.InstancedMesh(g,M.dash,dashes.length*2); let n=0; const m4=new THREE.Matrix4(), q=new THREE.Quaternion(), q90=new THREE.Quaternion().setFromAxisAngle(V(0,1,0),Math.PI/2);
   for(const [c,s] of dashes){ m4.compose(V(s,.01,c),q,V(1,1,1)); im.setMatrixAt(n++,m4); m4.compose(V(c,.01,s),q90,V(1,1,1)); im.setMatrixAt(n++,m4); }
   im.receiveShadow=true; city.add(im);
+}
+// crosswalks and street lamps
+{
+  const zebra=[]; for(const a of ROADS) for(const b of ROADS){ for(const dir of [-1,1]){ for(let k=0;k<5;k++){ zebra.push([a+dir*4.6, b-2.2+k*1.1, 0]); zebra.push([b-2.2+k*1.1, a+dir*4.6, 1]); } } }
+  const zg=new THREE.BoxGeometry(1.5,.02,.5); const zm=new THREE.InstancedMesh(zg,M.dash,zebra.length); const m4=new THREE.Matrix4(), q0=new THREE.Quaternion(), q90=new THREE.Quaternion().setFromAxisAngle(V(0,1,0),Math.PI/2);
+  zebra.forEach(([x,z,r],i)=>{ m4.compose(V(x,.012,z),r?q90:q0,V(1,1,1)); zm.setMatrixAt(i,m4); }); zm.receiveShadow=true; city.add(zm);
+  const lamps=[]; for(const bd of blockDefs){ for(const o of [-5,5]){ lamps.push([bd.cx+o,bd.cz-9.5],[bd.cx+o,bd.cz+9.5],[bd.cx-9.5,bd.cz+o],[bd.cx+9.5,bd.cz+o]); } }
+  const pole=new THREE.InstancedMesh(new THREE.CylinderGeometry(.06,.08,2.4,8).translate(0,1.6,0),M.white,lamps.length);
+  const head=new THREE.InstancedMesh(new THREE.BoxGeometry(.5,.12,.22).translate(0,2.85,0),M.white,lamps.length);
+  lamps.forEach(([x,z],i)=>{ m4.compose(V(x,0,z),q0,V(1,1,1)); pole.setMatrixAt(i,m4); head.setMatrixAt(i,m4); });
+  pole.castShadow=head.castShadow=true; city.add(pole,head);
 }
 // trees (instanced)
 const foliageGeo = (()=>{ let g=new THREE.IcosahedronGeometry(1,3); g.deleteAttribute('normal'); g.deleteAttribute('uv'); g=mergeVertices(g); const p=g.attributes.position, v=new THREE.Vector3();
@@ -704,7 +743,7 @@ function updateOverlay(t){
   const nOn=env(t,TL.line-.3,35.6,.6,.6); const ns=toScreen(node.position); nodeTag.style.opacity=ns.ok?nOn.toFixed(3):0; nodeTag.style.transform=`translate3d(${(ns.x+64).toFixed(1)}px,${(ns.y-50).toFixed(1)}px,0)`;
   const cnt=1+detPings.filter(p=>t>p.act).length; nodeNum.textContent=fmt(cnt);
   const cOn=env(t,37.4,49.8,.6,.5); countEl.style.opacity=cOn.toFixed(3); countEl.style.transform=`translateY(${((1-eout(prog(t,37.4,38.2)))*20).toFixed(1)}px)`;
-  const cv=eout(prog(t,37.6,43.6))*1200; countNum.textContent = t>43.8? '1.200–1.500' : fmt(Math.round(cv/10)*10);
+  const cv=eout(prog(t,37.6,42.6))*400; countNum.textContent = t>42.7? '400+' : fmt(Math.round(cv/5)*5);
   endEl.style.opacity=t>TL.end-.2?1:0;
   endParts.forEach((p,i)=>{ const st=TL.end+.1+i*.45; const e=eout(prog(t,st,st+1)); p.style.opacity=e.toFixed(3); p.style.transform=`translateY(${((1-e)*40).toFixed(1)}px)`; p.style.filter=e<1?`blur(${((1-e)*10).toFixed(1)}px)`:'none'; });
 }
@@ -834,7 +873,7 @@ const ICON_PLAY='<path d="M7 4.5v15l13-7.5z"/>', ICON_PAUSE='<path d="M6 4.5h4v1
 const mmss=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 scrub.max=DUR; timeEl.textContent=`0:00 / ${mmss(DUR)}`;
 function layout(){
-  if(CAPTURE){ viewport.style.width=W+'px'; viewport.style.height=H+'px'; stage.style.transform='none'; renderer.setSize(W,H,false); return; }
+  if(CAPTURE){ viewport.style.width=W+'px'; viewport.style.height=H+'px'; stage.style.transform='none'; renderer.setPixelRatio(1.5); renderer.setSize(W,H,false); return; }  // 1.5× supersampling for crisp edges
   const avW=document.getElementById('app').clientWidth-32, avH=window.innerHeight-80;
   const s=Math.min(avW/W, avH/H); viewport.style.width=(W*s)+'px'; viewport.style.height=(H*s)+'px'; stage.style.transform=`scale(${s})`;
   const q=clamp(s*(window.devicePixelRatio||1),.5,1); renderer.setSize(Math.round(W*q),Math.round(H*q),false);
