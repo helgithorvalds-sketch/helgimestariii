@@ -7,10 +7,10 @@ import wave
 import numpy as np
 
 SR = 44100
-DUR = 41.0
+DUR = 43.0
 BPM = 96
 BEAT = 60 / BPM
-SCENE_CUTS = [4.4, 10.4, 15.4, 22.8, 25.8, 32.2, 37.2]   # matches S{} in index.html
+SCENE_CUTS = [4.4, 10.4, 15.4, 22.8, 25.8, 32.2, 35.0, 37.1, 39.2]   # matches S{} in index.html (+ result-card changes)
 
 t = np.arange(int(SR * DUR)) / SR
 out = np.zeros((len(t), 2))

@@ -44,7 +44,7 @@
   /* S2 problem cards */
   .pcard{width:440px;height:150px;display:flex;align-items:center;gap:24px;padding:0 30px}
   .pcard img{width:86px;height:86px}
-  .pcard .q{font-size:29px;font-weight:700;line-height:1.2;color:var(--navy)}
+  .pcard .q{font-size:31px;font-weight:700;line-height:1.2;color:var(--navy)}
   .pcard .badge{position:absolute;right:-16px;top:-16px;width:52px;height:52px;border-radius:50%;background:var(--red);
     color:#fff;font-weight:800;font-size:32px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px -6px rgba(255,101,104,.7)}
 
@@ -78,22 +78,25 @@
   #hub{position:absolute;left:810px;top:440px;width:300px;height:300px;border-radius:50%;background:#fff;
     display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 14px rgba(44,152,255,.12),0 30px 70px -20px rgba(20,58,133,.45)}
   #hub img{width:230px}
-  .node{width:430px;height:128px;display:flex;align-items:center;gap:22px;padding:0 26px}
+  .node{width:470px;height:128px;display:flex;align-items:center;gap:22px;padding:0 26px}
   .node img{width:80px;height:80px}
-  .node .n{font-size:30px;font-weight:800}
-  .node .d{font-size:21px;font-weight:500;color:var(--muted);margin-top:4px}
+  .node .n{font-size:33px;font-weight:800}
+  .node .d{font-size:25px;font-weight:500;color:var(--muted);margin-top:4px}
 
   /* S7 results */
-  .rcard{top:280px;width:540px;height:610px;padding:44px;display:flex;flex-direction:column}
-  .rcard .ic{position:absolute;right:36px;top:30px;width:96px;height:96px}
-  .rcard .num{font-size:76px;font-weight:800;letter-spacing:-3px;color:var(--green);white-space:nowrap;margin-top:40px}
-  .rcard .num small{font-size:46px;letter-spacing:-1px}
-  .rcard .desc{font-size:30px;font-weight:600;line-height:1.3;margin-top:14px;color:var(--ink)}
-  .rcard .who{margin-top:auto;font-size:24px;font-weight:600;color:var(--muted)}
-  .rcard .stars{color:var(--amber);font-size:30px;letter-spacing:4px}
-  .mini{display:flex;gap:18px;align-items:flex-end;height:110px;margin-top:26px;margin-bottom:44px}
-  .mini div{border-radius:10px 10px 4px 4px;width:110px;position:relative}
-  .mini span{position:absolute;bottom:-34px;left:0;right:0;text-align:center;font-size:20px;color:var(--muted);font-weight:600}
+  .rcard{left:330px;top:255px;width:1260px;height:640px;padding:50px 70px;display:flex;gap:60px;align-items:center}
+  .rcard .ic{width:230px;height:230px;flex:none}
+  .rcard .body{flex:1;display:flex;flex-direction:column}
+  .rcard .num{font-size:128px;font-weight:800;letter-spacing:-5px;color:var(--green);white-space:nowrap;line-height:1.05;margin-top:10px}
+  .rcard .num small{font-size:68px;letter-spacing:-2px}
+  .rcard .desc{font-size:44px;font-weight:700;line-height:1.25;margin-top:18px;color:var(--navy)}
+  .rcard .who{margin-top:28px;font-size:32px;font-weight:600;color:var(--muted)}
+  .rcard .stars{color:var(--amber);font-size:40px;letter-spacing:6px}
+  .dots7{position:absolute;left:0;right:0;top:920px;display:flex;justify-content:center;gap:18px}
+  .dots7 i{width:16px;height:16px;border-radius:999px;background:#c9dcf7;display:block}
+  .mini{display:flex;gap:22px;align-items:flex-end;height:120px;margin-top:26px;margin-bottom:36px}
+  .mini div{border-radius:12px 12px 4px 4px;width:150px;position:relative}
+  .mini span{position:absolute;bottom:-38px;left:0;right:0;text-align:center;font-size:26px;color:var(--muted);font-weight:600}
 
   /* S8 CTA */
   #s8{background:linear-gradient(135deg,#2C98FF 0%,#155dfc 55%,#143a85 100%)}
@@ -120,7 +123,6 @@
   <section class="scene" id="s2">
     <h1 class="title" id="s2t"></h1>
     <div id="pcards"></div>
-    <div class="sub" id="s2sub" style="top:960px"></div>
   </section>
 
   <!-- S3: costs are rising -->
@@ -269,7 +271,7 @@ const set = (el,o,tf) => { el.style.opacity=o; if(tf!==undefined) el.style.trans
 /* ---------- build DOM ---------- */
 $('s1tag').innerHTML = C.tag.map(w=>`<span>${w}</span>`).join('');
 $('s1pill').textContent = C.pill;
-$('s2t').innerHTML = C.s2t; $('s2sub').textContent = C.s2sub;
+$('s2t').innerHTML = C.s2t;
 const ICON = ['refinancing','finances','zap','house-stars','pension-optimizer','bank'];
 const PPOS = [[150,250,-4],[1330,240,3],[90,560,2],[1390,560,-3],[300,790,-2],[1180,800,4]];
 $('pcards').innerHTML = C.q.map((q,i)=>`<div class="card pcard" id="pc${i}" style="left:${PPOS[i][0]}px;top:${PPOS[i][1]}px">
@@ -304,7 +306,7 @@ $('s5txt').innerHTML = C.s5;
 $('s6t').innerHTML = C.s6t; $('s6sub').textContent = C.s6sub;
 const HUB = {x:960,y:590};
 const NPOS = [[-655,-250],[0,-330],[655,-250],[-655,190],[0,290],[655,190]].map(([dx,dy])=>[HUB.x+dx,HUB.y+dy]);
-$('nodes').innerHTML = C.nodes.map(([ic,n,d],i)=>`<div class="card node" id="nd${i}" style="left:${NPOS[i][0]-215}px;top:${NPOS[i][1]-64}px">
+$('nodes').innerHTML = C.nodes.map(([ic,n,d],i)=>`<div class="card node" id="nd${i}" style="left:${NPOS[i][0]-235}px;top:${NPOS[i][1]-64}px">
   <img src="assets/${ic}.png"><div><div class="n">${n}</div><div class="d">${d}</div></div></div>`).join('');
 $('links').innerHTML = NPOS.map(([x,y],i)=>{ const L=Math.hypot(x-HUB.x,y-HUB.y);
   return `<line id="ln${i}" x1="${HUB.x}" y1="${HUB.y}" x2="${x}" y2="${y}" stroke="#2C98FF" stroke-width="5" stroke-linecap="round"
@@ -312,16 +314,17 @@ $('links').innerHTML = NPOS.map(([x,y],i)=>{ const L=Math.hypot(x-HUB.x,y-HUB.y)
     <circle id="pu${i}" r="11" fill="#2C98FF"/>`; }).join('');
 
 $('s7t').innerHTML = C.s7t; $('s7sub').innerHTML = C.s7sub + ' &nbsp;<span style="color:#f99c00">★★★★★</span>';
-$('rcards').innerHTML = C.r.map((r,i)=>`<div class="card rcard" id="rc${i}" style="left:${135+i*570}px">
-  <img class="ic" src="assets/${r.ic}.png"><div class="stars">★★★★★</div><div class="num" id="rn${i}"></div><div class="desc">${r.desc}</div>
+$('rcards').innerHTML = C.r.map((r,i)=>`<div class="card rcard" id="rc${i}">
+  <img class="ic" src="assets/${r.ic}.png"><div class="body"><div class="stars">★★★★★</div><div class="num" id="rn${i}"></div>
+  <div class="desc">${r.desc}</div>
   ${r.bars ? `<div class="mini"><div id="mb0" style="background:#ffd5d6"><span>${r.bars[0]}</span></div><div id="mb1" style="background:#00bb7f"><span>${r.bars[1]}</span></div></div>` : ''}
-  <div class="who">— ${r.who}</div></div>`).join('');
+  <div class="who">— ${r.who}</div></div></div>`).join('') + `<div class="dots7">${C.r.map((_,i)=>`<i id="dt${i}"></i>`).join('')}</div>`;
 
 $('s8tag').textContent = C.s8tag; $('s8btn').textContent = C.s8btn;
 
 /* ---------- timeline ---------- */
-const DURATION = 41;
-const S = { s1:[0,4.6], s2:[4.4,10.6], s3:[10.4,15.6], s4:[15.4,23.0], s5:[22.8,26.0], s6:[25.8,32.4], s7:[32.2,37.4], s8:[37.2,41.6] };
+const DURATION = 43;
+const S = { s1:[0,4.6], s2:[4.4,10.6], s3:[10.4,15.6], s4:[15.4,23.0], s5:[22.8,26.0], s6:[25.8,32.4], s7:[32.2,39.4], s8:[39.2,43.6] };
 
 function render(t){
   for (const [id,[a,b]] of Object.entries(S)) $(id).style.opacity = (id==='s8') ? (t>=a?1:0) : win(t,a,b);
@@ -335,12 +338,15 @@ function render(t){
     const q=eo(P(t,2.5,.5)); set($('s1pill'),q,`translateX(-50%) translateY(${(1-q)*20}px)`);
     if (t>3.9) $('s1').style.transform=`translateY(${-eio(P(t,3.9,.7))*60}px)`; else $('s1').style.transform=''; }
 
-  /* S2 */
+  /* S2 – eye stays in the centre: each question is read big, then parks in its slot */
   { const q=eo(P(t,4.6,.6)); set($('s2t'),q,`translateY(${(1-q)*-30}px)`);
-    C.q.forEach((_,i)=>{ const st=5.1+i*.42, k=P(t,st,.55), [,,rot]=PPOS[i];
-      const fl = Math.sin(t*1.6+i*1.3)*7, sc = k>0 ? back(k) : 0;
-      set($('pc'+i), eo(P(t,st,.3)), `translateY(${fl}px) rotate(${rot}deg) scale(${.4+.6*sc})`); });
-    const s=eo(P(t,8.0,.6)); set($('s2sub'),s,`translateY(${(1-s)*20}px)`); }
+    C.q.forEach((_,i)=>{ const st=5.0+i*.8, [x,y,rot]=PPOS[i];
+      const dx=960-(x+220), dy=570-(y+75);
+      const a=back(P(t,st,.35)), f=eio(P(t,st+.6,.4));             // appear, then fly
+      const sc=(.5+1.2*a)*(1-f) + 1*f;                             // 1.7× in centre → 1× in slot
+      const fl = Math.sin(t*1.6+i*1.3)*7*f;
+      const el=$('pc'+i); el.style.zIndex = 10+i;
+      set(el, eo(P(t,st,.2)), `translate(${dx*(1-f)}px,${dy*(1-f)+fl}px) rotate(${rot*f}deg) scale(${sc})`); }); }
 
   /* S3 */
   { const q=eo(P(t,10.6,.6)); set($('s3t'),q,`translateY(${(1-q)*-30}px)`);
@@ -386,20 +392,24 @@ function render(t){
     if (t>26.7) $('hub').style.transform=`scale(${pulse})`;
     set($('s6sub'), eo(P(t,28.8,.6))); }
 
-  /* S7 */
+  /* S7 – one result at a time, full focus */
   { const q=eo(P(t,32.4,.6)); set($('s7t'),q,`translateY(${(1-q)*-30}px)`);
-    set($('s7sub'), eo(P(t,32.8,.6)));
-    C.r.forEach((r,i)=>{ const st=33.0+i*.35, k=eo(P(t,st,.6));
-      set($('rc'+i), k, `translateY(${(1-k)*60}px)`);
-      $('rn'+i).innerHTML = (r.pre?`<small>${r.pre}</small>`:'') + fmt(r.to*eio(P(t,st+.2,1.6)),r.dec) + (r.suf.length>1?`<small>${r.suf}</small>`:r.suf); });
-    const mb=eio(P(t,34.0,1.0)); if ($('mb0')) { $('mb0').style.height=110*mb+'px'; $('mb1').style.height=110*.85*mb+'px'; } }
+    set($('s7sub'), eo(P(t,32.7,.6)));
+    C.r.forEach((r,i)=>{ const st=32.9+i*2.1, last=i===C.r.length-1;
+      const k=eo(P(t,st,.5)), out=last?0:eio(P(t,st+1.85,.4));
+      set($('rc'+i), k*(1-out), `translateX(${(1-k)*240 - out*240}px) scale(${.94+.06*k})`);
+      $('rn'+i).innerHTML = (r.pre?`<small>${r.pre}</small>`:'') + fmt(r.to*eio(P(t,st+.25,1.1)),r.dec) + (r.suf.length>1?`<small>${r.suf}</small>`:r.suf);
+      const on = t>=st && (last || t<st+2.05);
+      $('dt'+i).style.background = on ? '#2C98FF' : '#c9dcf7'; $('dt'+i).style.width = on ? '44px' : '16px';
+      if (r.bars) { const mb=eio(P(t,st+.5,.9)); $('mb0').style.height=120*mb+'px'; $('mb1').style.height=120*.85*mb+'px'; } });
+    set(document.querySelector('.dots7'), eo(P(t,32.9,.5))); }
 
   /* S8 */
-  { const c=eio(P(t,37.2,.9)); $('s8').style.clipPath=`circle(${c*1200}px at 50% 50%)`;
-    const k=back(P(t,37.8,.8)); set($('s8logo'), eo(P(t,37.8,.4)), `translate(-50%,-50%) scale(${.7+.3*k})`);
-    const q=eo(P(t,38.3,.6)); set($('s8tag'),q,`translateY(${(1-q)*30}px)`);
-    const b=back(P(t,38.8,.6)); set($('s8btn'), cl(b), `translateX(-50%) scale(${.6+.4*b})`);
-    set($('s8url'), eo(P(t,39.2,.6))); }
+  { const c=eio(P(t,39.2,.9)); $('s8').style.clipPath=`circle(${c*1200}px at 50% 50%)`;
+    const k=back(P(t,39.8,.8)); set($('s8logo'), eo(P(t,39.8,.4)), `translate(-50%,-50%) scale(${.7+.3*k})`);
+    const q=eo(P(t,40.3,.6)); set($('s8tag'),q,`translateY(${(1-q)*30}px)`);
+    const b=back(P(t,40.8,.6)); set($('s8btn'), cl(b), `translateX(-50%) scale(${.6+.4*b})`);
+    set($('s8url'), eo(P(t,41.2,.6))); }
 }
 
 window.DURATION = DURATION; window.render = render;
