@@ -174,13 +174,16 @@ function openDlg(cvr) {
     '<div class="dlgbar">' + (r.web ? '<a class="btn primary" href="' + esc(r.web) + '" target="_blank" rel="noopener">' + esc(t('open')) + '</a>' : '') + '<button class="btn" onclick="document.getElementById(\'dlg\').close()">' + esc(t('close')) + '</button></div>';
   document.getElementById('dlg').showModal();
 }
-function exportCsv() {
+async function exportCsv() {
   const rows = filtered();
   const H = lang === 'da' ? ['Navn', 'By', 'Postnr', 'Adresse', 'Hjemmeside', 'Facebook', 'Status', 'Vurdering', 'Hvorfor', 'Note', 'Ejer/direktør', 'Telefon', 'Nummeret er', 'CVR', 'Kontaktet'] : ['Name', 'City', 'Zip', 'Address', 'Website', 'Facebook', 'Status', 'Rating', 'Why', 'Note', 'Owner/director', 'Phone', 'Phone is', 'CVR', 'Contacted'];
   const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
   const lines = [H.map(q).join(',')].concat(rows.map(r => [r.name, r.city, r.zip, r.address, r.web, r.fb, r.st, r.r == null ? '' : r.r, (lang === 'da' ? r.rd : r.re).join('; '), lang === 'da' ? r.nd : r.ne, r.dir, r.ph, t(r.pk) || r.pk, r.cvr, done[r.cvr] ? 1 : 0].map(q).join(',')));
-  const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'restaurant-leads-' + lang + '.csv'; a.click();
+  const csv = '﻿' + lines.join('\n'); const filename = 'restaurant-leads-' + lang + '.csv';
+  const dl = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('downloads').catch(() => null) : null;
+  if (dl) { try { await dl.save({ filename, data: csv }); } catch (e) { /* viewer declined or unavailable */ } return; }
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click();
 }
 document.getElementById('dlg').addEventListener('click', e => { if (e.target.id === 'dlg') e.target.close(); });
 document.documentElement.lang = lang; applyText(); render();
