@@ -1,0 +1,135 @@
+<!doctype html><html lang="is"><head><meta charset="utf-8"><title>Straumlind ad</title>
+<style>
+@font-face{font-family:Montserrat;src:url(fonts/Montserrat-Regular.ttf);font-weight:400}
+@font-face{font-family:Montserrat;src:url(fonts/Montserrat-Medium.ttf);font-weight:500}
+@font-face{font-family:Montserrat;src:url(fonts/Montserrat-SemiBold.ttf);font-weight:600}
+@font-face{font-family:Montserrat;src:url(fonts/Montserrat-Bold.ttf);font-weight:700}
+@font-face{font-family:OpenSans;src:url(fonts/OpenSans-Light.ttf);font-weight:300}
+@font-face{font-family:OpenSans;src:url(fonts/OpenSans-Regular.ttf);font-weight:400}
+@font-face{font-family:OpenSans;src:url(fonts/OpenSans-SemiBold.ttf);font-weight:600}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--teal:#11757f;--teal2:#1a858f;--navy:#00506e;--orange:#ff7800;--cyan:#00bdd0;--cream:#fdf6d8;--ink:#212020;--mute:#6e6967}
+html,body{width:2000px;height:2000px;overflow:hidden;background:#fff;font-family:OpenSans,sans-serif;color:var(--ink)}
+.top{position:relative;height:1100px;background:var(--teal);overflow:hidden}
+.c{position:absolute;border-radius:50%;background:var(--teal2)}
+.c1{width:1100px;height:1100px;left:-380px;top:-520px}
+.c2{width:900px;height:900px;right:-300px;bottom:-480px}
+.c3{width:420px;height:420px;left:520px;bottom:-250px;background:#1f8d97}
+.head{position:absolute;left:110px;top:96px;width:1000px}
+.head svg{width:560px;display:block}
+.tag{position:absolute;right:110px;top:112px;font:500 30px/1 Montserrat;letter-spacing:.14em;text-transform:uppercase;color:#bfeef3}
+.h1{position:absolute;left:110px;top:262px;width:1080px;font:600 104px/1.1 Montserrat;color:#fff;letter-spacing:-.005em}
+.h1 b{color:var(--cream);font-weight:700}
+.sub{position:absolute;left:110px;top:560px;width:960px;font:300 42px/1.45 OpenSans;color:#e8f6f8}
+.sub strong{font-weight:600;color:#fff}
+.line{position:absolute;left:110px;top:792px;width:120px;height:6px;background:var(--orange);border-radius:3px}
+.step{position:absolute;left:110px;top:856px;width:980px;font:400 34px/1.5 OpenSans;color:#e8f6f8}
+.step span{display:inline-block;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);border-radius:40px;padding:10px 26px;margin:0 16px 16px 0;font-weight:600;color:#fff}
+.cards{position:absolute;right:130px;top:290px;width:800px;height:820px}
+.card{position:absolute;background:#fff;border-radius:24px;box-shadow:0 40px 80px rgba(0,40,50,.35);padding:44px 48px;width:520px}
+.card.sl{left:-30px;top:170px;transform:rotate(-6deg);z-index:2}
+.card.ot{right:-20px;top:-30px;transform:rotate(5deg);width:500px}
+.card .brand{display:flex;align-items:center;gap:14px;height:48px}
+.card .brand svg{height:44px;width:auto}
+.card .ph{height:22px;border-radius:11px;background:#e4efec;width:120px}
+.card .ph.s{width:220px;height:14px;margin-top:10px;background:#e4efec}
+.card .ttl{font:600 20px/1 Montserrat;letter-spacing:.16em;color:var(--navy);text-transform:uppercase;margin-top:26px;display:flex;justify-content:space-between}
+.card .ttl i{font:400 18px OpenSans;color:#9ca3af;letter-spacing:0}
+.card .ttl.g{color:#9ca3af}
+.card hr{border:0;border-top:2px solid #e4efec;margin:18px 0 10px}
+.row{display:flex;justify-content:space-between;font:400 24px/2 OpenSans;color:#807b78}
+.row b{font-weight:400;color:#212020}
+.price{margin-top:26px;border-radius:18px;padding:26px 30px;background:#e4efec}
+.price .l{font:600 17px/1 Montserrat;letter-spacing:.16em;color:var(--navy);text-transform:uppercase}
+.price .v{font:600 72px/1 Montserrat;color:var(--navy);margin-top:14px}
+.price .v small{font:400 26px OpenSans;color:#6e6967;margin-left:8px}
+.price .n{font:300 20px OpenSans;color:#6e6967;margin-top:10px}
+.ot .price{background:#eeeeee}.ot .price .l,.ot .price .v{color:#555}
+.badge{position:absolute;right:-30px;top:-34px;background:var(--orange);color:#fff;font:700 34px/1 Montserrat;padding:22px 30px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.25);transform:rotate(6deg)}
+.bot{position:relative;height:900px;background:#fff;padding:0 110px}
+.prod{display:flex;gap:40px;position:absolute;left:110px;right:110px;top:90px}
+.p{flex:1;border:3px solid #e4efec;border-radius:28px;padding:40px 44px;min-height:290px}
+.p.hi{background:#f2fbfc;border-color:var(--cyan)}
+.p .k{font:600 19px/1 Montserrat;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.p .t{font:500 34px/1.2 Montserrat;color:var(--navy);margin-top:16px;min-height:82px}
+.p .v{font:600 64px/1 Montserrat;color:var(--navy);margin-top:18px}
+.p .v small{font:400 24px OpenSans;color:#6e6967;margin-left:6px}
+.p .d{font:300 23px/1.4 OpenSans;color:#6e6967;margin-top:12px}
+.cmp{position:absolute;left:110px;right:110px;top:70px;display:flex;gap:50px;align-items:stretch}
+.chart{flex:1;border:3px solid #e4efec;border-radius:28px;padding:34px 44px 22px;align-self:flex-start}
+.ct{font:600 20px/1 Montserrat;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-bottom:26px;display:flex;justify-content:space-between;align-items:baseline}
+.ct span{font:300 20px OpenSans;color:#6e6967;letter-spacing:0;text-transform:none}
+.bar{display:grid;grid-template-columns:270px 1fr 110px 90px;align-items:center;gap:22px;height:50px;margin-bottom:10px}
+.bar .n{font:400 27px OpenSans;color:#6e6967}
+.bar .tr{height:34px;background:#f1f5f4;border-radius:17px;overflow:hidden}
+.bar .f{height:100%;border-radius:17px}
+.bar .f.g{background:#c7d3d1}.bar .f.o{background:linear-gradient(90deg,var(--orange),#ffa24d)}
+.bar .v{font:600 30px Montserrat;color:#6e6967;text-align:right}
+.bar .pc{font:600 22px Montserrat;color:#c0392b;text-align:right}
+.bar.sl .n,.bar.sl .v{color:var(--navy);font-weight:600}
+.stat{width:470px;background:var(--teal);border-radius:28px;padding:34px 44px;align-self:flex-start;color:#fff;display:flex;flex-direction:column;justify-content:center}
+.stat .big{font:700 130px/1 Montserrat;color:var(--cream);letter-spacing:-.02em}
+.stat .sl1{font:600 28px/1.3 Montserrat;margin-top:14px}
+.stat .sl2{font:300 24px/1.4 OpenSans;color:#d8eff2;margin-top:22px;padding-top:18px;border-top:2px solid rgba(255,255,255,.25)}
+.stat .sl2 b{font-weight:600;color:#fff}
+.cta{position:absolute;left:110px;right:110px;top:500px;display:flex;align-items:center;gap:60px}
+.qr{width:230px;height:230px;flex:none;border:3px solid #e4efec;border-radius:22px;padding:18px;background:#fff}
+.qr img{width:100%;height:100%;display:block}
+.cta .tx{font:300 36px/1.45 OpenSans;color:var(--ink)}
+.cta .tx b{font:600 44px/1.3 Montserrat;color:var(--navy);display:block;margin-bottom:10px}
+.cta .tx em{font-style:normal;color:var(--orange);font-weight:600}
+.cta .lg{margin-left:auto;flex:none}
+.cta .lg svg{width:380px;display:block}
+.src{position:absolute;left:110px;bottom:118px;font:300 19px OpenSans;color:#9ca3af}
+.foot{position:absolute;left:0;right:0;bottom:0;height:96px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 110px;font:500 30px/1 Montserrat;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+</style></head><body>
+<section class="top">
+  <div class="c c1"></div><div class="c c2"></div><div class="c c3"></div>
+  <div class="head"><svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84.19 9.81"><defs><style>.cls-1{fill:#00bdd0;}.cls-2{fill:#ff7800;}.cls-3{fill:#ffffff;}</style></defs><path class="cls-1" d="M10.12,0V4.69A5.12,5.12,0,0,1,5,9.81H4.86l2.52-6H5.05L6,0Z"/><path class="cls-2" d="M0,9.81V5.12A5.12,5.12,0,0,1,5.12,0h.14L2.74,6H5.07l-1,3.82Z"/><path class="cls-3" d="M13.47,6.29h.84a1.14,1.14,0,0,0,.48.92A2.26,2.26,0,0,0,16,7.5c1.12,0,1.68-.38,1.68-1.13a1,1,0,0,0-.32-.76,2,2,0,0,0-1-.34l-.87-.1c-1.27-.16-1.91-.74-1.91-1.75a1.63,1.63,0,0,1,.65-1.37A2.87,2.87,0,0,1,16,1.57a2.77,2.77,0,0,1,1.7.46,1.92,1.92,0,0,1,.72,1.39h-.83a1.13,1.13,0,0,0-.44-.85A2,2,0,0,0,16,2.29a2,2,0,0,0-1.18.28.91.91,0,0,0-.39.79.89.89,0,0,0,.3.71,1.86,1.86,0,0,0,1,.34l.92.11c1.29.17,1.93.77,1.93,1.79a1.67,1.67,0,0,1-.68,1.42,3.08,3.08,0,0,1-1.89.5,2.94,2.94,0,0,1-1.82-.49A1.9,1.9,0,0,1,13.47,6.29Z"/><path class="cls-3" d="M23.4,2.42V8.18h-.85V2.42H20.44V1.65h5.07v.77Z"/><path class="cls-3" d="M28.54,5.4V8.18h-.86V1.65h2.84a2.55,2.55,0,0,1,1.66.48,1.72,1.72,0,0,1,.57,1.39,1.76,1.76,0,0,1-.37,1.17,1.79,1.79,0,0,1-1.06.62l1.62,2.87H32L30.43,5.4Zm2-.75a1.53,1.53,0,0,0,1-.28,1,1,0,0,0,.33-.85,1,1,0,0,0-.35-.83,1.69,1.69,0,0,0-1.05-.27H28.54V4.65Z"/><path class="cls-3" d="M36.25,6.7l-.59,1.48h-.9l2.73-6.53h.72L41,8.18H40l-.6-1.48Zm1.6-4L36.54,6h2.61Z"/><path class="cls-3" d="M42.94,5.84V1.65h.86V5.78a1.73,1.73,0,0,0,3.46,0V1.65h.87V5.84a2.25,2.25,0,0,1-.69,1.76,3.2,3.2,0,0,1-3.81,0A2.25,2.25,0,0,1,42.94,5.84Z"/><path class="cls-3" d="M57.37,8.18h-.86V3.24L54.44,6.88h-.6L51.77,3.24V8.18h-.86V1.65h.86l2.37,4.24,2.37-4.24h.86Z"/><path class="cls-3" d="M61,1.65V7.41h3.66v.77H60.15V1.65Z"/><path class="cls-3" d="M68,1.65V8.18h-.86V1.65Z"/><path class="cls-3" d="M76.27,8.18h-.86l-3.74-5V8.18h-.86V1.65h.86l3.74,5.06V1.65h.86Z"/><path class="cls-3" d="M81.46,1.65a2.76,2.76,0,0,1,2,.71,2.89,2.89,0,0,1,.71,2.12v.86a2.85,2.85,0,0,1-.72,2.12,2.72,2.72,0,0,1-2,.72H79.05V1.65Zm1.41,5.26a2.28,2.28,0,0,0,.46-1.55V4.53a2.41,2.41,0,0,0-.46-1.6,1.82,1.82,0,0,0-1.41-.51H79.91v5h1.55A1.85,1.85,0,0,0,82.87,6.91Z"/></svg></div>
+  <div class="tag">Sama rafmagn, bara ódýrara</div>
+  <div class="h1">Borgar þú of mikið fyrir rafmagnið?</div>
+  <div class="sub">Almennt verð Straumlindar er allt að <strong>19% lægra</strong> en almennt verð stóru raforkusalanna. Sama rafmagn, sama dreifikerfi, <strong>lægri reikningur</strong>.</div>
+  <div class="line"></div>
+  <div class="step">Það tekur eina mínútu að skipta<br><span>Rafræn skilríki</span><span>Engin pappírsvinna</span><span>Við sjáum um allt ferlið</span></div>
+  <div class="cards">
+    <div class="card ot">
+      <div class="brand"><div class="ph"></div></div><div class="ph s"></div>
+      <div class="ttl g">Annar raforkusali <i>01.07–31.07</i></div><hr>
+      <div class="row"><span>Notkun</span><b>4.000 kWst</b></div>
+      <div class="row"><span>Taxti</span><b>Almennt verð</b></div>
+      <div class="price"><div class="l">Verð á kWst</div><div class="v">12,97<small>kr./kWst</small></div><div class="n">með VSK</div></div>
+      <div class="badge">+23%</div>
+    </div>
+    <div class="card sl">
+      <div class="brand"><svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84.19 9.81"><defs><style>.cls-1{fill:#00bdd0;}.cls-2{fill:#ff7800;}.cls-3{fill:#00506e;}</style></defs><path class="cls-1" d="M10.12,0V4.69A5.12,5.12,0,0,1,5,9.81H4.86l2.52-6H5.05L6,0Z"/><path class="cls-2" d="M0,9.81V5.12A5.12,5.12,0,0,1,5.12,0h.14L2.74,6H5.07l-1,3.82Z"/><path class="cls-3" d="M13.47,6.29h.84a1.14,1.14,0,0,0,.48.92A2.26,2.26,0,0,0,16,7.5c1.12,0,1.68-.38,1.68-1.13a1,1,0,0,0-.32-.76,2,2,0,0,0-1-.34l-.87-.1c-1.27-.16-1.91-.74-1.91-1.75a1.63,1.63,0,0,1,.65-1.37A2.87,2.87,0,0,1,16,1.57a2.77,2.77,0,0,1,1.7.46,1.92,1.92,0,0,1,.72,1.39h-.83a1.13,1.13,0,0,0-.44-.85A2,2,0,0,0,16,2.29a2,2,0,0,0-1.18.28.91.91,0,0,0-.39.79.89.89,0,0,0,.3.71,1.86,1.86,0,0,0,1,.34l.92.11c1.29.17,1.93.77,1.93,1.79a1.67,1.67,0,0,1-.68,1.42,3.08,3.08,0,0,1-1.89.5,2.94,2.94,0,0,1-1.82-.49A1.9,1.9,0,0,1,13.47,6.29Z"/><path class="cls-3" d="M23.4,2.42V8.18h-.85V2.42H20.44V1.65h5.07v.77Z"/><path class="cls-3" d="M28.54,5.4V8.18h-.86V1.65h2.84a2.55,2.55,0,0,1,1.66.48,1.72,1.72,0,0,1,.57,1.39,1.76,1.76,0,0,1-.37,1.17,1.79,1.79,0,0,1-1.06.62l1.62,2.87H32L30.43,5.4Zm2-.75a1.53,1.53,0,0,0,1-.28,1,1,0,0,0,.33-.85,1,1,0,0,0-.35-.83,1.69,1.69,0,0,0-1.05-.27H28.54V4.65Z"/><path class="cls-3" d="M36.25,6.7l-.59,1.48h-.9l2.73-6.53h.72L41,8.18H40l-.6-1.48Zm1.6-4L36.54,6h2.61Z"/><path class="cls-3" d="M42.94,5.84V1.65h.86V5.78a1.73,1.73,0,0,0,3.46,0V1.65h.87V5.84a2.25,2.25,0,0,1-.69,1.76,3.2,3.2,0,0,1-3.81,0A2.25,2.25,0,0,1,42.94,5.84Z"/><path class="cls-3" d="M57.37,8.18h-.86V3.24L54.44,6.88h-.6L51.77,3.24V8.18h-.86V1.65h.86l2.37,4.24,2.37-4.24h.86Z"/><path class="cls-3" d="M61,1.65V7.41h3.66v.77H60.15V1.65Z"/><path class="cls-3" d="M68,1.65V8.18h-.86V1.65Z"/><path class="cls-3" d="M76.27,8.18h-.86l-3.74-5V8.18h-.86V1.65h.86l3.74,5.06V1.65h.86Z"/><path class="cls-3" d="M81.46,1.65a2.76,2.76,0,0,1,2,.71,2.89,2.89,0,0,1,.71,2.12v.86a2.85,2.85,0,0,1-.72,2.12,2.72,2.72,0,0,1-2,.72H79.05V1.65Zm1.41,5.26a2.28,2.28,0,0,0,.46-1.55V4.53a2.41,2.41,0,0,0-.46-1.6,1.82,1.82,0,0,0-1.41-.51H79.91v5h1.55A1.85,1.85,0,0,0,82.87,6.91Z"/></svg></div>
+      <div class="ttl">Raforkureikningur <i>01.07–31.07</i></div><hr>
+      <div class="row"><span>Notkun</span><b>4.000 kWst</b></div>
+      <div class="row"><span>Taxti</span><b>Almennt verð</b></div>
+      <div class="price"><div class="l">Verð á kWst</div><div class="v">10,54<small>kr./kWst</small></div><div class="n">með VSK · sama verð allan sólarhringinn</div></div>
+    </div>
+  </div>
+</section>
+<section class="bot">
+  <div class="cmp">
+    <div class="chart">
+      <div class="ct">Almennt verð raforkusala <span>kr./kWst með VSK</span></div>
+      <div class="bar"><div class="n">Orkusalan</div><div class="tr"><div class="f g" style="width:100%"></div></div><div class="v">12,97</div><div class="pc">+23%</div></div>
+      <div class="bar"><div class="n">HS Orka</div><div class="tr"><div class="f g" style="width:93.9%"></div></div><div class="v">12,18</div><div class="pc">+16%</div></div>
+      <div class="bar"><div class="n">Orka náttúrunnar</div><div class="tr"><div class="f g" style="width:88%"></div></div><div class="v">11,41</div><div class="pc">+8%</div></div>
+      <div class="bar sl"><div class="n">Straumlind</div><div class="tr"><div class="f o" style="width:81.3%"></div></div><div class="v">10,54</div><div class="pc"></div></div>
+    </div>
+    <div class="stat">
+      <div class="big">19%</div>
+      <div class="sl1">lægra verð en hjá<br>dýrasta stóra raforkusalanum</div>
+      <div class="sl2">Allt að <b>9.700 kr.</b> sparnaður á ári<br>m.v. 4.000 kWst notkun</div>
+    </div>
+  </div>
+  <div class="cta">
+    <div class="qr"><img src="qr_navy.png"></div>
+    <div class="tx"><b>Skannaðu og skiptu í dag</b>Skráðu þig á <em>straumlind.is</em> – við látum núverandi<br>raforkusala vita, þú þarft ekkert að gera.</div>
+    <div class="lg"><svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84.19 9.81"><defs><style>.cls-1{fill:#00bdd0;}.cls-2{fill:#ff7800;}.cls-3{fill:#00506e;}</style></defs><path class="cls-1" d="M10.12,0V4.69A5.12,5.12,0,0,1,5,9.81H4.86l2.52-6H5.05L6,0Z"/><path class="cls-2" d="M0,9.81V5.12A5.12,5.12,0,0,1,5.12,0h.14L2.74,6H5.07l-1,3.82Z"/><path class="cls-3" d="M13.47,6.29h.84a1.14,1.14,0,0,0,.48.92A2.26,2.26,0,0,0,16,7.5c1.12,0,1.68-.38,1.68-1.13a1,1,0,0,0-.32-.76,2,2,0,0,0-1-.34l-.87-.1c-1.27-.16-1.91-.74-1.91-1.75a1.63,1.63,0,0,1,.65-1.37A2.87,2.87,0,0,1,16,1.57a2.77,2.77,0,0,1,1.7.46,1.92,1.92,0,0,1,.72,1.39h-.83a1.13,1.13,0,0,0-.44-.85A2,2,0,0,0,16,2.29a2,2,0,0,0-1.18.28.91.91,0,0,0-.39.79.89.89,0,0,0,.3.71,1.86,1.86,0,0,0,1,.34l.92.11c1.29.17,1.93.77,1.93,1.79a1.67,1.67,0,0,1-.68,1.42,3.08,3.08,0,0,1-1.89.5,2.94,2.94,0,0,1-1.82-.49A1.9,1.9,0,0,1,13.47,6.29Z"/><path class="cls-3" d="M23.4,2.42V8.18h-.85V2.42H20.44V1.65h5.07v.77Z"/><path class="cls-3" d="M28.54,5.4V8.18h-.86V1.65h2.84a2.55,2.55,0,0,1,1.66.48,1.72,1.72,0,0,1,.57,1.39,1.76,1.76,0,0,1-.37,1.17,1.79,1.79,0,0,1-1.06.62l1.62,2.87H32L30.43,5.4Zm2-.75a1.53,1.53,0,0,0,1-.28,1,1,0,0,0,.33-.85,1,1,0,0,0-.35-.83,1.69,1.69,0,0,0-1.05-.27H28.54V4.65Z"/><path class="cls-3" d="M36.25,6.7l-.59,1.48h-.9l2.73-6.53h.72L41,8.18H40l-.6-1.48Zm1.6-4L36.54,6h2.61Z"/><path class="cls-3" d="M42.94,5.84V1.65h.86V5.78a1.73,1.73,0,0,0,3.46,0V1.65h.87V5.84a2.25,2.25,0,0,1-.69,1.76,3.2,3.2,0,0,1-3.81,0A2.25,2.25,0,0,1,42.94,5.84Z"/><path class="cls-3" d="M57.37,8.18h-.86V3.24L54.44,6.88h-.6L51.77,3.24V8.18h-.86V1.65h.86l2.37,4.24,2.37-4.24h.86Z"/><path class="cls-3" d="M61,1.65V7.41h3.66v.77H60.15V1.65Z"/><path class="cls-3" d="M68,1.65V8.18h-.86V1.65Z"/><path class="cls-3" d="M76.27,8.18h-.86l-3.74-5V8.18h-.86V1.65h.86l3.74,5.06V1.65h.86Z"/><path class="cls-3" d="M81.46,1.65a2.76,2.76,0,0,1,2,.71,2.89,2.89,0,0,1,.71,2.12v.86a2.85,2.85,0,0,1-.72,2.12,2.72,2.72,0,0,1-2,.72H79.05V1.65Zm1.41,5.26a2.28,2.28,0,0,0,.46-1.55V4.53a2.41,2.41,0,0,0-.46-1.6,1.82,1.82,0,0,0-1.41-.51H79.91v5h1.55A1.85,1.85,0,0,0,82.87,6.91Z"/></svg></div>
+  </div>
+  <div class="foot"><span>straumlind.is</span><span>454-3040</span><span>straumlind@straumlind.is</span></div>
+  <div class="src">Heimild: verðskrár raforkusala og verðsamanburður Aurbjargar, október 2026</div>
+</section>
+</body></html>
