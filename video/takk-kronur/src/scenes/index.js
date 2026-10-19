@@ -17,5 +17,7 @@ import s16 from './s16_close.js';
 import gallery from './gallery.js';
 
 // s06 covers both the Hagkaup chart and the Refurinn close-up (scenes 6 and 7 in the storyboard).
-export const SCENES = [s01, s02, s03, s04, s05, s06, s08, s09, s10, s11, s12, s13, s14, s15, s16, gallery];
+export const SCENES = [s01, s02, s03, s04, s05, s06, s08, s09, s10, s11, s12, s13, s14, s15, s16];
+// Test-only scenes, loaded with ?scene=<id>.
+export const TEST_SCENES = [gallery];
 export const DURATION = b(182);

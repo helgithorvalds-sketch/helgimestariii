@@ -1,7 +1,7 @@
 import opentype from 'opentype.js';
 import { Stage } from './three/stage.js';
 import { getCues, FPS } from './core/util.js';
-import { SCENES, DURATION } from './scenes/index.js';
+import { SCENES, TEST_SCENES, DURATION } from './scenes/index.js';
 import { setupFx, updateFx } from './fx.js';
 
 async function boot() {
@@ -20,7 +20,7 @@ async function boot() {
   };
 
   const only = new URLSearchParams(location.search).get('scene');
-  const scenes = only ? SCENES.filter((s) => only.split(',').includes(s.id)) : SCENES;
+  const scenes = only ? [...SCENES, ...TEST_SCENES].filter((s) => only.split(',').includes(s.id)) : SCENES;
   for (const s of scenes) {
     s.back = document.createElement('div');
     s.back.className = 'layer';
