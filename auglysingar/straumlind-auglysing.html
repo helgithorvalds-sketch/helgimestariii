@@ -10,29 +10,23 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--teal:#11757f;--teal2:#1a858f;--navy:#00506e;--orange:#ff7800;--cyan:#00bdd0;--cream:#fdf6d8;--ink:#212020;--mute:#6e6967}
 html,body{width:2000px;height:2000px;overflow:hidden;background:#fff;font-family:OpenSans,sans-serif;color:var(--ink)}
-.top{position:relative;height:1330px;background:var(--teal);overflow:hidden}
+.top{position:relative;height:1100px;background:var(--teal);overflow:hidden}
 .c{position:absolute;border-radius:50%;background:var(--teal2)}
 .c1{width:1100px;height:1100px;left:-380px;top:-520px}
-.c2{width:900px;height:900px;right:-300px;bottom:-380px}
-.c3{width:420px;height:420px;left:520px;bottom:-170px;background:#1f8d97}
+.c2{width:900px;height:900px;right:-300px;bottom:-480px}
+.c3{width:420px;height:420px;left:520px;bottom:-250px;background:#1f8d97}
 .head{position:absolute;left:110px;top:96px;width:1000px}
 .head svg{width:560px;display:block}
 .tag{position:absolute;right:110px;top:112px;font:500 30px/1 Montserrat;letter-spacing:.14em;text-transform:uppercase;color:#bfeef3}
-.h1{position:absolute;left:110px;top:250px;width:1080px;font:600 104px/1.1 Montserrat;color:#fff;letter-spacing:-.005em}
+.h1{position:absolute;left:110px;top:262px;width:1080px;font:600 104px/1.1 Montserrat;color:#fff;letter-spacing:-.005em}
 .h1 b{color:var(--cream);font-weight:700}
-.sub{position:absolute;left:110px;top:540px;width:960px;font:300 42px/1.45 OpenSans;color:#e8f6f8}
+.sub{position:absolute;left:110px;top:560px;width:960px;font:300 42px/1.45 OpenSans;color:#e8f6f8}
 .sub strong{font-weight:600;color:#fff}
-.line{position:absolute;left:110px;top:768px;width:120px;height:6px;background:var(--orange);border-radius:3px}
-.step{position:absolute;left:110px;top:816px;width:980px;font:400 34px/1.5 OpenSans;color:#e8f6f8}
-.step span{display:inline-block;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);border-radius:40px;padding:10px 26px;margin:0 16px 16px 0;font-weight:600;color:#fff}
-.prod{position:absolute;left:110px;right:110px;top:1036px;display:flex;gap:34px}
-.p{flex:1;background:rgba(255,255,255,.10);border:2px solid rgba(255,255,255,.35);border-radius:24px;padding:28px 34px 26px;backdrop-filter:blur(2px)}
-.p .k{font:600 17px/1 Montserrat;letter-spacing:.16em;text-transform:uppercase;color:#ffb366}
-.p .t{font:500 27px/1.2 Montserrat;color:#fff;margin-top:12px;min-height:66px}
-.p .v{font:600 54px/1 Montserrat;color:var(--cream);margin-top:10px}
-.p .v small{font:400 21px OpenSans;color:#d8eff2;margin-left:6px}
-.p .d{font:300 20px/1.35 OpenSans;color:#d8eff2;margin-top:8px}
-.cards{position:absolute;right:130px;top:270px;width:800px;height:820px}
+.line{position:absolute;left:110px;top:792px;width:120px;height:6px;background:var(--orange);border-radius:3px}
+.step{position:absolute;left:110px;right:110px;top:842px;font:400 34px/1.5 OpenSans;color:#e8f6f8}
+.step .row{display:flex;gap:22px;margin-top:10px}
+.step span{flex:1;text-align:center;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.35);border-radius:40px;padding:16px 26px;font-weight:600;font-size:32px;color:#fff;white-space:nowrap}
+.cards{position:absolute;right:120px;top:230px;width:800px;height:820px;transform:scale(.86);transform-origin:top right}
 .card{position:absolute;background:#fff;border-radius:24px;box-shadow:0 40px 80px rgba(0,40,50,.35);padding:44px 48px;width:520px}
 .card.sl{left:-30px;top:170px;transform:rotate(-6deg);z-index:2}
 .card.ot{right:-20px;top:-30px;transform:rotate(5deg);width:500px}
@@ -53,33 +47,41 @@ html,body{width:2000px;height:2000px;overflow:hidden;background:#fff;font-family
 .price .n{font:300 20px OpenSans;color:#6e6967;margin-top:10px}
 .ot .price{background:#eeeeee}.ot .price .l,.ot .price .v{color:#555}
 .badge{position:absolute;right:-30px;top:-34px;background:var(--orange);color:#fff;font:700 34px/1 Montserrat;padding:22px 30px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.25);transform:rotate(6deg)}
-.bot{position:relative;height:670px;background:#fff;padding:0 110px}
-.cmp{position:absolute;left:110px;right:110px;top:40px;display:flex;gap:50px;align-items:stretch}
-.chart{flex:1;border:3px solid #e4efec;border-radius:28px;padding:28px 44px 18px;align-self:stretch}
-.ct{font:600 20px/1 Montserrat;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline}
+.bot{position:relative;height:900px;background:#fff;padding:0 110px}
+.prod{display:flex;gap:40px;position:absolute;left:110px;right:110px;top:90px}
+.p{flex:1;border:3px solid #e4efec;border-radius:28px;padding:40px 44px;min-height:290px}
+.p.hi{background:#f2fbfc;border-color:var(--cyan)}
+.p .k{font:600 19px/1 Montserrat;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.p .t{font:500 34px/1.2 Montserrat;color:var(--navy);margin-top:16px;min-height:82px}
+.p .v{font:600 64px/1 Montserrat;color:var(--navy);margin-top:18px}
+.p .v small{font:400 24px OpenSans;color:#6e6967;margin-left:6px}
+.p .d{font:300 23px/1.4 OpenSans;color:#6e6967;margin-top:12px}
+.cmp{position:absolute;left:110px;right:110px;top:70px;display:flex;gap:50px;align-items:stretch}
+.chart{flex:1;border:3px solid #e4efec;border-radius:28px;padding:34px 44px 22px;align-self:flex-start}
+.ct{font:600 20px/1 Montserrat;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-bottom:26px;display:flex;justify-content:space-between;align-items:baseline}
 .ct span{font:300 20px OpenSans;color:#6e6967;letter-spacing:0;text-transform:none}
-.bar{display:grid;grid-template-columns:270px 1fr 110px 90px;align-items:center;gap:22px;height:44px;margin-bottom:8px}
+.bar{display:grid;grid-template-columns:270px 1fr 110px 90px;align-items:center;gap:22px;height:50px;margin-bottom:10px}
 .bar .n{font:400 27px OpenSans;color:#6e6967}
-.bar .tr{height:28px;background:#f1f5f4;border-radius:17px;overflow:hidden}
+.bar .tr{height:34px;background:#f1f5f4;border-radius:17px;overflow:hidden}
 .bar .f{height:100%;border-radius:17px}
 .bar .f.g{background:#c7d3d1}.bar .f.o{background:linear-gradient(90deg,var(--orange),#ffa24d)}
 .bar .v{font:600 30px Montserrat;color:#6e6967;text-align:right}
 .bar .pc{font:600 22px Montserrat;color:#c0392b;text-align:right}
 .bar.sl .n,.bar.sl .v{color:var(--navy);font-weight:600}
-.stat{width:470px;background:var(--teal);border-radius:28px;padding:28px 44px;align-self:stretch;color:#fff;display:flex;flex-direction:column;justify-content:center}
-.stat .big{font:700 112px/1 Montserrat;color:var(--cream);letter-spacing:-.02em}
-.stat .sl1{font:600 25px/1.3 Montserrat;margin-top:10px}
+.stat{width:470px;background:var(--teal);border-radius:28px;padding:34px 44px;align-self:stretch;color:#fff;display:flex;flex-direction:column;justify-content:center}
+.stat .big{font:700 130px/1 Montserrat;color:var(--cream);letter-spacing:-.02em}
+.stat .sl1{font:600 28px/1.3 Montserrat;margin-top:14px}
 .stat .sl2{font:300 24px/1.4 OpenSans;color:#d8eff2;margin-top:22px;padding-top:18px;border-top:2px solid rgba(255,255,255,.25)}
 .stat .sl2 b{font-weight:600;color:#fff}
-.cta{position:absolute;left:110px;right:110px;top:362px;display:flex;align-items:center;gap:60px}
-.qr{width:176px;height:176px;flex:none;border:3px solid #e4efec;border-radius:20px;padding:14px;background:#fff}
+.cta{position:absolute;left:110px;right:110px;top:500px;display:flex;align-items:center;gap:60px}
+.qr{width:230px;height:230px;flex:none;border:3px solid #e4efec;border-radius:22px;padding:18px;background:#fff}
 .qr img{width:100%;height:100%;display:block}
-.cta .tx{font:300 31px/1.4 OpenSans;color:var(--ink)}
-.cta .tx b{font:600 38px/1.3 Montserrat;color:var(--navy);display:block;margin-bottom:10px}
+.cta .tx{font:300 36px/1.45 OpenSans;color:var(--ink)}
+.cta .tx b{font:600 44px/1.3 Montserrat;color:var(--navy);display:block;margin-bottom:10px}
 .cta .tx em{font-style:normal;color:var(--orange);font-weight:600}
 .cta .lg{margin-left:auto;flex:none}
-.cta .lg svg{width:340px;display:block}
-.src{position:absolute;left:110px;bottom:104px;font:300 19px OpenSans;color:#9ca3af}
+.cta .lg svg{width:380px;display:block}
+.src{position:absolute;left:110px;bottom:118px;font:300 19px OpenSans;color:#9ca3af}
 .foot{position:absolute;left:0;right:0;bottom:0;height:96px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 110px;font:500 30px/1 Montserrat;letter-spacing:.08em;color:#fff;text-transform:uppercase}
 </style></head><body>
 <section class="top">
@@ -89,7 +91,7 @@ html,body{width:2000px;height:2000px;overflow:hidden;background:#fff;font-family
   <div class="h1">Borgar þú of mikið fyrir rafmagnið?</div>
   <div class="sub">Almennt verð Straumlindar er allt að <strong>19% lægra</strong> en almennt verð stóru raforkusalanna. Sama rafmagn, sama dreifikerfi, <strong>lægri reikningur</strong>.</div>
   <div class="line"></div>
-  <div class="step">Það tekur eina mínútu að skipta<br><span>Rafræn skilríki</span><span>Engin pappírsvinna</span><span>Við sjáum um allt ferlið</span></div>
+  <div class="step">Það tekur eina mínútu að skipta<div class="row"><span>Rafræn skilríki</span><span>Engin pappírsvinna</span><span>Við sjáum um allt ferlið</span></div></div>
   <div class="cards">
     <div class="card ot">
       <div class="brand"><div class="ph"></div></div><div class="ph s"></div>
@@ -106,11 +108,6 @@ html,body{width:2000px;height:2000px;overflow:hidden;background:#fff;font-family
       <div class="row"><span>Taxti</span><b>Almennt verð</b></div>
       <div class="price"><div class="l">Verð á kWst</div><div class="v">10,54<small>kr./kWst</small></div><div class="n">með VSK · sama verð allan sólarhringinn</div></div>
     </div>
-  </div>
-  <div class="prod">
-    <div class="p"><div class="k">Heimili</div><div class="t">Fast verð</div><div class="v">10,54<small>kr./kWst</small></div><div class="d">Sama verð allan sólarhringinn</div></div>
-    <div class="p"><div class="k">Rafbílaeigendur</div><div class="t">Ódýrara rafmagn á nóttunni</div><div class="v">7,03<small>kr./kWst</small></div><div class="d">Nótt kl. 23–07 · dagur 10,54 kr./kWst</div></div>
-    <div class="p"><div class="k">Fyrirframgreitt</div><div class="t">1.000 kWst á föstu verði</div><div class="v">9,80<small>kr./kWst</small></div><div class="d">Kauptu fyrirfram, tryggðu þér lágt verð</div></div>
   </div>
 </section>
 <section class="bot">
