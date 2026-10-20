@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { lathe, extrudeSvg, canvasTexture } from '../three/geo.js';
 import { PAL } from '../three/materials.js';
-import { TAKK } from '../brand.js';
+import { TAKK, GLEDI } from '../brand.js';
 
 let shared = null;
 
@@ -141,4 +141,43 @@ export function makeKronaCoin(numberGeo) {
 export function coinParts() {
   if (!shared) shared = build();
   return shared;
+}
+
+let gledi = null;
+
+/**
+ * Gleðipeningar coin: same body as the Takk coin, yellow lacquer, raised smiling face.
+ * Axis is +Y, radius 1.
+ */
+export function makeGlediCoin({ body = GLEDI.yellow, face = GLEDI.ink } = {}) {
+  if (!shared) shared = build();
+  const s = shared;
+  if (!gledi) {
+    const o = { scale: 0.0172, cx: 50, cy: 49.5, depth: 0.03, bevel: 0.011, bevelSegs: 3 };
+    gledi = [GLEDI.smile, GLEDI.eyeL, GLEDI.eyeR].map((d) => extrudeSvg(d, o));
+  }
+  const bodyMat = new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color(body), roughness: 0.42, clearcoat: 0.75, clearcoatRoughness: 0.12, envMapIntensity: 0.6,
+  });
+  const bandMat = bodyMat.clone();
+  bandMat.bumpMap = s.reedTex;
+  bandMat.bumpScale = 1.6;
+  const faceMat = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(face), roughness: 0.36, clearcoat: 0.6, clearcoatRoughness: 0.25 });
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(s.bodyGeo, bodyMat), new THREE.Mesh(s.bandGeo, bandMat));
+  for (const side of [1, -1]) {
+    const f = new THREE.Group();
+    gledi.forEach((geo) => f.add(new THREE.Mesh(geo, faceMat)));
+    f.rotation.x = (-Math.PI / 2) * side;
+    if (side < 0) f.rotation.z = Math.PI;
+    f.position.y = s.h * 0.55 * side;
+    g.add(f);
+    const ring = new THREE.Mesh(s.ringGeo, bodyMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = s.h * 0.56 * side;
+    g.add(ring);
+  }
+  g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  g.userData.materials = { bodyMat, bandMat, faceMat };
+  return g;
 }

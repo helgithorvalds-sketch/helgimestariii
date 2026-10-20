@@ -27,3 +27,33 @@ export function tMarkSvg({ color = '#FFFFFF', spark = '#B9A2FF', size = 60 } = {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size * 0.72}" height="${size}" viewBox="26 17 33.5 46" fill="none" style="display:block">
 <path d="${TAKK.t}" fill="${color}"/><path d="${TAKK.spark}" fill="${spark}"/></svg>`;
 }
+
+// Gleðipeningar: an original mark for the restaurant version (a smiling coin). viewBox 0 0 100 100.
+export const GLEDI = {
+  yellow: '#FFD24D',
+  deep: '#F2B705',
+  ink: '#18003E',
+  smile: 'M76.74 54.47A29.5 29.5 0 0 1 23.26 54.47A4.5 4.5 0 0 1 31.42 50.66A20.5 20.5 0 0 0 68.58 50.66A4.5 4.5 0 0 1 76.74 54.47Z',
+  eyeL: 'M30.5 34a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0 -13 0Z',
+  eyeR: 'M56.5 34a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0 -13 0Z',
+};
+
+/** The smiling face on its own (no disc), as inline SVG. */
+export function smileSvg({ color = GLEDI.ink, size = 60 } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="18 18 64 64" fill="none" style="display:block">
+<path d="${GLEDI.smile}" fill="${color}"/><path d="${GLEDI.eyeL}" fill="${color}"/><path d="${GLEDI.eyeR}" fill="${color}"/></svg>`;
+}
+
+/** Round app icon: yellow disc with the smile. */
+export function glediIconSvg({ size = 80, disc = GLEDI.yellow, face = GLEDI.ink, ring = GLEDI.deep } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 100 100" fill="none" style="display:block">
+<circle cx="50" cy="50" r="49" fill="${ring}"/><circle cx="50" cy="50" r="44" fill="${disc}"/>
+<path d="${GLEDI.smile}" fill="${face}"/><path d="${GLEDI.eyeL}" fill="${face}"/><path d="${GLEDI.eyeR}" fill="${face}"/></svg>`;
+}
+
+/** Icon + lowercase wordmark, as an HTML string (wordmark set in Figtree 800). */
+export function glediLogoHtml({ height = 120, color = GLEDI.ink, disc = GLEDI.yellow, face = GLEDI.ink, ring = GLEDI.deep } = {}) {
+  return `<div style="display:flex;align-items:center;gap:${Math.round(height * 0.22)}px;white-space:nowrap">
+${glediIconSvg({ size: height, disc, face, ring })}
+<span style="font:800 ${Math.round(height * 0.74)}px Figtree;letter-spacing:-0.045em;color:${color};line-height:1;padding-bottom:${Math.round(height * 0.08)}px">gleðipeningar</span></div>`;
+}

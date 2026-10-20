@@ -6,13 +6,14 @@ import { ContactShadow } from '../three/stage.js';
 import { makeCoin, makeKronaCoin } from '../models/coin.js';
 import { makePhone, drawTakkApp, makeTerminal, makeReceipt } from '../models/devices.js';
 import { text3d } from '../three/text3d.js';
-import { background, orbit, popObj, pin, V3 } from './common.js';
+import { background, orbit, popObj, pin, V3, screenDisc, makeIris, updateIris, IRIS } from './common.js';
 
-const FROM = b(16), TO = b(32);
-const TAP = b(19); // phone touches the terminal
-const COIN0 = b(20.5); // first coin leaves the receipt
+const FROM = b(44), TO = b(64);
+const TAP = b(47); // phone touches the terminal
+const COIN0 = b(48.5); // first coin leaves the receipt
 const NCOINS = 6;
-const PARTB = b(24);
+const PARTB = b(56);
+const PUSH = b(62); // camera pushes into the Takk coin, pink iris
 
 export default {
   id: 'how',
@@ -70,14 +71,16 @@ export default {
 
     // ---- DOM ----
     S.h1 = new Words(S.front, 'Þú verslar.', 't-h1');
-    S.h2 = new Words(S.front, 'Hluti verðsins\nkemur til baka.', 't-h2', { color: '#691FE7' });
+    S.h2 = new Words(S.front, 'Í stað afsláttar\nfærðu inneign\ntil baka.', 't-h2', { color: '#691FE7' });
+    S.h3 = new Words(S.front, 'Beint inn í appið.', 't-h4');
+    css(S.h3.root, { color: 'rgba(24,0,62,0.6)' });
     S.eq = el('div', 'abs t-mega ink', S.front, '=');
     css(S.eq, { fontSize: '200px' });
     S.lab1 = el('div', 'abs t-h2 nowrap', S.front, '1 tkr');
     S.lab2 = el('div', 'abs t-h2 nowrap', S.front, '1 kr.');
     css(S.lab1, { color: '#691FE7' });
-    S.sub = new Words(S.front, 'þegar þú notar þær í Bónus og Hagkaup', 't-body', { align: 'center' });
-    css(S.sub.root, { color: 'rgba(24,0,62,0.65)' });
+    S.sub = new Words(S.front, 'en bara í Bónus og Hagkaup.', 't-h3', { align: 'center' });
+    S.iris = makeIris(S, IRIS.pink);
 
     cue(FROM + 0.02, 'swoosh', { gain: 0.6 });
     cue(TAP, 'beep', { gain: 0.8 });
@@ -87,6 +90,8 @@ export default {
     cue(PARTB, 'pop', { gain: 0.7, pitch: 1.0 });
     cue(PARTB + b(1), 'pop', { gain: 0.7, pitch: 1.15 });
     cue(PARTB + b(2), 'thock', { gain: 0.75 });
+    cue(PARTB + b(3.5), 'stab', { gain: 0.55 });
+    cue(PUSH, 'whoosh', { dur: TO - PUSH, gain: 0.6, from: 250, to: 2400 });
   },
 
   update(lt, t, S) {
@@ -165,8 +170,9 @@ export default {
       }
       v.contact.group.visible = true;
     } else {
-      orbit(v.camera, [0, 1.3, 0], lerp(-3, 3, prog(t, PARTB, TO)) * DEG, 6 * DEG, lerp(10.4, 9.8, ease.outCubic(prog(t, PARTB, TO))), { t, seed: 9 });
-      const out = PARTB + b(7.2);
+      const push = ease.inQuart(prog(t, PUSH, TO));
+      orbit(v.camera, [lerp(0, -1.75, push), lerp(0.95, 1.35, push), 0], lerp(-3, 3, prog(t, PARTB, TO)) * (1 - push) * DEG, 6 * (1 - push) * DEG, lerp(lerp(10.4, 9.8, ease.outCubic(prog(t, PARTB, PUSH))), 3.0, push), { t, seed: 9 });
+      const out = TO + 1;
       [S.tcG, S.kcG].forEach((g, i) => {
         const at = PARTB + b(i);
         popObj(g, t, at, { base: 1.15, freq: 2.6, zeta: 0.5, out, outDur: 0.3 });
@@ -178,9 +184,10 @@ export default {
 
     // ---- text ----
     S.h1.update(t, { at: FROM + b(1), x: 140, y: 300, out: PARTB - 0.5, outDur: 0.3 });
-    S.h2.update(t, { at: b(21), stagger: 0.06, x: 144, y: 470, out: PARTB - 0.45, outDur: 0.3 });
+    S.h2.update(t, { at: b(49), stagger: 0.06, x: 144, y: 450, out: PARTB - 0.45, outDur: 0.3 });
+    S.h3.update(t, { at: b(53), stagger: 0.05, x: 148, y: 760, out: PARTB - 0.45, outDur: 0.3 });
     const eqIn = spring(t - (PARTB + b(2)), 3.2, 0.42);
-    const outB = ease.inCubic(prog(t, PARTB + b(7.2), PARTB + b(7.2) + 0.3));
+    const outB = ease.inCubic(prog(t, PUSH, PUSH + 0.3));
     if (partB) {
       const cam = v.camera;
       const p1 = pin(S.lab1, new THREE.Vector3(-1.75, 0.12, 0), cam, { ay: 0, o: ease.outCubic(prog(t, PARTB + b(2), PARTB + b(2.6))) * (1 - outB), dy: 30 * (1 - ease.outCubic(prog(t, PARTB + b(2), PARTB + b(2.6)))) });
@@ -189,6 +196,7 @@ export default {
     } else {
       [S.lab1, S.lab2, S.eq].forEach((e) => css(e, { visibility: 'hidden' }));
     }
-    S.sub.update(t, { at: PARTB + b(3.5), stagger: 0.04, x: 0, y: 958, out: PARTB + b(7.1), outDur: 0.3 });
+    S.sub.update(t, { at: PARTB + b(3.5), stagger: 0.06, x: 0, y: 935, out: PUSH, outDur: 0.3 });
+    if (partB) updateIris(S.iris, t, TO - b(1.1), TO, screenDisc(S.tcG.position, 1.15, v.camera));
   },
 };

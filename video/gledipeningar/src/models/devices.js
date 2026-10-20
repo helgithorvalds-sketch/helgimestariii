@@ -1,7 +1,7 @@
 import { THREE, M, G, rbox } from '../three/kit.js';
 import { clay, gloss, flat, PAL } from '../three/materials.js';
 import { slab, canvasTexture, rr, roundedRectShape } from '../three/geo.js';
-import { TAKK } from '../brand.js';
+import { TAKK, GLEDI } from '../brand.js';
 import { isk } from '../core/util.js';
 
 // ---------- 2D canvas helpers shared by screens ----------
@@ -22,6 +22,21 @@ export function drawTakkLogo(ctx, x, y, h, { pill = '#FFFFFF', letters = PAL.ink
   for (const k of ['k1', 'k2', 'a', 't']) ctx.fill(new Path2D(TAKK[k]));
   ctx.fillStyle = spark;
   ctx.fill(new Path2D(TAKK.spark));
+  ctx.restore();
+}
+
+/** Gleðipeningar icon (yellow disc + smile) centred at (cx, cy) with diameter d. */
+export function drawGlediIcon(ctx, cx, cy, d) {
+  const s = d / 100;
+  ctx.save();
+  ctx.translate(cx - d / 2, cy - d / 2);
+  ctx.scale(s, s);
+  ctx.fillStyle = GLEDI.deep;
+  ctx.beginPath(); ctx.arc(50, 50, 49, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = GLEDI.yellow;
+  ctx.beginPath(); ctx.arc(50, 50, 44, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = GLEDI.ink;
+  for (const k of ['smile', 'eyeL', 'eyeR']) ctx.fill(new Path2D(GLEDI[k]));
   ctx.restore();
 }
 
@@ -203,7 +218,7 @@ export function drawTakkApp(ctx, w, h, { balance = 0, plus = 0, plusAlpha = 0, c
 }
 
 /** Lock screen with a Takk notification. */
-export function drawLockScreen(ctx, w, h, { notif = 0, lit = 1, time = '10:12', day = 'Laugardagur', title = 'Takk', body = ['Þú fékkst 8.000 tkr', 'til baka frá barnum.'] } = {}) {
+export function drawLockScreen(ctx, w, h, { notif = 0, lit = 1, time = '10:12', day = 'Laugardagur', title = 'Takk', body = ['Þú fékkst 8.000 tkr', 'til baka frá barnum.'], icon = 'takk' } = {}) {
   ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = '#05030A';
   ctx.fillRect(0, 0, w, h);
@@ -230,10 +245,14 @@ export function drawLockScreen(ctx, w, h, { notif = 0, lit = 1, time = '10:12', 
     ctx.fillStyle = 'rgba(255,255,255,0.92)';
     rr(ctx, 40, y, w - 80, 220, 44);
     ctx.fill();
-    ctx.fillStyle = PAL.purple;
-    rr(ctx, 72, y + 36, 92, 92, 24);
-    ctx.fill();
-    drawTMark(ctx, 118, y + 82, 50, '#FFFFFF', '#C3ADFF');
+    if (icon === 'gledi') {
+      drawGlediIcon(ctx, 118, y + 82, 92);
+    } else {
+      ctx.fillStyle = PAL.purple;
+      rr(ctx, 72, y + 36, 92, 92, 24);
+      ctx.fill();
+      drawTMark(ctx, 118, y + 82, 50, '#FFFFFF', '#C3ADFF');
+    }
     ctx.fillStyle = PAL.ink;
     font(ctx, 800, 38);
     ctx.fillText(title, 190, y + 72);

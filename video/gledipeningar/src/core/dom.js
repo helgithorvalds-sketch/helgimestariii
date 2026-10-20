@@ -38,7 +38,7 @@ export function place(e, { x = 0, y = 0, s = 1, sx = null, sy = null, r = 0, o =
  * reveal(t) with t in seconds relative to the in-point.
  */
 export class Words {
-  constructor(parent, text, cls = 't-h2', { color = null, gap = 0, align = null, width = 1920 } = {}) {
+  constructor(parent, text, cls = 't-h2', { color = null, gap = 0, align = null, width = 1920, chars = false } = {}) {
     this.root = el('div', `abs ${cls}`, parent);
     if (color) this.root.style.color = color;
     if (align) { this.root.style.width = `${width}px`; this.root.style.textAlign = align; }
@@ -47,11 +47,13 @@ export class Words {
     lines.forEach((line, li) => {
       const lineEl = el('div', '', this.root);
       lineEl.style.whiteSpace = 'nowrap';
-      line.split(' ').forEach((w, wi) => {
+      // chars: every letter gets its own mask (for logotype reveals)
+      const parts = chars ? Array.from(line) : line.split(' ');
+      parts.forEach((w, wi) => {
         const wrap = el('span', 'w', lineEl);
         const inner = el('span', 'wi', wrap, w.replace(/~/g, '&nbsp;'));
         this.words.push({ wrap, inner, line: li });
-        if (wi < line.split(' ').length - 1) lineEl.appendChild(document.createTextNode(' '));
+        if (!chars && wi < parts.length - 1) lineEl.appendChild(document.createTextNode(' '));
       });
     });
   }

@@ -6,13 +6,15 @@ import { ContactShadow, enableKeyShadow } from '../three/stage.js';
 import { makeBedroom } from '../models/places.js';
 import { makePhone, drawLockScreen } from '../models/devices.js';
 import { makePerson, SKIN, HAIR } from '../models/people.js';
-import { background, orbit } from './common.js';
-import { tMarkSvg } from '../brand.js';
+import { background, orbit, screenDisc, makeIris, updateIris, IRIS, YELLOW } from './common.js';
+import { glediIconSvg } from '../brand.js';
 
-const FROM = b(132), TO = b(140);
-const BUZZ = b(133);
-const WAKE = b(134);
-const BIG = b(135);
+const FROM = b(200), TO = b(208);
+const BUZZ = b(201);
+const WAKE = b(202);
+const BIG = b(203);
+const NUDGE = b(205); // the second popup: a reason to come back
+const PUSH = b(206.9);
 
 export default {
   id: 'morning',
@@ -54,23 +56,37 @@ export default {
       width: '660px', padding: '26px 30px', borderRadius: '34px', background: 'rgba(255,255,255,0.94)',
       boxShadow: '0 24px 60px rgba(42,10,94,0.18)', display: 'flex', gap: '22px', alignItems: 'center',
     });
-    S.card.innerHTML = `<div style="width:84px;height:84px;border-radius:22px;background:#691FE7;display:flex;align-items:center;justify-content:center;flex:none">${tMarkSvg({ size: 48 })}</div>
-      <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 34px Figtree;color:#18003E">Takk</span><span style="font:600 24px Figtree;color:rgba(24,0,62,.45)">núna</span></div>
-      <div style="font:600 30px Figtree;color:rgba(24,0,62,.8);margin-top:6px;line-height:1.25">Þú fékkst Takk krónur frá barnum.</div></div>`;
-    S.big = el('div', 'abs t-mega purple nowrap tnum', S.front, '+8.000 tkr');
-    css(S.big, { fontSize: '196px' });
+    S.card.innerHTML = `<div style="flex:none">${glediIconSvg({ size: 84 })}</div>
+      <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 34px Figtree;color:#18003E">Gleðipeningar</span><span style="font:600 24px Figtree;color:rgba(24,0,62,.45)">núna</span></div>
+      <div style="font:600 30px Figtree;color:rgba(24,0,62,.8);margin-top:6px;line-height:1.25">Þú fékkst inneign frá barnum.</div></div>`;
+    S.big = el('div', 'abs t-mega nowrap tnum', S.front, '<span style="position:relative;display:inline-block"><span style="position:absolute;left:-0.08em;right:-0.08em;top:0.42em;bottom:0.02em;background:#FFD24D;border-radius:0.12em;transform:rotate(-1.5deg)"></span><span style="position:relative">+8.000 kr.</span></span>');
+    css(S.big, { fontSize: '176px', color: '#18003E' });
+    // second popup: a nudge to come back and use it
+    S.nudge = el('div', 'abs', S.front);
+    css(S.nudge, {
+      width: '660px', padding: '28px 30px', borderRadius: '34px', background: '#18003E',
+      boxShadow: '0 24px 60px rgba(42,10,94,0.25)', color: '#FFFFFF',
+    });
+    S.nudge.innerHTML = `<div style="font:800 40px Figtree;letter-spacing:-.02em">Inneignin bíður.</div>
+      <div style="font:600 30px Figtree;color:rgba(255,255,255,.75);margin-top:8px;line-height:1.3">8.000 kr. á barnum. Kíkirðu í kvöld?</div>
+      <div style="display:inline-block;margin-top:20px;background:${YELLOW};color:#18003E;font:800 30px Figtree;padding:14px 28px;border-radius:999px">Bóka borð</div>`;
+    S.iris = makeIris(S, IRIS.yellow);
 
     cue(FROM, 'morning', { gain: 0.5 });
     cue(BUZZ, 'buzz', { dur: 0.5, gain: 0.7 });
     cue(BUZZ + 0.25, 'notify', { gain: 0.65 });
     cue(WAKE, 'blink', { gain: 0.4 });
     cue(BIG, 'stab', { gain: 0.75 });
+    cue(NUDGE, 'notify', { gain: 0.6 });
+    cue(PUSH, 'whoosh', { dur: TO - PUSH, gain: 0.6, from: 250, to: 2400 });
   },
 
   update(lt, t, S) {
     const v = S.view;
     const fadeIn = ease.outCubic(prog(t, FROM, FROM + 0.5));
-    orbit(v.camera, [-3.35, 1.15, -1.55], lerp(12, 6, prog(t, FROM, TO)) * DEG, lerp(47, 44, prog(t, FROM, TO)) * DEG, lerp(8.3, 7.4, ease.outCubic(prog(t, FROM, TO))), { t, seed: 61 });
+    const push = ease.inQuart(prog(t, PUSH, TO));
+    const ph = S.phone.root.position;
+    orbit(v.camera, [lerp(-3.35, ph.x, push), lerp(1.15, ph.y, push), lerp(-1.55, ph.z, push)], lerp(12, 6, prog(t, FROM, TO)) * DEG, lerp(lerp(47, 44, prog(t, FROM, TO)), 80, push) * DEG, lerp(lerp(8.3, 7.4, ease.outCubic(prog(t, FROM, PUSH))), 1.6, push), { t, seed: 61 });
     v.rig.key.intensity = 2.9 * fadeIn;
     v.rig.hemi.intensity = 0.55 * fadeIn;
 
@@ -81,7 +97,7 @@ export default {
     const notif = ease.outBack(prog(t, BUZZ + 0.15, BUZZ + 0.5));
     const sig = `${lit.toFixed(2)}|${notif.toFixed(2)}`;
     if (sig !== S.sig) {
-      S.phone.redraw({ lit, notif, time: '10:12', day: 'Laugardagur', title: 'Takk', body: ['Þú fékkst Takk krónur', 'frá barnum.'] });
+      S.phone.redraw({ lit, notif, time: '10:12', day: 'Laugardagur', title: 'Gleðipeningar', body: ['Þú fékkst 8.000 kr.', 'inneign frá barnum.'], icon: 'gledi' });
       S.sig = sig;
     }
 
@@ -97,10 +113,14 @@ export default {
     S.headHolder.position.y = 1.6 + breathe;
 
     const kIn = ease.outExpo(prog(t, FROM + 0.25, FROM + 0.8));
-    place(S.kick, { x: 150, y: 250 + (1 - kIn) * 16, o: kIn });
+    const outAll = 1 - ease.inCubic(prog(t, PUSH - 0.1, PUSH + 0.25));
+    place(S.kick, { x: 150, y: 150 + (1 - kIn) * 16, o: kIn * outAll });
     const c = spring(t - (BUZZ + 0.25), 3.0, 0.5);
-    place(S.card, { x: 140, y: 300, s: Math.max(0.001, c), o: t > BUZZ + 0.25 ? 1 : 0, ox: '0%', oy: '50%' });
+    place(S.card, { x: 140, y: 200, s: Math.max(0.001, c), o: (t > BUZZ + 0.25 ? 1 : 0) * outAll, ox: '0%', oy: '50%' });
     const g = spring(t - BIG, 3.2, 0.42);
-    place(S.big, { x: 132, y: 470, s: Math.max(0.001, g), o: t > BIG ? 1 : 0, ox: '0%', oy: '60%' });
+    place(S.big, { x: 132, y: 380, s: Math.max(0.001, g), o: (t > BIG ? 1 : 0) * outAll, ox: '0%', oy: '60%' });
+    const n = spring(t - NUDGE, 3.0, 0.5);
+    place(S.nudge, { x: 140, y: 640, s: Math.max(0.001, n), r: (1 - n) * -4, o: (t > NUDGE ? 1 : 0) * outAll, ox: '0%', oy: '50%' });
+    updateIris(S.iris, t, TO - b(1.1), TO, screenDisc(ph, 0.5, v.camera));
   },
 };

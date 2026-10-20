@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { el, css, place } from '../core/dom.js';
-import { spring, clamp, prog, ease, drift } from '../core/anim.js';
+import { spring, clamp, prog, ease, drift, lerp } from '../core/anim.js';
 import { toScreen } from '../three/stage.js';
-import { tMarkSvg } from '../brand.js';
+import { tMarkSvg, glediIconSvg } from '../brand.js';
 
 export const BG = {
   studio: 'radial-gradient(ellipse 80% 75% at 58% 42%, #F7F3FC 0%, #EEE6F9 55%, #E2D6F5 100%)',
@@ -10,7 +10,15 @@ export const BG = {
   purple: 'radial-gradient(ellipse 85% 80% at 55% 45%, #7430F0 0%, #691FE7 50%, #5A14D2 100%)',
   night: 'radial-gradient(ellipse 85% 80% at 60% 40%, #2E0D6B 0%, #1E0650 50%, #12002F 100%)',
   morning: 'radial-gradient(ellipse 90% 85% at 30% 30%, #FFF6EC 0%, #F5E9F7 50%, #E6D8F6 100%)',
+  lavender: 'radial-gradient(ellipse 85% 80% at 55% 45%, #E6D8FF 0%, #DBC7FF 50%, #CDB5FA 100%)',
+  pink: 'radial-gradient(ellipse 85% 80% at 55% 45%, #FF8DC0 0%, #FF7AB6 50%, #F865A8 100%)',
+  ink: 'radial-gradient(ellipse 85% 80% at 55% 45%, #24064F 0%, #18003E 50%, #10002B 100%)',
+  yellow: 'radial-gradient(ellipse 85% 80% at 55% 45%, #FFDD6E 0%, #FFD24D 50%, #FFC72E 100%)',
 };
+
+// Flat colours matching the centre tones above, used by the chapter irises.
+export const IRIS = { purple: '#691FE7', lavender: '#DBC7FF', pink: '#FF7AB6', ink: '#18003E', yellow: '#FFD24D' };
+export const YELLOW = '#FFD24D';
 
 export function background(S, kind = 'studio') {
   const bg = el('div', 'fill', S.back);
@@ -73,3 +81,38 @@ export function chip(parent, html, { bg = '#691FE7', color = '#FFFFFF', size = 3
 }
 
 export const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+
+/** Small flat Gleðipeningar coin icon (2D). */
+export function glediIcon(parent, size = 56) {
+  const e = el('div', 'abs', parent);
+  css(e, { width: `${size}px`, height: `${size}px`, borderRadius: '50%', boxShadow: `0 ${Math.round(size * 0.12)}px ${Math.round(size * 0.3)}px rgba(42,10,94,0.25)` });
+  e.innerHTML = glediIconSvg({ size });
+  return e;
+}
+
+/** Screen-space disc around a 3D point: centre and the projected radius. */
+export function screenDisc(v3, radius, cam) {
+  cam.updateMatrixWorld();
+  const c = toScreen(v3, cam);
+  const right = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 0);
+  const e = toScreen(v3.clone().addScaledVector(right, radius), cam);
+  return { x: c.x, y: c.y, r: Math.hypot(e.x - c.x, e.y - c.y) };
+}
+
+/** A chapter iris: a flat disc in the next chapter's colour that grows out of an object. */
+export function makeIris(S, color) {
+  const e = el('div', 'abs', S.front);
+  css(e, { background: color, borderRadius: '50%', display: 'none', zIndex: '4' });
+  return e;
+}
+export function updateIris(e, t, a, b, disc) {
+  const ip = ease.inQuart(prog(t, a, b));
+  const rad = lerp(disc.r, 2300, ip);
+  css(e, {
+    display: ip > 0 ? 'block' : 'none',
+    width: `${(rad * 2).toFixed(1)}px`, height: `${(rad * 2).toFixed(1)}px`,
+    transform: `translate3d(${(disc.x - rad).toFixed(1)}px, ${(disc.y - rad).toFixed(1)}px, 0)`,
+    opacity: Math.min(1, ip * 6).toFixed(3),
+  });
+  return ip;
+}

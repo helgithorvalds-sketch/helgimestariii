@@ -7,7 +7,8 @@ import { makeCrowd } from '../models/people.js';
 import { background, orbit } from './common.js';
 import { wipe } from '../fx.js';
 
-const FROM = b(8), TO = b(16);
+const FROM = b(12), TO = b(20);
+const LAND = b(16);
 
 export default {
   id: 'crowd',
@@ -46,12 +47,12 @@ export default {
     // DOM
     S.num = new Counter(S.front, 't-mega white', { format: (v) => isk(v) });
     css(S.num.root, { fontSize: '232px', letterSpacing: '-0.05em' });
-    S.l1 = new Words(S.front, 'manns safna Takk krónum', 't-h3', { color: '#FFFFFF' });
+    S.l1 = new Words(S.front, 'manns hafa skráð sig í Takk', 't-h3', { color: '#FFFFFF' });
     S.l2 = new Words(S.front, 'í Bónus, Hagkaup og Eldum rétt', 't-body', { color: '#DBC7FF' });
 
     cue(FROM + 0.1, 'popcloud', { dur: 2.3, gain: 0.55 });
-    cue(FROM + 0.15, 'counter', { dur: 2.25, gain: 0.35 });
-    cue(b(12.5), 'stab', { gain: 0.8 });
+    cue(FROM + 0.15, 'counter', { dur: LAND - FROM - 0.2, gain: 0.35 });
+    cue(LAND, 'stab', { gain: 0.8 });
     wipe(TO, { kind: 'panel', dur: 0.62, color: '#F0EBF7', dir: 1, angle: -10 });
   },
 
@@ -70,12 +71,12 @@ export default {
     orbit(v.camera, [-2.4, 0, 0.6], lerp(-6, 3, push) * DEG, lerp(50, 46, push) * DEG, lerp(26, 23, push), { t, seed: 4 });
 
     // Counter tracks the wave.
-    const cp = ease.outCubic(prog(t, FROM + 0.15, b(12.5)));
+    const cp = ease.outCubic(prog(t, FROM + 0.15, LAND));
     S.num.set(Math.round((cp * 65000) / 10) * 10);
-    const stab = spring(t - b(12.5), 4, 0.35);
+    const stab = spring(t - LAND, 4, 0.35);
     const nIn = ease.outExpo(prog(t, FROM, FROM + 0.45));
-    place(S.num.root, { x: 128, y: 250 + (1 - nIn) * 40, o: nIn, s: t > b(12.5) ? 1 + (1 - stab) * -0.04 + 0.0 : 1, ox: '0%', oy: '100%' });
-    S.l1.update(t, { at: b(12.5), stagger: 0.06, x: 140, y: 500 });
-    S.l2.update(t, { at: b(13.5), stagger: 0.05, x: 142, y: 590 });
+    place(S.num.root, { x: 128, y: 250 + (1 - nIn) * 40, o: nIn, s: t > LAND ? 1 + (1 - stab) * -0.04 + 0.0 : 1, ox: '0%', oy: '100%' });
+    S.l1.update(t, { at: LAND, stagger: 0.06, x: 140, y: 500 });
+    S.l2.update(t, { at: LAND + b(1), stagger: 0.05, x: 142, y: 590 });
   },
 };

@@ -238,3 +238,58 @@ export function makeBurger() {
 export function makePlate(radius = 1.0) {
   return M(lathe([[0, 0.05], [radius * 0.7, 0.05], [radius * 0.92, 0.1], [radius, 0.1], [radius * 0.98, 0.07], [radius * 0.8, 0.0], [0, 0]], { segments: 72 }), clay('#FFFFFF', { rough: 0.22, coat: 0.85 }));
 }
+
+// ---------------- sandwich (one triangular half, lying flat) ----------------
+function roundedPoly(pts, r) {
+  const s = new THREE.Shape();
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i + n - 1) % n], p1 = pts[i], p2 = pts[(i + 1) % n];
+    const d0 = Math.hypot(p0[0] - p1[0], p0[1] - p1[1]), d2 = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+    const a = [p1[0] + ((p0[0] - p1[0]) / d0) * r, p1[1] + ((p0[1] - p1[1]) / d0) * r];
+    const b = [p1[0] + ((p2[0] - p1[0]) / d2) * r, p1[1] + ((p2[1] - p1[1]) / d2) * r];
+    if (i === 0) s.moveTo(a[0], a[1]);
+    else s.lineTo(a[0], a[1]);
+    s.quadraticCurveTo(p1[0], p1[1], b[0], b[1]);
+  }
+  s.closePath();
+  return s;
+}
+
+let sandwichGeo = null;
+export function makeSandwich() {
+  if (!sandwichGeo) {
+    const tri = (k) => roundedPoly([[-0.68 * k, -0.42 * k], [0.68 * k, -0.42 * k], [0, 0.72 * k]], 0.13 * k);
+    const layer = (k, depth, bevel, wave = 0) => {
+      const g = new THREE.ExtrudeGeometry(tri(k), { depth, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 4, curveSegments: 10 });
+      g.rotateX(-Math.PI / 2);
+      if (wave) {
+        const p = g.attributes.position;
+        for (let i = 0; i < p.count; i++) p.setY(i, p.getY(i) + Math.sin(p.getX(i) * 15) * Math.sin(p.getZ(i) * 13) * wave);
+      }
+      g.computeVertexNormals();
+      return g;
+    };
+    sandwichGeo = {
+      bread: layer(1, 0.12, 0.04),
+      ham: layer(1.03, 0.04, 0.01, 0.012),
+      cheese: layer(1.06, 0.02, 0.008),
+      lettuce: layer(1.1, 0.03, 0.01, 0.025),
+      tomato: new THREE.CylinderGeometry(0.2, 0.2, 0.05, 40),
+    };
+  }
+  const k = sandwichGeo;
+  const crumb = clay('#F6E2B3', { rough: 0.7, coat: 0.05 });
+  const crust = clay('#D79A55', { rough: 0.5, coat: 0.3 });
+  const bread = (y) => M(k.bread, [crumb, crust], { p: [0, y, 0] });
+  const tomatoMat = gloss('#F2554B', { rough: 0.3 });
+  return G([
+    bread(0.04),
+    M(k.ham, clay('#F29C9C', { rough: 0.5, coat: 0.2 }), { p: [0, 0.2, 0] }),
+    M(k.cheese, clay('#FFC93C', { rough: 0.35, coat: 0.5 }), { p: [0, 0.25, 0] }),
+    M(k.lettuce, clay('#7DCB6A', { rough: 0.45, coat: 0.35 }), { p: [0, 0.28, 0] }),
+    M(k.tomato, tomatoMat, { p: [-0.28, 0.34, 0.3] }),
+    M(k.tomato, tomatoMat, { p: [0.26, 0.34, 0.32] }),
+    bread(0.4),
+  ]);
+}

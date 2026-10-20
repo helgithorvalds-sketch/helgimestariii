@@ -1,8 +1,8 @@
 // Seeded randomness, Icelandic number formatting and the global timing grid.
 
-export const BPM = 120;
-export const BEAT = 60 / BPM; // 0.5 s
-export const BAR = BEAT * 4; // 2 s
+export const BPM = 110;
+export const BEAT = 60 / BPM; // 0.545 s
+export const BAR = BEAT * 4; // 2.18 s
 export const FPS = 60;
 /** Beats to seconds. */
 export const b = (n) => n * BEAT;

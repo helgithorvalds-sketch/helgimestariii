@@ -35,10 +35,14 @@ const scenes = meta.scenes.filter((s) => s.from < meta.duration);
 const total = Math.round(meta.duration * FPS);
 const segName = (a, b) => path.join(SEG, `seg_${String(a).padStart(5, '0')}_${String(b).padStart(5, '0')}.mp4`);
 
-// Build jobs: every scene split into chunks.
+// Build jobs: the timeline is cut at every scene start (scenes may overlap, e.g. a chapter card
+// sliding away over the next scene), and each piece is split into chunks.
+scenes.sort((x, y) => x.from - y.from);
 let jobs = [];
-for (const s of scenes) {
-  const a = Math.round(s.from * FPS), b = Math.min(total, Math.round(s.to * FPS));
+for (let i = 0; i < scenes.length; i++) {
+  const s = scenes[i];
+  const end = i + 1 < scenes.length ? scenes[i + 1].from : meta.duration;
+  const a = Math.round(s.from * FPS), b = Math.min(total, Math.round(end * FPS));
   for (let f = a; f < b; f += CHUNK) jobs.push({ scene: s.id, a: f, b: Math.min(b, f + CHUNK) });
 }
 const allJobs = jobs.slice();
