@@ -7,16 +7,17 @@ import { makeBottleTable } from '../models/places.js';
 import { background, orbit, glediIcon, YELLOW } from './common.js';
 import { wipe } from '../fx.js';
 
-// Idea 3: an arcade-style goal. Real spend fills the bar, credit comes back on every visit.
-const FROM = b(212), TO = b(228);
-const GOAL = 300000;
+// Idea 3: an arcade-style goal. Every visit's credit fills the bar like tickets; at 25.000 kr. of
+// credit (after 300.000 kr. spent) the bottle table unlocks.
+const FROM = b(220), TO = b(236);
+const GOAL = 25000;
 const VISITS = [
-  { at: b(214), spend: 50000, back: 8000, label: 'Föstudagur' },
-  { at: b(216), spend: 100000, back: 16000, label: 'Afmæli' },
-  { at: b(218), spend: 150000, back: 24000, label: 'Jólahlaðborð' },
+  { at: b(222), spend: 60000, back: 5000, label: 'Afmæli' },
+  { at: b(224), spend: 90000, back: 7500, label: 'Vinnudjamm' },
+  { at: b(226), spend: 150000, back: 12500, label: 'Jólahlaðborð' },
 ];
-const UNLOCK = b(220);
-const SAY = b(221);
+const UNLOCK = b(228);
+const SAY = b(229);
 const BX = 150, BY = 600, BW = 860, BH = 56;
 
 export default {
@@ -55,28 +56,29 @@ export default {
     S.kick2 = el('div', 'abs t-label', S.front, 'Opnað!');
     css(S.kick2, { color: YELLOW });
     S.h = new Words(S.front, 'Flöskuborð', 't-h1', { color: '#FFFFFF' });
-    S.sub = new Words(S.front, 'eftir 300.000 kr. í viðskiptum', 't-body', { color: '#DBC7FF' });
+    S.sub = new Words(S.front, 'fyrir 25.000 kr. inneign', 't-body', { color: '#DBC7FF' });
     S.h2 = new Words(S.front, 'í boði hússins.', 't-h2', { color: YELLOW });
     S.track = el('div', 'abs', S.front);
     S.fill = el('div', 'abs', S.front);
-    S.goal = el('div', 'abs t-h4 nowrap tnum', S.front, '300.000 kr.');
-    css(S.goal, { color: '#FFFFFF' });
+    S.goal = el('div', 'abs t-h4 nowrap tnum', S.front, '25.000 kr.');
+    css(S.goal, { color: YELLOW });
     S.lock = el('div', 'abs', S.front);
     S.lock.innerHTML = `<svg width="64" height="76" viewBox="0 0 64 76"><path d="M16 34V22a16 16 0 0 1 32 0v12" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/><rect x="6" y="32" width="52" height="40" rx="12" fill="#FFFFFF"/><circle cx="32" cy="50" r="6" fill="#691FE7"/></svg>`;
     S.shackle = S.lock.querySelector('path');
-    S.cur = new Counter(S.front, 't-h4 white', { format: (x) => `${isk(x)} kr.` });
+    S.cur = new Counter(S.front, 't-h4', { format: (x) => `${isk(x)} kr. inneign` });
+    css(S.cur.root, { color: YELLOW });
     S.chips = VISITS.map((vv) => {
       const c = el('div', 'abs nowrap', S.front);
       css(c, { textAlign: 'center' });
       c.innerHTML = `<div style="font:700 21px Figtree;color:#DBC7FF;letter-spacing:.08em;text-transform:uppercase">${vv.label}</div>
-        <div style="font:800 34px Figtree;color:#FFFFFF;letter-spacing:-.02em;margin-top:6px">${isk(vv.spend)} kr.</div>
-        <div style="font:800 30px Figtree;color:${YELLOW};letter-spacing:-.02em;margin-top:2px">+${isk(vv.back)} kr.</div>`;
+        <div style="font:700 26px Figtree;color:rgba(255,255,255,.8);letter-spacing:-.01em;margin-top:6px">${isk(vv.spend)} kr. eytt</div>
+        <div style="font:800 34px Figtree;color:${YELLOW};letter-spacing:-.02em;margin-top:2px">+${isk(vv.back)} kr.</div>`;
       return c;
     });
-    S.credLab = el('div', 'abs t-label nowrap', S.front, 'Inneign safnað');
-    css(S.credLab, { color: YELLOW });
+    S.credLab = el('div', 'abs t-label nowrap', S.front, 'Í viðskiptum');
+    css(S.credLab, { color: '#DBC7FF' });
     S.cred = new Counter(S.front, 't-h2 nowrap tnum', { format: (x) => `${isk(x)} kr.` });
-    css(S.cred.root, { color: YELLOW });
+    css(S.cred.root, { color: '#FFFFFF' });
     S.icon = glediIcon(S.front, 64);
     S.ring = el('div', 'abs', S.front);
     css(S.ring, { borderRadius: '50%', border: '6px solid rgba(255,255,255,0.9)' });
@@ -96,23 +98,23 @@ export default {
     const out = ease.inCubic(prog(t, TO - 0.4, TO - 0.05));
     orbit(v.camera, [2.3, 1.85, 0], lerp(-8, 4, prog(t, FROM, TO)) * DEG, 12 * DEG, lerp(13.5, 11.5, ease.inOutSine(prog(t, FROM, TO))), { t, seed: 71 });
 
-    // spend and credit, eased per visit
+    // spend and credit, eased per visit; the bar is the credit
     let spend = 0, cred = 0;
     VISITS.forEach((vv) => {
       const p = ease.outCubic(prog(t, vv.at, vv.at + 0.5));
       spend += vv.spend * p;
       cred += vv.back * p;
     });
-    const p = spend / GOAL;
+    const p = cred / GOAL;
     const tIn = ease.outExpo(prog(t, FROM + 0.3, FROM + 0.8));
     bar(S.track, { x: BX, y: BY, w: BW * tIn, h: BH, color: 'rgba(255,255,255,0.16)', o: 1 - out });
     bar(S.fill, { x: BX, y: BY, w: Math.max(BH, BW * p), h: BH, color: '#FFFFFF', o: (p > 0.001 ? 1 : 0) * (1 - out) });
     const unl = t > UNLOCK;
     const flash = unl ? Math.exp(-(t - UNLOCK) * 5) : 0;
     css(S.fill, { boxShadow: unl ? `0 0 ${(40 * flash).toFixed(1)}px rgba(255,255,255,${(0.9 * flash).toFixed(2)})` : 'none' });
-    S.cur.set(Math.round(spend / 1000) * 1000);
+    S.cur.set(Math.round(cred / 100) * 100);
     const headX = BX + BW * p;
-    place(S.cur.root, { x: Math.min(BX + BW - 200, Math.max(BX, headX - 200)), y: BY - 62, o: (p > 0.001 ? 1 : 0) * (1 - out) * (1 - ease.inCubic(prog(t, UNLOCK, UNLOCK + 0.25))) });
+    place(S.cur.root, { x: Math.min(BX + BW - 330, Math.max(BX, headX - 330)), y: BY - 62, o: (p > 0.001 ? 1 : 0) * (1 - out) * (1 - ease.inCubic(prog(t, UNLOCK, UNLOCK + 0.25))) });
     place(S.goal, { x: BX + BW + 100, y: BY + 6, o: tIn * (1 - out) * (1 - ease.inCubic(prog(t, UNLOCK, UNLOCK + 0.3))) });
     // lock: shakes on each visit, pops open at the unlock
     let shake = 0;
@@ -124,7 +126,7 @@ export default {
     let acc = 0;
     S.chips.forEach((c, i) => {
       const vv = VISITS[i];
-      acc += vv.spend;
+      acc += vv.back;
       const cs = spring(t - vv.at, 3, 0.45);
       place(c, { x: BX + (BW * acc) / GOAL - 92, y: BY + BH + 24, s: Math.max(0.001, cs), o: (t > vv.at ? 1 : 0) * (1 - out), ox: '50%', oy: '0%' });
       css(c, { width: '184px' });
@@ -132,10 +134,10 @@ export default {
     const cIn = ease.outExpo(prog(t, VISITS[0].at, VISITS[0].at + 0.5));
     let bump = 0;
     VISITS.forEach((vv) => { if (t > vv.at) bump += Math.max(0, wobble(t - vv.at - 0.2, 4, 9)); });
-    S.cred.set(Math.round(cred / 1000) * 1000);
-    place(S.credLab, { x: BX + 84, y: 880 + (1 - cIn) * 14, o: cIn * (1 - out) });
-    place(S.cred.root, { x: BX + 84, y: 912 + (1 - cIn) * 14, o: cIn * (1 - out), s: 1 + bump * 0.05, ox: '0%', oy: '50%' });
-    place(S.icon, { x: BX, y: 892 + (1 - cIn) * 14, o: cIn * (1 - out), s: 1 + bump * 0.08, r: bump * 12, ox: '50%', oy: '50%' });
+    S.cred.set(Math.round(spend / 1000) * 1000);
+    place(S.credLab, { x: BX, y: 880 + (1 - cIn) * 14, o: cIn * (1 - out) });
+    place(S.cred.root, { x: BX, y: 912 + (1 - cIn) * 14, o: cIn * (1 - out), s: 1 + bump * 0.05, ox: '0%', oy: '50%' });
+    css(S.icon, { visibility: 'hidden' });
 
     // titles
     const kIn = ease.outExpo(prog(t, FROM + 0.05, FROM + 0.5));

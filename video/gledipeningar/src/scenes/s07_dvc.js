@@ -11,8 +11,8 @@ import { background, orbit, chip } from './common.js';
 import { wipe } from '../fx.js';
 
 // Chapter 3: a discount can be spent anywhere, credit only comes back to you.
-const FROM = b(68), TO = b(84);
-const PARTB = b(76);
+const FROM = b(60), TO = b(76);
+const PARTB = b(68);
 const OTHERS = [
   { x: -6.5, z: -1.3, ry: 0.34, awning: '#FF7AB6', door: '#B83B78', glass: '#FFC6DE', pot: '#FF7AB6' },
   { x: 6.5, z: -1.3, ry: -0.34, awning: '#3FBF95', door: '#1F7A5E', glass: '#BDEBDC', pot: '#3FBF95' },

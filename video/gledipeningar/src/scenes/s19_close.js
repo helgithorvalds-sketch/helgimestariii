@@ -8,9 +8,8 @@ import { background, orbit, BG, screenDisc, makeIris, updateIris, IRIS } from '.
 import { glediLogoHtml } from '../brand.js';
 
 // The takeaway, then the Gleðipeningar end card.
-const FROM = b(228), TO = b(250);
-const L2 = b(232);
-const END = b(240);
+const FROM = b(236), TO = b(254);
+const END = b(244);
 const LOGO_H = 190;
 
 export default {
@@ -32,16 +31,15 @@ export default {
     S.coinG.position.set(3.3, 1.35, 0);
     v.scene.add(S.coinG);
 
-    S.l1 = new Words(S.front, 'Afsláttur fær\nfólk inn.', 't-h1');
-    S.l2 = new Words(S.front, 'Inneign fær það inn\nog heldur því\ní keðjunni.', 't-h1', { color: '#691FE7' });
-    S.l2.root.style.fontSize = '104px';
+    S.l1 = new Words(S.front, 'Inneign fær\nfólk inn.', 't-h1');
+    S.l2 = new Words(S.front, 'Og heldur því\ní keðjunni.', 't-h1', { color: '#691FE7' });
     S.iris = makeIris(S, IRIS.yellow);
     S.logo = el('div', 'abs', S.front, glediLogoHtml({ height: LOGO_H }));
     css(S.logo, { width: '1920px', display: 'flex', justifyContent: 'center' });
     S.tag = new Words(S.front, 'Vildarkerfi fyrir veitingastaði.', 't-h3', { color: '#18003E', align: 'center' });
 
     cue(FROM, 'swoosh', { gain: 0.45 });
-    cue(L2, 'swoosh', { gain: 0.45 });
+    cue(FROM + b(2), 'swoosh', { gain: 0.45 });
     cue(END - b(1.1), 'whoosh', { dur: b(1.1), gain: 0.55, from: 300, to: 2400 });
     cue(END + 0.05, 'clink', { gain: 0.9, pitch: 1.0 });
     cue(END + 0.05, 'final', { gain: 0.9 });
@@ -64,8 +62,8 @@ export default {
     S.coinG.position.y = 1.35 + Math.sin(t * 1.8) * 0.06;
 
     const outT = END - b(1.3);
-    S.l1.update(t, { at: FROM + 0.1, stagger: 0.07, x: 140, y: 190, out: outT, outDur: 0.25 });
-    S.l2.update(t, { at: L2, stagger: 0.07, x: 140, y: 470, out: outT, outDur: 0.25 });
+    S.l1.update(t, { at: FROM + 0.1, stagger: 0.07, x: 140, y: 230, out: outT, outDur: 0.25 });
+    S.l2.update(t, { at: FROM + b(2), stagger: 0.07, x: 140, y: 500, out: outT, outDur: 0.25 });
 
     // iris from the coin into the end card
     updateIris(S.iris, t, END - b(1.1), END, screenDisc(S.coinG.position, 1.2, cam));

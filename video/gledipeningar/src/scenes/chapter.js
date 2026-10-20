@@ -11,7 +11,7 @@ import { glediIconSvg } from '../brand.js';
  */
 const SLIDE = 0.42;
 
-export function chapter({ id, at, next, bg, text = '#FFFFFF', kickerColor = null, kicker, title, num = null, icon = false, size = 128 }) {
+export function chapter({ id, at, next, bg, text = '#FFFFFF', kickerColor = null, kicker, title, sub = null, num = null, icon = false, size = 128, riser = false }) {
   const FROM = b(at), NEXT = b(next), TO = NEXT + SLIDE;
   return {
     id,
@@ -35,10 +35,12 @@ export function chapter({ id, at, next, bg, text = '#FFFFFF', kickerColor = null
       S.title = new Words(S.panel, title, 't-h1', { color: text });
       S.title.root.style.fontSize = `${size}px`;
       S.lines = title.split('\n').length;
+      if (sub) S.sub = new Words(S.panel, sub, 't-h2', { color: kickerColor || text });
 
       cue(FROM, 'impact', { gain: 0.55 });
       cue(FROM + 0.1, 'tick', { gain: 0.4, pitch: 1.3 });
-      cue(NEXT - 0.22, 'whoosh', { dur: 0.42, gain: 0.5, from: 500, to: 2600 });
+      if (riser) cue(FROM + b(1), 'riser', { dur: NEXT - FROM - b(1), gain: 0.6 });
+      else cue(NEXT - 0.22, 'whoosh', { dur: 0.42, gain: 0.5, from: 500, to: 2600 });
     },
     update(lt, t, S) {
       const slide = ease.inOutQuart(prog(t, NEXT - 0.18, TO - 0.02));
@@ -46,11 +48,12 @@ export function chapter({ id, at, next, bg, text = '#FFFFFF', kickerColor = null
       place(S.panel, { y: -1120 * slide });
       // text block, vertically centred
       const lh = size * 0.95;
-      const blockH = 70 + S.lines * lh;
+      const blockH = 70 + S.lines * lh + (S.sub ? 120 : 0);
       const y0 = 540 - blockH / 2 - 10;
       const kIn = ease.outExpo(prog(t, FROM + 0.05, FROM + 0.6));
       place(S.kicker, { x: 150, y: y0 + (1 - kIn) * 24 - slide * 120, o: kIn });
       S.title.update(t, { at: FROM + b(0.5), stagger: 0.07, dur: 0.6, x: 142, y: y0 + 64 - slide * 200, s: 1 + drift * 0.02 });
+      if (S.sub) S.sub.update(t, { at: FROM + b(1.5), stagger: 0.06, dur: 0.6, x: 148, y: y0 + 64 + S.lines * lh + 30 - slide * 240 });
       if (S.num) {
         const nIn = spring(t - FROM, 1.6, 0.8);
         place(S.num, { x: lerp(1560, 1240, nIn) - drift * 40, y: 30 - slide * 60 });

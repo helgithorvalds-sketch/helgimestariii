@@ -9,12 +9,12 @@ import { makePerson, SKIN, HAIR } from '../models/people.js';
 import { background, orbit, screenDisc, makeIris, updateIris, IRIS, YELLOW } from './common.js';
 import { glediIconSvg } from '../brand.js';
 
-const FROM = b(200), TO = b(208);
-const BUZZ = b(201);
-const WAKE = b(202);
-const BIG = b(203);
-const NUDGE = b(205); // the second popup: a reason to come back
-const PUSH = b(206.9);
+const FROM = b(208), TO = b(216);
+const BUZZ = b(209);
+const WAKE = b(210);
+const BIG = b(211);
+const NUDGE = b(213); // the second popup: a reason to come back
+const PUSH = b(214.9);
 
 export default {
   id: 'morning',

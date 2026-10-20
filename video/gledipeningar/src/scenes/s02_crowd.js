@@ -4,11 +4,11 @@ import { ease, prog, spring, lerp, clamp, DEG } from '../core/anim.js';
 import { el, css, place, Words, Counter } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeCrowd } from '../models/people.js';
-import { background, orbit } from './common.js';
-import { wipe } from '../fx.js';
+import { background, orbit, screenDisc, makeIris, updateIris, IRIS, V3 } from './common.js';
 
-const FROM = b(12), TO = b(20);
-const LAND = b(16);
+const FROM = b(8), TO = b(16);
+const LAND = b(12);
+const PUSH = b(14.6); // dive into one person in the crowd, lavender iris
 
 export default {
   id: 'crowd',
@@ -47,13 +47,16 @@ export default {
     // DOM
     S.num = new Counter(S.front, 't-mega white', { format: (v) => isk(v) });
     css(S.num.root, { fontSize: '232px', letterSpacing: '-0.05em' });
-    S.l1 = new Words(S.front, 'manns hafa skráð sig í Takk', 't-h3', { color: '#FFFFFF' });
+    S.l1 = new Words(S.front, 'manns hafa þegar skráð sig í Takk', 't-h3', { color: '#FFFFFF' });
     S.l2 = new Words(S.front, 'í Bónus, Hagkaup og Eldum rétt', 't-body', { color: '#DBC7FF' });
 
     cue(FROM + 0.1, 'popcloud', { dur: 2.3, gain: 0.55 });
     cue(FROM + 0.15, 'counter', { dur: LAND - FROM - 0.2, gain: 0.35 });
     cue(LAND, 'stab', { gain: 0.8 });
-    wipe(TO, { kind: 'panel', dur: 0.62, color: '#F0EBF7', dir: 1, angle: -10 });
+    // the person the camera dives into: the one nearest a spot right of centre
+    S.hero = pts.reduce((best, p) => (Math.hypot(p.x - 4.2, p.z - 1.2) < Math.hypot(best.x - 4.2, best.z - 1.2) ? p : best), pts[0]);
+    S.iris = makeIris(S, IRIS.lavender);
+    cue(PUSH, 'whoosh', { dur: TO - PUSH, gain: 0.6, from: 250, to: 2400 });
   },
 
   update(lt, t, S) {
@@ -67,16 +70,20 @@ export default {
     });
     cr.commit();
 
-    const push = ease.inOutSine(prog(t, FROM, TO));
-    orbit(v.camera, [-2.4, 0, 0.6], lerp(-6, 3, push) * DEG, lerp(50, 46, push) * DEG, lerp(26, 23, push), { t, seed: 4 });
+    const drift = ease.inOutSine(prog(t, FROM, PUSH));
+    const push = ease.inQuart(prog(t, PUSH, TO));
+    const head = V3(S.hero.x, 1.45 * S.hero.s, S.hero.z);
+    orbit(v.camera, [lerp(-2.4, head.x, push), lerp(0, head.y, push), lerp(0.6, head.z, push)], lerp(-6, 3, drift) * DEG, lerp(lerp(50, 46, drift), 30, push) * DEG, lerp(lerp(26, 23, drift), 2.4, push), { t, seed: 4 });
 
     // Counter tracks the wave.
     const cp = ease.outCubic(prog(t, FROM + 0.15, LAND));
     S.num.set(Math.round((cp * 65000) / 10) * 10);
     const stab = spring(t - LAND, 4, 0.35);
     const nIn = ease.outExpo(prog(t, FROM, FROM + 0.45));
-    place(S.num.root, { x: 128, y: 250 + (1 - nIn) * 40, o: nIn, s: t > LAND ? 1 + (1 - stab) * -0.04 + 0.0 : 1, ox: '0%', oy: '100%' });
-    S.l1.update(t, { at: LAND, stagger: 0.06, x: 140, y: 500 });
-    S.l2.update(t, { at: LAND + b(1), stagger: 0.05, x: 142, y: 590 });
+    place(S.num.root, { x: 128, y: 250 + (1 - nIn) * 40, o: nIn * (1 - ease.inCubic(prog(t, PUSH - 0.05, PUSH + 0.3))), s: t > LAND ? 1 + (1 - stab) * -0.04 + 0.0 : 1, ox: '0%', oy: '100%' });
+    const tOut = PUSH - 0.05;
+    S.l1.update(t, { at: LAND, stagger: 0.06, x: 140, y: 500, out: tOut, outDur: 0.3 });
+    S.l2.update(t, { at: LAND + b(1), stagger: 0.05, x: 142, y: 590, out: tOut, outDur: 0.3 });
+    updateIris(S.iris, t, TO - b(1.1), TO, screenDisc(head, 0.35, v.camera));
   },
 };

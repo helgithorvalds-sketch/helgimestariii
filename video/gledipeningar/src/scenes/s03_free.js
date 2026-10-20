@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import { b, cue } from '../core/util.js';
 import { ease, prog, spring, lerp, clamp, DEG } from '../core/anim.js';
-import { Words } from '../core/dom.js';
+import { Words, place } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeCoin } from '../models/coin.js';
 import { makeTag, font } from '../models/devices.js';
 import { clay } from '../three/materials.js';
-import { background, orbit, popObj } from './common.js';
+import { background, orbit, popObj, chip } from './common.js';
 import { wipe } from '../fx.js';
 
 const FROM = b(20), TO = b(32);
@@ -66,6 +66,8 @@ export default {
       return { g, x, y, s, at: GAIN + b(i * 0.5) };
     });
 
+    S.r1 = chip(S.front, 'Ástæða 1', { size: 30 });
+    S.r2 = chip(S.front, 'Ástæða 2', { size: 30 });
     S.l1 = new Words(S.front, 'Það kostar ekkert\nað vera með.', 't-h2');
     S.l2 = new Words(S.front, 'Engin áhætta.', 't-h1');
     S.l3 = new Words(S.front, 'Þú getur\nbara grætt.', 't-h1', { color: '#691FE7' });
@@ -118,6 +120,10 @@ export default {
       m.g.rotation.y = (1 - k) * 3 + Math.sin(t * 1.7 + i) * 0.25;
     });
 
+    const c1 = spring(t - (FROM + 0.05), 3, 0.5), c1o = ease.inBack(prog(t, FLIP - 0.4, FLIP - 0.1), 2);
+    const c2 = spring(t - FLIP, 3, 0.5), c2o = ease.inBack(prog(t, TO - 0.4, TO - 0.1), 2);
+    place(S.r1, { x: 146, y: 262, s: Math.max(0.001, c1 * (1 - c1o)), o: t > FROM && t < FLIP ? 1 : 0, ox: '0%', oy: '50%' });
+    place(S.r2, { x: 146, y: 202, s: Math.max(0.001, c2 * (1 - c2o)), o: t > FLIP ? 1 : 0, ox: '0%', oy: '50%' });
     S.l1.update(t, { at: FROM + 0.1, stagger: 0.06, x: 140, y: 360, out: FLIP - 0.4, outDur: 0.3 });
     S.l2.update(t, { at: FLIP + 0.05, stagger: 0.06, x: 140, y: 300, out: TO - 0.4, outDur: 0.3 });
     S.l3.update(t, { at: GAIN, stagger: 0.08, x: 140, y: 450, out: TO - 0.4, outDur: 0.3 });

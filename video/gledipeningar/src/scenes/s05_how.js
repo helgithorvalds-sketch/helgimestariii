@@ -1,19 +1,18 @@
 import * as THREE from 'three';
-import { b, cue, isk } from '../core/util.js';
-import { ease, prog, spring, lerp, clamp, key, arc, DEG, wobble } from '../core/anim.js';
-import { el, css, place, Words } from '../core/dom.js';
+import { b, cue } from '../core/util.js';
+import { ease, prog, spring, lerp, clamp, arc, DEG } from '../core/anim.js';
+import { css, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
-import { makeCoin, makeKronaCoin } from '../models/coin.js';
+import { makeCoin } from '../models/coin.js';
 import { makePhone, drawTakkApp, makeTerminal, makeReceipt } from '../models/devices.js';
-import { text3d } from '../three/text3d.js';
-import { background, orbit, popObj, pin, V3, screenDisc, makeIris, updateIris, IRIS } from './common.js';
+import { background, orbit, screenDisc, makeIris, updateIris, IRIS } from './common.js';
 
-const FROM = b(44), TO = b(64);
+// Chapter 2: you shop, and instead of a discount the credit lands in the app.
+const FROM = b(44), TO = b(56);
 const TAP = b(47); // phone touches the terminal
 const COIN0 = b(48.5); // first coin leaves the receipt
 const NCOINS = 6;
-const PARTB = b(56);
-const PUSH = b(62); // camera pushes into the Takk coin, pink iris
+const PUSH = b(54.6); // camera dives into the phone screen, purple iris
 
 export default {
   id: 'how',
@@ -26,16 +25,13 @@ export default {
     v.contact = new ContactShadow({ width: 16, depth: 16, height: 4, opacity: 0.55, blur: 2.6 });
     v.scene.add(v.contact.group);
 
-    // ---- part A ----
-    S.A = new THREE.Group();
-    v.scene.add(S.A);
     S.term = makeTerminal();
     S.termG = new THREE.Group();
     S.term.root.position.y = 0.61;
     S.termG.add(S.term.root);
     S.termG.position.set(1.25, 0, 0.1);
     S.termG.rotation.set(-0.2, -0.28, 0);
-    S.A.add(S.termG);
+    v.scene.add(S.termG);
     S.receipt = makeReceipt({
       lines: [['Mjólk 1 l', '219 kr.'], ['Smjör 500 g', '1.089 kr.'], ['Skálin', '2.290 kr.'], ['Vítamín', '1.990 kr.'], ['Brauð', '892 kr.']],
       total: '6.480 kr.',
@@ -45,158 +41,102 @@ export default {
     S.termG.add(S.receipt.root);
     S.phone = makePhone();
     S.phone.draw = drawTakkApp;
-    S.A.add(S.phone.root);
+    v.scene.add(S.phone.root);
     S.coins = [];
     for (let i = 0; i < NCOINS; i++) {
       const c = makeCoin();
       c.scale.setScalar(0.14);
-      S.A.add(c);
+      v.scene.add(c);
       S.coins.push(c);
     }
 
-    // ---- part B: 1 tkr = 1 kr. ----
-    S.B = new THREE.Group();
-    v.scene.add(S.B);
-    S.tc = makeCoin();
-    S.kc = makeKronaCoin(text3d(ctx.font3d, '1', { size: 1.2, depth: 0.05, bevel: 0.012, bevelSegs: 3 }));
-    S.tcG = new THREE.Group();
-    S.kcG = new THREE.Group();
-    S.tc.rotation.x = Math.PI / 2;
-    S.kc.rotation.x = Math.PI / 2;
-    S.tcG.add(S.tc);
-    S.kcG.add(S.kc);
-    S.tcG.position.set(-1.75, 1.35, 0);
-    S.kcG.position.set(1.75, 1.35, 0);
-    S.B.add(S.tcG, S.kcG);
-
-    // ---- DOM ----
     S.h1 = new Words(S.front, 'Þú verslar.', 't-h1');
     S.h2 = new Words(S.front, 'Í stað afsláttar\nfærðu inneign\ntil baka.', 't-h2', { color: '#691FE7' });
     S.h3 = new Words(S.front, 'Beint inn í appið.', 't-h4');
     css(S.h3.root, { color: 'rgba(24,0,62,0.6)' });
-    S.eq = el('div', 'abs t-mega ink', S.front, '=');
-    css(S.eq, { fontSize: '200px' });
-    S.lab1 = el('div', 'abs t-h2 nowrap', S.front, '1 tkr');
-    S.lab2 = el('div', 'abs t-h2 nowrap', S.front, '1 kr.');
-    css(S.lab1, { color: '#691FE7' });
-    S.sub = new Words(S.front, 'en bara í Bónus og Hagkaup.', 't-h3', { align: 'center' });
-    S.iris = makeIris(S, IRIS.pink);
+    S.iris = makeIris(S, IRIS.purple);
 
     cue(FROM + 0.02, 'swoosh', { gain: 0.6 });
     cue(TAP, 'beep', { gain: 0.8 });
     cue(TAP + 0.12, 'printer', { dur: 0.6, gain: 0.45 });
     for (let i = 0; i < NCOINS; i++) cue(COIN0 + i * b(0.5) + 0.42, 'coin', { pitch: 1 + i * 0.06, gain: 0.55 });
-    cue(PARTB - 0.1, 'whoosh', { dur: 0.4, gain: 0.5, from: 1800, to: 300 });
-    cue(PARTB, 'pop', { gain: 0.7, pitch: 1.0 });
-    cue(PARTB + b(1), 'pop', { gain: 0.7, pitch: 1.15 });
-    cue(PARTB + b(2), 'thock', { gain: 0.75 });
-    cue(PARTB + b(3.5), 'stab', { gain: 0.55 });
+    cue(b(52), 'stab', { gain: 0.5 });
     cue(PUSH, 'whoosh', { dur: TO - PUSH, gain: 0.6, from: 250, to: 2400 });
   },
 
   update(lt, t, S) {
     const v = S.view;
-    const partB = t >= PARTB - 0.02;
-    S.A.visible = !partB;
-    S.B.visible = partB;
+    const ph = S.phone.root;
+    const push = ease.inQuart(prog(t, PUSH, TO));
 
-    if (!partB) {
-      // camera
-      orbit(v.camera, [1.05, 1.1, 0.2], lerp(-4, 3, prog(t, FROM, PARTB)) * DEG, 12 * DEG, lerp(7.6, 7.0, ease.outCubic(prog(t, FROM, PARTB))), { t, seed: 6 });
+    // terminal pops in
+    const tin = spring(t - FROM - 0.05, 2.6, 0.5);
+    S.termG.scale.setScalar(Math.max(1e-4, tin));
+    S.term.set(t >= TAP ? 'ok' : 'idle');
 
-      // terminal pops in
-      const tin = spring(t - FROM - 0.05, 2.6, 0.5);
-      S.termG.scale.setScalar(Math.max(1e-4, tin));
-      S.term.set(t >= TAP ? 'ok' : 'idle');
-      const termOut = ease.inBack(prog(t, PARTB - 0.45, PARTB - 0.05), 1.6);
-      S.termG.position.x = 1.25 - termOut * 6;
+    // receipt prints after the tap
+    const pr = ease.outCubic(prog(t, TAP + 0.1, TAP + 0.75));
+    S.receipt.root.position.y = 0.61 + lerp(-0.66, 0.62, pr);
+    S.receipt.root.visible = pr > 0;
+    S.receipt.shape(0.25 + pr * 0.35, 1, t);
 
-      // receipt prints after the tap
-      const pr = ease.outCubic(prog(t, TAP + 0.1, TAP + 0.75));
-      S.receipt.root.position.y = 0.61 + lerp(-0.66, 0.62, pr) * 1.0 + 0.0;
-      S.receipt.root.visible = pr > 0;
-      S.receipt.shape(0.25 + pr * 0.35, 1, t);
+    // phone path: enter, tap, return
+    const enter = spring(t - FROM - 0.15, 2.2, 0.62);
+    const home = [2.75, 1.6, 0.75];
+    const tapPos = [1.32, 0.98, 0.62];
+    const go = ease.inOutCubic(prog(t, TAP - 0.5, TAP));
+    const back = ease.outCubic(prog(t, TAP + 0.18, TAP + 0.8));
+    const k = go * (1 - back);
+    ph.position.set(lerp(lerp(6.5, home[0], enter), tapPos[0], k), lerp(home[1], tapPos[1], k), lerp(home[2], tapPos[2], k));
+    ph.rotation.set(lerp(-0.08, -1.1, k), lerp(-0.42, -0.25, k) + (1 - enter) * 0.8, lerp(0.06, 0.0, k));
+    if (t > TAP && t < TAP + 0.15) ph.position.x += Math.sin(t * 160) * 0.01;
+    ph.updateMatrixWorld();
 
-      // phone path: enter, tap, return
-      const ph = S.phone.root;
-      const enter = spring(t - FROM - 0.15, 2.2, 0.62);
-      const home = [2.75, 1.6, 0.75];
-      const tapPos = [1.32, 0.98, 0.62];
-      const go = ease.inOutCubic(prog(t, TAP - 0.5, TAP));
-      const back = ease.outCubic(prog(t, TAP + 0.18, TAP + 0.8));
-      const k = go * (1 - back);
-      ph.position.set(
-        lerp(lerp(6.5, home[0], enter), tapPos[0], k),
-        lerp(home[1], tapPos[1], k),
-        lerp(home[2], tapPos[2], k)
-      );
-      ph.rotation.set(lerp(-0.08, -1.1, k), lerp(-0.42, -0.25, k) + (1 - enter) * 0.8, lerp(0.06, 0.0, k));
-      // tiny vibration on contact
-      const buzz = t > TAP && t < TAP + 0.15 ? Math.sin(t * 160) * 0.01 : 0;
-      ph.position.x += buzz;
-      const phOut = ease.inBack(prog(t, PARTB - 0.45, PARTB - 0.05), 1.6);
-      ph.position.x += phOut * 6;
+    // camera: hold on the pair, then dive into the phone screen
+    const scr = new THREE.Vector3(0, 0.1, 0.06).applyMatrix4(ph.matrixWorld);
+    orbit(
+      v.camera,
+      [lerp(1.05, scr.x, push), lerp(1.1, scr.y, push), lerp(0.2, scr.z, push)],
+      lerp(lerp(-4, 3, prog(t, FROM, PUSH)), -24, push) * DEG,
+      lerp(12, 5, push) * DEG,
+      lerp(lerp(7.6, 7.0, ease.outCubic(prog(t, FROM, PUSH))), 1.3, push),
+      { t, seed: 6 }
+    );
 
-      // coins arc from the receipt top into the phone
-      const recTop = new THREE.Vector3(0, 0.61 + 0.62 + 0.62, 0).applyMatrix4(S.termG.matrixWorld);
-      S.termG.updateMatrixWorld();
-      const phoneScr = new THREE.Vector3(0, 0.1, 0.06).applyMatrix4(ph.matrixWorld);
-      ph.updateMatrixWorld();
-      let arrived = 0;
-      S.coins.forEach((c, i) => {
-        const t0 = COIN0 + i * b(0.5);
-        const p = prog(t, t0, t0 + 0.45);
-        if (t < t0 || p >= 1) {
-          c.visible = false;
-          if (p >= 1) arrived++;
-          return;
-        }
-        c.visible = true;
-        const e = ease.inOutSine(p);
-        const mid = [(recTop.x + phoneScr.x) / 2 - 0.2, Math.max(recTop.y, phoneScr.y) + 1.1, (recTop.z + phoneScr.z) / 2 + 0.4];
-        const q = arc([recTop.x, recTop.y, recTop.z], mid, [phoneScr.x, phoneScr.y, phoneScr.z], e);
-        c.position.set(q[0], q[1], q[2]);
-        c.rotation.set(Math.PI / 2 + p * 6, p * 4, i);
-        const sc = 0.14 * (p < 0.15 ? spring(t - t0, 4, 0.5) : 1) * (p > 0.85 ? 1 - prog(p, 0.85, 1) : 1);
-        c.scale.setScalar(Math.max(1e-4, sc));
-      });
-      const bal = 1000 + Math.round((245 * arrived) / NCOINS);
-      const chip = ease.outBack(prog(t, COIN0 + NCOINS * b(0.5) + 0.3, COIN0 + NCOINS * b(0.5) + 0.6));
-      const check = t > TAP && t < TAP + 0.6 ? 1 - prog(t, TAP + 0.35, TAP + 0.6) : 0;
-      const sig = `${bal}|${chip.toFixed(2)}|${check.toFixed(2)}`;
-      if (sig !== S.lastSig) {
-        S.phone.redraw({ balance: bal, plus: 245, plusAlpha: clamp(chip), check });
-        S.lastSig = sig;
+    // coins arc from the receipt top into the phone
+    S.termG.updateMatrixWorld();
+    const recTop = new THREE.Vector3(0, 0.61 + 0.62 + 0.62, 0).applyMatrix4(S.termG.matrixWorld);
+    let arrived = 0;
+    S.coins.forEach((c, i) => {
+      const t0 = COIN0 + i * b(0.5);
+      const p = prog(t, t0, t0 + 0.45);
+      if (t < t0 || p >= 1) {
+        c.visible = false;
+        if (p >= 1) arrived++;
+        return;
       }
-      v.contact.group.visible = true;
-    } else {
-      const push = ease.inQuart(prog(t, PUSH, TO));
-      orbit(v.camera, [lerp(0, -1.75, push), lerp(0.95, 1.35, push), 0], lerp(-3, 3, prog(t, PARTB, TO)) * (1 - push) * DEG, 6 * (1 - push) * DEG, lerp(lerp(10.4, 9.8, ease.outCubic(prog(t, PARTB, PUSH))), 3.0, push), { t, seed: 9 });
-      const out = TO + 1;
-      [S.tcG, S.kcG].forEach((g, i) => {
-        const at = PARTB + b(i);
-        popObj(g, t, at, { base: 1.15, freq: 2.6, zeta: 0.5, out, outDur: 0.3 });
-        const spin = (1 - ease.outCubic(prog(t, at, at + 1.1))) * Math.PI * 4;
-        g.rotation.y = spin + Math.sin((t - at) * 1.6) * 0.12 * (t > at + 1.1 ? 1 : 0);
-        g.position.y = 1.35 + Math.sin((t - at) * 2.1 + i) * 0.05;
-      });
+      c.visible = true;
+      const e = ease.inOutSine(p);
+      const mid = [(recTop.x + scr.x) / 2 - 0.2, Math.max(recTop.y, scr.y) + 1.1, (recTop.z + scr.z) / 2 + 0.4];
+      const q = arc([recTop.x, recTop.y, recTop.z], mid, [scr.x, scr.y, scr.z], e);
+      c.position.set(q[0], q[1], q[2]);
+      c.rotation.set(Math.PI / 2 + p * 6, p * 4, i);
+      const sc = 0.14 * (p < 0.15 ? spring(t - t0, 4, 0.5) : 1) * (p > 0.85 ? 1 - prog(p, 0.85, 1) : 1);
+      c.scale.setScalar(Math.max(1e-4, sc));
+    });
+    const bal = 1000 + Math.round((245 * arrived) / NCOINS);
+    const chipA = ease.outBack(prog(t, COIN0 + NCOINS * b(0.5) + 0.3, COIN0 + NCOINS * b(0.5) + 0.6));
+    const check = t > TAP && t < TAP + 0.6 ? 1 - prog(t, TAP + 0.35, TAP + 0.6) : 0;
+    const sig = `${bal}|${chipA.toFixed(2)}|${check.toFixed(2)}`;
+    if (sig !== S.lastSig) {
+      S.phone.redraw({ balance: bal, plus: 245, plusAlpha: clamp(chipA), check });
+      S.lastSig = sig;
     }
 
-    // ---- text ----
-    S.h1.update(t, { at: FROM + b(1), x: 140, y: 300, out: PARTB - 0.5, outDur: 0.3 });
-    S.h2.update(t, { at: b(49), stagger: 0.06, x: 144, y: 450, out: PARTB - 0.45, outDur: 0.3 });
-    S.h3.update(t, { at: b(53), stagger: 0.05, x: 148, y: 760, out: PARTB - 0.45, outDur: 0.3 });
-    const eqIn = spring(t - (PARTB + b(2)), 3.2, 0.42);
-    const outB = ease.inCubic(prog(t, PUSH, PUSH + 0.3));
-    if (partB) {
-      const cam = v.camera;
-      const p1 = pin(S.lab1, new THREE.Vector3(-1.75, 0.12, 0), cam, { ay: 0, o: ease.outCubic(prog(t, PARTB + b(2), PARTB + b(2.6))) * (1 - outB), dy: 30 * (1 - ease.outCubic(prog(t, PARTB + b(2), PARTB + b(2.6)))) });
-      pin(S.lab2, new THREE.Vector3(1.75, 0.12, 0), cam, { ay: 0, o: ease.outCubic(prog(t, PARTB + b(2.3), PARTB + b(2.9))) * (1 - outB), dy: 30 * (1 - ease.outCubic(prog(t, PARTB + b(2.3), PARTB + b(2.9)))) });
-      pin(S.eq, new THREE.Vector3(0, 1.35, 0), cam, { s: Math.max(0.001, eqIn) * (1 - outB), o: eqIn > 0.01 ? 1 - outB : 0 });
-    } else {
-      [S.lab1, S.lab2, S.eq].forEach((e) => css(e, { visibility: 'hidden' }));
-    }
-    S.sub.update(t, { at: PARTB + b(3.5), stagger: 0.06, x: 0, y: 935, out: PUSH, outDur: 0.3 });
-    if (partB) updateIris(S.iris, t, TO - b(1.1), TO, screenDisc(S.tcG.position, 1.15, v.camera));
+    const out = PUSH - 0.1;
+    S.h1.update(t, { at: FROM + b(1), x: 140, y: 300, out, outDur: 0.3 });
+    S.h2.update(t, { at: b(49), stagger: 0.06, x: 144, y: 450, out, outDur: 0.3 });
+    S.h3.update(t, { at: b(52), stagger: 0.05, x: 148, y: 760, out, outDur: 0.3 });
+    updateIris(S.iris, t, TO - b(1.1), TO, screenDisc(scr, 0.3, v.camera));
   },
 };

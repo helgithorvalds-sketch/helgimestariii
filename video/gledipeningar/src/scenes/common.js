@@ -116,3 +116,40 @@ export function updateIris(e, t, a, b, disc) {
   });
   return ip;
 }
+
+/** Scale for someone popping into a door: a small swell, then gone (dt seconds after the pop). */
+export function popAway(dt) {
+  if (dt <= 0) return 1;
+  if (dt < 0.07) return 1 + 0.18 * ease.outQuad(dt / 0.07);
+  return Math.max(0, 1.18 * (1 - ease.inCubic(prog(dt, 0.07, 0.22))));
+}
+/** Scale for someone popping out of a door. */
+export const popOut = (dt) => Math.max(0, spring(dt, 3.4, 0.42));
+
+/** A small pool of ring bursts for door pops. events: [{ t, x, y, z }]. */
+export function makeBursts(scene, n = 6, color = '#8C5CF5') {
+  const geo = new THREE.TorusGeometry(1, 0.05, 8, 48);
+  const pool = [];
+  for (let i = 0; i < n; i++) {
+    const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color, transparent: true, depthWrite: false }));
+    m.visible = false;
+    scene.add(m);
+    pool.push(m);
+  }
+  return pool;
+}
+export function updateBursts(pool, t, events, dur = 0.38) {
+  let k = 0;
+  for (const e of events) {
+    const dt = t - e.t;
+    if (dt < 0 || dt > dur || k >= pool.length) continue;
+    const m = pool[k++];
+    const p = dt / dur;
+    const r = 0.3 + ease.outCubic(p) * 0.7;
+    m.visible = true;
+    m.position.set(e.x, e.y, e.z);
+    m.scale.set(r, r, r);
+    m.material.opacity = (1 - p) * 0.85;
+  }
+  for (; k < pool.length; k++) pool[k].visible = false;
+}
