@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Original 120 BPM score + sound effects for the Takk krónur film.
+Original 110 BPM score + sound effects for the Gleðipeningar film.
 Reads out/meta.json (scene timeline and sound cues exported from the page) and writes audio/out/mix.wav.
 Every sound is synthesised here; no samples are used.
 """
@@ -19,7 +19,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 META = json.load(open(os.path.join(ROOT, 'out', 'meta.json')))
 DUR = float(META['duration'])
 N = int(round(DUR * SR))
-BEAT, BAR = 0.5, 2.0
+BPM = 110
+BEAT = 60 / BPM
+BAR = 4 * BEAT
+
+
+def bt(n):
+    """Beats to seconds."""
+    return n * BEAT
+
+
 STEP = BEAT / 4
 NBARS = int(np.ceil(DUR / BAR))
 
@@ -37,47 +46,86 @@ CH = {
     'Csus': dict(root=36, notes=[53, 55, 60, 65]),   # Csus4
     'F9': dict(root=29, notes=[57, 60, 64, 67, 69]),  # Fmaj9
 }
-LOOP = ['F', 'C/E', 'Dm', 'Bb']
-SPECIAL = {21: 'Bb', 22: 'Csus', 31: 'Dm', 32: 'Bb', 33: 'F', 34: 'Bb', 35: 'Dm', 36: 'Bb', 37: 'Csus', 44: 'F9', 45: 'F9'}
+# One chord per bar, laid out against the chapter map (4 beats per bar).
+PLAN = (
+    ['F', 'C/E', 'Dm']                                    # 0-1 coin, 2 chapter 1 card
+    + ['Bb', 'F', 'C/E', 'Dm', 'Bb', 'F', 'C/E']          # 3-9 crowd, free, store
+    + ['Dm']                                              # 10 chapter 2 card
+    + ['Bb', 'F', 'C/E', 'Dm', 'Bb']                      # 11-15 how it works
+    + ['Csus']                                            # 16 chapter 3 card
+    + ['F', 'C/E', 'Dm', 'Bb', 'F', 'C/E', 'Bb']          # 17-23 discount vs credit, flow
+    + ['Dm']                                              # 24 chapter 4 card
+    + ['Bb', 'F', 'C/E', 'Dm', 'Bb', 'F', 'C/E', 'Dm']    # 25-32 thin margins, chart, 15 %
+    + ['Bb']                                              # 33 chapter 5 card
+    + ['Dm', 'Bb', 'Csus', 'Csus']                        # 34-37 build: margins, offers
+    + ['F', 'C/E', 'Dm']                                  # 38-40 DROP: gleðipeningar
+    + ['Bb']                                              # 41 idea 1 card
+    + ['F', 'C/E', 'Dm', 'Bb', 'C/E']                     # 42-46 the math
+    + ['Dm']                                              # 47 idea 2 card
+    + ['Dm', 'Bb']                                        # 48-49 friday night
+    + ['F', 'Bb']                                         # 50-51 saturday morning
+    + ['Dm']                                              # 52 idea 3 card
+    + ['Bb', 'Csus']                                      # 53-54 goal build
+    + ['F', 'C/E']                                        # 55-56 unlocked
+    + ['Dm', 'Bb', 'Csus']                                # 57-59 closing lines
+    + ['F9', 'F9', 'F9', 'F9']                            # 60- end card
+)
+CARDS = [2, 10, 16, 24, 33, 41, 47, 52]
 
 
 def chord(bar):
-    return SPECIAL.get(bar, LOOP[bar % 4])
+    return PLAN[min(bar, len(PLAN) - 1)]
 
 
-# ---------------------------------------------------------------- arrangement (per 2-second bar)
+# ---------------------------------------------------------------- arrangement (per bar)
 def section(bar):
-    s = dict(kick=0, clap=0, hats=0, open=0, bass=None, chords=0, cut=2200, pad=0, arp=0, lead=0, bells=0)
+    s = dict(kick=0, clap=0, hats=0, open=0, bass=None, chords=0, cut=2200, pad=0, arp=0, lead=0, bells=0, half=0)
     if bar <= 1:  # coin
         s.update(hats=1 if bar == 1 else 0, chords=0.55, cut=900 + bar * 700, pad=0.5)
-    elif bar <= 7:  # 65.000, how it works
+    elif bar in CARDS:  # chapter cards: half-time breath, long bass, open pad
+        dark = bar in (24, 47)
+        s.update(kick=1, half=1, bass='long', chords=0.6, cut=900 if dark else 1300, pad=0.8)
+    elif bar <= 4:  # 65.000
         s.update(kick=1, clap=1, hats=1, bass='off', chords=1, cut=2100)
-    elif bar <= 12:  # discount, butter, chart rises
-        s.update(kick=1, clap=1, hats=2, bass='off', chords=1, cut=2400, arp=0.8)
-    elif bar <= 16:  # 15 %, Refurinn
-        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2700, arp=1, bells=1)
-    elif bar <= 20:  # why it works
+    elif bar <= 9:  # free, no risk, the store
+        s.update(kick=1, clap=1, hats=2, bass='off', chords=1, cut=2300, arp=0.7)
+    elif bar <= 15:  # how it works, 1 tkr = 1 kr
+        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2500, arp=0.8, bells=1 if bar >= 14 else 0)
+    elif bar <= 20:  # discount vs credit
+        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2600, arp=0.6)
+    elif bar <= 23:  # the two lanes: rolling bass for the constant flow
         s.update(kick=1, clap=1, hats=2, bass='roll', chords=1, cut=2500, arp=0.7)
-    elif bar <= 22:  # pivot breakdown
-        s.update(pad=1, bass='long', chords=0.5, cut=700 + (bar - 21) * 900)
-    elif bar <= 30:  # drop: offers + the math
-        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2600, arp=0.8, lead=1)
-    elif bar <= 32:  # friday night, muffled club
+    elif bar <= 28:  # the flaw: thin margins, chart rises
+        s.update(kick=1, clap=0.8, hats=1, bass='off', chords=0.9, cut=1600 + (bar - 25) * 200)
+    elif bar <= 32:  # 15 %, Refurinn
+        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2500, arp=0.8, bells=1 if bar >= 30 else 0)
+    elif bar <= 37:  # build into the drop
+        k = bar - 34
+        s.update(kick=1, clap=0 if k == 0 else 1, hats=1 if k < 2 else 2, bass='off' if k > 0 else 'long', chords=0.8, cut=1100 + k * 450, arp=0.3 + k * 0.2, pad=0.5 if k < 2 else 0)
+    elif bar <= 40:  # DROP: gleðipeningar
+        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2800, arp=0.8, lead=1)
+    elif bar <= 46:  # idea 1: the math
+        s.update(kick=1, clap=1, hats=2, bass='off', chords=1, cut=2500, arp=0.6, lead=0.6 if bar >= 45 else 0)
+    elif bar <= 49:  # friday night, muffled club
         s.update(kick=1, clap=0.7, hats=1, bass='club', chords=0.8, cut=650)
-    elif bar <= 34:  # saturday morning
+    elif bar <= 51:  # saturday morning
         s.update(pad=0.9, bells=1)
-    elif bar <= 37:  # goal build
-        s.update(kick=1, hats=1 if bar == 35 else 2, clap=0 if bar == 35 else 1, bass='off', chords=0.8, cut=1400 + (bar - 35) * 700, arp=0.5 + (bar - 35) * 0.25)
-    elif bar <= 41:  # unlocked, cost
-        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2600, arp=0.8, lead=1)
-    elif bar <= 43:  # closing lines
-        s.update(kick=1, clap=0.6, hats=1, bass='off', chords=0.9, cut=1700 - (bar - 42) * 500, pad=0.4)
+    elif bar <= 54:  # goal build
+        k = bar - 53
+        s.update(kick=1, hats=1 + k, clap=k, bass='off', chords=0.8, cut=1500 + k * 800, arp=0.5 + k * 0.3)
+    elif bar <= 56:  # unlocked
+        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2800, arp=0.8, lead=1)
+    elif bar <= 59:  # closing lines
+        s.update(kick=1, clap=0.6, hats=1, bass='off', chords=0.9, cut=2000 - (bar - 57) * 400, pad=0.4)
     return s
 
 
 SEC = [section(b) for b in range(NBARS)]
-KICK_BREAKS = [(25.5, 26.0), (65.62, 66.0)]  # no kick in these windows
-STOP = (65.62, 66.0)  # tape stop when the bar's lights go out
+LIGHTS_OUT = bt(199.25)
+STOP = (LIGHTS_OUT, bt(200))  # tape stop when the bar's lights go out
+KICK_BREAKS = [(bt(151.5), bt(152)), STOP, (bt(219.5), bt(220))]  # no kick in these windows
+ROLLS = [(bt(118), bt(120), 0.08, 0.42), (bt(148), bt(152), 0.05, 0.45), (bt(218), bt(220), 0.08, 0.45)]
+FINAL = bt(240)
 
 
 def in_break(t):
@@ -96,7 +144,7 @@ def drums():
             t = bar * BAR + step * STEP
             if t >= DUR - 0.01:
                 break
-            if s['kick'] and step % 4 == 0 and not in_break(t):
+            if s['kick'] and step % (8 if s['half'] else 4) == 0 and not in_break(t):
                 place(d, K, t, 0.9)
                 kicks.append(t)
             if s['clap'] and step in (4, 12) and not in_break(t):
@@ -110,7 +158,7 @@ def drums():
                 place(d, pan(HO, 0.3), t, 0.12)
     # snare rolls into the big moments
     SN = snare(7)
-    for a, b_, g0, g1 in [(25.0, 26.0, 0.12, 0.42), (44.0, 46.0, 0.06, 0.45), (74.0, 76.0, 0.08, 0.45)]:
+    for a, b_, g0, g1 in ROLLS:
         n = int(round((b_ - a) / STEP))
         for i in range(n):
             t = a + i * STEP
@@ -120,8 +168,8 @@ def drums():
                 g = g0 + (g1 - g0) * (i / n)
                 place(d, pan(SN, (0.15 if i % 2 else -0.15)), tt, g)
     # the last hit
-    place(d, K, 88.0, 1.0)
-    kicks.append(88.0)
+    place(d, K, FINAL, 1.0)
+    kicks.append(FINAL)
     return d, kicks
 
 
@@ -192,7 +240,7 @@ def chord_stabs():
         pattern = STAB if bar > 1 else [0, 6, 10]
         for st in pattern:
             t = bar * BAR + st * STEP
-            if t >= DUR or (STOP[0] <= t < STOP[1] + 0.3 and bar == 32 and st >= 10):
+            if t >= DUR or STOP[0] <= t < STOP[1]:
                 continue
             x = sum(pluck(mtof(m), 0.42, cutoff=s['cut'], tau=0.12, seed=m) for m in notes) / len(notes)
             place2(out, x * 0.55 * s['chords'], t)
@@ -208,7 +256,7 @@ def pads():
         notes = CH[chord(bar)]['notes']
         n = int(SR * (BAR + 1.2))
         env = adsr(n, a=0.35, d=0.4, s=0.85, r=1.1, hold=BAR)
-        x = sum(pad_voice(mtof(m), n, cutoff=1500 if bar != 22 else 2600, seed=m) for m in notes) / len(notes)
+        x = sum(pad_voice(mtof(m), n, cutoff=1500 if bar not in CARDS else 1900, seed=m) for m in notes) / len(notes)
         place2(out, x * env * 0.5 * s['pad'], bar * BAR)
     return out
 
@@ -238,7 +286,7 @@ def bells():
         if not s['bells']:
             continue
         notes = [m + 24 for m in CH[chord(bar)]['notes']]
-        hits = [0, 6, 10] if bar >= 33 else [2, 10]
+        hits = [0, 6, 10] if 50 <= bar <= 51 else [2, 10]
         for k, st in enumerate(hits):
             t = bar * BAR + st * STEP
             m = notes[(k + bar) % len(notes)]
@@ -275,12 +323,12 @@ def lead():
 def final_chord():
     out = np.zeros(N)
     notes = CH['F9']['notes'] + [53, 41]
-    n = int(SR * 3.0)
-    env = expdec(n, 1.1, 0.004)
+    n = int(SR * 5.4)
+    env = expdec(n, 1.8, 0.004)
     x = sum(pad_voice(mtof(m), n, cutoff=3200, voices=5, seed=m) for m in notes) / len(notes)
-    place2(out, x * env * 0.7, 88.0)
-    for m in [69, 72, 76, 81]:
-        place2(out, fm_bell(mtof(m), 2.6, ratio=3.5, index=1.4, tau=1.0) * 0.12, 88.0)
+    place2(out, x * env * 0.7, FINAL)
+    for k, m in enumerate([69, 72, 76, 81]):
+        place2(out, fm_bell(mtof(m), 3.2, ratio=3.5, index=1.4, tau=1.2) * 0.12, FINAL + k * BEAT / 2)
     return out
 
 
@@ -755,36 +803,41 @@ def main():
     ld = lead()
     fin = final_chord()
 
-    DROP = [(46, 62), (76, 84)]
+    DROP = [(bt(152), bt(164)), (bt(220), bt(228))]
+    DOT8 = BEAT * 0.75  # dotted eighth
     print('effects + gain staging...')
     drums_b = stage(fx_board(dr, Pedalboard([HighpassFilter(34), Reverb(room_size=0.25, damping=0.7, wet_level=0.08, dry_level=1.0)])), -17.5, DROP)
     bass_b = stage(fx_board(pan(bs, 0), Pedalboard([HighpassFilter(36)])), -18.8, DROP)
     chords_b = stage(fx_board(widen(chd, 12, 0.55), Pedalboard([Chorus(rate_hz=0.6, depth=0.25, mix=0.3), Reverb(room_size=0.45, damping=0.6, wet_level=0.18, dry_level=0.9, width=1.0)])), -23.5, DROP)
-    pad_b = stage(fx_board(widen(pd, 18, 0.7), Pedalboard([Chorus(rate_hz=0.3, depth=0.4, mix=0.5), Reverb(room_size=0.85, damping=0.5, wet_level=0.35, dry_level=0.75, width=1.0)])), -25.0, [(42, 46), (66, 70)])
-    arp_b = stage(fx_board(pan(ar, -0.25), Pedalboard([Delay(delay_seconds=0.375, feedback=0.28, mix=0.22), Reverb(room_size=0.6, wet_level=0.22, dry_level=0.85)])), -30.0, [(16, 26), (46, 62)])
-    bell_b = stage(fx_board(pan(bl, 0.3), Pedalboard([Reverb(room_size=0.8, wet_level=0.35, dry_level=0.8)])), -29.0, [(26, 34), (66, 70)])
-    lead_b = stage(fx_board(pan(ld, 0.05), Pedalboard([Delay(delay_seconds=0.375, feedback=0.3, mix=0.2), Reverb(room_size=0.55, wet_level=0.2, dry_level=0.9)])), -24.0, DROP)
-    fin_b = stage(fx_board(widen(fin, 15, 0.7), Pedalboard([Reverb(room_size=0.9, damping=0.4, wet_level=0.45, dry_level=0.8, width=1.0)])), -19.0, [(88, 89.5)])
+    pad_b = stage(fx_board(widen(pd, 18, 0.7), Pedalboard([Chorus(rate_hz=0.3, depth=0.4, mix=0.5), Reverb(room_size=0.85, damping=0.5, wet_level=0.35, dry_level=0.75, width=1.0)])), -25.0, [(bt(200), bt(208)), (bt(132), bt(136))])
+    arp_b = stage(fx_board(pan(ar, -0.25), Pedalboard([Delay(delay_seconds=DOT8, feedback=0.28, mix=0.22), Reverb(room_size=0.6, wet_level=0.22, dry_level=0.85)])), -30.0, [(bt(44), bt(64)), (bt(152), bt(164))])
+    bell_b = stage(fx_board(pan(bl, 0.3), Pedalboard([Reverb(room_size=0.8, wet_level=0.35, dry_level=0.8)])), -29.0, [(bt(200), bt(208)), (bt(120), bt(132))])
+    lead_b = stage(fx_board(pan(ld, 0.05), Pedalboard([Delay(delay_seconds=DOT8, feedback=0.3, mix=0.2), Reverb(room_size=0.55, wet_level=0.2, dry_level=0.9)])), -24.0, DROP)
+    fin_b = stage(fx_board(widen(fin, 15, 0.7), Pedalboard([Reverb(room_size=0.9, damping=0.4, wet_level=0.45, dry_level=0.8, width=1.0)])), -19.0, [(FINAL, FINAL + 1.5)])
     music = drums_b + bass_b + chords_b + pad_b + arp_b + bell_b + lead_b + fin_b
     for name, x in [('drums', drums_b), ('bass', bass_b), ('chords', chords_b), ('lead', lead_b)]:
         print(f'  {name:7s} drop rms {10*np.log10(power(x, DROP)):.1f} dB')
     # crashes and reverse swells at the big moments
     CR = crash(5)
-    for t in [4.0, 26.0, 46.0, 76.0, 88.0]:
-        place(music, widen(CR, 9, 0.6), t, 0.05)
-    for t in [46.0, 76.0]:
+    # a crash where each answer starts after its chapter card, and on the big hits
+    for t in [12, 44, 68, 100, 120, 152, 168, 192, 212, 220, 240]:
+        place(music, widen(CR, 9, 0.6), bt(t), 0.05 if t not in (152, 220, 240) else 0.065)
+    for t in [152, 220]:
         rc = crash(8, 1.2)[::-1]
-        place(music, widen(rc, 9, 0.6), t - len(rc) / SR, 0.035)
-    rz = sfx_riser(2.0)
-    place(music, rz / np.max(np.abs(rz)), 74.0, 0.12)
+        place(music, widen(rc, 9, 0.6), bt(t) - len(rc) / SR, 0.035)
+    for a, b_ in [(bt(144), bt(152)), (bt(216), bt(220))]:
+        rz = sfx_riser(b_ - a)
+        place(music, rz / np.max(np.abs(rz)), a, 0.12)
     # tonal balance: warmer lows, less 2-3 kHz bite
     music = fx_board(music, Pedalboard([LowShelfFilter(cutoff_frequency_hz=140, gain_db=4.5, q=0.7), PeakFilter(cutoff_frequency_hz=320, gain_db=2.0, q=0.8),
                                         PeakFilter(cutoff_frequency_hz=2400, gain_db=-4.5, q=0.8), HighShelfFilter(cutoff_frequency_hz=9000, gain_db=1.0, q=0.7)]))
     music = tape_stop(music, *STOP)
-    music[:, int(STOP[1] * SR): int(66.02 * SR)] = 0
+    music[:, int(STOP[1] * SR): int((STOP[1] + 0.02) * SR)] = 0
     # section dynamics: the breakdown sits lower so the drop lands
     tt = secs(N)
-    sec_db = np.interp(tt, [0, 42.0, 42.3, 44.0, 45.9, 46.0, 91], [0, 0, -6, -5, -1.5, 0, 0])
+    sec_db = np.interp(tt, [0, bt(136), bt(136.3), bt(144), bt(151.9), bt(152), DUR + 1], [0, 0, -5, -4, -1.5, 0, 0])
+    for c in CARDS:  # chapter cards sit a little lower so the answers land
+        sec_db += np.interp(tt, [bt(c * 4) - 0.05, bt(c * 4) + 0.1, bt(c * 4 + 3.6), bt(c * 4 + 4)], [0, -2.0, -2.0, 0], left=0, right=0)
     music *= 10 ** (sec_db / 20)
     print(f'  music bus rms (drop) {10*np.log10(power(music, DROP)):.1f} dB')
 

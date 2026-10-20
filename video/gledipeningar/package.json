@@ -1,9 +1,9 @@
 {
-  "name": "takk-kronur-video",
+  "name": "gledipeningar-video",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Motion-graphics explainer about Takk krónur, rendered frame by frame with Three.js, Playwright and FFmpeg.",
+  "description": "Motion-graphics pitch for Gleðipeningar, rendered frame by frame with Three.js, Playwright and FFmpeg.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "render": "node scripts/render.mjs",

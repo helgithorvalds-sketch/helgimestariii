@@ -1,6 +1,6 @@
 // Parallel frame renderer.
 //   node scripts/render.mjs [--workers=3] [--only=sceneId,...] [--chunk=240] [--fps=60] [--concat-only]
-// Each job renders a frame range of one scene and pipes PNGs into an ffmpeg segment (out/seg/*.mp4).
+// Each job renders a frame range of one scene and pipes JPEG frames into an ffmpeg segment (out/seg/*.mp4).
 // When everything is rendered the segments are concatenated into out/video.mp4.
 import fs from 'fs';
 import path from 'path';
@@ -58,7 +58,7 @@ const todo = jobs.reduce((n, j) => n + j.b - j.a, 0);
 
 function encoder(file) {
   const ff = spawn('ffmpeg', [
-    '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
+    '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-preset', 'fast', '-crf', '11', '-pix_fmt', 'yuv420p',
     '-vf', 'scale=out_color_matrix=bt709:out_range=tv:flags=bicubic+accurate_rnd+full_chroma_int',
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-g', String(FPS), '-an', file,
@@ -78,7 +78,8 @@ async function worker(id) {
     const js = Date.now();
     for (let f = job.a; f < job.b; f++) {
       await page.evaluate((t) => window.seek(t), f / FPS);
-      const r = await cdp.send('Page.captureScreenshot', { format: 'png' });
+      // JPEG at q95: PNG encoding in the browser cost more than rendering the frame
+      const r = await cdp.send('Page.captureScreenshot', { format: 'jpeg', quality: 95 });
       const buf = Buffer.from(r.data, 'base64');
       if (!ff.stdin.write(buf)) await new Promise((res) => ff.stdin.once('drain', res));
       done++;

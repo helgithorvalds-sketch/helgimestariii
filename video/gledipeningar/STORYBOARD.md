@@ -1,86 +1,96 @@
-# Takk krónur: storyboard
+# Gleðipeningar: storyboard
 
-A 90-second, 16:9 (1920x1080, 60 fps) motion-graphics explainer. It explains how Takk krónur work at Hagkaup and Bónus, then pitches the same model to restaurants and bars.
+A 136-second, 16:9 (1920x1080, 60 fps) motion-graphics pitch. Takk krónur is used to explain the mechanism. The pitch is **Gleðipeningar** ("happy money"), the same idea built for restaurant and bar chains.
 
-- **Tempo:** 120 BPM. One beat is 0.5 s, one bar is 2 s. Every cut, pop and stamp lands on a beat.
-- **Look:** soft "clay" 3D objects on an endless lilac studio floor, flat 2D infographics on top. Takk's own palette only: purple `#691FE7`, dark purple `#18003E`, lavender `#DBC7FF`, lilac `#E9DFFA`, light purple `#F0EBF7`, white.
-- **Type:** Figtree (a free open-source font that feels close to Takk's Matter typeface). Big headlines, tight tracking, few words per frame.
-- **Sound:** an original synthesized track plus sound effects generated from the same timeline, so every hit is on the grid. No voiceover.
+- **Structure:** five chapters, each opened by a question. The camera zooms into an object, the frame floods with the chapter colour (iris), the question card appears, and the answer follows. Idea cards inside chapter 5 work the same way.
+- **Tempo:** 110 BPM (a little slower than the first cut). One beat is 0.545 s and one bar is 2.18 s. Every cut, pop and stamp lands on a beat, and each chapter card gets a half-time "breath" in the music.
+- **Look:** soft clay 3D on a lilac studio floor, with flat 2D infographics on top. Takk purple runs through chapters 1–4. Gleðipeningar brings in its own yellow `#FFD24D` with dark ink.
+- **Brand:** Gleðipeningar uses an original mark, a smiling coin, with a lowercase Figtree wordmark. It is a placeholder identity for the pitch.
+- **Sound:** an original synthesized score and sound effects, generated from the same timeline. No voiceover.
 
-## Facts used (sources)
+## Chapter colours
 
-| Fact | Source |
-| --- | --- |
-| Takk is Hagar's loyalty app. You earn at Bónus, Hagkaup and Eldum rétt and spend at Bónus and Hagkaup. | takkkronur.is |
-| 1 tkr = 1 kr. when spent in store. Krónur expire after 2 years. | takkkronur.is |
-| Hagkaup fixed rates: cosmetics 1.5%, specialty goods 1.5%, vitamins 3%, flame-grilled chicken 3%, Skálin and Salatbarinn 5%, Refurinn 15%. | takkkronur.is |
-| 65,000 members. | Hagar, quoted by DV, 4 Sep 2026 |
-| Refurinn is Hagkaup's candy-mix ice cream. | hagkaup.is |
-
-Restaurant and bar numbers (3,000 kr. meal, 40,000 kr. night, 20% back, 20,000 tkr bottle table) are illustrative pitch examples and are presented as such.
-
-## Rules we hold ourselves to (what makes motion graphics look AI-made)
-
-1. No gradient blobs, neon glows, lens flares, sparkles or glassmorphism. Flat brand purple used with confidence.
-2. One focal point per beat. Asymmetric, grid-based layouts, not everything centered.
-3. 3 to 7 words per frame. Text never repeats what the picture already shows.
-4. Motion carries meaning: anticipation, overshoot and settle. No identical fade-ins.
-5. Holds vary. Key numbers get time to land, transitions are fast.
-6. Concrete numbers instead of marketing words.
-7. Sound effects are tied to physical events (coin lands, tag stamps, phone buzzes).
+| Card | Colour | Question |
+| --- | --- | --- |
+| Kafli 1 | purple | Af hverju hafa svona margir skráð sig? |
+| Kafli 2 | lavender | Hvernig virkar Takk? |
+| Kafli 3 | pink | Afsláttur eða inneign? |
+| Kafli 4 | ink | Hver er gallinn? |
+| Kafli 5 · Hugmyndin | yellow | Hvað ef veitingastaðir gerðu það sama? |
+| Hugmynd 1, 2, 3 | yellow | Tilboð / Stóra kvöldið / Verðlaun |
 
 ## Script
 
 | Time | Beats | Scene | Picture | On-screen text (Icelandic) | Sound |
 | --- | --- | --- | --- | --- | --- |
-| 0:00 | 0-8 | **1. Coin** | A purple Takk coin falls, bounces twice, spins down like a settling coin. Camera cranes to top-down and dives into the face. | Takk krónur | whoosh, two clinks, accelerating coin rattle |
-| 0:04 | 8-16 | **2. 65.000** | Tiny clay people pop up across the floor in waves while a counter rolls to 65.000. | 65.000 / manns safna Takk krónum / í Bónus, Hagkaup og Eldum rétt | rising pops, chord stab on 65.000 |
-| 0:08 | 16-32 | **3. How it works** | A phone with the Takk card taps a card terminal. Coins arc out of the receipt into the phone. The coin flips to show 1 tkr = 1 kr. | Þú verslar. / Hluti verðsins kemur til baka. / 1 tkr = 1 kr. | beep, coin ticks, flip |
-| 0:16 | 32-36 | **4. Not a discount** | A pink "-20%" price tag swings in and flips into a coin. | Ekki afsláttur í dag. / Krónur fyrir næstu ferð. | swing creak, flip |
-| 0:18 | 36-44 | **5. Thin margin** | Butter on a striped cloth (from the reference). A price bar splits into cost and a thin margin sliver, and a tiny coin drops off it. | Matvara: þunn álagning. / lítið til baka | thud, ruler draw, tiny tink |
-| 0:22 | 44-60 | **6. Hagkaup chart** | Six clay bars rise one per beat, each topped by its product. Refurinn's 15% bar shoots past the rest. | Föst söfnun í Hagkaup / labels and % / Heimild: takkkronur.is | pop per bar, riser into 15% |
-| 0:30 | 60-68 | **7. Refurinn** | Camera dives into the Refurinn ice cream. Big extruded "15%". | Meiri álagning. Meira til baka. | impact, sparkle-free bell |
-| 0:34 | 68-84 | **8. Why it works** | Clay people stream into a store. Then one coin loops between the phone and the store, again and again. | Ástæða til að velja búðina. / Og ástæða til að koma aftur. / Krónurnar virka bara þar. | footsteps ticks, loop whoosh |
-| 0:42 | 84-92 | **9. Pivot** | Breakdown. Two margin bars: grocery store (thin) and restaurant (thick). | Álagning / Hvað ef veitingastaðir gerðu það sama? | drums drop out, riser |
-| 0:46 | 92-100 | **10. Offers** | Drop. Offer tags slam in on each beat, then all of them get the same stamp. | Hádegistilboð / Þriðjudagstilboð / Happy hour / 2 fyrir 1 / Gesturinn sparar. Og fer. | four slams, stamp |
-| 0:50 | 100-124 | **11. The math** | Split screen with the same 3,000 kr. burger. Left: 50% off, the guest walks away. Right: 50% back, the guest returns a week later and pays 1,500 tkr + 1,500 kr. Totals tick up. | Sama tilboð. Tvær leiðir. / 50% afsláttur / 50% til baka / Viku seinna / 1 heimsókn / 2 heimsóknir / Sama prósenta. Tvöfalt fleiri heimsóknir. | register, coin, calendar flip, counter ticks |
-| 1:02 | 124-132 | **12. Friday night** | Dark purple bar counter. Cocktails slide in on the beat while a tab climbs to 40,000 kr. | Föstudagskvöld / 40.000 kr. | glass clinks, filtered bass |
-| 1:06 | 132-140 | **13. Saturday morning** | Morning light. A clay character asleep, the phone on the nightstand buzzes, eyes open. | Laugardagsmorgunn / +8.000 tkr | buzz, notification chime |
-| 1:10 | 140-160 | **14. The goal** | An arcade-style progress bar fills over three visits to 20,000 tkr and unlocks a bottle table with ice bucket and glasses. | Markmið: Flöskuborð / Opnað! / Flöskuborð í boði hússins. / eftir 100.000 kr. í viðskiptum | rising coin pitch, unlock fanfare |
-| 1:20 | 160-168 | **15. What it costs** | The bottle's price tag flips over. Then a payment card's fee "%" dissolves next to a coin. | Gesturinn sér 20.000 kr. / Þú borgar innkaupsverðið. / Engin kortagjöld af krónum. | flip, dissolve |
-| 1:24 | 168-180 | **16. Close** | Two lines answer each other, then the Takk logo lands on a purple field. | Afsláttur dregur fólk inn. / Krónur draga það aftur. / Næst á matseðlinum: veitingastaðir. | final clink, chord rings out |
+| 0:00 | 0-8 | **Coin** | The purple Takk coin falls, bounces and spins down. Camera cranes top-down, and purple floods out of the coin face. | Vildarkerfi Haga / Takk krónur | whoosh, clinks, rattle |
+| 0:04 | 8-12 | **Kafli 1** | Purple card. | Af hverju hafa svona margir skráð sig? | impact, half-time beat |
+| 0:07 | 12-20 | **65.000** | Clay people pop up in waves while the counter rolls to 65.000. | 65.000 / manns hafa skráð sig í Takk / í Bónus, Hagkaup og Eldum rétt | pops, stab |
+| 0:11 | 20-32 | **Free, no risk** | A pink "0 kr." tag swings in and flips into a Takk coin, and small coins pop out around it. | Það kostar ekkert að vera með. / Engin áhætta. / Þú getur bara grætt. | swing, flip, coin chimes |
+| 0:17 | 32-40 | **The store** | People stream into a Takk store on the half beats. The camera pushes into the door, and lavender floods the frame. | Og það dregur fólk í búðina. | footstep ticks, whoosh |
+| 0:22 | 40-44 | **Kafli 2** | Lavender card. | Hvernig virkar Takk? | |
+| 0:24 | 44-56 | **How it works** | The phone taps the terminal, the receipt prints, and coins arc into the app. | Þú verslar. / Í stað afsláttar færðu inneign til baka. / Beint inn í appið. | beep, printer, coins |
+| 0:30 | 56-64 | **1 tkr = 1 kr.** | Takk coin = silver krónur coin. Camera dives into the Takk coin, and pink floods the frame. | 1 tkr = 1 kr. / en bara í Bónus og Hagkaup. | pops, thock |
+| 0:35 | 64-68 | **Kafli 3** | Pink card. | Afsláttur eða inneign? | |
+| 0:37 | 68-76 | **Discount** | Your store between a pink and a mint shop. Shoppers walk out of yours carrying silver "kr" coins and spend them next door. | Afsláttur / Afsláttinn má nota hvar sem er. | coin on each spend |
+| 0:41 | 76-84 | **Credit** | The other shops pop away. Shoppers arrive from both sides carrying Takk coins and bring them back into your store. | Inneign / Inneignina má bara nota hjá þér. / Peningarnir haldast í keðjunni. | pops, coins |
+| 0:46 | 84-96 | **Two lanes** | Replaces the old loop. Two straight lanes to the door with moving arrows, one in and one out, in a constant flow with a coin over every head. Camera pushes into the sign, and ink floods the frame. | Inneign fær fólk til að koma aftur. / Út með inneign. / Inn aftur til að nota hana. / Inn · Út | rolling bass, soft ticks |
+| 0:52 | 96-100 | **Kafli 4** | Ink card. | Hver er gallinn? | dark half-time |
+| 0:55 | 100-112 | **Thin margins** | Butter. A price bar splits off a thin margin sliver, and one tiny coin drops: +40 kr. on a 4.000 kr. basket. | Matvara / Þunn álagning. / +40 kr. af 4.000 kr. körfu / 40 krónur skipta litlu. / Lítil ástæða til að opna appið. | thud, ruler, tink |
+| 1:01 | 112-132 | **Hagkaup rates** | Six bars rise on the beat. Refurinn shoots to 15%, the camera dives in, and yellow floods out of the ice cream. | Meiri álagning. Meira til baka. / Refurinn 15% / Flest annað: 1–3%. | pops, riser, snare roll, bell |
+| 1:12 | 132-136 | **Kafli 5** | Yellow card. | Hugmyndin / Hvað ef veitingastaðir gerðu það sama? | build starts |
+| 1:14 | 136-144 | **Margins** | Margin bars: grocery store (short) and restaurant & bar (long, yellow). | Álagning / Meira svigrúm til að gefa til baka. | ruler draws |
+| 1:19 | 144-152 | **Offers** | Offer tags slam in on each beat, then get pulled up and away before the drop. | Hádegistilboð / Þriðjudagstilboð / Happy hour / 2 fyrir 1 / Og þeir eru nú þegar með tilboð. | slams, snare roll, riser |
+| 1:23 | 152-158 | **DROP: Gleðipeningar** | The yellow smiling coin slams in with a flash and a ring, and the wordmark types in letter by letter. | Hugmyndin / gleðipeningar / Eins og Takk. Fyrir veitingastaði. | impact, crash, lead melody |
+| 1:26 | 158-164 | **Same benefit** | Butter with one small Takk coin (+20 kr.) against a burger with a fast-growing stack of yellow coins (+1.000 kr.). Camera rises to the stack, and yellow floods the frame. | Takk · matvara / Gleðipeningar · veitingastaður / +20 kr. á smjörstykki / +1.000 kr. á þriðjudagstilboði / Sami ávinningur. Án gallans. | tink, coin cascade, stab |
+| 1:29 | 164-168 | **Hugmynd 1** | Yellow card. | Tilboð | |
+| 1:32 | 168-182 | **The math** | Split screen with a 2.000 kr. sandwich. Left: three at 50% off, 3.000 kr. in the till, then nothing. Right: two at full price, 4.000 kr. in the till, +2.000 kr. credit, a week later the third sandwich is free. | Hádegistilboð: 3 samlokur / 50% afsláttur / 50% til baka / Í kassann / +2.000 kr. inneign / Viku seinna / Frítt / 1 heimsókn / 2 heimsóknir | register, coins, flip, counter |
+| 1:39 | 182-188 | **Punch** | Purple field. A yellow smiling coin pops up, and yellow floods out of it. | Sömu 3 samlokur. / 1.000 kr. meira í kassann. / Og gesturinn kom aftur. | impact, stab |
+| 1:43 | 188-192 | **Hugmynd 2** | Yellow card. | Stóra kvöldið | |
+| 1:45 | 192-200 | **Friday night** | Drinks slide down the bar on the beat. On the left the spend climbs to 50.000 kr. On the right the credit ticks up to +8.000 kr. (16%). Lights out. | Föstudagskvöld / Eytt / Til baka · 16% | glass clinks, muffled club, tape stop |
+| 1:49 | 200-208 | **Saturday morning** | The sleeper wakes, and the phone shows a Gleðipeningar notification. A second popup nudges a return visit. Camera dives into the phone, and yellow floods the frame. | Laugardagsmorgunn / Þú fékkst inneign frá barnum. / +8.000 kr. / Inneignin bíður. 8.000 kr. á barnum. Kíkirðu í kvöld? / Bóka borð | buzz, notification, chime |
+| 1:54 | 208-212 | **Hugmynd 3** | Yellow card. | Verðlaun | |
+| 1:56 | 212-220 | **The goal** | An arcade progress bar tracks real spend toward 300.000 kr. Each visit shows what was spent and the credit that came back. | Markmið / Flöskuborð / eftir 300.000 kr. í viðskiptum / Föstudagur 50.000 kr. +8.000 kr. / Afmæli 100.000 kr. +16.000 kr. / Jólahlaðborð 150.000 kr. +24.000 kr. / Inneign safnað 48.000 kr. | level-up per visit, snare roll |
+| 2:00 | 220-228 | **Unlocked** | The lock flies off, and the bottle table appears with the bottle standing in the ice bucket and a sparkler. | Opnað! / Flöskuborð í boði hússins. | unlock, crash, lead melody |
+| 2:04 | 228-240 | **Close** | The yellow coin turns on every bar. Camera dives into it, and yellow floods the frame. | Afsláttur fær fólk inn. / Inneign fær það inn og heldur því í keðjunni. | swooshes |
+| 2:11 | 240-250 | **End card** | Yellow field with the Gleðipeningar logo. | gleðipeningar / Vildarkerfi fyrir veitingastaði. | final hit, F major 9 rings out |
 
 ## On-screen text with English gloss
 
 | Icelandic | English |
 | --- | --- |
-| Vildarkerfi Haga / Takk krónur | Hagar's loyalty programme / Takk krónur |
-| 65.000 manns safna Takk krónum í Bónus, Hagkaup og Eldum rétt | 65,000 people collect Takk krónur at Bónus, Hagkaup and Eldum rétt |
-| Þú verslar. Hluti verðsins kemur til baka. | You shop. Part of the price comes back. |
-| 1 tkr = 1 kr. þegar þú notar þær í Bónus og Hagkaup | 1 tkr = 1 kr. when you use them at Bónus and Hagkaup |
-| Ekki afsláttur í dag. Krónur fyrir næstu ferð. | Not a discount today. Krónur for the next trip. |
-| Matvara: þunn álagning. Innkaupsverð / Álagning / lítið til baka | Groceries: thin margin. Cost price / Margin / little back |
-| Föst söfnun Takk króna í Hagkaup. Heimild: takkkronur.is | Fixed Takk króna earning at Hagkaup. Source: takkkronur.is |
-| Meiri álagning. Meira til baka. | Bigger margin. More back. |
-| Hæsta hlutfallið: Refurinn, ís með nammi að eigin vali | Highest rate: Refurinn, ice cream with candy of your choice |
-| Ástæða til að velja búðina. Og ástæða til að koma aftur. Krónurnar virka bara þar. | A reason to pick the shop. And a reason to come back. The krónur only work there. |
-| Álagning: Matvöruverslun / Veitingastaður & bar | Margin: grocery store / restaurant & bar |
+| Af hverju hafa svona margir skráð sig? | Why have so many people signed up? |
+| manns hafa skráð sig í Takk | people have signed up for Takk |
+| Það kostar ekkert að vera með. / Engin áhætta. / Þú getur bara grætt. | It costs nothing to join. / No risk. / You can only gain. |
+| Og það dregur fólk í búðina. | And it draws people into the store. |
+| Hvernig virkar Takk? | How does Takk work? |
+| Í stað afsláttar færðu inneign til baka. Beint inn í appið. | Instead of a discount you get credit back. Straight into the app. |
+| 1 tkr = 1 kr. en bara í Bónus og Hagkaup. | 1 tkr = 1 kr., but only at Bónus and Hagkaup. |
+| Afsláttur eða inneign? | Discount or credit? |
+| Afsláttinn má nota hvar sem er. | The discount can be spent anywhere. |
+| Inneignina má bara nota hjá þér. Peningarnir haldast í keðjunni. | The credit can only be spent with you. The money stays in the chain. |
+| Inneign fær fólk til að koma aftur. Út með inneign. Inn aftur til að nota hana. | Credit makes people come back. Out with credit. Back in to use it. |
+| Hver er gallinn? | What's the catch? |
+| Þunn álagning. 40 krónur skipta litlu. Lítil ástæða til að opna appið. | Thin margins. 40 krónur barely matter. Little reason to open the app. |
+| Meiri álagning. Meira til baka. Flest annað: 1–3%. | Higher margin, more back. Most other things: 1–3%. |
 | Hvað ef veitingastaðir gerðu það sama? | What if restaurants did the same? |
-| Hádegistilboð, Þriðjudagstilboð, Happy hour, 2 fyrir 1 | Lunch deal, Tuesday deal, happy hour, 2 for 1 |
-| Gesturinn sparar. Og fer. | The guest saves. And leaves. |
-| Sama tilboð. Tvær leiðir. 50% afsláttur / 50% til baka | Same offer. Two ways. 50% off / 50% back |
-| Viku seinna. Engin ástæða til að koma aftur. | A week later. No reason to come back. |
-| 1 heimsókn, 1.500 kr. í kassann / 2 heimsóknir, 4.500 kr. í kassann | 1 visit, 1,500 kr. in the till / 2 visits, 4,500 kr. in the till |
-| Sama prósenta. Gesturinn kemur aftur. | Same percentage. The guest comes back. |
-| Föstudagskvöld, 40.000 kr. | Friday night, 40,000 kr. |
-| Laugardagsmorgunn. Þú fékkst Takk krónur frá barnum. +8.000 tkr | Saturday morning. You got Takk krónur from the bar. +8,000 tkr |
-| Markmið: Flöskuborð. 1., 2., 3. ferð. Opnað! | Goal: bottle table. 1st, 2nd, 3rd visit. Unlocked! |
-| Flöskuborð í boði hússins, eftir 100.000 kr. í viðskiptum | Bottle table on the house, after 100,000 kr. of business |
-| Gesturinn sér 20.000 kr. Þú borgar innkaupsverðið. | The guest sees 20,000 kr. You pay the cost price. |
-| Engin kortagjöld af krónum. | No card fees on krónur. |
-| Afsláttur dregur fólk inn. Krónur draga það aftur. | Discounts pull people in. Krónur pull them back. |
-| Næst á matseðlinum: veitingastaðir. | Next on the menu: restaurants. |
+| Meira svigrúm til að gefa til baka. | More room to give back. |
+| Og þeir eru nú þegar með tilboð. | And they already run offers. |
+| Eins og Takk. Fyrir veitingastaði. | Like Takk. For restaurants. |
+| Sami ávinningur. Án gallans. | Same benefit. Without the catch. |
+| Sömu 3 samlokur. 1.000 kr. meira í kassann. Og gesturinn kom aftur. | Same 3 sandwiches. 1,000 kr. more in the till. And the guest came back. |
+| Stóra kvöldið / Inneignin bíður. Kíkirðu í kvöld? Bóka borð | The big night / Your credit is waiting. Stopping by tonight? Book a table |
+| Verðlaun / Flöskuborð í boði hússins. | Rewards / A bottle table on the house. |
+| Afsláttur fær fólk inn. Inneign fær það inn og heldur því í keðjunni. | A discount brings people in. Credit brings them in and keeps them in your chain. |
+| Vildarkerfi fyrir veitingastaði. | A loyalty programme for restaurants. |
 
-## Key frames
+## Facts used (sources)
 
-`storyboard/` holds one rendered key frame per scene, made with the same engine as the final video.
+| Fact | Source |
+| --- | --- |
+| Takk is Hagar's loyalty app: earn at Bónus, Hagkaup and Eldum rétt, spend at Bónus and Hagkaup. Joining is free. | takkkronur.is |
+| 1 tkr = 1 kr. when spent in store. | takkkronur.is |
+| Hagkaup fixed rates: cosmetics 1.5%, specialty goods 1.5%, vitamins 3%, flame-grilled chicken 3%, Skálin and Salatbarinn 5%, Refurinn 15%. | takkkronur.is |
+| 65,000 members. | Hagar, quoted by DV, 4 Sep 2026 |
+
+The grocery basket (+40 kr. on 4.000 kr.), the restaurant and bar figures (2.000 kr. sandwich, 50.000 kr. night with 16% back, the 300.000 kr. goal) and the 1.000 kr. Tuesday-offer example are illustrative pitch numbers.
