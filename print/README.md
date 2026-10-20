@@ -85,3 +85,11 @@ python3 print/assemble.py raster.pdf out.pdf 1=pdf/T1_bleed.pdf 2=...
 Afsláttarmiðarnir sex eru til sem 871 px PNG í sama artifacti; `vector/find_coupons.py`
 finnur staðsetningu þeirra á bláu afsláttarmiðasíðunni og `vector/composite_coupons.py`
 límir þá yfir í 300 dpi útgáfunni.
+
+## 5. Afsláttarmiðahringurinn (síða 3)
+
+Hringurinn í bókinni var lítil mynd (hver miði ~250 px). `vector/ring.py` beygir
+871 px miðana sex utan um sívalning með CSS 3D og `vector/shot.js` render-ar hann í
+þrefaldri upplausn með gegnsæjum bakgrunni. `vector/build_ring_pages.py` setur hann
+inn í beige Afslaettir-síðuna og í endurgerða bláa síðu (`vector/Afsl_BLA_src.html`,
+vektor-texti, sama útlit og í bókinni).
