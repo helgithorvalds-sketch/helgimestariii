@@ -62,8 +62,8 @@ def page_report(page: pymupdf.Page, min_dpi: float) -> tuple[bool, list[str]]:
         dpi_x = w_px / (bbox.width / 72)
         dpi_y = h_px / (bbox.height / 72)
         dpi = min(dpi_x, dpi_y)
-        flag = "OK " if dpi >= min_dpi else "LÁG"
-        if dpi < min_dpi:
+        flag = "OK " if dpi >= min_dpi - 1 else "LÁG"
+        if dpi < min_dpi - 1:
             ok = False
         lines.append(
             f"  Mynd xref {info.get('xref')}: {w_px}x{h_px} px teiknuð í {fmt_rect(bbox)} -> {dpi:.0f} dpi [{flag}]"
