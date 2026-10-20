@@ -67,3 +67,21 @@ Athugið: þetta gerir skjalið prenthæft (300 dpi, blæði) en upprunaleg sker
 er áfram takmörkuð af 144 dpi útflutningnum. Besta lausnin til framtíðar er að
 flytja bæklinginn út sem PDF með vektor-texta eða myndir í 300 dpi (2362 px
 fyrir 200 mm síðu með blæði).
+
+## 4. Vektor-síður úr hönnunarartifactinu (beige)
+
+SVIF-síðurnar sex í beige-útgáfunni (kápa T1, Yfirlit, Afslaettir, UmSvif,
+Midar, Bak) eru til sem HTML í Claude-artifactinu „SVIF Flyer Concepts"
+(https://claude.ai/artifact/GKE6k2o2NJa4d3kyzDPnyf). `print/vector/` render-ar þær
+sem vektor-PDF með Playwright/Chromium:
+
+```sh
+python3 print/vector/build_rest.py      # býr til HTML úr .dc.html + blobs (sjá prep.py)
+node print/vector/render.js pages/T1.html pdf/T1.pdf   # 194 x 194 mm, texti vektor
+python3 print/add_bleed.py pdf/T1.pdf pdf/T1_bleed.pdf --expect-mm 194
+python3 print/assemble.py raster.pdf out.pdf 1=pdf/T1_bleed.pdf 2=...
+```
+
+Afsláttarmiðarnir sex eru til sem 871 px PNG í sama artifacti; `vector/find_coupons.py`
+finnur staðsetningu þeirra á bláu afsláttarmiðasíðunni og `vector/composite_coupons.py`
+límir þá yfir í 300 dpi útgáfunni.
