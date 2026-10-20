@@ -7,29 +7,29 @@ import { serve, openPage, shoot } from './browser.mjs';
 
 const FRAMES = [
   { t: 3.382, n: '01', name: 'Peningurinn', text: 'Takk krónur', sound: 'Klingur, peningur snýst niður' },
-  { t: 5.782, n: '02', name: 'Kafli 1', text: 'Af hverju hafa svona margir skráð sig?', sound: 'Högg, hálfur taktur' },
-  { t: 9.273, n: '03', name: '65.000', text: '65.000 manns hafa skráð sig í Takk', sound: 'Smellir í bylgju, hljómur' },
-  { t: 16.091, n: '04', name: 'Ókeypis', text: 'Engin áhætta. Þú getur bara grætt.', sound: 'Sveifla, snúningur, peningar' },
-  { t: 20.455, n: '05', name: 'Búðin', text: 'Og það dregur fólk í búðina.', sound: 'Fótatak á hálfslögum' },
-  { t: 28.364, n: '06', name: 'Svona virkar það', text: 'Í stað afsláttar færðu inneign til baka.', sound: 'Píp, prentari, peningar' },
-  { t: 32.727, n: '07', name: '1 tkr = 1 kr.', text: 'en bara í Bónus og Hagkaup.', sound: 'Smellir, högg' },
-  { t: 40.255, n: '08', name: 'Afsláttur', text: 'Afsláttinn má nota hvar sem er.', sound: 'Peningur í hverri búð' },
-  { t: 44.182, n: '09', name: 'Inneign', text: 'Inneignina má bara nota hjá þér.', sound: 'Búðir hverfa, peningar inn' },
-  { t: 49.636, n: '10', name: 'Tvær brautir', text: 'Inneign fær fólk til að koma aftur.', sound: 'Rúllandi bassi' },
-  { t: 53.455, n: '11', name: 'Kafli 4', text: 'Hver er gallinn?', sound: 'Dimmur hálfur taktur' },
-  { t: 59.727, n: '12', name: 'Þunn álagning', text: '40 krónur skipta litlu.', sound: 'Dynkur, lítið tink' },
-  { t: 70.636, n: '13', name: 'Refurinn', text: '15% á Refnum, flest annað 1–3%.', sound: 'Ris, trommuþyrill, bjalla' },
-  { t: 81.545, n: '14', name: 'Tilboð', text: 'Og þeir eru nú þegar með tilboð.', sound: 'Skellir, ris' },
-  { t: 84.818, n: '15', name: 'Gleðipeningar', text: 'Eins og Takk. Fyrir veitingastaði.', sound: 'Fallið: högg og laglína' },
-  { t: 88.636, n: '16', name: 'Sami ávinningur', text: '+20 kr. á móti +1.000 kr.', sound: 'Peningastafli' },
-  { t: 98.455, n: '17', name: 'Hugmynd 1: Tilboð', text: '3.000 kr. á móti 4.000 kr.', sound: 'Kassi, peningar, teljari' },
-  { t: 100.636, n: '18', name: 'Niðurstaðan', text: '1.000 kr. meira í kassann.', sound: 'Högg' },
-  { t: 107.782, n: '19', name: 'Hugmynd 2: Stóra kvöldið', text: '50.000 kr. eytt, 8.000 kr. til baka', sound: 'Glös, deyfður klúbbur' },
-  { t: 112.364, n: '20', name: 'Laugardagsmorgunn', text: 'Inneignin bíður. Bóka borð', sound: 'Titringur, tilkynning' },
-  { t: 119.455, n: '21', name: 'Hugmynd 3: Verðlaun', text: '300.000 kr. í viðskiptum', sound: 'Hljóð á hverri heimsókn' },
-  { t: 121.636, n: '22', name: 'Opnað', text: 'Flöskuborð í boði hússins.', sound: 'Opnun, sindur' },
-  { t: 128.182, n: '23', name: 'Lokaorð', text: 'Inneign fær það inn og heldur því í keðjunni.', sound: 'Hvísl' },
-  { t: 134.182, n: '24', name: 'Lokaspjald', text: 'gleðipeningar. Vildarkerfi fyrir veitingastaði.', sound: 'Lokahljómur' },
+  { t: 7.364, n: '02', name: '65.000', text: '65.000 manns hafa þegar skráð sig í Takk', sound: 'Smellir í bylgju, hljómur' },
+  { t: 10.091, n: '03', name: 'Kafli 1', text: 'Af hverju?', sound: 'Högg, hálfur taktur' },
+  { t: 13.091, n: '04', name: 'Ástæða 1', text: 'Það kostar ekkert að vera með.', sound: 'Sveifla' },
+  { t: 16.364, n: '05', name: 'Ástæða 2', text: 'Engin áhætta. Þú getur bara grætt.', sound: 'Snúningur, peningar' },
+  { t: 19.636, n: '06', name: 'Ástæða 3', text: 'Það dregur fólk í búðina.', sound: 'Smellir við dyrnar' },
+  { t: 28.909, n: '07', name: 'Kafli 2: Svona virkar það', text: 'Í stað afsláttar færðu inneign til baka.', sound: 'Píp, prentari, peningar' },
+  { t: 36.000, n: '08', name: 'Kafli 3: Afsláttur', text: '5.000 kr. sem má nota hvar sem er.', sound: 'Peningur í hverri búð' },
+  { t: 40.636, n: '09', name: 'Inneign', text: '5.000 kr. inneign, bara hjá þér.', sound: 'Búðir hverfa, peningar inn' },
+  { t: 45.273, n: '10', name: 'Tvær brautir', text: 'Inneign fær fólk til að koma aftur.', sound: 'Smellur á hverju slagi' },
+  { t: 57.273, n: '11', name: 'Kafli 4: Gallinn', text: 'Smjör 400 kr., +20 kr. til baka', sound: 'Strik, tink' },
+  { t: 60.273, n: '12', name: 'Kafli 5', text: 'Hugmyndin', sound: 'Ris, trommuþyrill' },
+  { t: 63.545, n: '13', name: 'Gleðipeningar', text: 'Hvað ef veitingastaðir gerðu það sama?', sound: 'Fallið: högg og laglína' },
+  { t: 68.727, n: '14', name: 'Álagning', text: '~10% á móti ~30%', sound: 'Strik dregin' },
+  { t: 80.727, n: '15', name: 'Sami ávinningur', text: '+20 kr. á móti +1.200 kr.', sound: 'Peningastafli' },
+  { t: 85.909, n: '16', name: 'Hugmynd 1', text: 'Ein samloka kostar 3.000 kr.', sound: 'Smellur' },
+  { t: 99.818, n: '17', name: 'Afsláttur eða inneign', text: '4.500 kr. á móti 6.000 kr.', sound: 'Kassi, peningar, teljari' },
+  { t: 105.000, n: '18', name: 'Niðurstaðan', text: '1.500 kr. meiri hagnaður.', sound: 'Högg' },
+  { t: 112.145, n: '19', name: 'Hugmynd 2: Djamm í kvöld', text: '50.000 kr. eytt, 8.000 kr. til baka', sound: 'Glös, deyfður klúbbur' },
+  { t: 116.727, n: '20', name: 'Laugardagsmorgunn', text: 'Inneignin bíður. Bóka borð', sound: 'Titringur, tilkynning' },
+  { t: 123.545, n: '21', name: 'Hugmynd 3: Söfnun', text: '25.000 kr. inneign eftir 300.000 kr.', sound: 'Hljóð á hverri heimsókn' },
+  { t: 126.545, n: '22', name: 'Opnað', text: 'Flöskuborð í boði hússins.', sound: 'Opnun, sindur' },
+  { t: 131.455, n: '23', name: 'Lokaorð', text: 'Inneign fær fólk inn. Og heldur því í keðjunni.', sound: 'Hvísl' },
+  { t: 136.364, n: '24', name: 'Lokaspjald', text: 'gleðipeningar. Vildarkerfi fyrir veitingastaði.', sound: 'Lokahljómur' },
 ];
 
 const tc = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
@@ -77,7 +77,7 @@ figcaption{padding:16px 4px 0}.meta{display:flex;gap:12px;align-items:baseline}
 .n{font-weight:800;font-size:22px;color:#691FE7}.name{font-weight:800;font-size:24px;letter-spacing:-.01em;flex:1}.tc{font-weight:700;font-size:20px;color:rgba(24,0,62,.5)}
 .txt{font-weight:600;font-size:20px;margin-top:8px;line-height:1.3}.snd{font-weight:500;font-size:18px;margin-top:6px;color:rgba(24,0,62,.55)}
 </style></head><body>
-<header><div><h1>Gleðipeningar: storyboard</h1><div class="sub">Hreyfigrafík í köflum, 136 sek. Takk útskýrir hugmyndina, Gleðipeningar færa hana á veitingastaði og bari.</div></div>
+<header><div><h1>Gleðipeningar: storyboard</h1><div class="sub">Hreyfigrafík í köflum, 139 sek. Takk útskýrir hugmyndina, Gleðipeningar færa hana á veitingastaði og bari.</div></div>
 <div class="spec">1920 × 1080 · 60 fps · 110 BPM<br>Figtree · Takk #691FE7 · Gleði #FFD24D</div></header>
 <div class="grid">${cells}</div></body></html>`;
 fs.writeFileSync(path.join(outDir, 'storyboard.html'), html);

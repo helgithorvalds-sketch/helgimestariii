@@ -16,25 +16,22 @@ strip() {
   ffmpeg -y -loglevel error -ss "$start" -t 0.8 -i "$VIDEO" -frames:v 1 -vf "fps=15,scale=480:-1,tile=6x2:padding=4:color=0x222222" "$OUT/strip_${name}.jpg"
 }
 strip coin 0.2
-strip iris1 3.9
-strip card1 6.3
-strip crowd 6.6
+strip crowd 4.6
+strip dive 8.0
 strip flip 14.0
-strip store 20.6
+strip store 19.3
 strip tap 25.4
-strip eq 34.0
-strip dvc 40.0
-strip credit 42.5
-strip flow 47.0
-strip chart 65.4
-strip dive 68.0
-strip suck 82.2
-strip drop 82.8
-strip stack 86.8
-strip free 96.8
-strip punch 99.2
-strip night 107.5
-strip morning 111.5
-strip unlock 119.8
-strip end 130.4
+strip dvc 36.0
+strip credit 39.5
+strip flow 43.0
+strip butter 53.3
+strip drop 61.0
+strip compare 77.5
+strip hero 85.2
+strip free3 95.2
+strip punch 102.5
+strip night 113.0
+strip morning 115.5
+strip unlock 124.2
+strip end 133.0
 ls "$OUT"

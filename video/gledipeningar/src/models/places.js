@@ -162,7 +162,7 @@ export function makeBedroom() {
     M(new THREE.TorusGeometry(0.22, 0.03, 10, 40), clay(PAL.purple, { rough: 0.4, coat: 0.6 })),
     M(new THREE.BoxGeometry(0.02, 0.12, 0.01), clay(PAL.ink), { p: [0, 0.05, 0.065] }),
     M(new THREE.BoxGeometry(0.09, 0.02, 0.01), clay(PAL.ink), { p: [0.04, 0, 0.065] }),
-  ], { p: [-2.85, 1.5, -2.35], r: [-0.1, 0.35, 0] });
+  ], { p: [-2.56, 1.5, -2.6], r: [-0.1, 0.35, 0] });
   const water = G([
     M(new THREE.CylinderGeometry(0.13, 0.11, 0.38, 32, 1, true), glassMat(), { p: [0, 0.19, 0], cast: false }),
     M(new THREE.CylinderGeometry(0.12, 0.105, 0.26, 32), liquid('#DDEBFF', 0.45), { p: [0, 0.14, 0] }),

@@ -44,9 +44,9 @@ export default {
     // phone face up on the nightstand
     S.phone = makePhone();
     S.phone.draw = drawLockScreen;
-    S.phone.root.rotation.set(-Math.PI / 2, 0, 0.35);
-    S.phone.root.position.set(-2.95, 1.31, -1.9);
-    S.phone.root.scale.setScalar(0.8);
+    S.phone.root.rotation.set(-Math.PI / 2, 0, 0.15);
+    S.phone.root.position.set(-3.05, 1.31, -2.0);
+    S.phone.root.scale.setScalar(0.7);
     v.scene.add(S.phone.root);
 
     // DOM: kicker, notification card, big number
@@ -92,7 +92,7 @@ export default {
 
     // phone buzz + screen
     const bz = t > BUZZ && t < BUZZ + 0.5 ? Math.sin((t - BUZZ) * 95) * 0.035 * (1 - prog(t, BUZZ, BUZZ + 0.5)) : 0;
-    S.phone.root.rotation.z = 0.35 + bz;
+    S.phone.root.rotation.z = 0.15 + bz;
     const lit = ease.outCubic(prog(t, BUZZ, BUZZ + 0.2));
     const notif = ease.outBack(prog(t, BUZZ + 0.15, BUZZ + 0.5));
     const sig = `${lit.toFixed(2)}|${notif.toFixed(2)}`;

@@ -92,9 +92,11 @@ export default {
 
     S.chipA = chip(S.front, 'Afsláttur', { bg: '#FFFFFF', color: '#18003E', size: 34 });
     S.chipB = chip(S.front, 'Inneign', { bg: '#691FE7', color: '#FFFFFF', size: 34 });
-    S.hA = new Words(S.front, 'Afsláttinn má nota hvar sem er.', 't-h2');
-    S.hB = new Words(S.front, 'Inneignina má bara nota hjá þér.', 't-h2');
-    S.cap = new Words(S.front, 'Peningarnir haldast í keðjunni.', 't-h3', { color: '#691FE7' });
+    S.hA = new Words(S.front, 'Keypt fyrir 10.000 kr. með 50% afslætti.', 't-h2');
+    S.sA = new Words(S.front, '5.000 kr. sparast, og þær má nota hvar sem er.', 't-h3', { color: '#691FE7' });
+    S.hB = new Words(S.front, 'Keypt fyrir 10.000 kr. með 50% til baka.', 't-h2');
+    S.sB = new Words(S.front, '5.000 kr. inneign, sem má bara nota hjá þér.', 't-h3', { color: '#691FE7' });
+    S.cap = new Words(S.front, 'Peningarnir haldast í keðjunni.', 't-h3');
 
     cue(FROM + 0.05, 'swoosh', { gain: 0.45 });
     S.outA.forEach((w, i) => cue(w.ts + w.dur, 'coin', { pitch: 0.9 + i * 0.06, gain: 0.5 }));
@@ -152,10 +154,12 @@ export default {
     const chA = spring(t - (FROM + 0.05), 3, 0.5);
     const chB = spring(t - PARTB, 3, 0.5);
     const swap = t >= PARTB;
-    place(S.chipA, { x: 148, y: 92, s: Math.max(0.001, chA) * (swap ? 1 - ease.inBack(prog(t, PARTB - 0.25, PARTB), 2) : 1), o: chA > 0.01 && t < PARTB ? 1 : 0, ox: '0%', oy: '50%' });
-    place(S.chipB, { x: 148, y: 92, s: Math.max(0.001, chB), o: swap ? 1 : 0, ox: '0%', oy: '50%' });
-    S.hA.update(t, { at: FROM + 0.25, stagger: 0.05, x: 140, y: 168, out: PARTB - 0.4, outDur: 0.3 });
-    S.hB.update(t, { at: PARTB + 0.1, stagger: 0.05, x: 140, y: 168, out: TO - 0.4, outDur: 0.3 });
-    S.cap.update(t, { at: PARTB + b(4), stagger: 0.05, x: 144, y: 292, out: TO - 0.4, outDur: 0.3 });
+    place(S.chipA, { x: 148, y: 84, s: Math.max(0.001, chA) * (swap ? 1 - ease.inBack(prog(t, PARTB - 0.25, PARTB), 2) : 1), o: chA > 0.01 && t < PARTB ? 1 : 0, ox: '0%', oy: '50%' });
+    place(S.chipB, { x: 148, y: 84, s: Math.max(0.001, chB), o: swap ? 1 : 0, ox: '0%', oy: '50%' });
+    S.hA.update(t, { at: FROM + 0.25, stagger: 0.05, x: 140, y: 160, out: PARTB - 0.4, outDur: 0.3 });
+    S.sA.update(t, { at: FROM + b(1.5), stagger: 0.05, x: 144, y: 268, out: PARTB - 0.4, outDur: 0.3 });
+    S.hB.update(t, { at: PARTB + 0.1, stagger: 0.05, x: 140, y: 160, out: TO - 0.4, outDur: 0.3 });
+    S.sB.update(t, { at: PARTB + b(1.5), stagger: 0.05, x: 144, y: 268, out: TO - 0.4, outDur: 0.3 });
+    S.cap.update(t, { at: PARTB + b(4.5), stagger: 0.05, x: 144, y: 350, out: TO - 0.4, outDur: 0.3 });
   },
 };

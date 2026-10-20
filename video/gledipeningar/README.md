@@ -1,8 +1,8 @@
 # Gleðipeningar: motion-graphics pitch
 
-A 136-second pitch in five chapters for **Gleðipeningar** ("happy money"), a credit-back loyalty app for restaurant and bar chains. Takk krónur, Hagar's app for Bónus and Hagkaup, is used to explain how the model works and where it falls short. The film is made entirely with code: every frame is a function of time, drawn by Three.js and HTML in headless Chromium, and stitched with FFmpeg. The music and sound effects are synthesised in Python from the same timeline, so every hit lands on the beat.
+A 139-second pitch in five chapters for **Gleðipeningar** ("happy money"), a credit-back loyalty app for restaurant and bar chains. Takk krónur, Hagar's app for Bónus and Hagkaup, is used to explain how the model works and where it falls short. The film is made entirely with code: every frame is a function of time, drawn by Three.js and HTML in headless Chromium, and stitched with FFmpeg. The music and sound effects are synthesised in Python from the same timeline, so every hit lands on the beat.
 
-The finished film is `gledipeningar.mp4` (136 s, 1920×1080, 60 fps, AAC stereo at -14 LUFS). See `STORYBOARD.md` for the script with English glosses and `storyboard/storyboard.png` for one rendered key frame per scene.
+The finished film is `gledipeningar.mp4` (139 s, 1920×1080, 60 fps, AAC stereo at -14 LUFS). See `STORYBOARD.md` for the script with English glosses and `storyboard/storyboard.png` for one rendered key frame per scene.
 
 ## Requirements
 
@@ -26,7 +26,8 @@ Re-render one scene after a change, then concatenate and mux again:
 npm run build && node scripts/render.mjs --only=math && node scripts/finalize.mjs
 ```
 
-Check single frames while working: `node scripts/still.mjs out/stills 12.5 30 --scene=how,chart`.
+Check single frames while working: `node scripts/still.mjs out/stills 12.5 30 --scene=how,compare`.
+For a quick watchable cut with the music, `node scripts/preview.mjs --fps=4` writes a half-size animatic to `out/preview.mp4` in a few minutes.
 
 ## Layout
 

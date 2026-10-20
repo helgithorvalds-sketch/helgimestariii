@@ -96,8 +96,6 @@ export default {
     S.bursts = makeBursts(v.scene, 6);
 
     S.h = new Words(S.front, 'Inneign fær fólk\ntil að koma aftur.', 't-h2');
-    S.c1 = new Words(S.front, 'Út með inneign.', 't-h3', { color: '#691FE7' });
-    S.c2 = new Words(S.front, 'Inn aftur til að nota hana.', 't-h3', { color: '#691FE7' });
     S.labIn = el('div', 'abs t-label nowrap', S.front, 'Inn');
     S.labOut = el('div', 'abs t-label nowrap', S.front, 'Út');
     [S.labIn, S.labOut].forEach((e) => css(e, { background: '#FFFFFF', color: '#691FE7', padding: '12px 20px', borderRadius: '999px', boxShadow: '0 10px 24px rgba(42,10,94,0.14)' }));
@@ -152,8 +150,6 @@ export default {
     pin(S.labOut, V3(SX + LANE, 0.05, 7.5), cam, { s: Math.max(0.001, lOut), o: (lOut > 0.01 ? 1 : 0) * lo, dx: 70 });
 
     S.h.update(t, { at: FROM + 0.2, stagger: 0.07, x: 140, y: 300, out: PUSH - 0.1, outDur: 0.3 });
-    S.c1.update(t, { at: b(80), stagger: 0.06, x: 144, y: 520, out: PUSH - 0.1, outDur: 0.3 });
-    S.c2.update(t, { at: b(82), stagger: 0.06, x: 144, y: 600, out: PUSH - 0.1, outDur: 0.3 });
     updateIris(S.iris, t, TO - b(1.1), TO, screenDisc(sign, 0.24, cam));
   },
 };

@@ -9,15 +9,17 @@ import { makeSandwich } from '../models/food.js';
 import { background, orbit, pin, chip, V3, BG, YELLOW, glediIcon, makeIris, updateIris, IRIS } from './common.js';
 import { wipe } from '../fx.js';
 
-// Idea 1: credit instead of a discount. The same 3.000 kr. sandwich, bought three times.
-// Discount 50%: 1.500 + 1.500 + 1.500 = 4.500 kr.
-// 50% back as credit: 3.000, then 1.500 kr. + 1.500 credit, twice = 6.000 kr., and 1.500 credit left over.
+// Idea 1: credit instead of a discount. One sandwich costs 3.000 kr.
+// 50% off: three sandwiches at 1.500 kr. = 4.500 kr.
+// 50% back as credit: two at full price = 6.000 kr. and 3.000 kr. of credit, which pays for the third.
 const FROM = b(156), TO = b(196);
-const VISIT = [b(160), b(168), b(176)];
-const L_AT = (k) => VISIT[k] + b(0.5); // left sandwich
-const R_AT = (k) => VISIT[k] + b(2.5); // right sandwich
-const EARN = (k) => VISIT[k] + b(4); // credit lands in the wallet
-const TOTALS = b(184);
+const HERO_OUT = b(158.75); // the single priced sandwich makes way for the comparison
+const L_AT = [b(160), b(161), b(162)];
+const R_AT = [b(166), b(169), b(175)]; // the third one is paid with credit, a week later
+const EARN = [b(167.5), b(170.5)];
+const WORTH = b(172); // "3.000 kr. inneign = ein samloka"
+const WEEK = b(173.5);
+const TOTALS = b(180);
 const PUNCH = b(188), P2 = b(189.5), P3 = b(191), COIN = b(193.5);
 const LX = -2.6, RX = 2.6, GAP = 1.22;
 const slotX = (cx, i) => cx + (i - 1) * GAP;
@@ -42,25 +44,28 @@ export default {
       v.scene.add(m);
       return m;
     });
-    const mk = (x, at) => {
+    const mk = (x, at, s = 0.78) => {
       const g = new THREE.Group();
-      const s = makeSandwich();
-      s.scale.setScalar(0.78);
-      g.add(s);
+      const sw = makeSandwich();
+      sw.scale.setScalar(s);
+      g.add(sw);
       g.position.set(x, 0.12, 0.05);
       v.scene.add(g);
       return { g, at };
     };
-    S.L = [0, 1, 2].map((k) => mk(slotX(LX, k), L_AT(k)));
-    S.R = [0, 1, 2].map((k) => mk(slotX(RX, k), R_AT(k)));
+    S.hero = mk(0, FROM + 0.1, 1.25);
+    S.hero.g.position.set(0, 0, 0.3);
+    S.L = L_AT.map((at, k) => mk(slotX(LX, k), at));
+    S.R = R_AT.map((at, k) => mk(slotX(RX, k), at));
 
     // DOM
     S.div = el('div', 'abs', S.front);
     css(S.div, { width: '3px', height: '760px', background: 'rgba(105,31,231,0.2)', borderRadius: '2px' });
-    S.head = new Words(S.front, 'Sama samloka · 3.000 kr.', 't-h3', { align: 'center' });
+    S.head = new Words(S.front, 'Ein samloka kostar 3.000 kr.', 't-h3', { align: 'center' });
+    S.heroTag = chip(S.front, '3.000 kr.', { bg: '#FFFFFF', color: '#18003E', size: 56, pad: '14px 30px' });
+    css(S.heroTag, { boxShadow: '0 14px 30px rgba(42,10,94,0.16)' });
     S.cL = chip(S.front, '50% afsláttur', { bg: '#FFFFFF', color: '#18003E', size: 34 });
     S.cR = chip(S.front, '50% til baka sem inneign', { bg: YELLOW, color: '#18003E', size: 34 });
-    S.visits = ['1. heimsókn', '2. heimsókn', '3. heimsókn'].map((txt) => chip(S.front, txt, { bg: '#18003E', color: '#FFFFFF', size: 28 }));
     const tag = (html, bg = '#FFFFFF') => {
       const e = el('div', 'abs nowrap', S.front, html);
       css(e, { background: bg, borderRadius: '18px', padding: '8px 16px', textAlign: 'center', boxShadow: '0 10px 24px rgba(42,10,94,0.14)', font: '800 28px Figtree', color: '#18003E', letterSpacing: '-0.01em' });
@@ -68,12 +73,11 @@ export default {
     };
     const struck = '<div style="font:700 20px Figtree;color:rgba(24,0,62,.45);text-decoration:line-through">3.000 kr.</div>';
     S.tL = [0, 1, 2].map(() => tag(`${struck}1.500 kr.`));
-    S.tR = [0, 1, 2].map((k) => (k === 0 ? tag('3.000 kr.')
-      : tag(`1.500 kr.<div style="font:700 20px Figtree;margin-top:2px;background:${YELLOW};border-radius:8px;padding:2px 8px">+ 1.500 kr. inneign</div>`)));
+    S.tR = [0, 1, 2].map((k) => (k < 2 ? tag('3.000 kr.') : tag(`${struck}Frítt`, YELLOW)));
     S.tillL = new Counter(S.front, 't-h2', { format: (x) => `${isk(x)} kr.` });
     S.tillR = new Counter(S.front, 't-h2', { format: (x) => `${isk(x)} kr.` });
-    S.lpL = el('div', 'abs t-label nowrap', S.front, 'Í kassann');
-    S.lpR = el('div', 'abs t-label nowrap', S.front, 'Í kassann');
+    S.lpL = el('div', 'abs t-label nowrap', S.front, 'Gesturinn borgar');
+    S.lpR = el('div', 'abs t-label nowrap', S.front, 'Gesturinn borgar');
     [S.lpL, S.lpR].forEach((e) => css(e, { color: 'rgba(24,0,62,0.5)' }));
     S.wallet = el('div', 'abs nowrap', S.front);
     css(S.wallet, { display: 'flex', alignItems: 'center', gap: '14px', background: '#FFFFFF', borderRadius: '999px', padding: '8px 22px 8px 8px', boxShadow: '0 10px 24px rgba(42,10,94,0.14)' });
@@ -81,30 +85,40 @@ export default {
     css(S.walletIcon, { position: 'relative', boxShadow: 'none' });
     S.walletTxt = el('div', 'tnum', S.wallet);
     css(S.walletTxt, { font: '800 32px Figtree', color: '#18003E', letterSpacing: '-0.01em' });
+    S.worth = el('div', 'abs t-small nowrap', S.front, '= ein samloka frítt');
+    css(S.worth, { color: '#691FE7', fontWeight: '800' });
+    S.week = el('div', 'abs', S.front);
+    css(S.week, { width: '196px', borderRadius: '22px', background: '#FFFFFF', boxShadow: '0 18px 40px rgba(42,10,94,0.16)', overflow: 'hidden', textAlign: 'center' });
+    S.week.innerHTML = '<div style="background:#18003E;color:#fff;font:800 20px Figtree;letter-spacing:.14em;padding:11px 0">VIKU SEINNA</div><div style="font:800 72px Figtree;letter-spacing:-.04em;color:#18003E;padding:4px 0 0">+7</div><div style="font:700 22px Figtree;color:rgba(24,0,62,.55);padding:0 0 14px">dagar</div>';
     S.fly = [0, 1, 2].map(() => glediIcon(S.front, 40));
     S.vL = el('div', 'abs t-h4 nowrap', S.front, '3 samlokur');
     S.vR = el('div', 'abs t-h4 nowrap', S.front, '3 samlokur');
-    S.none = chip(S.front, 'Engin inneign eftir', { bg: 'rgba(24,0,62,0.08)', color: 'rgba(24,0,62,0.55)', size: 30 });
 
     S.p1 = new Words(S.front, 'Sömu 3 samlokur.', 't-h1', { color: '#FFFFFF', align: 'center' });
-    S.p2 = new Words(S.front, '1.500 kr. meiri hagnaður.', 't-h1', { color: YELLOW, align: 'center' });
-    S.p3 = new Words(S.front, 'Og gesturinn á enn inneign\ntil að koma aftur.', 't-h2', { color: '#DBC7FF', align: 'center' });
+    S.p2 = new Words(S.front, '6.000 kr. í stað 4.500 kr.', 't-h1', { color: YELLOW, align: 'center' });
+    S.p3 = new Words(S.front, '1.500 kr. meiri hagnaður.\nOg gesturinn kom aftur.', 't-h2', { color: '#DBC7FF', align: 'center' });
     S.p1.root.style.fontSize = '112px';
     S.p2.root.style.fontSize = '112px';
     S.icon = glediIcon(S.front, 120);
     S.iris = makeIris(S, IRIS.yellow);
 
-    cue(FROM, 'swoosh', { gain: 0.5 });
-    VISIT.forEach((vt, k) => {
-      cue(vt, 'tick', { gain: 0.45, pitch: 1.2 });
-      cue(L_AT(k), 'pop', { gain: 0.55, pitch: 0.95 });
-      cue(L_AT(k) + b(1), 'register', { gain: 0.5 });
-      cue(R_AT(k), 'pop', { gain: 0.55, pitch: 1.05 });
-      if (k > 0) cue(R_AT(k) + 0.05, 'coin', { gain: 0.4, pitch: 0.9 });
-      cue(R_AT(k) + b(1), 'register', { gain: 0.55 });
-      cue(EARN(k), 'coin', { gain: 0.5, pitch: 1.2 });
+    cue(FROM + 0.1, 'pop', { gain: 0.6, pitch: 0.9 });
+    cue(FROM + b(1), 'tick', { gain: 0.5, pitch: 1.2 });
+    cue(HERO_OUT, 'swoosh', { gain: 0.45 });
+    L_AT.forEach((at, k) => {
+      cue(at, 'pop', { gain: 0.55, pitch: 0.95 + k * 0.06 });
+      cue(at + b(0.5), 'register', { gain: 0.4 });
     });
-    cue(TOTALS, 'counter', { dur: 0.6, gain: 0.3 });
+    R_AT.forEach((at, k) => {
+      cue(at, 'pop', { gain: 0.55, pitch: 1.05 + k * 0.06 });
+      if (k < 2) cue(at + b(0.5), 'register', { gain: 0.5 });
+    });
+    EARN.forEach((at, k) => cue(at, 'coin', { gain: 0.5, pitch: 1.15 + k * 0.1 }));
+    cue(WORTH, 'tink', { gain: 0.5 });
+    cue(WEEK, 'flip', { gain: 0.55 });
+    cue(R_AT[2] - 0.05, 'coin', { gain: 0.5, pitch: 0.9 });
+    cue(R_AT[2] + 0.1, 'bell', { gain: 0.35 });
+    cue(TOTALS, 'counter', { dur: 0.5, gain: 0.3 });
     cue(TOTALS + b(1), 'stab', { gain: 0.6 });
     cue(PUNCH, 'impact', { gain: 0.75 });
     cue(P2, 'stab', { gain: 0.6 });
@@ -121,9 +135,18 @@ export default {
     css(S.purple, { display: punched ? 'block' : 'none' });
     v.visible = !punched;
     orbit(cam, [0, 0.4, 0.3], lerp(-1.5, 1.5, prog(t, FROM, PUNCH)) * DEG, 21 * DEG, 11.8, { t, seed: 41 });
+    const all = 1 - ease.inCubic(prog(t, PUNCH - 0.3, PUNCH));
+
+    // first: one sandwich, one price
+    const hs = spring(t - S.hero.at, 2.8, 0.5) * (1 - ease.inBack(prog(t, HERO_OUT, HERO_OUT + 0.3), 2));
+    S.hero.g.scale.setScalar(Math.max(1e-4, hs));
+    S.hero.g.visible = hs > 0.002;
+    S.hero.g.rotation.y = 0.4 + Math.sin(t * 0.8) * 0.15;
+    const ht = spring(t - (FROM + b(1)), 3, 0.45) * (1 - ease.inBack(prog(t, HERO_OUT - 0.1, HERO_OUT + 0.2), 2));
+    pin(S.heroTag, V3(0, 1.2, 0.3), cam, { ay: -100, s: Math.max(0.001, ht), o: ht > 0.01 ? 1 : 0 });
 
     S.boards.forEach((m, i) => {
-      const s = spring(t - FROM - 0.05 - i * 0.1, 2.6, 0.55);
+      const s = spring(t - HERO_OUT - 0.1 - i * 0.1, 2.6, 0.55);
       m.scale.set(Math.max(1e-4, s), 1, Math.max(1e-4, s));
       m.visible = s > 0.002;
     });
@@ -134,22 +157,14 @@ export default {
       k.g.rotation.y = 0.35 + Math.sin(t * 0.8 + i) * 0.1;
     });
 
-    // DOM
-    const all = 1 - ease.inCubic(prog(t, PUNCH - 0.3, PUNCH));
-    place(S.div, { x: 958, y: 200, sy: ease.outExpo(prog(t, FROM, FROM + 0.6)), o: 0.9 * all, oy: '0%' });
+    // header, divider, chips
+    place(S.div, { x: 958, y: 200, sy: ease.outExpo(prog(t, HERO_OUT, HERO_OUT + 0.6)), o: 0.9 * all, oy: '0%' });
     S.head.update(t, { at: FROM + 0.05, stagger: 0.05, x: 0, y: 46, o: all });
-    const ch = spring(t - (FROM + b(0.5)), 3, 0.5), ch2 = spring(t - (FROM + b(1)), 3, 0.5);
+    const ch = spring(t - (HERO_OUT + 0.2), 3, 0.5), ch2 = spring(t - (HERO_OUT + 0.35), 3, 0.5);
     place(S.cL, { x: 480, y: 160, s: Math.max(0.001, ch), o: (ch > 0.01 ? 1 : 0) * all, ox: '50%', oy: '50%' });
     css(S.cL, { marginLeft: `-${S.cL.offsetWidth / 2}px` });
     place(S.cR, { x: 1440, y: 160, s: Math.max(0.001, ch2), o: (ch2 > 0.01 ? 1 : 0) * all, ox: '50%', oy: '50%' });
     css(S.cR, { marginLeft: `-${S.cR.offsetWidth / 2}px` });
-    // which visit we are on: a pill on the divider
-    S.visits.forEach((e, k) => {
-      const a = VISIT[k], z = k < 2 ? VISIT[k + 1] : TOTALS;
-      const s = spring(t - a, 3.2, 0.45) * (1 - ease.inBack(prog(t, z - 0.2, z), 2));
-      place(e, { x: 960, y: 262, s: Math.max(0.001, s), o: t > a && t < z ? all : 0, ox: '50%', oy: '50%' });
-      css(e, { marginLeft: `-${e.offsetWidth / 2}px` });
-    });
 
     // price tags above the sandwiches
     const tags = (list, items, cx) => items.forEach((k, i) => {
@@ -159,46 +174,48 @@ export default {
     tags(S.tL, S.L, LX);
     tags(S.tR, S.R, RX);
 
-    // what lands in the till
-    const paid = (side) => [0, 1, 2].reduce((acc, k) => {
-      const at = (side ? R_AT(k) : L_AT(k)) + b(1);
-      const amt = side ? (k === 0 ? 3000 : 1500) : 1500;
-      return acc + amt * ease.outCubic(prog(t, at, at + 0.4));
-    }, 0);
-    S.tillL.set(Math.round(paid(0) / 10) * 10);
-    S.tillR.set(Math.round(paid(1) / 10) * 10);
-    const iL = ease.outExpo(prog(t, L_AT(0) + b(1), L_AT(0) + b(1) + 0.4)), iR = ease.outExpo(prog(t, R_AT(0) + b(1), R_AT(0) + b(1) + 0.4));
+    // what the guest pays
+    const paidL = L_AT.reduce((a, at) => a + 1500 * ease.outCubic(prog(t, at + b(0.5), at + b(0.5) + 0.4)), 0);
+    const paidR = R_AT.slice(0, 2).reduce((a, at) => a + 3000 * ease.outCubic(prog(t, at + b(0.5), at + b(0.5) + 0.4)), 0);
+    S.tillL.set(Math.round(paidL / 10) * 10);
+    S.tillR.set(Math.round(paidR / 10) * 10);
+    const iL = ease.outExpo(prog(t, L_AT[0] + b(0.5), L_AT[0] + b(0.5) + 0.4)), iR = ease.outExpo(prog(t, R_AT[0] + b(0.5), R_AT[0] + b(0.5) + 0.4));
     const big = spring(t - TOTALS - b(1), 3.2, 0.4);
     const pulse = t > TOTALS + b(1) ? 1 + (1 - big) * 0.14 : 1;
     place(S.lpL, { x: 480, y: 684 + (1 - iL) * 14, o: iL * all });
     css(S.lpL, { marginLeft: `-${S.lpL.offsetWidth / 2}px` });
     place(S.lpR, { x: 1440, y: 684 + (1 - iR) * 14, o: iR * all });
     css(S.lpR, { marginLeft: `-${S.lpR.offsetWidth / 2}px` });
-    place(S.tillL.root, { x: 480, y: 714 + (1 - iL) * 18, o: iL * all, ox: '50%', oy: '50%' });
+    place(S.tillL.root, { x: 480, y: 714 + (1 - iL) * 18, o: iL * all, s: pulse, ox: '50%', oy: '50%' });
     css(S.tillL.root, { marginLeft: `-${S.tillL.root.offsetWidth / 2}px` });
     place(S.tillR.root, { x: 1440, y: 714 + (1 - iR) * 18, o: iR * all, s: pulse, ox: '50%', oy: '50%' });
     css(S.tillR.root, { marginLeft: `-${S.tillR.root.offsetWidth / 2}px`, color: t > TOTALS + b(1) ? '#691FE7' : '#18003E' });
 
-    // the guest's credit wallet: earned after every visit, spent on the next
+    // the guest's credit: +1.500 twice, then all 3.000 pays for the third sandwich
     let bal = 0;
-    [0, 1, 2].forEach((k) => {
-      if (k > 0) bal -= 1500 * ease.outCubic(prog(t, R_AT(k), R_AT(k) + 0.4));
-      bal += 1500 * ease.outCubic(prog(t, EARN(k), EARN(k) + 0.4));
-    });
+    EARN.forEach((at) => { bal += 1500 * ease.outCubic(prog(t, at, at + 0.4)); });
+    bal -= 3000 * ease.outCubic(prog(t, R_AT[2] - 0.1, R_AT[2] + 0.3));
     S.walletTxt.innerHTML = `Inneign ${isk(Math.round(bal / 10) * 10)} kr.`;
-    const wIn = spring(t - (EARN(0) - 0.3), 3, 0.5);
+    const wIn = spring(t - (EARN[0] - 0.3), 3, 0.5);
     let wb = 0;
-    [0, 1, 2].forEach((k) => { if (t > EARN(k)) wb += Math.max(0, wobble(t - EARN(k) - 0.35, 4, 9)); });
-    const wPos = { x: 1440, y: 910 };
-    place(S.wallet, { x: wPos.x, y: wPos.y, s: Math.max(0.001, wIn) * (1 + wb * 0.06), o: (t > EARN(0) - 0.3 ? 1 : 0) * all, ox: '50%', oy: '50%' });
+    EARN.forEach((at) => { if (t > at) wb += Math.max(0, wobble(t - at - 0.05, 4, 9)); });
+    const wPos = { x: 1440, y: 880 };
+    place(S.wallet, { x: wPos.x, y: wPos.y, s: Math.max(0.001, wIn) * (1 + wb * 0.06), o: (t > EARN[0] - 0.3 ? 1 : 0) * all * (1 - ease.inCubic(prog(t, TOTALS - 0.3, TOTALS))), ox: '50%', oy: '50%' });
     css(S.wallet, { marginLeft: `-${S.wallet.offsetWidth / 2}px`, marginTop: '-34px' });
-    // coins: from the sandwich to the wallet when earned, from the wallet to the sandwich when spent
+    const wo = ease.outExpo(prog(t, WORTH, WORTH + 0.4)) * (1 - ease.inCubic(prog(t, R_AT[2] - 0.3, R_AT[2])));
+    place(S.worth, { x: 1440, y: 930 + (1 - wo) * 10, o: wo * all });
+    css(S.worth, { marginLeft: `-${S.worth.offsetWidth / 2}px` });
+    const wk = spring(t - WEEK, 3, 0.45);
+    const wkOut = ease.inCubic(prog(t, R_AT[2] + 0.2, R_AT[2] + 0.5));
+    pin(S.week, V3(slotX(RX, 2), 1.0, 0), cam, { dy: -90, s: Math.max(0.001, wk) * (1 - wkOut), o: t > WEEK ? 1 - wkOut : 0 });
+    // coins: from each full-price sandwich into the wallet, then from the wallet into the third
     const flights = [];
-    [0, 1, 2].forEach((k) => {
+    [0, 1].forEach((k) => {
       const s = toScreen(V3(slotX(RX, k), 0.5, 0), cam);
-      flights.push({ t0: EARN(k) - 0.35, from: [s.x - 20, s.y - 20], to: [wPos.x - 136, wPos.y - 20] });
-      if (k > 0) flights.push({ t0: R_AT(k) - 0.4, from: [wPos.x - 136, wPos.y - 20], to: [s.x - 20, s.y - 20] });
+      flights.push({ t0: EARN[k] - 0.4, from: [s.x - 20, s.y - 20], to: [wPos.x - 136, wPos.y - 20] });
     });
+    const s3 = toScreen(V3(slotX(RX, 2), 0.5, 0), cam);
+    flights.push({ t0: R_AT[2] - 0.45, from: [wPos.x - 136, wPos.y - 20], to: [s3.x - 20, s3.y - 20] });
     S.fly.forEach((e) => css(e, { visibility: 'hidden' }));
     let fi = 0;
     flights.forEach((f) => {
@@ -215,9 +232,6 @@ export default {
     css(S.vL, { marginLeft: `-${S.vL.offsetWidth / 2}px` });
     place(S.vR, { x: 1440, y: 818 + (1 - vIn) * 12, o: vIn * all });
     css(S.vR, { marginLeft: `-${S.vR.offsetWidth / 2}px` });
-    const nIn = spring(t - TOTALS - b(1), 3, 0.5);
-    place(S.none, { x: 480, y: 910, s: Math.max(0.001, nIn), o: (t > TOTALS + b(1) ? 1 : 0) * all, ox: '50%', oy: '50%' });
-    css(S.none, { marginLeft: `-${S.none.offsetWidth / 2}px`, marginTop: '-28px' });
 
     // punch
     S.p1.update(t, { at: PUNCH + 0.05, stagger: 0.07, x: 0, y: 230 });
