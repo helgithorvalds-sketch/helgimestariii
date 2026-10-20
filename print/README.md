@@ -38,3 +38,32 @@ Blæði lagar ekki pixlun. Ef `check_print.py` sýnir síður undir 300 dpi þar
 flytja bæklinginn út aftur úr upprunaforritinu í 300 dpi (eða sem vektor-PDF),
 og keyra svo `add_bleed.py` á nýja skjalið. Fyrir 194 mm síðu þarf hver síðu-mynd
 að vera a.m.k. 2291 x 2291 px (2362 x 2362 px með blæði).
+
+## 3. Síður sem eru bara mynd (eins og SVIF-skjölin frá 19.10.)
+
+Ef hver síða er ein JPEG-mynd (1100 x 1100 px = 144 dpi) er ferlið:
+
+```sh
+# a) taka síðumyndirnar út og búa til 300 dpi útgáfu með Lanczos + 3 mm blæði
+python3 print/raster_print.py print/input/SVIF_baeklingur_BLA.pdf \
+    print/output/SVIF_baeklingur_BLA_PRENT_194mm_3mm_bleed.pdf --dump-dir /tmp/orig_BLA
+
+# b) (valfrjálst) AI-skerping á texta: Real-ESRGAN (realesr-general-x4v3) á CPU,
+#    ~15 s á síðu. Þarf: pip install torch --index-url https://download.pytorch.org/whl/cpu
+curl -sSL -o /tmp/realesr-general-x4v3.pth \
+    https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-general-x4v3.pth
+python3 print/ai_upscale.py /tmp/orig_BLA /tmp/ai_BLA 2292 /tmp/realesr-general-x4v3.pth
+
+# c) blanda: AI aðeins á skörpum brúnum (texti, línur), Lanczos annars staðar,
+#    svo fín mynstur (rúðunet) og ljósmyndir haldist eins og í hönnuninni
+python3 print/blend_upscale.py /tmp/orig_BLA /tmp/ai_BLA /tmp/blend_BLA
+
+# d) lokaskjal með blæði úr blönduðu myndunum
+python3 print/raster_print.py print/input/SVIF_baeklingur_BLA.pdf \
+    print/output/SVIF_baeklingur_BLA_PRENT_194mm_3mm_bleed.pdf --upscaled-dir /tmp/blend_BLA
+```
+
+Athugið: þetta gerir skjalið prenthæft (300 dpi, blæði) en upprunaleg skerpa
+er áfram takmörkuð af 144 dpi útflutningnum. Besta lausnin til framtíðar er að
+flytja bæklinginn út sem PDF með vektor-texta eða myndir í 300 dpi (2362 px
+fyrir 200 mm síðu með blæði).
