@@ -224,3 +224,35 @@ def pad_voice(freq, n, cutoff=1400.0, voices=5, spread=0.14, seed=0):
         c = spread * (k / (voices - 1) - 0.5) * 2
         x += saw(freq * 2 ** (c / 12), n, phase0=(k * 0.37 + seed * 0.11) % 1)
     return lpf(x / voices, cutoff, 2)
+
+
+def brickwall(x, ceiling_db=-1.5, look_ms=4.0, release_ms=90.0, true_peak=True):
+    """Look-ahead brickwall limiter for a (2, n) signal. Peaks (true peaks when true_peak) stay under the ceiling."""
+    from scipy.ndimage import minimum_filter1d
+    c = 10 ** (ceiling_db / 20)
+    n = x.shape[1]
+    if true_peak:
+        up = signal.resample_poly(x, 4, 1, axis=1)
+        a = np.max(np.abs(up), axis=0)[: n * 4].reshape(-1, 4).max(1)
+        a = np.concatenate([a, np.zeros(max(0, n - len(a)))])[:n]
+        del up
+    else:
+        a = np.max(np.abs(x), axis=0)
+    g = np.minimum(1.0, c / np.maximum(a, 1e-12))
+    L = max(1, int(SR * look_ms / 1000))
+    gmin = minimum_filter1d(g, size=2 * L + 1, mode='nearest')
+    gs = np.convolve(gmin, np.ones(L) / L, mode='same')
+    gs = np.minimum(gs, gmin + 0.0)
+    # release: reduction decays smoothly instead of snapping back
+    r = 1.0 - gs
+    dec = 16
+    rd = r[: len(r) // dec * dec].reshape(-1, dec).max(1)
+    k = np.exp(-dec / (SR * release_ms / 1000))
+    out = np.empty_like(rd)
+    prev = 0.0
+    for i, v in enumerate(rd):
+        prev = v if v > prev else prev * k
+        out[i] = prev
+    rr = np.repeat(out, dec)
+    rfull = np.maximum(r, np.concatenate([rr, np.zeros(len(r) - len(rr))]))
+    return x * (1.0 - rfull)

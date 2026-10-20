@@ -9,10 +9,10 @@ import { background, orbit } from './common.js';
 
 const FROM = b(92), TO = b(100);
 const OFFERS = [
-  { text: 'Hádegistilboð', bg: '#FFFFFF', fg: '#691FE7', pos: [1.9, -1.9], rot: 0.13 },
-  { text: 'Þriðjudagstilboð', bg: '#691FE7', fg: '#FFFFFF', pos: [4.9, -0.75], rot: -0.09 },
-  { text: 'Happy hour', bg: '#FF7AB6', fg: '#FFFFFF', pos: [2.3, 0.55], rot: 0.06 },
-  { text: '2 fyrir 1', bg: '#FFD24D', fg: '#18003E', pos: [4.7, 1.75], rot: -0.12 },
+  { text: 'Hádegistilboð', bg: '#FFFFFF', fg: '#691FE7', pos: [4.0, -1.65], rot: 0.13 },
+  { text: 'Þriðjudagstilboð', bg: '#691FE7', fg: '#FFFFFF', pos: [4.75, -0.5], rot: -0.09 },
+  { text: 'Happy hour', bg: '#FF7AB6', fg: '#FFFFFF', pos: [3.85, 0.65], rot: 0.06 },
+  { text: '2 fyrir 1', bg: '#FFD24D', fg: '#18003E', pos: [4.65, 1.75], rot: -0.12 },
 ];
 const LEAVE = b(96);
 
@@ -30,7 +30,7 @@ export default {
     v.scene.add(v.contact.group);
     S.tags = OFFERS.map((o, i) => {
       const tg = makeTag({
-        w: 3.7, h: 1.2, color: o.bg, depth: 0.05,
+        w: 3.9, h: 1.28, color: o.bg, depth: 0.05,
         draw: (c, w, h) => {
           c.fillStyle = o.fg;
           font(c, 800, o.text.length > 12 ? 112 : 128);
@@ -50,6 +50,8 @@ export default {
 
     S.h1 = new Words(S.front, 'Gesturinn sparar.', 't-h1');
     S.h2 = new Words(S.front, 'Og fer.', 't-h1', { color: '#691FE7' });
+    S.h1.root.style.fontSize = '104px';
+    S.h2.root.style.fontSize = '104px';
 
     S.tags.forEach((tg, i) => cue(tg.at, 'slam', { gain: 0.8, pitch: 1 + i * 0.05 }));
     cue(LEAVE + 0.2, 'steps', { dur: 1.6, gain: 0.35 });
@@ -61,7 +63,12 @@ export default {
     // camera shake on each slam
     let shake = 0;
     S.tags.forEach((tg) => { shake += Math.abs(wobble(t - tg.at, 9, 10)) * (t > tg.at ? 1 : 0); });
-    orbit(v.camera, [0.4, 0, 0.6], lerp(-2, 3, prog(t, FROM, TO)) * DEG, (55 + shake * 1.2) * DEG, lerp(16.5, 15.5, prog(t, FROM, TO)), { t, seed: 31 });
+    orbit(v.camera, [1.75, 0, 0.45], lerp(-2, 3, prog(t, FROM, TO)) * DEG, (55 + shake * 1.2) * DEG, lerp(13.4, 12.7, prog(t, FROM, TO)), { t, seed: 31 });
+    // a quick lens punch on every slam
+    let punch = 0;
+    S.tags.forEach((tg) => { const dt = t - tg.at; if (dt >= 0) punch += Math.exp(-dt * 11) * (1 - Math.exp(-dt * 90)); });
+    v.camera.fov = 28 - Math.min(1, punch) * 2.2;
+    v.camera.updateProjectionMatrix();
 
     S.tags.forEach((tg, i) => {
       const dt = t - tg.at;
@@ -80,12 +87,12 @@ export default {
     const u = prog(t, LEAVE, LEAVE + 1.7);
     const appear = spring(t - (LEAVE - 0.5), 3, 0.5);
     g.root.visible = t > LEAVE - 0.5;
-    g.root.position.set(lerp(3.3, 13.5, ease.inQuad(u)), 0, 3.0);
+    g.root.position.set(lerp(2.75, 13.5, ease.inQuad(u)), 0, 3.15);
     g.root.rotation.y = u > 0 ? Math.PI / 2 : 0.3;
     g.root.scale.setScalar(Math.max(1e-4, appear * 1.05));
     walkPose(g, (t - LEAVE) * 11, u > 0 ? 1 : 0);
 
     S.h1.update(t, { at: LEAVE, stagger: 0.07, x: 140, y: 330, out: TO - 0.35, outDur: 0.28 });
-    S.h2.update(t, { at: b(98), stagger: 0.07, x: 140, y: 470, out: TO - 0.35, outDur: 0.28 });
+    S.h2.update(t, { at: b(98), stagger: 0.07, x: 140, y: 448, out: TO - 0.35, outDur: 0.28 });
   },
 };

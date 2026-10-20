@@ -13,7 +13,7 @@ ffmpeg -y -loglevel error -i "$VIDEO" -vf "fps=1,scale=384:-1,tile=6x5:padding=4
 # motion strips: 12 frames at 15 fps around each moment (start time in seconds)
 strip() {
   local name="$1" start="$2"
-  ffmpeg -y -loglevel error -ss "$start" -i "$VIDEO" -frames:v 12 -vf "fps=15,scale=480:-1,tile=6x2:padding=4:color=0x222222" "$OUT/strip_${name}.jpg"
+  ffmpeg -y -loglevel error -ss "$start" -t 0.8 -i "$VIDEO" -frames:v 1 -vf "fps=15,scale=480:-1,tile=6x2:padding=4:color=0x222222" "$OUT/strip_${name}.jpg"
 }
 strip coin 0.3
 strip euler 1.8

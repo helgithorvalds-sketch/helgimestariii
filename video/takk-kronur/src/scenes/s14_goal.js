@@ -30,7 +30,7 @@ export default {
     const bt = makeBottleTable();
     S.table = new THREE.Group();
     S.table.add(bt.root);
-    S.table.position.set(4.2, 0, 0);
+    S.table.position.set(4.9, 0, 0);
     v.scene.add(S.table);
     // sparkler: thin emissive rays from the tip, re-seeded every frame
     S.spark = new THREE.Group();
@@ -128,7 +128,7 @@ export default {
     S.table.rotation.y = -0.4 + (1 - ts) * 1.2 + Math.sin(t * 0.6) * 0.05;
     const rp = ease.outCubic(prog(t, UNLOCK, UNLOCK + 0.7));
     const rr = 80 + rp * 520;
-    css(S.ring, { width: `${rr * 2}px`, height: `${rr * 2}px`, transform: `translate3d(${(1440 - rr).toFixed(1)}px, ${(560 - rr).toFixed(1)}px, 0)`, opacity: String(t > UNLOCK ? (1 - rp) * 0.8 : 0) });
+    css(S.ring, { width: `${rr * 2}px`, height: `${rr * 2}px`, transform: `translate3d(${(1530 - rr).toFixed(1)}px, ${(560 - rr).toFixed(1)}px, 0)`, opacity: String(t > UNLOCK ? (1 - rp) * 0.8 : 0) });
     // sparkler rays
     const r = rng(9000 + Math.round(t * 60));
     const on = t > UNLOCK + 0.25;

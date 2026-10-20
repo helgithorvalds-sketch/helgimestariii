@@ -63,8 +63,11 @@ export default {
     // iris from the coin into the end card
     cam.updateMatrixWorld();
     const c = toScreen(S.coinG.position, cam);
+    const right = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 0);
+    const edge = toScreen(S.coinG.position.clone().addScaledVector(right, 1.25), cam);
+    const rad0 = Math.hypot(edge.x - c.x, edge.y - c.y) * 0.97;
     const ip = ease.inQuart(prog(t, END - 0.42, END));
-    const rad = lerp(150, 2300, ip);
+    const rad = lerp(rad0, 2300, ip);
     css(S.iris, {
       display: ip > 0 && t < END ? 'block' : 'none',
       width: `${(rad * 2).toFixed(1)}px`, height: `${(rad * 2).toFixed(1)}px`,

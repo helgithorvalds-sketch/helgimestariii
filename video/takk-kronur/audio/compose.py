@@ -819,11 +819,15 @@ def main():
     duck = 1 - 0.28 * np.clip(env / 0.25, 0, 1)
     music *= duck * 0.8
 
-    mix = music + sfx
-    mix = fx_board(mix, Pedalboard([HighpassFilter(24), Compressor(threshold_db=-16, ratio=2.0, attack_ms=15, release_ms=180), Limiter(threshold_db=-1.5, release_ms=120)]))
+    mix = (music + sfx) * 0.6
+    mix = fx_board(mix, Pedalboard([HighpassFilter(24), Compressor(threshold_db=-20, ratio=2.0, attack_ms=15, release_ms=180)]))
+    mix *= 10 ** (5.8 / 20)  # drive into the limiter: ~-14 LUFS with peaks held at the ceiling
+    pre_pk, pre_rms = np.max(np.abs(mix)), np.sqrt(np.mean(mix ** 2))
+    over = np.mean(np.max(np.abs(mix), axis=0) > 10 ** (-1.6 / 20))
+    print(f'pre-limiter peak {20*np.log10(pre_pk):.1f} dBFS, rms {20*np.log10(pre_rms):.1f} dBFS, samples over ceiling {over*100:.3f}%')
+    mix = brickwall(mix, ceiling_db=-1.6)
     f = int(0.4 * SR)
     mix[:, -f:] *= np.linspace(1, 0, f)
-    mix = np.clip(mix, -0.98, 0.98)
     peak = np.max(np.abs(mix))
     rms = np.sqrt(np.mean(mix ** 2))
     print(f'mix peak {20*np.log10(peak+1e-9):.1f} dBFS, rms {20*np.log10(rms+1e-9):.1f} dBFS')
