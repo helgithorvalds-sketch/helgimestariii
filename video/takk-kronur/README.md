@@ -2,7 +2,7 @@
 
 A 91-second explainer about Takk krónur at Hagkaup and Bónus, and a pitch for using the same model in restaurants and bars. It is made entirely with code: every frame is a function of time, drawn by Three.js and HTML in headless Chromium, and stitched with FFmpeg. The music and sound effects are synthesised in Python from the same timeline, so every hit lands on the beat.
 
-See `STORYBOARD.md` for the script and `storyboard/storyboard.png` for one rendered key frame per scene.
+The finished film is `takk-kronur.mp4` (91 s, 1920×1080, 60 fps, AAC stereo at -14 LUFS). See `STORYBOARD.md` for the script with English glosses and `storyboard/storyboard.png` for one rendered key frame per scene.
 
 ## Requirements
 
