@@ -10,7 +10,8 @@ import { background, orbit, popObj, screenDisc, makeIris, updateIris, IRIS, C } 
 
 // Recap: the four reasons fly into one price tag. Lower cost, lower price.
 const FROM = b(100), TO = b(108);
-const MERGE = b(103);
+const ARRIVE = b(103.75); // the first tile reaches the tag here; the rest follow on sixteenths
+const FLY = 0.32;
 const TAG = b(104);
 const ITEMS = [['Engar virkjanir', 'plant'], ['Lítil yfirbygging', 'layers'], ['Nákvæm spá', 'chart'], ['Sjálfvirkni', 'gear']];
 const TAG_POS = new THREE.Vector3(3.2, 0.6, 0);
@@ -93,7 +94,7 @@ export default {
     S.tiles = ITEMS.map(([txt, kind], i) => {
       const g = reasonTile(txt, kind, i);
       v.scene.add(g);
-      return { g, at: FROM + b(0.5 + i * 0.5), home: new THREE.Vector3(-5.4 + i * 3.6, 0.2, 0), go: MERGE + i * b(0.25) };
+      return { g, at: FROM + b(0.5 + i * 0.5), home: new THREE.Vector3(-5.4 + i * 3.6, 0.2, 0), go: ARRIVE + i * b(0.25) - FLY };
     });
     S.tag = priceTag();
     // the tag swings from its hole: the outer group sits at the hole, the tag is offset back
@@ -109,7 +110,7 @@ export default {
     S.iris = makeIris(S, IRIS.orange);
 
     S.tiles.forEach((tl, i) => cue(tl.at, 'slam', { pitch: 1 + i * 0.1, gain: 0.42 }));
-    S.tiles.forEach((tl, i) => cue(tl.go + 0.3, 'blip', { pitch: 1.2 + i * 0.12, gain: 0.3 }));
+    S.tiles.forEach((tl, i) => cue(tl.go + FLY, 'blip', { pitch: 1.2 + i * 0.12, gain: 0.3 }));
     cue(TAG, 'hit', { gain: 0.6 });
     cue(TAG + 0.05, 'coin', { gain: 0.5 });
     cue(TO - b(1.2), 'swell', { dur: 0.7, gain: 0.5 });
@@ -120,7 +121,7 @@ export default {
     orbit(v.camera, [-0.9, 1.6, 0], lerp(-4, 3, ease.inOutSine(prog(t, FROM, TO))) * DEG, 4 * DEG, 25, { t, seed: 29, driftAmt: 0.02 });
     S.tiles.forEach((tl) => {
       const k = spring(t - tl.at, 3, 0.62);
-      const fly = ease.inCubic(prog(t, tl.go, tl.go + 0.32));
+      const fly = ease.inCubic(prog(t, tl.go, tl.go + FLY));
       const p = tl.home.clone().lerp(TAG_POS, fly);
       p.y += (1 - clamp(k)) * -1.5;
       tl.g.position.copy(p);

@@ -14,6 +14,7 @@ import { background, orbit, chip, chipPop, label, updateLabel, popObj, C } from 
 // on the beat; Straumlind is one software block with its eight experts standing on it.
 const FROM = b(56), TO = b(68);
 const OUT = TO - b(0.6);
+const FALL = 0.22; // seconds a block falls before it lands
 const BW = 5.2, BH = 1.45, BD = 3.8;
 const LEFT_X = -3.5, RIGHT_X = 3.7;
 const BLOCKS = [
@@ -86,9 +87,9 @@ export default {
     S.left = BLOCKS.map(([txt, kind], i) => {
       const g = block(txt, kind);
       v.scene.add(g);
-      return { g, at: FROM + b(1 + i * 0.5), y: 0.5 + BH / 2 + i * (BH + 0.06) };
+      return { g, at: FROM + b(1 + i * 0.5) - FALL, y: 0.5 + BH / 2 + i * (BH + 0.06) }; // lands on the beat
     });
-    S.soft = { g: block('Hugbúnaður', 'code', { accent: '#00BDD0' }), at: FROM + b(4), y: 0.5 + BH / 2 };
+    S.soft = { g: block('Hugbúnaður', 'code', { accent: '#00BDD0' }), at: FROM + b(4) - FALL, y: 0.5 + BH / 2 };
     v.scene.add(S.soft.g);
     // eight experts on the software block, popping on the sixteenths
     S.team = [];
@@ -110,8 +111,8 @@ export default {
     S.labR = label(S.front, 'Straumlind · 8 sérfræðingar', { kind: 'orange' });
 
     cue(FROM, 'tick', { gain: 0.4 }); // the chip lands on the downbeat, as the previous set finishes sinking
-    S.left.forEach((bl, i) => cue(bl.at + 0.2, 'thud', { pitch: 1 + i * 0.12, gain: 0.5 }));
-    cue(S.soft.at + 0.2, 'thud', { pitch: 1.6, gain: 0.5 });
+    S.left.forEach((bl, i) => cue(bl.at + FALL, 'thud', { pitch: 1 + i * 0.12, gain: 0.5 }));
+    cue(S.soft.at + FALL, 'thud', { pitch: 1.6, gain: 0.5 });
     S.team.forEach((p, i) => cue(p.at, 'pop', { pitch: 1.3 + i * 0.05, gain: 0.3 }));
     cue(FROM + b(7), 'tick', { gain: 0.35, pitch: 1.3 });
   },
@@ -124,8 +125,8 @@ export default {
     // blocks fall into place: a short drop, then a small squash on landing
     const drop = (bl, x) => {
       const dt = t - bl.at;
-      const fall = clamp(dt / 0.22);
-      const land = dt - 0.22;
+      const fall = clamp(dt / FALL);
+      const land = dt - FALL;
       const squash = land > 0 ? 1 - Math.exp(-land * 9) * Math.cos(land * 26) * 0.12 : 1;
       const sy = land > 0 ? squash : 1;
       const out = t > OUT ? 1 - ease.inBack(prog(t, OUT, OUT + 0.3), 1.6) : 1;

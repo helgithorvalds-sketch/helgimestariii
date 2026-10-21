@@ -17,6 +17,7 @@ const BLK = 1.0;
 const SLOTS = [[-0.55, -0.55], [0.55, -0.55], [-0.55, 0.55], [0.55, 0.55]];
 const K = 5.5 * DEG; // tilt per block of imbalance
 const MAXT = 16 * DEG;
+const FALL = 0.2; // seconds a block falls before it lands
 const FIX = b(88); // the forecast is right: orange turns into a bought (cyan) block
 
 function makePan(M, side, text, dot) {
@@ -97,9 +98,10 @@ export default {
 
     // blocks: drop times, which pan, colour
     const ev = [];
-    [0, 1, 2].forEach((i) => ev.push({ pan: 0, slot: i, color: '#00BDD0', at: FROM + b(2 + i * 0.5), w: 1 }));
-    [0, 1, 2, 3].forEach((i) => ev.push({ pan: 1, slot: i, color: '#0B3446', at: FROM + b(3.5 + i * 0.5), w: 1 }));
-    ev.push({ pan: 0, slot: 3, color: '#FF7800', at: FROM + b(5.75), w: 1, orange: true });
+    // drop times are set so each block lands on its beat (it falls for FALL seconds first)
+    [0, 1, 2].forEach((i) => ev.push({ pan: 0, slot: i, color: '#00BDD0', at: FROM + b(2 + i * 0.5) - FALL, w: 1 }));
+    [0, 1, 2, 3].forEach((i) => ev.push({ pan: 1, slot: i, color: '#0B3446', at: FROM + b(3.5 + i * 0.5) - FALL, w: 1 }));
+    ev.push({ pan: 0, slot: 3, color: '#FF7800', at: FROM + b(5.75) - FALL, w: 1, orange: true });
     S.blocks = ev.map((e) => {
       const m = block(e.color);
       S.pans[e.pan].add(m);
@@ -107,7 +109,7 @@ export default {
     });
     S.orange = S.blocks.find((x) => x.orange);
     // imbalance over time as a sum of spring steps (right heavier = positive)
-    S.steps = S.blocks.map((x) => ({ t: x.at + 0.2, d: x.pan === 1 ? x.w : -x.w }));
+    S.steps = S.blocks.map((x) => ({ t: x.at + FALL, d: x.pan === 1 ? x.w : -x.w }));
 
     S.chip = chip(S.front, 'Ástæða 3', { bg: C.navy });
     S.h1 = new Words(S.front, 'Jafnvægi, hverja\nklukkustund.', 't-h2');
@@ -118,7 +120,7 @@ export default {
     css(S.check, { background: '#FFFFFF', color: C.navy, fontSize: '28px', boxShadow: '0 14px 34px -12px rgba(11,52,70,0.32)' });
 
     cue(FROM, 'tick', { gain: 0.4 }); // the chip lands on the downbeat, as the previous set finishes sinking
-    S.blocks.forEach((x, i) => cue(x.at + 0.2, x.orange ? 'thock' : 'block', { pitch: x.pan ? 0.9 : 1.15, gain: x.orange ? 0.55 : 0.42 }));
+    S.blocks.forEach((x, i) => cue(x.at + FALL, x.orange ? 'thock' : 'block', { pitch: x.pan ? 0.9 : 1.15, gain: x.orange ? 0.55 : 0.42 }));
     cue(FROM + b(4.25), 'creak', { gain: 0.3 });
     cue(FIX, 'flip', { gain: 0.45 });
     cue(FIX + b(1), 'level', { gain: 0.55 });
@@ -144,10 +146,10 @@ export default {
     S.blocks.forEach((x) => {
       const dt = t - x.at;
       const [sx, sz] = SLOTS[x.slot];
-      const fall = clamp(dt / 0.2);
+      const fall = clamp(dt / FALL);
       x.m.visible = dt > 0;
       x.m.position.set(sx, 0.38 + BLK / 2 + 0.01 + (1 - fall * fall) * 5, sz);
-      const land = dt - 0.2;
+      const land = dt - FALL;
       const sq = land > 0 ? 1 - Math.exp(-land * 10) * Math.cos(land * 28) * 0.1 : 1;
       x.m.scale.set(2 - sq, sq, 2 - sq);
       if (x.orange) {
