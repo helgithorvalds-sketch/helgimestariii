@@ -20,7 +20,7 @@ from dsp import *  # noqa: E402,F401,F403
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 META = json.load(open(os.path.join(ROOT, 'out', 'meta.json')))
-DUR = float(META['duration']) + 2.5  # let the last chord ring past the picture
+DUR = float(META['duration'])  # the score ends with the picture; the last chord is faded into the final frame
 N = int(round(DUR * SR))
 BPM = 120
 BEAT = 60 / BPM
@@ -289,14 +289,20 @@ def lead():
 
 
 def final_chord():
+    """The hit on the logo, then a warm Dmaj9 that holds under the end card and fades with the picture."""
     out = np.zeros(N)
     notes = CH['D9']['notes'] + [50, 38]
-    n = int(SR * 6.0)
-    env = expdec(n, 2.0, 0.004)
+    n = int(SR * (DUR - FINAL))
+    hit = expdec(n, 1.4, 0.004)
+    hold = adsr(n, a=0.6, d=1.0, s=0.55, r=0.01, hold=n / SR)
+    env = np.maximum(hit, hold * 0.9)
     x = sum(pad_voice(mtof(m), n, cutoff=3200, voices=5, seed=m) for m in notes) / len(notes)
     place2(out, x * env * 0.7, FINAL)
     for k, m in enumerate([74, 78, 81, 86]):
         place2(out, fm_bell(mtof(m), 3.2, ratio=3.5, index=1.3, tau=1.2) * 0.11, FINAL + k * BEAT / 2)
+    # a slow, quiet bell figure while the line and the URL come in
+    for k, (beat, m) in enumerate([(2, 81), (3.5, 78), (5, 86), (6.5, 81), (8, 74), (10, 78)]):
+        place2(out, fm_bell(mtof(m), 2.6, ratio=3.5, index=1.0, tau=0.9) * 0.05 * (1 - k * 0.1), FINAL + bt(beat))
     return out
 
 
@@ -734,8 +740,8 @@ def main():
     mix = fx_board(mix, Pedalboard([HighpassFilter(24), Compressor(threshold_db=-20, ratio=2.0, attack_ms=15, release_ms=180)]))
     mix *= 10 ** (5.5 / 20)
     mix = brickwall(mix, ceiling_db=-1.6)
-    f = int(0.6 * SR)
-    mix[:, -f:] *= np.linspace(1, 0, f)
+    f = int(2.2 * SR)
+    mix[:, -f:] *= np.cos(np.linspace(0, np.pi / 2, f)) ** 2
     fi = int(0.02 * SR)
     mix[:, :fi] *= np.linspace(0, 1, fi)
     peak = np.max(np.abs(mix))

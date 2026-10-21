@@ -109,7 +109,7 @@ export default {
     S.labL = label(S.front, 'Hefðbundið orkufyrirtæki', { kind: 'muted' });
     S.labR = label(S.front, 'Straumlind · 8 sérfræðingar', { kind: 'orange' });
 
-    cue(FROM + b(0.5), 'tick', { gain: 0.4 });
+    cue(FROM, 'tick', { gain: 0.4 }); // the chip lands on the downbeat, as the previous set finishes sinking
     S.left.forEach((bl, i) => cue(bl.at + 0.2, 'thud', { pitch: 1 + i * 0.12, gain: 0.5 }));
     cue(S.soft.at + 0.2, 'thud', { pitch: 1.6, gain: 0.5 });
     S.team.forEach((p, i) => cue(p.at, 'pop', { pitch: 1.3 + i * 0.05, gain: 0.3 }));
@@ -118,7 +118,7 @@ export default {
 
   update(lt, t, S) {
     const v = S.view;
-    orbit(v.camera, [-7.3, 3.2, 0], lerp(-3, 2, ease.inOutSine(prog(t, FROM, TO))) * DEG, 15 * DEG, 37, { t, seed: 13, driftAmt: 0.03 });
+    orbit(v.camera, [-6.1, 3.2, 0], lerp(-3, 2, ease.inOutSine(prog(t, FROM, TO))) * DEG, 15 * DEG, 37, { t, seed: 13, driftAmt: 0.03 });
     popObj(S.plinthL, t, FROM + b(0.25), { freq: 2.6, zeta: 0.7, out: OUT + 0.1 });
     popObj(S.plinthR, t, FROM + b(0.5), { freq: 2.6, zeta: 0.7, out: OUT + 0.1 });
     // blocks fall into place: a short drop, then a small squash on landing
@@ -138,7 +138,7 @@ export default {
     S.team.forEach((p) => popObj(p.g, t, p.at, { base: 0.72, freq: 3.4, zeta: 0.55, out: OUT }));
 
     const x = 140;
-    chipPop(S.chip, t, FROM + b(0.5), OUT, { x, y: 150 });
+    chipPop(S.chip, t, FROM, OUT, { x, y: 150 });
     S.h1.update(t, { at: FROM + b(1), stagger: 0.07, x, y: 202, out: OUT, outDur: 0.3 });
     S.sub.update(t, { at: FROM + b(7), stagger: 0.035, x: x + 2, y: 430, out: OUT, outDur: 0.3 });
     updateLabel(S.labL, new THREE.Vector3(LEFT_X, 0, BD / 2 + 0.7), v.camera, t, FROM + b(1.5), OUT, { ay: 0, dy: 26 });

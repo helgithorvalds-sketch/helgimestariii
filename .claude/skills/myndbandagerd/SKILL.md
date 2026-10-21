@@ -108,14 +108,52 @@ Allar tímasetningar eru í hlutnum `TL` og `KEYS` (myndavél) í `svif-motion.h
 ## 5b. Önnur myndbönd sem hafa verið gerð
 - `svif-video/` (SVIF, ein samfelld taka).
 - `kamina-video/` (Augnablik, leiðbeiningar).
-- `straumlind-video/` (Straumlind, 81 sek.).
+- `straumlind-video/` (Straumlind v1, 81 sek.). v2 (95 sek., spurt og svarað, faglegri) er í `video/straumlind/`.
   - Hraðari, í köflum. Hver kafli byrjar á tómri plötu og byggist upp (`rise()` með glugga per kafla).
   - Staðreyndir í `DATA` efst og heimildir í `HANDRIT.md`.
   - Athugaðu alltaf fullyrðingar notandans: „20% ódýrari en allir“ stóðst ekki og var leiðrétt í „allt að 19%“ miðað við stærsta raforkusalann.
   - Notandinn vildi ekki veltutölur í myndbandinu.
 
+## 5c. Einingavélin (v2): `video/straumlind/` og `video/gledipeningar/`
+
+Nýrri myndböndin nota sömu vél: Three.js-senur yfir CSS-bakgrunni með DOM-texta ofan á. Notaðu hana fyrir ný myndbönd frekar en eina stóra HTML-skrá.
+
+- **Uppbygging:**
+  - Hver sena er `src/scenes/sNN_*.js` með `{id, from, to, setup(ctx,S), update(lt,t,S)}` og er skráð í `src/scenes/index.js`.
+  - Allur rammi ræðst af `window.seek(t)`.
+  - Allar tölur á skjánum koma úr `src/data.js` (aldrei harðkóðaðar í senum).
+- **Taktnet:**
+  - 120 BPM, `b(n) = n*0.5 s`.
+  - Allt sem birtist, poppar, telur eða stimplar lendir á slagi eða hálfslagi.
+  - Hljóðmerki eru skráð með `cue(t, nafn, {gain, pitch, dur})` í senunni sjálfri.
+  - `node scripts/meta.mjs` skrifar `out/meta.json` og `python3 audio/compose.py` semur tónlist og hljóð út frá því. Hljóðin hitta því alltaf myndina.
+- **Spurt og svarað (það sem notandinn bað um):**
+  - Opnun með fullyrðingunni.
+  - Stórt spurningaspjald („Hvernig er það hægt?“), svo kaflaspjöld sem hvert er spurning (`src/scenes/chapter.js`, iris út úr hlut eða spjald sem rennur upp).
+  - Hver kafli svarar sinni spurningu með texta og hreyfimynd saman.
+  - Ástæður eru númeraðar („Ástæða 1–4“) og dregnar saman í lokin á kaflanum.
+- **Auga og texti:**
+  - Fyrirsögn í fastri dálkstöðu vinstra megin (x 140–950, y 100–520).
+  - 3D-efnið er hægra megin eða í neðra beltinu.
+  - Merkingar eru festar við hlutinn sinn með `pin()`/`updateLabel()`.
+  - Aðeins eitt hreyfist í einu þar sem þarf að lesa.
+- **Faglegt frekar en „bubbly“:** stífari gormar (minna overshoot) en í Gleðipeningum, aðhaldssöm litapalletta og hreyfing nákvæmlega á taktnetinu.
+- **Lýsing á hvítum leir:**
+  - Of mikið umhverfisljós gerir hvítan leir flatan og hvítbrenndan. Notaðu hemi 0.42, key 1.65 og envIntensity 0.45.
+  - Í `enableKeyShadow` þarf `shadow.camera.updateProjectionMatrix()`, annars fá stórar senur enga skugga.
+- **Yfirferð fyrir upptöku:**
+  - Fyrst kyrrmyndir: `node scripts/still.mjs out/stills <sek…>` og `scripts/sheet.sh out/sN.jpg …`. Athugaðu skörun í hverri senu.
+  - Svo hreyfimynd með hljóði í lágri rammatíðni: `node scripts/preview.mjs --fps=4 --workers=4`.
+  - Loks full upptaka og frágangur:
+    ```
+    node scripts/render.mjs --workers=4
+    node scripts/finalize.mjs --out=out/<nafn>.mp4
+    ```
+    `finalize.mjs` stillir hljóðið á -14 LUFS.
+- **Lengd tónlistar:** `DUR` í `compose.py` er jafnt lengd myndarinnar. Lokahljómurinn heldur undir lokaspjaldinu og fjarar út með myndinni. Annars klippir `-shortest` hljóðið eða spjaldið verður þögult.
+
 ## 6. Samskipti við notandann
 
-- Notandinn skrifar oft á íslensku eða ensku með raddinnslætti; svaraðu á sama máli og hann notar.
-- Hann vill sjá niðurstöðu fljótt: sýndu stutta yfirlitsramma og sendu myndbandið þegar það er tilbúið.
+- Notandinn skrifar oft á íslensku eða ensku með raddinnslætti; svaraðu á sama máli og notandinn notar.
+- Notandinn vill sjá niðurstöðu fljótt: sýndu stutta yfirlitsramma og sendu myndbandið þegar það er tilbúið.
 - Áhorfendur myndbandsins eru markaðsfólk og fyrirtæki: faglegt, rólegt og „award-winning“ útlit, en ekki minnast á það í myndbandinu sjálfu.

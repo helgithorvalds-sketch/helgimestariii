@@ -34,11 +34,11 @@ function makePan(M, side, text, dot) {
   const top = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 4.1, 10).rotateZ(Math.PI / 2).translate(0, 0.38 + HANG, 0), M.steel);
   g.add(top);
   // a small sign hanging on the front of the pan
-  const sign = new THREE.Mesh(new RoundedBoxGeometry(2.3, 0.62, 0.12, 2, 0.06), M.white);
-  sign.position.set(0, -0.45, 1.5);
+  const sign = new THREE.Mesh(new RoundedBoxGeometry(3.0, 0.9, 0.12, 2, 0.08), M.white);
+  sign.position.set(0, -0.6, 1.5);
   sign.castShadow = true;
   g.add(sign);
-  const face = printPlane(2.1, 0.5, (c, w, h) => {
+  const face = printPlane(2.8, 0.74, (c, w, h) => {
     c.fillStyle = dot;
     c.beginPath(); c.arc(h * 0.62, h / 2, h * 0.16, 0, Math.PI * 2); c.fill();
     c.font = `700 ${Math.round(h * 0.56)}px ${FONT}`;
@@ -46,7 +46,7 @@ function makePan(M, side, text, dot) {
     c.textBaseline = 'middle';
     c.fillText(text, h * 1.05, h / 2 + 2);
   }, { px: 200 });
-  face.position.set(0, -0.45, 1.565);
+  face.position.set(0, -0.6, 1.565);
   g.add(face);
   g.userData.side = side;
   return g;
@@ -117,7 +117,7 @@ export default {
     S.check = el('div', 'abs pill nowrap', S.front, '<svg width="30" height="30" viewBox="0 0 30 30" style="display:block"><circle cx="15" cy="15" r="15" fill="#00BDD0"/><path d="M8.5 15.5l4.2 4.2 8.8-9.4" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Jafnvægi</span>');
     css(S.check, { background: '#FFFFFF', color: C.navy, fontSize: '28px', boxShadow: '0 14px 34px -12px rgba(11,52,70,0.32)' });
 
-    cue(FROM + b(0.5), 'tick', { gain: 0.4 });
+    cue(FROM, 'tick', { gain: 0.4 }); // the chip lands on the downbeat, as the previous set finishes sinking
     S.blocks.forEach((x, i) => cue(x.at + 0.2, x.orange ? 'thock' : 'block', { pitch: x.pan ? 0.9 : 1.15, gain: x.orange ? 0.55 : 0.42 }));
     cue(FROM + b(4.25), 'creak', { gain: 0.3 });
     cue(FIX, 'flip', { gain: 0.45 });
@@ -160,7 +160,7 @@ export default {
     });
 
     const x0 = 140;
-    chipPop(S.chip, t, FROM + b(0.5), OUT, { x: x0, y: 150 });
+    chipPop(S.chip, t, FROM, OUT, { x: x0, y: 150 });
     S.h1.update(t, { at: FROM + b(1), stagger: 0.07, x: x0, y: 202, out: OUT, outDur: 0.3 });
     S.s1.update(t, { at: FROM + b(6), stagger: 0.035, x: x0 + 2, y: 430, out: OUT, outDur: 0.3 });
     S.s2.update(t, { at: FIX + b(0.5), stagger: 0.05, x: x0 + 2, y: 560, out: OUT, outDur: 0.3 });
@@ -168,7 +168,7 @@ export default {
     S.orange.m.updateMatrixWorld(true);
     const ob = new THREE.Vector3().setFromMatrixPosition(S.orange.m.matrixWorld);
     const panL = S.pans[0].position;
-    updateLabel(S.labBal, new THREE.Vector3(panL.x, panL.y - 1.0, 1.5), v.camera, t, FROM + b(6), FIX - 0.05, { ay: 0, dy: 8 });
+    updateLabel(S.labBal, new THREE.Vector3(panL.x, panL.y - 1.3, 1.5), v.camera, t, FROM + b(6), FIX - 0.05, { ay: 0, dy: 10 });
     const kc = spring(t - (FIX + b(1)), 3.2, 0.6);
     const fade = 1 - ease.inCubic(prog(t, OUT, OUT + 0.3));
     pin(S.check, new THREE.Vector3(0, PIVOT_Y + 1.3, 0), v.camera, { ay: -100, o: (t > FIX + b(1) ? 1 : 0) * fade, s: Math.max(0.001, kc) });

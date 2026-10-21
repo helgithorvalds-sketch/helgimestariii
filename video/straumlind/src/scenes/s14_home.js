@@ -73,7 +73,7 @@ export default {
       drive.position.set(x + (i ? 3.2 : -3.2), 0.62, 3.8);
       drive.receiveShadow = true;
       v.scene.add(drive);
-      return { plate, h, trees, drive, winMat, x, at: FROM + b(0.25 + i * 0.25) };
+      return { plate, h, trees, drive, winMat, x, at: FROM + b(i * 0.25) }; // the first home starts on the downbeat, as the chart finishes
     });
     // wall box on the Straumlind home, and the car
     S.box = new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.75, 0.22, 2, 0.08), clay('#FFFFFF', { rough: 0.5, coat: 0.4 }));
@@ -173,7 +173,8 @@ export default {
       pin(e, new THREE.Vector3(HX[i], 0.6, 6.6), v.camera, { ay: 0, dy: 18, o: (t > COUNT_A - 0.1 ? 1 : 0) * fadeDay, s: 0.85 + 0.15 * clamp(k) });
     });
     const ks = spring(t - SAVE, 3.2, 0.6);
-    pin(S.save, new THREE.Vector3(0, 6.6, -1.2), v.camera, { o: (t > SAVE ? 1 : 0) * fadeDay, s: Math.max(0.001, ks) });
+    // high enough to clear both roofs and the chimney by a wide margin, still level with the headline's right edge
+    pin(S.save, new THREE.Vector3(0, 6.6, -1.2), v.camera, { dy: -92, o: (t > SAVE ? 1 : 0) * fadeDay, s: Math.max(0.001, ks) });
 
     const x = 140;
     S.h1.update(t, { at: FROM + b(0.5), stagger: 0.08, x, y: 140, out: NIGHT - b(0.75), outDur: 0.3 });

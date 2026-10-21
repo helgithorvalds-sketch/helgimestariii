@@ -101,7 +101,7 @@ export default {
     S.labFc = label(S.front, 'Spá', { kind: 'cyan' });
     S.labOrb = label(S.front, 'Hugbúnaður Straumlindar', { kind: 'navy' });
 
-    cue(FROM + b(0.5), 'tick', { gain: 0.4 });
+    cue(FROM, 'tick', { gain: 0.4 }); // the chip lands on the downbeat, as the previous set finishes sinking
     for (let d = 0; d < 7; d++) cue(FROM + b(1 + d * 0.5), 'ruler', { dur: 0.16, gain: 0.32, pitch: 1 + d * 0.08 });
     cue(FROM + b(3), 'node', { gain: 0.45 });
     cue(DRAW_A, 'draw', { dur: DRAW_B - DRAW_A, gain: 0.45 });
@@ -147,12 +147,13 @@ export default {
     }
 
     const x = 140;
-    chipPop(S.chip, t, FROM + b(0.5), OUT, { x, y: 150 });
+    chipPop(S.chip, t, FROM, OUT, { x, y: 150 });
     S.h1.update(t, { at: FROM + b(1), stagger: 0.07, x, y: 202, out: OUT, outDur: 0.3 });
     S.sub.update(t, { at: DRAW_B, stagger: 0.04, x: x + 2, y: 430, out: OUT, outDur: 0.3 });
-    // labels: use on the Monday evening peak, forecast at the end of the line, the orb under itself
-    const peak = S.bars[18];
-    updateLabel(S.labUse, new THREE.Vector3(peak.x, 0.9 + peak.hgt + 0.2, 0.45), v.camera, t, FROM + b(3), OUT, { ay: -100, dy: -18 });
+    // labels: use on the Wednesday evening peak (clear of the sub-text), forecast at the end of the line, the orb under itself
+    const peak = S.bars[2 * 24 + 18];
+    // it names the grey bars, so it leaves before the forecast line reaches Wednesday and could be read as naming the line
+    updateLabel(S.labUse, new THREE.Vector3(peak.x, 0.9 + peak.hgt + 0.2, 0.45), v.camera, t, FROM + b(2), b(72.75), { ay: -100, dy: -18 });
     const end = S.line.curve.getPointAt(1);
     updateLabel(S.labFc, end, v.camera, t, DRAW_B - b(0.25), OUT, { ax: 0, ay: -100, dx: 10, dy: -22 });
     updateLabel(S.labOrb, S.orb.position.clone().add(new THREE.Vector3(0, 1.6, 0)), v.camera, t, FROM + b(3.5), DRAW_A + b(1.5), { ay: -100, dy: -10 });

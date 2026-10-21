@@ -99,7 +99,8 @@ export default {
     S.houses.forEach((h, i) => cue(h.at, 'pop', { pitch: 1.2 + i * 0.1, gain: 0.45 }));
     S.burstEv.forEach((e, i) => cue(e.t, 'blip', { pitch: 1 + i * 0.12, gain: 0.35 }));
     S.tags.forEach((tg, i) => cue(tg.at, 'tick', { pitch: 1 + i * 0.15, gain: 0.45 }));
-    wipe(TO, { kind: 'panel', dur: 0.6, color: '#F3F7F8', dir: 1, angle: -10 });
+    wipe(TO, { kind: 'panel', dur: 0.6, color: '#00BDD0', dir: 1, angle: -10 });
+    cue(TO - 0.34, 'swell', { dur: 0.34, gain: 0.4 });
   },
 
   update(lt, t, S) {
@@ -113,10 +114,10 @@ export default {
     updateBursts(S.bursts, t, S.burstEv, 0.6);
 
     // camera travels along the chain: station, lines, substation, homes
-    const tx = key(t, [[FROM, -31], [FROM + b(2.5), -16, ease.inOutCubic], [FROM + b(5), 10, ease.inOutCubic], [FROM + b(8), 36, ease.inOutCubic], [TO, 40, ease.inOutSine]]);
+    const tx = key(t, [[FROM, -42], [FROM + b(1), -39, ease.inOutSine], [FROM + b(3), -16, ease.inOutCubic], [FROM + b(5), 10, ease.inOutCubic], [FROM + b(8), 36, ease.inOutCubic], [TO, 40, ease.inOutSine]]);
     const az = key(t, [[FROM, -14], [FROM + b(5), -4, ease.inOutCubic], [FROM + b(8), 4, ease.inOutCubic], [TO, 8, ease.inOutSine]]) * DEG;
     const el = key(t, [[FROM, 16], [FROM + b(5), 20], [FROM + b(8), 22], [TO, 20]]) * DEG;
-    const dist = key(t, [[FROM, 64], [FROM + b(5), 66], [FROM + b(8), 58, ease.inOutCubic], [TO, 54, ease.inOutSine]]);
+    const dist = key(t, [[FROM, 78], [FROM + b(3), 68, ease.inOutCubic], [FROM + b(5), 66], [FROM + b(8), 58, ease.inOutCubic], [TO, 54, ease.inOutSine]]);
     orbit(v.camera, [tx, 8.6, 0], az, el, dist, { t, seed: 9, driftAmt: 0.05 });
 
     // type

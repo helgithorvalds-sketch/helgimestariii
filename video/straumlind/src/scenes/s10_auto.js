@@ -74,7 +74,7 @@ export default {
     S.h1 = new Words(S.front, 'Sjálfvirkni í stað\nhandavinnu.', 't-h2');
     S.sub = new Words(S.front, 'Minni handavinna þýðir\nminni kostnað.', 't-body', { color: C.steel });
 
-    cue(FROM + b(0.5), 'tick', { gain: 0.4 });
+    cue(FROM, 'tick', { gain: 0.4 }); // the chip lands on the downbeat, as the previous set finishes sinking
     S.tiles.forEach((tl, i) => cue(tl.at, 'pop', { pitch: 1 + i * 0.08, gain: 0.32 }));
     cue(OK, 'beep', { gain: 0.5 });
     S.tiles.forEach((tl, i) => cue(tl.tickAt, 'blip', { pitch: 1.1 + i * 0.12, gain: 0.42 }));
@@ -94,7 +94,7 @@ export default {
       tl.g.userData.tick.visible = k > 0.01;
     });
     const x = 140;
-    chipPop(S.chip, t, FROM + b(0.5), OUT, { x, y: 150 });
+    chipPop(S.chip, t, FROM, OUT, { x, y: 150 });
     S.h1.update(t, { at: FROM + b(1), stagger: 0.07, x, y: 202, out: OUT, outDur: 0.3 });
     S.sub.update(t, { at: FROM + b(5), stagger: 0.04, x: x + 2, y: 430, out: OUT, outDur: 0.3 });
   },
