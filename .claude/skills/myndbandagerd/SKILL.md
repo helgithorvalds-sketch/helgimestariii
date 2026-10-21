@@ -125,6 +125,8 @@ Nýrri myndböndin nota sömu vél: Three.js-senur yfir CSS-bakgrunni með DOM-t
 - **Taktnet:**
   - 120 BPM, `b(n) = n*0.5 s`.
   - Allt sem birtist, poppar, telur eða stimplar lendir á slagi eða hálfslagi.
+  - Hlutur sem dettur eða flýgur á sinn stað á að **lenda** á slaginu. Láttu hreyfinguna byrja `FALL` sekúndum fyrr (`at: b(n) - FALL`) og settu hljóðið á lendinguna.
+  - Athugaðu með stuttu skriftu að öll hljóðmerki í `out/meta.json` séu á 1/16-netinu. Undantekning eru „swell“ sem leiða inn í slag.
   - Hljóðmerki eru skráð með `cue(t, nafn, {gain, pitch, dur})` í senunni sjálfri.
   - `node scripts/meta.mjs` skrifar `out/meta.json` og `python3 audio/compose.py` semur tónlist og hljóð út frá því. Hljóðin hitta því alltaf myndina.
 - **Spurt og svarað (það sem notandinn bað um):**
