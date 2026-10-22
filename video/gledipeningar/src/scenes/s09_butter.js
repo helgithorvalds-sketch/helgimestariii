@@ -49,7 +49,7 @@ export default {
     css(S.lb2, { color: 'rgba(24,0,62,0.55)' });
     S.h2 = new Words(S.front, '20 krónur skipta litlu.', 't-h2');
     S.why = new Words(S.front, 'Lítil ástæða til að opna appið.', 't-h3', { color: '#691FE7' });
-    S.iris = makeIris(S, IRIS.yellow);
+    S.iris = makeIris(S, IRIS.green);
 
     cue(FROM, 'pop', { gain: 0.6, pitch: 0.8 });
     cue(FROM + b(1) + 0.02, 'thud', { gain: 0.7 });

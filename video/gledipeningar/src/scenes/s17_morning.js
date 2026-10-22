@@ -6,8 +6,8 @@ import { ContactShadow, enableKeyShadow } from '../three/stage.js';
 import { makeBedroom } from '../models/places.js';
 import { makePhone, drawLockScreen } from '../models/devices.js';
 import { makePerson, SKIN, HAIR } from '../models/people.js';
-import { background, orbit, screenDisc, makeIris, updateIris, IRIS, YELLOW } from './common.js';
-import { glediIconSvg } from '../brand.js';
+import { background, orbit, screenDisc, makeIris, updateIris, IRIS, GREEN, FOREST } from './common.js';
+import { vildIconSvg } from '../brand.js';
 
 const FROM = b(208), TO = b(216);
 const BUZZ = b(209);
@@ -56,10 +56,10 @@ export default {
       width: '660px', padding: '26px 30px', borderRadius: '34px', background: 'rgba(255,255,255,0.94)',
       boxShadow: '0 24px 60px rgba(42,10,94,0.18)', display: 'flex', gap: '22px', alignItems: 'center',
     });
-    S.card.innerHTML = `<div style="flex:none">${glediIconSvg({ size: 84 })}</div>
-      <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 34px Figtree;color:#18003E">Gleðipeningar</span><span style="font:600 24px Figtree;color:rgba(24,0,62,.45)">núna</span></div>
+    S.card.innerHTML = `<div style="flex:none">${vildIconSvg({ size: 84 })}</div>
+      <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 34px Figtree;color:#18003E">VILD</span><span style="font:600 24px Figtree;color:rgba(24,0,62,.45)">núna</span></div>
       <div style="font:600 30px Figtree;color:rgba(24,0,62,.8);margin-top:6px;line-height:1.25">Þú fékkst inneign frá barnum.</div></div>`;
-    S.big = el('div', 'abs t-mega nowrap tnum', S.front, '<span style="position:relative;display:inline-block"><span style="position:absolute;left:-0.08em;right:-0.08em;top:0.42em;bottom:0.02em;background:#FFD24D;border-radius:0.12em;transform:rotate(-1.5deg)"></span><span style="position:relative">+8.000 kr.</span></span>');
+    S.big = el('div', 'abs t-mega nowrap tnum', S.front, '<span style="position:relative;display:inline-block"><span style="position:absolute;left:-0.08em;right:-0.08em;top:0.42em;bottom:0.02em;background:#B4FF9B;border-radius:0.12em;transform:rotate(-1.5deg)"></span><span style="position:relative">+8.000 kr.</span></span>');
     css(S.big, { fontSize: '176px', color: '#18003E' });
     // second popup: a nudge to come back and use it
     S.nudge = el('div', 'abs', S.front);
@@ -69,8 +69,8 @@ export default {
     });
     S.nudge.innerHTML = `<div style="font:800 40px Figtree;letter-spacing:-.02em">Inneignin bíður.</div>
       <div style="font:600 30px Figtree;color:rgba(255,255,255,.75);margin-top:8px;line-height:1.3">8.000 kr. á barnum. Kíkirðu í kvöld?</div>
-      <div style="display:inline-block;margin-top:20px;background:${YELLOW};color:#18003E;font:800 30px Figtree;padding:14px 28px;border-radius:999px">Bóka borð</div>`;
-    S.iris = makeIris(S, IRIS.yellow);
+      <div style="display:inline-block;margin-top:20px;background:${GREEN};color:${FOREST};font:800 30px Figtree;padding:14px 28px;border-radius:999px">Bóka borð</div>`;
+    S.iris = makeIris(S, IRIS.green);
 
     cue(FROM, 'morning', { gain: 0.5 });
     cue(BUZZ, 'buzz', { dur: 0.5, gain: 0.7 });
@@ -97,7 +97,7 @@ export default {
     const notif = ease.outBack(prog(t, BUZZ + 0.15, BUZZ + 0.5));
     const sig = `${lit.toFixed(2)}|${notif.toFixed(2)}`;
     if (sig !== S.sig) {
-      S.phone.redraw({ lit, notif, time: '10:12', day: 'Laugardagur', title: 'Gleðipeningar', body: ['Þú fékkst 8.000 kr.', 'inneign frá barnum.'], icon: 'gledi' });
+      S.phone.redraw({ lit, notif, time: '10:12', day: 'Laugardagur', title: 'VILD', body: ['Þú fékkst 8.000 kr.', 'inneign frá barnum.'], icon: 'vild' });
       S.sig = sig;
     }
 

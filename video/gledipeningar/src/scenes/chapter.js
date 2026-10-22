@@ -2,7 +2,7 @@ import { b, cue } from '../core/util.js';
 import { ease, prog, spring, lerp } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { BG } from './common.js';
-import { glediIconSvg } from '../brand.js';
+import { vildIconSvg } from '../brand.js';
 
 /**
  * Full-colour chapter card. The previous scene's iris fills the frame with the card colour at `at`;
@@ -30,7 +30,7 @@ export function chapter({ id, at, next, bg, text = '#FFFFFF', kickerColor = null
         css(S.num, { font: '900 900px Figtree', letterSpacing: '-0.06em', lineHeight: '1', color: `rgba(${rgb},0.09)` });
       }
       S.kicker = el('div', 'abs t-label nowrap', S.panel);
-      S.kicker.innerHTML = icon ? `<span style="display:inline-flex;align-items:center;gap:16px">${glediIconSvg({ size: 46 })}<span>${kicker}</span></span>` : kicker;
+      S.kicker.innerHTML = icon ? `<span style="display:inline-flex;align-items:center;gap:16px">${vildIconSvg({ size: 46 })}<span>${kicker}</span></span>` : kicker;
       css(S.kicker, { color: kickerColor || text, fontSize: '28px', opacity: '0.9' });
       S.title = new Words(S.panel, title, 't-h1', { color: text });
       S.title.root.style.fontSize = `${size}px`;

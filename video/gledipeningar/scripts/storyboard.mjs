@@ -18,18 +18,18 @@ const FRAMES = [
   { t: 45.273, n: '10', name: 'Tvær brautir', text: 'Inneign fær fólk til að koma aftur.', sound: 'Smellur á hverju slagi' },
   { t: 57.273, n: '11', name: 'Kafli 4: Gallinn', text: 'Smjör 400 kr., +20 kr. til baka', sound: 'Strik, tink' },
   { t: 60.273, n: '12', name: 'Kafli 5', text: 'Hugmyndin', sound: 'Ris, trommuþyrill' },
-  { t: 63.545, n: '13', name: 'Gleðipeningar', text: 'Hvað ef veitingastaðir gerðu það sama?', sound: 'Fallið: högg og laglína' },
+  { t: 63.545, n: '13', name: 'VILD', text: 'Vildarpeningar fyrir veitingastaði.', sound: 'Fallið: högg og laglína' },
   { t: 68.727, n: '14', name: 'Álagning', text: '~10% á móti ~30%', sound: 'Strik dregin' },
   { t: 80.727, n: '15', name: 'Sami ávinningur', text: '+20 kr. á móti +1.200 kr.', sound: 'Peningastafli' },
   { t: 85.909, n: '16', name: 'Hugmynd 1', text: 'Ein samloka kostar 3.000 kr.', sound: 'Smellur' },
-  { t: 99.818, n: '17', name: 'Afsláttur eða inneign', text: '4.500 kr. á móti 6.000 kr.', sound: 'Kassi, peningar, teljari' },
+  { t: 99.818, n: '17', name: 'Afsláttur eða inneign', text: '1.500 kr. tap á móti ~1.050 kr. hráefni', sound: 'Kassi, peningar, teljari' },
   { t: 105.000, n: '18', name: 'Niðurstaðan', text: '1.500 kr. meiri hagnaður.', sound: 'Högg' },
   { t: 112.145, n: '19', name: 'Hugmynd 2: Djamm í kvöld', text: '50.000 kr. eytt, 8.000 kr. til baka', sound: 'Glös, deyfður klúbbur' },
   { t: 116.727, n: '20', name: 'Laugardagsmorgunn', text: 'Inneignin bíður. Bóka borð', sound: 'Titringur, tilkynning' },
   { t: 123.545, n: '21', name: 'Hugmynd 3: Söfnun', text: '25.000 kr. inneign eftir 300.000 kr.', sound: 'Hljóð á hverri heimsókn' },
   { t: 126.545, n: '22', name: 'Opnað', text: 'Flöskuborð í boði hússins.', sound: 'Opnun, sindur' },
   { t: 131.455, n: '23', name: 'Lokaorð', text: 'Inneign fær fólk inn. Og heldur því í keðjunni.', sound: 'Hvísl' },
-  { t: 136.364, n: '24', name: 'Lokaspjald', text: 'gleðipeningar. Vildarkerfi fyrir veitingastaði.', sound: 'Lokahljómur' },
+  { t: 136.364, n: '24', name: 'Lokaspjald', text: 'VILD', sound: 'Lokahljómur' },
 ];
 
 const tc = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
@@ -77,8 +77,8 @@ figcaption{padding:16px 4px 0}.meta{display:flex;gap:12px;align-items:baseline}
 .n{font-weight:800;font-size:22px;color:#691FE7}.name{font-weight:800;font-size:24px;letter-spacing:-.01em;flex:1}.tc{font-weight:700;font-size:20px;color:rgba(24,0,62,.5)}
 .txt{font-weight:600;font-size:20px;margin-top:8px;line-height:1.3}.snd{font-weight:500;font-size:18px;margin-top:6px;color:rgba(24,0,62,.55)}
 </style></head><body>
-<header><div><h1>Gleðipeningar: storyboard</h1><div class="sub">Hreyfigrafík í köflum, 139 sek. Takk útskýrir hugmyndina, Gleðipeningar færa hana á veitingastaði og bari.</div></div>
-<div class="spec">1920 × 1080 · 60 fps · 110 BPM<br>Figtree · Takk #691FE7 · Gleði #FFD24D</div></header>
+<header><div><h1>VILD: storyboard</h1><div class="sub">Hreyfigrafík í köflum, 139 sek. Takk útskýrir hugmyndina, VILD færir hana á veitingastaði og bari.</div></div>
+<div class="spec">1920 × 1080 · 60 fps · 110 BPM<br>Figtree · Takk #691FE7 · VILD #B4FF9B / #0C5C3B</div></header>
 <div class="grid">${cells}</div></body></html>`;
 fs.writeFileSync(path.join(outDir, 'storyboard.html'), html);
 const { browser: b2, page: p2 } = await openPage(port).catch(async () => ({}));

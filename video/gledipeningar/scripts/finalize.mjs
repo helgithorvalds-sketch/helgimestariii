@@ -1,5 +1,5 @@
 // Mux the rendered video with the mix, two-pass loudness normalised to -14 LUFS / -1 dBTP.
-//   node scripts/finalize.mjs [--crf=18] [--out=out/gledipeningar.mp4]
+//   node scripts/finalize.mjs [--crf=18] [--out=out/vild.mp4]
 import { execFileSync, spawnSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
@@ -7,7 +7,7 @@ import fs from 'fs';
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const arg = (k, d) => { const a = process.argv.find((x) => x.startsWith(`--${k}=`)); return a ? a.split('=')[1] : d; };
 const crf = arg('crf', '18');
-const out = path.resolve(ROOT, arg('out', 'out/gledipeningar.mp4'));
+const out = path.resolve(ROOT, arg('out', 'out/vild.mp4'));
 const video = path.join(ROOT, 'out', 'video.mp4');
 const audio = path.join(ROOT, 'audio', 'out', 'mix.wav');
 

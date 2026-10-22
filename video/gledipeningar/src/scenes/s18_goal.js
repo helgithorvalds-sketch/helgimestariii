@@ -4,7 +4,7 @@ import { ease, prog, spring, lerp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words, Counter, bar } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeBottleTable } from '../models/places.js';
-import { background, orbit, glediIcon, YELLOW } from './common.js';
+import { background, orbit, vildIcon, GREEN } from './common.js';
 import { wipe } from '../fx.js';
 
 // Idea 3: an arcade-style goal. Every visit's credit fills the bar like tickets; at 25.000 kr. of
@@ -54,32 +54,32 @@ export default {
     S.kick = el('div', 'abs t-label', S.front, 'Markmið');
     css(S.kick, { color: '#DBC7FF' });
     S.kick2 = el('div', 'abs t-label', S.front, 'Opnað!');
-    css(S.kick2, { color: YELLOW });
+    css(S.kick2, { color: GREEN });
     S.h = new Words(S.front, 'Flöskuborð', 't-h1', { color: '#FFFFFF' });
     S.sub = new Words(S.front, 'fyrir 25.000 kr. inneign', 't-body', { color: '#DBC7FF' });
-    S.h2 = new Words(S.front, 'í boði hússins.', 't-h2', { color: YELLOW });
+    S.h2 = new Words(S.front, 'í boði hússins.', 't-h2', { color: GREEN });
     S.track = el('div', 'abs', S.front);
     S.fill = el('div', 'abs', S.front);
     S.goal = el('div', 'abs t-h4 nowrap tnum', S.front, '25.000 kr.');
-    css(S.goal, { color: YELLOW });
+    css(S.goal, { color: GREEN });
     S.lock = el('div', 'abs', S.front);
     S.lock.innerHTML = `<svg width="64" height="76" viewBox="0 0 64 76"><path d="M16 34V22a16 16 0 0 1 32 0v12" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/><rect x="6" y="32" width="52" height="40" rx="12" fill="#FFFFFF"/><circle cx="32" cy="50" r="6" fill="#691FE7"/></svg>`;
     S.shackle = S.lock.querySelector('path');
     S.cur = new Counter(S.front, 't-h4', { format: (x) => `${isk(x)} kr. inneign` });
-    css(S.cur.root, { color: YELLOW });
+    css(S.cur.root, { color: GREEN });
     S.chips = VISITS.map((vv) => {
       const c = el('div', 'abs nowrap', S.front);
       css(c, { textAlign: 'center' });
       c.innerHTML = `<div style="font:700 21px Figtree;color:#DBC7FF;letter-spacing:.08em;text-transform:uppercase">${vv.label}</div>
         <div style="font:700 26px Figtree;color:rgba(255,255,255,.8);letter-spacing:-.01em;margin-top:6px">${isk(vv.spend)} kr. eytt</div>
-        <div style="font:800 34px Figtree;color:${YELLOW};letter-spacing:-.02em;margin-top:2px">+${isk(vv.back)} kr.</div>`;
+        <div style="font:800 34px Figtree;color:${GREEN};letter-spacing:-.02em;margin-top:2px">+${isk(vv.back)} kr.</div>`;
       return c;
     });
     S.credLab = el('div', 'abs t-label nowrap', S.front, 'Í viðskiptum');
     css(S.credLab, { color: '#DBC7FF' });
     S.cred = new Counter(S.front, 't-h2 nowrap tnum', { format: (x) => `${isk(x)} kr.` });
     css(S.cred.root, { color: '#FFFFFF' });
-    S.icon = glediIcon(S.front, 64);
+    S.icon = vildIcon(S.front, 64);
     S.ring = el('div', 'abs', S.front);
     css(S.ring, { borderRadius: '50%', border: '6px solid rgba(255,255,255,0.9)' });
 

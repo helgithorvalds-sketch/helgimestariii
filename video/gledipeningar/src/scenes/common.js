@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { el, css, place } from '../core/dom.js';
 import { spring, clamp, prog, ease, drift, lerp } from '../core/anim.js';
 import { toScreen } from '../three/stage.js';
-import { tMarkSvg, glediIconSvg } from '../brand.js';
+import { tMarkSvg, glediIconSvg, vildIconSvg } from '../brand.js';
 
 export const BG = {
   studio: 'radial-gradient(ellipse 80% 75% at 58% 42%, #F7F3FC 0%, #EEE6F9 55%, #E2D6F5 100%)',
@@ -14,11 +14,16 @@ export const BG = {
   pink: 'radial-gradient(ellipse 85% 80% at 55% 45%, #FF8DC0 0%, #FF7AB6 50%, #F865A8 100%)',
   ink: 'radial-gradient(ellipse 85% 80% at 55% 45%, #24064F 0%, #18003E 50%, #10002B 100%)',
   yellow: 'radial-gradient(ellipse 85% 80% at 55% 45%, #FFDD6E 0%, #FFD24D 50%, #FFC72E 100%)',
+  green: 'radial-gradient(ellipse 85% 80% at 55% 45%, #C4FFB0 0%, #B4FF9B 50%, #A2F587 100%)',
+  forest: 'radial-gradient(ellipse 85% 80% at 55% 45%, #13704A 0%, #0C5C3B 50%, #08452C 100%)',
 };
 
 // Flat colours matching the centre tones above, used by the chapter irises.
-export const IRIS = { purple: '#691FE7', lavender: '#DBC7FF', pink: '#FF7AB6', ink: '#18003E', yellow: '#FFD24D' };
+export const IRIS = { purple: '#691FE7', lavender: '#DBC7FF', pink: '#FF7AB6', ink: '#18003E', yellow: '#FFD24D', green: '#B4FF9B' };
 export const YELLOW = '#FFD24D';
+// VILD brand colours
+export const GREEN = '#B4FF9B';
+export const FOREST = '#0C5C3B';
 
 export function background(S, kind = 'studio') {
   const bg = el('div', 'fill', S.back);
@@ -152,4 +157,12 @@ export function updateBursts(pool, t, events, dur = 0.38) {
     m.material.opacity = (1 - p) * 0.85;
   }
   for (; k < pool.length; k++) pool[k].visible = false;
+}
+
+/** Small flat VILD coin icon (2D). */
+export function vildIcon(parent, size = 56) {
+  const e = el('div', 'abs', parent);
+  css(e, { width: `${size}px`, height: `${size}px`, borderRadius: '50%', boxShadow: `0 ${Math.round(size * 0.12)}px ${Math.round(size * 0.3)}px rgba(12,92,59,0.25)` });
+  e.innerHTML = vildIconSvg({ size });
+  return e;
 }

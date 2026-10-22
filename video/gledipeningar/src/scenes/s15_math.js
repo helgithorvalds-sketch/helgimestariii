@@ -1,28 +1,27 @@
 import * as THREE from 'three';
-import { b, cue, isk } from '../core/util.js';
+import { b, cue } from '../core/util.js';
 import { ease, prog, spring, lerp, arc, wobble, DEG } from '../core/anim.js';
-import { el, css, place, Words, Counter } from '../core/dom.js';
+import { el, css, place, Words, bar } from '../core/dom.js';
 import { ContactShadow, toScreen } from '../three/stage.js';
 import { M, rbox } from '../three/kit.js';
 import { clay } from '../three/materials.js';
-import { makeSandwich } from '../models/food.js';
-import { background, orbit, pin, chip, V3, BG, YELLOW, glediIcon, makeIris, updateIris, IRIS } from './common.js';
+import { makeSandwich, makeIceCream } from '../models/food.js';
+import { background, orbit, pin, chip, V3, BG, GREEN, FOREST, vildIcon, makeIris, updateIris, IRIS } from './common.js';
 import { wipe } from '../fx.js';
 
-// Idea 1: credit instead of a discount. One sandwich costs 3.000 kr.
-// 50% off: three sandwiches at 1.500 kr. = 4.500 kr.
-// 50% back as credit: two at full price = 6.000 kr. and 3.000 kr. of credit, which pays for the third.
+// Idea 1: credit instead of a discount, counted as what it costs the restaurant.
+// A 3.000 kr. sandwich with 50% off: the guest keeps 1.500 kr. in cash, spendable anywhere. Pure loss.
+// Full price with 1.500 kr. back as credit: the credit is spent here (a 1.500 kr. dessert), so the
+// restaurant only gives away what that dessert costs to make (~70% at the film's ~30% margin = ~1.050 kr.).
 const FROM = b(156), TO = b(196);
-const HERO_OUT = b(158.75); // the single priced sandwich makes way for the comparison
-const L_AT = [b(160), b(161), b(162)];
-const R_AT = [b(166), b(169), b(175)]; // the third one is paid with credit, a week later
-const EARN = [b(167.5), b(170.5)];
-const WORTH = b(172); // "3.000 kr. inneign = ein samloka"
-const WEEK = b(173.5);
-const TOTALS = b(180);
+const HERO_OUT = b(158.75);
+const L_SAND = b(160), L_OUT = b(162);
+const R_SAND = b(164), R_EARN = b(165.5), R_WEEK = b(167.5), R_USE = b(169);
+const L_LOSS = b(172), R_LOSS = b(176);
 const PUNCH = b(188), P2 = b(189.5), P3 = b(191), COIN = b(193.5);
-const LX = -2.6, RX = 2.6, GAP = 1.22;
-const slotX = (cx, i) => cx + (i - 1) * GAP;
+const LX = -2.6, RX = 2.6;
+const PINK = '#FF4F8B';
+const COST = 1050, MARGIN = 450;
 
 export default {
   id: 'math',
@@ -44,82 +43,101 @@ export default {
       v.scene.add(m);
       return m;
     });
-    const mk = (x, at, s = 0.78) => {
+    const hold = (obj, x, at, y = 0.12) => {
       const g = new THREE.Group();
-      const sw = makeSandwich();
-      sw.scale.setScalar(s);
-      g.add(sw);
-      g.position.set(x, 0.12, 0.05);
+      g.add(obj);
+      g.position.set(x, y, 0.05);
       v.scene.add(g);
       return { g, at };
     };
-    S.hero = mk(0, FROM + 0.1, 1.25);
-    S.hero.g.position.set(0, 0, 0.3);
-    S.L = L_AT.map((at, k) => mk(slotX(LX, k), at));
-    S.R = R_AT.map((at, k) => mk(slotX(RX, k), at));
+    const sw = (s) => { const o = makeSandwich(); o.scale.setScalar(s); return o; };
+    S.hero = hold(sw(1.25), 0, FROM + 0.1, 0);
+    S.hero.g.position.z = 0.3;
+    S.L = hold(sw(0.82), LX, L_SAND);
+    S.R1 = hold(sw(0.82), RX - 0.8, R_SAND);
+    const ice = makeIceCream({ detail: 1.2 });
+    ice.scale.setScalar(0.62);
+    S.R2 = hold(ice, RX + 0.95, R_USE);
 
     // DOM
     S.div = el('div', 'abs', S.front);
-    css(S.div, { width: '3px', height: '760px', background: 'rgba(105,31,231,0.2)', borderRadius: '2px' });
+    css(S.div, { width: '3px', height: '700px', background: 'rgba(105,31,231,0.2)', borderRadius: '2px' });
     S.head = new Words(S.front, 'Ein samloka kostar 3.000 kr.', 't-h3', { align: 'center' });
     S.heroTag = chip(S.front, '3.000 kr.', { bg: '#FFFFFF', color: '#18003E', size: 56, pad: '14px 30px' });
     css(S.heroTag, { boxShadow: '0 14px 30px rgba(42,10,94,0.16)' });
     S.cL = chip(S.front, '50% afsláttur', { bg: '#FFFFFF', color: '#18003E', size: 34 });
-    S.cR = chip(S.front, '50% til baka sem inneign', { bg: YELLOW, color: '#18003E', size: 34 });
-    const tag = (html, bg = '#FFFFFF') => {
+    S.cR = chip(S.front, '50% til baka sem inneign', { bg: GREEN, color: FOREST, size: 34 });
+    const tag = (html, bg = '#FFFFFF', color = '#18003E') => {
       const e = el('div', 'abs nowrap', S.front, html);
-      css(e, { background: bg, borderRadius: '18px', padding: '8px 16px', textAlign: 'center', boxShadow: '0 10px 24px rgba(42,10,94,0.14)', font: '800 28px Figtree', color: '#18003E', letterSpacing: '-0.01em' });
+      css(e, { background: bg, borderRadius: '18px', padding: '8px 16px', textAlign: 'center', boxShadow: '0 10px 24px rgba(42,10,94,0.14)', font: '800 28px Figtree', color, letterSpacing: '-0.01em' });
       return e;
     };
-    const struck = '<div style="font:700 20px Figtree;color:rgba(24,0,62,.45);text-decoration:line-through">3.000 kr.</div>';
-    S.tL = [0, 1, 2].map(() => tag(`${struck}1.500 kr.`));
-    S.tR = [0, 1, 2].map((k) => (k < 2 ? tag('3.000 kr.') : tag(`${struck}Frítt`, YELLOW)));
-    S.tillL = new Counter(S.front, 't-h2', { format: (x) => `${isk(x)} kr.` });
-    S.tillR = new Counter(S.front, 't-h2', { format: (x) => `${isk(x)} kr.` });
-    S.lpL = el('div', 'abs t-label nowrap', S.front, 'Gesturinn borgar');
-    S.lpR = el('div', 'abs t-label nowrap', S.front, 'Gesturinn borgar');
-    [S.lpL, S.lpR].forEach((e) => css(e, { color: 'rgba(24,0,62,0.5)' }));
+    S.tL = tag('<div style="font:700 20px Figtree;color:rgba(24,0,62,.45);text-decoration:line-through">3.000 kr.</div>1.500 kr.');
+    S.tR1 = tag('3.000 kr.');
+    S.tR2 = tag('Eftirréttur · 1.500 kr.<div style="font:700 20px Figtree;margin-top:2px">greitt með inneign</div>', GREEN, FOREST);
+    // the 1.500 kr. the discount hands out: silver coins that leave the restaurant
+    S.silver = [0, 1, 2].map(() => {
+      const c = el('div', 'abs', S.front, 'kr');
+      css(c, { width: '46px', height: '46px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D6D2E2 45%, #9C96B0 100%)', boxShadow: 'inset 0 0 0 4px #B8B2CA, 0 6px 14px rgba(24,0,62,0.2)', font: '800 18px Figtree', color: '#6E6788', display: 'flex', alignItems: 'center', justifyContent: 'center' });
+      return c;
+    });
+    S.noteL = el('div', 'abs t-h4 nowrap', S.front, '1.500 kr. sparað, má nota hvar sem er');
+    css(S.noteL, { fontSize: '34px', color: 'rgba(24,0,62,0.75)' });
     S.wallet = el('div', 'abs nowrap', S.front);
     css(S.wallet, { display: 'flex', alignItems: 'center', gap: '14px', background: '#FFFFFF', borderRadius: '999px', padding: '8px 22px 8px 8px', boxShadow: '0 10px 24px rgba(42,10,94,0.14)' });
-    S.walletIcon = glediIcon(S.wallet, 52);
+    S.walletIcon = vildIcon(S.wallet, 52);
     css(S.walletIcon, { position: 'relative', boxShadow: 'none' });
     S.walletTxt = el('div', 'tnum', S.wallet);
     css(S.walletTxt, { font: '800 32px Figtree', color: '#18003E', letterSpacing: '-0.01em' });
-    S.worth = el('div', 'abs t-small nowrap', S.front, '= ein samloka frítt');
-    css(S.worth, { color: '#691FE7', fontWeight: '800' });
     S.week = el('div', 'abs', S.front);
     css(S.week, { width: '196px', borderRadius: '22px', background: '#FFFFFF', boxShadow: '0 18px 40px rgba(42,10,94,0.16)', overflow: 'hidden', textAlign: 'center' });
     S.week.innerHTML = '<div style="background:#18003E;color:#fff;font:800 20px Figtree;letter-spacing:.14em;padding:11px 0">VIKU SEINNA</div><div style="font:800 72px Figtree;letter-spacing:-.04em;color:#18003E;padding:4px 0 0">+7</div><div style="font:700 22px Figtree;color:rgba(24,0,62,.55);padding:0 0 14px">dagar</div>';
-    S.fly = [0, 1, 2].map(() => glediIcon(S.front, 40));
-    S.vL = el('div', 'abs t-h4 nowrap', S.front, '3 samlokur');
-    S.vR = el('div', 'abs t-h4 nowrap', S.front, '3 samlokur');
+    S.fly = [0, 1, 2].map(() => vildIcon(S.front, 40));
+    // what each way costs the restaurant
+    const lossBlock = (title, value, sub, color) => {
+      const e = el('div', 'abs nowrap', S.front);
+      css(e, { width: '640px', textAlign: 'center' });
+      e.innerHTML = `<div style="font:700 22px Figtree;letter-spacing:.12em;text-transform:uppercase;color:rgba(24,0,62,.55)">${title}</div>
+        <div class="tnum" style="font:800 88px Figtree;letter-spacing:-.04em;line-height:1.05;color:${color}">${value}</div>
+        <div style="font:600 28px Figtree;color:rgba(24,0,62,.65)">${sub}</div>`;
+      return e;
+    };
+    S.lossL = lossBlock('Afslátturinn kostar fyrirtækið', '1.500 kr.', 'í peningum sem fara annað', PINK);
+    S.lossR = lossBlock('Inneignin kostar fyrirtækið', '~1.050 kr.', 'bara hráefnið í eftirréttinn', FOREST);
+    S.barL = el('div', 'abs', S.front);
+    S.barR1 = el('div', 'abs', S.front);
+    S.barR2 = el('div', 'abs', S.front);
+    S.bl = el('div', 'abs t-small nowrap', S.front, '1.500 kr. tap');
+    S.br1 = el('div', 'abs t-small nowrap', S.front, 'hráefni 1.050');
+    S.br2 = el('div', 'abs t-small nowrap', S.front, 'álagning 450');
+    css(S.bl, { color: '#FFFFFF', fontWeight: '800' });
+    css(S.br1, { color: '#FFFFFF', fontWeight: '800' });
+    css(S.br2, { color: FOREST, fontWeight: '800' });
 
-    S.p1 = new Words(S.front, 'Sömu 3 samlokur.', 't-h1', { color: '#FFFFFF', align: 'center' });
-    S.p2 = new Words(S.front, '6.000 kr. í stað 4.500 kr.', 't-h1', { color: YELLOW, align: 'center' });
-    S.p3 = new Words(S.front, '1.500 kr. meiri hagnaður.\nOg gesturinn kom aftur.', 't-h2', { color: '#DBC7FF', align: 'center' });
+    S.p1 = new Words(S.front, 'Afsláttur er hreint tap.', 't-h1', { color: '#FFFFFF', align: 'center' });
+    S.p2 = new Words(S.front, 'Inneign kostar bara hráefnið.', 't-h1', { color: GREEN, align: 'center' });
+    S.p3 = new Words(S.front, 'Og peningarnir haldast hjá þér.', 't-h2', { color: '#DBC7FF', align: 'center' });
     S.p1.root.style.fontSize = '112px';
     S.p2.root.style.fontSize = '112px';
-    S.icon = glediIcon(S.front, 120);
-    S.iris = makeIris(S, IRIS.yellow);
+    S.icon = vildIcon(S.front, 120);
+    S.iris = makeIris(S, IRIS.green);
 
     cue(FROM + 0.1, 'pop', { gain: 0.6, pitch: 0.9 });
     cue(FROM + b(1), 'tick', { gain: 0.5, pitch: 1.2 });
     cue(HERO_OUT, 'swoosh', { gain: 0.45 });
-    L_AT.forEach((at, k) => {
-      cue(at, 'pop', { gain: 0.55, pitch: 0.95 + k * 0.06 });
-      cue(at + b(0.5), 'register', { gain: 0.4 });
-    });
-    R_AT.forEach((at, k) => {
-      cue(at, 'pop', { gain: 0.55, pitch: 1.05 + k * 0.06 });
-      if (k < 2) cue(at + b(0.5), 'register', { gain: 0.5 });
-    });
-    EARN.forEach((at, k) => cue(at, 'coin', { gain: 0.5, pitch: 1.15 + k * 0.1 }));
-    cue(WORTH, 'tink', { gain: 0.5 });
-    cue(WEEK, 'flip', { gain: 0.55 });
-    cue(R_AT[2] - 0.05, 'coin', { gain: 0.5, pitch: 0.9 });
-    cue(R_AT[2] + 0.1, 'bell', { gain: 0.35 });
-    cue(TOTALS, 'counter', { dur: 0.5, gain: 0.3 });
-    cue(TOTALS + b(1), 'stab', { gain: 0.6 });
+    cue(L_SAND, 'pop', { gain: 0.55, pitch: 0.95 });
+    cue(L_SAND + b(0.5), 'register', { gain: 0.45 });
+    cue(L_OUT, 'whoosh', { dur: 0.7, gain: 0.45, from: 1800, to: 400 });
+    [0, 1, 2].forEach((j) => cue(L_OUT + j * 0.1, 'coin', { gain: 0.35, pitch: 0.85 }));
+    cue(R_SAND, 'pop', { gain: 0.55, pitch: 1.05 });
+    cue(R_SAND + b(0.5), 'register', { gain: 0.5 });
+    cue(R_EARN, 'coin', { gain: 0.5, pitch: 1.2 });
+    cue(R_WEEK, 'flip', { gain: 0.55 });
+    cue(R_USE - 0.05, 'coin', { gain: 0.5, pitch: 0.95 });
+    cue(R_USE + 0.1, 'pop', { gain: 0.55, pitch: 1.2 });
+    cue(L_LOSS, 'thud', { gain: 0.6 });
+    cue(R_LOSS, 'stab', { gain: 0.55 });
+    cue(R_LOSS + b(1), 'ruler', { dur: 0.5, gain: 0.45 });
     cue(PUNCH, 'impact', { gain: 0.75 });
     cue(P2, 'stab', { gain: 0.6 });
     cue(P3, 'swoosh', { gain: 0.4 });
@@ -134,7 +152,7 @@ export default {
     const punched = t >= PUNCH;
     css(S.purple, { display: punched ? 'block' : 'none' });
     v.visible = !punched;
-    orbit(cam, [0, 0.4, 0.3], lerp(-1.5, 1.5, prog(t, FROM, PUNCH)) * DEG, 21 * DEG, 11.8, { t, seed: 41 });
+    orbit(cam, [0, 0.55, 0.3], lerp(-1.5, 1.5, prog(t, FROM, PUNCH)) * DEG, 21 * DEG, 11.8, { t, seed: 41 });
     const all = 1 - ease.inCubic(prog(t, PUNCH - 0.3, PUNCH));
 
     // first: one sandwich, one price
@@ -150,7 +168,7 @@ export default {
       m.scale.set(Math.max(1e-4, s), 1, Math.max(1e-4, s));
       m.visible = s > 0.002;
     });
-    [...S.L, ...S.R].forEach((k, i) => {
+    [S.L, S.R1, S.R2].forEach((k, i) => {
       const s = spring(t - k.at, 3.0, 0.45);
       k.g.scale.setScalar(Math.max(1e-4, s));
       k.g.visible = s > 0.002;
@@ -166,56 +184,43 @@ export default {
     place(S.cR, { x: 1440, y: 160, s: Math.max(0.001, ch2), o: (ch2 > 0.01 ? 1 : 0) * all, ox: '50%', oy: '50%' });
     css(S.cR, { marginLeft: `-${S.cR.offsetWidth / 2}px` });
 
-    // price tags above the sandwiches
-    const tags = (list, items, cx) => items.forEach((k, i) => {
+    // price tags above the items
+    const tagAt = (e, k, x, y = 0.75) => {
       const s = spring(t - k.at - 0.12, 3, 0.5);
-      pin(list[i], V3(slotX(cx, i), 0.75, 0), cam, { ay: -100, dy: -6, s: Math.max(0.001, s), o: (s > 0.01 ? 1 : 0) * all });
+      pin(e, V3(x, y, 0), cam, { ay: -100, dy: -6, s: Math.max(0.001, s), o: (s > 0.01 ? 1 : 0) * all });
+    };
+    tagAt(S.tL, S.L, LX);
+    tagAt(S.tR1, S.R1, RX - 0.8);
+    tagAt(S.tR2, S.R2, RX + 0.95, 1.25);
+
+    // left: the 1.500 kr. walks out of the door, to be spent anywhere
+    const ls = toScreen(V3(LX, 0.5, 0), cam);
+    S.silver.forEach((c, j) => {
+      const p = prog(t, L_OUT + j * 0.1, L_OUT + j * 0.1 + 0.9);
+      const q = arc([ls.x - 23, ls.y - 23], [ls.x - 260, ls.y - 220 - j * 30], [-120, 300 + j * 60], ease.inCubic(p));
+      place(c, { x: q[0], y: q[1], r: p * 200, s: 1 - p * 0.2, o: (p > 0 && p < 1 ? 1 : 0) * all });
     });
-    tags(S.tL, S.L, LX);
-    tags(S.tR, S.R, RX);
+    const nl = ease.outExpo(prog(t, L_OUT + 0.3, L_OUT + 0.8));
+    place(S.noteL, { x: 480, y: 692 + (1 - nl) * 12, o: nl * all });
+    css(S.noteL, { marginLeft: `-${S.noteL.offsetWidth / 2}px` });
 
-    // what the guest pays
-    const paidL = L_AT.reduce((a, at) => a + 1500 * ease.outCubic(prog(t, at + b(0.5), at + b(0.5) + 0.4)), 0);
-    const paidR = R_AT.slice(0, 2).reduce((a, at) => a + 3000 * ease.outCubic(prog(t, at + b(0.5), at + b(0.5) + 0.4)), 0);
-    S.tillL.set(Math.round(paidL / 10) * 10);
-    S.tillR.set(Math.round(paidR / 10) * 10);
-    const iL = ease.outExpo(prog(t, L_AT[0] + b(0.5), L_AT[0] + b(0.5) + 0.4)), iR = ease.outExpo(prog(t, R_AT[0] + b(0.5), R_AT[0] + b(0.5) + 0.4));
-    const big = spring(t - TOTALS - b(1), 3.2, 0.4);
-    const pulse = t > TOTALS + b(1) ? 1 + (1 - big) * 0.14 : 1;
-    place(S.lpL, { x: 480, y: 684 + (1 - iL) * 14, o: iL * all });
-    css(S.lpL, { marginLeft: `-${S.lpL.offsetWidth / 2}px` });
-    place(S.lpR, { x: 1440, y: 684 + (1 - iR) * 14, o: iR * all });
-    css(S.lpR, { marginLeft: `-${S.lpR.offsetWidth / 2}px` });
-    place(S.tillL.root, { x: 480, y: 714 + (1 - iL) * 18, o: iL * all, s: pulse, ox: '50%', oy: '50%' });
-    css(S.tillL.root, { marginLeft: `-${S.tillL.root.offsetWidth / 2}px` });
-    place(S.tillR.root, { x: 1440, y: 714 + (1 - iR) * 18, o: iR * all, s: pulse, ox: '50%', oy: '50%' });
-    css(S.tillR.root, { marginLeft: `-${S.tillR.root.offsetWidth / 2}px`, color: t > TOTALS + b(1) ? '#691FE7' : '#18003E' });
-
-    // the guest's credit: +1.500 twice, then all 3.000 pays for the third sandwich
-    let bal = 0;
-    EARN.forEach((at) => { bal += 1500 * ease.outCubic(prog(t, at, at + 0.4)); });
-    bal -= 3000 * ease.outCubic(prog(t, R_AT[2] - 0.1, R_AT[2] + 0.3));
-    S.walletTxt.innerHTML = `Inneign ${isk(Math.round(bal / 10) * 10)} kr.`;
-    const wIn = spring(t - (EARN[0] - 0.3), 3, 0.5);
-    let wb = 0;
-    EARN.forEach((at) => { if (t > at) wb += Math.max(0, wobble(t - at - 0.05, 4, 9)); });
-    const wPos = { x: 1440, y: 880 };
-    place(S.wallet, { x: wPos.x, y: wPos.y, s: Math.max(0.001, wIn) * (1 + wb * 0.06), o: (t > EARN[0] - 0.3 ? 1 : 0) * all * (1 - ease.inCubic(prog(t, TOTALS - 0.3, TOTALS))), ox: '50%', oy: '50%' });
+    // right: full price, 1.500 kr. of credit into the wallet, spent here a week later
+    let bal = 1500 * ease.outCubic(prog(t, R_EARN, R_EARN + 0.4)) - 1500 * ease.outCubic(prog(t, R_USE - 0.1, R_USE + 0.3));
+    S.walletTxt.innerHTML = `Inneign ${bal > 1499 ? '1.500' : bal < 1 ? '0' : Math.round(bal / 10) * 10} kr.`;
+    const wIn = spring(t - (R_EARN - 0.3), 3, 0.5);
+    const wb = t > R_EARN ? Math.max(0, wobble(t - R_EARN - 0.05, 4, 9)) : 0;
+    const wPos = { x: 1440, y: 714 };
+    const wOut = ease.inCubic(prog(t, R_LOSS - 0.4, R_LOSS - 0.1));
+    place(S.wallet, { x: wPos.x, y: wPos.y, s: Math.max(0.001, wIn) * (1 + wb * 0.06), o: (t > R_EARN - 0.3 ? 1 : 0) * all * (1 - wOut), ox: '50%', oy: '50%' });
     css(S.wallet, { marginLeft: `-${S.wallet.offsetWidth / 2}px`, marginTop: '-34px' });
-    const wo = ease.outExpo(prog(t, WORTH, WORTH + 0.4)) * (1 - ease.inCubic(prog(t, R_AT[2] - 0.3, R_AT[2])));
-    place(S.worth, { x: 1440, y: 930 + (1 - wo) * 10, o: wo * all });
-    css(S.worth, { marginLeft: `-${S.worth.offsetWidth / 2}px` });
-    const wk = spring(t - WEEK, 3, 0.45);
-    const wkOut = ease.inCubic(prog(t, R_AT[2] + 0.2, R_AT[2] + 0.5));
-    pin(S.week, V3(slotX(RX, 2), 1.0, 0), cam, { dy: -90, s: Math.max(0.001, wk) * (1 - wkOut), o: t > WEEK ? 1 - wkOut : 0 });
-    // coins: from each full-price sandwich into the wallet, then from the wallet into the third
-    const flights = [];
-    [0, 1].forEach((k) => {
-      const s = toScreen(V3(slotX(RX, k), 0.5, 0), cam);
-      flights.push({ t0: EARN[k] - 0.4, from: [s.x - 20, s.y - 20], to: [wPos.x - 136, wPos.y - 20] });
-    });
-    const s3 = toScreen(V3(slotX(RX, 2), 0.5, 0), cam);
-    flights.push({ t0: R_AT[2] - 0.45, from: [wPos.x - 136, wPos.y - 20], to: [s3.x - 20, s3.y - 20] });
+    const wk = spring(t - R_WEEK, 3, 0.45);
+    const wkOut = ease.inCubic(prog(t, R_USE + 0.2, R_USE + 0.5));
+    pin(S.week, V3(RX + 0.95, 1.1, 0), cam, { dy: -90, s: Math.max(0.001, wk) * (1 - wkOut), o: t > R_WEEK ? 1 - wkOut : 0 });
+    const r1 = toScreen(V3(RX - 0.8, 0.5, 0), cam), r2 = toScreen(V3(RX + 0.95, 0.6, 0), cam);
+    const flights = [
+      { t0: R_EARN - 0.4, from: [r1.x - 20, r1.y - 20], to: [wPos.x - 136, wPos.y - 20] },
+      { t0: R_USE - 0.45, from: [wPos.x - 136, wPos.y - 20], to: [r2.x - 20, r2.y - 20] },
+    ];
     S.fly.forEach((e) => css(e, { visibility: 'hidden' }));
     let fi = 0;
     flights.forEach((f) => {
@@ -227,18 +232,28 @@ export default {
       });
     });
 
-    const vIn = ease.outExpo(prog(t, TOTALS, TOTALS + 0.4));
-    place(S.vL, { x: 480, y: 818 + (1 - vIn) * 12, o: vIn * all });
-    css(S.vL, { marginLeft: `-${S.vL.offsetWidth / 2}px` });
-    place(S.vR, { x: 1440, y: 818 + (1 - vIn) * 12, o: vIn * all });
-    css(S.vR, { marginLeft: `-${S.vR.offsetWidth / 2}px` });
+    // what each costs the restaurant
+    const lIn = ease.outExpo(prog(t, L_LOSS, L_LOSS + 0.5)), rIn = ease.outExpo(prog(t, R_LOSS, R_LOSS + 0.5));
+    place(S.lossL, { x: 480 - 320, y: 770 + (1 - lIn) * 16, o: lIn * all });
+    place(S.lossR, { x: 1440 - 320, y: 770 + (1 - rIn) * 16, o: rIn * all });
+    const BW = 440, BH = 44, BY = 952;
+    const gl = ease.outExpo(prog(t, L_LOSS + 0.2, L_LOSS + 0.8));
+    bar(S.barL, { x: 480 - BW / 2, y: BY, w: BW * gl, h: BH, color: PINK, radius: 10, o: all });
+    place(S.bl, { x: 480 - BW / 2 + 16, y: BY + 7, o: gl * all });
+    const gr = ease.outExpo(prog(t, R_LOSS + b(1), R_LOSS + b(1) + 0.6));
+    const split = ease.outCubic(prog(t, R_LOSS + b(1.5), R_LOSS + b(1.5) + 0.5));
+    const cW = BW * (COST / (COST + MARGIN));
+    bar(S.barR1, { x: 1440 - BW / 2, y: BY, w: lerp(BW, cW, split) * gr, h: BH, color: FOREST, radius: 10, o: all });
+    bar(S.barR2, { x: 1440 - BW / 2 + cW + 4, y: BY, w: (BW - cW - 4) * split, h: BH, color: GREEN, radius: 10, o: all });
+    place(S.br1, { x: 1440 - BW / 2 + 16, y: BY + 7, o: split * all });
+    place(S.br2, { x: 1440 - BW / 2 + cW + 18, y: BY + 7, o: split * all });
 
     // punch
     S.p1.update(t, { at: PUNCH + 0.05, stagger: 0.07, x: 0, y: 230 });
     S.p2.update(t, { at: P2, stagger: 0.07, x: 0, y: 390 });
     S.p3.update(t, { at: P3, stagger: 0.06, x: 0, y: 560 });
     const ic = spring(t - COIN, 3, 0.45);
-    place(S.icon, { x: 960 - 60, y: 800, s: Math.max(0.001, ic), r: (1 - ic) * 40, o: t > COIN ? 1 : 0, ox: '50%', oy: '50%' });
-    updateIris(S.iris, t, TO - b(1.1), TO, { x: 960, y: 860, r: 56 });
+    place(S.icon, { x: 960 - 60, y: 760, s: Math.max(0.001, ic), r: (1 - ic) * 40, o: t > COIN ? 1 : 0, ox: '50%', oy: '50%' });
+    updateIris(S.iris, t, TO - b(1.1), TO, { x: 960, y: 820, r: 56 });
   },
 };

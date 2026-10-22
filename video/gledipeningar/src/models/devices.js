@@ -1,7 +1,7 @@
 import { THREE, M, G, rbox } from '../three/kit.js';
 import { clay, gloss, flat, PAL } from '../three/materials.js';
 import { slab, canvasTexture, rr, roundedRectShape } from '../three/geo.js';
-import { TAKK, GLEDI } from '../brand.js';
+import { TAKK, GLEDI, VILD } from '../brand.js';
 import { isk } from '../core/util.js';
 
 // ---------- 2D canvas helpers shared by screens ----------
@@ -37,6 +37,21 @@ export function drawGlediIcon(ctx, cx, cy, d) {
   ctx.beginPath(); ctx.arc(50, 50, 44, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = GLEDI.ink;
   for (const k of ['smile', 'eyeL', 'eyeR']) ctx.fill(new Path2D(GLEDI[k]));
+  ctx.restore();
+}
+
+/** VILD app icon (rounded square, light green, dark mark) centred at (cx, cy) with size d. */
+export function drawVildIcon(ctx, cx, cy, d) {
+  ctx.save();
+  ctx.fillStyle = VILD.light;
+  rr(ctx, cx - d / 2, cy - d / 2, d, d, d * 0.24);
+  ctx.fill();
+  const s = (d * 0.72) / 283;
+  ctx.translate(cx, cy);
+  ctx.scale(s, s);
+  ctx.translate(-586, -330);
+  ctx.fillStyle = VILD.ink;
+  for (const k of ['ring', 'chevron', 'v']) ctx.fill(new Path2D(VILD[k]));
   ctx.restore();
 }
 
@@ -245,7 +260,9 @@ export function drawLockScreen(ctx, w, h, { notif = 0, lit = 1, time = '10:12', 
     ctx.fillStyle = 'rgba(255,255,255,0.92)';
     rr(ctx, 40, y, w - 80, 220, 44);
     ctx.fill();
-    if (icon === 'gledi') {
+    if (icon === 'vild') {
+      drawVildIcon(ctx, 118, y + 82, 92);
+    } else if (icon === 'gledi') {
       drawGlediIcon(ctx, 118, y + 82, 92);
     } else {
       ctx.fillStyle = PAL.purple;

@@ -3,45 +3,49 @@ import { b, cue } from '../core/util.js';
 import { ease, prog, spring, lerp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
-import { makeGlediCoin } from '../models/coin.js';
-import { background, orbit, YELLOW, screenDisc } from './common.js';
+import { makeVildCoin } from '../models/coin.js';
+import { background, orbit, GREEN, screenDisc } from './common.js';
+import { vildWordSvg } from '../brand.js';
 import { wipe } from '../fx.js';
 
-// THE DROP: Chapter 5 "Hugmyndin" lands on Gleðipeningar, then asks the question.
+// THE DROP: Chapter 5 "Hugmyndin" lands on VILD, then asks the question.
 const FROM = b(112), TO = b(120);
-const WORD = b(113), ASK = b(115);
+const WORD = b(113), LINE = b(114.5), ASK = b(116);
 
 export default {
-  id: 'gledi',
+  id: 'vild',
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'purple');
+    background(S, 'forest');
     const v = ctx.stage.makeScene({ fov: 26, envIntensity: 0.9 });
     S.view = v;
-    v.rig.hemi.groundColor.set('#7A3CF0');
-    v.contact = new ContactShadow({ width: 22, depth: 12, height: 4, res: 1024, opacity: 0.5, blur: 2.2 });
+    v.rig.hemi.groundColor.set('#0C5C3B');
+    v.contact = new ContactShadow({ width: 22, depth: 12, height: 4, res: 1024, opacity: 0.45, blur: 2.2, color: '#03140C' });
     v.scene.add(v.contact.group);
 
-    S.hero = makeGlediCoin();
+    S.hero = makeVildCoin();
     S.heroG = new THREE.Group();
     S.hero.rotation.x = Math.PI / 2;
     S.heroG.add(S.hero);
     v.scene.add(S.heroG);
 
     S.kick = el('div', 'abs t-label nowrap', S.front, 'Hugmyndin');
-    css(S.kick, { color: YELLOW, fontSize: '28px' });
-    S.word = new Words(S.front, 'gleðipeningar', 't-mega', { color: '#FFFFFF', chars: true });
-    css(S.word.root, { fontSize: '168px' });
-    S.ask = new Words(S.front, 'Hvað ef veitingastaðir\ngerðu það sama og Takk?', 't-h3', { color: '#DBC7FF' });
+    css(S.kick, { color: GREEN, fontSize: '28px' });
+    S.word = el('div', 'abs', S.front, vildWordSvg({ color: GREEN, height: 168, stroke: 6 }));
+    S.paths = Array.from(S.word.querySelectorAll('.vw'));
+    S.paths.forEach((p) => { p.style.strokeDasharray = '1'; p.style.strokeDashoffset = '1'; });
+    S.line = new Words(S.front, 'Vildarpeningar fyrir veitingastaði.', 't-h3', { color: '#FFFFFF' });
+    S.ask = new Words(S.front, 'Hvað ef veitingastaðir\ngerðu það sama og Takk?', 't-h3', { color: GREEN });
     S.ring = el('div', 'abs', S.front);
-    css(S.ring, { borderRadius: '50%', border: `8px solid ${YELLOW}` });
+    css(S.ring, { borderRadius: '50%', border: `8px solid ${GREEN}` });
     S.flash = el('div', 'fill', S.front);
     css(S.flash, { background: '#FFFFFF', opacity: '0' });
 
     cue(FROM, 'impact', { gain: 1.0 });
     cue(FROM, 'clink', { gain: 0.8, pitch: 0.8 });
-    cue(WORD, 'swoosh', { gain: 0.5 });
+    cue(WORD, 'ruler', { dur: 0.6, gain: 0.5, pitch: 1.2 });
+    cue(LINE, 'swoosh', { gain: 0.45 });
     cue(ASK, 'tick', { gain: 0.4 });
     wipe(TO, { kind: 'panel', dur: 0.56, color: '#F0EBF7', dir: -1, angle: 10 });
   },
@@ -63,8 +67,14 @@ export default {
 
     const out = ease.inCubic(prog(t, TO - 0.4, TO - 0.1));
     const kIn = ease.outExpo(prog(t, FROM + 0.25, FROM + 0.8));
-    place(S.kick, { x: 152, y: 290 + (1 - kIn) * 16, o: kIn * (1 - out) });
-    S.word.update(t, { at: WORD, stagger: 0.028, dur: 0.55, x: 140, y: 334, o: 1 - out });
-    S.ask.update(t, { at: ASK, stagger: 0.06, x: 148, y: 545, out: TO - 0.4, outDur: 0.28 });
+    place(S.kick, { x: 152, y: 250 + (1 - kIn) * 16, o: kIn * (1 - out) });
+    // the thin wordmark draws itself, one letter after another
+    S.paths.forEach((p, i) => {
+      const d = ease.inOutCubic(prog(t, WORD + i * 0.12, WORD + i * 0.12 + 0.5));
+      p.style.strokeDashoffset = (1 - d).toFixed(4);
+    });
+    place(S.word, { x: 132, y: 300, o: 1 - out });
+    S.line.update(t, { at: LINE, stagger: 0.05, x: 148, y: 520, out: TO - 0.4, outDur: 0.28 });
+    S.ask.update(t, { at: ASK, stagger: 0.06, x: 148, y: 620, out: TO - 0.4, outDur: 0.28 });
   },
 };

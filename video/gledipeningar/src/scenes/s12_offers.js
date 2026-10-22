@@ -12,7 +12,7 @@ const OFFERS = [
   { text: 'Hádegistilboð', bg: '#FFFFFF', fg: '#691FE7', pos: [3.85, 0.65], rot: 0.06 },
   { text: 'Þriðjudagstilboð', bg: '#691FE7', fg: '#FFFFFF', pos: [4.75, -0.5], rot: -0.09 },
   { text: 'Happy hour', bg: '#FF7AB6', fg: '#FFFFFF', pos: [4.0, -1.65], rot: 0.13 },
-  { text: '2 fyrir 1', bg: '#FFD24D', fg: '#18003E', pos: [4.65, 1.75], rot: -0.12 },
+  { text: '2 fyrir 1', bg: '#B4FF9B', fg: '#0C5C3B', pos: [4.65, 1.75], rot: -0.12 },
 ];
 const SAY = b(132);
 

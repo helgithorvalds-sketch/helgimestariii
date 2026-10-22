@@ -3,14 +3,14 @@ import { b, cue } from '../core/util.js';
 import { ease, prog, spring, lerp, clamp, DEG } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
-import { makeGlediCoin } from '../models/coin.js';
+import { makeVildCoin } from '../models/coin.js';
 import { background, orbit, BG, screenDisc, makeIris, updateIris, IRIS } from './common.js';
-import { glediLogoHtml } from '../brand.js';
+import { vildLogoSvg } from '../brand.js';
 
-// The takeaway, then the Gleðipeningar end card.
+// The takeaway, then the VILD end card (mark above the thin wordmark, as in the brand artwork).
 const FROM = b(236), TO = b(254);
 const END = b(244);
-const LOGO_H = 190;
+const LOGO_W = 600;
 
 export default {
   id: 'close',
@@ -18,13 +18,13 @@ export default {
   to: TO,
   setup(ctx, S) {
     background(S, 'studio');
-    S.yellow = el('div', 'fill', S.back);
-    css(S.yellow, { background: BG.yellow, display: 'none' });
+    S.green = el('div', 'fill', S.back);
+    css(S.green, { background: BG.green, display: 'none' });
     const v = ctx.stage.makeScene({ fov: 26 });
     S.view = v;
     v.contact = new ContactShadow({ width: 8, depth: 8, height: 3, opacity: 0.5, blur: 2.6 });
     v.scene.add(v.contact.group);
-    S.coin = makeGlediCoin();
+    S.coin = makeVildCoin();
     S.coinG = new THREE.Group();
     S.coin.rotation.x = Math.PI / 2;
     S.coinG.add(S.coin);
@@ -33,10 +33,11 @@ export default {
 
     S.l1 = new Words(S.front, 'Inneign fær\nfólk inn.', 't-h1');
     S.l2 = new Words(S.front, 'Og heldur því\ní keðjunni.', 't-h1', { color: '#691FE7' });
-    S.iris = makeIris(S, IRIS.yellow);
-    S.logo = el('div', 'abs', S.front, glediLogoHtml({ height: LOGO_H }));
-    css(S.logo, { width: '1920px', display: 'flex', justifyContent: 'center' });
-    S.tag = new Words(S.front, 'Vildarkerfi fyrir veitingastaði.', 't-h3', { color: '#18003E', align: 'center' });
+    S.iris = makeIris(S, IRIS.green);
+    S.logo = el('div', 'abs', S.front, vildLogoSvg({ width: LOGO_W }));
+    S.mark = S.logo.querySelector('.vm');
+    S.letters = Array.from(S.logo.querySelectorAll('.vw'));
+    S.letters.forEach((p) => { p.style.strokeDasharray = '1'; p.style.strokeDashoffset = '1'; });
 
     cue(FROM, 'swoosh', { gain: 0.45 });
     cue(FROM + b(2), 'swoosh', { gain: 0.45 });
@@ -68,11 +69,16 @@ export default {
     // iris from the coin into the end card
     updateIris(S.iris, t, END - b(1.1), END, screenDisc(S.coinG.position, 1.2, cam));
     const endCard = t >= END;
-    css(S.yellow, { display: endCard ? 'block' : 'none' });
+    css(S.green, { display: endCard ? 'block' : 'none' });
     css(S.iris, { visibility: endCard ? 'hidden' : 'visible' });
     v.visible = !endCard;
-    const lg = spring(t - END, 2.4, 0.45);
-    place(S.logo, { x: 0, y: 380, s: Math.max(0.001, lg), o: endCard ? 1 : 0, ox: '50%', oy: '50%' });
-    S.tag.update(t, { at: END + b(1.5), stagger: 0.06, x: 0, y: 640 });
+    // the mark lands with a quarter turn back along its own arrow, then the wordmark draws in
+    const m = spring(t - END, 2.4, 0.5);
+    css(S.mark, { transformOrigin: '586px 330px', transformBox: 'view-box', transform: `scale(${Math.max(0.001, m).toFixed(4)}) rotate(${((1 - m) * -90).toFixed(2)}deg)` });
+    S.letters.forEach((p, i) => {
+      const d = ease.inOutCubic(prog(t, END + b(1) + i * 0.12, END + b(1) + i * 0.12 + 0.55));
+      p.style.strokeDashoffset = (1 - d).toFixed(4);
+    });
+    place(S.logo, { x: 960 - LOGO_W / 2, y: 540 - (LOGO_W * 560) / 520 / 2, o: endCard ? 1 : 0 });
   },
 };

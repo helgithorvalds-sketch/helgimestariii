@@ -57,3 +57,49 @@ export function glediLogoHtml({ height = 120, color = GLEDI.ink, disc = GLEDI.ye
 ${glediIconSvg({ size: height, disc, face, ring })}
 <span style="font:800 ${Math.round(height * 0.74)}px Figtree;letter-spacing:-0.045em;color:${color};line-height:1;padding-bottom:${Math.round(height * 0.08)}px">gleðipeningar</span></div>`;
 }
+
+// VILD: the restaurant brand. Mark = a circular arrow around a V; wordmark = thin, widely spaced capitals.
+// Geometry traced from the supplied logo (1200 x 900 artboard, mark centred at 600, 330).
+export const VILD = {
+  light: '#B4FF9B',
+  ink: '#0C5C3B',
+  // filled outlines (used for both the 2D mark and the extruded coin face)
+  ring: 'M600 202 A128 128 0 1 1 472 330 L488 330 A112 112 0 1 0 600 218 Z',
+  chevron: 'M457.58 358.71 L480 332.35 L502.42 358.71 L514.61 348.35 L480 307.65 L445.39 348.35 Z',
+  v: 'M544.06 289.47 L600 401.36 L655.94 289.47 L638.06 280.53 L600 356.64 L561.94 280.53 Z',
+  // wordmark centrelines, stroked at 5 units
+  word: [
+    'M391 586 L440 694 L489 586',
+    'M544.5 586 V689.5',
+    'M599.5 586 V689.5 H665',
+    'M720.5 586.5 H754.5 A51.5 51.5 0 0 1 806 638 A51.5 51.5 0 0 1 754.5 689.5 H720.5 Z',
+  ],
+};
+
+/** The VILD mark alone (no background). */
+export function vildMarkSvg({ color = VILD.ink, size = 80 } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="438 182 296 296" fill="none" style="display:block">
+<path d="${VILD.ring}" fill="${color}"/><path d="${VILD.chevron}" fill="${color}"/><path d="${VILD.v}" fill="${color}"/></svg>`;
+}
+
+/** Round app icon: light green disc with the mark. */
+export function vildIconSvg({ size = 80, disc = VILD.light, mark = VILD.ink } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="398 142 376 376" fill="none" style="display:block">
+<circle cx="586" cy="330" r="188" fill="${disc}"/>
+<path d="${VILD.ring}" fill="${mark}"/><path d="${VILD.chevron}" fill="${mark}"/><path d="${VILD.v}" fill="${mark}"/></svg>`;
+}
+
+/** The thin VILD wordmark. `draw` (0..1 per letter) animates the strokes drawing in. */
+export function vildWordSvg({ color = VILD.ink, height = 100, stroke = 5 } = {}) {
+  const w = (height * 432) / 120;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w.toFixed(1)}" height="${height}" viewBox="383 578 432 120" fill="none" style="display:block">
+${VILD.word.map((d, i) => `<path class="vw vw${i}" d="${d}" stroke="${color}" stroke-width="${stroke}" stroke-linejoin="miter" fill="none" pathLength="1"/>`).join('')}</svg>`;
+}
+
+/** Full logo as in the brand artwork: mark above the wordmark. */
+export function vildLogoSvg({ color = VILD.ink, width = 520 } = {}) {
+  const h = (width * 560) / 520;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${h.toFixed(1)}" viewBox="340 170 520 560" fill="none" style="display:block">
+<g class="vm"><path d="${VILD.ring}" fill="${color}"/><path d="${VILD.chevron}" fill="${color}"/><path d="${VILD.v}" fill="${color}"/></g>
+${VILD.word.map((d, i) => `<path class="vw vw${i}" d="${d}" stroke="${color}" stroke-width="5" fill="none" pathLength="1"/>`).join('')}</svg>`;
+}

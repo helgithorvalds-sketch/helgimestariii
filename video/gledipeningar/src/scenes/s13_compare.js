@@ -3,9 +3,9 @@ import { b, cue, rng } from '../core/util.js';
 import { ease, prog, spring, lerp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
-import { makeGlediCoin, makeCoin } from '../models/coin.js';
+import { makeVildCoin, makeCoin } from '../models/coin.js';
 import { makeButterSet, makeBurger, makePlate } from '../models/food.js';
-import { background, orbit, pin, chip, V3, YELLOW, screenDisc, makeIris, updateIris, IRIS } from './common.js';
+import { background, orbit, pin, chip, V3, GREEN, FOREST, screenDisc, makeIris, updateIris, IRIS } from './common.js';
 
 // Same mechanism, worked through for both: half the margin comes back.
 // Grocery: 400 kr. butter, ~10% margin = 40 kr., half back = 20 kr.
@@ -65,21 +65,21 @@ export default {
     const r = rng(52);
     S.stack = [];
     for (let i = 0; i < NSTACK; i++) {
-      const c = makeGlediCoin();
+      const c = makeVildCoin();
       c.scale.setScalar(0.34);
       v.scene.add(c);
       S.stack.push({ c, at: STACK0 + (i / NSTACK) * STACKDUR, dx: (r() - 0.5) * 0.05, dz: (r() - 0.5) * 0.05, ry: r() * 6 });
     }
 
     S.cL = chip(S.front, 'Takk · matvara', { bg: '#691FE7', color: '#FFFFFF', size: 30 });
-    S.cR = chip(S.front, 'Gleðipeningar · veitingastaður', { bg: YELLOW, color: '#18003E', size: 30 });
+    S.cR = chip(S.front, 'VILD · veitingastaður', { bg: GREEN, color: FOREST, size: 30 });
     S.L = rows(S.front, [['Smjör', '400 kr.'], ['Álagning ~10%', '40 kr.'], ['Helmingur til baka', '+20 kr.']], '#691FE7');
-    S.R = rows(S.front, [['Kvöldverður fyrir tvo', '8.000 kr.'], ['Álagning ~30%', '2.400 kr.'], ['Helmingur til baka', '+1.200 kr.']], '#18003E');
-    css(S.R.items[2].lastChild, { background: YELLOW, padding: '0 14px', borderRadius: '14px' });
+    S.R = rows(S.front, [['Kvöldverður fyrir tvo', '8.000 kr.'], ['Álagning ~30%', '2.400 kr.'], ['Helmingur til baka', '+1.200 kr.']], FOREST);
+    css(S.R.items[2].lastChild, { background: GREEN, padding: '0 14px', borderRadius: '14px' });
     S.div = el('div', 'abs', S.front);
     css(S.div, { width: '3px', height: '560px', background: 'rgba(105,31,231,0.18)', borderRadius: '2px' });
     S.same = new Words(S.front, 'Sami ávinningur. Án gallans.', 't-h2', { align: 'center' });
-    S.iris = makeIris(S, IRIS.yellow);
+    S.iris = makeIris(S, IRIS.green);
 
     cue(FROM, 'swoosh', { gain: 0.45 });
     [...LROWS, ...RROWS].forEach((tt, i) => cue(tt, 'tick', { gain: 0.45, pitch: 1.0 + (i % 3) * 0.15 }));

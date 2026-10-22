@@ -4,7 +4,7 @@ import { ease, prog, spring, lerp, clamp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words, Counter } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeCounter, makeCoupe, makeHighball, makeBeer, makeShot, makeWine } from '../models/places.js';
-import { background, orbit, glediIcon, YELLOW } from './common.js';
+import { background, orbit, vildIcon, GREEN } from './common.js';
 
 const FROM = b(200), TO = b(208);
 const TOP = 1.09;
@@ -60,10 +60,10 @@ export default {
     css(S.tabLab, { color: 'rgba(255,255,255,0.6)' });
     // right side: credit earned, ticking up with every round
     S.cred = new Counter(S.front, 't-h1 nowrap', { format: (x) => `+${isk(x)} kr.` });
-    css(S.cred.root, { color: YELLOW, fontSize: '104px', textAlign: 'right' });
+    css(S.cred.root, { color: GREEN, fontSize: '104px', textAlign: 'right' });
     S.credLab = el('div', 'abs t-label nowrap', S.front, 'Til baka · 16%');
-    css(S.credLab, { color: YELLOW });
-    S.icon = glediIcon(S.front, 76);
+    css(S.credLab, { color: GREEN });
+    S.icon = vildIcon(S.front, 76);
     S.black = el('div', 'fill', S.front);
     css(S.black, { background: '#05010D', opacity: '0' });
     S.drinks.forEach((d, i) => {
