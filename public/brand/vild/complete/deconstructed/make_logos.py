@@ -7,12 +7,15 @@ def bare(body): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" hei
 def g(body, x, y, s): return f'<g transform="translate({x:.2f} {y:.2f}) scale({s:.4f})">{body}</g>'
 def stroke(fg, t): return f'fill="none" stroke="{fg}" stroke-width="{t}" stroke-linecap="butt" stroke-linejoin="miter"'
 
-def deconstructed(fg, h, cx, cy, dmode="line", t=0.055, gap=0.5, cut=0.09, dh=1.0, dw=0.8):
+def deconstructed(fg, h, cx, cy, dmode="line", t=0.055, gap=0.5, cut=0.09, dh=1.0, dw=0.8, whole=False):
+    if whole: cut = 0.0
     """V I L D from separated strokes.  dmode: line | big-line | solid | big-solid"""
     st = stroke(fg, t); x = 0; p = []
     p.append(f'<path d="M0,0 L0.45,1 L0.9,0" {st}/>'); x += 0.9 + gap   # V whole, arms meet
     p.append(f'<path d="M{x:.3f},0 V1" {st}/>'); x += gap
-    p.append(f'<path d="M{x:.3f},0 V{1-cut:.3f} M{x+cut:.3f},1 H{x+0.6:.3f}" {st}/>'); x += 0.6 + gap
+    if whole: p.append(f'<path d="M{x:.3f},0 V{1-t/2:.3f} H{x+0.6:.3f}" {st}/>')
+    else:     p.append(f'<path d="M{x:.3f},0 V{1-cut:.3f} M{x+cut:.3f},1 H{x+0.6:.3f}" {st}/>')
+    x += 0.6 + gap
     top = 1 - dh; r = dh / 2; stem = dw - r
     if dmode in ("line", "big-line"):
         p.append(f'<path d="M{x:.3f},{top:.3f} V1 M{x+cut:.3f},{top+t/2:.3f} H{x+stem:.3f} '
@@ -23,6 +26,8 @@ def deconstructed(fg, h, cx, cy, dmode="line", t=0.055, gap=0.5, cut=0.09, dh=1.
     return g("".join(p), cx - x*h/2, cy - (top+1)/2*h, h)
 
 VARIANTS = [("deconstructed",            dict(dmode="line")),
+            ("whole",                    dict(dmode="line", whole=True)),
+            ("whole-big-d",              dict(dmode="big-line", dh=1.3, dw=1.0, whole=True)),
             ("deconstructed-big-d",      dict(dmode="big-line", dh=1.3, dw=1.0)),
             ("deconstructed-solid-d",    dict(dmode="solid", dh=1.0, dw=0.8)),
             ("deconstructed-big-solid-d",dict(dmode="big-solid", dh=1.3, dw=1.0))]
