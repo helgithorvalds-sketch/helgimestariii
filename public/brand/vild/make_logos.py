@@ -1,169 +1,159 @@
 import math
 W, H = 1200, 900
-COLOURWAYS = [
-    ("lime-dark",   "#0C5C3B", "#B4FF9B"),
-    ("lime-white",  "#FFFFFF", "#B4FF9B"),
-    ("green-cream", "#F2EFE6", "#00BF63"),
-    ("mint-cream",  "#F3F4EE", "#06CE78"),
-]
-T = 0.27    # stroke thickness (unit = letter height)
-S = 0.075   # slit thickness
-_id = [0]
-def uid():
-    _id[0] += 1; return f"m{_id[0]}"
-
-# ---- constructed letters, each in a box of height 1 (y down), returns (pathdata, width) ----
-def letter_V(w=1.0):
-    a = 0.31 * w; hw = 0.13 * w                     # top arm width, half flat-bottom width
-    hin = 1 - (w/2 - a) / (w/2 - hw)                # inner vertex height so arm edges are parallel
-    return (f"M0,0 L{a:.4f},0 L{w/2:.4f},{hin:.4f} L{w-a:.4f},0 L{w:.4f},0 "
-            f"L{w/2+hw:.4f},1 L{w/2-hw:.4f},1 Z"), w
-def letter_I(w=0.72):
-    st = T * 0.95; x0 = w/2 - st/2
-    return (f"M0,0 H{w:.4f} V{T:.4f} H{x0+st:.4f} V{1-T:.4f} H{w:.4f} V1 H0 V{1-T:.4f} "
-            f"H{x0:.4f} V{T:.4f} H0 Z"), w
-def letter_L(w=0.72):
-    return f"M0,0 H{T:.4f} V{1-T:.4f} H{w:.4f} V1 H0 Z", w
-def letter_D(w=1.0):
-    r = 0.5; ri = 0.5 - T
-    return (f"M0,0 H{w-r:.4f} A{r},{r} 0 0 1 {w-r:.4f},1 H0 Z "
-            f"M{T:.4f},{T:.4f} V{1-T:.4f} H{w-r:.4f} A{ri:.4f},{ri:.4f} 0 0 0 {w-r:.4f},{T:.4f} Z"), w
-
-def slits_mask(width, ys, extra=""):
-    """mask that keeps everything except horizontal slits starting at each y in ys (unit coords)."""
-    i = uid()
-    rects = "".join(f'<rect x="-1" y="{y:.4f}" width="{width+2:.4f}" height="{S:.4f}" fill="black"/>' for y in ys)
-    return i, f'<mask id="{i}" maskUnits="userSpaceOnUse" x="-1" y="-1" width="{width+2:.4f}" height="3"><rect x="-1" y="-1" width="{width+2:.4f}" height="3" fill="white"/>{rects}{extra}</mask>'
-
-ROW1 = [T, 1 - T - S]          # two slits, aligned with the I's bars
-ROW2 = [1 - T - S]             # one slit, separating the L's foot
-
-def glyph(d, width, ys, fg, x, y, h):
-    """place a unit letter at (x,y) scaled to height h, with slits."""
-    mid, mdef = slits_mask(width, ys)
-    return (f'<defs>{mdef}</defs><g transform="translate({x:.2f} {y:.2f}) scale({h:.3f})">'
-            f'<path d="{d}" fill="{fg}" fill-rule="evenodd" mask="url(#{mid})"/></g>')
-
-# ---- compositions ----
-def stacked(fg, h, cx, cy, gap=0.13):
-    """ZERO-style 2x2 block: VI over LD, both rows justified to the same width."""
-    (dV, wV), (dI, wI), (dL, wL), (dD, wD) = letter_V(), letter_I(), letter_L(), letter_D()
-    rw = wV + gap + wI                      # == wL + gap + wD
-    total_w = rw * h; total_h = (2 + gap) * h
-    x0 = cx - total_w/2; y0 = cy - total_h/2
-    out = glyph(dV, wV, ROW1, fg, x0, y0, h)
-    out += glyph(dI, wI, ROW1, fg, x0 + (wV + gap) * h, y0, h)
-    y1 = y0 + (1 + gap) * h
-    out += glyph(dL, wL, ROW2, fg, x0, y1, h)
-    out += glyph(dD, wD, ROW2, fg, x0 + (wL + gap) * h, y1, h)
-    return out
-
-def inline(fg, h, cx, cy, gap=0.13, ys=ROW1):
-    letters = [letter_V(), letter_I(), letter_L(), letter_D()]
-    total = (sum(w for _, w in letters) + gap * 3) * h
-    x = cx - total/2; y = cy - h/2; out = ""
-    for d, w in letters:
-        out += glyph(d, w, ys, fg, x, y, h); x += (w + gap) * h
-    return out
-
-def mark_stripes(fg, h, cx, cy):
-    d, w = letter_V()
-    return glyph(d, w, ROW1, fg, cx - w*h/2, cy - h/2, h)
-
-def mark_cut(fg, h, cx, cy):
-    """Perimeter-Watch style: chunky V with one diagonal cut, parallel to the left arm, through the right arm."""
-    d, w = letter_V(); a = 0.31; hw = 0.13
-    ang = math.degrees(math.atan2(1, w/2 - hw))      # angle of the arm edges
-    # a slanted slit crossing the right arm, lower-left to upper-right of it
-    cutx, cuty = 0.78, 0.36
-    extra = (f'<rect x="-0.6" y="{-S/2:.4f}" width="1.2" height="{S*1.1:.4f}" fill="black" '
-             f'transform="translate({cutx} {cuty}) rotate({ -(90 - ang):.2f})"/>')
-    mid, mdef = slits_mask(w, [], extra)
-    x = cx - w*h/2; y = cy - h/2
-    return (f'<defs>{mdef}</defs><g transform="translate({x:.2f} {y:.2f}) scale({h:.3f})">'
-            f'<path d="{d}" fill="{fg}" mask="url(#{mid})"/></g>')
+LIME, DARK = "#B4FF9B", "#0C5C3B"
+COLOURWAYS = [("lime-dark", DARK, LIME), ("dark-lime", LIME, DARK)]
 
 def svg(body, bg, w=W, h=H):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
             f'<rect width="{w}" height="{h}" fill="{bg}"/>{body}</svg>')
+def g(body, x, y, s):
+    return f'<g transform="translate({x:.2f} {y:.2f}) scale({s:.4f})">{body}</g>'
 
-def design_stacked(fg, bg):  return svg(stacked(fg, 215, W/2, H/2), bg)
-def design_inline(fg, bg):   return svg(inline(fg, 210, W/2, H/2), bg)
-def design_mark(fg, bg):     return svg(mark_stripes(fg, 320, W/2, H/2), bg)
-def design_mark_cut(fg, bg): return svg(mark_cut(fg, 320, W/2, H/2), bg)
+# ---------- Boon-style solid block letters (unit height, y down) ----------
+# every letter is one solid shape: no counters, like the discs in BOON
+def B_V(w=1.0, hw=0.07): return f'<path d="M0,0 H{w} L{w/2+hw:.3f},1 H{w/2-hw:.3f} Z"/>', w
+def B_I(w=0.5):          return f'<rect width="{w}" height="1"/>', w
+def B_L(w=0.6, st=0.32): return f'<path d="M0,0 H{st} V{1-st:.3f} H{w} V1 H0 Z"/>', w
+def B_D(w=0.9):
+    r = 0.5; return f'<path d="M0,0 H{w-r:.3f} A{r},{r} 0 0 1 {w-r:.3f},1 H0 Z"/>', w
+BLOCK = [B_V, B_I, B_L, B_D]
+
+def block_row(letters, gap=0.1):
+    x = 0; out = ""; 
+    for fn in letters:
+        d, w = fn(); out += f'<g transform="translate({x:.3f} 0)">{d}</g>'; x += w + gap
+    return out, x - gap
+
+def block_inline(fg, h, cx, cy, gap=0.1):
+    body, w = block_row(BLOCK, gap)
+    return g(f'<g fill="{fg}">{body}</g>', cx - w*h/2, cy - h/2, h)
+
+def block_stacked(fg, h, cx, cy, gap=0.1):
+    r1, w1 = block_row(BLOCK[:2], gap); r2, w2 = block_row(BLOCK[2:], gap)   # both rows are 1.5 wide
+    w = max(w1, w2); th = 2 + gap
+    body = f'<g fill="{fg}">{r1}<g transform="translate(0 {1+gap})">{r2}</g></g>'
+    return g(body, cx - w*h/2, cy - th*h/2, h)
+
+# ---------- boon.-style rounded lowercase "vild." (x-height 1, stroke t) ----------
+def lower(fg, xh, cx, cy, t=0.34, gap=0.2):
+    asc = -0.5; dot_r = t * 0.55
+    st = f'fill="none" stroke="{fg}" stroke-width="{t}" stroke-linecap="round" stroke-linejoin="round"'
+    x = 0; parts = []
+    # v
+    parts.append(f'<path d="M{t/2},{t/2} L{0.5+t/2*0.0:.3f},{1-t/2} L{1-t/2},{t/2}" {st}/>'
+                 .replace(f"M{t/2},{t/2}", f"M{t/2:.3f},{t/2:.3f}")); vx = x; x += 1 + gap
+    # i
+    parts.append(f'<g transform="translate({x:.3f} 0)"><path d="M{t/2:.3f},{t/2:.3f} V{1-t/2:.3f}" {st}/>'
+                 f'<circle cx="{t/2:.3f}" cy="{asc + 0.12:.3f}" r="{dot_r:.3f}" fill="{fg}"/></g>'); x += t + gap
+    # l
+    parts.append(f'<g transform="translate({x:.3f} 0)"><path d="M{t/2:.3f},{asc:.3f} V{1-t/2:.3f}" {st}/></g>'); x += t + gap
+    # d: ring + stem on the right
+    r = 0.5 - t/2
+    parts.append(f'<g transform="translate({x:.3f} 0)"><circle cx="0.5" cy="0.5" r="{r:.3f}" {st}/>'
+                 f'<path d="M{1-t/2:.3f},{asc:.3f} V{1-t/2:.3f}" {st}/></g>'); x += 1 + gap * 0.6
+    # period
+    parts.append(f'<circle cx="{x + dot_r:.3f}" cy="{1 - dot_r:.3f}" r="{dot_r:.3f}" fill="{fg}"/>'); x += dot_r * 2
+    body = "".join(parts); total_h = 1 - asc
+    return g(body, cx - x*xh/2, cy - (asc + 1)/2*xh, xh)
+
+# ---------- MUKU-style thin stacked letters ----------
+def thin_stacked(fg, h, cx, cy, t=0.09, gap=0.55):
+    st = f'fill="none" stroke="{fg}" stroke-width="{t}" stroke-linecap="square" stroke-linejoin="miter"'
+    w = 0.8
+    V = f'<path d="M0,0 L{w/2},1 L{w},0" {st}/>'
+    I = f'<path d="M{w/2},0 V1" {st}/>'
+    L = f'<path d="M0,0 V1 H{w}" {st}/>'
+    D = f'<path d="M0,0 V1 H{w-0.5} A0.5,0.5 0 0 0 {w-0.5},0 Z" {st}/>'
+    rw = 2*w + gap; rh = 2 + gap
+    body = (f'{V}<g transform="translate({w+gap} 0)">{I}</g>'
+            f'<g transform="translate(0 {1+gap})">{L}</g><g transform="translate({w+gap} {1+gap})">{D}</g>')
+    return g(body, cx - rw*h/2, cy - rh*h/2, h)
+
+# ---------- coin: solid disc with the block V knocked out (cashback) ----------
+def coin(fg, bg, dia, cx, cy):
+    d, w = B_V(); vh = dia * 0.5
+    return (f'<circle cx="{cx}" cy="{cy}" r="{dia/2}" fill="{fg}"/>' +
+            g(f'<g fill="{bg}">{d}</g>', cx - w*vh/2, cy - vh/2 + dia*0.02, vh))
+
+# ---------- compositions ----------
+def design_block(fg, bg):         return svg(block_inline(fg, 230, W/2, H/2), bg)
+def design_block_stacked(fg, bg): return svg(block_stacked(fg, 215, W/2, H/2), bg)
+def design_lower(fg, bg):         return svg(lower(fg, 190, W/2, H/2), bg)
+def design_thin_stacked(fg, bg):  return svg(thin_stacked(fg, 190, W/2, H/2), bg)
+def design_coin(fg, bg):          return svg(coin(fg, bg, 380, W/2, H/2), bg)
 def design_lockup(fg, bg):
-    h = 150; mw = 1.0 * 1.15 * h; gap = 0.5 * h
-    d_total = (1.0 + 0.72 + 0.72 + 1.0 + 0.13*3) * h
-    total = mw + gap + d_total; x0 = W/2 - total/2
-    return svg(mark_cut(fg, h * 1.15, x0 + mw/2, H/2) + inline(fg, h, x0 + mw + gap + d_total/2, H/2), bg)
-def design_lockup_stacked(fg, bg):
-    return svg(mark_cut(fg, 230, W/2, H/2 - 160) + inline(fg, 120, W/2, H/2 + 150), bg)
-def design_icon(fg, bg):
-    Sq = 560; r = Sq * 0.2; x = W/2 - Sq/2; y = H/2 - Sq/2
-    return svg(f'<rect x="{x}" y="{y}" width="{Sq}" height="{Sq}" rx="{r}" fill="{fg}"/>' + mark_stripes(bg, Sq*0.5, W/2, H/2), bg)
-def design_icon_cut(fg, bg):
-    Sq = 560; r = Sq * 0.2; x = W/2 - Sq/2; y = H/2 - Sq/2
-    return svg(f'<rect x="{x}" y="{y}" width="{Sq}" height="{Sq}" rx="{r}" fill="{fg}"/>' + mark_cut(bg, Sq*0.5, W/2, H/2), bg)
-
-
-# ---- cashback marks ----
-def mark_coin(fg, bg, h, cx, cy):
-    """coin: solid disc with the striped V knocked out of it."""
-    d, w = letter_V(); r = h / 2
-    mid, mdef = slits_mask(w, ROW1)
-    vh = h * 0.52; vx = cx - w*vh/2; vy = cy - vh/2 + h*0.02
-    return (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{fg}"/><defs>{mdef}</defs>'
-            f'<g transform="translate({vx:.2f} {vy:.2f}) scale({vh:.3f})">'
-            f'<path d="{d}" fill="{bg}" fill-rule="evenodd" mask="url(#{mid})"/></g>')
-
-def mark_catch(fg, h, cx, cy):
-    """V as a cup catching a coin: cut V with a disc dropping into the opening."""
-    d, w = letter_V()
-    r = h * 0.14; vh = h * 0.78
-    v = mark_cut(fg, vh, cx, cy + h*0.11)
-    # coin hovers above the mouth of the V, about to drop in
-    return v + f'<circle cx="{cx:.2f}" cy="{cy + h*0.11 - vh/2 - r - h*0.07:.2f}" r="{r:.2f}" fill="{fg}"/>'
-
-def mark_return(fg, h, cx, cy):
-    """V whose right arm is a detached chip flipped back: money going out and coming back."""
-    d, w = letter_V(); a = 0.31; hw = 0.13
-    ang = math.degrees(math.atan2(1, w/2 - hw))
-    cutx, cuty = 0.78, 0.36
-    extra = (f'<rect x="-0.6" y="{-S*1.6/2:.4f}" width="1.2" height="{S*1.6:.4f}" fill="black" '
-             f'transform="translate({cutx} {cuty}) rotate({ -(90 - ang):.2f})"/>')
-    mid, mdef = slits_mask(w, [], extra)
-    x = cx - w*h/2; y = cy - h/2
-    body = (f'<defs>{mdef}</defs><g transform="translate({x:.2f} {y:.2f}) scale({h:.3f})">'
-            f'<path d="{d}" fill="{fg}" mask="url(#{mid})"/></g>')
-    # coin where the chip was cut off, hovering above the right arm
-    r = h * 0.11
-    return body + f'<circle cx="{cx + w*h*0.46:.2f}" cy="{cy - h*0.62:.2f}" r="{r:.2f}" fill="{fg}"/>'
-
-def design_mark_coin(fg, bg):   return svg(mark_coin(fg, bg, 360, W/2, H/2), bg)
-def design_mark_catch(fg, bg):  return svg(mark_catch(fg, 320, W/2, H/2), bg)
-def design_mark_return(fg, bg): return svg(mark_return(fg, 320, W/2, H/2), bg)
-def design_lockup_coin(fg, bg):
-    h = 150; mw = 1.25 * h; gap = 0.45 * h
-    d_total = (1.0 + 0.72 + 0.72 + 1.0 + 0.13*3) * h
-    total = mw + gap + d_total; x0 = W/2 - total/2
-    return svg(mark_coin(fg, bg, mw, x0 + mw/2, H/2) + inline(fg, h, x0 + mw + gap + d_total/2, H/2), bg)
-def design_lockup_catch(fg, bg):
-    h = 150; mw = 1.15 * h; gap = 0.5 * h
-    d_total = (1.0 + 0.72 + 0.72 + 1.0 + 0.13*3) * h
-    total = mw + gap + d_total; x0 = W/2 - total/2
-    return svg(mark_catch(fg, h*1.0, x0 + mw/2, H/2 + h*0.04) + inline(fg, h, x0 + mw + gap + d_total/2, H/2), bg)
+    h = 160; dia = h * 1.1; gap = h * 0.45; _, bw = block_row(BLOCK); bw *= h
+    total = dia + gap + bw; x0 = W/2 - total/2
+    return svg(coin(fg, bg, dia, x0 + dia/2, H/2) + block_inline(fg, h, x0 + dia + gap + bw/2, H/2), bg)
+def design_lockup_lower(fg, bg):
+    xh = 150; dia = xh * 1.25; gap = xh * 0.5; lw = (1 + 0.2 + 0.34 + 0.2 + 0.34 + 0.2 + 1 + 0.12 + 0.37) * xh
+    total = dia + gap + lw; x0 = W/2 - total/2
+    return svg(coin(fg, bg, dia, x0 + dia/2, H/2 + xh*0.1) + lower(fg, xh, x0 + dia + gap + lw/2, H/2), bg)
 def design_stacked_coin(fg, bg):
-    """ZERO block with the coin mark beside it, like a seal."""
-    return svg(mark_coin(fg, bg, 250, W/2, H/2 - 170) + inline(fg, 120, W/2, H/2 + 150), bg)
-def design_icon_coin(fg, bg):
-    Sq = 560; r = Sq * 0.2; x = W/2 - Sq/2; y = H/2 - Sq/2
-    return svg(f'<rect x="{x}" y="{y}" width="{Sq}" height="{Sq}" rx="{r}" fill="{fg}"/>' + mark_coin(bg, fg, Sq*0.62, W/2, H/2), bg)
+    return svg(coin(fg, bg, 260, W/2, H/2 - 165) + block_inline(fg, 125, W/2, H/2 + 160), bg)
+def design_icon(fg, bg):
+    S = 560; r = S*0.22; x = W/2 - S/2; y = H/2 - S/2; d, w = B_V(); vh = S * 0.5
+    return svg(f'<rect x="{x}" y="{y}" width="{S}" height="{S}" rx="{r}" fill="{fg}"/>' +
+               g(f'<g fill="{bg}">{d}</g>', W/2 - w*vh/2, H/2 - vh/2 + S*0.02, vh), bg)
+def design_icon_stacked(fg, bg):
+    S = 560; r = S*0.22; x = W/2 - S/2; y = H/2 - S/2
+    return svg(f'<rect x="{x}" y="{y}" width="{S}" height="{S}" rx="{r}" fill="{fg}"/>' + block_stacked(bg, S*0.3, W/2, H/2), bg)
 
-DESIGNS = [("stacked", design_stacked), ("inline", design_inline),
-           ("mark-coin", design_mark_coin), ("mark-catch", design_mark_catch), ("mark-cut", design_mark_cut),
-           ("lockup-coin", design_lockup_coin), ("lockup-catch", design_lockup_catch), ("lockup", design_lockup),
-           ("stacked-coin", design_stacked_coin), ("icon-coin", design_icon_coin), ("icon-cut", design_icon_cut)]
+DESIGNS = [("block", design_block), ("block-stacked", design_block_stacked), ("lower", design_lower),
+           ("thin-stacked", design_thin_stacked), ("coin", design_coin), ("lockup", design_lockup),
+           ("lockup-lower", design_lockup_lower), ("stacked-coin", design_stacked_coin),
+           ("icon", design_icon), ("icon-stacked", design_icon_stacked)]
 for dn, fn in DESIGNS:
     for cn, fg, bg in COLOURWAYS:
-        open(f"v4/vild-{dn}-{cn}.svg", "w").write(fn(fg, bg))
+        open(f"v5/vild-{dn}-{cn}.svg", "w").write(fn(fg, bg))
 print("ok")
+
+# ================= single-object "VILD" monograms =================
+def mono_tight(fg, h, cx, cy, gap=0.06):
+    """fused square monogram: VI over LD with hairline gaps, one silhouette."""
+    return block_stacked(fg, h, cx, cy, gap)
+
+def coin_vild(fg, bg, dia, cx, cy):
+    """a coin that spells VILD: stacked block letters knocked out of a disc."""
+    return f'<circle cx="{cx}" cy="{cy}" r="{dia/2}" fill="{fg}"/>' + block_stacked(bg, dia*0.27, cx, cy, 0.1)
+
+def ligature(fg, xh, cx, cy, t=0.3):
+    """lowercase 'vild' as one ligature: a check-mark 'v' whose upright is the 'i' stem (dot above),
+    then 'l' and 'd' sharing one bowl between two tall stems."""
+    asc = -0.55; dot_r = t * 0.58; parts = []
+    # v + i : diagonal from top-left down to the base of an upright stem
+    vx = 0.0; dw = 0.62                     # diagonal spans dw horizontally
+    diag = (f'<path d="M{vx},0 H{vx+t*1.05:.3f} L{vx+dw+t:.3f},{1:.3f} H{vx+dw:.3f} Z" fill="{fg}"/>')
+    stem_x = vx + dw
+    parts.append(diag)
+    parts.append(f'<rect x="{stem_x:.3f}" y="0" width="{t}" height="1" fill="{fg}"/>')
+    parts.append(f'<circle cx="{stem_x + t/2:.3f}" cy="{asc + 0.2:.3f}" r="{dot_r:.3f}" fill="{fg}"/>')
+    x = stem_x + t + 0.26
+    # l
+    parts.append(f'<rect x="{x:.3f}" y="{asc:.3f}" width="{t}" height="{1-asc:.3f}" fill="{fg}"/>')
+    lx = x; x += t + 0.14
+    # d : bowl between l-stem and its own tall stem
+    bw = 0.95; r_out = 0.5
+    bowl = (f'<path d="M{x:.3f},{0.5:.3f} A{r_out},{r_out} 0 0 1 {x+bw:.3f},0.5 A{r_out},{r_out} 0 0 1 {x:.3f},0.5 Z '
+            f'M{x+t:.3f},0.5 A{r_out-t:.3f},{r_out-t:.3f} 0 0 0 {x+bw-t:.3f},0.5 A{r_out-t:.3f},{r_out-t:.3f} 0 0 0 {x+t:.3f},0.5 Z" '
+            f'fill="{fg}" fill-rule="evenodd" transform="translate(0 0) scale(1 1)"/>')
+    # ellipse-ish bowl via two arcs is a circle of diameter bw>1? keep it a circle: set bw = 1
+    parts.append(bowl.replace(f"{x+bw:.3f}", f"{x+1.0:.3f}").replace(f"{x+bw-t:.3f}", f"{x+1.0-t:.3f}"))
+    parts.append(f'<rect x="{x+1.0-t:.3f}" y="{asc:.3f}" width="{t}" height="{1-asc:.3f}" fill="{fg}"/>')
+    total_w = x + 1.0
+    return g("".join(parts), cx - total_w*xh/2, cy - (asc+1)/2*xh, xh)
+
+def design_mono_tight(fg, bg):  return svg(mono_tight(fg, 215, W/2, H/2), bg)
+def design_coin_vild(fg, bg):   return svg(coin_vild(fg, bg, 520, W/2, H/2), bg)
+def design_ligature(fg, bg):    return svg(ligature(fg, 200, W/2, H/2), bg)
+def design_coin_vild_lockup(fg, bg):
+    h = 150; dia = h * 1.9; gap = h * 0.5; _, bw = block_row(BLOCK); bw *= h
+    total = dia + gap + bw; x0 = W/2 - total/2
+    return svg(coin_vild(fg, bg, dia, x0 + dia/2, H/2) + block_inline(fg, h, x0 + dia + gap + bw/2, H/2), bg)
+
+MONO = [("mono-tight", design_mono_tight), ("coin-vild", design_coin_vild), ("ligature", design_ligature),
+        ("coin-vild-lockup", design_coin_vild_lockup)]
+for dn, fn in MONO:
+    for cn, fg, bg in COLOURWAYS:
+        open(f"v5/vild-{dn}-{cn}.svg", "w").write(fn(fg, bg))
+print("mono ok")
