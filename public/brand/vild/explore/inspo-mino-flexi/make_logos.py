@@ -46,8 +46,8 @@ def frame_v(fg, h, cx, cy, t=0.13):
     return g(frame + v, cx - h/2, cy - h/2, h)
 def frame_v_cut(fg, bg, h, cx, cy, t=0.13):
     """one continuous line: down the V, up again, then around the rounded frame back to the V"""
-    s = st(fg, t, "round"); r = 0.26; a, b = 0.17, 0.83
-    d = (f"M{a},0 L0.5,0.7 L{b},0 H{1-r} A{r},{r} 0 0 1 1,{r} V{1-r} A{r},{r} 0 0 1 {1-r},1 "
+    s = st(fg, t, "round"); r = 0.26; a, b = r, 1 - r
+    d = (f"M{a},0 L0.5,0.7 L{b},0 A{r},{r} 0 0 1 1,{r} V{1-r} A{r},{r} 0 0 1 {1-r},1 "
          f"H{r} A{r},{r} 0 0 1 0,{1-r} V{r} A{r},{r} 0 0 1 {r},0 Z")
     return g(f'<path d="{d}" {s}/>', cx - h/2, cy - h/2, h)
 def wordmark(fg, text, wght, cap_px, x_left, cy, tracking=0.0):
