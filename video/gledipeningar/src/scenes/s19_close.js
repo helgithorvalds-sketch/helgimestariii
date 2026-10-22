@@ -4,12 +4,12 @@ import { ease, prog, spring, lerp, clamp, DEG } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeVildCoin } from '../models/coin.js';
-import { background, orbit, BG, screenDisc, makeIris, updateIris, IRIS } from './common.js';
+import { greenWorld, orbit, BG, screenDisc, makeIris, updateIris, IRIS, LEAF, SHADOW_G } from './common.js';
 import { vildLogoSvg } from '../brand.js';
 
 // The takeaway, then the VILD end card (mark above the thin wordmark, as in the brand artwork).
-const FROM = b(236), TO = b(254);
-const END = b(244);
+const FROM = b(268), TO = b(286);
+const END = b(276);
 const LOGO_W = 600;
 
 export default {
@@ -17,12 +17,13 @@ export default {
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'studio');
+    greenWorld(S);
     S.green = el('div', 'fill', S.back);
     css(S.green, { background: BG.green, display: 'none' });
-    const v = ctx.stage.makeScene({ fov: 26 });
+    const v = ctx.stage.makeScene({ fov: 26, light: 'mint', envIntensity: 0.9 });
     S.view = v;
-    v.contact = new ContactShadow({ width: 8, depth: 8, height: 3, opacity: 0.5, blur: 2.6 });
+    v.contact = new ContactShadow({ width: 16, depth: 8, height: 3, opacity: 0.45, blur: 2.6, color: SHADOW_G });
+    v.contact.group.position.x = 2;
     v.scene.add(v.contact.group);
     S.coin = makeVildCoin();
     S.coinG = new THREE.Group();
@@ -32,7 +33,7 @@ export default {
     v.scene.add(S.coinG);
 
     S.l1 = new Words(S.front, 'Inneign fær\nfólk inn.', 't-h1');
-    S.l2 = new Words(S.front, 'Og heldur því\ní keðjunni.', 't-h1', { color: '#691FE7' });
+    S.l2 = new Words(S.front, 'Og heldur því\ní keðjunni.', 't-h1', { color: LEAF });
     S.iris = makeIris(S, IRIS.green);
     S.logo = el('div', 'abs', S.front, vildLogoSvg({ width: LOGO_W }));
     S.mark = S.logo.querySelector('.vm');

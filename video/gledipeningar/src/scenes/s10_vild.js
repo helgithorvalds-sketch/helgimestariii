@@ -4,24 +4,23 @@ import { ease, prog, spring, lerp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeVildCoin } from '../models/coin.js';
-import { background, orbit, GREEN, screenDisc } from './common.js';
+import { background, orbit, GREEN, FOREST, LEAF, YELLOW, SHADOW_G, screenDisc } from './common.js';
 import { vildWordSvg } from '../brand.js';
 import { wipe } from '../fx.js';
 
 // THE DROP: Chapter 5 "Hugmyndin" lands on VILD, then asks the question.
-const FROM = b(112), TO = b(120);
-const WORD = b(113), LINE = b(114.5), ASK = b(116);
+const FROM = b(128), TO = b(136);
+const WORD = b(129), LINE = b(130.5), ASK = b(132);
 
 export default {
   id: 'vild',
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'forest');
-    const v = ctx.stage.makeScene({ fov: 26, envIntensity: 0.9 });
+    background(S, 'lime');
+    const v = ctx.stage.makeScene({ fov: 26, light: 'mint', envIntensity: 0.9 });
     S.view = v;
-    v.rig.hemi.groundColor.set('#0C5C3B');
-    v.contact = new ContactShadow({ width: 22, depth: 12, height: 4, res: 1024, opacity: 0.45, blur: 2.2, color: '#03140C' });
+    v.contact = new ContactShadow({ width: 22, depth: 12, height: 4, res: 1024, opacity: 0.4, blur: 2.2, color: SHADOW_G });
     v.scene.add(v.contact.group);
 
     S.hero = makeVildCoin();
@@ -31,14 +30,14 @@ export default {
     v.scene.add(S.heroG);
 
     S.kick = el('div', 'abs t-label nowrap', S.front, 'Hugmyndin');
-    css(S.kick, { color: GREEN, fontSize: '28px' });
-    S.word = el('div', 'abs', S.front, vildWordSvg({ color: GREEN, height: 168, stroke: 6 }));
+    css(S.kick, { color: LEAF, fontSize: '28px' });
+    S.word = el('div', 'abs', S.front, vildWordSvg({ color: FOREST, height: 168, stroke: 6 }));
     S.paths = Array.from(S.word.querySelectorAll('.vw'));
     S.paths.forEach((p) => { p.style.strokeDasharray = '1'; p.style.strokeDashoffset = '1'; });
-    S.line = new Words(S.front, 'Vildarpeningar fyrir veitingastaði.', 't-h3', { color: '#FFFFFF' });
-    S.ask = new Words(S.front, 'Hvað ef veitingastaðir\ngerðu það sama og Takk?', 't-h3', { color: GREEN });
+    S.line = new Words(S.front, 'Vildarpeningar fyrir veitingastaði.', 't-h3', { color: FOREST });
+    S.ask = new Words(S.front, 'Hvað ef veitingastaðir\ngerðu það sama og Takk?', 't-h3', { color: LEAF });
     S.ring = el('div', 'abs', S.front);
-    css(S.ring, { borderRadius: '50%', border: `8px solid ${GREEN}` });
+    css(S.ring, { borderRadius: '50%', border: `8px solid ${YELLOW}` });
     S.flash = el('div', 'fill', S.front);
     css(S.flash, { background: '#FFFFFF', opacity: '0' });
 
@@ -47,7 +46,7 @@ export default {
     cue(WORD, 'ruler', { dur: 0.6, gain: 0.5, pitch: 1.2 });
     cue(LINE, 'swoosh', { gain: 0.45 });
     cue(ASK, 'tick', { gain: 0.4 });
-    wipe(TO, { kind: 'panel', dur: 0.56, color: '#F0EBF7', dir: -1, angle: 10 });
+    wipe(TO, { kind: 'panel', dur: 0.56, color: '#E8FCDA', dir: -1, angle: 10 });
   },
 
   update(lt, t, S) {

@@ -94,6 +94,7 @@ export default {
     S.chipB = chip(S.front, 'Inneign', { bg: '#691FE7', color: '#FFFFFF', size: 34 });
     S.hA = new Words(S.front, 'Keypt fyrir 10.000 kr. með 50% afslætti.', 't-h2');
     S.sA = new Words(S.front, '5.000 kr. sparast, og þær má nota hvar sem er.', 't-h3', { color: '#691FE7' });
+    S.capA = new Words(S.front, '5.000 kr. sem fyrirtækið sér aldrei aftur.', 't-h3');
     S.hB = new Words(S.front, 'Keypt fyrir 10.000 kr. með 50% til baka.', 't-h2');
     S.sB = new Words(S.front, '5.000 kr. inneign, sem má bara nota hjá þér.', 't-h3', { color: '#691FE7' });
     S.cap = new Words(S.front, 'Peningarnir haldast í keðjunni.', 't-h3');
@@ -104,7 +105,7 @@ export default {
     S.others.forEach((o, i) => cue(PARTB + b(i * 0.5), 'pop', { gain: 0.6, pitch: 0.8 + i * 0.12 }));
     S.inB.forEach((w, i) => cue(w.ts + w.dur, 'coin', { pitch: 1.15 + i * 0.07, gain: 0.55 }));
     cue(PARTB + b(4), 'stab', { gain: 0.5 });
-    wipe(TO, { kind: 'panel', dur: 0.6, color: '#F0EBF7', dir: -1, angle: 10 });
+    wipe(TO, { kind: 'panel', dur: 0.6, color: '#DBC7FF', dir: -1, angle: 10 });
   },
 
   update(lt, t, S) {
@@ -158,6 +159,7 @@ export default {
     place(S.chipB, { x: 148, y: 84, s: Math.max(0.001, chB), o: swap ? 1 : 0, ox: '0%', oy: '50%' });
     S.hA.update(t, { at: FROM + 0.25, stagger: 0.05, x: 140, y: 160, out: PARTB - 0.4, outDur: 0.3 });
     S.sA.update(t, { at: FROM + b(1.5), stagger: 0.05, x: 144, y: 268, out: PARTB - 0.4, outDur: 0.3 });
+    S.capA.update(t, { at: FROM + b(5), stagger: 0.05, x: 144, y: 350, out: PARTB - 0.4, outDur: 0.3 });
     S.hB.update(t, { at: PARTB + 0.1, stagger: 0.05, x: 140, y: 160, out: TO - 0.4, outDur: 0.3 });
     S.sB.update(t, { at: PARTB + b(1.5), stagger: 0.05, x: 144, y: 268, out: TO - 0.4, outDur: 0.3 });
     S.cap.update(t, { at: PARTB + b(4.5), stagger: 0.05, x: 144, y: 350, out: TO - 0.4, outDur: 0.3 });

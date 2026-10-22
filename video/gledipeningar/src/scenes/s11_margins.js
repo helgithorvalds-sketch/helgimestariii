@@ -1,12 +1,12 @@
 import { b, cue } from '../core/util.js';
 import { ease, prog, spring } from '../core/anim.js';
 import { el, css, place, Words, bar } from '../core/dom.js';
-import { background, GREEN, FOREST } from './common.js';
+import { greenWorld, GREEN, FOREST, LEAF, YELLOW } from './common.js';
 import { wipe } from '../fx.js';
 
 // The numbers behind the idea: restaurants and bars have about three times the margin.
-const FROM = b(120), TO = b(128);
-const R1 = b(121), R2 = b(122), CAP = b(124);
+const FROM = b(136), TO = b(144);
+const R1 = b(137), R2 = b(138), CAP = b(140);
 const X = 150, U = 40; // px per margin percent
 
 export default {
@@ -15,8 +15,9 @@ export default {
   to: TO,
   setup(ctx, S) {
     S.view = null;
-    background(S, 'studioLeft');
-    S.kicker = el('div', 'abs t-label purple', S.front, 'Álagning');
+    greenWorld(S);
+    S.kicker = el('div', 'abs t-label', S.front, 'Álagning');
+    css(S.kicker, { color: LEAF });
     S.l1 = el('div', 'abs t-h3 nowrap', S.front, 'Matvöruverslun');
     S.l2 = el('div', 'abs t-h3 nowrap', S.front, 'Veitingastaður &amp; bar');
     S.b1 = el('div', 'abs', S.front);
@@ -25,13 +26,13 @@ export default {
     S.v2 = el('div', 'abs t-h2 nowrap tnum', S.front, '~30%');
     css(S.v1, { color: '#691FE7' });
     css(S.v2, { color: FOREST });
-    S.cap = new Words(S.front, 'Þrisvar sinnum meira svigrúm\ntil að gefa til baka.', 't-h3', { color: '#691FE7' });
+    S.cap = new Words(S.front, 'Þrisvar sinnum meira svigrúm\ntil að gefa til baka.', 't-h3', { color: LEAF });
 
     cue(R1, 'ruler', { dur: 0.4, gain: 0.45 });
     cue(R2, 'ruler', { dur: 0.6, gain: 0.6, pitch: 1.3 });
     cue(R2 + 0.5, 'stab', { gain: 0.45 });
     cue(CAP, 'swoosh', { gain: 0.45 });
-    wipe(TO, { kind: 'panel', dur: 0.56, color: GREEN, dir: 1, angle: -10 });
+    wipe(TO, { kind: 'panel', dur: 0.56, color: YELLOW, dir: 1, angle: -10 });
   },
 
   update(lt, t, S) {

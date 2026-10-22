@@ -3,35 +3,35 @@ import { b, cue } from '../core/util.js';
 import { ease, prog, spring, lerp, clamp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow, enableKeyShadow } from '../three/stage.js';
-import { makeBedroom } from '../models/places.js';
+import { makeBedroom, MINT_ROOM } from '../models/places.js';
 import { makePhone, drawLockScreen } from '../models/devices.js';
 import { makePerson, SKIN, HAIR } from '../models/people.js';
-import { background, orbit, screenDisc, makeIris, updateIris, IRIS, GREEN, FOREST } from './common.js';
+import { background, orbit, screenDisc, makeIris, updateIris, IRIS, FOREST, LEAF, YELLOW } from './common.js';
 import { vildIconSvg } from '../brand.js';
 
-const FROM = b(208), TO = b(216);
-const BUZZ = b(209);
-const WAKE = b(210);
-const BIG = b(211);
-const NUDGE = b(213); // the second popup: a reason to come back
-const PUSH = b(214.9);
+const FROM = b(224), TO = b(232);
+const BUZZ = b(225);
+const WAKE = b(226);
+const BIG = b(227);
+const NUDGE = b(229); // the second popup: a reason to come back
+const PUSH = b(230.9);
 
 export default {
   id: 'morning',
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'morning');
-    const v = ctx.stage.makeScene({ fov: 30, light: 'morning', envIntensity: 0.8 });
+    background(S, 'dawn');
+    const v = ctx.stage.makeScene({ fov: 30, light: 'dawn', envIntensity: 0.8 });
     S.view = v;
     enableKeyShadow(v, { size: 1024, extent: 7, radius: 14, samples: 16 });
-    const room = makeBedroom();
+    const room = makeBedroom(MINT_ROOM);
     room.root.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
     v.scene.add(room.root);
     S.room = room;
 
     // the sleeper: only the head shows above the duvet, resting on the pillow
-    S.p = makePerson({ face: true, top: '#C9B2F7', skin: SKIN[1], hair: HAIR[1], arms: false });
+    S.p = makePerson({ face: true, top: '#FFE27A', skin: SKIN[1], hair: HAIR[1], arms: false });
     S.p.body.visible = false;
     S.headHolder = new THREE.Group();
     S.headHolder.position.set(-0.95, 1.6, -2.18);
@@ -50,27 +50,28 @@ export default {
     v.scene.add(S.phone.root);
 
     // DOM: kicker, notification card, big number
-    S.kick = el('div', 'abs t-label purple', S.front, 'Laugardagsmorgunn');
+    S.kick = el('div', 'abs t-label', S.front, 'Laugardagsmorgunn');
+    css(S.kick, { color: LEAF });
     S.card = el('div', 'abs', S.front);
     css(S.card, {
       width: '660px', padding: '26px 30px', borderRadius: '34px', background: 'rgba(255,255,255,0.94)',
-      boxShadow: '0 24px 60px rgba(42,10,94,0.18)', display: 'flex', gap: '22px', alignItems: 'center',
+      boxShadow: '0 24px 60px rgba(10,61,36,0.18)', display: 'flex', gap: '22px', alignItems: 'center',
     });
     S.card.innerHTML = `<div style="flex:none">${vildIconSvg({ size: 84 })}</div>
-      <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 34px Figtree;color:#18003E">VILD</span><span style="font:600 24px Figtree;color:rgba(24,0,62,.45)">núna</span></div>
-      <div style="font:600 30px Figtree;color:rgba(24,0,62,.8);margin-top:6px;line-height:1.25">Þú fékkst inneign frá barnum.</div></div>`;
-    S.big = el('div', 'abs t-mega nowrap tnum', S.front, '<span style="position:relative;display:inline-block"><span style="position:absolute;left:-0.08em;right:-0.08em;top:0.42em;bottom:0.02em;background:#B4FF9B;border-radius:0.12em;transform:rotate(-1.5deg)"></span><span style="position:relative">+8.000 kr.</span></span>');
-    css(S.big, { fontSize: '176px', color: '#18003E' });
+      <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 34px Figtree;color:${FOREST}">VILD</span><span style="font:600 24px Figtree;color:rgba(12,92,59,.45)">núna</span></div>
+      <div style="font:600 30px Figtree;color:rgba(12,92,59,.85);margin-top:6px;line-height:1.25">Þú fékkst inneign frá barnum.</div></div>`;
+    S.big = el('div', 'abs t-mega nowrap tnum', S.front, `<span style="position:relative;display:inline-block"><span style="position:absolute;left:-0.08em;right:-0.08em;top:0.42em;bottom:0.02em;background:${YELLOW};border-radius:0.12em;transform:rotate(-1.5deg)"></span><span style="position:relative">+8.000 kr.</span></span>`);
+    css(S.big, { fontSize: '176px', color: FOREST });
     // second popup: a nudge to come back and use it
     S.nudge = el('div', 'abs', S.front);
     css(S.nudge, {
-      width: '660px', padding: '28px 30px', borderRadius: '34px', background: '#18003E',
-      boxShadow: '0 24px 60px rgba(42,10,94,0.25)', color: '#FFFFFF',
+      width: '660px', padding: '28px 30px', borderRadius: '34px', background: FOREST,
+      boxShadow: '0 24px 60px rgba(10,61,36,0.28)', color: '#FFFFFF',
     });
     S.nudge.innerHTML = `<div style="font:800 40px Figtree;letter-spacing:-.02em">Inneignin bíður.</div>
       <div style="font:600 30px Figtree;color:rgba(255,255,255,.75);margin-top:8px;line-height:1.3">8.000 kr. á barnum. Kíkirðu í kvöld?</div>
-      <div style="display:inline-block;margin-top:20px;background:${GREEN};color:${FOREST};font:800 30px Figtree;padding:14px 28px;border-radius:999px">Bóka borð</div>`;
-    S.iris = makeIris(S, IRIS.green);
+      <div style="display:inline-block;margin-top:20px;background:${YELLOW};color:${FOREST};font:800 30px Figtree;padding:14px 28px;border-radius:999px">Bóka borð</div>`;
+    S.iris = makeIris(S, IRIS.mint);
 
     cue(FROM, 'morning', { gain: 0.5 });
     cue(BUZZ, 'buzz', { dur: 0.5, gain: 0.7 });

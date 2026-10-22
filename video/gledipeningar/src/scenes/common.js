@@ -16,14 +16,21 @@ export const BG = {
   yellow: 'radial-gradient(ellipse 85% 80% at 55% 45%, #FFDD6E 0%, #FFD24D 50%, #FFC72E 100%)',
   green: 'radial-gradient(ellipse 85% 80% at 55% 45%, #C4FFB0 0%, #B4FF9B 50%, #A2F587 100%)',
   forest: 'radial-gradient(ellipse 85% 80% at 55% 45%, #13704A 0%, #0C5C3B 50%, #08452C 100%)',
+  // the VILD world after Kafli 5: fresh, sunny greens (a touch of yellow keeps them from going dull)
+  mint: 'radial-gradient(ellipse 80% 75% at 58% 42%, #FBFFF2 0%, #E8FCDA 52%, #D0F5BD 100%)',
+  lime: 'radial-gradient(ellipse 85% 80% at 55% 42%, #F6FFB8 0%, #CFFFA6 45%, #A8F58A 100%)',
+  emerald: 'radial-gradient(ellipse 85% 80% at 60% 40%, #146B45 0%, #0B4A30 50%, #062E1E 100%)',
+  dawn: 'radial-gradient(ellipse 90% 85% at 30% 30%, #FFFBE6 0%, #F1FBE4 50%, #DCF5CF 100%)',
 };
 
 // Flat colours matching the centre tones above, used by the chapter irises.
-export const IRIS = { purple: '#691FE7', lavender: '#DBC7FF', pink: '#FF7AB6', ink: '#18003E', yellow: '#FFD24D', green: '#B4FF9B' };
+export const IRIS = { purple: '#691FE7', lavender: '#DBC7FF', pink: '#FF7AB6', ink: '#18003E', yellow: '#FFD24D', green: '#B4FF9B', mint: '#E8FCDA', forest: '#0C5C3B' };
 export const YELLOW = '#FFD24D';
 // VILD brand colours
 export const GREEN = '#B4FF9B';
 export const FOREST = '#0C5C3B';
+export const LEAF = '#17914F'; // a brighter green for secondary lines on light green
+export const SHADOW_G = '#0A3D24'; // contact shadow tint in the green world
 
 export function background(S, kind = 'studio') {
   const bg = el('div', 'fill', S.back);
@@ -165,4 +172,10 @@ export function vildIcon(parent, size = 56) {
   css(e, { width: `${size}px`, height: `${size}px`, borderRadius: '50%', boxShadow: `0 ${Math.round(size * 0.12)}px ${Math.round(size * 0.3)}px rgba(12,92,59,0.25)` });
   e.innerHTML = vildIconSvg({ size });
   return e;
+}
+
+/** Background + default text colour for a scene in the VILD world. */
+export function greenWorld(S, kind = 'mint') {
+  background(S, kind);
+  css(S.front, { color: FOREST });
 }

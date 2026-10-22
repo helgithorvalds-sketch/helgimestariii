@@ -7,8 +7,8 @@ import { makeButterSet } from '../models/food.js';
 import { background, orbit, coinIcon, makeIris, updateIris, IRIS } from './common.js';
 
 // Chapter 4, the catch: butter costs 400 kr., the margin is about 40 kr., half of it comes back = 20 kr.
-const FROM = b(92), TO = b(108);
-const PRICE = b(94), SPLIT = b(96), HALF = b(98), DROP = b(99), SMALL = b(101), WHY = b(103);
+const FROM = b(108), TO = b(124);
+const PRICE = b(110), SPLIT = b(112), HALF = b(114), DROP = b(115), SMALL = b(117), WHY = b(119);
 const PUSH = TO - b(1.1);
 const BAR_X = 150, BAR_Y = 440, BAR_W = 780, BAR_H = 66;
 const MARGIN = 0.1; // 40 of 400 kr.

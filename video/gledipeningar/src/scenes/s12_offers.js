@@ -4,28 +4,28 @@ import { ease, prog, spring, lerp, clamp, wobble, DEG } from '../core/anim.js';
 import { Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeTag, font } from '../models/devices.js';
-import { background, orbit } from './common.js';
+import { greenWorld, orbit, SHADOW_G } from './common.js';
 import { wipe } from '../fx.js';
 
-const FROM = b(128), TO = b(136);
+const FROM = b(144), TO = b(152);
 const OFFERS = [
-  { text: 'Hádegistilboð', bg: '#FFFFFF', fg: '#691FE7', pos: [3.85, 0.65], rot: 0.06 },
-  { text: 'Þriðjudagstilboð', bg: '#691FE7', fg: '#FFFFFF', pos: [4.75, -0.5], rot: -0.09 },
+  { text: 'Hádegistilboð', bg: '#FFFFFF', fg: '#0C5C3B', pos: [3.85, 0.65], rot: 0.06 },
+  { text: 'Þriðjudagstilboð', bg: '#0C5C3B', fg: '#FFFFFF', pos: [4.75, -0.5], rot: -0.09 },
   { text: 'Happy hour', bg: '#FF7AB6', fg: '#FFFFFF', pos: [4.0, -1.65], rot: 0.13 },
-  { text: '2 fyrir 1', bg: '#B4FF9B', fg: '#0C5C3B', pos: [4.65, 1.75], rot: -0.12 },
+  { text: '2 fyrir 1', bg: '#FFD24D', fg: '#0C5C3B', pos: [4.65, 1.75], rot: -0.12 },
 ];
-const SAY = b(132);
+const SAY = b(148);
 
 export default {
   id: 'offers',
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'studio');
-    const v = ctx.stage.makeScene({ fov: 28 });
+    greenWorld(S);
+    const v = ctx.stage.makeScene({ fov: 28, light: 'mint' });
     S.view = v;
     v.rig.key.position.set(-5, 11, 6);
-    v.contact = new ContactShadow({ width: 22, depth: 16, height: 4, res: 1024, opacity: 0.5, blur: 1.8 });
+    v.contact = new ContactShadow({ width: 22, depth: 16, height: 4, res: 1024, opacity: 0.45, blur: 1.8, color: SHADOW_G });
     v.contact.group.position.set(3, 0, 0.5);
     v.scene.add(v.contact.group);
     S.tags = OFFERS.map((o, i) => {
@@ -47,7 +47,7 @@ export default {
     });
     S.h1 = new Words(S.front, 'Og þeir eru nú\nþegar með tilboð.', 't-h1');
     S.h1.root.style.fontSize = '112px';
-    wipe(TO, { kind: 'panel', dur: 0.56, color: '#F0EBF7', dir: -1, angle: 10 });
+    wipe(TO, { kind: 'panel', dur: 0.56, color: '#E8FCDA', dir: -1, angle: 10 });
 
     S.tags.forEach((tg, i) => cue(tg.at, 'slam', { gain: 0.8, pitch: 1 + i * 0.05 }));
     cue(SAY, 'swoosh', { gain: 0.5 });

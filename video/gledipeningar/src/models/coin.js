@@ -182,18 +182,18 @@ export function makeGlediCoin({ body = GLEDI.yellow, face = GLEDI.ink } = {}) {
   return g;
 }
 
-let vild = null;
+let vild = null, vildRing = null;
 
 /**
- * VILD coin: same body as the Takk coin in VILD light green, with the circular-arrow V raised on both faces.
+ * VILD coin, after the brand's coin logo: light green body, a raised inner ring and a bold V.
  * Axis is +Y, radius 1.
  */
 export function makeVildCoin({ body = VILD.light, mark = VILD.ink } = {}) {
   if (!shared) shared = build();
   const s = shared;
   if (!vild) {
-    const o = { scale: 0.0046, cx: 586, cy: 330, depth: 0.03, bevel: 0.01, bevelSegs: 3 };
-    vild = [VILD.ring, VILD.chevron, VILD.v].map((d) => extrudeSvg(d, o));
+    vild = extrudeSvg(VILD.coinV, { scale: 0.0034, cx: 600, cy: 440, depth: 0.03, bevel: 0.011, bevelSegs: 3 });
+    vildRing = new THREE.TorusGeometry(0.72, 0.016, 10, 160);
   }
   const bodyMat = new THREE.MeshPhysicalMaterial({
     color: new THREE.Color(body), roughness: 0.42, clearcoat: 0.75, clearcoatRoughness: 0.12, envMapIntensity: 0.55,
@@ -206,11 +206,15 @@ export function makeVildCoin({ body = VILD.light, mark = VILD.ink } = {}) {
   g.add(new THREE.Mesh(s.bodyGeo, bodyMat), new THREE.Mesh(s.bandGeo, bandMat));
   for (const side of [1, -1]) {
     const f = new THREE.Group();
-    vild.forEach((geo) => f.add(new THREE.Mesh(geo, markMat)));
+    f.add(new THREE.Mesh(vild, markMat));
     f.rotation.x = (-Math.PI / 2) * side;
     if (side < 0) f.rotation.z = Math.PI;
     f.position.y = s.h * 0.55 * side;
     g.add(f);
+    const ring = new THREE.Mesh(vildRing, markMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = s.h * 0.56 * side;
+    g.add(ring);
   }
   g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   g.userData.materials = { bodyMat, bandMat, markMat };

@@ -4,31 +4,31 @@ import { ease, prog, spring, lerp, clamp, wobble, DEG } from '../core/anim.js';
 import { el, css, place, Words, Counter } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeCounter, makeCoupe, makeHighball, makeBeer, makeShot, makeWine } from '../models/places.js';
-import { background, orbit, vildIcon, GREEN } from './common.js';
+import { background, orbit, vildIcon, GREEN, YELLOW } from './common.js';
 
-const FROM = b(200), TO = b(208);
+const FROM = b(216), TO = b(224);
 const TOP = 1.09;
 const RATE = 0.16; // credit back on the night
 const DRINKS = [
-  { make: () => makeCoupe('#FF7AB6'), x: -1.4, at: b(200.25), add: 4900 },
-  { make: () => makeHighball('#8C5CF5'), x: -0.2, at: b(201), add: 5800 },
-  { make: () => makeBeer(), x: 1.0, at: b(202), add: 8000 },
-  { make: () => makeShot('#FFD24D'), x: 1.95, at: b(203), add: 6500 },
-  { make: () => makeShot('#FFD24D'), x: 2.4, at: b(203.5), add: 6500 },
-  { make: () => makeWine('#8E2A6B'), x: 3.4, at: b(204), add: 8500 },
-  { make: () => makeHighball('#FF7AB6'), x: 4.6, at: b(205), add: 9800 },
+  { make: () => makeCoupe('#FF7AB6'), x: -1.4, at: b(216.25), add: 4900 },
+  { make: () => makeHighball('#7EE08A'), x: -0.2, at: b(217), add: 5800 },
+  { make: () => makeBeer(), x: 1.0, at: b(218), add: 8000 },
+  { make: () => makeShot('#FFD24D'), x: 1.95, at: b(219), add: 6500 },
+  { make: () => makeShot('#FFD24D'), x: 2.4, at: b(219.5), add: 6500 },
+  { make: () => makeWine('#8E2A6B'), x: 3.4, at: b(220), add: 8500 },
+  { make: () => makeHighball('#FF7AB6'), x: 4.6, at: b(221), add: 9800 },
 ];
-const OFF = b(207);
+const OFF = b(223);
 
 export default {
   id: 'night',
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'night');
+    background(S, 'emerald');
     // soft out-of-focus bar lights behind the counter
     S.bokeh = [];
-    const cols = ['255,122,182', '140,92,245', '219,199,255', '255,210,77'];
+    const cols = ['255,217,77', '180,255,155', '236,255,214', '126,224,138'];
     for (let i = 0; i < 11; i++) {
       const d = el('div', 'abs', S.back);
       const r = 60 + ((i * 37) % 90);
@@ -36,14 +36,14 @@ export default {
       css(d, { width: `${r * 2}px`, height: `${r * 2}px`, borderRadius: '50%', background: `radial-gradient(circle, rgba(${c},0.32) 0%, rgba(${c},0.18) 45%, rgba(${c},0) 70%)` });
       S.bokeh.push({ d, r, x: 700 + ((i * 263) % 1300), y: 80 + ((i * 151) % 380), s: 0.3 + (i % 5) * 0.12 });
     }
-    const v = ctx.stage.makeScene({ fov: 26, light: 'night', envIntensity: 0.45 });
+    const v = ctx.stage.makeScene({ fov: 26, light: 'greennight', envIntensity: 0.5 });
     S.view = v;
-    S.pink = new THREE.PointLight('#FF7AB6', 18, 14, 2);
+    S.pink = new THREE.PointLight('#FFD54A', 18, 14, 2);
     S.pink.position.set(5, 3.2, 2.5);
-    S.violet = new THREE.PointLight('#8C5CF5', 22, 16, 2);
+    S.violet = new THREE.PointLight('#5BE38A', 22, 16, 2);
     S.violet.position.set(-3, 3.5, 2);
     v.scene.add(S.pink, S.violet);
-    S.counter = makeCounter(18);
+    S.counter = makeCounter(18, { top: '#0E3F29', front: '#072619', rail: GREEN });
     S.counter.position.set(1.5, 0, 0);
     v.scene.add(S.counter);
     S.drinks = DRINKS.map((d) => {
@@ -53,19 +53,19 @@ export default {
       return { ...d, g };
     });
     S.kick = el('div', 'abs t-label', S.front, 'Föstudagskvöld');
-    css(S.kick, { color: '#DBC7FF' });
+    css(S.kick, { color: GREEN });
     S.tab = new Counter(S.front, 't-mega white', { format: (x) => `${isk(x)} kr.` });
     css(S.tab.root, { fontSize: '150px' });
     S.tabLab = el('div', 'abs t-label', S.front, 'Eytt');
     css(S.tabLab, { color: 'rgba(255,255,255,0.6)' });
     // right side: credit earned, ticking up with every round
     S.cred = new Counter(S.front, 't-h1 nowrap', { format: (x) => `+${isk(x)} kr.` });
-    css(S.cred.root, { color: GREEN, fontSize: '104px', textAlign: 'right' });
+    css(S.cred.root, { color: YELLOW, fontSize: '104px', textAlign: 'right' });
     S.credLab = el('div', 'abs t-label nowrap', S.front, 'Til baka · 16%');
-    css(S.credLab, { color: GREEN });
+    css(S.credLab, { color: YELLOW });
     S.icon = vildIcon(S.front, 76);
     S.black = el('div', 'fill', S.front);
-    css(S.black, { background: '#05010D', opacity: '0' });
+    css(S.black, { background: '#020D07', opacity: '0' });
     S.drinks.forEach((d, i) => {
       cue(d.at - 0.32, 'slide', { dur: 0.36, gain: 0.35 });
       cue(d.at, 'glass', { gain: 0.6, pitch: 1 + (i % 4) * 0.07 });

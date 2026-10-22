@@ -40,18 +40,27 @@ export function drawGlediIcon(ctx, cx, cy, d) {
   ctx.restore();
 }
 
-/** VILD app icon (rounded square, light green, dark mark) centred at (cx, cy) with size d. */
+/** VILD app icon (rounded square, light green, the coin logo) centred at (cx, cy) with size d. */
 export function drawVildIcon(ctx, cx, cy, d) {
   ctx.save();
   ctx.fillStyle = VILD.light;
   rr(ctx, cx - d / 2, cy - d / 2, d, d, d * 0.24);
   ctx.fill();
-  const s = (d * 0.72) / 283;
+  const s = (d * 0.78) / 560;
   ctx.translate(cx, cy);
   ctx.scale(s, s);
-  ctx.translate(-586, -330);
+  ctx.translate(-608, -448);
   ctx.fillStyle = VILD.ink;
-  for (const k of ['ring', 'chevron', 'v']) ctx.fill(new Path2D(VILD[k]));
+  ctx.beginPath(); ctx.arc(617, 466, 253.5, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = VILD.light;
+  ctx.beginPath(); ctx.arc(600, 434.5, 250, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = VILD.ink;
+  ctx.lineWidth = 7;
+  ctx.stroke();
+  ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.arc(600, 434.5, 215, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = VILD.ink;
+  ctx.fill(new Path2D(VILD.coinV));
   ctx.restore();
 }
 
@@ -240,9 +249,10 @@ export function drawLockScreen(ctx, w, h, { notif = 0, lit = 1, time = '10:12', 
   if (lit <= 0) return;
   ctx.globalAlpha = lit;
   const g = ctx.createLinearGradient(0, 0, 0, h);
-  g.addColorStop(0, '#2A0A6E');
-  g.addColorStop(0.55, '#691FE7');
-  g.addColorStop(1, '#B9A2FF');
+  const stops = icon === 'vild' ? ['#0B4A30', '#17914F', '#B4FF9B'] : ['#2A0A6E', '#691FE7', '#B9A2FF'];
+  g.addColorStop(0, stops[0]);
+  g.addColorStop(0.55, stops[1]);
+  g.addColorStop(1, stops[2]);
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
   statusBar(ctx, w, { dark: true, time: '' });
@@ -270,7 +280,7 @@ export function drawLockScreen(ctx, w, h, { notif = 0, lit = 1, time = '10:12', 
       ctx.fill();
       drawTMark(ctx, 118, y + 82, 50, '#FFFFFF', '#C3ADFF');
     }
-    ctx.fillStyle = PAL.ink;
+    ctx.fillStyle = icon === 'vild' ? '#0C5C3B' : PAL.ink;
     font(ctx, 800, 38);
     ctx.fillText(title, 190, y + 72);
     ctx.globalAlpha = lit * Math.min(1, notif) * 0.5;

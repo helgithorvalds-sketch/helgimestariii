@@ -67,6 +67,8 @@ export const VILD = {
   ring: 'M600 202 A128 128 0 1 1 472 330 L488 330 A112 112 0 1 0 600 218 Z',
   chevron: 'M457.58 358.71 L480 332.35 L502.42 358.71 L514.61 348.35 L480 307.65 L445.39 348.35 Z',
   v: 'M544.06 289.47 L600 401.36 L655.94 289.47 L638.06 280.53 L600 356.64 L561.94 280.53 Z',
+  // the coin logo (1200 x 900 artboard, coin centred at 600, 434.5): bold V with rounded tips and point
+  coinV: 'M481 336 L578 548 Q600 576 622 548 L719 336 Q714 322 700 322 Q692 322 686 330 L600 476 L514 330 Q508 322 500 322 Q486 322 481 336 Z',
   // wordmark centrelines, stroked at 5 units
   word: [
     'M391 586 L440 694 L489 586',
@@ -82,11 +84,13 @@ export function vildMarkSvg({ color = VILD.ink, size = 80 } = {}) {
 <path d="${VILD.ring}" fill="${color}"/><path d="${VILD.chevron}" fill="${color}"/><path d="${VILD.v}" fill="${color}"/></svg>`;
 }
 
-/** Round app icon: light green disc with the mark. */
+/** The VILD coin logo: rim, inner ring, bold V, and an offset dark crescent for the coin's edge. */
 export function vildIconSvg({ size = 80, disc = VILD.light, mark = VILD.ink } = {}) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="398 142 376 376" fill="none" style="display:block">
-<circle cx="586" cy="330" r="188" fill="${disc}"/>
-<path d="${VILD.ring}" fill="${mark}"/><path d="${VILD.chevron}" fill="${mark}"/><path d="${VILD.v}" fill="${mark}"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="328 168 560 560" fill="none" style="display:block">
+<circle cx="617" cy="466" r="253.5" fill="${mark}"/>
+<circle cx="600" cy="434.5" r="250" fill="${disc}" stroke="${mark}" stroke-width="7"/>
+<circle cx="600" cy="434.5" r="215" fill="none" stroke="${mark}" stroke-width="5"/>
+<path d="${VILD.coinV}" fill="${mark}"/></svg>`;
 }
 
 /** The thin VILD wordmark. `draw` (0..1 per letter) animates the strokes drawing in. */

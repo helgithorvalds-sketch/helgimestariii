@@ -2,7 +2,7 @@ import { THREE, M, G, rbox } from '../three/kit.js';
 import { clay, gloss, metal, PAL } from '../three/materials.js';
 import { lathe, lumpy, canvasTexture, slab, roundedRectShape } from '../three/geo.js';
 import { rng } from '../core/util.js';
-import { drawTMark, font } from './devices.js';
+import { drawTMark, drawVildIcon, font } from './devices.js';
 import { makeCoin } from './coin.js';
 
 // ---------------- store front ----------------
@@ -60,10 +60,10 @@ export function makeStore({ awning = PAL.purple, door = PAL.deep, glass = '#BFA8
 }
 
 // ---------------- bar counter and drinks ----------------
-export function makeCounter(len = 14) {
-  const top = M(rbox(len, 0.18, 1.6, 0.06, 4), gloss('#2A0F5E', { rough: 0.18, coat: 1 }), { p: [0, 1.0, 0] });
-  const front = M(rbox(len, 1.0, 1.3, 0.06, 4), clay('#1E0A45', { rough: 0.5, coat: 0.3 }), { p: [0, 0.5, 0.05] });
-  const rail = M(new THREE.CylinderGeometry(0.04, 0.04, len, 16), metal('#B9A2FF', { rough: 0.25 }), { p: [0, 0.22, 0.85], r: [0, 0, Math.PI / 2] });
+export function makeCounter(len = 14, { top: cTop = '#2A0F5E', front: cFront = '#1E0A45', rail: cRail = '#B9A2FF' } = {}) {
+  const top = M(rbox(len, 0.18, 1.6, 0.06, 4), gloss(cTop, { rough: 0.18, coat: 1 }), { p: [0, 1.0, 0] });
+  const front = M(rbox(len, 1.0, 1.3, 0.06, 4), clay(cFront, { rough: 0.5, coat: 0.3 }), { p: [0, 0.5, 0.05] });
+  const rail = M(new THREE.CylinderGeometry(0.04, 0.04, len, 16), metal(cRail, { rough: 0.25 }), { p: [0, 0.22, 0.85], r: [0, 0, Math.PI / 2] });
   return G([top, front, rail]);
 }
 
@@ -116,14 +116,17 @@ export function makeWine(color = '#7A1F5C') {
 }
 
 // ---------------- bedroom ----------------
-export function makeBedroom() {
+const LILAC_ROOM = { head: '#D9C8F2', pillow2: '#F1EAFB', duvet: '#C9B2F7', stand: '#F4ECFF', drawer: '#E4D7FA', knob: '#C9B2F7', lamp: PAL.purple, stem: '#E9DFFA', ring: PAL.purple, floor: '#EFE6FB', rug: '#E2D3FA' };
+export const MINT_ROOM = { head: '#CFEFC0', pillow2: '#EEFBE6', duvet: '#A8E39A', stand: '#F3FCEB', drawer: '#DDF5D0', knob: '#F5D90A', lamp: '#17914F', stem: '#E6F5DD', ring: '#17914F', floor: '#F1F8E8', rug: '#DCF2CC' };
+
+export function makeBedroom(pal = LILAC_ROOM) {
   const wood = clay('#E7C8A0', { rough: 0.55, coat: 0.2 });
   const frame = M(rbox(4.6, 0.5, 6.4, 0.12, 4), wood, { p: [0, 0.25, 0] });
-  const head = M(rbox(4.6, 2.1, 0.32, 0.14, 5), clay('#D9C8F2', { rough: 0.6, sheen: 0.6 }), { p: [0, 1.05, -3.2] });
+  const head = M(rbox(4.6, 2.1, 0.32, 0.14, 5), clay(pal.head, { rough: 0.6, sheen: 0.6 }), { p: [0, 1.05, -3.2] });
   const mattress = M(rbox(4.3, 0.55, 6.1, 0.2, 5), clay('#FFFFFF', { rough: 0.7, sheen: 0.4 }), { p: [0, 0.75, 0.05] });
   const pillowGeo = lumpy(rbox(1.9, 0.42, 1.05, 0.2, 6), 0.03, 3.5, 2);
   const pillow = M(pillowGeo, clay('#FFFFFF', { rough: 0.75, sheen: 0.8 }), { p: [-0.9, 1.22, -2.35], r: [0.18, 0.05, 0] });
-  const pillow2 = M(pillowGeo, clay('#F1EAFB', { rough: 0.75, sheen: 0.8 }), { p: [1.05, 1.2, -2.4], r: [0.16, -0.06, 0.02] });
+  const pillow2 = M(pillowGeo, clay(pal.pillow2, { rough: 0.75, sheen: 0.8 }), { p: [1.05, 1.2, -2.4], r: [0.16, -0.06, 0.02] });
   // duvet: a soft slab with folds
   const dg = new THREE.PlaneGeometry(4.5, 4.6, 70, 70);
   dg.rotateX(-Math.PI / 2);
@@ -141,25 +144,25 @@ export function makeBedroom() {
     dp.setY(i, Math.max(0.35, y));
   }
   dg.computeVertexNormals();
-  const duvet = M(dg, new THREE.MeshPhysicalMaterial({ color: '#C9B2F7', roughness: 0.8, sheen: 1, sheenColor: new THREE.Color('#FFFFFF'), sheenRoughness: 0.45, side: THREE.DoubleSide }), { p: [0, 0, 0.85] });
+  const duvet = M(dg, new THREE.MeshPhysicalMaterial({ color: pal.duvet, roughness: 0.8, sheen: 1, sheenColor: new THREE.Color('#FFFFFF'), sheenRoughness: 0.45, side: THREE.DoubleSide }), { p: [0, 0, 0.85] });
   const fold = M(rbox(4.55, 0.16, 0.5, 0.08, 4), clay('#FFFFFF', { rough: 0.75, sheen: 0.6 }), { p: [0, 1.22, -1.35], r: [0.06, 0, 0] });
   // nightstand
-  const nsMat = clay('#F4ECFF', { rough: 0.5, coat: 0.3 });
+  const nsMat = clay(pal.stand, { rough: 0.5, coat: 0.3 });
   const ns = G([
     M(rbox(1.5, 1.25, 1.3, 0.1, 4), nsMat, { p: [0, 0.625, 0] }),
-    M(rbox(1.2, 0.36, 0.06, 0.05, 3), clay('#E4D7FA'), { p: [0, 0.82, 0.66] }),
-    M(new THREE.SphereGeometry(0.05, 16, 12), metal('#C9B2F7'), { p: [0, 0.82, 0.72] }),
+    M(rbox(1.2, 0.36, 0.06, 0.05, 3), clay(pal.drawer), { p: [0, 0.82, 0.66] }),
+    M(new THREE.SphereGeometry(0.05, 16, 12), metal(pal.knob), { p: [0, 0.82, 0.72] }),
   ], { p: [-3.2, 0, -2.1] });
   // lamp
   const lamp = G([
-    M(new THREE.CylinderGeometry(0.2, 0.24, 0.08, 32), clay(PAL.purple), { p: [0, 0.04, 0] }),
-    M(new THREE.CylinderGeometry(0.035, 0.035, 0.75, 16), metal('#E9DFFA'), { p: [0, 0.42, 0] }),
+    M(new THREE.CylinderGeometry(0.2, 0.24, 0.08, 32), clay(pal.lamp), { p: [0, 0.04, 0] }),
+    M(new THREE.CylinderGeometry(0.035, 0.035, 0.75, 16), metal(pal.stem), { p: [0, 0.42, 0] }),
     M(new THREE.CylinderGeometry(0.22, 0.38, 0.42, 40, 1, true), new THREE.MeshPhysicalMaterial({ color: '#FFF4E6', roughness: 0.8, side: THREE.DoubleSide, emissive: '#FFE3C2', emissiveIntensity: 0.15 }), { p: [0, 0.9, 0] }),
   ], { p: [-3.55, 1.25, -2.45] });
   // alarm clock
   const clock = G([
     M(new THREE.CylinderGeometry(0.22, 0.22, 0.12, 40), clay('#FFFFFF', { rough: 0.4, coat: 0.6 }), { r: [Math.PI / 2, 0, 0] }),
-    M(new THREE.TorusGeometry(0.22, 0.03, 10, 40), clay(PAL.purple, { rough: 0.4, coat: 0.6 })),
+    M(new THREE.TorusGeometry(0.22, 0.03, 10, 40), clay(pal.ring, { rough: 0.4, coat: 0.6 })),
     M(new THREE.BoxGeometry(0.02, 0.12, 0.01), clay(PAL.ink), { p: [0, 0.05, 0.065] }),
     M(new THREE.BoxGeometry(0.09, 0.02, 0.01), clay(PAL.ink), { p: [0.04, 0, 0.065] }),
   ], { p: [-2.56, 1.5, -2.6], r: [-0.1, 0.35, 0] });
@@ -167,17 +170,19 @@ export function makeBedroom() {
     M(new THREE.CylinderGeometry(0.13, 0.11, 0.38, 32, 1, true), glassMat(), { p: [0, 0.19, 0], cast: false }),
     M(new THREE.CylinderGeometry(0.12, 0.105, 0.26, 32), liquid('#DDEBFF', 0.45), { p: [0, 0.14, 0] }),
   ], { p: [-3.55, 1.25, -1.75] });
-  const floor = M(rbox(13, 0.1, 10, 0.05, 2), clay('#EFE6FB', { rough: 0.8 }), { p: [-1, -0.05, 0], cast: false });
-  const rug = M(new THREE.CylinderGeometry(2.4, 2.4, 0.04, 64), clay('#E2D3FA', { rough: 0.95, sheen: 0.8 }), { p: [-3.4, 0.02, 1.8], s: [1.2, 1, 0.8], cast: false });
+  const floor = M(rbox(13, 0.1, 10, 0.05, 2), clay(pal.floor, { rough: 0.8 }), { p: [-1, -0.05, 0], cast: false });
+  const rug = M(new THREE.CylinderGeometry(2.4, 2.4, 0.04, 64), clay(pal.rug, { rough: 0.95, sheen: 0.8 }), { p: [-3.4, 0.02, 1.8], s: [1.2, 1, 0.8], cast: false });
   return { root: G([floor, rug, frame, head, mattress, pillow, pillow2, duvet, fold, ns, lamp, clock, water]), nightstandTop: new THREE.Vector3(-3.2, 1.25, -2.1) };
 }
 
 // ---------------- bottle table ----------------
-export function makeBottleTable() {
+export function makeBottleTable({ brand = 'takk' } = {}) {
+  const vild = brand === 'vild';
+  const trim = vild ? '#E6C24A' : '#C9B2F7', base = vild ? '#E3EEDC' : '#DDD3F2';
   const top = M(new THREE.CylinderGeometry(1.5, 1.5, 0.12, 72), clay('#FFFFFF', { rough: 0.25, coat: 0.9 }), { p: [0, 1.5, 0] });
-  const edge = M(new THREE.TorusGeometry(1.5, 0.06, 12, 72), metal('#C9B2F7', { rough: 0.25 }), { p: [0, 1.5, 0], r: [Math.PI / 2, 0, 0] });
-  const stem = M(new THREE.CylinderGeometry(0.14, 0.18, 1.45, 32), metal('#DDD3F2', { rough: 0.3 }), { p: [0, 0.75, 0] });
-  const foot = M(new THREE.CylinderGeometry(0.8, 0.9, 0.08, 48), metal('#DDD3F2', { rough: 0.3 }), { p: [0, 0.04, 0] });
+  const edge = M(new THREE.TorusGeometry(1.5, 0.06, 12, 72), metal(trim, { rough: 0.25 }), { p: [0, 1.5, 0], r: [Math.PI / 2, 0, 0] });
+  const stem = M(new THREE.CylinderGeometry(0.14, 0.18, 1.45, 32), metal(base, { rough: 0.3 }), { p: [0, 0.75, 0] });
+  const foot = M(new THREE.CylinderGeometry(0.8, 0.9, 0.08, 48), metal(base, { rough: 0.3 }), { p: [0, 0.04, 0] });
   const bucket = M(lathe([[0.5, 0.9], [0.47, 0.86], [0.42, 0.1], [0.36, 0], [0, 0]], { segments: 64 }), metal('#E4E0EE', { rough: 0.18 }), { p: [0, 1.56, 0] });
   const iceTop = G();
   const r = rng(13);
@@ -189,14 +194,15 @@ export function makeBottleTable() {
   }
   // bottle: dark glass with a white label and lavender foil
   const bottle = G([
-    M(lathe([[0.075, 1.75], [0.075, 1.35], [0.1, 1.15], [0.25, 0.9], [0.27, 0.75], [0.27, 0.05], [0.24, 0], [0, 0]], { segments: 48 }), gloss('#16082E', { rough: 0.08, coat: 1, env: 1.6 })),
+    M(lathe([[0.075, 1.75], [0.075, 1.35], [0.1, 1.15], [0.25, 0.9], [0.27, 0.75], [0.27, 0.05], [0.24, 0], [0, 0]], { segments: 48 }), gloss(vild ? '#0B3320' : '#16082E', { rough: 0.08, coat: 1, env: 1.6 })),
     M(new THREE.CylinderGeometry(0.275, 0.275, 0.36, 48, 1, true), clay('#FFFFFF', { rough: 0.5 }), { p: [0, 0.45, 0] }),
-    M(new THREE.CylinderGeometry(0.085, 0.1, 0.5, 32), metal('#C9B2F7', { rough: 0.2 }), { p: [0, 1.55, 0] }),
+    M(new THREE.CylinderGeometry(0.085, 0.1, 0.5, 32), metal(trim, { rough: 0.2 }), { p: [0, 1.55, 0] }),
   ], { p: [0, 1.64, 0], r: [0.08, 0, -0.1] });
   const label = canvasTexture(512, 256);
   label.ctx.fillStyle = '#FFFFFF';
   label.ctx.fillRect(0, 0, 512, 256);
-  drawTMark(label.ctx, 256, 128, 120, PAL.purple, PAL.violet);
+  if (vild) drawVildIcon(label.ctx, 256, 128, 150);
+  else drawTMark(label.ctx, 256, 128, 120, PAL.purple, PAL.violet);
   label.tex.needsUpdate = true;
   bottle.children[1].material = new THREE.MeshPhysicalMaterial({ map: label.tex, roughness: 0.5 });
   // flutes
@@ -215,6 +221,73 @@ export function makeBottleTable() {
   bottle.updateMatrix();
   const sparkTip = new THREE.Vector3(0.13, 2.2, 0).applyMatrix4(bottle.matrix);
   return { root: G([foot, stem, top, edge, bucket, iceTop, bottle, flutes]), bottle, sparkTip };
+}
+
+// ---------------- birthday cake ----------------
+export function makeCake() {
+  const cream = clay('#FFF7EA', { rough: 0.55, sheen: 0.5 });
+  const drip = clay('#FFD24D', { rough: 0.3, coat: 0.6 });
+  const stand = M(lathe([[0, 0.16], [0.9, 0.16], [0.92, 0.12], [0.9, 0.1], [0.12, 0.1], [0.1, 0.02], [0.4, 0.0], [0, 0]], { segments: 64 }), clay('#FFFFFF', { rough: 0.22, coat: 0.85 }));
+  const low = M(new THREE.CylinderGeometry(0.66, 0.66, 0.46, 64), cream, { p: [0, 0.39, 0] });
+  const lowDrip = M(new THREE.TorusGeometry(0.64, 0.05, 10, 64), drip, { p: [0, 0.6, 0], r: [Math.PI / 2, 0, 0] });
+  const up = M(new THREE.CylinderGeometry(0.44, 0.44, 0.36, 64), cream, { p: [0, 0.8, 0] });
+  const upDrip = M(new THREE.TorusGeometry(0.42, 0.045, 10, 64), drip, { p: [0, 0.96, 0], r: [Math.PI / 2, 0, 0] });
+  const lid = M(new THREE.CylinderGeometry(0.43, 0.43, 0.04, 64), drip, { p: [0, 0.98, 0] });
+  // sprinkles around the lower tier
+  const r = rng(77);
+  const spr = G();
+  const cols = ['#FF7AB6', '#17914F', '#8CC8FF', '#FFFFFF', '#B4FF9B'];
+  const sg = new THREE.CapsuleGeometry(0.012, 0.05, 2, 6);
+  for (let i = 0; i < 34; i++) {
+    const a = r() * Math.PI * 2, y = 0.22 + r() * 0.3;
+    spr.add(M(sg, clay(cols[i % cols.length], { rough: 0.4 }), { p: [Math.cos(a) * 0.665, y, Math.sin(a) * 0.665], r: [r() * 3, a, r() * 3], cast: false }));
+  }
+  // candles, each with a two-tone flame
+  const flames = [];
+  const candles = G();
+  const ccol = ['#FF7AB6', '#17914F', '#FFFFFF', '#8CC8FF', '#B4FF9B'];
+  const flameMat = new THREE.MeshBasicMaterial({ color: '#FFC23C', toneMapped: false });
+  const coreMat = new THREE.MeshBasicMaterial({ color: '#FFFBEA', toneMapped: false });
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 4) * Math.PI * 2 + 0.3;
+    const x = i === 4 ? 0 : Math.cos(a) * 0.25, z = i === 4 ? 0 : Math.sin(a) * 0.25;
+    candles.add(M(new THREE.CylinderGeometry(0.024, 0.024, 0.28, 12), clay(ccol[i], { rough: 0.4, coat: 0.4 }), { p: [x, 1.14, z] }));
+    const f = M(new THREE.SphereGeometry(0.04, 14, 10), flameMat, { p: [x, 1.33, z], s: [0.8, 1.6, 0.8], cast: false });
+    f.add(M(new THREE.SphereGeometry(0.022, 10, 8), coreMat, { p: [0, -0.012, 0], cast: false }));
+    candles.add(f);
+    flames.push(f);
+  }
+  return { root: G([stand, low, lowDrip, up, upDrip, lid, spr, candles]), flames };
+}
+
+// ---------------- Christmas tree with presents ----------------
+export function makeXmasTree() {
+  const pine = clay('#1F8A4C', { rough: 0.6, sheen: 0.4 });
+  const trunk = M(new THREE.CylinderGeometry(0.1, 0.12, 0.3, 16), clay('#7A4A2A', { rough: 0.7 }), { p: [0, 0.15, 0] });
+  const tiers = [[0.78, 0.9, 0.7], [0.6, 0.8, 1.15], [0.42, 0.7, 1.55]].map(([rad, h, y]) => M(new THREE.ConeGeometry(rad, h, 40), pine, { p: [0, y, 0] }));
+  const star = M(new THREE.OctahedronGeometry(0.13, 0), gloss('#FFD24D', { rough: 0.2, coat: 1 }), { p: [0, 1.98, 0], s: [1, 1.2, 0.5] });
+  const baubles = G();
+  const r = rng(91);
+  const bcol = ['#E8233F', '#FFD24D', '#FFFFFF'];
+  const bg = new THREE.SphereGeometry(0.065, 16, 12);
+  // on the cone surface, a little below each tier's widest point
+  [[0.6, 0.5], [0.46, 0.97], [0.31, 1.4]].forEach(([rad, y], ti) => {
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2 + ti * 0.6 + r() * 0.3;
+      baubles.add(M(bg, gloss(bcol[(i + ti) % 3], { rough: 0.15, coat: 1 }), { p: [Math.cos(a) * rad, y, Math.sin(a) * rad] }));
+    }
+  });
+  const present = (w, h, d, col, rib, p, ry) => G([
+    M(rbox(w, h, d, 0.03, 3), clay(col, { rough: 0.5, coat: 0.3 }), { p: [0, h / 2, 0] }),
+    M(new THREE.BoxGeometry(w + 0.01, h + 0.01, 0.07), clay(rib, { rough: 0.4, coat: 0.5 }), { p: [0, h / 2, 0] }),
+    M(new THREE.BoxGeometry(0.07, h + 0.01, d + 0.01), clay(rib, { rough: 0.4, coat: 0.5 }), { p: [0, h / 2, 0] }),
+  ], { p, r: [0, ry, 0] });
+  const gifts = G([
+    present(0.5, 0.36, 0.5, '#E8233F', '#FFD24D', [0.78, 0, 0.45], 0.3),
+    present(0.38, 0.3, 0.38, '#FFD24D', '#17914F', [-0.72, 0, 0.5], -0.4),
+    present(0.32, 0.46, 0.32, '#FFFFFF', '#E8233F', [0.15, 0, 0.85], 0.1),
+  ]);
+  return G([trunk, ...tiers, star, baubles, gifts]);
 }
 
 // ---------------- payment card ----------------

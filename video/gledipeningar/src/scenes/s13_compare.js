@@ -5,17 +5,17 @@ import { el, css, place, Words } from '../core/dom.js';
 import { ContactShadow } from '../three/stage.js';
 import { makeVildCoin, makeCoin } from '../models/coin.js';
 import { makeButterSet, makeBurger, makePlate } from '../models/food.js';
-import { background, orbit, pin, chip, V3, GREEN, FOREST, screenDisc, makeIris, updateIris, IRIS } from './common.js';
+import { greenWorld, orbit, pin, chip, V3, GREEN, FOREST, YELLOW, SHADOW_G, screenDisc, makeIris, updateIris, IRIS } from './common.js';
 
 // Same mechanism, worked through for both: half the margin comes back.
 // Grocery: 400 kr. butter, ~10% margin = 40 kr., half back = 20 kr.
 // Restaurant: 8.000 kr. dinner for two, ~30% margin = 2.400 kr., half back = 1.200 kr.
-const FROM = b(136), TO = b(152);
-const LROWS = [b(137), b(138), b(139)];
-const RROWS = [b(141), b(142), b(143)];
-const ONE = b(139); // the single grocery coin
-const STACK0 = b(143), NSTACK = 18, STACKDUR = b(1.5);
-const SAME = b(146.5);
+const FROM = b(152), TO = b(168);
+const LROWS = [b(153), b(154), b(155)];
+const RROWS = [b(157), b(158), b(159)];
+const ONE = b(155); // the single grocery coin
+const STACK0 = b(159), NSTACK = 18, STACKDUR = b(1.5);
+const SAME = b(162.5);
 const PUSH = TO - b(1.1);
 const LX = -2.6, RX = 2.0, SXS = 3.7; // butter, dinner, coin stack
 
@@ -25,9 +25,9 @@ function rows(parent, lines, accent) {
   const items = lines.map(([label, value], i) => {
     const last = i === lines.length - 1;
     const r = el('div', '', box);
-    css(r, { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: last ? '14px 0 0' : '10px 0', borderTop: i ? '2px solid rgba(24,0,62,0.12)' : 'none' });
-    r.innerHTML = `<span style="font:600 ${last ? 30 : 28}px Figtree;color:rgba(24,0,62,${last ? 0.85 : 0.6})">${label}</span>`
-      + `<span class="tnum" style="font:800 ${last ? 64 : 36}px Figtree;letter-spacing:-.03em;color:${last ? accent : '#18003E'}">${value}</span>`;
+    css(r, { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: last ? '14px 0 0' : '10px 0', borderTop: i ? '2px solid rgba(12,92,59,0.15)' : 'none' });
+    r.innerHTML = `<span style="font:600 ${last ? 30 : 28}px Figtree;color:rgba(12,92,59,${last ? 0.9 : 0.7})">${label}</span>`
+      + `<span class="tnum" style="font:800 ${last ? 64 : 36}px Figtree;letter-spacing:-.03em;color:${last ? accent : '#0C5C3B'}">${value}</span>`;
     return r;
   });
   return { box, items };
@@ -38,10 +38,10 @@ export default {
   from: FROM,
   to: TO,
   setup(ctx, S) {
-    background(S, 'studio');
-    const v = ctx.stage.makeScene({ fov: 26, envIntensity: 0.9 });
+    greenWorld(S);
+    const v = ctx.stage.makeScene({ fov: 26, light: 'mint', envIntensity: 0.9 });
     S.view = v;
-    v.contact = new ContactShadow({ width: 22, depth: 12, height: 4, res: 1024, opacity: 0.5, blur: 2.2 });
+    v.contact = new ContactShadow({ width: 22, depth: 12, height: 4, res: 1024, opacity: 0.45, blur: 2.2, color: SHADOW_G });
     v.scene.add(v.contact.group);
 
     S.butter = makeButterSet();
@@ -72,12 +72,12 @@ export default {
     }
 
     S.cL = chip(S.front, 'Takk · matvara', { bg: '#691FE7', color: '#FFFFFF', size: 30 });
-    S.cR = chip(S.front, 'VILD · veitingastaður', { bg: GREEN, color: FOREST, size: 30 });
+    S.cR = chip(S.front, 'VILD · veitingastaður', { bg: FOREST, color: GREEN, size: 30 });
     S.L = rows(S.front, [['Smjör', '400 kr.'], ['Álagning ~10%', '40 kr.'], ['Helmingur til baka', '+20 kr.']], '#691FE7');
     S.R = rows(S.front, [['Kvöldverður fyrir tvo', '8.000 kr.'], ['Álagning ~30%', '2.400 kr.'], ['Helmingur til baka', '+1.200 kr.']], FOREST);
-    css(S.R.items[2].lastChild, { background: GREEN, padding: '0 14px', borderRadius: '14px' });
+    css(S.R.items[2].lastChild, { background: YELLOW, padding: '0 14px', borderRadius: '14px' });
     S.div = el('div', 'abs', S.front);
-    css(S.div, { width: '3px', height: '560px', background: 'rgba(105,31,231,0.18)', borderRadius: '2px' });
+    css(S.div, { width: '3px', height: '560px', background: 'rgba(12,92,59,0.18)', borderRadius: '2px' });
     S.same = new Words(S.front, 'Sami ávinningur. Án gallans.', 't-h2', { align: 'center' });
     S.iris = makeIris(S, IRIS.green);
 

@@ -67,6 +67,25 @@ function addLights(scene, kind) {
     rig.key.position.set(-3, 7, 5);
     rig.rim = new THREE.DirectionalLight('#9B6BFF', 2.2);
     rig.rim.position.set(4, 3, -6);
+  } else if (kind === 'mint') {
+    // the VILD world: same studio key, fill and bounce tinted fresh green instead of lilac
+    rig.hemi = new THREE.HemisphereLight('#FFFFFF', '#BDEBA9', 0.7);
+    rig.key = new THREE.DirectionalLight('#FFFFFF', 2.0);
+    rig.key.position.set(-4, 9, 6);
+    rig.rim = new THREE.DirectionalLight('#F1FFE6', 0.9);
+    rig.rim.position.set(6, 5, -6);
+  } else if (kind === 'greennight') {
+    rig.hemi = new THREE.HemisphereLight('#C8FFB0', '#06281A', 0.55);
+    rig.key = new THREE.DirectionalLight('#F4FFE8', 1.4);
+    rig.key.position.set(-3, 7, 5);
+    rig.rim = new THREE.DirectionalLight('#7EE08A', 2.0);
+    rig.rim.position.set(4, 3, -6);
+  } else if (kind === 'dawn') {
+    rig.hemi = new THREE.HemisphereLight('#FFF8EA', '#C2EBAE', 0.75);
+    rig.key = new THREE.DirectionalLight('#FFE9C8', 2.4);
+    rig.key.position.set(-6, 6, 3);
+    rig.rim = new THREE.DirectionalLight('#E2FAD4', 0.8);
+    rig.rim.position.set(5, 4, -5);
   } else if (kind === 'morning') {
     rig.hemi = new THREE.HemisphereLight('#FFF6EC', '#CDB8F5', 0.75);
     rig.key = new THREE.DirectionalLight('#FFE9D2', 2.4);

@@ -12,8 +12,8 @@ import { background, orbit, pin, V3, screenDisc, makeIris, updateIris, IRIS, pop
 
 // Two straight lanes: one into the store, one out of it. People pop in at the door on every beat
 // and pop back out on the off-beat, so the flow never stops and the money stays in the chain.
-const FROM = b(76), TO = b(88);
-const PUSH = b(86.6);
+const FROM = b(92), TO = b(104);
+const PUSH = b(102.6);
 const SX = 2.6;
 const LANE = 0.64; // lane offset from the door centre
 const Z0 = 1.9, Z1 = 14; // door end, far end
@@ -144,7 +144,7 @@ export default {
       a.m.scale.setScalar(Math.max(1e-4, edge));
     });
 
-    const lIn = spring(t - b(78), 3, 0.5), lOut = spring(t - b(78.5), 3, 0.5);
+    const lIn = spring(t - b(94), 3, 0.5), lOut = spring(t - b(94.5), 3, 0.5);
     const lo = 1 - ease.inCubic(prog(t, PUSH - 0.2, PUSH + 0.1));
     pin(S.labIn, V3(SX - LANE, 0.05, 7.5), cam, { s: Math.max(0.001, lIn), o: (lIn > 0.01 ? 1 : 0) * lo, dx: -70 });
     pin(S.labOut, V3(SX + LANE, 0.05, 7.5), cam, { s: Math.max(0.001, lOut), o: (lOut > 0.01 ? 1 : 0) * lo, dx: 70 });
