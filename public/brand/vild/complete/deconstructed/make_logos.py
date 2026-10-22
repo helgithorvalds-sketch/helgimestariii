@@ -10,7 +10,7 @@ def stroke(fg, t): return f'fill="none" stroke="{fg}" stroke-width="{t}" stroke-
 def deconstructed(fg, h, cx, cy, dmode="line", t=0.055, gap=0.5, cut=0.09, dh=1.0, dw=0.8):
     """V I L D from separated strokes.  dmode: line | big-line | solid | big-solid"""
     st = stroke(fg, t); x = 0; p = []
-    p.append(f'<path d="M0,0 L{0.45-cut*0.5:.3f},{1-cut:.3f} M{0.9:.3f},0 L{0.45+cut*0.5:.3f},{1-cut:.3f}" {st}/>'); x += 0.9 + gap
+    p.append(f'<path d="M0,0 L0.45,1 L0.9,0" {st}/>'); x += 0.9 + gap   # V whole, arms meet
     p.append(f'<path d="M{x:.3f},0 V1" {st}/>'); x += gap
     p.append(f'<path d="M{x:.3f},0 V{1-cut:.3f} M{x+cut:.3f},1 H{x+0.6:.3f}" {st}/>'); x += 0.6 + gap
     top = 1 - dh; r = dh / 2; stem = dw - r
