@@ -25,7 +25,7 @@ describe('HistoryPage', () => {
     const spend = ledger.find((e) => e.kind === 'spend')!;
     expect(screen.getAllByText(formatSignedISK(spend.amount)).length).toBeGreaterThan(0);
     // the welcome credit is its own row
-    expect(screen.getByText('Velkomin í VILD')).toBeInTheDocument();
+    expect(screen.getByText(/Velkomin í VILD/)).toBeInTheDocument();
     // summary strip
     expect(screen.getByText('Safnað')).toBeInTheDocument();
   });

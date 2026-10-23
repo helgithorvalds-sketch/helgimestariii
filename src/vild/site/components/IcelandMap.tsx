@@ -55,11 +55,19 @@ const PATH = COAST.map(([lng, lat], i) => {
   return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
 }).join(' ') + ' Z';
 
-/* Where the label goes relative to the dot, per city, so the capital area stays legible. */
+/* At this scale the capital-area towns sit on one pixel, so they share a dot. */
+const CAPITAL = new Set(['Reykjavík', 'Kópavogur', 'Hafnarfjörður', 'Garðabær', 'Mosfellsbær', 'Seltjarnarnes']);
+const CAPITAL_LABEL = 'Höfuðborgarsvæðið';
+
+function mapGroups(locations: Location[]) {
+  const capital = locations.filter((l) => CAPITAL.has(l.city)).map((l) => ({ ...l, city: CAPITAL_LABEL }));
+  const rest = locations.filter((l) => !CAPITAL.has(l.city));
+  return groupByCity([...capital, ...rest]);
+}
+
+/* Where the label goes relative to the dot, so the south-west corner stays legible. */
 const LABEL_SIDE: Record<string, 'left' | 'right' | 'above' | 'below'> = {
-  Reykjavík: 'above',
-  Kópavogur: 'right',
-  Hafnarfjörður: 'below',
+  [CAPITAL_LABEL]: 'right',
   Reykjanesbær: 'left',
   Selfoss: 'right',
   Akureyri: 'right',
@@ -70,16 +78,16 @@ const LABEL_SIDE: Record<string, 'left' | 'right' | 'above' | 'below'> = {
  * linearly into the box, so Akureyri is north and Reykjanesbær south-west.
  */
 export function IcelandMap({ locations, className }: { locations: Location[]; className?: string }) {
-  const groups = groupByCity(locations);
+  const groups = mapGroups(locations);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={cn('h-auto w-full', className)} role="img" aria-label={`Kort af Íslandi með ${locations.length} stöðum`}>
+    <svg viewBox={`-14 -8 ${W + 28} ${H + 16}`} className={cn('h-auto w-full', className)} role="img" aria-label={`Kort af Íslandi með ${locations.length} stöðum`}>
       <path d={PATH} fill="hsl(var(--mint-50))" stroke="hsl(var(--green-500))" strokeWidth="1.5" strokeLinejoin="round" />
       {groups.map((g) => {
         const { x, y } = project(g.lat, g.lng);
         const side = LABEL_SIDE[g.city] ?? 'right';
         const label = g.count > 1 ? `${g.city} · ${g.count}` : g.city;
         const dx = side === 'right' ? 11 : side === 'left' ? -11 : 0;
-        const dy = side === 'above' ? -11 : side === 'below' ? 17 : 4;
+        const dy = side === 'above' ? -12 : side === 'below' ? 18 : 4;
         const anchor = side === 'right' ? 'start' : side === 'left' ? 'end' : 'middle';
         return (
           <g key={g.city}>

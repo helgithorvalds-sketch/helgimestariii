@@ -164,7 +164,7 @@ export default function RestaurantsPage() {
               <LinkButton to="#hafa-samband" anchor size="lg">
                 Hafa samband
               </LinkButton>
-              <LinkButton to={href(paths.merchantLogin)} variant="ghost" size="lg">
+              <LinkButton to={href(paths.merchantLogin)} variant="secondary" size="lg">
                 Innskráning fyrirtækja
               </LinkButton>
             </div>

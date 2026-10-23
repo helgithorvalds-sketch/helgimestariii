@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { AnimatedNumber, Skeleton } from '../../components/kit';
-import { formatDate, formatISK } from '../../lib/format';
+import { formatDateYear, formatISK } from '../../lib/format';
 import { tap } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
 import type { PocketView } from '../lib/hooks';
@@ -45,11 +45,6 @@ export function BalanceCard({ total, earnedTotal, pockets, className }: BalanceC
                     <p className="truncate text-[15px] font-semibold leading-tight">
                       {label} <span className="font-medium text-muted-foreground">· {merchant.name}</span>
                     </p>
-                    {pocket.expiring && pocket.expiring.amount > 0 && (
-                      <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
-                        <span className="vild-num">{formatISK(pocket.expiring.amount)}</span> rennur út {formatDate(pocket.expiring.at)}
-                      </p>
-                    )}
                   </div>
                   <span className="vild-num shrink-0 text-[15px] font-bold">{formatISK(pocket.balance)}</span>
                   <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
@@ -58,6 +53,14 @@ export function BalanceCard({ total, earnedTotal, pockets, className }: BalanceC
             </li>
           ))}
         </ul>
+      )}
+      {rows.some((r) => r.pocket.expiring && r.pocket.expiring.amount > 0) && (
+        <p className="mt-3 px-1 text-[12px] font-medium text-[hsl(var(--green-600))]">
+          {rows
+            .filter((r) => r.pocket.expiring && r.pocket.expiring.amount > 0)
+            .map((r) => `${formatISK(r.pocket.expiring!.amount)} rennur út ${formatDateYear(r.pocket.expiring!.at)}${rows.length > 1 ? ` (${r.label})` : ''}`)
+            .join(' · ')}
+        </p>
       )}
     </section>
   );

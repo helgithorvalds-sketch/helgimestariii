@@ -10,7 +10,7 @@ export function LegalPage({ eyebrow, title, updated, intro, sections }: { eyebro
       <section className="border-b border-border">
         <Container className="py-14 lg:py-20">
           <Eyebrow>{eyebrow}</Eyebrow>
-          <Display as="h1" className="mt-4 max-w-[14ch] text-[36px] sm:text-[44px] lg:text-[56px]">
+          <Display as="h1" className="mt-4 max-w-[14ch] break-words text-[32px] sm:text-[44px] lg:text-[56px]">
             {title}
           </Display>
           <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-[13px] font-medium text-muted-foreground" role="note">

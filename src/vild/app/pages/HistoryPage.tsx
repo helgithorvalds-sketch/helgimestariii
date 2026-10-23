@@ -43,7 +43,7 @@ export default function HistoryPage() {
   const filters = pockets.views.filter((v) => v.pocket.earnedTotal > 0 || v.sector?.status === 'live');
 
   return (
-    <div className="min-h-full bg-[hsl(var(--surface-2))] pb-8">
+    <div className="flex-1 bg-[hsl(var(--surface-2))] pb-8">
       <div className="bg-white px-4 pb-4 pt-[max(16px,var(--safe-top))]">
         <h1 className="text-[28px] font-extrabold leading-[1.1] tracking-[-0.025em]">Yfirlit</h1>
         <div className="mt-4 grid grid-cols-3 gap-3 rounded-2xl border border-border px-4 py-3" aria-label="Samantekt">

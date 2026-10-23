@@ -75,7 +75,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       eyebrow="Persónuvernd"
-      title="Persónuverndarstefna VILD"
+      title="Persónuvernd hjá VILD"
       updated="23. október 2026"
       intro="Hvaða upplýsingar við söfnum, til hvers, hverjir sjá þær og hversu lengi þær eru geymdar. Kennitalan er notuð einu sinni og fer aldrei á kassann."
       sections={SECTIONS}

@@ -34,7 +34,7 @@ function GoogleWalletGlyph({ className }: { className?: string }) {
  * says the pass is issued from the phone app; inside Capacitor they will call
  * the wallet plugins. Black like the real badges, our own glyphs.
  */
-export function WalletButton({ kind, className, full = true }: { kind: Kind; className?: string; full?: boolean }) {
+export function WalletButton({ kind, className, full = true, long = false }: { kind: Kind; className?: string; full?: boolean; long?: boolean }) {
   const [open, setOpen] = useState(false);
   const label = kind === 'apple' ? 'Bæta í Apple Wallet' : 'Bæta í Google Wallet';
   return (
@@ -50,8 +50,8 @@ export function WalletButton({ kind, className, full = true }: { kind: Kind; cla
         )}
       >
         {kind === 'apple' ? <WalletGlyph /> : <GoogleWalletGlyph />}
-        <span className="truncate">{kind === 'apple' ? 'Apple Wallet' : 'Google Wallet'}</span>
-        <span className="sr-only">{label}</span>
+        <span className="truncate">{long ? label : kind === 'apple' ? 'Apple Wallet' : 'Google Wallet'}</span>
+        {!long && <span className="sr-only">{label}</span>}
       </motion.button>
       <Sheet open={open} onClose={() => setOpen(false)} title={label}>
         <div className="pb-2">

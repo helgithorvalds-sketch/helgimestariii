@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Chip, SectionHeader } from '../../components/kit';
 import { CoinMark } from '../../components/brand';
-import { formatISK, isSingular } from '../../lib/format';
+import { isSingular } from '../../lib/format';
 import { href, paths } from '../../lib/paths';
 import { useLocations, useOffers, useProducts } from '../../lib/queries';
 import { CardVisual } from '../components/CardVisual';
@@ -51,18 +51,16 @@ export default function HomePage() {
                 Svona virkar þetta
               </LinkButton>
             </div>
-            <p className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] font-medium text-[hsl(var(--green-700))]">
-              <span>Ein króna = ein króna</span>
-              <span aria-hidden="true">·</span>
-              <span>Gildir í 24 mánuði</span>
-              <span aria-hidden="true">·</span>
-              <span>Rafræn skilríki</span>
-            </p>
+            <ul className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] font-medium text-[hsl(var(--green-700))] [&>li+li]:before:mr-2.5 [&>li+li]:before:content-['·']">
+              <li>Ein króna = ein króna</li>
+              <li>Gildir í 24 mánuði</li>
+              <li>Rafræn skilríki</li>
+            </ul>
           </div>
 
-          <div className="relative flex justify-center lg:justify-end lg:pr-6">
+          <div className="relative flex justify-center pt-14 lg:justify-end lg:pr-6 lg:pt-12">
             <PhoneMock products={products.data} />
-            <div className="absolute -left-1 top-10 w-[220px] rounded-2xl bg-white p-3 shadow-[var(--shadow-md)] sm:left-0 sm:top-14 sm:w-[250px] lg:-left-6" aria-hidden="true">
+            <div className="absolute left-1/2 top-0 w-[240px] -translate-x-[62%] rounded-2xl bg-white p-3 shadow-[var(--shadow-md)] sm:w-[260px] lg:left-0 lg:translate-x-0" aria-hidden="true">
               <div className="flex items-start gap-2.5">
                 <CoinMark size={28} />
                 <div className="min-w-0">
@@ -83,7 +81,7 @@ export default function HomePage() {
           <div>
             <Reveal as="header">
               <Eyebrow>Svona virkar VILD</Eyebrow>
-              <Headline className="mt-3">Þrjú skref. Ekkert smáa letur.</Headline>
+              <Headline className="mt-3">Þrjú skref. Ekkert smáletur.</Headline>
             </Reveal>
             <NumberedList items={STEPS} className="mt-10" />
           </div>
@@ -218,7 +216,7 @@ export default function HomePage() {
             <LinkButton to={href(paths.app)} size="lg">
               Sækja appið
             </LinkButton>
-            <p className="text-[13px] font-medium text-[hsl(var(--green-700))]">Ókeypis. Rafræn skilríki. {formatISK(0)} í áskrift.</p>
+            <p className="text-[13px] font-medium text-[hsl(var(--green-700))]">Ókeypis app. Ekkert áskriftargjald.</p>
           </div>
         </Container>
       </section>

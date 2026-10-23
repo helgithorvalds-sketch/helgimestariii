@@ -79,7 +79,7 @@ function CardSlide({ name }: { name: string }) {
         <CardVisual holderName={name} balance={1495} pocketLabel="Hádegið · Lúna" compact />
       </motion.div>
       <div className="mt-6">
-        <WalletButton kind="apple" />
+        <WalletButton kind="apple" long />
       </div>
     </div>
   );
@@ -170,9 +170,9 @@ export default function OnboardingPage() {
         </Link>
       </div>
 
-      <div ref={trackRef} className="relative flex-1 overflow-hidden">
+      <div ref={trackRef} className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
         <motion.div
-          className="flex h-full"
+          className="flex min-h-0 flex-1"
           drag="x"
           dragConstraints={{ left: -(SLIDES.length - 1) * width, right: 0 }}
           dragElastic={0.12}
@@ -183,7 +183,7 @@ export default function OnboardingPage() {
           style={{ width: width ? width * SLIDES.length : '100%' }}
         >
           {SLIDES.map((s, i) => (
-            <section key={s.key} aria-hidden={i !== index} className="flex h-full shrink-0 flex-col px-6" style={{ width: width || '100%' }}>
+            <section key={s.key} aria-hidden={i !== index} className="flex shrink-0 flex-col self-stretch px-6" style={{ width: width || '100%' }}>
               <div className="flex min-h-[300px] flex-1 items-center justify-center py-6">
                 {s.key === 'pay' && <PaySlide />}
                 {s.key === 'credit' && <CreditSlide />}

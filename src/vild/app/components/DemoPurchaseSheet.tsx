@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Minus, Plus } from 'lucide-react';
+import { ChevronDown, Minus, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CoinMark } from '../../components/brand';
 import { AnimatedNumber, Button, ErrorState, ProductImage, Sheet } from '../../components/kit';
@@ -26,7 +26,7 @@ export function DemoPurchaseSheet({ open, onClose, merchant, pocketLabel, balanc
   const locations = useLocations(merchant.id);
   const [qty, setQty] = useState<Record<string, number>>({ p_margherita: 1 });
   const [locationId, setLocationId] = useState<string>('');
-  const [useCredit, setUseCredit] = useState(balance > 0);
+  const [useCredit, setUseCredit] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const record = useRecordPurchase();
 
@@ -37,7 +37,7 @@ export function DemoPurchaseSheet({ open, onClose, merchant, pocketLabel, balanc
   useEffect(() => {
     if (!open) return;
     setResult(null);
-    setUseCredit(balance > 0);
+    setUseCredit(false);
     record.reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- reset the sheet each time it opens
   }, [open]);
@@ -85,9 +85,13 @@ export function DemoPurchaseSheet({ open, onClose, merchant, pocketLabel, balanc
           <motion.div initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ ...spring, stiffness: 320, damping: 18 }}>
             <CoinMark size={88} title="VILD" />
           </motion.div>
-          <p className="mt-5 text-[22px] font-extrabold tracking-[-0.02em]">
-            <span className="vild-marker vild-num">{formatSignedISK(result.credit)}</span> komu inn á {pocketLabel}
-          </p>
+          {result.credit > 0 ? (
+            <p className="mt-5 text-[22px] font-extrabold tracking-[-0.02em]">
+              <span className="vild-marker vild-num">{formatSignedISK(result.credit)}</span> komu inn á {pocketLabel}
+            </p>
+          ) : (
+            <p className="mt-5 text-[22px] font-extrabold tracking-[-0.02em]">Þú borgaðir með inneigninni</p>
+          )}
           {result.spend > 0 && (
             <p className="mt-2 text-[14px] text-muted-foreground">
               Inneign nýtt <span className="vild-num">{formatSignedISK(-result.spend)}</span>
@@ -134,17 +138,20 @@ export function DemoPurchaseSheet({ open, onClose, merchant, pocketLabel, balanc
 
           <label className="mt-4 block">
             <span className="vild-eyebrow">Staður</span>
-            <select value={locationId} onChange={(e) => setLocationId(e.target.value)} className="mt-1.5 h-11 w-full appearance-none rounded-xl border border-border bg-white px-3 text-[15px] font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              {(locations.data ?? []).map((l) => (
-                <option key={l.id} value={l.id}>
-                  {l.name}
-                </option>
-              ))}
-            </select>
+            <span className="relative mt-1.5 block">
+              <select value={locationId} onChange={(e) => setLocationId(e.target.value)} className="h-11 w-full appearance-none rounded-xl border border-border bg-white pl-3 pr-10 text-[15px] font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                {(locations.data ?? []).map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            </span>
           </label>
 
           <div className="mt-3 overflow-hidden rounded-2xl border border-border">
-            <ToggleRow label="Nota inneign" caption={`Í boði: ${formatISK(balance)}`} checked={useCredit} onCheckedChange={setUseCredit} />
+            <ToggleRow label="Nota inneign í þessum kaupum" caption={`Í boði: ${formatISK(balance)}`} checked={useCredit} onCheckedChange={setUseCredit} />
           </div>
 
           <div className="vild-num mt-4 rounded-2xl bg-secondary px-4 py-3 text-[14px]" aria-live="polite">

@@ -20,7 +20,7 @@ export function ProductCarousel({ products, loading, className }: { products: Pr
     .sort((a, b) => b.creditPct - a.creditPct || b.creditAmount - a.creditAmount)
     .slice(0, 8);
 
-  const wrap = cn('no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0', className);
+  const wrap = cn('no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 scroll-pl-4 sm:-mx-6 sm:px-6 sm:scroll-pl-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0', className);
 
   if (loading || !products) {
     return (

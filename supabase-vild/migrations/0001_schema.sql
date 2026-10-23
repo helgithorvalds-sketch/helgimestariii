@@ -217,6 +217,7 @@ create table public.vild_pass_registrations (
   serial_number uuid not null references public.vild_profiles (id) on delete cascade,   -- serial = user id
   push_token text not null,
   created_at timestamptz not null default now(),
+  pushed_at timestamptz,                                  -- last APNs push sent for this registration (the sweep compares it with pass_updated_at)
   primary key (device_library_id, pass_type_id, serial_number)
 );
 create index vild_pass_registrations_serial_idx on public.vild_pass_registrations (serial_number);

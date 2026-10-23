@@ -48,7 +48,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-full bg-[hsl(var(--surface-2))] pb-8">
+    <div className="flex-1 bg-[hsl(var(--surface-2))] pb-8">
       <div className="bg-white">
         <PageHeader title="Stillingar" backTo={href(paths.appProfile)} />
       </div>

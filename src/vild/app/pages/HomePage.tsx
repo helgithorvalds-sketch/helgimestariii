@@ -126,7 +126,7 @@ export default function HomePage() {
 
         <motion.section variants={fadeUp} aria-labelledby="home-today">
           <SectionHeader title="Krónur til baka í dag" action="Sjá allt" to={live ? href(paths.appMerchant(live.slug)) : undefined} />
-          <div className="no-scrollbar -mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
+          <div className="no-scrollbar -mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 scroll-pl-4">
             {products.isPending ? (
               [0, 1, 2].map((i) => <ProductCardSkeleton key={i} variant="carousel" />)
             ) : products.error ? (

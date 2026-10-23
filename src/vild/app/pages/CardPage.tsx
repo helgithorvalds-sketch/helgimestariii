@@ -84,7 +84,7 @@ export default function CardPage() {
         )}
       </div>
 
-      <section className="mx-4 mt-4 rounded-[22px] bg-white px-5 pb-3 pt-5 text-foreground" aria-label="QR-kóði">
+      <section className="vild mx-4 mt-4 rounded-[22px] bg-white px-5 pb-3 pt-5 text-foreground" aria-label="QR-kóði">
         <div className="flex flex-col items-center">
           <div className="rounded-2xl border border-border p-3" data-testid="wallet-qr">
             {pass.isPending ? (

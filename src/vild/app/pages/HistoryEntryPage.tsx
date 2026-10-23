@@ -54,7 +54,7 @@ export default function HistoryEntryPage() {
   const isPurchase = e.kind === 'earn' || e.kind === 'spend';
 
   return (
-    <div className="min-h-full bg-[hsl(var(--surface-2))] pb-8">
+    <div className="flex-1 bg-[hsl(var(--surface-2))] pb-8">
       <div className="bg-white">
         <PageHeader title="Kvittun" backTo={href(paths.appHistory)} />
       </div>
@@ -98,6 +98,9 @@ export default function HistoryEntryPage() {
             </table>
           )}
 
+          {earn && items.length > 0 && earn.amount < items.reduce((a, i) => a + i.credit, 0) && (
+            <p className="border-t border-border px-5 py-2.5 text-[12px] text-muted-foreground">Inneign reiknast aðeins af þeim hluta sem var greiddur með peningum.</p>
+          )}
           <dl className="vild-num space-y-2 border-t border-border px-5 py-4 text-[14px]">
             {isPurchase && total != null && (
               <div className="flex justify-between">

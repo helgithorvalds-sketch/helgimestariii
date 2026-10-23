@@ -72,9 +72,9 @@ export default function MerchantPage() {
         <div className="mt-4 flex items-center gap-4 rounded-[22px] bg-[hsl(var(--mint-300))] px-5 py-4 text-[hsl(var(--green-700))]">
           <div className="min-w-0 flex-1">
             <p className="vild-eyebrow">{pocket ? `${pocket.label} · inneignin þín` : 'Inneignin þín hér'}</p>
-            <p className="vild-num mt-1 text-[32px] font-extrabold leading-none tracking-[-0.03em]" aria-live="polite">
+            <div className="vild-num mt-1 text-[32px] font-extrabold leading-none tracking-[-0.03em]" aria-live="polite">
               {pockets.isPending ? <Skeleton className="inline-block h-8 w-28 bg-white/60 align-middle" /> : formatISK(pocket?.pocket.balance ?? 0)}
-            </p>
+            </div>
           </div>
           <Button variant="primary" size="md" onClick={() => navigate(href(paths.appCard))}>
             Nýta inneign

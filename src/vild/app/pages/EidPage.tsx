@@ -57,7 +57,7 @@ export default function EidPage() {
   const verified = profile.data?.eidVerifiedAt ?? null;
 
   return (
-    <div className="min-h-full bg-[hsl(var(--surface-2))] pb-8">
+    <div className="flex-1 bg-[hsl(var(--surface-2))] pb-8">
       <div className="bg-white">
         <PageHeader title="Rafræn skilríki" backTo={href(paths.appProfile)} />
       </div>

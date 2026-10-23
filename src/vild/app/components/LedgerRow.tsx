@@ -11,16 +11,16 @@ import { ledgerTitle } from '../lib/labels';
 
 /** One ledger line: place · time, description, +/− chip and the basket total. */
 export function LedgerRow({ entry, location, className }: { entry: LedgerEntry; location: Location | undefined; className?: string }) {
-  const positive = entry.amount >= 0;
+  const positive = entry.amount > 0;
   const title = ledgerTitle(entry, location);
   return (
     <Link to={href(paths.appHistoryEntry(entry.id))} className={cn('flex min-h-[64px] items-center gap-3 px-4 py-3 transition-colors hover:bg-secondary/60 active:bg-secondary', className)}>
       {entry.kind === 'welcome' ? <CoinMark size={40} /> : <InitialsMark text={initialsOf(title)} size={40} tone={positive ? 'mint' : 'neutral'} />}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[15px] font-semibold leading-tight">
-          {title} <span className="vild-num font-medium text-muted-foreground">· {formatTime(entry.createdAt)}</span>
+        <p className="truncate text-[15px] font-semibold leading-tight">{title}</p>
+        <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
+          <span className="vild-num">{formatTime(entry.createdAt)}</span> · {entry.description}
         </p>
-        <p className="mt-0.5 truncate text-[13px] text-muted-foreground">{entry.description}</p>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         <Chip tone={positive ? 'mint' : 'neutral'} className="vild-num h-7 text-[13px] font-bold">

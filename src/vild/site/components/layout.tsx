@@ -11,7 +11,7 @@ export function Container({ className, children, as: Tag = 'div' }: { className?
 /** Display headline (site hero): 44–72px, 800, -0.03em. */
 export function Display({ as: Tag = 'h1', className, children, id }: { as?: 'h1' | 'h2' | 'p'; className?: string; children: ReactNode; id?: string }) {
   return (
-    <Tag id={id} className={cn('text-[40px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[52px] lg:text-[68px]', className)}>
+    <Tag id={id} className={cn('text-[40px] sm:text-[52px] lg:text-[68px]', className, 'font-extrabold leading-[1.02] tracking-[-0.03em]')}>
       {children}
     </Tag>
   );
@@ -20,7 +20,7 @@ export function Display({ as: Tag = 'h1', className, children, id }: { as?: 'h1'
 /** Section headline: 32–44px, 800, -0.03em. */
 export function Headline({ as: Tag = 'h2', className, children, id }: { as?: 'h1' | 'h2' | 'h3'; className?: string; children: ReactNode; id?: string }) {
   return (
-    <Tag id={id} className={cn('text-[30px] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[38px] lg:text-[44px]', className)}>
+    <Tag id={id} className={cn('text-[30px] sm:text-[38px] lg:text-[44px]', className, 'font-extrabold leading-[1.05] tracking-[-0.03em]')}>
       {children}
     </Tag>
   );

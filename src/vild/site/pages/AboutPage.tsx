@@ -24,7 +24,7 @@ export default function AboutPage() {
             <p>
               Við tökum eina keðju inn í hvern geira. Inneignin gildir bara þar sem hún var veitt, svo staðirnir geta gefið meira – og þú veist alltaf hvar hún bíður.
             </p>
-            <p className="text-muted-foreground">Hönnun og þróun: Norðurvefur, í samstarfi við hönnunarstofu. VILD er þróað af Norðurvef.</p>
+            <p className="text-muted-foreground">VILD er þróað af Norðurvef. Hönnun og þróun í samstarfi við hönnunarstofu.</p>
           </div>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[15px] font-semibold text-[hsl(var(--green-500))]">
             <Link to={href(paths.siteForRestaurants)} className="inline-flex items-center gap-1">

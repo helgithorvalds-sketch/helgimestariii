@@ -37,7 +37,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-full bg-[hsl(var(--surface-2))] pb-8">
+    <div className="flex-1 bg-[hsl(var(--surface-2))] pb-8">
       <div className="bg-white px-4 pb-5 pt-[max(16px,var(--safe-top))]">
         <h1 className="text-[28px] font-extrabold leading-[1.1] tracking-[-0.025em]">Ég</h1>
         {profile.isPending ? (
