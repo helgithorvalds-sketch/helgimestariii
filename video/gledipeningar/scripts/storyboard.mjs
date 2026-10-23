@@ -79,7 +79,7 @@ figcaption{padding:16px 4px 0}.meta{display:flex;gap:12px;align-items:baseline}
 .n{font-weight:800;font-size:22px;color:#691FE7}.name{font-weight:800;font-size:24px;letter-spacing:-.01em;flex:1}.tc{font-weight:700;font-size:20px;color:rgba(24,0,62,.5)}
 .txt{font-weight:600;font-size:20px;margin-top:8px;line-height:1.3}.snd{font-weight:500;font-size:18px;margin-top:6px;color:rgba(24,0,62,.55)}
 </style></head><body>
-<header><div><h1>VILD: storyboard</h1><div class="sub">Hreyfigrafík í köflum, 139 sek. Takk útskýrir hugmyndina, VILD færir hana á veitingastaði og bari.</div></div>
+<header><div><h1>VILD: storyboard</h1><div class="sub">Hreyfigrafík í köflum, 156 sek. Takk útskýrir hugmyndina, VILD færir hana á veitingastaði og bari.</div></div>
 <div class="spec">1920 × 1080 · 60 fps · 110 BPM<br>Figtree · Takk #691FE7 · VILD #B4FF9B / #0C5C3B</div></header>
 <div class="grid">${cells}</div></body></html>`;
 fs.writeFileSync(path.join(outDir, 'storyboard.html'), html);
