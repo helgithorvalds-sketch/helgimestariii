@@ -6,15 +6,18 @@ import { prefersReducedMotion } from '../../lib/motion';
  * Counts from the previous value to the next one (ease-out, ~700 ms).
  * Renders with Icelandic grouping and tabular figures; suffix " kr." by default.
  */
-export function AnimatedNumber({ value, suffix = ' kr.', className, duration = 700 }: { value: number; suffix?: string; className?: string; duration?: number }) {
+export function AnimatedNumber({ value, suffix = ' kr.', className, duration = 700, onComplete }: { value: number; suffix?: string; className?: string; duration?: number; /** Called once the count has settled on `value` (immediately under reduced motion). */ onComplete?: () => void }) {
   const [shown, setShown] = useState(value);
   const from = useRef(value);
   const raf = useRef<number | null>(null);
+  const done = useRef(onComplete);
+  done.current = onComplete;
 
   useEffect(() => {
     if (prefersReducedMotion() || from.current === value) {
       from.current = value;
       setShown(value);
+      done.current?.();
       return;
     }
     const start = performance.now();
@@ -25,7 +28,10 @@ export function AnimatedNumber({ value, suffix = ' kr.', className, duration = 7
       const eased = 1 - Math.pow(1 - p, 3);
       setShown(Math.round(a + (b - a) * eased));
       if (p < 1) raf.current = requestAnimationFrame(step);
-      else from.current = b;
+      else {
+        from.current = b;
+        done.current?.();
+      }
     };
     raf.current = requestAnimationFrame(step);
     return () => {

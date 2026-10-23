@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { fadeUp } from '../../lib/motion';
+import { fadeUp, staggerParent, useRevealProps, wordRise } from '../../lib/motion';
 
 /** Content column: max 1120px, 16/24/32px gutters. */
 export function Container({ className, children, as: Tag = 'div' }: { className?: string; children: ReactNode; as?: 'div' | 'section' | 'footer' | 'header' | 'nav' }) {
@@ -34,12 +34,38 @@ export function Lead({ className, children }: { className?: string; children: Re
   return <p className={cn('text-[17px] leading-[1.5] text-muted-foreground sm:text-[19px]', className)}>{children}</p>;
 }
 
-/** A section header that rises in once when scrolled into view (the only scroll animation on the site). */
+/** A section header that rises in once when scrolled into view. Static under reduced motion. */
 export function Reveal({ className, children, as = 'div' }: { className?: string; children: ReactNode; as?: 'div' | 'header' }) {
   const Tag = as === 'header' ? motion.header : motion.div;
+  const reveal = useRevealProps();
   return (
-    <Tag className={className} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3, margin: '0px 0px -40px 0px' }}>
+    <Tag className={className} variants={fadeUp} {...reveal}>
       {children}
     </Tag>
+  );
+}
+
+/**
+ * A headline whose words rise out of line masks, one every 40 ms, so the text
+ * reads as being set rather than slid in. The parent orchestrates `hidden`/`show`;
+ * screen readers get the sentence in one piece.
+ */
+export function SplitWords({ text, className }: { text: string; className?: string }) {
+  const words = text.split(' ');
+  return (
+    <motion.span className={className} variants={staggerParent(0.04)}>
+      <span className="sr-only">{text}</span>
+      {words.map((word, i) => (
+        // The space sits between the masks, not inside one, or it collapses and the words run together.
+        <span key={`${word}-${i}`} aria-hidden="true">
+          <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-baseline">
+            <motion.span className="inline-block" variants={wordRise}>
+              {word}
+            </motion.span>
+          </span>
+          {i < words.length - 1 ? ' ' : null}
+        </span>
+      ))}
+    </motion.span>
   );
 }

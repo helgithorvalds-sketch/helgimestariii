@@ -42,6 +42,12 @@ import type {
 
 const KIND_KEY = 'vild-session-kind';
 
+/** The seeded demo member (supabase-vild/seed/test_users.sql). Only works while demo_purchases_enabled is true. */
+const DEMO_PHONE = '+3546661234';
+const DEMO_CODE = '123456';
+const DEMO_EMAIL = 'helgi@demo.vild.is';
+const DEMO_PASSWORD = (import.meta.env.VITE_VILD_DEMO_PASSWORD as string | undefined) ?? 'vild-demo-2026';
+
 type Kind = 'consumer' | 'merchant';
 
 // ---- row → frontend type -----------------------------------------------------
@@ -255,15 +261,37 @@ export class SupabaseApi implements VildApi {
     this.listeners.add(cb);
     return () => this.listeners.delete(cb);
   }
+  /**
+   * Demo account: the number 666 1234 with code 123456 signs in the seeded demo
+   * member with a password (no SMS needed) while vild_settings.demo_purchases_enabled
+   * is true. Every other number goes through Supabase phone OTP (needs an SMS provider).
+   */
+  private async demoLoginEnabled(): Promise<boolean> {
+    const { data } = await this.client.from('vild_public_settings').select('value').eq('key', 'demo_purchases_enabled').maybeSingle();
+    return data?.value === true;
+  }
   async startPhoneLogin(phone: string) {
-    const { error } = await this.client.auth.signInWithOtp({ phone: normalisePhone(phone), options: { channel: 'sms' } });
+    const e164 = normalisePhone(phone);
+    if (e164 === DEMO_PHONE && (await this.demoLoginEnabled())) return;
+    const { error } = await this.client.auth.signInWithOtp({ phone: e164, options: { channel: 'sms' } });
     if (error) fail(error, 'INVALID_PHONE');
   }
   async verifyPhoneLogin(phone: string, code: string): Promise<Session> {
-    const { data, error } = await this.client.auth.verifyOtp({ phone: normalisePhone(phone), token: code.replace(/\D/g, ''), type: 'sms' });
-    if (error || !data.user) fail(error, 'INVALID_CODE');
+    const e164 = normalisePhone(phone);
+    const digits = code.replace(/\D/g, '');
+    let userId: string | undefined;
+    if (e164 === DEMO_PHONE && (await this.demoLoginEnabled())) {
+      if (digits !== DEMO_CODE) throw new ApiError('INVALID_CODE');
+      const { data, error } = await this.client.auth.signInWithPassword({ email: DEMO_EMAIL, password: DEMO_PASSWORD });
+      if (error || !data.user) fail(error, 'INVALID_CODE');
+      userId = data.user!.id;
+    } else {
+      const { data, error } = await this.client.auth.verifyOtp({ phone: e164, token: digits, type: 'sms' });
+      if (error || !data.user) fail(error, 'INVALID_CODE');
+      userId = data.user!.id;
+    }
     writeKind('consumer');
-    const s: Session = { userId: data.user!.id, kind: 'consumer' };
+    const s: Session = { userId: userId!, kind: 'consumer' };
     this.lastSessionKey = `consumer:${s.userId}`;
     this.listeners.forEach((l) => l(s));
     return s;

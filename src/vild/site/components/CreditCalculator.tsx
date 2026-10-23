@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { animate, motion, useMotionValue } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { AnimatedNumber } from '../../components/kit';
 import { formatISK, formatPct } from '../../lib/format';
+import { springSnappy, useMotionAllowed } from '../../lib/motion';
+import { DrawnMarker } from './DrawnMarker';
 import { RangeInput } from './RangeInput';
 
 type Mode = 'guest' | 'merchant';
@@ -14,15 +17,46 @@ function Column({ title, rows, highlight, className }: { title: string; rows: { 
         {rows.map((r) => (
           <div key={r.label}>
             <dt className="text-[13px] text-muted-foreground">{r.label}</dt>
-            <dd className="mt-0.5 text-[22px] font-extrabold leading-none tracking-[-0.02em] sm:text-[26px]">
+            <dd className="vild-num mt-0.5 text-[22px] font-extrabold leading-none tracking-[-0.02em] sm:text-[26px]">
               {r.sign && <span aria-hidden="true">{r.sign}</span>}
-              <AnimatedNumber value={r.value} className={cn(r.marker && 'vild-marker')} duration={500} />
+              {r.marker ? (
+                <DrawnMarker>
+                  <AnimatedNumber value={r.value} duration={500} />
+                </DrawnMarker>
+              ) : (
+                <AnimatedNumber value={r.value} duration={500} />
+              )}
             </dd>
           </div>
         ))}
       </dl>
     </div>
   );
+}
+
+/**
+ * While a slider moves the result columns sit 2px low; when it stops they
+ * spring back up. A motion value, so nothing re-renders per frame.
+ */
+function useSettle(deps: number[]) {
+  const y = useMotionValue(0);
+  const allowed = useMotionAllowed();
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (!allowed) return;
+    const down = animate(y, 2, { duration: 0.08 });
+    const t = window.setTimeout(() => animate(y, 0, springSnappy), 120);
+    return () => {
+      down.stop();
+      window.clearTimeout(t);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps, allowed, y]);
+  return y;
 }
 
 /**
@@ -38,6 +72,8 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
 
   const back = Math.round((price * pct) / 100);
   const costOfCredit = Math.round((credit * cogs) / 100);
+  const y = useSettle(mode === 'guest' ? [price, pct] : [credit, cogs]);
+  const results = 'mt-7 grid grid-cols-2 divide-x divide-border border-t border-border pt-6';
 
   return (
     <div className={cn('rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-sm)] sm:p-7', className)} data-testid="credit-calculator">
@@ -47,7 +83,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
             <RangeInput label="Verð máltíðar" value={price} min={1000} max={10000} step={100} onChange={setPrice} format={formatISK} />
             <RangeInput label="Hlutfall til baka" value={pct} min={10} max={50} step={5} onChange={setPct} format={formatPct} />
           </div>
-          <div className="mt-7 grid grid-cols-2 divide-x divide-border border-t border-border pt-6">
+          <motion.div className={results} style={{ y }}>
             <Column
               title="Afsláttur"
               className="pr-4 sm:pr-6"
@@ -65,7 +101,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
                 { label: 'Kemur til baka sem inneign', value: back, marker: true, sign: '+' },
               ]}
             />
-          </div>
+          </motion.div>
           <p className="mt-5 text-[13px] leading-snug text-muted-foreground">Sama upphæð. En inneignin bíður þín hjá sömu keðju og togar þig aftur. Afslátturinn er gleymdur um leið.</p>
         </>
       ) : (
@@ -74,7 +110,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
             <RangeInput label="Inneign sem gesturinn nýtir" value={credit} min={500} max={5000} step={100} onChange={setCredit} format={formatISK} />
             <RangeInput label="Hráefni, hlutfall af verði" value={cogs} min={20} max={60} step={5} onChange={setCogs} format={formatPct} />
           </div>
-          <div className="mt-7 grid grid-cols-2 divide-x divide-border border-t border-border pt-6">
+          <motion.div className={results} style={{ y }}>
             <Column
               title="Afsláttur"
               className="pr-4 sm:pr-6"
@@ -92,7 +128,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
                 { label: 'Kostar þig, í hráefni', value: costOfCredit, sign: '−' },
               ]}
             />
-          </div>
+          </motion.div>
           <p className="mt-5 text-[13px] leading-snug text-muted-foreground">
             Inneign er krafa um mat hjá þér, ekki peningar. Þú borgar hráefnið þegar hún er nýtt – og gesturinn kom aftur til að nýta hana. Munurinn er{' '}
             <span className="vild-num font-semibold text-foreground">{formatISK(credit - costOfCredit)}</span> á hverjum gesti.

@@ -1,4 +1,9 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { AnimatedNumber } from '../../components/kit';
+import { isSingular } from '../../lib/format';
+import { EASE_OUT, spring, useMotionAllowed } from '../../lib/motion';
 import type { Location } from '../../lib/types';
 import { H, W, groupByCity, project } from './iceland-geo';
 
@@ -73,31 +78,66 @@ const LABEL_SIDE: Record<string, 'left' | 'right' | 'above' | 'below'> = {
   Akureyri: 'right',
 };
 
+/* The coastline takes 1.2 s to draw; the dots start popping in as it closes. */
+const DRAW = 1.2;
+const DOT_START = 0.95;
+const DOT_GAP = 0.09;
+
+/* Dots appear south-west to north: rank by normalised lat + lng. */
+function swFirst(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+  const key = (g: { lat: number; lng: number }) => (g.lat - 63.3) / 3.3 + (g.lng + 24.6) / 11.2;
+  return key(a) - key(b);
+}
+
 /**
  * A simplified outline of Iceland with a dot per city. Lat/lng are projected
  * linearly into the box, so Akureyri is north and Reykjanesbær south-west.
+ * In view, the coast draws itself, the dots pop in from the south-west and the
+ * count under the map counts up. Static under reduced motion.
  */
 export function IcelandMap({ locations, className }: { locations: Location[]; className?: string }) {
   const groups = mapGroups(locations);
+  const order = [...groups].sort(swFirst).map((g) => g.city);
+  const ref = useRef<HTMLDivElement>(null);
+  const allowed = useMotionAllowed();
+  const inView = useInView(ref, { once: true, amount: 0.4 });
+  const play = allowed && inView;
+  const n = locations.length;
   return (
-    <svg viewBox={`-14 -8 ${W + 28} ${H + 16}`} className={cn('h-auto w-full', className)} role="img" aria-label={`Kort af Íslandi með ${locations.length} stöðum`}>
-      <path d={PATH} fill="hsl(var(--mint-50))" stroke="hsl(var(--green-500))" strokeWidth="1.5" strokeLinejoin="round" />
-      {groups.map((g) => {
-        const { x, y } = project(g.lat, g.lng);
-        const side = LABEL_SIDE[g.city] ?? 'right';
-        const label = g.count > 1 ? `${g.city} · ${g.count}` : g.city;
-        const dx = side === 'right' ? 11 : side === 'left' ? -11 : 0;
-        const dy = side === 'above' ? -12 : side === 'below' ? 18 : 4;
-        const anchor = side === 'right' ? 'start' : side === 'left' ? 'end' : 'middle';
-        return (
-          <g key={g.city}>
-            <circle cx={x} cy={y} r={g.count > 1 ? 7 : 5.5} fill="hsl(var(--green-500))" stroke="#fff" strokeWidth="2" />
-            <text x={x + dx} y={y + dy} textAnchor={anchor} fontSize="12" fontWeight="600" fill="hsl(var(--green-900))" fontFamily="Figtree, system-ui, sans-serif">
-              {label}
-            </text>
-          </g>
-        );
-      })}
-    </svg>
+    <div ref={ref} className={className}>
+      <svg viewBox={`-14 -8 ${W + 28} ${H + 16}`} className="h-auto w-full" role="img" aria-label={`Kort af Íslandi með ${n} stöðum`}>
+        <motion.path
+          d={PATH}
+          fill="hsl(var(--mint-50))"
+          stroke="hsl(var(--green-500))"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+          initial={allowed ? { pathLength: 0, fillOpacity: 0 } : false}
+          animate={play ? { pathLength: 1, fillOpacity: 1 } : undefined}
+          transition={{ pathLength: { duration: DRAW, ease: EASE_OUT }, fillOpacity: { duration: 0.6, delay: DRAW * 0.6 } }}
+        />
+        {groups.map((g) => {
+          const { x, y } = project(g.lat, g.lng);
+          const side = LABEL_SIDE[g.city] ?? 'right';
+          const label = g.count > 1 ? `${g.city} · ${g.count}` : g.city;
+          const dx = side === 'right' ? 11 : side === 'left' ? -11 : 0;
+          const dy = side === 'above' ? -12 : side === 'below' ? 18 : 4;
+          const anchor = side === 'right' ? 'start' : side === 'left' ? 'end' : 'middle';
+          const r = g.count > 1 ? 7 : 5.5;
+          const at = DOT_START + order.indexOf(g.city) * DOT_GAP;
+          return (
+            <g key={g.city}>
+              <motion.circle cx={x} cy={y} r={r} fill="hsl(var(--green-500))" stroke="#fff" strokeWidth="2" initial={allowed ? { r: 0, opacity: 0 } : false} animate={play ? { r, opacity: 1 } : undefined} transition={{ ...spring, delay: at }} />
+              <motion.text x={x + dx} y={y + dy} textAnchor={anchor} fontSize="12" fontWeight="600" fill="hsl(var(--green-900))" fontFamily="Figtree, system-ui, sans-serif" initial={allowed ? { opacity: 0 } : false} animate={play ? { opacity: 1 } : undefined} transition={{ duration: 0.3, delay: at + 0.1 }}>
+                {label}
+              </motion.text>
+            </g>
+          );
+        })}
+      </svg>
+      <p className="mt-3 text-center text-[13px] text-muted-foreground lg:text-right">
+        <AnimatedNumber value={play || !allowed ? n : 0} suffix={isSingular(n) ? ' staður' : ' staðir'} duration={900} className="font-semibold text-foreground" /> um allt land, ein inneign.
+      </p>
+    </div>
   );
 }

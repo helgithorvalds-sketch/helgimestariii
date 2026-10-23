@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { tap } from '../../lib/motion';
+import { springSnappy, tap } from '../../lib/motion';
 import type { ButtonVariant } from '../../components/kit';
 
 type Size = 'sm' | 'md' | 'lg';
@@ -23,6 +23,9 @@ const SIZES: Record<Size, string> = {
 };
 
 const MotionLink = motion.create(Link);
+
+/** Filled buttons rise 1px on hover (mouse only; framer ignores touch). */
+const LIFTS: ButtonVariant[] = ['primary', 'mint'];
 
 export type LinkButtonProps = {
   to: string;
@@ -46,15 +49,16 @@ export function LinkButton({ to, variant = 'primary', size = 'md', full, classNa
     full && 'w-full',
     className,
   );
+  const hover = LIFTS.includes(variant) ? { y: -1 } : undefined;
   if (anchor) {
     return (
-      <motion.a href={to} className={cls} whileTap={tap} title={title} onClick={onClick}>
+      <motion.a href={to} className={cls} whileTap={tap} whileHover={hover} transition={springSnappy} title={title} onClick={onClick}>
         {children}
       </motion.a>
     );
   }
   return (
-    <MotionLink to={to} className={cls} whileTap={tap} title={title} onClick={onClick}>
+    <MotionLink to={to} className={cls} whileTap={tap} whileHover={hover} transition={springSnappy} title={title} onClick={onClick}>
       {children}
     </MotionLink>
   );

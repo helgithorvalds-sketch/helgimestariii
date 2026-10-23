@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Home, MapPin, Receipt, User, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AnimatedNumber, Chip, CreditTag, ProductImage } from '../../components/kit';
 import { formatISK, formatSignedISK } from '../../lib/format';
-import { springSoft } from '../../lib/motion';
+import { springSoft, useMotionAllowed } from '../../lib/motion';
 import type { Product } from '../../lib/types';
 
 /** What the phone shows when the catalogue has not loaded yet: the three products the film uses. */
@@ -22,28 +22,57 @@ const TABS = [
   { icon: User, label: 'Ég' },
 ];
 
+/** The idle float: ±3px over 6s, transform only, paused when the phone is off screen. */
+const FLOAT = { y: [0, -3, 0, 3, 0] };
+const FLOAT_T = { duration: 6, repeat: Infinity, ease: 'easeInOut' as const };
+
 /**
  * A faithful, static render of the app home inside a phone frame, built from
  * the kit so it is real UI. 300 × 620 at full size; scaled down on phones.
+ * Rises in with a soft spring, then floats; the balance counts up once the
+ * phone is in view and `onBalanceSettled` fires when it lands.
  */
-export function PhoneMock({ products, balance = 2340, className, tilt = -4 }: { products?: Product[]; balance?: number; className?: string; tilt?: number }) {
+export function PhoneMock({
+  products,
+  balance = 2340,
+  className,
+  tilt = -4,
+  onBalanceSettled,
+}: {
+  products?: Product[];
+  balance?: number;
+  className?: string;
+  tilt?: number;
+  onBalanceSettled?: () => void;
+}) {
   const shown = (products && products.length >= 3 ? products.filter((p) => p.creditAmount > 0).slice(0, 3) : FALLBACK).slice(0, 3);
-  // Count up from zero once the phone has risen in.
+  const ref = useRef<HTMLDivElement>(null);
+  const seen = useInView(ref, { once: true, amount: 0.3 });
+  const visible = useInView(ref, { amount: 0.1 });
+  const loops = useMotionAllowed();
+
+  // Count up from zero once the phone has risen in, and only once it is in view.
   const [shownBalance, setShownBalance] = useState(0);
   useEffect(() => {
+    if (!seen) return;
     const t = window.setTimeout(() => setShownBalance(balance), 450);
     return () => window.clearTimeout(t);
-  }, [balance]);
+  }, [seen, balance]);
+
+  const floating = loops && visible;
+
   return (
     <motion.div
+      ref={ref}
       className={cn('relative h-[496px] w-[240px] sm:h-[620px] sm:w-[300px]', className)}
       initial={{ opacity: 0, y: 48, rotate: tilt }}
       animate={{ opacity: 1, y: 0, rotate: tilt }}
       transition={{ ...springSoft, delay: 0.15 }}
       aria-hidden="true"
     >
+      {/* The float lives on the frame, not on the scaled wrapper: framer's inline transform would override the Tailwind scale. */}
       <div className="absolute left-0 top-0 h-[620px] w-[300px] origin-top-left scale-[0.8] sm:scale-100">
-        <div className="h-full w-full rounded-[44px] bg-[hsl(var(--ink))] p-[10px] shadow-[var(--shadow-lg)]">
+        <motion.div className="h-full w-full rounded-[44px] bg-[hsl(var(--ink))] p-[10px] shadow-[var(--shadow-lg)]" animate={floating ? FLOAT : { y: 0 }} transition={floating ? FLOAT_T : { duration: 0.4 }}>
           <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[34px] bg-[hsl(var(--surface-2))] text-foreground">
             {/* status bar */}
             <div className="flex items-center justify-between px-6 pt-3 text-[12px] font-semibold">
@@ -64,7 +93,12 @@ export function PhoneMock({ products, balance = 2340, className, tilt = -4 }: { 
             {/* balance card */}
             <div className="mx-4 mt-4 rounded-2xl bg-[hsl(var(--mint-300))] p-4 text-[hsl(var(--green-900))]">
               <p className="text-[12px] font-semibold text-[hsl(var(--green-700))]">Inneignin þín</p>
-              <AnimatedNumber value={shownBalance} className="mt-0.5 block text-[34px] font-extrabold leading-none tracking-[-0.03em]" duration={1100} />
+              <AnimatedNumber
+                value={shownBalance}
+                className="mt-0.5 block text-[34px] font-extrabold leading-none tracking-[-0.03em]"
+                duration={1100}
+                onComplete={shownBalance === balance ? onBalanceSettled : undefined}
+              />
               <div className="mt-3 flex items-center justify-between">
                 <Chip tone="dark" className="bg-[hsl(var(--green-900))]">Hádegið · Lúna</Chip>
                 <span className="text-[12px] font-medium text-[hsl(var(--green-700))]">Gildir í 24 mán.</span>
@@ -101,7 +135,7 @@ export function PhoneMock({ products, balance = 2340, className, tilt = -4 }: { 
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );

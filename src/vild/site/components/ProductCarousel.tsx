@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { CreditTag, ProductImage, Skeleton } from '../../components/kit';
 import { formatISK, formatSignedISK } from '../../lib/format';
-import { fadeUp, staggerParent, tap } from '../../lib/motion';
+import { fadeUp, staggerParent, tap, useRevealProps } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
 import type { Product } from '../../lib/types';
 
 const CARD = 'w-[168px] shrink-0 snap-start lg:w-auto';
+/* Hover (mouse only): the photo grows 3% inside its clip, the tag lifts 2px. The card itself never scales. */
+const HOVER_T = '[transition-duration:400ms] [transition-timing-function:var(--ease-out)]';
+const IMG_HOVER = `transition-[opacity,transform] ${HOVER_T} [@media(hover:hover)]:group-hover:scale-[1.03]`;
+const TAG_HOVER = `transition-transform ${HOVER_T} [@media(hover:hover)]:group-hover:-translate-y-0.5`;
 
 /**
  * Products with credit, as the app shows them: image 4:5, the credit tag on
@@ -15,6 +19,7 @@ const CARD = 'w-[168px] shrink-0 snap-start lg:w-auto';
  * four-up grid on desktop. Max eight.
  */
 export function ProductCarousel({ products, loading, className }: { products: Product[] | undefined; loading?: boolean; className?: string }) {
+  const reveal = useRevealProps();
   const items = (products ?? [])
     .filter((p) => p.creditAmount > 0)
     .sort((a, b) => b.creditPct - a.creditPct || b.creditAmount - a.creditAmount)
@@ -41,16 +46,16 @@ export function ProductCarousel({ products, loading, className }: { products: Pr
   }
 
   return (
-    <motion.ul className={wrap} variants={staggerParent(0.05)} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+    <motion.ul className={wrap} variants={staggerParent(0.06)} {...reveal}>
       {items.map((p) => (
         <motion.li key={p.id} variants={fadeUp} className={CARD}>
           <motion.div whileTap={tap}>
             <Link to={href(paths.appProduct(p.id))} className="group block rounded-2xl" aria-label={`${p.name}, ${formatISK(p.price)}, ${formatSignedISK(p.creditAmount)} til baka`}>
               <div className="relative">
-                <ProductImage src={p.image} name={p.name} alt={p.name} className="aspect-[4/5] rounded-2xl" />
-                <CreditTag className="absolute bottom-3 left-3">{formatSignedISK(p.creditAmount)}</CreditTag>
+                <ProductImage src={p.image} name={p.name} alt={p.name} className="aspect-[4/5] rounded-2xl" imgClassName={IMG_HOVER} />
+                <CreditTag className={cn('absolute bottom-3 left-3', TAG_HOVER)}>{formatSignedISK(p.creditAmount)}</CreditTag>
               </div>
-              <p className="mt-3 truncate text-[15px] font-semibold leading-tight group-hover:text-[hsl(var(--green-500))]">{p.name}</p>
+              <p className="mt-3 truncate text-[15px] font-semibold leading-tight transition-colors duration-150 group-hover:text-[hsl(var(--green-500))]">{p.name}</p>
               <p className="vild-num mt-0.5 text-[14px] text-muted-foreground">{formatISK(p.price)}</p>
             </Link>
           </motion.div>

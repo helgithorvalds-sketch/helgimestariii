@@ -145,11 +145,12 @@ describe('restaurants page', () => {
     expect(screen.queryByRole('form', { name: 'Hafa samband' })).toBeNull();
   });
 
-  it('steps the credit picker and updates the example', () => {
+  it('steps the credit picker and updates the example', async () => {
     site('/fyrir-veitingastadi');
     expect(screen.getByText('10%')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Hækka prósentu' }));
-    expect(screen.getByText('15%')).toBeInTheDocument();
+    expect(screen.getByLabelText('15%')).toBeInTheDocument(); // the accessible value is immediate …
+    expect(await screen.findByText('15%')).toBeInTheDocument(); // … the visible one counts up to it
     expect(screen.getByText('+449 kr.')).toBeInTheDocument(); // 15 % of 2.990
     for (const l of screen.getAllByRole('link', { name: 'Innskráning fyrirtækja' })) expect(l).toHaveAttribute('href', '/vild/fyrirtaeki/innskraning');
   });

@@ -1,12 +1,16 @@
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Chip, SectionHeader } from '../../components/kit';
+import { AnimatedNumber, Chip, SectionHeader } from '../../components/kit';
 import { CoinMark } from '../../components/brand';
 import { isSingular } from '../../lib/format';
+import { EASE_OUT, fadeIn, fadeUp, staggerParent, useMotionAllowed, useRevealProps } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
 import { useLocations, useOffers, useProducts } from '../../lib/queries';
 import { CardVisual } from '../components/CardVisual';
 import { CreditCalculator } from '../components/CreditCalculator';
+import { DrawnMarker } from '../components/DrawnMarker';
 import { FaqAccordion } from '../components/FaqAccordion';
 import { IcelandMap } from '../components/IcelandMap';
 import { groupByCity } from '../components/iceland-geo';
@@ -14,7 +18,7 @@ import { LinkButton } from '../components/LinkButton';
 import { NumberedList } from '../components/NumberedList';
 import { PhoneMock } from '../components/PhoneMock';
 import { ProductCarousel } from '../components/ProductCarousel';
-import { Container, Display, Eyebrow, Headline, Lead, Reveal } from '../components/layout';
+import { Container, Display, Eyebrow, Headline, Lead, Reveal, SplitWords } from '../components/layout';
 import { usePageTitle } from '../components/usePageTitle';
 import { HOME_FAQ } from '../content/faq';
 
@@ -23,6 +27,152 @@ const STEPS = [
   { title: 'Borgaðu eins og venjulega og sýndu VILD-kortið í símanum.', body: 'Fullt verð, með kortinu þínu eða símanum. Starfsmaðurinn skannar VILD-kortið áður en kaupin eru kláruð.' },
   { title: 'Inneignin kemur um leið – og bíður þín næst.', body: 'Krónurnar birtast í appinu á sama augnabliki. Þú nýtir þær næst þegar þú borðar hjá sömu keðju, á hvaða stað sem er.' },
 ];
+
+const MARGINS = [
+  { label: 'Matvöruverslun', pct: 10, example: 'Smjör 400 kr. → +20 kr.' },
+  { label: 'Veitingastaður', pct: 30, example: 'Kvöldverður fyrir tvo 8.000 kr. → +1.200 kr.' },
+];
+
+/** The notification lands 900 ms after the balance has finished counting: first the money, then the news. */
+const NOTIFY_AFTER = 900;
+
+/** The hero copy: eyebrow, the headline word by word, then lead, buttons and facts, 80 ms apart. */
+function HeroCopy() {
+  return (
+    <motion.div className="max-w-[600px]" variants={staggerParent(0.08, 0.05)} initial="hidden" animate="show">
+      <motion.div variants={fadeIn}>
+        <Eyebrow className="text-[hsl(var(--green-700))]">Inneign í stað afsláttar</Eyebrow>
+      </motion.div>
+      <Display className="mt-4">
+        <SplitWords text="Borgaðu fullt verð. Fáðu hluta til baka." />
+      </Display>
+      <motion.p variants={fadeUp} className="mt-6 max-w-[44ch] text-[17px] leading-[1.5] text-[hsl(var(--green-900))]/80 sm:text-[19px]">
+        VILD safnar krónum fyrir þig þegar þú borðar hjá samstarfsstöðum. Inneignin bíður þín næst – hjá sömu keðju.
+      </motion.p>
+      <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
+        <LinkButton to={href(paths.app)} size="lg">
+          Sækja appið
+        </LinkButton>
+        <LinkButton to="#svona-virkar" anchor variant="secondary" size="lg" className="border-[hsl(var(--green-900))]/15 bg-white/70 hover:bg-white">
+          Svona virkar þetta
+        </LinkButton>
+      </motion.div>
+      <motion.ul variants={fadeIn} className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] font-medium text-[hsl(var(--green-700))] [&>li+li]:before:mr-2.5 [&>li+li]:before:content-['·']">
+        <li>Ein króna = ein króna</li>
+        <li>Gildir í 24 mánuði</li>
+        <li>Rafræn skilríki</li>
+      </motion.ul>
+    </motion.div>
+  );
+}
+
+/** The phone and, once its balance has landed, the push notification that explains it. */
+function HeroPhone({ products }: { products: ReturnType<typeof useProducts>['data'] }) {
+  const loops = useMotionAllowed();
+  const [notified, setNotified] = useState(false);
+  const timer = useRef<number | null>(null);
+  const onSettled = useCallback(() => {
+    if (timer.current !== null) return;
+    timer.current = window.setTimeout(() => setNotified(true), NOTIFY_AFTER);
+  }, []);
+  useEffect(
+    () => () => {
+      if (timer.current !== null) window.clearTimeout(timer.current);
+    },
+    [],
+  );
+  const showCard = notified || !loops;
+
+  return (
+    <div className="relative flex justify-center pt-14 lg:justify-end lg:pr-6 lg:pt-12">
+      <PhoneMock products={products} onBalanceSettled={onSettled} />
+      <div className="absolute left-1/2 top-0 w-[240px] -translate-x-[62%] sm:w-[260px] lg:left-0 lg:translate-x-0" aria-hidden="true">
+        <AnimatePresence>
+          {showCard && (
+            <motion.div
+              className="rounded-2xl bg-white p-3 shadow-[var(--shadow-md)]"
+              initial={{ opacity: 0, y: -18, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.9 }}
+            >
+              <div className="flex items-start gap-2.5">
+                <CoinMark size={28} />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">VILD · rétt í þessu</p>
+                  <p className="mt-0.5 text-[13px] font-semibold leading-snug text-foreground">
+                    Þú fékkst inneign frá Lúnu.{' '}
+                    <DrawnMarker className="vild-num" delay={0.35}>
+                      +1.495 kr.
+                    </DrawnMarker>
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+/** Two margin bars that grow from nothing while their percentages count up. */
+function MarginBars() {
+  const ref = useRef<HTMLDListElement>(null);
+  const allowed = useMotionAllowed();
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const play = inView || !allowed;
+  return (
+    <dl ref={ref} className="space-y-6">
+      {MARGINS.map((row, i) => (
+        <div key={row.label}>
+          <div className="flex items-baseline justify-between text-[14px]">
+            <dt className="font-semibold">{row.label}</dt>
+            <dd className="vild-num font-semibold text-[hsl(var(--mint-300))]">
+              ~<AnimatedNumber value={play ? row.pct : 0} suffix="% álagning" duration={900} />
+            </dd>
+          </div>
+          <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-white/10">
+            <motion.div
+              className="h-3 rounded-full bg-[hsl(var(--mint-300))]"
+              style={{ width: `${(row.pct / 30) * 100}%` }}
+              initial={allowed ? { x: '-100%' } : false}
+              animate={play ? { x: 0 } : undefined}
+              transition={{ duration: 0.9, ease: EASE_OUT, delay: i * 0.15 }}
+            />
+          </div>
+          <p className="vild-num mt-2 text-[13px] text-white/60">{row.example}</p>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** A second mint layer that breathes very slowly over the closing field: 0 → 0.12 over 8 s, mirrored, only while on screen. */
+function Breath() {
+  const ref = useRef<HTMLDivElement>(null);
+  const allowed = useMotionAllowed();
+  const inView = useInView(ref, { amount: 0.2 });
+  const on = allowed && inView;
+  return (
+    <motion.div
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,hsl(var(--mint-50)),transparent_65%)]"
+      animate={on ? { opacity: [0, 0.12] } : { opacity: 0 }}
+      transition={on ? { duration: 8, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' } : { duration: 0.6 }}
+    />
+  );
+}
+
+/** Rows that rise in one after another once the list is in view. */
+function StaggerList({ children, className, ...rest }: { children: ReactNode; className?: string; 'aria-label'?: string }) {
+  const reveal = useRevealProps();
+  return (
+    <motion.ul className={className} variants={staggerParent(0.06)} {...reveal} {...rest}>
+      {children}
+    </motion.ul>
+  );
+}
 
 export default function HomePage() {
   usePageTitle('VILD – Inneign í stað afsláttar');
@@ -37,41 +187,8 @@ export default function HomePage() {
       {/* a. Hero */}
       <section className="bg-[hsl(var(--mint-300))] text-[hsl(var(--green-900))]">
         <Container className="grid items-center gap-10 py-14 sm:py-16 lg:grid-cols-[55fr_45fr] lg:gap-8 lg:py-24">
-          <div className="max-w-[600px]">
-            <Eyebrow className="text-[hsl(var(--green-700))]">Inneign í stað afsláttar</Eyebrow>
-            <Display className="mt-4">Borgaðu fullt verð. Fáðu hluta til baka.</Display>
-            <p className="mt-6 max-w-[44ch] text-[17px] leading-[1.5] text-[hsl(var(--green-900))]/80 sm:text-[19px]">
-              VILD safnar krónum fyrir þig þegar þú borðar hjá samstarfsstöðum. Inneignin bíður þín næst – hjá sömu keðju.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <LinkButton to={href(paths.app)} size="lg">
-                Sækja appið
-              </LinkButton>
-              <LinkButton to="#svona-virkar" anchor variant="secondary" size="lg" className="border-[hsl(var(--green-900))]/15 bg-white/70 hover:bg-white">
-                Svona virkar þetta
-              </LinkButton>
-            </div>
-            <ul className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] font-medium text-[hsl(var(--green-700))] [&>li+li]:before:mr-2.5 [&>li+li]:before:content-['·']">
-              <li>Ein króna = ein króna</li>
-              <li>Gildir í 24 mánuði</li>
-              <li>Rafræn skilríki</li>
-            </ul>
-          </div>
-
-          <div className="relative flex justify-center pt-14 lg:justify-end lg:pr-6 lg:pt-12">
-            <PhoneMock products={products.data} />
-            <div className="absolute left-1/2 top-0 w-[240px] -translate-x-[62%] rounded-2xl bg-white p-3 shadow-[var(--shadow-md)] sm:w-[260px] lg:left-0 lg:translate-x-0" aria-hidden="true">
-              <div className="flex items-start gap-2.5">
-                <CoinMark size={28} />
-                <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">VILD · rétt í þessu</p>
-                  <p className="mt-0.5 text-[13px] font-semibold leading-snug text-foreground">
-                    Þú fékkst inneign frá Lúnu. <span className="vild-marker vild-num">+1.495 kr.</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <HeroCopy />
+          <HeroPhone products={products.data} />
         </Container>
       </section>
 
@@ -86,7 +203,7 @@ export default function HomePage() {
             <NumberedList items={STEPS} className="mt-10" />
           </div>
           <div className="flex flex-col items-center gap-4 lg:items-end lg:pt-24">
-            <CardVisual className="rotate-[2deg]" />
+            <CardVisual tilt={2} />
             <p className="max-w-[32ch] text-center text-[13px] text-muted-foreground lg:text-right">Kortið í appinu. Það er það eina sem þarf að sýna við kassann.</p>
           </div>
         </Container>
@@ -140,14 +257,14 @@ export default function HomePage() {
               <Headline className="mt-3">Níu staðir. Ein inneign.</Headline>
             </Reveal>
             <Lead className="mt-5 max-w-[38ch]">Inneign frá Lúnu gildir á öllum stöðum Lúnu, sama hvar þú fékkst hana.</Lead>
-            <ul className="mt-8 border-t border-border" aria-label="Staðir eftir bæjarfélagi">
+            <StaggerList className="mt-8 border-t border-border" aria-label="Staðir eftir bæjarfélagi">
               {(cities.length ? cities : [{ city: 'Sæki staði', count: 0, lat: 0, lng: 0 }]).map((c) => (
-                <li key={c.city} className="flex items-baseline justify-between border-b border-border py-3 text-[16px]">
+                <motion.li key={c.city} variants={fadeUp} className="flex items-baseline justify-between border-b border-border py-3 text-[16px]">
                   <span className="font-semibold">{c.city}</span>
                   <span className="vild-num text-muted-foreground">{c.count ? `${c.count} ${isSingular(c.count) ? 'staður' : 'staðir'}` : '…'}</span>
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </StaggerList>
           </div>
           <div className="mx-auto w-full max-w-[560px] lg:max-w-none">
             <IcelandMap locations={locations.data ?? []} />
@@ -171,23 +288,7 @@ export default function HomePage() {
               <ArrowRight className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
             </LinkButton>
           </div>
-          <dl className="space-y-6">
-            {[
-              { label: 'Matvöruverslun', pct: 10, example: 'Smjör 400 kr. → +20 kr.' },
-              { label: 'Veitingastaður', pct: 30, example: 'Kvöldverður fyrir tvo 8.000 kr. → +1.200 kr.' },
-            ].map((row) => (
-              <div key={row.label}>
-                <div className="flex items-baseline justify-between text-[14px]">
-                  <dt className="font-semibold">{row.label}</dt>
-                  <dd className="vild-num font-semibold text-[hsl(var(--mint-300))]">~{row.pct}% álagning</dd>
-                </div>
-                <div className="mt-2 h-3 w-full rounded-full bg-white/10">
-                  <div className="h-3 rounded-full bg-[hsl(var(--mint-300))]" style={{ width: `${(row.pct / 30) * 100}%` }} />
-                </div>
-                <p className="vild-num mt-2 text-[13px] text-white/60">{row.example}</p>
-              </div>
-            ))}
-          </dl>
+          <MarginBars />
         </Container>
       </section>
 
@@ -207,8 +308,9 @@ export default function HomePage() {
       </section>
 
       {/* h. Lokakall */}
-      <section className="bg-[hsl(var(--mint-300))] text-[hsl(var(--green-900))]">
-        <Container className="flex flex-col gap-8 py-20 lg:flex-row lg:items-end lg:justify-between lg:py-28">
+      <section className="relative overflow-hidden bg-[hsl(var(--mint-300))] text-[hsl(var(--green-900))]">
+        <Breath />
+        <Container className="relative flex flex-col gap-8 py-20 lg:flex-row lg:items-end lg:justify-between lg:py-28">
           <Display as="h2" className="max-w-[16ch]">
             Næsta máltíð er þegar byrjuð að borga sig.
           </Display>

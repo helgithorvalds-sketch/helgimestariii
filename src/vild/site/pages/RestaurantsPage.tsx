@@ -1,16 +1,19 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { AnimatePresence, animate, motion, useMotionValue } from 'framer-motion';
 import { ArrowRight, Check, Minus, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Button, Chip, CreditTag, ProductImage } from '../../components/kit';
-import { formatISK, formatPct, formatSignedISK } from '../../lib/format';
+import { AnimatedNumber, Button, Chip, CreditTag, ProductImage } from '../../components/kit';
+import { formatISK, formatSignedISK } from '../../lib/format';
+import { DUR, EASE_IN_OUT, EASE_OUT, fadeUp, spring, staggerParent, useMotionAllowed } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
 import { useProducts, useSectors } from '../../lib/queries';
 import { POS_VENDORS } from '../../lib/types';
 import { CreditCalculator } from '../components/CreditCalculator';
+import { DrawnMarker } from '../components/DrawnMarker';
 import { FaqAccordion } from '../components/FaqAccordion';
 import { LinkButton } from '../components/LinkButton';
 import { NumberedList } from '../components/NumberedList';
@@ -47,6 +50,22 @@ function CreditPickerMock() {
   const products = useProducts('m_luna');
   const example = products.data?.find((p) => p.id === 'p_margherita') ?? { name: 'Margherita', price: 2990, image: '/vild/img/products/margherita.jpg' };
   const back = Math.round((example.price * pct) / 100);
+
+  // The example amount swells a little and settles with a spring each time the percentage changes.
+  const scale = useMotionValue(1);
+  const allowed = useMotionAllowed();
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    if (!allowed) return;
+    scale.set(1.08);
+    const c = animate(scale, 1, spring);
+    return () => c.stop();
+  }, [pct, allowed, scale]);
+
   return (
     <div className="rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-sm)] sm:p-7" aria-label="Dæmi um stjórnborð">
       <div className="flex items-center justify-between">
@@ -57,8 +76,8 @@ function CreditPickerMock() {
         <Button variant="secondary" size="md" className="h-12 w-12 rounded-full px-0" aria-label="Lækka prósentu" onClick={() => setPct((p) => Math.max(0, p - 5))} disabled={pct <= 0}>
           <Minus className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
         </Button>
-        <p className="vild-num text-[64px] font-extrabold leading-none tracking-[-0.04em] text-[hsl(var(--green-500))] sm:text-[80px]" aria-live="polite">
-          {formatPct(pct)}
+        <p className="text-[64px] font-extrabold leading-none tracking-[-0.04em] text-[hsl(var(--green-500))] sm:text-[80px]" aria-live="polite">
+          <AnimatedNumber value={pct} suffix="%" duration={450} />
         </p>
         <Button variant="secondary" size="md" className="h-12 w-12 rounded-full px-0" aria-label="Hækka prósentu" onClick={() => setPct((p) => Math.min(50, p + 5))} disabled={pct >= 50}>
           <Plus className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
@@ -73,7 +92,9 @@ function CreditPickerMock() {
         </div>
         <div className="flex items-center gap-2">
           <ArrowRight className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
-          <CreditTag size="lg">{formatSignedISK(back)}</CreditTag>
+          <motion.span style={{ scale }} className="inline-flex origin-center">
+            <CreditTag size="lg">{formatSignedISK(back)}</CreditTag>
+          </motion.span>
         </div>
       </div>
     </div>
@@ -93,20 +114,6 @@ function ContactForm() {
     if (Object.keys(next).length === 0) setSent(true);
   };
 
-  if (sent) {
-    return (
-      <div className="rounded-2xl border border-border bg-white p-8 sm:p-10" role="status" aria-live="polite">
-        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--mint-300))] text-[hsl(var(--green-700))]">
-          <Check className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
-        </span>
-        <p className="mt-5 text-[24px] font-extrabold leading-tight tracking-[-0.025em]">Takk. Við heyrum í þér innan tveggja virkra daga.</p>
-        <p className="mt-2 text-[15px] text-muted-foreground">
-          Við skrifum á {form.email.trim()}. Ef það liggur á: <a href="mailto:hallo@vild.is" className="font-semibold text-[hsl(var(--green-500))]">hallo@vild.is</a>.
-        </p>
-      </div>
-    );
-  }
-
   const field = (k: keyof FormState, label: string, props: Record<string, string> = {}) => (
     <div>
       <Label htmlFor={`contact-${k}`} className="text-[13px] font-medium text-muted-foreground">
@@ -121,27 +128,48 @@ function ContactForm() {
     </div>
   );
 
+  // The form and the thank-you swap with a crossfade; the exit is quicker than the enter.
+  const swap = {
+    initial: { opacity: 0, y: 6 },
+    animate: { opacity: 1, y: 0, transition: { duration: DUR.base, ease: EASE_OUT } },
+    exit: { opacity: 0, transition: { duration: DUR.fast, ease: EASE_IN_OUT } },
+  };
+
   return (
-    <form onSubmit={submit} noValidate className="rounded-2xl border border-border bg-white p-5 sm:p-8" aria-label="Hafa samband">
-      <div className="grid gap-4 sm:grid-cols-2">
-        {field('name', 'Nafn', { autoComplete: 'name' })}
-        {field('company', 'Fyrirtæki', { autoComplete: 'organization' })}
-        {field('email', 'Netfang', { type: 'email', autoComplete: 'email', inputMode: 'email' })}
-        {field('phone', 'Sími', { type: 'tel', autoComplete: 'tel', inputMode: 'tel' })}
-      </div>
-      <div className="mt-4">
-        <Label htmlFor="contact-message" className="text-[13px] font-medium text-muted-foreground">
-          Skilaboð
-        </Label>
-        <Textarea id="contact-message" value={form.message} onChange={set('message')} rows={4} placeholder="Hvað heitir keðjan, hversu margir staðir, hvaða kassakerfi?" className="mt-1.5 rounded-xl border-border bg-secondary text-[15px]" />
-      </div>
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button type="submit" size="lg">
-          Senda
-        </Button>
-        <p className="text-[13px] text-muted-foreground">Við svörum innan tveggja virkra daga.</p>
-      </div>
-    </form>
+    <AnimatePresence mode="wait" initial={false}>
+      {sent ? (
+        <motion.div key="sent" {...swap} className="rounded-2xl border border-border bg-white p-8 sm:p-10" role="status" aria-live="polite">
+          <motion.span className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--mint-300))] text-[hsl(var(--green-700))]" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ ...spring, delay: 0.12 }}>
+            <Check className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
+          </motion.span>
+          <p className="mt-5 text-[24px] font-extrabold leading-tight tracking-[-0.025em]">Takk. Við heyrum í þér innan tveggja virkra daga.</p>
+          <p className="mt-2 text-[15px] text-muted-foreground">
+            Við skrifum á {form.email.trim()}. Ef það liggur á: <a href="mailto:hallo@vild.is" className="font-semibold text-[hsl(var(--green-500))]">hallo@vild.is</a>.
+          </p>
+        </motion.div>
+      ) : (
+        <motion.form key="form" {...swap} onSubmit={submit} noValidate className="rounded-2xl border border-border bg-white p-5 sm:p-8" aria-label="Hafa samband">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {field('name', 'Nafn', { autoComplete: 'name' })}
+            {field('company', 'Fyrirtæki', { autoComplete: 'organization' })}
+            {field('email', 'Netfang', { type: 'email', autoComplete: 'email', inputMode: 'email' })}
+            {field('phone', 'Sími', { type: 'tel', autoComplete: 'tel', inputMode: 'tel' })}
+          </div>
+          <div className="mt-4">
+            <Label htmlFor="contact-message" className="text-[13px] font-medium text-muted-foreground">
+              Skilaboð
+            </Label>
+            <Textarea id="contact-message" value={form.message} onChange={set('message')} rows={4} placeholder="Hvað heitir keðjan, hversu margir staðir, hvaða kassakerfi?" className="mt-1.5 rounded-xl border-border bg-secondary text-[15px]" />
+          </div>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Button type="submit" size="lg">
+              Senda
+            </Button>
+            <p className="text-[13px] text-muted-foreground">Við svörum innan tveggja virkra daga.</p>
+          </div>
+        </motion.form>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -169,17 +197,17 @@ export default function RestaurantsPage() {
               </LinkButton>
             </div>
           </div>
-          <ul className="border-t border-border" aria-label="Geirar">
+          <motion.ul className="border-t border-border" aria-label="Geirar" variants={staggerParent(0.06, 0.2)} initial="hidden" animate="show">
             {(sectors.data ?? []).map((s) => (
-              <li key={s.slug} className="flex items-center justify-between gap-4 border-b border-border py-4">
+              <motion.li key={s.slug} variants={fadeUp} className="flex items-center justify-between gap-4 border-b border-border py-4">
                 <div className="min-w-0">
                   <p className="text-[16px] font-semibold">{s.name}</p>
                   <p className="text-[13px] text-muted-foreground">{s.status === 'live' ? 'Lúna · 9 staðir' : 'Laust'}</p>
                 </div>
                 <Chip tone={s.status === 'live' ? 'green' : 'outline'}>{s.status === 'live' ? 'Í notkun' : 'Laust'}</Chip>
-              </li>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         </Container>
       </section>
 
@@ -196,7 +224,8 @@ export default function RestaurantsPage() {
             </Lead>
             <blockquote className="mt-8 border-l-2 border-[hsl(var(--green-500))] pl-5">
               <p className="text-[18px] font-bold leading-snug tracking-[-0.015em] sm:text-[20px]">
-                Kvöldverður fyrir tvo, <span className="vild-num">8.000 kr.</span> Helmingur álagningar til baka: <span className="vild-marker vild-num">+1.200 kr.</span>
+                Kvöldverður fyrir tvo, <span className="vild-num">8.000 kr.</span> Helmingur álagningar til baka:{' '}
+                <DrawnMarker className="vild-num">+1.200 kr.</DrawnMarker>
               </p>
               <p className="mt-2 text-[14px] text-muted-foreground">Í matvöruverslun með 10% álagningu væri sama hlutfall 20 kr. af smjörstykki. Sami ávinningur fyrir gestinn, án gallans.</p>
             </blockquote>

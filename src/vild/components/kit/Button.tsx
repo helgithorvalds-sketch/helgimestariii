@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { motion, type HTMLMotionProps } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { tap } from '../../lib/motion';
+import { springSnappy, tap } from '../../lib/motion';
 
 export type ButtonVariant = 'primary' | 'mint' | 'secondary' | 'ghost' | 'dark' | 'destructive';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -29,6 +29,9 @@ export type ButtonProps = Omit<HTMLMotionProps<'button'>, 'children'> & {
   children?: ReactNode;
 };
 
+/** Filled buttons rise 1px on hover (mouse only; framer ignores touch). */
+const LIFTS: ButtonVariant[] = ['primary', 'mint'];
+
 /** The one button. Press feedback is a tiny scale, not a colour flash. */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { variant = 'primary', size = 'md', loading, full, className, children, disabled, type = 'button', ...rest },
@@ -39,6 +42,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       ref={ref}
       type={type as ButtonHTMLAttributes<HTMLButtonElement>['type']}
       whileTap={disabled || loading ? undefined : tap}
+      whileHover={disabled || loading || !LIFTS.includes(variant) ? undefined : { y: -1 }}
+      transition={springSnappy}
       disabled={disabled || loading}
       className={cn(
         'inline-flex select-none items-center justify-center whitespace-nowrap font-semibold transition-colors duration-150',

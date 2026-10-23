@@ -18,12 +18,17 @@ const NAV = [
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
+  const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const onHome = location.pathname === href(paths.site) || location.pathname === '/' || location.pathname === `${href(paths.site)}/`;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 4);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 4);
+      setCompact(y > 40);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -54,9 +59,16 @@ export function SiteHeader() {
       </Link>
     );
 
+  // The bar is 72px at rest and settles to 60px once the page has moved 40px.
+  // Height is the one property animated here: a single sticky element, no list.
+  const height = compact && !open ? 60 : 72;
+
   return (
-    <header className={cn('sticky top-0 z-40 bg-white transition-shadow duration-200', scrolled ? 'border-b border-border' : 'border-b border-transparent')}>
-      <div className="mx-auto flex h-16 w-full max-w-[1120px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+    <header
+      className={cn('sticky top-0 z-40 bg-white transition-[border-color] duration-200', scrolled ? 'border-b border-border' : 'border-b border-transparent')}
+      style={{ ['--site-header-h' as string]: `${height}px` }}
+    >
+      <div className="mx-auto flex h-[var(--site-header-h)] w-full max-w-[1120px] items-center justify-between gap-6 px-4 transition-[height] duration-200 ease-out sm:px-6 lg:px-8">
         <Link to={href(paths.site)} className="flex h-11 items-center text-[hsl(var(--green-500))]" aria-label="VILD, forsíða">
           <Wordmark size="md" />
         </Link>
@@ -90,7 +102,7 @@ export function SiteHeader() {
         {open && (
           <motion.div
             id="site-menu"
-            className="fixed inset-0 top-16 z-30 flex flex-col bg-white md:hidden"
+            className="fixed inset-0 top-[var(--site-header-h)] z-30 flex flex-col bg-white md:hidden"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0, transition: { duration: DUR.base, ease: EASE_OUT } }}
             exit={{ opacity: 0, y: -8, transition: { duration: DUR.fast, ease: EASE_IN_OUT } }}
