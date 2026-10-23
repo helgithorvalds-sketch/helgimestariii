@@ -29,7 +29,7 @@ function useModuleChrome() {
       link.dataset.vildFonts = '1';
       document.head.appendChild(link);
     }
-    let viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
     const previousViewport = viewport?.content ?? null;
     if (viewport) viewport.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
     let theme = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');

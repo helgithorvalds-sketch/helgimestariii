@@ -77,7 +77,7 @@ export function Sheet({ open, onClose, title, children, className, desktopDialog
             <div className="flex cursor-grab touch-none items-center justify-center pb-1 pt-2.5 active:cursor-grabbing" onPointerDown={(e) => drag.start(e)}>
               <span className="h-1.5 w-10 rounded-full bg-border" aria-hidden="true" />
             </div>
-            {(title || true) && (
+            {(
               <div className="flex items-center justify-between px-5 pb-2 pt-1">
                 <h2 className="text-[18px] font-bold tracking-tight">{title}</h2>
                 <button type="button" onClick={onClose} aria-label="Loka" className="-mr-2 flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary">
