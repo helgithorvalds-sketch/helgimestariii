@@ -1,0 +1,243 @@
+/* ==========================================================================
+   VILD — design tokens, scoped to `.vild` (the module root and <body> while
+   the module is mounted). shadcn components pick these up automatically.
+   Brand: mint #B4FF9B · green #0C5C3B (sampled from the logo).
+   Fonts: Figtree (everything, like the pitch film) · Jost 300 for the wordmark only.
+   Accent: marker yellow #FFD24D for credit amounts (from the film).
+   ========================================================================== */
+
+.vild {
+  /* shadcn tokens (HSL triplets) */
+  --background: 0 0% 100%;            /* #FFFFFF */
+  --foreground: 150 18% 8%;           /* #111814 ink with a hint of green */
+  --card: 0 0% 100%;
+  --card-foreground: 150 18% 8%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 150 18% 8%;
+  --primary: 155 77% 20%;             /* #0C5C3B brand green */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 100 20% 96%;           /* #F3F6F1 light surface */
+  --secondary-foreground: 150 18% 8%;
+  --muted: 100 20% 96%;
+  --muted-foreground: 150 8% 38%;     /* #596660 (6.9:1 on white) */
+  --accent: 107 100% 94%;             /* #E8FFE0 mint-50 */
+  --accent-foreground: 155 77% 20%;
+  --destructive: 4 64% 44%;           /* #B8322A */
+  --destructive-foreground: 0 0% 100%;
+  --border: 105 12% 89%;              /* #E0E5DE */
+  --input: 105 12% 89%;
+  --ring: 155 77% 20%;
+  --radius: 0.75rem;                  /* 12px */
+
+  /* brand scale */
+  --mint-50: 107 100% 94%;            /* #E8FFE0 */
+  --mint-100: 106 100% 88%;           /* #D2FFC2 */
+  --mint-300: 106 100% 80%;           /* #B4FF9B brand */
+  --mint-500: 106 56% 66%;            /* #8FDA78 */
+  --green-500: 155 77% 20%;           /* #0C5C3B brand */
+  --green-600: 155 76% 16%;           /* #0A4A30 hover */
+  --green-700: 155 76% 13%;           /* #083B27 pressed */
+  --green-900: 155 70% 10%;           /* #072B1D deep (hero / dark surfaces) */
+  --ink: 150 18% 8%;
+  --surface-2: 100 20% 97%;           /* #F6F8F4 */
+  --success: 142 52% 36%;             /* #2C8C47 */
+  --yellow: 46 100% 65%;              /* #FFD24D marker for credit amounts */
+  --yellow-deep: 45 95% 48%;          /* #F2B705 */
+  --yellow-ink: 40 90% 18%;           /* #593F05 text on yellow (8.6:1) */
+  --warning: 36 72% 40%;              /* #B07A1C */
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 160ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+
+  /* shadows: soft, green-tinted, never heavy */
+  --shadow-sm: 0 1px 2px hsl(155 30% 10% / 0.05), 0 1px 3px hsl(155 30% 10% / 0.04);
+  --shadow-md: 0 2px 6px -2px hsl(155 30% 10% / 0.08), 0 8px 20px -6px hsl(155 30% 10% / 0.10);
+  --shadow-lg: 0 10px 30px -10px hsl(155 30% 10% / 0.18), 0 2px 6px -2px hsl(155 30% 10% / 0.06);
+
+  /* safe areas (Capacitor / iOS) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  font-family: 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color-scheme: light;
+}
+
+/* Dark surfaces inside the app (hero, wallet card). Opt in with .vild-dark. */
+.vild .vild-dark {
+  --background: 155 70% 10%;
+  --foreground: 0 0% 100%;
+  --card: 155 60% 13%;
+  --card-foreground: 0 0% 100%;
+  --muted: 155 40% 16%;
+  --muted-foreground: 110 25% 78%;
+  --border: 155 30% 20%;
+  --input: 155 30% 20%;
+  --primary: 106 100% 80%;            /* mint buttons on dark */
+  --primary-foreground: 155 77% 14%;
+  --accent: 155 50% 16%;
+  --accent-foreground: 106 100% 80%;
+  --ring: 106 100% 80%;
+  color-scheme: dark;
+}
+
+.vild .font-display,
+.vild .vild-display {
+  font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+/* The wordmark: thin, geometric, widely tracked — like the logo. */
+.vild .vild-wordmark {
+  font-family: 'Jost', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Tracked small-caps eyebrow, as in the film ("LAUGARDAGSMORGUNN"). */
+.vild .vild-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--green-500));
+}
+
+/* Yellow marker behind a credit amount: "+8.000 kr." */
+.vild .vild-marker {
+  background: linear-gradient(transparent 18%, hsl(var(--yellow)) 18%, hsl(var(--yellow)) 88%, transparent 88%);
+  padding: 0 0.12em;
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Numbers in balances and prices line up. */
+.vild .tabular,
+.vild .vild-num {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.vild-html {
+  background: #ffffff;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars on horizontal carousels without losing scrolling. */
+.vild .no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.vild .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* iOS-style tap feedback: no grey flash, no text selection on controls. */
+.vild button,
+.vild [role='button'],
+.vild a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Focus rings only for keyboard users. */
+.vild :focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Leaflet overrides so the map matches the brand. */
+.vild .leaflet-container {
+  font-family: inherit;
+  background: hsl(var(--surface-2));
+}
+.vild .leaflet-control-zoom a {
+  color: hsl(var(--ink));
+  border-color: hsl(var(--border));
+}
+.vild .leaflet-control-attribution {
+  font-size: 10px;
+  background: hsl(0 0% 100% / 0.8);
+  color: hsl(var(--muted-foreground));
+}
+.vild .vild-pin-icon {
+  background: transparent;
+  border: 0;
+}
+.vild .vild-pin {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: hsl(var(--green-500));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 0 0 3px #fff, var(--shadow-md);
+  transition: transform var(--dur-fast) var(--ease-out), background-color var(--dur-fast);
+  will-change: transform;
+}
+.vild .vild-pin img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 9999px;
+}
+.vild .vild-pin--selected {
+  transform: scale(1.18);
+  background: hsl(var(--ink));
+  box-shadow: 0 0 0 3px hsl(var(--mint-300)), var(--shadow-lg);
+}
+.vild .vild-pin__badge {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: hsl(var(--mint-300));
+  color: hsl(var(--green-700));
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 2px #fff;
+}
+.vild .vild-cluster {
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: hsl(var(--ink));
+  color: hsl(var(--mint-300));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 0 0 3px #fff, var(--shadow-md);
+}
+
+/* Reduced motion: everything settles instantly. */
+@media (prefers-reduced-motion: reduce) {
+  .vild *,
+  .vild *::before,
+  .vild *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
