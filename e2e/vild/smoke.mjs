@@ -112,12 +112,13 @@ const MERCHANT = [
 async function loginConsumer(page) {
   await page.goto(`${BASE}/vild/app/innskraning`, { waitUntil: 'networkidle' });
   await page.evaluate(() => localStorage.setItem('vild-onboarded', '1'));
-  const phoneBtn = page.getByRole('button', { name: /símanúmer/i }).first();
-  await phoneBtn.click();
-  await page.getByRole('textbox').first().fill('6661234');
-  await page.getByRole('button', { name: /senda kóða/i }).click();
+  await page.getByRole('button', { name: 'Símanúmer' }).click();
+  await page.getByLabel('Símanúmer').fill('6661234');
+  await page.getByRole('button', { name: 'Senda kóða' }).click();
+  await page.waitForTimeout(400);
   await page.keyboard.type('123456');
   await page.waitForURL((u) => !u.pathname.endsWith('/innskraning'), { timeout: 15000 });
+  await page.waitForTimeout(400);
 }
 
 async function loginMerchant(page) {
