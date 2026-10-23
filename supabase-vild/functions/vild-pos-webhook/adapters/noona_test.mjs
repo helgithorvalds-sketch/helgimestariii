@@ -45,7 +45,8 @@ test('noona sale → generic receipt → normalised, with PII dropped', () => {
 
 test('ignored events and token discovery', () => {
   assert.equal(noonaToReceipt({ event: 'customer.created', data: {} }), null);
-  assert.equal(findToken({ custom_fields: { vild_token: 'vildp-abcdefghjklmnpqrstuvw' } }), 'VILDP-ABCDEFGHJKLMNPQRSTUVW');
+  assert.equal(findToken({ custom_fields: { vild_token: 'vildp-abcdefghjklmnpqrstuv' } }), 'VILDP-ABCDEFGHJKLMNPQRSTUV');
+  assert.equal(findToken({ custom_fields: { vild_token: 'vildp-abcdefghjklmnpqrstuvw' } }), undefined); // 21 chars: not a token
   assert.equal(findToken({ note: 'nothing here' }), undefined);
   assert.equal(creditRequested({ custom_fields: { vild_use_credit: 'true' } }), true);
   assert.equal(creditRequested({ payments: [{ method: 'card' }] }), false);

@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthProvider } from './lib/auth';
+import { IS_MOCK, initApi } from './data';
 import { VildRoutes } from './routes';
 import './theme.css';
 
@@ -55,6 +56,12 @@ function useModuleChrome() {
 /** VILD root. Mounted lazily by src/App.tsx at `/vild/*` (react-query, tooltips and toasts come from there). */
 export default function VildApp() {
   useModuleChrome();
+  // VITE_VILD_DATA=supabase loads the adapter lazily; the mock is ready synchronously.
+  const [apiReady, setApiReady] = useState(IS_MOCK);
+  useEffect(() => {
+    if (!IS_MOCK) void initApi().then(() => setApiReady(true));
+  }, []);
+  if (!apiReady) return <div className="vild min-h-screen bg-background" aria-busy="true" />;
   return (
     <div className="vild min-h-screen bg-background text-foreground">
       <AuthProvider>
