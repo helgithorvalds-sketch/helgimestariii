@@ -25,7 +25,7 @@ function halfDelta(daily: MerchantStats['daily'], key: 'revenue' | 'issued' | 'r
   return ((b - a) / a) * 100;
 }
 
-function Delta({ value, suffix = 'milli hálfa tímabilsins' }: { value: number | null; suffix?: string }) {
+function Delta({ value, suffix = 'síðari helmingur á móti fyrri' }: { value: number | null; suffix?: string }) {
   if (value == null) return <span className="text-[12px] text-muted-foreground">—</span>;
   const up = value >= 0;
   return (
@@ -34,7 +34,7 @@ function Delta({ value, suffix = 'milli hálfa tímabilsins' }: { value: number 
         {up ? '+' : '−'}
         {formatPct(Math.abs(value))}
       </span>{' '}
-      {suffix}
+      <span className="hidden sm:inline">{suffix}</span>
     </span>
   );
 }
@@ -43,7 +43,7 @@ function Kpi({ label, value, delta }: { label: string; value: string; delta?: nu
   return (
     <div className="px-5 py-4">
       <p className="text-[13px] font-medium text-muted-foreground">{label}</p>
-      <p className="vild-num mt-1 text-[24px] font-extrabold leading-none tracking-[-0.02em] sm:text-[26px]">{value}</p>
+      <p className="vild-num mt-1 whitespace-nowrap text-[20px] font-extrabold leading-none tracking-[-0.02em] sm:text-[26px]">{value}</p>
       <p className="mt-1.5">{delta === undefined ? <span className="text-[12px] text-muted-foreground">af öllum kaupum</span> : <Delta value={delta} />}</p>
     </div>
   );
@@ -82,7 +82,7 @@ function RevenueChart({ daily, showCredit }: { daily: MerchantStats['daily']; sh
             </linearGradient>
           </defs>
           <CartesianGrid vertical={false} stroke="#E0E5DE" strokeWidth={1} />
-          <XAxis dataKey="date" tickLine={false} axisLine={false} tick={tick} interval={every - 1} tickFormatter={(d: string) => formatDate(d).replace(/^\w+\.\s/, '')} dy={6} />
+          <XAxis dataKey="date" tickLine={false} axisLine={false} tick={tick} interval="preserveStartEnd" minTickGap={every > 1 ? 56 : 40} tickFormatter={(d: string) => formatDate(d).replace(/^\w+\.\s/, '')} dy={6} />
           <YAxis tickLine={false} axisLine={false} tick={tick} width={56} tickFormatter={(v: number) => (v >= 1_000_000 ? `${formatNumber(v / 1_000_000, 1)} m` : `${formatNumber(Math.round(v / 1000))} þ.`)} />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#E0E5DE', strokeWidth: 1 }} />
           <Area type="monotone" dataKey="revenue" stroke={GREEN} strokeWidth={2} fill="url(#vild-rev)" isAnimationActive={false} activeDot={{ r: 4, fill: GREEN, stroke: '#fff', strokeWidth: 2 }} />
@@ -220,16 +220,16 @@ export default function DashboardPage() {
                 <Th>Staður</Th>
                 <Th align="right">Kaup</Th>
                 <Th align="right">Sala</Th>
-                <Th className="w-[30%] min-w-[140px]">Hlutur</Th>
+                <Th className="hidden w-[30%] min-w-[140px] md:table-cell">Hlutur</Th>
               </tr>
             </thead>
             <tbody>
               {s.byLocation.map((l) => (
                 <tr key={l.locationId}>
                   <Td className="font-semibold">{l.name}</Td>
-                  <Td align="right">{formatNumber(l.purchases)}</Td>
-                  <Td align="right">{formatISK(l.revenue)}</Td>
-                  <Td>
+                  <Td align="right" className="whitespace-nowrap">{formatNumber(l.purchases)}</Td>
+                  <Td align="right" className="whitespace-nowrap">{formatISK(l.revenue)}</Td>
+                  <Td className="hidden md:table-cell">
                     <div className="flex items-center gap-3">
                       <ShareBar pct={(l.revenue / maxLoc) * 100} />
                       <span className="vild-num w-10 shrink-0 text-right text-[12px] text-muted-foreground">{formatPct((l.revenue / s.revenue) * 100)}</span>

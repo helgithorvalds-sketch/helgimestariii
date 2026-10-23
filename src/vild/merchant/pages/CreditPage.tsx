@@ -182,7 +182,7 @@ export default function CreditPage() {
         <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed text-muted-foreground">
           Inneign kostar þig aðeins hráefnið. {example && merchant ? (
             <>
-              <span className="vild-num font-semibold text-foreground">{shownRate}%</span> inneign af <span className="vild-num font-semibold text-foreground">{formatISK(example.price)}</span> {example.name.toLowerCase()} = <span className="vild-num font-semibold text-foreground">{formatISK(exampleCredit)}</span> inneign, sem kostar þig um{' '}
+              <span className="vild-num font-semibold text-foreground">{shownRate}%</span> inneign af <span className="vild-num font-semibold text-foreground">{formatISK(example.price)}</span> {example.name} = <span className="vild-num font-semibold text-foreground">{formatISK(exampleCredit)}</span> inneign, sem kostar þig um{' '}
               <span className="vild-num font-semibold text-foreground">{formatISK(Math.round(exampleCredit * MARGIN_ASSUMPTION))}</span> í hráefni.
             </>
           ) : null}{' '}

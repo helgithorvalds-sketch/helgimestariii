@@ -7,13 +7,7 @@ import { formatISK, formatSignedISK, formatTime, initialsOf } from '../../lib/fo
 import { href, paths } from '../../lib/paths';
 import type { LedgerEntry, Location } from '../../lib/types';
 import { InitialsMark } from './MerchantMark';
-
-export function ledgerTitle(entry: LedgerEntry, location: Location | undefined): string {
-  if (entry.kind === 'welcome') return 'VILD';
-  if (entry.kind === 'expire') return 'Inneign rann út';
-  if (entry.kind === 'adjust') return 'Leiðrétting';
-  return location?.name ?? 'Lúna';
-}
+import { ledgerTitle } from '../lib/labels';
 
 /** One ledger line: place · time, description, +/− chip and the basket total. */
 export function LedgerRow({ entry, location, className }: { entry: LedgerEntry; location: Location | undefined; className?: string }) {

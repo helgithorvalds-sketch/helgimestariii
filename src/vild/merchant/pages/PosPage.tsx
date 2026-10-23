@@ -76,12 +76,14 @@ function LocationRow({ loc }: { loc: Location }) {
   };
 
   return (
-    <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 px-4 py-3.5 sm:grid-cols-[minmax(0,1.2fr)_minmax(200px,1fr)_auto_auto] sm:px-5">
+    <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 px-4 py-3.5 sm:grid-cols-[minmax(0,1.2fr)_minmax(200px,1fr)_104px_auto] sm:px-5">
       <div className="min-w-0">
         <p className="truncate text-[15px] font-semibold leading-tight">{loc.name}</p>
         <p className="truncate text-[13px] text-muted-foreground">{loc.city}</p>
       </div>
-      <PosStatusChip status={loc.posStatus} />
+      <div className="justify-self-end sm:justify-self-start">
+        <PosStatusChip status={loc.posStatus} />
+      </div>
       <div className="col-span-2 sm:col-span-1 sm:col-start-2 sm:row-start-1">
         <Select value={loc.posVendor ?? 'other'} onValueChange={(v) => setVendor(v as PosVendor)} disabled={update.isPending}>
           <SelectTrigger className="h-10 rounded-xl border-border bg-white text-[14px]" aria-label={`Kassakerfi á ${loc.name}`}>

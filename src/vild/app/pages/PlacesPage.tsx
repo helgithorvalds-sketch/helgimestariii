@@ -57,7 +57,7 @@ export default function PlacesPage() {
   const places = useMemo<MapPlace[]>(() => {
     if (!locations.data || !merchants.data) return [];
     return locations.data
-      .map((l) => {
+      .map((l): MapPlace | null => {
         const merchant = merchants.data.find((m) => m.id === l.merchantId);
         return merchant ? { ...l, merchant } : null;
       })
@@ -171,7 +171,7 @@ export default function PlacesPage() {
         </div>
       )}
 
-      <LocationSheet location={selected} merchant={selected?.merchant as MapPlace['merchant'] & { id: string; slug: string } as never} distance={selectedDistance} onClose={() => setSelectedId(null)} />
+      <LocationSheet location={selected} merchant={selected?.merchant} distance={selectedDistance} onClose={() => setSelectedId(null)} />
     </div>
   );
 }

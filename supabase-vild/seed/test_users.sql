@@ -1,0 +1,49 @@
+-- =====================================================================
+-- VILD — test users. Nothing here runs by itself: auth users are created
+-- through Supabase Auth (dashboard or API), never by inserting into
+-- auth.users from SQL. The triggers in 0001 then create the profile (with
+-- the 500 kr. welcome credit) and link merchant invites by e-mail.
+-- =====================================================================
+
+-- ---------------------------------------------------------------------
+-- 1. Demo consumer (phone login, like the mock's "6661234 / 123456")
+-- ---------------------------------------------------------------------
+-- a) Dashboard → Authentication → Providers → Phone: enable, pick Twilio
+--    (Twilio Verify or Messaging Service) and paste the credentials.
+--    While testing you can add a "test OTP" under Phone → Test OTPs:
+--      phone +3546661234, code 123456
+--    so no SMS is sent and the app's demo number keeps working.
+-- b) Sign in from the app (VITE_VILD_DATA=supabase) with 666 1234 → 123456,
+--    or create the user by hand: Authentication → Users → Add user → phone.
+-- c) Find the id and replay the demo history:
+--      select id from auth.users where phone = '3546661234';
+--      select public.vild_seed_demo_history('<that id>');
+--    (vild_seed_demo_history comes from seed/seed.sql; the welcome credit is
+--    already there, so the ledger ends up like the mock's: eleven visits,
+--    three with credit spent, balance in the low thousands.)
+-- d) Optional display name:
+--      update public.vild_profiles set name = 'Helgi', email = 'helgi@example.is' where id = '<that id>';
+
+-- ---------------------------------------------------------------------
+-- 2. Merchant users (password login, like the mock's johanna@luna.is)
+-- ---------------------------------------------------------------------
+-- seed.sql already inserted the three invites (owner / manager / staff).
+-- Create the accounts in Authentication → Users → Add user → e-mail + password
+-- ("Auto confirm user" on):
+--      johanna@luna.is   (owner)      password of your choice, 8+ chars
+--      kristjan@luna.is  (manager)
+--      elin@luna.is      (staff)
+-- The vild_on_auth_user_created trigger links each one to its invite row
+-- (user_id + accepted_at). Check:
+--      select email, role, user_id is not null as linked from public.vild_merchant_users;
+-- They also get a consumer profile and welcome credit — harmless; delete
+-- that ledger row only through the cleanup in seed/README.md if it matters.
+
+-- ---------------------------------------------------------------------
+-- 3. A POS connection for curl tests
+-- ---------------------------------------------------------------------
+-- As postgres in the SQL editor (the function wants the service role):
+--      select set_config('request.jwt.claims', '{"role":"service_role"}', true);
+--      select * from public.vild_set_pos_connection('m_luna', null, 'other', '{}');
+-- Copy api_key and webhook_secret from the result: they are shown once.
+-- README.md → "POS integration" has the curl.

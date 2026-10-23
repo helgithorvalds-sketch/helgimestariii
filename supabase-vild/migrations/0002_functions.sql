@@ -25,7 +25,7 @@ create sequence if not exists public.vild_receipt_seq start 50000;
 -- Same precedence and window logic as creditFor() in src/vild/data/seed.ts:
 --   * a rule counts only if active, inside [starts_at, ends_at], on one of
 --     its weekdays (ISO, Monday = 1) and inside [hours_from, hours_to) —
---     all evaluated in Europe/Reykjavik;
+--     all evaluated in Atlantic/Reykjavik;
 --   * product rule > category rule > merchant rule;
 --   * at the same scope a time-boxed rule (weekdays or hours set) beats an
 --     always-on one; then the newest (created_at) wins;
@@ -37,7 +37,7 @@ create or replace function public.vild_credit_for_line(
 ) returns table (amount integer, pct numeric, rule_id text)
 language sql stable set search_path = public as $$
   with local as (
-    select (p_at at time zone 'Europe/Reykjavik') as ts
+    select (p_at at time zone 'Atlantic/Reykjavik') as ts
   ),
   candidates as (
     select r.*,
@@ -75,8 +75,8 @@ language sql stable set search_path = public as $$
   from (select 1) one
   left join picked p on true;
 $$;
-comment on function public.vild_credit_for_line is 'Rule engine for one receipt line. Internal: vild_credit_for and vild_record_purchase call it.';
-revoke execute on function public.vild_credit_for_line(text, text, text, integer, timestamptz) from public, anon, authenticated;
+comment on function public.vild_credit_for_line is 'Rule engine for one receipt line. Reads only the public rules, so it is callable by anyone (vild_products_public needs it with the caller''s rights).';
+grant execute on function public.vild_credit_for_line(text, text, text, integer, timestamptz) to anon, authenticated, service_role;
 
 create or replace function public.vild_credit_for(p_product_id text, p_merchant_id text, p_at timestamptz default now())
 returns table (amount integer, pct numeric, rule_id text)
@@ -487,7 +487,7 @@ create or replace function public.vild_merchant_stats(p_merchant text, p_days in
 returns jsonb
 language plpgsql stable security definer set search_path = public as $$
 declare
-  v_today date := (now() at time zone 'Europe/Reykjavik')::date;
+  v_today date := (now() at time zone 'Atlantic/Reykjavik')::date;
   v_from date;
   v_from_ts timestamptz;
   v_daily jsonb;
@@ -503,17 +503,17 @@ begin
   if not (public.vild_is_merchant_user(p_merchant, 'staff') or public.vild_is_service_role()) then raise exception 'AUTH_REQUIRED'; end if;
   p_days := greatest(1, least(coalesce(p_days, 30), 366));
   v_from := v_today - (p_days - 1);
-  v_from_ts := (v_from::timestamp) at time zone 'Europe/Reykjavik';
+  v_from_ts := (v_from::timestamp) at time zone 'Atlantic/Reykjavik';
 
   with days as (
     select d::date as day from generate_series(v_from, v_today, interval '1 day') d
   ),
   pur as (
-    select (occurred_at at time zone 'Europe/Reykjavik')::date as day, count(*) as n, sum(total) as revenue
+    select (occurred_at at time zone 'Atlantic/Reykjavik')::date as day, count(*) as n, sum(total) as revenue
     from public.vild_purchases where merchant_id = p_merchant and occurred_at >= v_from_ts group by 1
   ),
   led as (
-    select (created_at at time zone 'Europe/Reykjavik')::date as day,
+    select (created_at at time zone 'Atlantic/Reykjavik')::date as day,
            sum(amount) filter (where amount > 0 and kind in ('earn', 'welcome')) as issued,
            -sum(amount) filter (where kind = 'spend') as redeemed
     from public.vild_ledger where merchant_id = p_merchant and created_at >= v_from_ts group by 1
@@ -656,10 +656,10 @@ grant execute on function public.vild_revoke_pos_connection(uuid) to authenticat
 create or replace function public.vild_close_settlements(p_month date default null)
 returns integer language plpgsql volatile security definer set search_path = public as $$
 declare
-  v_from date := date_trunc('month', coalesce(p_month, (now() at time zone 'Europe/Reykjavik')::date - interval '1 month'))::date;
+  v_from date := date_trunc('month', coalesce(p_month, (now() at time zone 'Atlantic/Reykjavik')::date - interval '1 month'))::date;
   v_to date := (v_from + interval '1 month' - interval '1 day')::date;
-  v_from_ts timestamptz := (v_from::timestamp) at time zone 'Europe/Reykjavik';
-  v_to_ts timestamptz := ((v_from + interval '1 month')::timestamp) at time zone 'Europe/Reykjavik';
+  v_from_ts timestamptz := (v_from::timestamp) at time zone 'Atlantic/Reykjavik';
+  v_to_ts timestamptz := ((v_from + interval '1 month')::timestamp) at time zone 'Atlantic/Reykjavik';
   v_fee numeric := public.vild_setting_int('platform_fee_pct', 10);
   v_n integer := 0;
   m record;

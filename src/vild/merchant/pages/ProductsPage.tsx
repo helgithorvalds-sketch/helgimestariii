@@ -133,7 +133,7 @@ export default function ProductsPage() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[15px] font-semibold leading-tight">{p.name}</p>
                   <p className="truncate text-[13px] text-muted-foreground">
-                    {CATEGORY_LABELS[p.category]} · <span className="vild-num">{formatISK(p.price)}</span> · {source}
+                    <span className="vild-num">{formatISK(p.price)}</span> · {source}
                   </p>
                 </div>
                 <CreditTag size="sm">{formatSignedISK(p.creditAmount)}</CreditTag>

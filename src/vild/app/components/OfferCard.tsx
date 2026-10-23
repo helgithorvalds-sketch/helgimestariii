@@ -2,16 +2,10 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Chip, CreditTag, ProductImage, Skeleton } from '../../components/kit';
-import { formatPct, formatSignedISK } from '../../lib/format';
 import { tap } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
 import type { Offer } from '../../lib/types';
-
-export function offerCreditText(offer: Offer): string | null {
-  if (offer.creditAmount) return formatSignedISK(offer.creditAmount);
-  if (offer.creditPct) return `${formatPct(offer.creditPct)} til baka`;
-  return null;
-}
+import { offerCreditText } from '../lib/labels';
 
 /** Wide card: picture left (96px), title, one line of body, tag chip. */
 export function OfferCard({ offer, className }: { offer: Offer; className?: string }) {

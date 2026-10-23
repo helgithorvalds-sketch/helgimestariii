@@ -102,22 +102,24 @@ export default function LocationsPage() {
             {list.map((loc) => {
               const vendor = POS_VENDORS.find((v) => v.id === loc.posVendor);
               return (
-                <li key={loc.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3.5 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto_auto] sm:px-5">
-                  <div className="min-w-0">
-                    <p className="truncate text-[15px] font-semibold leading-tight">{loc.name}</p>
-                    <p className="truncate text-[13px] text-muted-foreground">
-                      {loc.address}, {loc.city} · <span className="vild-num">{loc.openingHours}</span>
-                    </p>
+                <li key={loc.id} className="flex items-start gap-3 px-4 py-3.5 sm:items-center sm:px-5">
+                  <div className="min-w-0 flex-1 sm:grid sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] sm:items-center sm:gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-[15px] font-semibold leading-tight">{loc.name}</p>
+                      <p className="truncate text-[13px] text-muted-foreground">
+                        {loc.address}, {loc.city} · <span className="vild-num">{loc.openingHours}</span>
+                      </p>
+                    </div>
+                    <div className="mt-2 flex min-w-0 items-center gap-2 sm:mt-0">
+                      <span className="truncate text-[13px] text-muted-foreground">{vendor?.name ?? 'Ekkert kassakerfi'}</span>
+                      <PosStatusChip status={loc.posStatus} />
+                    </div>
                   </div>
-                  <div className="col-span-2 flex min-w-0 items-center gap-2 sm:col-span-1">
-                    <span className="truncate text-[13px] text-muted-foreground">{vendor?.name ?? 'Ekkert kassakerfi'}</span>
-                    <PosStatusChip status={loc.posStatus} />
-                  </div>
-                  <label className="col-start-2 row-start-1 flex items-center gap-2 text-[13px] font-medium text-muted-foreground sm:col-start-auto sm:row-start-auto">
-                    <span className="hidden sm:inline">Inneign virk</span>
+                  <label className="flex shrink-0 items-center gap-2 text-[13px] font-medium text-muted-foreground">
+                    <span className="hidden md:inline">Inneign virk</span>
                     <Switch checked={loc.acceptsRedemption} onCheckedChange={(v) => toggleRedemption(loc, v)} aria-label={`Inneign virk á ${loc.name}`} disabled={busyId === loc.id} />
                   </label>
-                  <IconButton aria-label={`Breyta ${loc.name}`} onClick={() => setEditing(loc)} className="col-start-2 row-start-2 justify-self-end sm:col-start-auto sm:row-start-auto">
+                  <IconButton aria-label={`Breyta ${loc.name}`} onClick={() => setEditing(loc)} className="-mr-2 shrink-0">
                     <Pencil className="h-4 w-4" aria-hidden="true" />
                   </IconButton>
                 </li>

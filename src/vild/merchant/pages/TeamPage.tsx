@@ -180,7 +180,7 @@ export default function TeamPage() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[15px] font-semibold leading-tight">
                     {u.name}
-                    {u.id === me?.id && <span className="ml-1.5 text-[12px] font-medium text-muted-foreground">(þú)</span>}
+                    {u.id === me?.id && <span className="ml-1.5 hidden text-[12px] font-medium text-muted-foreground sm:inline">(þú)</span>}
                   </p>
                   <p className="truncate text-[13px] text-muted-foreground">{u.email}</p>
                 </div>

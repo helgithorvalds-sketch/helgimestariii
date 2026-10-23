@@ -18,7 +18,7 @@ export function OpenChip({ location }: { location: Location }) {
 }
 
 /** Bottom sheet for a tapped pin: name, address, hours, status, two actions. */
-export function LocationSheet({ location, merchant, distance, onClose }: { location: Location | null; merchant: Merchant | undefined; distance?: number; onClose: () => void }) {
+export function LocationSheet({ location, merchant, distance, onClose }: { location: Location | null; merchant: Pick<Merchant, 'logoText' | 'brandColor' | 'name'> | undefined; distance?: number; onClose: () => void }) {
   const navigate = useNavigate();
   return (
     <Sheet open={Boolean(location)} onClose={onClose} title={location?.name}>

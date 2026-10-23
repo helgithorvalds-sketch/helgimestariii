@@ -147,7 +147,7 @@ create table public.vild_reward_rules (
   constraint vild_reward_rules_window check (starts_at is null or ends_at is null or starts_at <= ends_at)
 );
 create index vild_reward_rules_merchant_idx on public.vild_reward_rules (merchant_id, active);
-comment on table public.vild_reward_rules is 'Credit rules. Precedence product > category > merchant; a time-boxed rule (weekdays/hours) beats an always-on one at the same scope; then the newest wins. weekdays: ISO, 1 = Monday. hours are [from, to) in Europe/Reykjavik. Mirrors creditFor() in src/vild/data/seed.ts.';
+comment on table public.vild_reward_rules is 'Credit rules. Precedence product > category > merchant; a time-boxed rule (weekdays/hours) beats an always-on one at the same scope; then the newest wins. weekdays: ISO, 1 = Monday. hours are [from, to) in Atlantic/Reykjavik. Mirrors creditFor() in src/vild/data/seed.ts.';
 
 create table public.vild_offers (
   id text primary key check (id ~ '^[a-z0-9_-]{2,60}$'),
@@ -442,19 +442,20 @@ create or replace function public.vild_handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 declare
   v_name text;
-  v_is_merchant boolean;
+  v_prev text := coalesce(current_setting('vild.internal', true), '');
 begin
   perform set_config('vild.internal', '1', true);
   -- An invited merchant user who signs up with the invited e-mail is linked to the team.
   update public.vild_merchant_users
      set user_id = new.id, accepted_at = coalesce(accepted_at, now())
-   where user_id is null and lower(email) = lower(coalesce(new.email, ''))
-   returning true into v_is_merchant;
+   where user_id is null and lower(email) = lower(coalesce(new.email, ''));
   -- Everyone gets a consumer profile (a merchant user may also be a member).
   v_name := left(coalesce(nullif(trim(new.raw_user_meta_data ->> 'name'), ''), nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), 'Félagi'), 60);
   insert into public.vild_profiles (id, name, phone, email)
   values (new.id, v_name, new.phone, new.email)
   on conflict (id) do nothing;
+  -- restore: triggers run inside someone else's transaction, the flag must not leak past them
+  perform set_config('vild.internal', v_prev, true);
   return new;
 end $$;
 
@@ -464,11 +465,14 @@ create trigger vild_on_auth_user_created
 
 create or replace function public.vild_handle_user_updated()
 returns trigger language plpgsql security definer set search_path = public as $$
+declare
+  v_prev text := coalesce(current_setting('vild.internal', true), '');
 begin
   perform set_config('vild.internal', '1', true);
   if new.phone is distinct from old.phone or new.email is distinct from old.email then
     update public.vild_profiles set phone = new.phone, email = coalesce(email, new.email) where id = new.id;
   end if;
+  perform set_config('vild.internal', v_prev, true);
   return new;
 end $$;
 
@@ -604,6 +608,7 @@ returns trigger language plpgsql security definer set search_path = public as $$
 declare
   v_merchant text := public.vild_live_merchant();
   v_amount integer := public.vild_setting_int('welcome_credit', 0);
+  v_prev text := coalesce(current_setting('vild.internal', true), '');
 begin
   if v_merchant is null or v_amount <= 0 then return new; end if;
   perform set_config('vild.internal', '1', true);
@@ -612,6 +617,7 @@ begin
   values (new.id, v_merchant, 'welcome', v_amount,
           coalesce((select sum(amount) from public.vild_ledger where user_id = new.id and merchant_id = v_merchant), 0) + v_amount,
           'Velkomin í VILD');
+  perform set_config('vild.internal', v_prev, true);
   return new;
 end $$;
 create trigger vild_profiles_ai_welcome after insert on public.vild_profiles
