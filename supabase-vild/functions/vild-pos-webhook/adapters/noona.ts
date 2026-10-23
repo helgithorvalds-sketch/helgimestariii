@@ -36,7 +36,7 @@ import { TOKEN_RE } from '../receipt.ts';
 
 type Dict = Record<string, unknown>;
 
-const TOKEN_SCAN = /VILDP?-[A-Z2-9]{4,20}(?:-[A-Z2-9]{4})?/i;
+const TOKEN_SCAN = /(?<![A-Z2-9-])VILDP?-[A-Z2-9]{4,20}(?:-[A-Z2-9]{4})?(?![A-Z2-9-])/i;
 
 function dict(v: unknown): Dict {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Dict) : {};

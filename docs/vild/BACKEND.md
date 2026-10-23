@@ -22,3 +22,29 @@ flow everyone asks about.
 4. The POS prints "Inneign nýtt −1.500 kr. · Ný inneign +149 kr. · Staða 989 kr." on the receipt.
 5. A ledger insert triggers the pass update sweep (`vild-wallet-pass /push-updates`) and a push.
 6. The app's **Yfirlit** shows the receipt; **Heim** counts the balance up.
+
+## What `vild_record_purchase` actually returns
+
+The SQL function returns the ledger rows it wrote (`setof vild_ledger`: the optional `spend` row,
+then the `earn` row). The edge functions turn them into the receipt summary above:
+`applied = −spend.amount`, `earned = earn.amount`, `balance_after` of the last row, plus
+`receipt_no` from `vild_purchases`. The app reads the same rows through the `vild_ledger_entries`
+view, which adds the receipt total and the items.
+
+## Where things live
+
+| Concern | Object |
+|---|---|
+| Rule engine (product > category > merchant, time-boxed first, newest wins) | `vild_credit_for`, `vild_credit_for_line` — same logic as `creditFor()` in `src/vild/data/seed.ts`, checked by `supabase-vild/test/assertions.sql` |
+| Balances / pockets | `vild_pockets` view (sum of `vild_ledger`), FIFO lots in `vild_lots` |
+| Expiry (24 months, FIFO) | `vild_expire_credit`, cron hourly |
+| Monthly statement per chain | `vild_close_settlements`, cron on the 1st → `vild_settlements` |
+| QR token (60 s) / pass token | `vild_issue_wallet_token`, `vild_resolve_wallet_token`, `vild_pass_secrets` |
+| POS webhook contract | `supabase-vild/functions/vild-pos-webhook/receipt.ts` (+ `adapters/noona.ts`, unverified) |
+| Cashier till + demo purchase | `supabase-vild/functions/vild-till` |
+| Electronic ID | `supabase-vild/functions/vild-eid` + `migrations/0003_eid.sql` |
+| Apple / Google wallet | `supabase-vild/functions/vild-wallet-pass` |
+| Frontend adapter | `src/vild/data/supabase.ts` (`VITE_VILD_DATA=supabase`), types in `database.types.ts` |
+
+Time zone note: the IANA zone is `Atlantic/Reykjavik` (there is no `Europe/Reykjavik`); it is UTC
+year-round, and the rule windows (weekdays, hours) are evaluated in it.

@@ -7,7 +7,7 @@
 //                                                                       merchant user (staff+) of the venue's chain
 //        → 200 { purchase_id, applied, earned, balance_after, total, to_pay }
 //        items: [{ product_id | sku | name, qty, unit_price? }]; without items one line
-//        "Kaup" at `amount` is recorded (chain default rate).
+//        "Kaup við kassa" at `amount` is recorded (chain default rate).
 //   POST /vild-till/demo     { merchant_id, location_id, items, use_credit }  consumer (own account)
 //        → same shape as /charge. Only while vild_settings.demo_purchases_enabled = true.
 //        Production turns it off: real purchases come from the POS or a cashier.
@@ -130,7 +130,7 @@ Deno.serve(async (req: Request) => {
       if (!items) {
         const amount = Number(body.amount);
         if (!Number.isInteger(amount) || amount < 0 || amount > 10_000_000) return json({ code: 'INVALID_INPUT', detail: 'amount or items' }, 422);
-        items = [{ name: 'Kaup', qty: 1, unit_price: amount }];
+        items = [{ name: 'Kaup við kassa', qty: 1, unit_price: amount }];
       }
       const idem = typeof body.idempotency_key === 'string' && body.idempotency_key ? body.idempotency_key.slice(0, 120) : crypto.randomUUID();
 

@@ -231,6 +231,19 @@ export class SupabaseApi implements VildApi {
     return `${base}/functions/v1/${path}`;
   }
 
+  /** POST to an edge function with the user's JWT; non-2xx → ApiError(code from the body). */
+  private async invoke<T>(path: string, body: Record<string, unknown>): Promise<T> {
+    const { data, error } = await this.client.functions.invoke<T & { code?: string }>(path, { body });
+    if (error) {
+      const ctx = (error as { context?: Response }).context;
+      const parsed = ctx ? ((await ctx.json().catch(() => ({}))) as { code?: string }) : {};
+      if (ctx?.status === 401) throw new ApiError('AUTH_REQUIRED', error.message);
+      throw new ApiError(parsed.code ?? (ctx ? 'UNKNOWN' : 'NETWORK'), error.message);
+    }
+    if (!data) throw new ApiError('UNKNOWN');
+    return data;
+  }
+
   // ---- session -----------------------------------------------------------
   async getSession(): Promise<Session | null> {
     const { data } = await this.client.auth.getSession();
@@ -431,18 +444,46 @@ export class SupabaseApi implements VildApi {
   /** Demo only: vild-till/demo records the purchase with the user's own JWT while vild_settings.demo_purchases_enabled is true. */
   async recordPurchase(input: { merchantId: string; locationId: string; items: { productId: string; qty: number }[]; useCredit: boolean }): Promise<LedgerEntry[]> {
     await this.userId();
-    const { data, error } = await this.client.functions.invoke<{ purchase_id: string | null; code?: string }>('vild-till/demo', {
-      body: { merchant_id: input.merchantId, location_id: input.locationId, items: input.items.map((i) => ({ product_id: i.productId, qty: i.qty })), use_credit: input.useCredit },
+    const data = await this.invoke<{ purchase_id: string | null }>('vild-till/demo', {
+      merchant_id: input.merchantId,
+      location_id: input.locationId,
+      items: input.items.map((i) => ({ product_id: i.productId, qty: i.qty })),
+      use_credit: input.useCredit,
     });
-    if (error) {
-      const ctx = (error as { context?: Response }).context;
-      const body = ctx ? ((await ctx.json().catch(() => ({}))) as { code?: string }) : {};
-      throw new ApiError(body.code ?? 'UNKNOWN', error.message);
-    }
-    if (!data?.purchase_id) throw new ApiError(data?.code ?? 'UNKNOWN');
+    if (!data.purchase_id) throw new ApiError('UNKNOWN');
     const { data: rows, error: readError } = await this.client.from('vild_ledger_entries').select('*').eq('purchase_id', data.purchase_id).order('created_at');
     if (readError) fail(readError);
     return (rows ?? []).map(toEntry);
+  }
+
+  // ---- till (cashier) ----------------------------------------------------
+  /** vild-till/lookup with the merchant user's JWT: first name + balance at this chain; null for an unknown/expired code. */
+  async tillLookup(token: string): Promise<{ firstName: string; balance: number; merchantId: string } | null> {
+    const session = await this.getSession();
+    if (!session) throw new ApiError('AUTH_REQUIRED');
+    const merchantId = session.kind === 'merchant' ? session.merchantId : undefined;
+    try {
+      const data = await this.invoke<{ customer: { first_name: string }; balance: number; merchant_id: string | null }>('vild-till/lookup', {
+        token: token.trim().toUpperCase(),
+        merchant_id: merchantId,
+      });
+      return { firstName: data.customer.first_name, balance: data.balance, merchantId: data.merchant_id ?? merchantId ?? '' };
+    } catch (err) {
+      if (err instanceof ApiError && (err.code === 'TOKEN_INVALID' || err.code === 'NOT_FOUND')) return null;
+      throw err;
+    }
+  }
+  /** vild-till/charge: consumes the code, spends credit if asked, earns at the chain rate on the money part. */
+  async tillCharge(input: { token: string; locationId: string; amount: number; useCredit: boolean }): Promise<{ applied: number; toPay: number; earned: number; balanceAfter: number }> {
+    const total = Math.max(0, Math.round(input.amount));
+    const data = await this.invoke<{ applied: number; earned: number; balance_after: number; to_pay: number | null }>('vild-till/charge', {
+      token: input.token.trim().toUpperCase(),
+      location_id: input.locationId,
+      amount: total,
+      use_credit: input.useCredit,
+      idempotency_key: typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Date.now()),
+    });
+    return { applied: data.applied, toPay: data.to_pay ?? total - data.applied, earned: data.earned, balanceAfter: data.balance_after };
   }
 
   // ---- merchant portal ---------------------------------------------------
