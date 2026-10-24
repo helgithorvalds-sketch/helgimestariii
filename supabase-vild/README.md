@@ -26,8 +26,10 @@ electronic ID, wallet passes) and the demo seed. See **Status: live** below for 
 The backend runs in the Supabase project **`amiomcjvtdpnbyayreko`** (`https://amiomcjvtdpnbyayreko.supabase.co`,
 eu-west-1). It is the project formerly called `higgsfield-saas` (it had no users); VILD only adds `vild_*`
 objects, so it can be moved to a dedicated project by re-running this directory once the org leaves the
-free tier (two active projects). Applied: migrations `0001`–`0004`, the seed, and the demo accounts;
-`0005_review_fixes` (below) corrects the data the first seed wrote and is applied after them.
+free tier (two active projects). Applied: migrations `0001`–`0004`, the seed, and the demo accounts.
+`0005_review_fixes` (below): its function changes (§1–3) are live as `vild_0005a_review_functions`;
+its data corrections (§4, the guarded DO block) still have to be run once — paste the whole file
+into the SQL editor (it is safe to run twice; §1–3 are then simply re-created).
 
 | Deployed | verify_jwt | Works now? |
 |---|---|---|
