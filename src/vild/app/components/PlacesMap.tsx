@@ -18,8 +18,9 @@ export type PlacesMapProps = {
 const PIN = 44;
 
 function pinIcon(place: MapPlace, selected: boolean): L.DivIcon {
-  const pending = place.posStatus !== 'connected';
-  const badge = pending ? '<span class="vild-pin__badge">Væntanlegt</span>' : '';
+  // only a place that is not connected yet is "coming"; a till that is temporarily offline keeps a normal pin
+  const coming = place.posStatus === 'pending';
+  const badge = coming ? '<span class="vild-pin__badge">Væntanlegt</span>' : '';
   return L.divIcon({
     className: 'vild-pin-icon',
     html: `<div class="vild-pin${selected ? ' vild-pin--selected' : ''}">${escapeHtml(place.merchant.logoText)}${badge}</div>`,

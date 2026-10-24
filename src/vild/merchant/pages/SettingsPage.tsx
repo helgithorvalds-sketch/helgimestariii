@@ -77,7 +77,7 @@ export default function SettingsPage() {
                 <dl className="flex flex-wrap gap-x-6 text-[13px] text-muted-foreground">
                   <div>
                     <dt className="inline">Lögaðili: </dt>
-                    <dd className="inline font-medium text-foreground">{merchant?.legalName ?? '—'}</dd>
+                    <dd className="inline font-medium text-foreground">{merchant?.legalName || '—'}</dd>
                   </div>
                   <div>
                     <dt className="inline">Geiri: </dt>

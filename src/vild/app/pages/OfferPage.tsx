@@ -4,7 +4,7 @@ import { Button, Chip, CreditTag, EmptyState, ErrorState, ProductImage, Skeleton
 import { errorMessage } from '../../data';
 import { formatDateYear, formatISK, formatSignedISK } from '../../lib/format';
 import { href, paths } from '../../lib/paths';
-import { useOffer, useProducts } from '../../lib/queries';
+import { useOffer, useProducts, useRewardRules } from '../../lib/queries';
 import { offerCreditText } from '../lib/labels';
 import { BackButton } from '../components/PageHeader';
 import { usePageTitle } from '../lib/hooks';
@@ -14,6 +14,7 @@ export default function OfferPage() {
   const navigate = useNavigate();
   const offer = useOffer(id);
   const products = useProducts(offer.data?.merchantId);
+  const rules = useRewardRules(offer.data?.merchantId ?? null);
   usePageTitle(offer.data?.title ?? 'Tilboð');
 
   if (offer.isPending) {
@@ -31,7 +32,7 @@ export default function OfferPage() {
   if (!offer.data) return <EmptyState title="Tilboðið fannst ekki" body="Það er mögulega runnið út." action={<Button variant="secondary" onClick={() => navigate(href(paths.appHome))}>Heim</Button>} />;
 
   const o = offer.data;
-  const credit = offerCreditText(o);
+  const credit = offerCreditText(o, products.data, rules.data);
   const included = (products.data ?? []).filter((p) => o.productIds.includes(p.id));
 
   return (

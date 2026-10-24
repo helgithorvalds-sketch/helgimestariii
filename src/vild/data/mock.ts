@@ -9,6 +9,9 @@ import { ApiError, type Session, type VildApi } from './api';
 import {
   DEMO_MERCHANT_ID,
   DEMO_USER_ID,
+  MOCK_NOW,
+  WELCOME_CREDIT,
+  buildSettlements,
   buildStats,
   creditFor,
   locations as seedLocations,
@@ -18,7 +21,6 @@ import {
   productsAt,
   rewardRules as seedRules,
   sectors as seedSectors,
-  settlements as seedSettlements,
 } from './seed';
 import type { LedgerEntry, Location, Merchant, MerchantUser, Pocket, Product, Profile, RewardRule, WalletPass } from '../lib/types';
 
@@ -38,7 +40,7 @@ type State = {
 const uid = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : Math.random().toString(36).slice(2));
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-function demoProfile(): Profile {
+function demoProfile(memberSince: string): Profile {
   return {
     id: DEMO_USER_ID,
     name: 'Helgi',
@@ -47,7 +49,7 @@ function demoProfile(): Profile {
     phone: '+3546661234',
     email: 'helgi@example.is',
     eidVerifiedAt: null,
-    memberSince: '2026-09-02T10:12:00Z',
+    memberSince,
     walletToken: 'VILD-DEMO-7F3A',
     avatarUrl: null,
     marketingOptIn: true,
@@ -55,22 +57,36 @@ function demoProfile(): Profile {
   };
 }
 
-/** Six weeks of plausible history for the demo user, ending with a balance in the low thousands. */
-function demoLedger(products: Product[], rules: RewardRule[]): LedgerEntry[] {
+/**
+ * Six weeks of plausible history for the demo user, ending with a balance in the low thousands.
+ * Same visits as vild_seed_demo_history() in supabase-vild/seed/seed.sql: lunch at 12:xx, dinner
+ * at 19:xx (inside every venue's opening hours).
+ */
+const DEMO_VISITS: { daysAgo: number; hour: 12 | 19; loc: string; items: [string, number][]; spend?: number }[] = [
+  { daysAgo: 41, hour: 12, loc: 'l_laugavegur', items: [['p_margherita', 1], ['p_soda', 1]] },
+  { daysAgo: 38, hour: 19, loc: 'l_kringlan', items: [['p_luna_burger', 2], ['p_fries', 1], ['p_cola', 2]] },
+  { daysAgo: 33, hour: 12, loc: 'l_laugavegur', items: [['p_chicken_salad', 1]] },
+  { daysAgo: 30, hour: 19, loc: 'l_grandi', items: [['p_pepperoni', 1], ['p_cake', 1]], spend: 1500 },
+  { daysAgo: 24, hour: 12, loc: 'l_smaralind', items: [['p_margherita', 1], ['p_coffee', 1]] },
+  { daysAgo: 20, hour: 19, loc: 'l_laugavegur', items: [['p_sveppa', 1], ['p_parma', 1]], spend: 2000 },
+  { daysAgo: 15, hour: 12, loc: 'l_kringlan', items: [['p_luna_burger', 1], ['p_fries', 1]] },
+  { daysAgo: 11, hour: 12, loc: 'l_grandi', items: [['p_greek', 1], ['p_soda', 1]] },
+  { daysAgo: 7, hour: 19, loc: 'l_fjordur', items: [['p_pepperoni', 2], ['p_garlic', 1]], spend: 1800 },
+  { daysAgo: 3, hour: 12, loc: 'l_laugavegur', items: [['p_margherita', 1], ['p_cola', 1]] },
+  { daysAgo: 1, hour: 19, loc: 'l_smaralind', items: [['p_chicken_salad', 1], ['p_cake', 1]] },
+];
+
+/** The demo member signed up (and got the welcome credit) the day before the first visit. */
+function demoSignup(now: Date = new Date()): Date {
+  const signup = new Date(now);
+  signup.setDate(signup.getDate() - (Math.max(...DEMO_VISITS.map((v) => v.daysAgo)) + 1));
+  signup.setHours(10, 12, 0, 0);
+  return signup;
+}
+
+function demoLedger(products: Product[], rules: RewardRule[], signup: Date): LedgerEntry[] {
   const byId = Object.fromEntries(products.map((p) => [p.id, p]));
-  const visits: { daysAgo: number; hour: number; loc: string; items: [string, number][]; spend?: number }[] = [
-    { daysAgo: 41, hour: 12, loc: 'l_laugavegur', items: [['p_margherita', 1], ['p_soda', 1]] },
-    { daysAgo: 38, hour: 19, loc: 'l_kringlan', items: [['p_luna_burger', 2], ['p_fries', 1], ['p_cola', 2]] },
-    { daysAgo: 33, hour: 12, loc: 'l_laugavegur', items: [['p_chicken_salad', 1]] },
-    { daysAgo: 30, hour: 18, loc: 'l_grandi', items: [['p_pepperoni', 1], ['p_cake', 1]], spend: 1500 },
-    { daysAgo: 24, hour: 12, loc: 'l_smaralind', items: [['p_margherita', 1], ['p_coffee', 1]] },
-    { daysAgo: 20, hour: 20, loc: 'l_laugavegur', items: [['p_sveppa', 1], ['p_parma', 1]], spend: 2000 },
-    { daysAgo: 15, hour: 13, loc: 'l_kringlan', items: [['p_luna_burger', 1], ['p_fries', 1]] },
-    { daysAgo: 11, hour: 12, loc: 'l_grandi', items: [['p_greek', 1], ['p_soda', 1]] },
-    { daysAgo: 7, hour: 19, loc: 'l_fjordur', items: [['p_pepperoni', 2], ['p_garlic', 1]], spend: 1800 },
-    { daysAgo: 3, hour: 12, loc: 'l_laugavegur', items: [['p_margherita', 1], ['p_cola', 1]] },
-    { daysAgo: 1, hour: 18, loc: 'l_smaralind', items: [['p_chicken_salad', 1], ['p_cake', 1]] },
-  ];
+  const visits = DEMO_VISITS;
   const now = new Date();
   const out: LedgerEntry[] = [];
   let balance = 0;
@@ -79,9 +95,7 @@ function demoLedger(products: Product[], rules: RewardRule[]): LedgerEntry[] {
     out.push({ id: uid(), userId: DEMO_USER_ID, merchantId: DEMO_MERCHANT_ID, balanceAfter: balance, ...e });
   };
   // welcome credit on signup
-  const signup = new Date(now);
-  signup.setDate(signup.getDate() - 44);
-  push({ locationId: null, kind: 'welcome', amount: 500, purchaseTotal: null, description: 'Velkomin í VILD', items: null, createdAt: signup.toISOString(), receiptNo: null });
+  push({ locationId: null, kind: 'welcome', amount: WELCOME_CREDIT, purchaseTotal: null, description: 'Velkomin í VILD', items: null, createdAt: signup.toISOString(), receiptNo: null });
   let receipt = 48210;
   for (const v of visits) {
     const at = new Date(now);
@@ -106,9 +120,10 @@ function demoLedger(products: Product[], rules: RewardRule[]): LedgerEntry[] {
 
 function freshState(): State {
   const rules = seedRules.map((r) => ({ ...r }));
+  const signup = demoSignup();
   return {
-    profile: demoProfile(),
-    ledger: demoLedger(productsAt(), rules),
+    profile: demoProfile(signup.toISOString()),
+    ledger: demoLedger(productsAt(), rules, signup),
     rules,
     locations: seedLocations.map((l) => ({ ...l })),
     merchants: seedMerchants.map((m) => ({ ...m })),
@@ -121,7 +136,7 @@ function load(): State {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as State & { v?: number };
-      if (parsed && parsed.ledger && parsed.rules && parsed.v === 2) return parsed;
+      if (parsed && parsed.ledger && parsed.rules && parsed.v === 3) return parsed;
     }
   } catch {
     /* fall through */
@@ -152,7 +167,7 @@ export class MockApi implements VildApi {
   private save() {
     if (!this.persist) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...this.state, v: 2 }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...this.state, v: 3 }));
     } catch {
       /* quota: ignore */
     }
@@ -356,7 +371,7 @@ export class MockApi implements VildApi {
 
   // ---- merchant portal ---------------------------------------------------
   async getMerchantStats(_merchantId: string, periodDays: number) {
-    return this.wait(buildStats(periodDays));
+    return this.wait(buildStats(periodDays, MOCK_NOW, this.state.rules));
   }
   async getRewardRules(merchantId: string) {
     return this.wait(this.state.rules.filter((r) => r.merchantId === merchantId).sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
@@ -381,7 +396,7 @@ export class MockApi implements VildApi {
     return this.wait(loc);
   }
   async getSettlements(merchantId: string) {
-    return this.wait(seedSettlements.filter((s) => s.merchantId === merchantId));
+    return this.wait(buildSettlements(MOCK_NOW, this.state.rules).filter((s) => s.merchantId === merchantId));
   }
   async getMerchantUsers(merchantId: string) {
     return this.wait(this.state.merchantUsers.filter((u) => u.merchantId === merchantId));

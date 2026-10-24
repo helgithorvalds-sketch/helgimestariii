@@ -95,7 +95,7 @@ insert into public.vild_offers (id, merchant_id, title, body, image, credit_amou
   ('o_lunch',      'm_luna', 'Hádegið: 30% til baka af pítsum',      'Virka daga 11–14. Borgaðu fullt verð, fáðu 30% í inneign.',             '/vild/img/products/margherita.jpg',    null, 30,   null,                   '{p_margherita,p_pepperoni,p_sveppa,p_parma}', 'Hádegi',  1),
   ('o_margherita', 'm_luna', 'Margherita · helmingurinn til baka',   '2.990 kr. og 1.495 kr. koma strax inn á Lúnu-inneignina.',              '/vild/img/products/margherita.jpg',    1495, 50,   '2026-11-30T23:59:00Z', '{p_margherita}',                              'Vinsælt', 2),
   ('o_two',        'm_luna', 'Tvær pítsur, 1.000 kr. til baka',      'Gildir um helgar á öllum stöðum.',                                       '/vild/img/products/pepperoni.jpg',     1000, null, '2026-12-31T23:59:00Z', '{p_pepperoni,p_sveppa,p_parma}',              'Helgin',  3),
-  ('o_salad',      'm_luna', 'Kjúklingasalat · 25% til baka',        'Fersk og létt. Fjórðungur kemur til baka.',                              '/vild/img/products/chicken-salad.jpg',  672, 25,   null,                   '{p_chicken_salad}',                           'Nýtt',    4)
+  ('o_salad',      'm_luna', 'Kjúklingasalat · 25% til baka',        'Fersk og létt. Fjórðungur kemur til baka.',                              '/vild/img/products/chicken-salad.jpg',  673, 25,   null,                   '{p_chicken_salad}',                           'Nýtt',    4)
 on conflict (id) do update set title = excluded.title, body = excluded.body, image = excluded.image, credit_amount = excluded.credit_amount,
   credit_pct = excluded.credit_pct, valid_until = excluded.valid_until, product_ids = excluded.product_ids, tag = excluded.tag, sort = excluded.sort, active = true;
 
@@ -118,20 +118,20 @@ update public.vild_merchant_users mu
 select set_config('vild.internal', '', false);
 
 -- ---------------------------------------------------------------------
--- Settlements (demo history; the cron writes the real ones)
+-- Settlements: none here. Statements are computed from the ledger by
+-- vild_close_settlements (cron on the 1st; vild_seed_demo_history below runs
+-- it for the months the demo history covers). Never insert figures by hand.
 -- ---------------------------------------------------------------------
-insert into public.vild_settlements (id, merchant_id, period_from, period_to, credit_issued, credit_redeemed, credit_expired, platform_fee, status) values
-  ('s_2026_09', 'm_luna', '2026-09-01', '2026-09-30', 1842500, 1203400, 0, 184250, 'paid'),
-  ('s_2026_10', 'm_luna', '2026-10-01', '2026-10-31', 1412300, 1031900, 0, 141230, 'open')
-on conflict (merchant_id, period_from) do update set credit_issued = excluded.credit_issued, credit_redeemed = excluded.credit_redeemed,
-  platform_fee = excluded.platform_fee, status = excluded.status;
 
 -- ---------------------------------------------------------------------
--- Demo history for a consumer: the eleven visits of MockApi.demoLedger,
--- replayed through vild_record_purchase so balances, items and expiries
--- are real. Call once per demo user (SQL editor, as postgres):
+-- Demo history for a consumer: the eleven visits of MockApi (DEMO_VISITS in
+-- src/vild/data/mock.ts), replayed through vild_record_purchase so balances,
+-- items and expiries are real. Call once per demo user (SQL editor, as postgres):
 --   select public.vild_seed_demo_history('<auth user id>');
--- The welcome credit was already written when the profile was created.
+-- Visits are at 12:xx or 19:xx local time (inside every venue's hours). The
+-- welcome credit the profile trigger wrote "now" is moved, with member_since,
+-- to the day before the first visit so the timeline reads in order; then the
+-- monthly statements of those months are computed from the ledger.
 -- Remove with the cleanup in seed/README.md.
 -- ---------------------------------------------------------------------
 create or replace function public.vild_seed_demo_history(p_user uuid)
@@ -140,6 +140,9 @@ declare
   v record;
   v_n integer := 0;
   v_at timestamptz;
+  v_first timestamptz;
+  v_signup timestamptz;
+  v_month date;
 begin
   -- vild_record_purchase insists on the service role; the SQL editor runs as postgres
   perform set_config('request.jwt.claims', '{"role":"service_role"}', true);
@@ -150,14 +153,14 @@ begin
       (41, 12, 'l_laugavegur', '[{"product_id":"p_margherita","qty":1},{"product_id":"p_soda","qty":1}]'::jsonb, false),
       (38, 19, 'l_kringlan',   '[{"product_id":"p_luna_burger","qty":2},{"product_id":"p_fries","qty":1},{"product_id":"p_cola","qty":2}]', false),
       (33, 12, 'l_laugavegur', '[{"product_id":"p_chicken_salad","qty":1}]', false),
-      (30, 18, 'l_grandi',     '[{"product_id":"p_pepperoni","qty":1},{"product_id":"p_cake","qty":1}]', true),
+      (30, 19, 'l_grandi',     '[{"product_id":"p_pepperoni","qty":1},{"product_id":"p_cake","qty":1}]', true),
       (24, 12, 'l_smaralind',  '[{"product_id":"p_margherita","qty":1},{"product_id":"p_coffee","qty":1}]', false),
-      (20, 20, 'l_laugavegur', '[{"product_id":"p_sveppa","qty":1},{"product_id":"p_parma","qty":1}]', true),
-      (15, 13, 'l_kringlan',   '[{"product_id":"p_luna_burger","qty":1},{"product_id":"p_fries","qty":1}]', false),
+      (20, 19, 'l_laugavegur', '[{"product_id":"p_sveppa","qty":1},{"product_id":"p_parma","qty":1}]', true),
+      (15, 12, 'l_kringlan',   '[{"product_id":"p_luna_burger","qty":1},{"product_id":"p_fries","qty":1}]', false),
       (11, 12, 'l_grandi',     '[{"product_id":"p_greek","qty":1},{"product_id":"p_soda","qty":1}]', false),
       ( 7, 19, 'l_fjordur',    '[{"product_id":"p_pepperoni","qty":2},{"product_id":"p_garlic","qty":1}]', true),
       ( 3, 12, 'l_laugavegur', '[{"product_id":"p_margherita","qty":1},{"product_id":"p_cola","qty":1}]', false),
-      ( 1, 18, 'l_smaralind',  '[{"product_id":"p_chicken_salad","qty":1},{"product_id":"p_cake","qty":1}]', false)
+      ( 1, 19, 'l_smaralind',  '[{"product_id":"p_chicken_salad","qty":1},{"product_id":"p_cake","qty":1}]', false)
     ) as t(days_ago, hour, loc, items, use_credit)
     order by days_ago desc
   loop
@@ -166,6 +169,21 @@ begin
     perform public.vild_record_purchase('m_luna', v.loc, p_user, v.items, v.use_credit, 'demo',
       'demo:' || p_user::text || ':' || v.days_ago, v_at, jsonb_build_object('seed', true));
     v_n := v_n + 1;
+  end loop;
+  -- the member joined the day before the first visit (10:12 local): move the welcome row and
+  -- member_since back. The ledger is append-only, so its update guard is lifted for this
+  -- statement only (this transaction; a failure rolls it back).
+  select min(occurred_at) into v_first from public.vild_purchases where user_id = p_user;
+  v_signup := (((v_first at time zone 'Atlantic/Reykjavik')::date - 1)::timestamp + interval '10 hours 12 minutes') at time zone 'Atlantic/Reykjavik';
+  alter table public.vild_ledger disable trigger vild_ledger_no_update;
+  update public.vild_ledger
+     set created_at = v_signup, expires_at = v_signup + make_interval(months => public.vild_setting_int('expiry_months', 24))
+   where user_id = p_user and kind = 'welcome' and created_at > v_signup;
+  alter table public.vild_ledger enable trigger vild_ledger_no_update;
+  update public.vild_profiles set member_since = v_signup where id = p_user and member_since > v_signup;
+  -- statements for the months the history covers, computed from the ledger (the cron writes later ones)
+  for v_month in select distinct date_trunc('month', occurred_at at time zone 'Atlantic/Reykjavik')::date from public.vild_purchases where user_id = p_user order by 1 loop
+    perform public.vild_close_settlements(v_month);
   end loop;
   return v_n;
 end $$;

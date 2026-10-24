@@ -16,8 +16,11 @@ import { POS_VENDORS, type Location, type PosVendor } from '../../lib/types';
 import { Field, IconButton, KeyValue, PageHeader, Panel, PanelHeader, PosStatusChip, TextInput } from '../components/ui';
 import { useMerchant } from '../lib/useMerchant';
 
-const WEBHOOK_URL = 'https://<project>.supabase.co/functions/v1/vild-pos-webhook';
-const API_KEY = 'vild_live_7f3a9c2e4b1d8f06a5c3e9b2d4f7a1c8';
+/** The real endpoint of the connected backend; null when no Supabase URL is configured (mock mode). */
+const SUPABASE_URL = ((import.meta.env.VITE_VILD_SUPABASE_URL as string | undefined) ?? '').trim().replace(/\/+$/, '');
+const WEBHOOK_URL: string | null = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/vild-pos-webhook` : null;
+const WEBHOOK_EXAMPLE = 'https://<verkefni>.supabase.co/functions/v1/vild-pos-webhook';
+const API_KEY_HEADER = 'x-vild-api-key';
 const SIGNATURE_HEADER = 'x-vild-signature';
 
 const PATHS = [
@@ -25,10 +28,6 @@ const PATHS = [
   { n: 2, title: 'Samstarfstenging', who: 'Upsell · Resto · dk · Regla', body: 'VILD setur tenginguna upp með kassakerfinu þínu. Þú þarft ekkert að gera nema staðfesta hjá þeim.' },
   { n: 3, title: 'Skönnun', who: 'Virkar með hvaða kassa sem er', body: 'Gjaldkeri skannar QR-kóða VILD-kortsins eða slær inn kóðann og upphæðina í Prufukassann hér fyrir neðan. Engin uppsetning.' },
 ];
-
-function mask(key: string): string {
-  return `${key.slice(0, 10)}${'•'.repeat(16)}${key.slice(-4)}`;
-}
 
 function CopyButton({ value, label }: { value: string; label: string }) {
   const [done, setDone] = useState(false);
@@ -236,7 +235,17 @@ function TillSimulator({ locations }: { locations: Location[] }) {
 export default function PosPage() {
   const { merchantId, merchant } = useMerchant();
   const locations = useLocations(merchantId || undefined);
-  const mailto = `mailto:?subject=${encodeURIComponent(`VILD tenging · ${merchant?.name ?? ''}`)}&body=${encodeURIComponent(`Vefkrókur: ${WEBHOOK_URL}\nHaus: ${SIGNATURE_HEADER} (HMAC-SHA256)\nAPI-lykill: sendur sérstaklega.`)}`;
+  const mailto = `mailto:?subject=${encodeURIComponent(`VILD tenging · ${merchant?.name ?? ''}`)}&body=${encodeURIComponent(
+    `Vefkrókur (POST): ${WEBHOOK_URL ?? 'fæst hjá VILD við tengingu'}\nLykilhaus: ${API_KEY_HEADER}\nUndirskriftarhaus: ${SIGNATURE_HEADER} (HMAC-SHA256 af meginmáli)\nAPI-lykill og undirskriftarlykill: VILD afhendir þá sérstaklega við tengingu.`,
+  )}`;
+  const rows: { label: string; value: string; copy: string | null; mono: boolean }[] = [
+    WEBHOOK_URL
+      ? { label: 'Vefkrókur (POST)', value: WEBHOOK_URL, copy: WEBHOOK_URL, mono: true }
+      : { label: 'Vefkrókur (POST) · dæmi í prufuham', value: WEBHOOK_EXAMPLE, copy: null, mono: true },
+    { label: 'API-lykill', value: 'Lykill fæst hjá VILD við tengingu', copy: null, mono: false },
+    { label: 'Lykilhaus', value: API_KEY_HEADER, copy: API_KEY_HEADER, mono: true },
+    { label: 'Undirskriftarhaus', value: `${SIGNATURE_HEADER} · HMAC-SHA256 af meginmáli`, copy: SIGNATURE_HEADER, mono: true },
+  ];
 
   useEffect(() => {
     document.title = 'Kassakerfi · VILD fyrirtæki';
@@ -295,21 +304,17 @@ export default function PosPage() {
           }
         />
         <dl className="divide-y divide-border px-5">
-          {[
-            { label: 'Vefkrókur (POST)', value: WEBHOOK_URL, copy: WEBHOOK_URL },
-            { label: 'API-lykill', value: mask(API_KEY), copy: API_KEY },
-            { label: 'Undirskriftarhaus', value: `${SIGNATURE_HEADER} · HMAC-SHA256 af meginmáli`, copy: SIGNATURE_HEADER },
-          ].map((row) => (
-            <div key={row.label} className="flex items-center justify-between gap-3 py-3">
+          {rows.map((row) => (
+            <div key={row.label} className="flex min-h-[56px] items-center justify-between gap-3 py-3">
               <div className="min-w-0">
                 <dt className="text-[13px] text-muted-foreground">{row.label}</dt>
-                <dd className="vild-num truncate font-mono text-[13px] font-medium">{row.value}</dd>
+                <dd className={row.mono ? 'vild-num truncate font-mono text-[13px] font-medium' : 'truncate text-[14px] font-medium'}>{row.value}</dd>
               </div>
-              <CopyButton value={row.copy} label={`Afrita ${row.label.toLowerCase()}`} />
+              {row.copy && <CopyButton value={row.copy} label={`Afrita ${row.label.toLowerCase()}`} />}
             </div>
           ))}
         </dl>
-        <p className="border-t border-border px-5 py-3 text-[12px] text-muted-foreground">Lykillinn er aðeins sýndur að hluta. Nýr lykill fæst hjá VILD; sá gamli hættir þá að virka.</p>
+        <p className="border-t border-border px-5 py-3 text-[12px] text-muted-foreground">API-lykill og undirskriftarlykill verða til þegar VILD tengir kassakerfið og eru aðeins afhentir einu sinni. Nýr lykill fæst hjá VILD; sá gamli hættir þá að virka.</p>
       </Panel>
 
       <div className="mt-4">{locations.data ? <TillSimulator locations={locations.data} /> : <Skeleton className="h-64 w-full rounded-2xl" />}</div>

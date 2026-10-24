@@ -162,18 +162,13 @@ export const offers: Offer[] = [
   { id: 'o_lunch', merchantId: DEMO_MERCHANT_ID, title: 'Hádegið: 30% til baka af pítsum', body: 'Virka daga 11–14. Borgaðu fullt verð, fáðu 30% í inneign.', image: '/vild/img/products/margherita.jpg', creditAmount: null, creditPct: 30, validUntil: null, productIds: ['p_margherita', 'p_pepperoni', 'p_sveppa', 'p_parma'], tag: 'Hádegi' },
   { id: 'o_margherita', merchantId: DEMO_MERCHANT_ID, title: 'Margherita · helmingurinn til baka', body: '2.990 kr. og 1.495 kr. koma strax inn á Lúnu-inneignina.', image: '/vild/img/products/margherita.jpg', creditAmount: 1495, creditPct: 50, validUntil: '2026-11-30T23:59:00Z', productIds: ['p_margherita'], tag: 'Vinsælt' },
   { id: 'o_two', merchantId: DEMO_MERCHANT_ID, title: 'Tvær pítsur, 1.000 kr. til baka', body: 'Gildir um helgar á öllum stöðum.', image: '/vild/img/products/pepperoni.jpg', creditAmount: 1000, creditPct: null, validUntil: '2026-12-31T23:59:00Z', productIds: ['p_pepperoni', 'p_sveppa', 'p_parma'], tag: 'Helgin' },
-  { id: 'o_salad', merchantId: DEMO_MERCHANT_ID, title: 'Kjúklingasalat · 25% til baka', body: 'Fersk og létt. Fjórðungur kemur til baka.', image: '/vild/img/products/chicken-salad.jpg', creditAmount: 672, creditPct: 25, validUntil: null, productIds: ['p_chicken_salad'], tag: 'Nýtt' },
+  { id: 'o_salad', merchantId: DEMO_MERCHANT_ID, title: 'Kjúklingasalat · 25% til baka', body: 'Fersk og létt. Fjórðungur kemur til baka.', image: '/vild/img/products/chicken-salad.jpg', creditAmount: 673, creditPct: 25, validUntil: null, productIds: ['p_chicken_salad'], tag: 'Nýtt' },
 ];
 
 export const merchantUsers: MerchantUser[] = [
   { id: 'mu_1', merchantId: DEMO_MERCHANT_ID, name: 'Jóhanna Lúnudóttir', email: 'johanna@luna.is', role: 'owner', locationIds: null },
   { id: 'mu_2', merchantId: DEMO_MERCHANT_ID, name: 'Kristján Pétursson', email: 'kristjan@luna.is', role: 'manager', locationIds: ['l_laugavegur', 'l_grandi'] },
   { id: 'mu_3', merchantId: DEMO_MERCHANT_ID, name: 'Elín Ósk', email: 'elin@luna.is', role: 'staff', locationIds: ['l_akureyri'] },
-];
-
-export const settlements: Settlement[] = [
-  { id: 's_2026_09', merchantId: DEMO_MERCHANT_ID, periodFrom: '2026-09-01', periodTo: '2026-09-30', creditIssued: 1842500, creditRedeemed: 1203400, platformFee: 184250, status: 'paid' },
-  { id: 's_2026_10', merchantId: DEMO_MERCHANT_ID, periodFrom: '2026-10-01', periodTo: '2026-10-31', creditIssued: 1412300, creditRedeemed: 1031900, platformFee: 141230, status: 'open' },
 ];
 
 /** Deterministic pseudo-random for stable demo charts. */
@@ -187,40 +182,128 @@ function mulberry32(seed: number) {
   };
 }
 
-export function buildStats(periodDays = 30, now: Date = new Date('2026-10-23T12:00:00')): MerchantStats {
-  const rnd = mulberry32(42);
-  const daily: MerchantStats['daily'] = [];
-  for (let i = periodDays - 1; i >= 0; i--) {
-    const d = new Date(now);
-    d.setDate(d.getDate() - i);
-    const weekend = d.getDay() === 5 || d.getDay() === 6;
-    const purchases = Math.round((weekend ? 420 : 260) * (0.8 + rnd() * 0.4));
-    const revenue = Math.round(purchases * (3100 + rnd() * 900));
-    const issued = Math.round(revenue * (0.095 + rnd() * 0.03));
-    const redeemed = Math.round(issued * (0.55 + rnd() * 0.3));
-    daily.push({ date: d.toISOString().slice(0, 10), revenue, issued, redeemed, purchases });
+/**
+ * The merchant side of the mock is a synthetic chain ledger: one day of
+ * sales per date, from the day Lúna joined VILD until MOCK_NOW. A day depends
+ * only on its date (and the rules), so the 7-, 30- and 90-day dashboards and
+ * the monthly settlements are all sums of the same days and always agree.
+ */
+export const MOCK_NOW = new Date('2026-10-23T12:00:00');
+export const MOCK_LAUNCH = new Date('2026-08-01T00:00:00');
+export const WELCOME_CREDIT = 500;
+export const PLATFORM_FEE_PCT = 10;
+
+/** Items sold per 1.000 purchases (the chain's product mix). */
+const MIX: Record<string, number> = {
+  p_margherita: 240, p_pepperoni: 160, p_sveppa: 70, p_parma: 60, p_luna_burger: 190, p_bacon: 90, p_vegan: 50, p_chicken_salad: 110,
+  p_greek: 50, p_fries: 300, p_garlic: 120, p_cola: 350, p_soda: 200, p_cake: 70, p_coffee: 150,
+};
+
+const LOCATION_SHARE = [0.19, 0.17, 0.11, 0.08, 0.15, 0.09, 0.08, 0.07, 0.06];
+
+const isoDay = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+type SyntheticDay = MerchantStats['daily'][number] & { welcome: number; newMembers: number; qty: Record<string, number>; credit: Record<string, number> };
+
+function syntheticDay(day: Date, rules: RewardRule[]): SyntheticDay {
+  const date = isoDay(day);
+  const empty = { date, revenue: 0, issued: 0, redeemed: 0, purchases: 0, welcome: 0, newMembers: 0, qty: {}, credit: {} };
+  if (day < MOCK_LAUNCH) return empty;
+  const rnd = mulberry32(Number(date.replace(/-/g, '')));
+  const weekend = day.getDay() === 5 || day.getDay() === 6;
+  const purchases = Math.round((weekend ? 420 : 260) * (0.8 + rnd() * 0.4));
+  // credit at full price, outside the lunch window (same moment as productsAt)
+  const at = new Date(day);
+  at.setHours(16, 0, 0, 0);
+  const qty: Record<string, number> = {};
+  const credit: Record<string, number> = {};
+  let revenue = 0;
+  let issued = 0;
+  for (const p of productList) {
+    const n = Math.round(((purchases * (MIX[p.id] ?? 0)) / 1000) * (0.85 + rnd() * 0.3));
+    const c = creditFor(p, rules, at).amount * n;
+    qty[p.id] = n;
+    credit[p.id] = c;
+    revenue += p.price * n;
+    issued += c;
   }
-  const sum = (k: keyof MerchantStats['daily'][number]) => daily.reduce((a, x) => a + (x[k] as number), 0);
+  const redeemed = Math.round(issued * (0.55 + rnd() * 0.3));
+  const newMembers = Math.round(purchases * (0.12 + rnd() * 0.04));
+  return { date, revenue, issued, redeemed, purchases, welcome: newMembers * WELCOME_CREDIT, newMembers, qty, credit };
+}
+
+function syntheticDays(from: Date, to: Date, rules: RewardRule[]): SyntheticDay[] {
+  const out: SyntheticDay[] = [];
+  const d = new Date(from);
+  d.setHours(12, 0, 0, 0);
+  const end = new Date(to);
+  end.setHours(12, 0, 0, 0);
+  for (; d <= end; d.setDate(d.getDate() + 1)) out.push(syntheticDay(new Date(d), rules));
+  return out;
+}
+
+/**
+ * Dashboard numbers for the last `periodDays` days up to `now`. creditIssued is
+ * credit earned on purchases; the welcome credit VILD gives new members is
+ * reported on its own (welcomeCredit) and is not part of it.
+ */
+export function buildStats(periodDays = 30, now: Date = MOCK_NOW, rules: RewardRule[] = rewardRules): MerchantStats {
+  const from = new Date(now);
+  from.setDate(from.getDate() - (periodDays - 1));
+  const days = syntheticDays(from, now, rules);
+  const daily: MerchantStats['daily'] = days.map(({ date, revenue, issued, redeemed, purchases }) => ({ date, revenue, issued, redeemed, purchases }));
+  const sum = (k: 'revenue' | 'issued' | 'redeemed' | 'purchases' | 'welcome' | 'newMembers') => days.reduce((a, x) => a + x[k], 0);
   const purchases = sum('purchases');
   const revenue = sum('revenue');
+  // "Mest til baka": ranked by the credit a product gave, zero-credit products left out (same as vild_merchant_stats)
+  const topProducts = productList
+    .map((p) => ({ productId: p.id, name: p.name, qty: days.reduce((a, d) => a + (d.qty[p.id] ?? 0), 0), credit: days.reduce((a, d) => a + (d.credit[p.id] ?? 0), 0) }))
+    .filter((t) => t.credit > 0)
+    .sort((a, b) => b.credit - a.credit || b.qty - a.qty)
+    .slice(0, 5);
   return {
     merchantId: DEMO_MERCHANT_ID,
     periodDays,
     purchases,
     revenue,
     creditIssued: sum('issued'),
+    welcomeCredit: sum('welcome'),
     creditRedeemed: sum('redeemed'),
     returningCustomersPct: 61,
-    newMembers: 1184,
-    avgBasket: Math.round(revenue / purchases),
+    newMembers: sum('newMembers'),
+    avgBasket: purchases ? Math.round(revenue / purchases) : 0,
     daily,
-    topProducts: [
-      { productId: 'p_margherita', name: 'Margherita', qty: 2140, credit: 2140 * 1495 },
-      { productId: 'p_luna_burger', name: 'Lúnuborgari', qty: 1720, credit: 1720 * 578 },
-      { productId: 'p_pepperoni', name: 'Pepperoni', qty: 1410, credit: 1410 * 329 },
-      { productId: 'p_chicken_salad', name: 'Kjúklingasalat', qty: 980, credit: 980 * 672 },
-      { productId: 'p_cake', name: 'Súkkulaðikaka', qty: 640, credit: 640 * 194 },
-    ],
-    byLocation: locations.map((l, i) => ({ locationId: l.id, name: l.name, purchases: Math.round(purchases * [0.19, 0.17, 0.11, 0.08, 0.15, 0.09, 0.08, 0.07, 0.06][i]), revenue: Math.round(revenue * [0.19, 0.17, 0.11, 0.08, 0.15, 0.09, 0.08, 0.07, 0.06][i]) })),
+    topProducts,
+    byLocation: locations.map((l, i) => ({ locationId: l.id, name: l.name, purchases: Math.round(purchases * LOCATION_SHARE[i]), revenue: Math.round(revenue * LOCATION_SHARE[i]) })),
   };
+}
+
+/**
+ * Monthly statements from the same synthetic days: credit issued on purchases,
+ * credit redeemed, and VILD's fee (PLATFORM_FEE_PCT of credit issued). Welcome
+ * credit is funded by VILD, so it is neither in credit issued nor billed.
+ * Newest first, like the Supabase query.
+ */
+export function buildSettlements(now: Date = MOCK_NOW, rules: RewardRule[] = rewardRules): Settlement[] {
+  const out: Settlement[] = [];
+  const month = new Date(MOCK_LAUNCH.getFullYear(), MOCK_LAUNCH.getMonth(), 1, 12);
+  const current = new Date(now.getFullYear(), now.getMonth(), 1, 12);
+  for (; month <= current; month.setMonth(month.getMonth() + 1)) {
+    const first = new Date(month);
+    const last = new Date(month.getFullYear(), month.getMonth() + 1, 0, 12);
+    const days = syntheticDays(first, last < now ? last : now, rules);
+    const issued = days.reduce((a, d) => a + d.issued, 0);
+    const monthsBack = (current.getFullYear() - month.getFullYear()) * 12 + current.getMonth() - month.getMonth();
+    out.push({
+      id: `s_${isoDay(first).slice(0, 7).replace('-', '_')}`,
+      merchantId: DEMO_MERCHANT_ID,
+      periodFrom: isoDay(first),
+      periodTo: isoDay(last),
+      creditIssued: issued,
+      creditRedeemed: days.reduce((a, d) => a + d.redeemed, 0),
+      platformFee: Math.round((issued * PLATFORM_FEE_PCT) / 100),
+      status: monthsBack === 0 ? 'open' : monthsBack === 1 ? 'invoiced' : 'paid',
+    });
+  }
+  return out.reverse();
 }

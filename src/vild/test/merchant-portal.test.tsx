@@ -97,7 +97,18 @@ describe('dashboard', () => {
     const isk = (n: number) => `${Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} kr.`;
     expect(screen.getAllByText(isk(stats.revenue)).length).toBeGreaterThan(0);
     expect(await screen.findByText('Lúna Laugavegi')).toBeInTheDocument();
+    // "Inneign veitt" is credit earned on purchases; VILD's welcome credit is a separate line
+    expect(stats.welcomeCredit).toBeGreaterThan(0);
+    expect(screen.getByText(`Auk þess ${isk(stats.welcomeCredit!)} velkomin inneign sem VILD greiðir`)).toBeInTheDocument();
+    expect(screen.getAllByText(isk(stats.creditIssued)).length).toBeGreaterThan(0);
+    // "Mest til baka" is ranked by credit and never lists a product that gave nothing
+    const top = stats.topProducts.map((t) => t.credit);
+    expect(top).toEqual([...top].sort((a, b) => b - a));
+    expect(top.every((c) => c > 0)).toBe(true);
+    expect(stats.topProducts[0].name).toBe('Margherita');
     expect(screen.getByText('Margherita')).toBeInTheDocument();
+    expect(screen.getByText('Kjúklingasalat')).toBeInTheDocument();
+    expect(screen.queryByText('Kók 0,33 l')).toBeNull();
     fireEvent.click(screen.getByRole('radio', { name: '7 dagar' }));
     const week = await mock.getMerchantStats('m_luna', 7);
     expect(await screen.findByText(isk(week.revenue))).toBeInTheDocument();
@@ -111,11 +122,13 @@ describe('credit page', () => {
     renderAt(at(paths.merchantCredit), at(paths.merchantCredit), <CreditPage />);
     const stepper = await screen.findByRole('group', { name: 'Grunninneign' });
     expect(within(stepper).getByText('10%')).toBeInTheDocument();
-    expect(await screen.findByText('+299 kr.')).toBeInTheDocument(); // Margherita 2.990 × 10%
+    // the example is a product without an exception (Margherita, the salad etc. have their own rules)
+    expect(await screen.findByText('+319 kr.')).toBeInTheDocument(); // Beikon ostborgari 3.190 × 10%
+    expect(screen.getAllByText('Beikon ostborgari').length).toBeGreaterThan(0);
     fireEvent.click(within(stepper).getByRole('button', { name: 'Auka' }));
     fireEvent.click(within(stepper).getByRole('button', { name: 'Auka' }));
     expect(within(stepper).getByText('12%')).toBeInTheDocument();
-    expect(screen.getByText('+359 kr.')).toBeInTheDocument();
+    expect(screen.getByText('+383 kr.')).toBeInTheDocument(); // 3.190 × 12% = 382,8
     fireEvent.click(screen.getByRole('button', { name: 'Vista' }));
     await waitFor(async () => expect((await mock.getMerchant('luna'))!.defaultRatePct).toBe(12));
     // the base rule followed, so a product without an exception now earns 12%
@@ -187,6 +200,10 @@ describe('kassakerfi', () => {
     await signInMerchant(mock);
     renderAt(at(paths.merchantPos), at(paths.merchantPos), <PosPage />);
     expect(await screen.findByText('Lúna Akureyri')).toBeInTheDocument();
+    // no made-up endpoint or key
+    expect(screen.queryByText(/<project>/)).toBeNull();
+    expect(screen.getByText('Lykill fæst hjá VILD við tengingu')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Afrita api-lykill' })).toBeNull();
     expect((await mock.getLocation('l_akureyri'))!.posStatus).toBe('pending');
     const buttons = screen.getAllByRole('button', { name: 'Prófa tengingu' });
     fireEvent.click(buttons[6]); // Akureyri is the 7th place
@@ -224,7 +241,17 @@ describe('the other pages', () => {
     await signInMerchant(mock);
     renderAt(at(paths.merchantSettlement), at(paths.merchantSettlement), <SettlementPage />);
     expect((await screen.findAllByText('Greitt')).length).toBeGreaterThan(0);
-    expect(screen.getAllByText('1.842.500 kr.').length).toBeGreaterThan(0);
+    // computed from the same days as the dashboard: October so far is part of the last 30 days
+    const rows = await mock.getSettlements('m_luna');
+    const isk = (n: number) => `${Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} kr.`;
+    expect(rows.map((r) => r.periodFrom)).toEqual(['2026-10-01', '2026-09-01', '2026-08-01']);
+    for (const r of rows) {
+      expect(screen.getAllByText(isk(r.creditIssued)).length).toBeGreaterThan(0);
+      expect(r.platformFee).toBe(Math.round(r.creditIssued * 0.1));
+    }
+    const month = await mock.getMerchantStats('m_luna', 23); // 1.–23. október
+    expect(rows[0].creditIssued).toBe(month.creditIssued);
+    expect(rows[0].creditRedeemed).toBe(month.creditRedeemed);
   });
   it('team: invites a user', async () => {
     const mock = freshApi();
@@ -244,6 +271,7 @@ describe('the other pages', () => {
     await signInMerchant(mock);
     renderAt(at(paths.merchantSettings), at(paths.merchantSettings), <SettingsPage />);
     const desc = await screen.findByLabelText('Lýsing');
+    expect(screen.getByText('Lúna veitingar ehf.')).toBeInTheDocument();
     fireEvent.change(desc, { target: { value: 'Ný lýsing.' } });
     fireEvent.click(screen.getByRole('button', { name: 'Vista' }));
     await waitFor(async () => expect((await mock.getMerchant('luna'))!.description).toBe('Ný lýsing.'));

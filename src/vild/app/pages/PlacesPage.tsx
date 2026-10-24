@@ -13,6 +13,7 @@ import type { MapPlace } from '../components/PlacesMap';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { REGIONS, REGION_ORDER, distanceM, formatDistance, inRegion, openStatusText, type RegionKey } from '../lib/geo';
 import { useGeolocation, usePageTitle } from '../lib/hooks';
+import { posStatusText } from '../lib/labels';
 import { KEYS, readLocal, writeLocal } from '../lib/storage';
 
 const PlacesMap = lazy(() => import('../components/PlacesMap'));
@@ -34,7 +35,7 @@ function PlaceRow({ place, distance }: { place: MapPlace; distance: number | nul
               <Clock className="h-3.5 w-3.5" aria-hidden="true" />
               {openStatusText(place.openingHours)}
             </span>
-            {place.posStatus !== 'connected' && <span>· Söfnun væntanleg</span>}
+            {place.posStatus !== 'connected' && <span>· {posStatusText(place)}</span>}
           </p>
         </div>
         {distance != null && <span className="vild-num shrink-0 text-[13px] font-semibold text-muted-foreground">{formatDistance(distance)}</span>}

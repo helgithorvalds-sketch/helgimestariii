@@ -47,6 +47,13 @@ export function formatDate(iso: string | Date | null | undefined): string {
   return dfFormat(d, 'EEE d. MMM', { locale: isLocale });
 }
 
+/** "14. nóv." (no weekday: chart axes) */
+export function formatDayMonth(iso: string | Date | null | undefined): string {
+  const d = toDate(iso);
+  if (!d) return DASH;
+  return dfFormat(d, 'd. MMM', { locale: isLocale });
+}
+
 /** "14. nóv. 2026" */
 export function formatDateYear(iso: string | Date | null | undefined): string {
   const d = toDate(iso);

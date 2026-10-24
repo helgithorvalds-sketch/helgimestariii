@@ -168,7 +168,10 @@ export type MerchantStats = {
   periodDays: number;
   purchases: number;
   revenue: number;
+  /** Credit earned on purchases in the period (the chain's cost; the base of VILD's fee). */
   creditIssued: number;
+  /** Welcome credit VILD gave new members in the period: funded by VILD, not part of creditIssued, not billed. */
+  welcomeCredit?: number;
   creditRedeemed: number;
   returningCustomersPct: number;
   newMembers: number;

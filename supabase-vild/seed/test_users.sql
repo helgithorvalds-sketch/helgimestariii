@@ -18,9 +18,10 @@
 -- c) Find the id and replay the demo history:
 --      select id from auth.users where phone = '3546661234';
 --      select public.vild_seed_demo_history('<that id>');
---    (vild_seed_demo_history comes from seed/seed.sql; the welcome credit is
---    already there, so the ledger ends up like the mock's: eleven visits,
---    three with credit spent, balance in the low thousands.)
+--    (vild_seed_demo_history comes from seed/seed.sql; it moves the welcome
+--    credit and member_since to the day before the first visit and computes
+--    the monthly statements, so the ledger ends up like the mock's: eleven
+--    visits, three with credit spent, balance in the low thousands.)
 -- d) Optional display name:
 --      update public.vild_profiles set name = 'Helgi', email = 'helgi@example.is' where id = '<that id>';
 
@@ -36,8 +37,9 @@
 -- The vild_on_auth_user_created trigger links each one to its invite row
 -- (user_id + accepted_at). Check:
 --      select email, role, user_id is not null as linked from public.vild_merchant_users;
--- They also get a consumer profile and welcome credit — harmless; delete
--- that ledger row only through the cleanup in seed/README.md if it matters.
+-- They also get a consumer profile, but no welcome credit: since 0005 the
+-- welcome trigger skips accounts on a chain's team (0005 also removed the
+-- welcome rows the first three staff accounts got before that).
 
 -- ---------------------------------------------------------------------
 -- 3. A POS connection for curl tests

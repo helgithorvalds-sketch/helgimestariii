@@ -18,7 +18,7 @@ DB=vild_test
 mkdir -p "$WORK"
 cleanup() {
   if [ -z "${KEEP:-}" ]; then
-    "$PGBIN/pg_ctl" -D "$WORK/data" -s stop -m fast >/dev/null 2>&1 || true
+    run_as "$PGBIN/pg_ctl -D $WORK/data -s stop -m fast" >/dev/null 2>&1 || true   # pg_ctl refuses to run as root
     rm -rf "$WORK"
   else
     echo "cluster kept at $WORK (port $PORT): psql -h $WORK -p $PORT -U postgres $DB"

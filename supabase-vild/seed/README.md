@@ -2,10 +2,10 @@
 
 | File | What |
 |---|---|
-| `seed.sql` | The demo catalogue of `src/vild/data/seed.ts`: 5 sectors, the chain **Lúna** (`m_luna`), 9 venues, 15 products, 9 reward rules, 4 offers, 3 team invites, 2 settlements, and `vild_seed_demo_history(user)` which replays the mock's eleven visits for a real auth user. |
+| `seed.sql` | The demo catalogue of `src/vild/data/seed.ts`: 5 sectors, the chain **Lúna** (`m_luna`), 9 venues, 15 products, 9 reward rules, 4 offers, 3 team invites, and `vild_seed_demo_history(user)` which replays the mock's eleven visits for a real auth user (12:xx / 19:xx), dates the welcome credit and `member_since` the day before the first visit, and computes the monthly statements of those months with `vild_close_settlements`. No settlement figures are inserted by hand. |
 | `test_users.sql` | Comments only: how to create the demo consumer (phone OTP) and the three merchant accounts through Supabase Auth, and a POS connection for curl. |
 
-Apply order: migrations `0001` → `0002` → `0003`, then `seed.sql`, then follow `test_users.sql`.
+Apply order: migrations `0001` → `0005`, then `seed.sql`, then follow `test_users.sql`.
 
 ## Removing the demo data before launch
 

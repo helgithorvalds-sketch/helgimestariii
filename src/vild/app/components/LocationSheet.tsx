@@ -4,11 +4,12 @@ import { Button, Chip, Sheet } from '../../components/kit';
 import { href, paths } from '../../lib/paths';
 import type { Location, Merchant } from '../../lib/types';
 import { directionsUrl, formatDistance, isOpenNow, openStatusText } from '../lib/geo';
+import { posStatusText } from '../lib/labels';
 import { MerchantMark } from './MerchantMark';
 
 export function PosChip({ location }: { location: Location }) {
   const live = location.acceptsRedemption && location.posStatus === 'connected';
-  return <Chip tone={live ? 'mint' : 'outline'}>{live ? 'Inneign virk' : 'Söfnun væntanleg'}</Chip>;
+  return <Chip tone={live ? 'mint' : 'outline'}>{posStatusText(location)}</Chip>;
 }
 
 export function OpenChip({ location }: { location: Location }) {

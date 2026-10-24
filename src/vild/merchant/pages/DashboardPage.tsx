@@ -3,7 +3,7 @@ import { Area, AreaChart, CartesianGrid, Line, ResponsiveContainer, Tooltip, XAx
 import { Switch } from '@/components/ui/switch';
 import { ChipButton, CreditTag, ErrorState, ProductImage, Skeleton } from '../../components/kit';
 import { errorMessage } from '../../data';
-import { formatDate, formatISK, formatNumber, formatPct } from '../../lib/format';
+import { formatDate, formatDayMonth, formatISK, formatNumber, formatPct } from '../../lib/format';
 import { useMerchantStats, useProducts } from '../../lib/queries';
 import type { MerchantStats } from '../../lib/types';
 import { PageHeader, Panel, PanelHeader, ShareBar, Table, Td, Th } from '../components/ui';
@@ -39,12 +39,13 @@ function Delta({ value, suffix = 'síðari helmingur á móti fyrri' }: { value:
   );
 }
 
-function Kpi({ label, value, delta }: { label: string; value: string; delta?: number | null }) {
+function Kpi({ label, value, delta, note }: { label: string; value: string; delta?: number | null; note?: string }) {
   return (
     <div className="px-5 py-4">
       <p className="text-[13px] font-medium text-muted-foreground">{label}</p>
       <p className="vild-num mt-1 whitespace-nowrap text-[20px] font-extrabold leading-none tracking-[-0.02em] sm:text-[26px]">{value}</p>
       <p className="mt-1.5">{delta === undefined ? <span className="text-[12px] text-muted-foreground">af öllum kaupum</span> : <Delta value={delta} />}</p>
+      {note && <p className="mt-1 text-[12px] leading-snug text-muted-foreground">{note}</p>}
     </div>
   );
 }
@@ -82,7 +83,7 @@ function RevenueChart({ daily, showCredit }: { daily: MerchantStats['daily']; sh
             </linearGradient>
           </defs>
           <CartesianGrid vertical={false} stroke="#E0E5DE" strokeWidth={1} />
-          <XAxis dataKey="date" tickLine={false} axisLine={false} tick={tick} interval="preserveStartEnd" minTickGap={every > 1 ? 56 : 40} tickFormatter={(d: string) => formatDate(d).replace(/^\w+\.\s/, '')} dy={6} />
+          <XAxis dataKey="date" tickLine={false} axisLine={false} tick={tick} interval="preserveStartEnd" minTickGap={every > 1 ? 56 : 40} tickFormatter={(d: string) => formatDayMonth(d)} dy={6} />
           <YAxis tickLine={false} axisLine={false} tick={tick} width={56} tickFormatter={(v: number) => (v >= 1_000_000 ? `${formatNumber(v / 1_000_000, 1)} m` : `${formatNumber(Math.round(v / 1000))} þ.`)} />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#E0E5DE', strokeWidth: 1 }} />
           <Area type="monotone" dataKey="revenue" stroke={GREEN} strokeWidth={2} fill="url(#vild-rev)" isAnimationActive={false} activeDot={{ r: 4, fill: GREEN, stroke: '#fff', strokeWidth: 2 }} />
@@ -131,7 +132,7 @@ export default function DashboardPage() {
         {s && deltas ? (
           <>
             <Kpi label="Sala" value={formatISK(s.revenue)} delta={deltas.revenue} />
-            <Kpi label="Inneign veitt" value={formatISK(s.creditIssued)} delta={deltas.issued} />
+            <Kpi label="Inneign veitt" value={formatISK(s.creditIssued)} delta={deltas.issued} note={s.welcomeCredit ? `Auk þess ${formatISK(s.welcomeCredit)} velkomin inneign sem VILD greiðir` : undefined} />
             <Kpi label="Inneign nýtt" value={formatISK(s.creditRedeemed)} delta={deltas.redeemed} />
             <Kpi label="Endurkomur" value={formatPct(s.returningCustomersPct)} />
           </>

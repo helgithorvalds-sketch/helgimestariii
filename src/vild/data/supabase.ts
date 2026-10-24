@@ -53,7 +53,8 @@ type Kind = 'consumer' | 'merchant';
 // ---- row → frontend type -----------------------------------------------------
 const toSector = (r: Tables<'vild_sectors'>): Sector => ({ slug: r.slug as Sector['slug'], name: r.name, pocketName: r.pocket_name, tagline: r.tagline, status: r.status, icon: r.icon });
 
-const toMerchant = (r: Views<'vild_merchant_public'> & { legal_name?: string }): Merchant => ({
+/** legal_name is not in the public view; merchant sessions merge it from vild_merchants (see legalNames()). */
+const toMerchant = (r: Views<'vild_merchant_public'> & { legal_name?: string | null }): Merchant => ({
   id: r.id,
   slug: r.slug,
   sector: r.sector_slug as Merchant['sector'],
@@ -340,15 +341,26 @@ export class SupabaseApi implements VildApi {
     if (error) fail(error);
     return (data ?? []).map(toSector);
   }
+  /**
+   * The legal name of the chain(s) a merchant user belongs to. vild_merchant_public leaves it out;
+   * the merchant's RLS lets team members read their own row of vild_merchants (everyone else gets
+   * no rows). Consumers skip the call.
+   */
+  private async legalNames(): Promise<Map<string, string>> {
+    if (readKind() !== 'merchant') return new Map();
+    const { data, error } = await this.client.from('vild_merchants').select('id, legal_name');
+    if (error || !data) return new Map();
+    return new Map(data.map((r) => [r.id, r.legal_name]));
+  }
   async getMerchants(): Promise<Merchant[]> {
-    const { data, error } = await this.client.from('vild_merchant_public').select('*').order('name');
+    const [{ data, error }, legal] = await Promise.all([this.client.from('vild_merchant_public').select('*').order('name'), this.legalNames()]);
     if (error) fail(error);
-    return (data ?? []).map(toMerchant);
+    return (data ?? []).map((r) => toMerchant({ ...r, legal_name: legal.get(r.id) ?? null }));
   }
   async getMerchant(slug: string): Promise<Merchant | null> {
-    const { data, error } = await this.client.from('vild_merchant_public').select('*').or(`slug.eq.${slug},id.eq.${slug}`).maybeSingle();
+    const [{ data, error }, legal] = await Promise.all([this.client.from('vild_merchant_public').select('*').or(`slug.eq.${slug},id.eq.${slug}`).maybeSingle(), this.legalNames()]);
     if (error) fail(error);
-    return data ? toMerchant(data) : null;
+    return data ? toMerchant({ ...data, legal_name: legal.get(data.id) ?? null }) : null;
   }
   async getLocations(merchantId?: string): Promise<Location[]> {
     let q = this.client.from('vild_locations').select('*').order('name');

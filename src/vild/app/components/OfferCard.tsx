@@ -4,12 +4,15 @@ import { cn } from '@/lib/utils';
 import { Chip, CreditTag, ProductImage, Skeleton } from '../../components/kit';
 import { tap } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
+import { useProducts, useRewardRules } from '../../lib/queries';
 import type { Offer } from '../../lib/types';
 import { offerCreditText } from '../lib/labels';
 
 /** Wide card: picture left (96px), title, one line of body, tag chip. */
 export function OfferCard({ offer, className }: { offer: Offer; className?: string }) {
-  const credit = offerCreditText(offer);
+  const products = useProducts(offer.merchantId);
+  const rules = useRewardRules(offer.merchantId);
+  const credit = offerCreditText(offer, products.data, rules.data);
   return (
     <motion.div whileTap={tap} className={className}>
       <Link to={href(paths.appOffer(offer.id))} className="flex gap-3 rounded-2xl border border-border bg-white p-3 transition-colors hover:bg-secondary/50">

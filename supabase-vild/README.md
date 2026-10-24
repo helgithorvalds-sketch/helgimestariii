@@ -26,7 +26,8 @@ electronic ID, wallet passes) and the demo seed. See **Status: live** below for 
 The backend runs in the Supabase project **`amiomcjvtdpnbyayreko`** (`https://amiomcjvtdpnbyayreko.supabase.co`,
 eu-west-1). It is the project formerly called `higgsfield-saas` (it had no users); VILD only adds `vild_*`
 objects, so it can be moved to a dedicated project by re-running this directory once the org leaves the
-free tier (two active projects). Applied: migrations `0001`–`0004`, the seed, and the demo accounts.
+free tier (two active projects). Applied: migrations `0001`–`0004`, the seed, and the demo accounts;
+`0005_review_fixes` (below) corrects the data the first seed wrote and is applied after them.
 
 | Deployed | verify_jwt | Works now? |
 |---|---|---|
@@ -61,6 +62,8 @@ The app reads the project through `.env` (`VITE_VILD_DATA=supabase`). Demo accou
 | `migrations/0001_schema.sql` | Tables (`vild_*`), guard triggers, views, RLS, grants. Every table has a comment. |
 | `migrations/0002_functions.sql` | Rule engine `vild_credit_for`, tokens, `vild_redeem_quote`, `vild_record_purchase`, expiry, stats, merchant RPCs, settlements, threshold report, realtime, cron, storage buckets. |
 | `migrations/0003_eid.sql` | `vild_eid_sessions`, `vild_kennitala_valid`, `vild_eid_apply`. |
+| `migrations/0004_pockets_view_fix.sql` | `vild_pockets` joins the public merchant view (consumers could not read their pockets). |
+| `migrations/0005_review_fixes.sql` | No welcome credit for merchant staff; dashboard credit = credit earned on purchases (welcome credit apart), top products ranked by credit; settlements exclude welcome credit; one guarded block that corrects the live demo data (offer amount, staff welcome rows, demo timeline, placeholder settlements → computed from the ledger). Safe to run twice. |
 | `seed/` | Demo catalogue (mirrors `src/vild/data/seed.ts`), test-user instructions, cleanup. |
 | `functions/` | Edge functions + `deno.json`. Each `index.ts` starts with its routes, auth and secrets. |
 | `test/` | `local_db.sh` applies everything to a throw-away Postgres 16 cluster and runs `assertions.sql`. |
@@ -95,6 +98,8 @@ mkdir -p supabase/migrations
 cp supabase-vild/migrations/0001_schema.sql    supabase/migrations/20261023000001_vild_schema.sql
 cp supabase-vild/migrations/0002_functions.sql supabase/migrations/20261023000002_vild_functions.sql
 cp supabase-vild/migrations/0003_eid.sql       supabase/migrations/20261023000003_vild_eid.sql
+cp supabase-vild/migrations/0004_pockets_view_fix.sql supabase/migrations/20261023000004_vild_pockets_view_fix.sql
+cp supabase-vild/migrations/0005_review_fixes.sql     supabase/migrations/20261024000005_vild_review_fixes.sql
 supabase db push
 ```
 
@@ -221,9 +226,13 @@ while `vild_settings.demo_purchases_enabled = true` — set it to `false` before
   pocket for lots past their date. The app shows the soonest-expiring lot ("rennur út …"); add a
   30-day warning there.
 - **Monthly statement**: `vild_close_settlements()` runs on the 1st (cron) and writes one
-  `vild_settlements` row per chain for the previous month — credit issued, redeemed, expired, and
-  VILD's fee (`platform_fee_pct`). The chain books outstanding credit as a liability (IFRS 15
-  material right). Ad-hoc, for any period:
+  `vild_settlements` row per chain for the previous month — credit issued (earn rows + positive
+  adjustments), redeemed, expired, and VILD's fee (`platform_fee_pct` of credit issued). The 500 kr.
+  **welcome credit is VILD's**: it is not in credit issued and no fee is charged on it (merchant staff
+  get none). `vild_close_settlements('2026-09-01')` (re)computes any month; open statements are
+  updated, invoiced/paid ones are left alone. Statements are only ever computed from the ledger, never
+  inserted by hand. The chain books outstanding credit as a liability (IFRS 15 material right).
+  Ad-hoc, for any period:
 
   ```sql
   select merchant_id,

@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { Switch } from '@/components/ui/switch';
 import { Button, CreditTag, EmptyState, ErrorState, ProductImage, Skeleton } from '../../components/kit';
 import { errorMessage } from '../../data';
+import { creditFor } from '../../data/seed';
 import { formatISK, formatSignedISK } from '../../lib/format';
 import { useDeleteRule, useProducts, useRewardRules, useSaveRule, useUpdateMerchant } from '../../lib/queries';
 import type { RewardRule } from '../../lib/types';
@@ -41,8 +42,22 @@ export default function CreditPage() {
 
   const shownRate = rate ?? merchant?.defaultRatePct ?? 0;
   const dirty = merchant ? shownRate !== merchant.defaultRatePct : false;
-  const example = useMemo(() => products.data?.find((p) => p.featured) ?? products.data?.[0], [products.data]);
-  const exampleCredit = example ? Math.round((example.price * shownRate) / 100) : 0;
+  // The example must follow the base rate, so pick a product no product or category rule touches
+  // (featured first), and compute it with the rule engine itself: the same creditFor() the Vörur table uses.
+  const example = useMemo(() => {
+    if (!products.data || !rules.data) return undefined;
+    const list = products.data;
+    const ruled = rules.data.filter((r) => r.active && r.scope !== 'merchant');
+    const plain = list.filter((p) => !ruled.some((r) => (r.scope === 'product' ? r.productId === p.id : r.categoryId === p.category)));
+    return plain.find((p) => p.featured) ?? plain[0] ?? list[0];
+  }, [products.data, rules.data]);
+  const { amount: exampleCredit, pct: examplePct } = useMemo(() => {
+    if (!example) return { amount: 0, pct: shownRate };
+    // the saved rules, with the always-on base rule at the rate on the stepper (campaigns left out: this is the base)
+    const base: RewardRule = { id: 'example-base', merchantId, scope: 'merchant', categoryId: null, productId: null, ratePct: shownRate, fixedAmount: null, name: 'Grunninneign', startsAt: null, endsAt: null, weekdays: null, hoursFrom: null, hoursTo: null, active: true, createdAt: '' };
+    const exampleRules = [...(rules.data ?? []).filter((r) => r.scope !== 'merchant' && !isTimeBoxed(r)), base];
+    return creditFor(example, exampleRules);
+  }, [example, rules.data, shownRate, merchantId]);
 
   const exceptions = useMemo(() => (rules.data ?? []).filter((r) => r.scope !== 'merchant' && !isTimeBoxed(r)), [rules.data]);
 
@@ -182,7 +197,7 @@ export default function CreditPage() {
         <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed text-muted-foreground">
           Inneign kostar þig aðeins hráefnið. {example && merchant ? (
             <>
-              <span className="vild-num font-semibold text-foreground">{shownRate}%</span> inneign af <span className="vild-num font-semibold text-foreground">{formatISK(example.price)}</span> {example.name} = <span className="vild-num font-semibold text-foreground">{formatISK(exampleCredit)}</span> inneign, sem kostar þig um{' '}
+              <span className="vild-num font-semibold text-foreground">{examplePct}%</span> inneign af <span className="vild-num font-semibold text-foreground">{formatISK(example.price)}</span> {example.name} = <span className="vild-num font-semibold text-foreground">{formatISK(exampleCredit)}</span> inneign, sem kostar þig um{' '}
               <span className="vild-num font-semibold text-foreground">{formatISK(Math.round(exampleCredit * MARGIN_ASSUMPTION))}</span> í hráefni.
             </>
           ) : null}{' '}

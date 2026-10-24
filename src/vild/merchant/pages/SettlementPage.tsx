@@ -60,11 +60,12 @@ export default function SettlementPage() {
           Í hverjum mánuði gerum við upp <span className="font-semibold">inneign veitta</span> (það sem gestir unnu sér inn), <span className="font-semibold">inneign nýtta</span> (það sem þeir notuðu) og <span className="font-semibold">þóknun VILD</span>, 10% af veittri inneign.
           <span className="text-muted-foreground"> Dæmi um skilmála; þínir skilmálar eru í samningnum.</span>
         </p>
-        <p className="mt-2 text-[13px] text-muted-foreground">Bókhald: inneign er skuldbinding (contract liability) þar til hún er nýtt eða rennur út.</p>
+        <p className="mt-2 text-[13px] text-muted-foreground">Velkomin inneign nýrra meðlima er greidd af VILD: hún er hvorki í veittri inneign né í þóknun.</p>
+        <p className="mt-1 text-[13px] text-muted-foreground">Bókhald: inneign er skuldbinding (contract liability) þar til hún er nýtt eða rennur út.</p>
       </Panel>
 
       <Panel className="mt-4">
-        <PanelHeader title="Tímabil" caption={merchant ? merchant.legalName : undefined} />
+        <PanelHeader title="Tímabil" caption={merchant?.legalName || undefined} />
         {settlements.isError && <ErrorState message={errorMessage(settlements.error)} retry={() => settlements.refetch()} className="m-4" />}
         {settlements.isLoading && (
           <div className="space-y-3 p-5">
@@ -138,7 +139,7 @@ export default function SettlementPage() {
       {/* Printable section: hidden on screen, the only thing visible on paper. */}
       <section id="vild-print" className="hidden" aria-hidden="true">
         <p style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#0C5C3B', fontWeight: 600 }}>VILD · Uppgjör</p>
-        <h1 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 2px' }}>{merchant?.legalName ?? merchant?.name}</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 800, margin: '4px 0 2px' }}>{merchant?.legalName || merchant?.name}</h1>
         <p style={{ fontSize: 12, color: '#596660', margin: '0 0 16px' }}>Prentað {formatLongDate(new Date())}</p>
         <table>
           <thead>

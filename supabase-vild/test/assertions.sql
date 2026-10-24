@@ -221,6 +221,12 @@ begin
   -- owner signs up with the invited e-mail → linked
   insert into auth.users (email) values ('johanna@luna.is') returning id into v_owner;
   if (select user_id from public.vild_merchant_users where email = 'johanna@luna.is') <> v_owner then raise exception 'owner not linked'; end if;
+  -- staff get a profile but no welcome credit (0005)
+  if not exists (select 1 from public.vild_profiles where id = v_owner) then raise exception 'owner profile'; end if;
+  if exists (select 1 from public.vild_ledger where user_id = v_owner) then raise exception 'staff got welcome credit'; end if;
+  -- statements come from the ledger only (the seed has none); this month's, for the RLS read below
+  if exists (select 1 from public.vild_settlements) then raise exception 'seed wrote settlements'; end if;
+  perform public.vild_close_settlements((now() at time zone 'Atlantic/Reykjavik')::date);
 
   -- as Helgi (authenticated)
   perform set_config('request.jwt.claims', json_build_object('role', 'authenticated', 'sub', v_helgi)::text, true);
@@ -302,7 +308,7 @@ begin
   -- invite + stats + settlements + pos connection
   perform public.vild_invite_merchant_user('m_luna', 'Nýr', 'nyr@luna.is', 'staff', '{l_grandi}');
   if (select role from public.vild_merchant_users where email = 'nyr@luna.is') <> 'staff' then raise exception 'invite'; end if;
-  if (select count(*) from public.vild_settlements) <> 2 then raise exception 'settlements read'; end if;
+  if (select count(*) from public.vild_settlements) <> 1 then raise exception 'settlements read'; end if;
   select * into r from public.vild_set_pos_connection('m_luna', null, 'noona', '{"company_id":"c1"}');
   if r.api_key !~ '^vk_[A-Z2-9]{32}$' or length(r.webhook_secret) <> 64 then raise exception 'pos connection: %', r; end if;
   if (select count(*) from public.vild_pos_connections_public) <> 1 then raise exception 'connections view'; end if;
@@ -333,6 +339,16 @@ begin
   j := public.vild_merchant_stats('m_luna', 30);
   if (j ->> 'purchases')::int < 0 or jsonb_array_length(j -> 'daily') <> 30 or jsonb_array_length(j -> 'byLocation') <> 9 then raise exception 'stats: %', j; end if;
   if (j ->> 'merchantId') <> 'm_luna' or (j ->> 'periodDays')::int <> 30 then raise exception 'stats keys: %', j; end if;
+  -- creditIssued = earn rows only; welcome credit apart; top products by credit, none at 0 kr.
+  if (j ->> 'creditIssued')::bigint <> (select coalesce(sum(amount), 0) from public.vild_ledger where merchant_id = 'm_luna' and kind = 'earn'
+       and created_at >= (((now() at time zone 'Atlantic/Reykjavik')::date - 29)::timestamp at time zone 'Atlantic/Reykjavik')) then raise exception 'stats creditIssued: %', j ->> 'creditIssued'; end if;
+  if not (j ? 'welcomeCredit') then raise exception 'stats welcomeCredit missing'; end if;
+  if exists (select 1 from jsonb_array_elements(j -> 'topProducts') t where (t ->> 'credit')::bigint <= 0) then raise exception 'zero-credit top product: %', j -> 'topProducts'; end if;
+  if exists (
+    select 1 from jsonb_array_elements(j -> 'topProducts') with ordinality a(t, n)
+    join jsonb_array_elements(j -> 'topProducts') with ordinality b(t, n) on b.n = a.n + 1
+    where (b.t ->> 'credit')::bigint > (a.t ->> 'credit')::bigint
+  ) then raise exception 'top products not ranked by credit: %', j -> 'topProducts'; end if;
   raise notice 'stats: ok (purchases=% revenue=% issued=%)', j ->> 'purchases', j ->> 'revenue', j ->> 'creditIssued';
 end $$;
 
@@ -350,6 +366,9 @@ begin
   if v_n <> 1 then raise exception 'settlements closed: %', v_n; end if;
   select * into r from public.vild_settlements where merchant_id = 'm_luna' and period_from = '2026-10-01';
   if r.credit_issued < 1245 or r.platform_fee <> round(r.credit_issued * 0.10) then raise exception 'settlement figures: %', r; end if;
+  -- welcome credit (VILD's) is neither issued by the chain nor billed
+  if r.credit_issued <> (select coalesce(sum(amount), 0) from public.vild_ledger where merchant_id = 'm_luna' and (kind = 'earn' or (kind = 'adjust' and amount > 0))
+       and created_at >= '2026-10-01T00:00:00Z' and created_at < '2026-11-01T00:00:00Z') then raise exception 'settlement includes welcome: %', r; end if;
 
   -- eID
   perform public.vild_eid_apply(v_helgi, '010130-2989', 'Helgi Már Þorvaldsson', 'idp.kenni.is');
@@ -366,6 +385,14 @@ begin
   -- demo history replays eleven visits
   v_n := public.vild_seed_demo_history(v_helgi);
   if v_n <> 11 then raise exception 'demo history: %', v_n; end if;
+  -- the timeline reads in order: joined (welcome, member_since) before the first visit; visits at 12:xx / 19:xx
+  if (select max(created_at) from public.vild_ledger where user_id = v_helgi and kind = 'welcome') >= (select min(occurred_at) from public.vild_purchases where user_id = v_helgi)
+     or (select member_since from public.vild_profiles where id = v_helgi) <> (select created_at from public.vild_ledger where user_id = v_helgi and kind = 'welcome') then
+    raise exception 'demo timeline: welcome after first purchase';
+  end if;
+  if exists (select 1 from public.vild_purchases where user_id = v_helgi and raw ->> 'seed' = 'true'
+             and extract(hour from occurred_at at time zone 'Atlantic/Reykjavik') not in (12, 19)) then raise exception 'demo purchase outside 12:xx/19:xx'; end if;
+  if not exists (select 1 from public.vild_settlements where merchant_id = 'm_luna' and period_from < '2026-10-01') then raise exception 'demo history: no statement for its first month'; end if;
   select * into r from public.vild_pockets where user_id = v_helgi;
   if r.balance <= 0 then raise exception 'demo balance: %', r; end if;
   -- the threshold report runs

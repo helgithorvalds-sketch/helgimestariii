@@ -28,6 +28,10 @@ describe('PlacesPage', () => {
     expect(rows).toHaveLength(9);
     expect(rows[0]).toHaveTextContent('Lúna Akureyri'); // Akureyri sorts first by town
     expect(rows[0]).toHaveTextContent('Söfnun væntanleg');
+    // Reykjanesbær's till is offline: paused, not "coming"
+    const keflavik = within(list).getByText('Lúna Reykjanesbæ').closest('a')!;
+    expect(keflavik).toHaveTextContent('Söfnun í bið');
+    expect(keflavik).not.toHaveTextContent('væntanleg');
     expect(within(list).getByText('Lúna Laugavegi').closest('a')).toHaveAttribute('href', '/vild/app/stadir/l_laugavegur');
 
     fireEvent.click(screen.getByRole('button', { name: 'Höfuðborgarsvæðið' }));
