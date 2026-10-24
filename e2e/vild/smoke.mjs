@@ -115,7 +115,9 @@ async function loginConsumer(page) {
   await page.getByRole('button', { name: 'Símanúmer' }).click();
   await page.getByLabel('Símanúmer').fill('6661234');
   await page.getByRole('button', { name: 'Senda kóða' }).click();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(600);
+  // focus the first code slot explicitly: autoFocus is not reliable after an async step change
+  await page.locator('input[autocomplete="one-time-code"], [data-input-otp]').first().click({ force: true }).catch(() => {});
   await page.keyboard.type('123456');
   await page.waitForURL((u) => !u.pathname.endsWith('/innskraning'), { timeout: 15000 });
   await page.waitForTimeout(400);

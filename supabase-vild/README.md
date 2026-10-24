@@ -3,8 +3,7 @@
 Customers pay full price at a partner chain, earn credit ("inneign", 1 kr = 1 kr) by the chain's
 rules and spend it only at that chain. This directory is the whole backend: Postgres schema with
 row-level security, SQL functions (the ledger), Deno edge functions (POS webhook, cashier till,
-electronic ID, wallet passes) and the demo seed. Nothing is applied yet — there is no VILD project
-(the org is on the free tier with two active projects). Everything is written to be applied as-is.
+electronic ID, wallet passes) and the demo seed. See **Status: live** below for the project it runs in.
 
 ```
                  ┌──────────────────────────────────────────────────────────────┐
@@ -21,6 +20,39 @@ electronic ID, wallet passes) and the demo seed. Nothing is applied yet — ther
    Wallet        │  vild-noona-sync ─────▶ Noona HQ API (products)  [unverified]  │
                  └──────────────────────────────────────────────────────────────┘
 ```
+
+## Status: live (24 Oct 2026)
+
+The backend runs in the Supabase project **`amiomcjvtdpnbyayreko`** (`https://amiomcjvtdpnbyayreko.supabase.co`,
+eu-west-1). It is the project formerly called `higgsfield-saas` (it had no users); VILD only adds `vild_*`
+objects, so it can be moved to a dedicated project by re-running this directory once the org leaves the
+free tier (two active projects). Applied: migrations `0001`–`0004`, the seed, and the demo accounts.
+
+| Deployed | verify_jwt | Works now? |
+|---|---|---|
+| `vild-till` (lookup / charge / demo) | on | yes |
+| `vild-pos-webhook` (+ Noona adapter) | off | yes — needs a connection from `vild_set_pos_connection` |
+| `vild-eid` | off | answers `503 EID_NOT_CONFIGURED` until the `EID_*` secrets exist |
+| `vild-wallet-pass` | off | answers `503 PASS_NOT_CONFIGURED` / `GOOGLE_NOT_CONFIGURED` until the certificates exist |
+| `vild-noona-sync` | — | not deployed (unverified vendor API) |
+
+The app reads the project through `.env` (`VITE_VILD_DATA=supabase`). Demo accounts (change before launch):
+
+| Who | Login |
+|---|---|
+| Member "Helgi" | phone `666 1234`, code `123456` (maps to `helgi@demo.vild.is` while `demo_purchases_enabled` is true) |
+| Owner | `johanna@luna.is` / `luna1234` |
+| Manager / staff | `kristjan@luna.is`, `elin@luna.is` / `luna1234` |
+
+### Secrets Helgi must add (Supabase dashboard → Edge Functions → Secrets)
+
+| Integration | Secrets | Where they come from |
+|---|---|---|
+| Rafræn skilríki | `EID_ISSUER`, `EID_CLIENT_ID`, `EID_CLIENT_SECRET`, `EID_REDIRECT_URL` = `https://amiomcjvtdpnbyayreko.supabase.co/functions/v1/vild-eid/callback`, `EID_APP_ORIGIN` (e.g. `https://helgimestariii.lovable.app`) | Kenni (kenni.is, developers.kenni.is) or Auðkenni service-provider contract. Then `update vild_settings set value = 'true' where key = 'eid_enabled'`. |
+| Apple Wallet pass | `PASS_TYPE_ID` (e.g. `pass.is.vild.card`), `APPLE_TEAM_ID`, `PASS_CERT_PEM`, `PASS_KEY_PEM` (+ `PASS_KEY_PASSWORD`), `WWDR_PEM` | Apple Developer Program → Certificates → Pass Type ID; WWDR G4 from apple.com/certificateauthority |
+| Pass balance pushes | `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_KEY_PEM` | Apple Developer → Keys → APNs (.p8) |
+| Google Wallet | `GOOGLE_WALLET_ISSUER_ID`, `GOOGLE_WALLET_SA_JSON` | Google Pay & Wallet Console issuer account + service account |
+| SMS codes | none (dashboard) | Authentication → Providers → Phone → Twilio (account SID, auth token, message service) |
 
 ## Layout
 
