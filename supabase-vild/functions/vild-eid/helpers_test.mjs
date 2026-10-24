@@ -1,0 +1,52 @@
+// node --experimental-strip-types --test supabase-vild/functions/vild-eid/helpers_test.mjs
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { base64url, listFromEnv, maskKennitala, normaliseKennitala, pickClaim, pkceChallenge, randomToken, safeNextPath, withParams } from './helpers.ts';
+
+test('PKCE S256 matches the RFC 7636 appendix B example', async () => {
+  assert.equal(await pkceChallenge('dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk'), 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM');
+});
+
+test('randomToken is url-safe and long enough', () => {
+  const a = randomToken();
+  const b = randomToken();
+  assert.match(a, /^[A-Za-z0-9_-]{43}$/);
+  assert.notEqual(a, b);
+  assert.equal(base64url(new Uint8Array([251, 255])), '-_8');
+});
+
+test('kennitala: formats accepted, check digit and century validated', () => {
+  // 010130-2989 is the well-known test number for Þjóðskrá; 120174-3399 another valid one
+  assert.equal(normaliseKennitala('010130-2989'), '0101302989');
+  assert.equal(normaliseKennitala('0101302989'), '0101302989');
+  assert.equal(normaliseKennitala('010130 2989'), '0101302989');
+  assert.equal(normaliseKennitala('1201743399'), '1201743399');
+  assert.equal(normaliseKennitala('0101302979'), null); // wrong check digit
+  assert.equal(normaliseKennitala('0101302981'), null); // bad century digit
+  assert.equal(normaliseKennitala('12345'), null);
+  assert.equal(normaliseKennitala(null), null);
+  assert.equal(maskKennitala('0101302989'), '010130-xxxx');
+});
+
+test('next path must stay inside the consumer app', () => {
+  assert.equal(safeNextPath('/vild/app/eg?flipi=skilriki'), '/vild/app/eg?flipi=skilriki');
+  assert.equal(safeNextPath('/vild/app'), '/vild/app');
+  assert.equal(safeNextPath('/vild/apple'), '/vild/app/eg');
+  assert.equal(safeNextPath('/vild/fyrirtaeki'), '/vild/app/eg');
+  assert.equal(safeNextPath('https://evil.example/vild/app'), '/vild/app/eg');
+  assert.equal(safeNextPath('//evil.example'), '/vild/app/eg');
+  assert.equal(safeNextPath('/vild/app\\evil'), '/vild/app/eg');
+  assert.equal(safeNextPath(undefined), '/vild/app/eg');
+});
+
+test('claims are picked in order', () => {
+  assert.equal(pickClaim({ kennitala: '0101302989', national_id: '' }, ['national_id', 'kennitala']), '0101302989');
+  assert.equal(pickClaim({ ssn: 101302989 }, ['national_id', 'ssn']), '101302989');
+  assert.equal(pickClaim({}, ['name']), null);
+});
+
+test('helpers for URLs and env lists', () => {
+  assert.equal(withParams('https://app.example/vild/app/eg?flipi=yfirlit', { eid: 'ok' }), 'https://app.example/vild/app/eg?flipi=yfirlit&eid=ok');
+  assert.deepEqual(listFromEnv('national_id, kennitala ssn', ['x']), ['national_id', 'kennitala', 'ssn']);
+  assert.deepEqual(listFromEnv(undefined, ['x']), ['x']);
+});
