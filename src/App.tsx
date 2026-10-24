@@ -13,9 +13,6 @@ import SvifListi from "./pages/SvifListi";
 import SvifAkureyri from "./pages/SvifAkureyri";
 import Fyrirtaekjabok from "./pages/Fyrirtaekjabok";
 import NotFound from "./pages/NotFound";
-import { lazy, Suspense } from "react";
-
-const VildApp = lazy(() => import("./vild/VildApp"));
 
 const queryClient = new QueryClient();
 
@@ -37,8 +34,6 @@ const App = () => (
           <Route path="/svif-akureyri" element={<SvifAkureyri />} />
           <Route path="/fyrirtaekjabok" element={<Fyrirtaekjabok />} />
 
-
-          <Route path="/vild/*" element={<Suspense fallback={null}><VildApp /></Suspense>} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
