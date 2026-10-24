@@ -100,17 +100,13 @@
     @apply text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: "cv11", "ss01", "ss03";
-  }
-  /* The CRM's tinted page. Not under VILD (html.vild-html, set before the bundle by index.html), which is white. */
-  :where(html:not(.vild-html)) body {
     background-color: hsl(var(--background));
     background-image:
       radial-gradient(1200px 600px at 100% -10%, hsl(var(--primary) / 0.06), transparent 60%),
       radial-gradient(900px 500px at -10% 110%, hsl(var(--accent) / 0.5), transparent 60%);
     background-attachment: fixed;
   }
-  /* Not inside VILD (body.vild), which sets Figtree on everything. :where keeps the specificity of a bare h1. */
-  :where(body:not(.vild)) :is(h1, h2, h3, h4) {
+  h1, h2, h3, h4 {
     font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
     letter-spacing: -0.02em;
   }
