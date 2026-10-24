@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, Line, ResponsiveContainer, Tooltip, XAxis, YAxis, type TooltipProps } from 'recharts';
+import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis, type TooltipProps } from 'recharts';
 import { Switch } from '@/components/ui/switch';
 import { ChipButton, CreditTag, ErrorState, ProductImage, Skeleton } from '../../components/kit';
 import { errorMessage } from '../../data';
@@ -69,27 +69,30 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, string>) 
   );
 }
 
+/** Credit is drawn as a dot on the days it happened; a line would invent a slope between them. */
+function creditDot(fill: string) {
+  return function CreditDot(p: { cx?: number; cy?: number; value?: number | null; index?: number }) {
+    if (!p.value || p.cx == null || p.cy == null) return <g key={`n${p.index}`} />;
+    return <circle key={`d${p.index}`} cx={p.cx} cy={p.cy} r={4} fill={fill} stroke="#fff" strokeWidth={1.5} />;
+  };
+}
+
 function RevenueChart({ daily, showCredit }: { daily: MerchantStats['daily']; showCredit: boolean }) {
   const tick = { fontFamily: 'Figtree, sans-serif', fontSize: 12, fill: MUTED, fontVariantNumeric: 'tabular-nums' } as const;
   const every = Math.max(1, Math.round(daily.length / 6));
   return (
     <div className="h-[260px] w-full" role="img" aria-label="Dagleg sala yfir tímabilið">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={daily} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="vild-rev" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={MINT} stopOpacity={0.55} />
-              <stop offset="100%" stopColor={MINT} stopOpacity={0.15} />
-            </linearGradient>
-          </defs>
+        {/* Bars, not a curve: a day without sales is a gap, not a valley the line has to swing through. */}
+        <ComposedChart data={daily} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} barCategoryGap="22%">
           <CartesianGrid vertical={false} stroke="#E0E5DE" strokeWidth={1} />
           <XAxis dataKey="date" tickLine={false} axisLine={false} tick={tick} interval="preserveStartEnd" minTickGap={every > 1 ? 56 : 40} tickFormatter={(d: string) => formatDayMonth(d)} dy={6} />
           <YAxis tickLine={false} axisLine={false} tick={tick} width={56} tickFormatter={(v: number) => (v >= 1_000_000 ? `${formatNumber(v / 1_000_000, 1)} m` : `${formatNumber(Math.round(v / 1000))} þ.`)} />
-          <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#E0E5DE', strokeWidth: 1 }} />
-          <Area type="monotone" dataKey="revenue" stroke={GREEN} strokeWidth={2} fill="url(#vild-rev)" isAnimationActive={false} activeDot={{ r: 4, fill: GREEN, stroke: '#fff', strokeWidth: 2 }} />
-          {showCredit && <Line type="monotone" dataKey="issued" stroke={AMBER} strokeWidth={2} dot={false} isAnimationActive={false} activeDot={{ r: 4, fill: AMBER, stroke: '#fff', strokeWidth: 2 }} />}
-          {showCredit && <Line type="monotone" dataKey="redeemed" stroke={MUTED} strokeWidth={2} strokeDasharray="4 3" dot={false} isAnimationActive={false} activeDot={{ r: 4, fill: MUTED, stroke: '#fff', strokeWidth: 2 }} />}
-        </AreaChart>
+          <Tooltip content={<ChartTooltip />} cursor={{ fill: MINT, fillOpacity: 0.25 }} />
+          <Bar dataKey="revenue" fill={GREEN} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />
+          {showCredit && <Line dataKey="issued" stroke="none" dot={creditDot(AMBER)} activeDot={false} isAnimationActive={false} />}
+          {showCredit && <Line dataKey="redeemed" stroke="none" dot={creditDot(MUTED)} activeDot={false} isAnimationActive={false} />}
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );
@@ -169,11 +172,11 @@ export default function DashboardPage() {
               {showCredit && (
                 <>
                   <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-0.5 w-3.5 rounded" style={{ background: AMBER }} aria-hidden="true" />
+                    <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: AMBER }} aria-hidden="true" />
                     Inneign veitt
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-0.5 w-3.5 rounded border-t-2 border-dashed" style={{ borderColor: MUTED, background: 'transparent' }} aria-hidden="true" />
+                    <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: MUTED }} aria-hidden="true" />
                     Inneign nýtt
                   </span>
                 </>
