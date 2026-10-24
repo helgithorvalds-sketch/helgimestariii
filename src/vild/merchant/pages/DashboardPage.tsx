@@ -128,7 +128,7 @@ export default function DashboardPage() {
 
       {stats.isError && <ErrorState message={errorMessage(stats.error)} retry={() => stats.refetch()} className="mb-4" />}
 
-      <Panel className="grid grid-cols-2 divide-y divide-border md:grid-cols-4 md:divide-x md:divide-y-0 [&>*:nth-child(odd)]:border-r [&>*:nth-child(odd)]:border-border md:[&>*:nth-child(odd)]:border-r-0 [&>*:nth-child(-n+2)]:border-t-0">
+      <Panel className="grid grid-cols-2 gap-px overflow-hidden bg-border md:grid-cols-4 [&>*]:bg-white">
         {s && deltas ? (
           <>
             <Kpi label="Sala" value={formatISK(s.revenue)} delta={deltas.revenue} />

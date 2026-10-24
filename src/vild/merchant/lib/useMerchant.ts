@@ -13,7 +13,8 @@ export function useMerchant(): { merchantId: string; merchant: Merchant | undefi
   const merchants = useMerchants();
   const users = useMerchantUsers(merchantId);
   const merchant = merchants.data?.find((m) => m.id === id);
-  const user = users.data?.find((u) => u.id === session?.userId);
+  // The mock's session id is the team row id; the live session id is the login account (user_id on the team row).
+  const user = users.data?.find((u) => u.id === session?.userId || (u.authUserId != null && u.authUserId === session?.userId));
   return { merchantId: id, merchant, user, loading: merchants.isLoading || users.isLoading };
 }
 

@@ -161,6 +161,8 @@ export type MerchantUser = {
   email: string;
   role: 'owner' | 'manager' | 'staff';
   locationIds: string[] | null; // null = all
+  /** The login account behind this team row, once the invite is accepted (live backend only). */
+  authUserId?: string | null;
 };
 
 export type MerchantStats = {

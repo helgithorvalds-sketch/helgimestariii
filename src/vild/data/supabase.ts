@@ -145,7 +145,7 @@ const toEntry = (r: Views<'vild_ledger_entries'>): LedgerEntry => ({
   balanceAfter: r.balance_after,
 });
 
-const toMerchantUser = (r: Tables<'vild_merchant_users'>): MerchantUser => ({ id: r.id, merchantId: r.merchant_id, name: r.name, email: r.email, role: r.role, locationIds: r.location_ids });
+const toMerchantUser = (r: Tables<'vild_merchant_users'>): MerchantUser => ({ id: r.id, merchantId: r.merchant_id, name: r.name, email: r.email, role: r.role, locationIds: r.location_ids, authUserId: r.user_id });
 
 const toSettlement = (r: Tables<'vild_settlements'>): Settlement => ({
   id: r.id,

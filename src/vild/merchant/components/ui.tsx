@@ -165,7 +165,7 @@ export function Th({ className, children, align = 'left' }: { className?: string
   return <th className={cn('whitespace-nowrap border-b border-border px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.06em] text-muted-foreground', align === 'right' ? 'text-right' : 'text-left', className)}>{children}</th>;
 }
 export function Td({ className, children, align = 'left' }: { className?: string; children?: ReactNode; align?: 'left' | 'right' }) {
-  return <td className={cn('border-b border-border px-4 py-3 align-middle last:border-b-0 [tr:last-child_&]:border-b-0', align === 'right' ? 'vild-num text-right' : 'text-left', className)}>{children}</td>;
+  return <td className={cn('border-b border-border px-4 py-3 align-middle [tr:last-child_&]:border-b-0', align === 'right' ? 'vild-num text-right' : 'text-left', className)}>{children}</td>;
 }
 
 /** Initials avatar for team members. */
