@@ -187,4 +187,6 @@ begin
   end loop;
   return v_n;
 end $$;
-revoke execute on function public.vild_seed_demo_history(uuid) from public, anon, authenticated;
+-- SQL editor (postgres) only: it lifts the ledger's update guard, so not even the service role
+-- (edge functions) may call it
+revoke execute on function public.vild_seed_demo_history(uuid) from public, anon, authenticated, service_role;

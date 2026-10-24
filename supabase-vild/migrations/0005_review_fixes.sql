@@ -12,11 +12,17 @@
 --   4. corrections of the live data the old seed / triggers wrote (one DO block,
 --      guarded, safe to run again):
 --        a. offer o_salad: credit_amount 672 → 673 (round(2.690 × 25 %), what creditFor shows)
---        b. the welcome rows the three Lúna staff accounts got at signup
---        c. the demo member's timeline: purchases at 12:xx / 19:xx local time, the
---           welcome row and member_since the day before the first purchase
+--        b. the welcome rows the three Lúna staff accounts got at signup (invited
+--           before they signed up; the welcome row is their only ledger row)
+--        c. the demo member's timeline: seeded purchases (and the one "Prófa kaup"
+--           receipt of 24 Oct 08:01, pinned by id) at 12:xx / 19:xx local time unless
+--           another row of the pocket lies in between, the welcome row and member_since
+--           the day before the first purchase; aborts if any balance_after would no
+--           longer match the running sum
 --        d. the placeholder settlements s_2026_09 / s_2026_10 (hard-coded figures of
 --           the old seed), then every month the ledger covers regenerated from the ledger
+--      Run as the owner of vild_ledger (postgres): the block uses ALTER TABLE …
+--      DISABLE TRIGGER for the two append-only guards and re-enables them.
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
@@ -227,24 +233,39 @@ begin
   alter table public.vild_ledger disable trigger vild_ledger_no_update;
   alter table public.vild_ledger disable trigger vild_ledger_no_delete;
 
-  -- b. welcome credit the chain's staff got at signup: only kind 'welcome', only users on a
-  --    team, and only when it is the user's single ledger row (nothing else depends on it)
+  -- b. welcome credit the chain's staff got at signup: only kind 'welcome', only users who were
+  --    invited to a team before the row was written (the rows the new trigger would not have
+  --    written; a member who joins a team later keeps theirs), and only when it is the user's
+  --    single ledger row (no balance_after or lot depends on it)
   delete from public.vild_ledger l
    where l.kind = 'welcome'
-     and exists (select 1 from public.vild_merchant_users mu where mu.user_id = l.user_id)
+     and l.purchase_id is null
+     and exists (select 1 from public.vild_merchant_users mu where mu.user_id = l.user_id and mu.invited_at <= l.created_at)
      and not exists (select 1 from public.vild_ledger o where o.user_id = l.user_id and o.id <> l.id);
 
   -- c. demo members = users with history written by vild_seed_demo_history (raw.seed = true)
   for v_demo in select distinct user_id from public.vild_purchases where raw ->> 'seed' = 'true' loop
     -- purchases at 12:xx (before 16:00) or 19:xx local, same minutes; a time that would lie in
     -- the future moves to the day before. Receipt rows (earn/spend) move with their purchase.
-    for p in select id, occurred_at from public.vild_purchases where user_id = v_demo.user_id and source = 'demo' loop
+    -- Only the seeded visits and the one "Prófa kaup" receipt of 24 Oct 08:01 (pinned by id and
+    -- time), so a later run never moves a purchase made after this migration.
+    for p in select id, occurred_at from public.vild_purchases
+              where user_id = v_demo.user_id and source = 'demo'
+                and (raw ->> 'seed' = 'true'
+                     or (id = '0e60475e-88ab-4e75-a5d9-77a5d4ac1312' and occurred_at = timestamptz '2026-10-24 08:01:18.411+00'))
+    loop
       v_local := p.occurred_at at time zone v_tz;
       v_new := (v_local::date + make_interval(hours => case when extract(hour from v_local) < 16 then 12 else 19 end)
                 + (v_local - date_trunc('hour', v_local))) at time zone v_tz;
       if v_new > now() then v_new := v_new - interval '1 day'; end if;
       v_delta := v_new - p.occurred_at;
-      if v_delta <> interval '0' then
+      -- never move a receipt past another row of the pocket (its spend row sits 1 s before it);
+      -- such a purchase keeps its time and the rest goes ahead
+      if v_delta <> interval '0' and not exists (
+        select 1 from public.vild_ledger o
+         where o.user_id = v_demo.user_id and o.kind <> 'welcome' and o.purchase_id is distinct from p.id
+           and o.created_at between least(p.occurred_at, v_new) - interval '1 second' and greatest(p.occurred_at, v_new)
+      ) then
         update public.vild_purchases set occurred_at = v_new where id = p.id;
         update public.vild_ledger set created_at = created_at + v_delta, expires_at = expires_at + v_delta where purchase_id = p.id;
       end if;
@@ -257,6 +278,16 @@ begin
            expires_at = v_signup + make_interval(months => public.vild_setting_int('expiry_months', 24))
      where user_id = v_demo.user_id and kind = 'welcome' and created_at > v_signup;
     update public.vild_profiles set member_since = v_signup where id = v_demo.user_id and member_since > v_signup;
+    -- the moved rows must still read in order: every balance_after equals the running sum in
+    -- created_at order. Anything else aborts the block (and rolls every change above back).
+    if exists (
+      select 1 from (
+        select balance_after, sum(amount) over (partition by merchant_id order by created_at, id rows unbounded preceding) as running
+        from public.vild_ledger where user_id = v_demo.user_id
+      ) x where x.running <> x.balance_after
+    ) then
+      raise exception 'VILD 0005: ledger of % would not read in order after the move', v_demo.user_id;
+    end if;
   end loop;
 
   alter table public.vild_ledger enable trigger vild_ledger_no_update;
