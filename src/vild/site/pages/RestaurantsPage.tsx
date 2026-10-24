@@ -47,7 +47,8 @@ function validate(f: FormState): Partial<Record<keyof FormState, string>> {
 function CreditPickerMock() {
   const [pct, setPct] = useState(10);
   const products = useProducts('m_luna');
-  const example = products.data?.find((p) => p.id === 'p_margherita') ?? { name: 'Margherita', price: 2990, image: '/vild/img/products/margherita.jpg' };
+  // Pepperoni has no rule of its own, so the chain-wide rate is exactly what a guest gets for it (10% → +329 kr., as on the home page).
+  const example = products.data?.find((p) => p.id === 'p_pepperoni') ?? { name: 'Pepperoni', price: 3290, image: '/vild/img/products/pepperoni.jpg' };
   const back = Math.round((example.price * pct) / 100);
 
   // The example amount swells a little and settles with a spring each time the percentage changes.

@@ -157,8 +157,8 @@ describe('restaurants page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Hækka prósentu' }));
     expect(screen.getByLabelText('15%')).toBeInTheDocument(); // the accessible value is immediate …
     expect(await screen.findByText('15%')).toBeInTheDocument(); // … the visible one counts up to it
-    const tag = await screen.findByLabelText('449 kr.'); // 15 % of 2.990, counting with the percentage
-    expect(tag.parentElement).toHaveTextContent('+449 kr.');
+    const tag = await screen.findByLabelText('494 kr.'); // 15 % of Pepperoni's 3.290, counting with the percentage
+    expect(tag.parentElement).toHaveTextContent('+494 kr.');
     for (const l of screen.getAllByRole('link', { name: 'Innskráning fyrirtækja' })) expect(l).toHaveAttribute('href', '/vild/fyrirtaeki/innskraning');
   });
 
