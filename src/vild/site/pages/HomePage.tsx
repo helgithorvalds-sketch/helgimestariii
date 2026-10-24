@@ -28,9 +28,10 @@ const STEPS = [
   { title: 'Inneignin kemur um leið – og bíður þín næst.', body: 'Krónurnar birtast í appinu á sama augnabliki. Þú nýtir þær næst þegar þú borðar hjá sömu keðju, á hvaða stað sem er.' },
 ];
 
-const MARGINS = [
-  { label: 'Matvöruverslun', pct: 10, example: 'Smjör 400 kr. → +20 kr.' },
-  { label: 'Veitingastaður', pct: 30, example: 'Kvöldverður fyrir tvo 8.000 kr. → +1.200 kr.' },
+/** What one króna of credit costs the business when it is spent: the goods, as a share of the price. */
+const COSTS = [
+  { label: 'Matvöruverslun', what: 'varan', pct: 90, example: '1.000 kr. inneign kostar búðina um 900 kr.' },
+  { label: 'Veitingastaður', what: 'hráefnið', pct: 30, example: '1.000 kr. inneign kostar staðinn um 300 kr.' },
 ];
 
 /** The notification lands 900 ms after the balance has finished counting: first the money, then the news. */
@@ -127,26 +128,26 @@ function HeroPhone({ products }: { products: ReturnType<typeof useProducts>['dat
   );
 }
 
-/** Two margin bars that grow from nothing while their percentages count up. */
-function MarginBars() {
+/** Two cost-of-goods bars (share of the price) that grow from nothing while their percentages count up. */
+function CostBars() {
   const ref = useRef<HTMLDListElement>(null);
   const allowed = useMotionAllowed();
   const inView = useInView(ref, { once: true, amount: 0.5 });
   const play = inView || !allowed;
   return (
     <dl ref={ref} className="space-y-6">
-      {MARGINS.map((row, i) => (
+      {COSTS.map((row, i) => (
         <div key={row.label}>
           <div className="flex items-baseline justify-between text-[14px]">
             <dt className="font-semibold">{row.label}</dt>
             <dd className="vild-num font-semibold text-[hsl(var(--mint-300))]">
-              ~<AnimatedNumber value={play ? row.pct : 0} suffix="% álagning" duration={900} />
+              {row.what} ~<AnimatedNumber value={play ? row.pct : 0} suffix="% af verði" duration={900} />
             </dd>
           </div>
           <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-white/10">
             <motion.div
               className="h-3 rounded-full bg-[hsl(var(--mint-300))]"
-              style={{ width: `${(row.pct / 30) * 100}%` }}
+              style={{ width: `${row.pct}%` }}
               initial={allowed ? { x: '-100%' } : false}
               animate={play ? { x: 0 } : undefined}
               transition={{ duration: 0.9, ease: EASE_OUT, delay: i * 0.15 }}
@@ -300,14 +301,14 @@ export default function HomePage() {
               <Headline className="mt-3 text-white">Inneign kostar bara vöruna.</Headline>
             </Reveal>
             <p className="mt-6 max-w-[46ch] text-[17px] leading-[1.5] text-white/80 sm:text-[19px]">
-              Matvöruverslun er með um 10% álagningu og getur gefið 20 kr. til baka af smjörinu. Veitingastaður er með um 30% – þrisvar sinnum meira svigrúm til að gefa til baka, og tilboðin eru þegar til: hádegið, þriðjudagurinn, happy hour.
+              Inneign kostar ekki krónurnar sem eru gefnar, heldur vöruna sem gesturinn fær fyrir þær. Í matvöruverslun er varan sjálf um 90% af verðinu og svigrúmið eftir því: 20 kr. til baka af smjörinu. Á veitingastað er hráefnið um 30% af verðinu. Þar er svigrúm til að gefa til baka, og tilboðin eru þegar til: hádegið, þriðjudagurinn, happy hour.
             </p>
             <LinkButton to={href(paths.siteForRestaurants)} variant="mint" size="lg" className="mt-8">
               Lesa meira
               <ArrowRight className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
             </LinkButton>
           </div>
-          <MarginBars />
+          <CostBars />
         </Container>
       </section>
 
