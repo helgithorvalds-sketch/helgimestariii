@@ -195,10 +195,10 @@ export default function RestaurantsPage() {
               VILD tekur eina keðju inn í hvern geira: eina í veitingum, eina í kaffi, eina í eldsneyti. Sú sem er með fær alla inneignina í sínum geira – og gestina sem fylgja henni. Hinar bíða.
             </Lead>
             <div className="mt-8 flex flex-wrap gap-3">
-              <LinkButton to="#hafa-samband" anchor size="lg">
+              <LinkButton to="#hafa-samband" anchor size="lg" className="w-full sm:w-auto">
                 Hafa samband
               </LinkButton>
-              <LinkButton to={href(paths.merchantLogin)} variant="secondary" size="lg">
+              <LinkButton to={href(paths.merchantLogin)} variant="secondary" size="lg" className="w-full sm:w-auto">
                 Innskráning fyrirtækja
               </LinkButton>
             </div>

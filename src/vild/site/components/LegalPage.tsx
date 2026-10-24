@@ -39,7 +39,8 @@ export function LegalPage({ eyebrow, title, updated, intro, sections }: { eyebro
           {sections.map((s, i) => (
             <section key={s.id} id={s.id} className="scroll-mt-24 border-t border-border py-8 first:border-t-0 first:pt-0">
               <h2 className="text-[22px] font-extrabold tracking-[-0.025em] sm:text-[24px]">
-                <span className="vild-num mr-2 text-muted-foreground">{i + 1}.</span>
+                {/* A real space (not just margin) so the heading's accessible name reads "1. Um skilmálana". */}
+                <span className="vild-num mr-1 text-muted-foreground">{i + 1}.</span>{' '}
                 {s.title}
               </h2>
               <div className="mt-4 space-y-4 text-[16px] leading-[1.6] text-foreground/85">
