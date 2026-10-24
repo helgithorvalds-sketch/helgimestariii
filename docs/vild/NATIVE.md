@@ -31,7 +31,7 @@ The standalone build reads `VITE_VILD_DATA` (`mock` for demos, `supabase` for pr
 | Apple Wallet pass | `capacitor-pass-to-wallet` | fetch `/functions/v1/vild-wallet-pass/pass` as base64 → `addToWallet` |
 | Google Wallet | `@capawesome/capacitor-wallet` or open the save URL from `/google-save-url` | |
 | Electronic ID return | Universal Links / App Links for `https://vild.is/app/eg/skilriki` | the eID callback redirects there with `?eid=ok` |
-| Status bar / safe areas | `@capacitor/status-bar`; CSS uses `env(safe-area-inset-*)` already | `viewport-fit=cover` is in `vild.html` |
+| Status bar / safe areas | `@capacitor/status-bar`; CSS uses `env(safe-area-inset-*)` already | `viewport-fit=cover` is in `vild-app.html` |
 | Geolocation (nearest place) | browser API works in the web view; `@capacitor/geolocation` for precise permissions | |
 
 ## Store checklist
