@@ -9,22 +9,25 @@ import { RangeInput } from './RangeInput';
 
 type Mode = 'guest' | 'merchant';
 
+/** All figures in the calculator count over the same 500 ms, so linked numbers settle together. */
+const COUNT_MS = 500;
+
 function Column({ title, rows, highlight, className }: { title: string; rows: { label: string; value: number; marker?: boolean; sign?: '+' | '−' }[]; highlight?: boolean; className?: string }) {
   return (
     <div className={cn('min-w-0', className)}>
-      <p className={cn('text-[12px] font-semibold uppercase tracking-[0.14em]', highlight ? 'text-[hsl(var(--green-500))]' : 'text-muted-foreground')}>{title}</p>
+      <p className={cn('vild-eyebrow', !highlight && 'text-muted-foreground')}>{title}</p>
       <dl className="mt-3 space-y-4">
         {rows.map((r) => (
           <div key={r.label}>
             <dt className="text-[13px] text-muted-foreground">{r.label}</dt>
             <dd className="vild-num mt-0.5 text-[22px] font-extrabold leading-none tracking-[-0.02em] sm:text-[26px]">
-              {r.sign && <span aria-hidden="true">{r.sign}</span>}
+              {/* The sign sits inside the marker and is read with the amount: "+1.500 kr." */}
               {r.marker ? (
                 <DrawnMarker>
-                  <AnimatedNumber value={r.value} duration={500} />
+                  <AnimatedNumber value={r.value} prefix={r.sign} duration={COUNT_MS} />
                 </DrawnMarker>
               ) : (
-                <AnimatedNumber value={r.value} duration={500} />
+                <AnimatedNumber value={r.value} prefix={r.sign} duration={COUNT_MS} />
               )}
             </dd>
           </div>
@@ -59,6 +62,23 @@ function useSettle(deps: number[]) {
   return y;
 }
 
+/** True while a slider is moving and for 400 ms after: the live region stays busy until the result rests. */
+function useMoving(deps: number[]) {
+  const [moving, setMoving] = useState(false);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    setMoving(true);
+    const t = window.setTimeout(() => setMoving(false), 400);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+  return moving;
+}
+
 /**
  * The film's argument as a thing you can move. Guest mode: what a meal costs
  * with a discount versus with credit. Merchant mode: what 1.000 kr. of credit
@@ -72,8 +92,12 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
 
   const back = Math.round((price * pct) / 100);
   const costOfCredit = Math.round((credit * cogs) / 100);
-  const y = useSettle(mode === 'guest' ? [price, pct] : [credit, cogs]);
+  const deps = mode === 'guest' ? [price, pct] : [credit, cogs];
+  const y = useSettle(deps);
+  const moving = useMoving(deps);
   const results = 'mt-7 grid grid-cols-2 divide-x divide-border border-t border-border pt-6';
+  // Screen readers hear the recomputed result once the slider rests (aria-busy while it moves), not every step on the way.
+  const live = { 'aria-live': 'polite', 'aria-atomic': true, 'aria-busy': moving } as const;
 
   return (
     <div className={cn('rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-sm)] sm:p-7', className)} data-testid="credit-calculator">
@@ -83,7 +107,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
             <RangeInput label="Verð máltíðar" value={price} min={1000} max={10000} step={100} onChange={setPrice} format={formatISK} />
             <RangeInput label="Hlutfall til baka" value={pct} min={10} max={50} step={5} onChange={setPct} format={formatPct} />
           </div>
-          <motion.div className={results} style={{ y }}>
+          <motion.div className={results} style={{ y }} {...live}>
             <Column
               title="Afsláttur"
               className="pr-4 sm:pr-6"
@@ -110,7 +134,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
             <RangeInput label="Inneign sem gesturinn nýtir" value={credit} min={500} max={5000} step={100} onChange={setCredit} format={formatISK} />
             <RangeInput label="Hráefni, hlutfall af verði" value={cogs} min={20} max={60} step={5} onChange={setCogs} format={formatPct} />
           </div>
-          <motion.div className={results} style={{ y }}>
+          <motion.div className={results} style={{ y }} {...live}>
             <Column
               title="Afsláttur"
               className="pr-4 sm:pr-6"
@@ -131,7 +155,7 @@ export function CreditCalculator({ mode = 'guest', className }: { mode?: Mode; c
           </motion.div>
           <p className="mt-5 text-[13px] leading-snug text-muted-foreground">
             Inneign er krafa um mat hjá þér, ekki peningar. Þú borgar hráefnið þegar hún er nýtt – og gesturinn kom aftur til að nýta hana. Munurinn er{' '}
-            <span className="vild-num font-semibold text-foreground">{formatISK(credit - costOfCredit)}</span> á hverjum gesti.
+            <AnimatedNumber value={credit - costOfCredit} duration={COUNT_MS} className="font-semibold text-foreground" /> á hverjum gesti.
           </p>
         </>
       )}

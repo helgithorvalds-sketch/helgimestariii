@@ -8,10 +8,8 @@ import { href, paths } from '../../lib/paths';
 import type { Product } from '../../lib/types';
 
 const CARD = 'w-[168px] shrink-0 snap-start lg:w-auto';
-/* Hover (mouse only): the photo grows 3% inside its clip, the tag lifts 2px. The card itself never scales. */
-const HOVER_T = '[transition-duration:400ms] [transition-timing-function:var(--ease-out)]';
-const IMG_HOVER = `transition-[opacity,transform] ${HOVER_T} [@media(hover:hover)]:group-hover:scale-[1.03]`;
-const TAG_HOVER = `transition-transform ${HOVER_T} [@media(hover:hover)]:group-hover:-translate-y-0.5`;
+/* The press lives on the link itself: one tab stop per card. Hover is a colour change on the name, nothing scales. */
+const MotionLink = motion.create(Link);
 
 /**
  * Products with credit, as the app shows them: image 4:5, the credit tag on
@@ -49,16 +47,14 @@ export function ProductCarousel({ products, loading, className }: { products: Pr
     <motion.ul className={wrap} variants={staggerParent(0.06)} {...reveal}>
       {items.map((p) => (
         <motion.li key={p.id} variants={fadeUp} className={CARD}>
-          <motion.div whileTap={tap}>
-            <Link to={href(paths.appProduct(p.id))} className="group block rounded-2xl" aria-label={`${p.name}, ${formatISK(p.price)}, ${formatSignedISK(p.creditAmount)} til baka`}>
-              <div className="relative">
-                <ProductImage src={p.image} name={p.name} alt={p.name} className="aspect-[4/5] rounded-2xl" imgClassName={IMG_HOVER} />
-                <CreditTag className={cn('absolute bottom-3 left-3', TAG_HOVER)}>{formatSignedISK(p.creditAmount)}</CreditTag>
-              </div>
-              <p className="mt-3 truncate text-[15px] font-semibold leading-tight transition-colors duration-150 group-hover:text-[hsl(var(--green-500))]">{p.name}</p>
-              <p className="vild-num mt-0.5 text-[14px] text-muted-foreground">{formatISK(p.price)}</p>
-            </Link>
-          </motion.div>
+          <MotionLink whileTap={tap} to={href(paths.appProduct(p.id))} className="group block rounded-2xl" aria-label={`${p.name}, ${formatISK(p.price)}, ${formatSignedISK(p.creditAmount)} til baka`}>
+            <div className="relative">
+              <ProductImage src={p.image} name={p.name} alt={p.name} className="aspect-[4/5] rounded-2xl" />
+              <CreditTag className="absolute bottom-3 left-3">{formatSignedISK(p.creditAmount)}</CreditTag>
+            </div>
+            <p className="mt-3 truncate text-[15px] font-semibold leading-tight transition-colors duration-150 group-hover:text-[hsl(var(--green-500))]">{p.name}</p>
+            <p className="vild-num mt-0.5 text-[14px] text-muted-foreground">{formatISK(p.price)}</p>
+          </MotionLink>
         </motion.li>
       ))}
     </motion.ul>

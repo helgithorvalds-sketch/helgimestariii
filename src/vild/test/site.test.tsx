@@ -102,7 +102,10 @@ describe('credit calculator', () => {
     expect(price.value).toBe('3000');
     expect(pct.value).toBe('50');
     // defaults: 3.000 kr. at 50 % → guest pays 1.500 with a discount, gets 1.500 back as credit
-    expect(within(calc).getAllByLabelText('1.500 kr.').length).toBe(3);
+    // (the signs are part of the amounts: "−1.500 kr." out of the till, "+1.500 kr." back as credit)
+    expect(within(calc).getByLabelText('1.500 kr.')).toBeInTheDocument();
+    expect(within(calc).getByLabelText('−1.500 kr.')).toBeInTheDocument();
+    expect(within(calc).getByLabelText('+1.500 kr.').closest('[aria-live="polite"]')).not.toBeNull();
 
     fireEvent.change(price, { target: { value: '6000' } });
     fireEvent.change(pct, { target: { value: '20' } });
@@ -110,7 +113,8 @@ describe('credit calculator', () => {
       expect(within(calc).getAllByText('6.000 kr.').length).toBeGreaterThan(0); // the output (and the credit column once it settled)
     });
     // discount: pays 4.800, loses 1.200 · credit: pays 6.000, gets 1.200 back
-    expect(within(calc).getAllByLabelText('1.200 kr.').length).toBe(2);
+    expect(within(calc).getByLabelText('−1.200 kr.')).toBeInTheDocument();
+    expect(within(calc).getByLabelText('+1.200 kr.')).toBeInTheDocument();
     expect(within(calc).getByLabelText('4.800 kr.')).toBeInTheDocument();
     expect(within(calc).getByLabelText('6.000 kr.')).toBeInTheDocument();
   });
@@ -120,8 +124,10 @@ describe('credit calculator', () => {
     const calc = screen.getByTestId('credit-calculator');
     const cogs = within(calc).getByLabelText('Hráefni, hlutfall af verði') as HTMLInputElement;
     expect(cogs.value).toBe('30');
-    expect(within(calc).getByLabelText('300 kr.')).toBeInTheDocument();
+    expect(within(calc).getByLabelText('−300 kr.')).toBeInTheDocument();
+    expect(within(calc).getByLabelText('700 kr.')).toBeInTheDocument(); // "Munurinn er 700 kr."
     fireEvent.change(cogs, { target: { value: '50' } });
+    expect(within(calc).getByLabelText('−500 kr.')).toBeInTheDocument();
     expect(within(calc).getByLabelText('500 kr.')).toBeInTheDocument();
   });
 });
@@ -151,8 +157,18 @@ describe('restaurants page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Hækka prósentu' }));
     expect(screen.getByLabelText('15%')).toBeInTheDocument(); // the accessible value is immediate …
     expect(await screen.findByText('15%')).toBeInTheDocument(); // … the visible one counts up to it
-    expect(screen.getByText('+449 kr.')).toBeInTheDocument(); // 15 % of 2.990
+    const tag = await screen.findByLabelText('449 kr.'); // 15 % of 2.990, counting with the percentage
+    expect(tag.parentElement).toHaveTextContent('+449 kr.');
     for (const l of screen.getAllByRole('link', { name: 'Innskráning fyrirtækja' })) expect(l).toHaveAttribute('href', '/vild/fyrirtaeki/innskraning');
+  });
+
+  it('lists the five sectors before the query resolves, with Laust only in the chip', () => {
+    site('/fyrir-veitingastadi');
+    const list = screen.getByRole('list', { name: 'Geirar' });
+    expect(within(list).getAllByRole('listitem').length).toBe(5);
+    expect(within(list).getByText('Lúna · 9 staðir')).toBeInTheDocument();
+    expect(within(list).getAllByText('Laust').length).toBe(4);
+    expect(within(list).getAllByText('Engin keðja enn').length).toBe(4);
   });
 });
 
@@ -162,6 +178,7 @@ describe('faq, terms and privacy', () => {
     expect(screen.getByRole('heading', { level: 1, name: /svör\. Stutt og skýr\./ })).toBeInTheDocument();
     for (const id of ['appid', 'inneignin', 'rafraen-skilriki', 'fyrir-veitingastadi']) expect(document.getElementById(id)).not.toBeNull();
     expect(screen.getByRole('button', { name: 'Þarf ég rafræn skilríki?' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Appið (4 spurningar)' })).toHaveAttribute('href', '#appid');
     expect(document.title).toBe('Spurningar – VILD');
   });
 
@@ -172,6 +189,8 @@ describe('faq, terms and privacy', () => {
     site('/personuvernd');
     expect(screen.getAllByText('Drög – ekki yfirfarið af lögfræðingi.').length).toBe(2);
     expect(screen.getAllByText(/Kennitalan er notuð einu sinni/).length).toBeGreaterThan(0);
+    // editorial to-dos live in the intro, not in the policy text
+    expect(screen.queryByText(/hér fyrir útgáfu/)).toBeNull();
   });
 });
 
@@ -184,16 +203,27 @@ describe('layout', () => {
     expect(within(header).getByRole('link', { name: 'Svona virkar VILD' })).toHaveAttribute('href', '/vild#svona-virkar');
     const footer = screen.getByRole('contentinfo');
     expect(within(footer).getByRole('link', { name: 'Skilmálar' })).toHaveAttribute('href', '/vild/skilmalar');
-    expect(within(footer).getByRole('link', { name: 'App Store' })).toHaveAttribute('title', 'Væntanlegt í App Store');
+    for (const l of within(footer).getAllByRole('link', { name: 'Sækja appið' })) expect(l).toHaveAttribute('href', '/vild/app');
+    expect(within(footer).getByText('Væntanlegt í App Store og Google Play')).toBeInTheDocument();
+    expect(within(footer).queryByRole('link', { name: /Google Play|App Store/ })).toBeNull();
     expect(within(footer).getByText('© 2026 VILD')).toBeInTheDocument();
   });
 
   it('mobile menu opens and lists the links', () => {
     site('/');
-    fireEvent.click(screen.getByRole('button', { name: 'Opna valmynd' }));
+    const toggle = screen.getByRole('button', { name: 'Opna valmynd' });
+    fireEvent.click(toggle);
     const menu = document.getElementById('site-menu')!;
+    expect(menu).toHaveAttribute('aria-modal', 'true');
     expect(within(menu).getByRole('link', { name: 'Fyrir veitingastaði' })).toBeInTheDocument();
+    // modal: focus on the first link, the page behind is inert and does not scroll
+    expect(document.activeElement).toBe(within(menu).getAllByRole('link')[0]);
+    expect(screen.getByRole('main', { hidden: true })).toHaveAttribute('inert');
+    expect(document.documentElement.style.overflow).toBe('hidden');
     fireEvent.click(screen.getByRole('button', { name: 'Loka valmynd' }));
+    expect(screen.getByRole('main')).not.toHaveAttribute('inert');
+    expect(document.documentElement.style.overflow).toBe('');
+    expect(document.activeElement).toBe(toggle);
   });
 });
 

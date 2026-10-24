@@ -22,8 +22,9 @@ export function LegalPage({ eyebrow, title, updated, intro, sections }: { eyebro
       </section>
 
       <Container className="grid gap-12 py-14 lg:grid-cols-[4fr_8fr] lg:gap-16 lg:py-20">
-        <nav className="lg:sticky lg:top-24 lg:self-start" aria-label="Efnisyfirlit">
-          <ol className="hidden border-t border-border lg:block">
+        {/* Desktop only, and hidden as a whole so it leaves no empty grid row on phones. */}
+        <nav className="hidden lg:sticky lg:top-24 lg:block lg:self-start" aria-label="Efnisyfirlit">
+          <ol className="border-t border-border">
             {sections.map((s, i) => (
               <li key={s.id} className="border-b border-border">
                 <a href={`#${s.id}`} className="flex gap-3 py-3 text-[15px] font-medium hover:text-[hsl(var(--green-500))]">

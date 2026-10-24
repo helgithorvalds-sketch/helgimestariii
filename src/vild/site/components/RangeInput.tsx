@@ -4,7 +4,9 @@ import { cn } from '@/lib/utils';
 /**
  * A native range input styled to the brand (green track fill, white thumb with
  * a green ring). Native so it is keyboard-accessible and testable without a
- * ResizeObserver.
+ * ResizeObserver. The input is a 44 px tall transparent hit area; the 6 px
+ * track is painted on its pseudo-elements (`.vild-range` in theme.css), the
+ * fill up to the thumb's centre comes in as `--fill`.
  */
 export function RangeInput({
   label,
@@ -29,7 +31,7 @@ export function RangeInput({
   const pct = ((value - min) / (max - min)) * 100;
   return (
     <div className={cn('min-w-0', className)}>
-      <div className="mb-2 flex items-baseline justify-between gap-3">
+      <div className="flex items-baseline justify-between gap-3">
         <label htmlFor={id} className="text-[13px] font-medium text-muted-foreground">
           {label}
         </label>
@@ -46,13 +48,9 @@ export function RangeInput({
         value={value}
         aria-valuetext={format(value)}
         onChange={(e) => onChange(Number(e.target.value))}
-        style={{ background: `linear-gradient(to right, hsl(var(--green-500)) ${pct}%, hsl(var(--border)) ${pct}%)` }}
-        className={cn(
-          'h-1.5 w-full cursor-pointer appearance-none rounded-full outline-none',
-          '[&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-[hsl(var(--green-500))] [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[var(--shadow-sm)]',
-          '[&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-[3px] [&::-moz-range-thumb]:border-[hsl(var(--green-500))] [&::-moz-range-thumb]:bg-white',
-          'focus-visible:[&::-webkit-slider-thumb]:ring-4 focus-visible:[&::-webkit-slider-thumb]:ring-[hsl(var(--mint-300))]',
-        )}
+        style={{ ['--fill' as string]: `calc(${pct / 100} * (100% - 24px) + 12px)` }}
+        // The hit area's lower 19 px hang into the gap below, so the block grows by the track's own room only.
+        className="vild-range -mb-[19px] block"
       />
     </div>
   );

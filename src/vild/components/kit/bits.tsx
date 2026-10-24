@@ -12,7 +12,8 @@ export function SectionHeader({ title, action, to, className, eyebrow }: { title
         <h2 className="text-[19px] font-bold leading-tight tracking-tight">{title}</h2>
       </div>
       {action && to && (
-        <Link to={to} className="inline-flex shrink-0 items-center gap-0.5 text-[14px] font-semibold text-[hsl(var(--green-500))]">
+        // py-3 -my-3: a 44 px touch target that takes no more room than the text.
+        <Link to={to} className="-my-3 inline-flex shrink-0 items-center gap-0.5 py-3 text-[14px] font-semibold text-[hsl(var(--green-500))]">
           {action}
           <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </Link>

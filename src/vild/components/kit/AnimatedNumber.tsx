@@ -4,9 +4,24 @@ import { prefersReducedMotion } from '../../lib/motion';
 
 /**
  * Counts from the previous value to the next one (ease-out, ~700 ms).
- * Renders with Icelandic grouping and tabular figures; suffix " kr." by default.
+ * Renders with Icelandic grouping and tabular figures; suffix " kr." by default,
+ * an optional sign (`prefix`, e.g. "+" or "−") glued to the figure and read with it.
  */
-export function AnimatedNumber({ value, suffix = ' kr.', className, duration = 700, onComplete }: { value: number; suffix?: string; className?: string; duration?: number; /** Called once the count has settled on `value` (immediately under reduced motion). */ onComplete?: () => void }) {
+export function AnimatedNumber({
+  value,
+  prefix = '',
+  suffix = ' kr.',
+  className,
+  duration = 700,
+  onComplete,
+}: {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  className?: string;
+  duration?: number;
+  /** Called once the count has settled on `value` (immediately under reduced motion). */ onComplete?: () => void;
+}) {
   const [shown, setShown] = useState(value);
   const from = useRef(value);
   const raf = useRef<number | null>(null);
@@ -40,8 +55,9 @@ export function AnimatedNumber({ value, suffix = ' kr.', className, duration = 7
   }, [value, duration]);
 
   return (
-    <span className={className} aria-label={`${formatNumber(value)}${suffix}`}>
+    <span className={className} aria-label={`${prefix}${formatNumber(value)}${suffix}`}>
       <span aria-hidden="true" className="vild-num">
+        {prefix}
         {formatNumber(shown)}
         {suffix}
       </span>

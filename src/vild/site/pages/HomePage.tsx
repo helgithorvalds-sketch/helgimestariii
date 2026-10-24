@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import { AnimatePresence, motion, useInView } from 'framer-motion';
+import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { AnimatedNumber, Chip, SectionHeader } from '../../components/kit';
+import { AnimatedNumber, Chip } from '../../components/kit';
 import { CoinMark } from '../../components/brand';
 import { isSingular } from '../../lib/format';
 import { EASE_OUT, fadeIn, fadeUp, staggerParent, useMotionAllowed, useRevealProps } from '../../lib/motion';
@@ -36,32 +36,41 @@ const MARGINS = [
 /** The notification lands 900 ms after the balance has finished counting: first the money, then the news. */
 const NOTIFY_AFTER = 900;
 
-/** The hero copy: eyebrow, the headline word by word, then lead, buttons and facts, 80 ms apart. */
+/**
+ * The hero copy: eyebrow, the headline word by word, then – once the headline
+ * is set – lead, buttons and facts, 80 ms apart. Under reduced motion it is
+ * simply there.
+ */
 function HeroCopy() {
+  const reduced = useReducedMotion();
   return (
-    <motion.div className="max-w-[600px]" variants={staggerParent(0.08, 0.05)} initial="hidden" animate="show">
+    <motion.div className="max-w-[600px]" variants={staggerParent(0.08, 0.05)} initial={reduced ? false : 'hidden'} animate="show">
       <motion.div variants={fadeIn}>
         <Eyebrow className="text-[hsl(var(--green-700))]">Inneign í stað afsláttar</Eyebrow>
       </motion.div>
       <Display className="mt-4">
         <SplitWords text="Borgaðu fullt verð. Fáðu hluta til baka." />
       </Display>
-      <motion.p variants={fadeUp} className="mt-6 max-w-[44ch] text-[17px] leading-[1.5] text-[hsl(var(--green-900))]/80 sm:text-[19px]">
-        VILD safnar krónum fyrir þig þegar þú borðar hjá samstarfsstöðum. Inneignin bíður þín næst – hjá sömu keðju.
-      </motion.p>
-      <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
-        <LinkButton to={href(paths.app)} size="lg">
-          Sækja appið
-        </LinkButton>
-        <LinkButton to="#svona-virkar" anchor variant="secondary" size="lg" className="border-[hsl(var(--green-900))]/15 bg-white/70 hover:bg-white">
-          Svona virkar þetta
-        </LinkButton>
+      {/* Starts 0.21 s in and waits 0.55 s more: the last word (0.37 s + its ease-out rise) has landed by then. */}
+      <motion.div variants={staggerParent(0.08, 0.55)}>
+        <motion.p variants={fadeUp} className="mt-6 max-w-[44ch] text-[17px] leading-[1.5] text-[hsl(var(--green-900))]/80 sm:text-[19px]">
+          VILD safnar krónum fyrir þig þegar þú borðar hjá samstarfsstöðum. Inneignin bíður þín næst – hjá sömu keðju.
+        </motion.p>
+        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
+          <LinkButton to={href(paths.app)} size="lg" className="w-full sm:w-auto">
+            Sækja appið
+          </LinkButton>
+          <LinkButton to="#svona-virkar" anchor variant="secondary" size="lg" className="w-full border-[hsl(var(--green-900))]/15 bg-white/70 hover:bg-white sm:w-auto">
+            Svona virkar þetta
+          </LinkButton>
+        </motion.div>
+        {/* The dot trails each fact but the last, so a wrapped line never starts with one. */}
+        <motion.ul variants={fadeIn} className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] font-medium text-[hsl(var(--green-700))] [&>li:not(:last-child)]:after:ml-2.5 [&>li:not(:last-child)]:after:content-['·']">
+          <li>Ein króna = ein króna</li>
+          <li>Gildir í 24 mánuði</li>
+          <li>Rafræn skilríki</li>
+        </motion.ul>
       </motion.div>
-      <motion.ul variants={fadeIn} className="mt-8 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] font-medium text-[hsl(var(--green-700))] [&>li+li]:before:mr-2.5 [&>li+li]:before:content-['·']">
-        <li>Ein króna = ein króna</li>
-        <li>Gildir í 24 mánuði</li>
-        <li>Rafræn skilríki</li>
-      </motion.ul>
     </motion.div>
   );
 }
@@ -69,36 +78,39 @@ function HeroCopy() {
 /** The phone and, once its balance has landed, the push notification that explains it. */
 function HeroPhone({ products }: { products: ReturnType<typeof useProducts>['data'] }) {
   const loops = useMotionAllowed();
+  const reduced = useReducedMotion();
   const [notified, setNotified] = useState(false);
   const timer = useRef<number | null>(null);
+  // The card always follows the balance; under reduced motion the balance is final at once and the card comes with it.
   const onSettled = useCallback(() => {
     if (timer.current !== null) return;
-    timer.current = window.setTimeout(() => setNotified(true), NOTIFY_AFTER);
-  }, []);
+    timer.current = window.setTimeout(() => setNotified(true), loops ? NOTIFY_AFTER : 0);
+  }, [loops]);
+  // Reset on cleanup too, so a remount (StrictMode, or reduced motion where the balance settles on mount) can schedule it again.
   useEffect(
     () => () => {
       if (timer.current !== null) window.clearTimeout(timer.current);
+      timer.current = null;
     },
     [],
   );
-  const showCard = notified || !loops;
 
   return (
-    <div className="relative flex justify-center pt-14 lg:justify-end lg:pr-6 lg:pt-12">
+    <div className="relative flex justify-center pt-20 sm:pt-14 lg:justify-end lg:pr-6 lg:pt-12">
       <PhoneMock products={products} onBalanceSettled={onSettled} />
       <div className="absolute left-1/2 top-0 w-[240px] -translate-x-[62%] sm:w-[260px] lg:left-0 lg:translate-x-0" aria-hidden="true">
         <AnimatePresence>
-          {showCard && (
+          {notified && (
             <motion.div
               className="rounded-2xl bg-white p-3 shadow-[var(--shadow-md)]"
-              initial={{ opacity: 0, y: -18, scale: 0.96 }}
+              initial={reduced ? false : { opacity: 0, y: -18, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.9 }}
             >
               <div className="flex items-start gap-2.5">
                 <CoinMark size={28} />
                 <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">VILD · rétt í þessu</p>
+                  <p className="vild-eyebrow text-muted-foreground">VILD · rétt í þessu</p>
                   <p className="mt-0.5 text-[13px] font-semibold leading-snug text-foreground">
                     Þú fékkst inneign frá Lúnu.{' '}
                     <DrawnMarker className="vild-num" delay={0.35}>
@@ -234,8 +246,15 @@ export default function HomePage() {
       {/* d. Krónur til baka í dag */}
       <section>
         <Container className="py-20 lg:py-28">
-          <Reveal as="header" className="[&_h2]:text-[28px] [&_h2]:font-extrabold [&_h2]:tracking-[-0.03em] sm:[&_h2]:text-[34px]">
-            <SectionHeader eyebrow="Hjá Lúnu núna" title="Krónur til baka í dag" action="Sjá allt" to={href(paths.app)} />
+          <Reveal as="header" className="flex items-end justify-between gap-4">
+            <div>
+              <Eyebrow>Hjá Lúnu núna</Eyebrow>
+              <Headline className="mt-3">Krónur til baka í dag</Headline>
+            </div>
+            <Link to={href(paths.app)} className="-my-3 inline-flex shrink-0 items-center gap-1 py-3 text-[15px] font-semibold text-[hsl(var(--green-500))]">
+              Sjá allt
+              <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+            </Link>
           </Reveal>
           <ProductCarousel products={products.data} loading={products.isLoading} className="mt-8" />
           {lunchOffer && (
@@ -298,7 +317,7 @@ export default function HomePage() {
           <Reveal as="header">
             <Eyebrow>Spurningar</Eyebrow>
             <Headline className="mt-3">Það sem fólk spyr um.</Headline>
-            <Link to={href(paths.siteFaq)} className="mt-5 inline-flex items-center gap-1 text-[15px] font-semibold text-[hsl(var(--green-500))]">
+            <Link to={href(paths.siteFaq)} className="-mb-3 mt-2 inline-flex items-center gap-1 py-3 text-[15px] font-semibold text-[hsl(var(--green-500))]">
               Fleiri spurningar
               <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
             </Link>

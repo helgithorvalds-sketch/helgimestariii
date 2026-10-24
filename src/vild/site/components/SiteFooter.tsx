@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Wordmark } from '../../components/brand';
 import { href, paths } from '../../lib/paths';
+import { LinkButton } from './LinkButton';
 import { HOW_IT_WORKS_HASH } from './SiteHeader';
 
 const COLUMNS: { title: string; links: { label: string; to: string }[] }[] = [
@@ -29,8 +30,6 @@ const COLUMNS: { title: string; links: { label: string; to: string }[] }[] = [
   },
 ];
 
-const STORE_TITLE = 'Væntanlegt í App Store';
-
 export function SiteFooter() {
   return (
     <footer className="vild-dark bg-[hsl(var(--green-900))] text-white">
@@ -43,10 +42,11 @@ export function SiteFooter() {
           {COLUMNS.map((col) => (
             <div key={col.title}>
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[hsl(var(--mint-300))]/80">{col.title}</p>
-              <ul className="mt-4 space-y-2.5">
+              {/* Each link is a 44 px row (the touch target); the text keeps its place under the title. */}
+              <ul className="mt-1.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <Link to={l.to} className="text-[15px] font-medium text-white/85 transition-colors hover:text-[hsl(var(--mint-300))]">
+                    <Link to={l.to} className="inline-flex min-h-11 items-center text-[15px] font-medium text-white/85 transition-colors hover:text-[hsl(var(--mint-300))]">
                       {l.label}
                     </Link>
                   </li>
@@ -56,23 +56,15 @@ export function SiteFooter() {
           ))}
           <div className="sm:col-span-3 lg:col-span-1">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[hsl(var(--mint-300))]/80">Sækja</p>
-            <div className="mt-4 flex flex-wrap gap-2.5">
-              {['App Store', 'Google Play'].map((store) => (
-                <Link
-                  key={store}
-                  to={href(paths.app)}
-                  title={STORE_TITLE}
-                  className="inline-flex h-11 items-center rounded-xl border border-white/15 bg-[hsl(var(--ink))] px-4 text-[15px] font-semibold text-white transition-colors hover:border-[hsl(var(--mint-300))]/60"
-                >
-                  {store}
-                </Link>
-              ))}
-            </div>
+            <LinkButton to={href(paths.app)} variant="mint" className="mt-4">
+              Sækja appið
+            </LinkButton>
+            <p className="mt-3 text-[13px] text-white/70">Væntanlegt í App Store og Google Play</p>
           </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-2 border-t border-[hsl(var(--border))] pt-6 text-[14px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
-          <a href="mailto:hallo@vild.is" className="font-medium text-white/85 hover:text-[hsl(var(--mint-300))]">
+          <a href="mailto:hallo@vild.is" className="-my-[11px] inline-flex min-h-11 items-center self-start font-medium text-white/85 hover:text-[hsl(var(--mint-300))] sm:self-center">
             hallo@vild.is
           </a>
           <p>© 2026 VILD</p>

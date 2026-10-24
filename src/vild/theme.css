@@ -87,6 +87,16 @@
   color-scheme: dark;
 }
 
+.vild h1,
+.vild h2,
+.vild h3,
+.vild h4,
+.vild h5,
+.vild h6 {
+  /* The host app sets Plus Jakarta Sans on headings; inside VILD they inherit Figtree. */
+  font-family: inherit;
+}
+
 .vild .font-display,
 .vild .vild-display {
   font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
@@ -103,13 +113,20 @@
   line-height: 1;
 }
 
-/* Tracked small-caps eyebrow, as in the film ("LAUGARDAGSMORGUNN"). */
+/* Tracked small-caps eyebrow, as in the film ("LAUGARDAGSMORGUNN"). The one
+   microstyle for small tracked labels. The colour sits in zero-specificity rules
+   so a text-* class passed alongside it wins; on dark surfaces it turns mint. */
 .vild .vild-eyebrow {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+:where(.vild .vild-eyebrow) {
   color: hsl(var(--green-500));
+}
+:where(.vild .vild-dark .vild-eyebrow) {
+  color: hsl(var(--mint-300));
 }
 
 /* Yellow marker behind a credit amount: "+8.000 kr." */
@@ -130,6 +147,65 @@
 .vild-html {
   background: #ffffff;
   scroll-behavior: smooth;
+}
+
+/* Range slider (site calculators): the input is a 44 px transparent hit area,
+   the 6 px track and the 24 px thumb are painted inside it. `--fill` is where
+   the green stops (the thumb's centre), set by RangeInput. */
+.vild .vild-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  margin-left: 0;
+  margin-right: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.vild .vild-range:focus-visible {
+  outline: none;
+}
+.vild .vild-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, hsl(var(--green-500)) var(--fill, 0%), hsl(var(--border)) var(--fill, 0%));
+}
+.vild .vild-range::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: hsl(var(--border));
+}
+.vild .vild-range::-moz-range-progress {
+  height: 6px;
+  border-radius: 9999px;
+  background: hsl(var(--green-500));
+}
+.vild .vild-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px; /* (6 − 24) / 2: centred on the track */
+  border-radius: 9999px;
+  border: 3px solid hsl(var(--green-500));
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.vild .vild-range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  border: 3px solid hsl(var(--green-500));
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.vild .vild-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px hsl(var(--mint-300)), 0 0 0 5px hsl(var(--green-500));
+}
+.vild .vild-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px hsl(var(--mint-300)), 0 0 0 5px hsl(var(--green-500));
 }
 
 /* Hide scrollbars on horizontal carousels without losing scrolling. */
@@ -232,6 +308,9 @@
 
 /* Reduced motion: everything settles instantly. */
 @media (prefers-reduced-motion: reduce) {
+  .vild-html {
+    scroll-behavior: auto;
+  }
   .vild *,
   .vild *::before,
   .vild *::after {

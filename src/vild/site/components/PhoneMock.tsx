@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { Home, MapPin, Receipt, User, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AnimatedNumber, Chip, CreditTag, ProductImage } from '../../components/kit';
@@ -10,9 +10,19 @@ import type { Product } from '../../lib/types';
 /** What the phone shows when the catalogue has not loaded yet: the three products the film uses. */
 const FALLBACK: Pick<Product, 'id' | 'name' | 'price' | 'image' | 'creditAmount'>[] = [
   { id: 'p_margherita', name: 'Margherita', price: 2990, image: '/vild/img/products/margherita.jpg', creditAmount: 1495 },
-  { id: 'p_chicken_salad', name: 'Kjúklingasalat', price: 2690, image: '/vild/img/products/chicken-salad.jpg', creditAmount: 672 },
+  { id: 'p_chicken_salad', name: 'Kjúklingasalat', price: 2690, image: '/vild/img/products/chicken-salad.jpg', creditAmount: 673 },
   { id: 'p_luna_burger', name: 'Lúnuborgari', price: 2890, image: '/vild/img/products/burger.jpg', creditAmount: 578 },
 ];
+
+/* Live products keep the film's order (Margherita first, the one the notification names), then the best rate. */
+const FILM_ORDER = FALLBACK.map((p) => p.id);
+function filmFirst(a: Product, b: Product) {
+  const rank = (p: Product) => {
+    const i = FILM_ORDER.indexOf(p.id);
+    return i === -1 ? FILM_ORDER.length : i;
+  };
+  return rank(a) - rank(b) || b.creditPct - a.creditPct || b.creditAmount - a.creditAmount;
+}
 
 const TABS = [
   { icon: Home, label: 'Heim', active: true },
@@ -30,7 +40,8 @@ const FLOAT_T = { duration: 6, repeat: Infinity, ease: 'easeInOut' as const };
  * A faithful, static render of the app home inside a phone frame, built from
  * the kit so it is real UI. 300 × 620 at full size; scaled down on phones.
  * Rises in with a soft spring, then floats; the balance counts up once the
- * phone is in view and `onBalanceSettled` fires when it lands.
+ * phone is in view and `onBalanceSettled` fires when it lands. Under reduced
+ * motion it is simply there, balance and all.
  */
 export function PhoneMock({
   products,
@@ -45,19 +56,25 @@ export function PhoneMock({
   tilt?: number;
   onBalanceSettled?: () => void;
 }) {
-  const shown = (products && products.length >= 3 ? products.filter((p) => p.creditAmount > 0).slice(0, 3) : FALLBACK).slice(0, 3);
+  const live = products ? products.filter((p) => p.creditAmount > 0).sort(filmFirst) : [];
+  const shown = (live.length >= 3 ? live : FALLBACK).slice(0, 3);
   const ref = useRef<HTMLDivElement>(null);
   const seen = useInView(ref, { once: true, amount: 0.3 });
   const visible = useInView(ref, { amount: 0.1 });
   const loops = useMotionAllowed();
+  const reduced = useReducedMotion();
 
-  // Count up from zero once the phone has risen in, and only once it is in view.
-  const [shownBalance, setShownBalance] = useState(0);
+  // Count up from zero once the phone has risen in, and only once it is in view. Reduced motion: the final value at once.
+  const [shownBalance, setShownBalance] = useState(reduced ? balance : 0);
   useEffect(() => {
+    if (reduced) {
+      setShownBalance(balance);
+      return;
+    }
     if (!seen) return;
     const t = window.setTimeout(() => setShownBalance(balance), 450);
     return () => window.clearTimeout(t);
-  }, [seen, balance]);
+  }, [seen, balance, reduced]);
 
   const floating = loops && visible;
 
@@ -65,7 +82,7 @@ export function PhoneMock({
     <motion.div
       ref={ref}
       className={cn('relative h-[496px] w-[240px] sm:h-[620px] sm:w-[300px]', className)}
-      initial={{ opacity: 0, y: 48, rotate: tilt }}
+      initial={reduced ? false : { opacity: 0, y: 48, rotate: tilt }}
       animate={{ opacity: 1, y: 0, rotate: tilt }}
       transition={{ ...springSoft, delay: 0.15 }}
       aria-hidden="true"
