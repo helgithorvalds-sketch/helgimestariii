@@ -139,16 +139,19 @@ export type Profile = {
 
 export type PosVendor = 'noona' | 'upsell' | 'resto' | 'dk' | 'ls' | 'straumur' | 'regla' | 'other';
 
-/** The POS vendors that matter in Iceland (see docs/vild/research/tech-landscape.md §A). */
-export const POS_VENDORS: { id: PosVendor; name: string; note: string; api: 'api' | 'partner' | 'scan' }[] = [
-  { id: 'noona', name: 'Noona HQ (SalesCloud)', note: 'Opið API, webhooks og inneignarveski. Síminn Pay.', api: 'api' },
-  { id: 'upsell', name: 'Upsell', note: 'Subway, Serrano, Te & Kaffi og 50+ staðir. Samstarfstenging.', api: 'partner' },
-  { id: 'resto', name: 'Resto', note: 'Veitingakassi, Teya og Adyen posar. Samstarfstenging.', api: 'partner' },
-  { id: 'dk', name: 'dk POS', note: 'dk hugbúnaður. API í bókhaldslagi.', api: 'partner' },
-  { id: 'ls', name: 'LS Central', note: 'Stærri keðjur. Innbyggt vildarkerfi.', api: 'api' },
-  { id: 'straumur', name: 'Straumur posi (Adyen)', note: 'Terminal API, VAS-vottaðir posar.', api: 'api' },
-  { id: 'regla', name: 'Regla', note: 'Bókhald + kassi.', api: 'partner' },
-  { id: 'other', name: 'Annað', note: 'Skönnun á VILD-korti við kassa.', api: 'scan' },
+/**
+ * The POS vendors that matter in Iceland (see docs/vild/research/tech-landscape.md §A).
+ * `short` is the name used in running text on the site: "Noona, Upsell, …, Straumur".
+ */
+export const POS_VENDORS: { id: PosVendor; name: string; short: string; note: string; api: 'api' | 'partner' | 'scan' }[] = [
+  { id: 'noona', name: 'Noona HQ (SalesCloud)', short: 'Noona', note: 'Opið API, webhooks og inneignarveski. Síminn Pay.', api: 'api' },
+  { id: 'upsell', name: 'Upsell', short: 'Upsell', note: 'Subway, Serrano, Te & Kaffi og 50+ staðir. Samstarfstenging.', api: 'partner' },
+  { id: 'resto', name: 'Resto', short: 'Resto', note: 'Veitingakassi, Teya og Adyen posar. Samstarfstenging.', api: 'partner' },
+  { id: 'dk', name: 'dk POS', short: 'dk', note: 'dk hugbúnaður. API í bókhaldslagi.', api: 'partner' },
+  { id: 'ls', name: 'LS Central', short: 'LS Central', note: 'Stærri keðjur. Innbyggt vildarkerfi.', api: 'api' },
+  { id: 'straumur', name: 'Straumur posi (Adyen)', short: 'Straumur', note: 'Terminal API, VAS-vottaðir posar.', api: 'api' },
+  { id: 'regla', name: 'Regla', short: 'Regla', note: 'Bókhald + kassi.', api: 'partner' },
+  { id: 'other', name: 'Annað', short: 'Annað', note: 'Skönnun á VILD-korti við kassa.', api: 'scan' },
 ];
 
 export type MerchantUser = {

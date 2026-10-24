@@ -6,6 +6,9 @@ import { Container, Display, Eyebrow, Lead } from '../components/layout';
 import { usePageTitle } from '../components/usePageTitle';
 import { FAQ_GROUPS } from '../content/faq';
 
+/** 1, 21, 31 … spurning; everything else spurningar. */
+const questions = (n: number) => `${n} ${n % 10 === 1 && n % 100 !== 11 ? 'spurning' : 'spurningar'}`;
+
 export default function FaqPage() {
   usePageTitle('Spurningar – VILD');
   const total = FAQ_GROUPS.reduce((n, g) => n + g.items.length, 0);
@@ -26,14 +29,17 @@ export default function FaqPage() {
           <ul className="flex flex-wrap gap-2 lg:flex-col lg:gap-0 lg:border-t lg:border-border">
             {FAQ_GROUPS.map((g) => (
               <li key={g.id} className="lg:border-b lg:border-border">
-                <a href={`#${g.id}`} className="inline-flex h-9 items-center rounded-full border border-border bg-white px-3.5 text-[14px] font-medium hover:bg-secondary lg:h-auto lg:w-full lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-3.5 lg:text-[16px] lg:font-semibold lg:hover:bg-transparent lg:hover:text-[hsl(var(--green-500))]">
-                  {g.title}
-                  <span className="vild-num ml-2 text-[13px] font-medium text-muted-foreground">{g.items.length}</span>
+                <a href={`#${g.id}`} className="inline-flex h-11 items-center rounded-full border border-border bg-white px-3.5 text-[14px] font-medium hover:bg-secondary lg:h-auto lg:w-full lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-3.5 lg:text-[16px] lg:font-semibold lg:hover:bg-transparent lg:hover:text-[hsl(var(--green-500))]">
+                  {g.title}{' '}
+                  <span className="vild-num ml-2 text-[13px] font-medium text-muted-foreground" aria-hidden="true">
+                    {g.items.length}
+                  </span>
+                  <span className="sr-only">({questions(g.items.length)})</span>
                 </a>
               </li>
             ))}
           </ul>
-          <Link to={href(paths.siteForRestaurants)} className="mt-6 hidden items-center gap-1 text-[15px] font-semibold text-[hsl(var(--green-500))] lg:inline-flex">
+          <Link to={href(paths.siteForRestaurants)} className="-mb-3 mt-3 hidden items-center gap-1 py-3 text-[15px] font-semibold text-[hsl(var(--green-500))] lg:inline-flex">
             Fyrir veitingastaði
             <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
           </Link>

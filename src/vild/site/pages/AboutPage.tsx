@@ -19,19 +19,20 @@ export default function AboutPage() {
               VILD er app fyrir fólk sem borðar úti og fyrir staðina sem það borðar á. Þú borgar fullt verð, hluti kemur til baka sem inneign hjá sömu keðju og bíður þín næst. Ein VILD-króna er ein króna, í 24 mánuði.
             </p>
             <p>
-              Hugmyndin er einföld. Afsláttur er peningur sem fer út um dyrnar og sést aldrei aftur. Inneign er peningur sem helst hjá staðnum sem gaf hana – hann kostar bara hráefnið þegar hún er nýtt, og gesturinn kemur aftur til að nýta hana. Matvöruverslanir hafa reynt þetta með um 10% álagningu og 20 kr. til baka af smjörstykki. Veitingastaður er með um 30% álagningu og tilboðin eru þegar til: hádegið, þriðjudagurinn, happy hour. Þar er þrisvar sinnum meira svigrúm til að gefa til baka, og ástæða til að opna appið.
+              Hugmyndin er einföld. Afsláttur er peningur sem fer út um dyrnar og sést aldrei aftur. Inneign er peningur sem helst hjá staðnum sem gaf hana – hún kostar staðinn bara hráefnið þegar hún er nýtt, og gesturinn kemur aftur til að nýta hana. Matvöruverslanir hafa reynt þetta, en þar kostar varan sjálf um 90% af verðinu og svigrúmið er eftir því: 20 kr. til baka af smjörstykki. Á veitingastað er hráefnið um 30% af verðinu og tilboðin eru þegar til: hádegið, þriðjudagurinn, happy hour. Þar er svigrúm til að gefa meira til baka, og ástæða til að opna appið.
             </p>
             <p>
               Við tökum eina keðju inn í hvern geira. Inneignin gildir bara þar sem hún var veitt, svo staðirnir geta gefið meira – og þú veist alltaf hvar hún bíður.
             </p>
             <p className="text-muted-foreground">VILD er þróað af Norðurvef. Hönnun og þróun í samstarfi við hönnunarstofu.</p>
           </div>
+          {/* py-3 -my-3: 44px touch targets without moving the text. */}
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[15px] font-semibold text-[hsl(var(--green-500))]">
-            <Link to={href(paths.siteForRestaurants)} className="inline-flex items-center gap-1">
+            <Link to={href(paths.siteForRestaurants)} className="-my-3 inline-flex items-center gap-1 py-3">
               Fyrir veitingastaði
               <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
             </Link>
-            <Link to={href(paths.siteFaq)} className="inline-flex items-center gap-1">
+            <Link to={href(paths.siteFaq)} className="-my-3 inline-flex items-center gap-1 py-3">
               Spurningar
               <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
             </Link>

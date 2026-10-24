@@ -7,11 +7,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { AnimatedNumber, Button, Chip, CreditTag, ProductImage } from '../../components/kit';
-import { formatISK, formatSignedISK } from '../../lib/format';
+import { sectors as SEED_SECTORS } from '../../data/seed';
+import { formatISK } from '../../lib/format';
 import { DUR, EASE_IN_OUT, EASE_OUT, fadeUp, spring, staggerParent, useMotionAllowed } from '../../lib/motion';
 import { href, paths } from '../../lib/paths';
 import { useProducts, useSectors } from '../../lib/queries';
-import { POS_VENDORS } from '../../lib/types';
 import { CreditCalculator } from '../components/CreditCalculator';
 import { DrawnMarker } from '../components/DrawnMarker';
 import { FaqAccordion } from '../components/FaqAccordion';
@@ -20,15 +20,14 @@ import { NumberedList } from '../components/NumberedList';
 import { Container, Display, Eyebrow, Headline, Lead, Reveal } from '../components/layout';
 import { usePageTitle } from '../components/usePageTitle';
 import { MERCHANT_FAQ } from '../content/faq';
+import { POS_CONNECTED, listWithOg } from '../content/pos';
 
-const POS_NAMES = POS_VENDORS.filter((v) => v.id !== 'other' && v.id !== 'regla')
-  .map((v) => v.name.replace(/\s*\(.*\)$/, ''))
-  .join(', ');
+const POS_NAMES = listWithOg(POS_CONNECTED);
 
 const WHAT_YOU_GET = [
   { title: 'Einfalt stjórnborð.', body: 'Veldu prósentu fyrir keðjuna, hækkaðu hana á einstökum réttum eða í hádeginu. Virkt um leið og þú vistar.' },
   { title: 'Tenging við kassakerfið.', body: `${POS_NAMES} – eða skönnun á VILD-kortinu við kassann ef kerfið er annað. Flestir staðir eru komnir í gang innan viku.` },
-  { title: 'Uppgjör mánaðarlega.', body: 'Veitt, nýtt, útrunnið og útistandandi inneign, sundurliðað á staði. Það sem bókarinn þarf, á einu blaði.' },
+  { title: 'Uppgjör mánaðarlega.', body: 'Veitt, nýtt, útrunnin og útistandandi inneign, sundurliðuð á staði. Það sem bókarinn þarf, á einu blaði.' },
   { title: 'Gögn um endurkomur.', body: 'Hversu margir komu aftur, hvað þeir keyptu og hvaða réttir skila mestu. Ekki hverjir þeir eru – bara hvað virkar.' },
 ];
 
@@ -69,7 +68,7 @@ function CreditPickerMock() {
   return (
     <div className="rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-sm)] sm:p-7" aria-label="Dæmi um stjórnborð">
       <div className="flex items-center justify-between">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Inneign · öll keðjan</p>
+        <p className="vild-eyebrow">Inneign · öll keðjan</p>
         <Chip tone="mint">Virkt</Chip>
       </div>
       <div className="mt-5 flex items-center justify-between gap-4">
@@ -92,8 +91,11 @@ function CreditPickerMock() {
         </div>
         <div className="flex items-center gap-2">
           <ArrowRight className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
+          {/* Counts with the percentage above (same 450 ms), so the two never disagree mid-step. */}
           <motion.span style={{ scale }} className="inline-flex origin-center">
-            <CreditTag size="lg">{formatSignedISK(back)}</CreditTag>
+            <CreditTag size="lg">
+              +<AnimatedNumber value={back} duration={450} />
+            </CreditTag>
           </motion.span>
         </div>
       </div>
@@ -176,12 +178,15 @@ function ContactForm() {
 export default function RestaurantsPage() {
   usePageTitle('Fyrir veitingastaði – VILD');
   const sectors = useSectors();
+  // The five sectors are known up front: render them at once and let live data replace them, so the hero never waits on the query.
+  const sectorRows = sectors.data ?? SEED_SECTORS;
+  const motionAllowed = useMotionAllowed();
 
   return (
     <>
       {/* Hero */}
       <section className="border-b border-border">
-        <Container className="grid gap-12 py-16 lg:grid-cols-[7fr_5fr] lg:items-center lg:gap-16 lg:py-24">
+        <Container className="grid gap-12 py-16 lg:grid-cols-[7fr_5fr] lg:items-start lg:gap-16 lg:py-24">
           <div>
             <Eyebrow>Fyrir veitingastaði</Eyebrow>
             <Display className="mt-4 max-w-[14ch]">Ein keðja í hverjum geira. Þín?</Display>
@@ -197,12 +202,12 @@ export default function RestaurantsPage() {
               </LinkButton>
             </div>
           </div>
-          <motion.ul className="border-t border-border" aria-label="Geirar" variants={staggerParent(0.06, 0.2)} initial="hidden" animate="show">
-            {(sectors.data ?? []).map((s) => (
+          <motion.ul className="border-t border-border" aria-label="Geirar" variants={staggerParent(0.06, 0.2)} initial={motionAllowed ? 'hidden' : false} animate="show">
+            {sectorRows.map((s) => (
               <motion.li key={s.slug} variants={fadeUp} className="flex items-center justify-between gap-4 border-b border-border py-4">
                 <div className="min-w-0">
                   <p className="text-[16px] font-semibold">{s.name}</p>
-                  <p className="text-[13px] text-muted-foreground">{s.status === 'live' ? 'Lúna · 9 staðir' : 'Laust'}</p>
+                  <p className="text-[13px] text-muted-foreground">{s.status === 'live' ? 'Lúna · 9 staðir' : 'Engin keðja enn'}</p>
                 </div>
                 <Chip tone={s.status === 'live' ? 'green' : 'outline'}>{s.status === 'live' ? 'Í notkun' : 'Laust'}</Chip>
               </motion.li>
@@ -220,14 +225,14 @@ export default function RestaurantsPage() {
               <Headline className="mt-3">Afsláttur kostar peninga. Inneign kostar bara vöruna.</Headline>
             </Reveal>
             <Lead className="mt-5 max-w-[40ch]">
-              Þegar þú gefur 1.000 kr. afslátt vantar 1.000 kr. í kassann. Þegar þú gefur 1.000 kr. inneign borgar þú hráefnið í réttinum sem gesturinn fær fyrir hana – um 300 kr. – og hann kom aftur til að nýta hana.
+              Þegar þú gefur 1.000 kr. afslátt vantar 1.000 kr. í kassann. Þegar þú gefur 1.000 kr. inneign borgar þú bara hráefnið í réttinum sem gesturinn fær fyrir hana. Ef hráefnið er 30% af verðinu eru það 300 kr. – og gesturinn kom aftur til að nýta hana.
             </Lead>
             <blockquote className="mt-8 border-l-2 border-[hsl(var(--green-500))] pl-5">
               <p className="text-[18px] font-bold leading-snug tracking-[-0.015em] sm:text-[20px]">
-                Kvöldverður fyrir tvo, <span className="vild-num">8.000 kr.</span> Helmingur álagningar til baka:{' '}
+                Kvöldverður fyrir tvo, <span className="vild-num">8.000 kr.</span> Gesturinn fær 15% til baka:{' '}
                 <DrawnMarker className="vild-num">+1.200 kr.</DrawnMarker>
               </p>
-              <p className="mt-2 text-[14px] text-muted-foreground">Í matvöruverslun með 10% álagningu væri sama hlutfall 20 kr. af smjörstykki. Sami ávinningur fyrir gestinn, án gallans.</p>
+              <p className="mt-2 text-[14px] text-muted-foreground">Staðurinn fær fullt verð í kassann í kvöld. Þegar gesturinn kemur aftur og nýtir inneignina kostar hún staðinn um 360 kr. í hráefni – 30% af 1.200 kr.</p>
             </blockquote>
           </div>
           <CreditCalculator mode="merchant" />
@@ -259,7 +264,10 @@ export default function RestaurantsPage() {
             <Headline className="mt-3">Segðu okkur frá keðjunni.</Headline>
             <p className="mt-5 max-w-[34ch] text-[16px] leading-[1.5] text-muted-foreground">Hvað heitir hún, hvað eru staðirnir margir og hvaða kassakerfi notið þið. Við svörum með tillögu að prósentu og tengingu.</p>
             <p className="mt-5 text-[15px]">
-              <a href="mailto:hallo@vild.is" className="font-semibold text-[hsl(var(--green-500))]">hallo@vild.is</a>
+              {/* py-3 -my-3: a 44px touch target without moving the text. */}
+              <a href="mailto:hallo@vild.is" className="-my-3 inline-block py-3 font-semibold text-[hsl(var(--green-500))]">
+                hallo@vild.is
+              </a>
             </p>
           </Reveal>
           <ContactForm />
@@ -272,7 +280,7 @@ export default function RestaurantsPage() {
           <Reveal as="header">
             <Eyebrow>Spurningar veitingastaða</Eyebrow>
             <Headline className="mt-3">Það sem eigendur spyrja um.</Headline>
-            <Link to={href(paths.merchantLogin)} className="mt-5 inline-flex items-center gap-1 text-[15px] font-semibold text-[hsl(var(--green-500))]">
+            <Link to={href(paths.merchantLogin)} className="-mb-3 mt-2 inline-flex items-center gap-1 py-3 text-[15px] font-semibold text-[hsl(var(--green-500))]">
               Innskráning fyrirtækja
               <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
             </Link>

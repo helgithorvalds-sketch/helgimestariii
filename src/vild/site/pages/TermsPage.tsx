@@ -76,7 +76,7 @@ const SECTIONS: LegalSection[] = [
     title: 'Lög og samband',
     body: [
       'Um skilmálana gilda íslensk lög. Ágreining má bera undir Neytendastofu eða Héraðsdóm Reykjavíkur.',
-      'Spurningar um skilmálana: hallo@vild.is. Norðurvefur, Reykjavík. Kennitala og heimilisfang verða birt hér fyrir útgáfu.',
+      'Spurningar um skilmálana: hallo@vild.is. Norðurvefur, Reykjavík.',
     ],
   },
 ];
@@ -88,7 +88,7 @@ export default function TermsPage() {
       eyebrow="Skilmálar"
       title="Skilmálar VILD"
       updated="23. október 2026"
-      intro="Hvað inneign er, hvað hún er ekki, hversu lengi hún gildir og hvað þú og keðjurnar skuldbindið ykkur til. Skrifað á mannamáli; lögfræðileg yfirferð á eftir að fara fram."
+      intro="Hvað inneign er, hvað hún er ekki, hversu lengi hún gildir og hvað þú og keðjurnar skuldbindið ykkur til. Skrifað á mannamáli. Fyrir útgáfu fer fram lögfræðileg yfirferð, og kennitala og heimilisfang Norðurvefs bætast við."
       sections={SECTIONS}
     />
   );

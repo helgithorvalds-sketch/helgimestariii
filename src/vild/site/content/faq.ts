@@ -2,6 +2,8 @@
  * The questions people actually ask. One list, grouped; the home page shows
  * the six marked `home`, the FAQ page shows everything under group headings.
  */
+import { POS_CONNECTED } from './pos';
+
 export type FaqItem = { id: string; q: string; a: string; home?: boolean };
 export type FaqGroup = { id: string; title: string; items: FaqItem[] };
 
@@ -53,7 +55,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         id: 'borga-med-inneign',
         q: 'Hvað gerist ef ég borga með inneign?',
-        a: 'Inneignin dregst frá reikningnum og þú borgar afganginn eins og venjulega. Þú safnar hins vegar ekki nýrri inneign af þeim hluta sem var greiddur með inneign – bara af því sem þú borgar sjálft.',
+        a: 'Inneignin dregst frá reikningnum og þú borgar afganginn eins og venjulega. Þú safnar hins vegar ekki nýrri inneign af þeim hluta sem var greiddur með inneign – bara af afganginum.',
         home: true,
       },
       {
@@ -112,7 +114,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         id: 'kassinn',
         q: 'Hvernig kemst inneignin á kassann?',
-        a: 'Með tengingu við kassakerfið (Noona, Upsell, Resto, dk, LS Central, Straumur) eða með skönnun á VILD-kortinu við kassann. Flestir staðir eru komnir í gang innan viku.',
+        a: `Með tengingu við kassakerfið (${POS_CONNECTED.join(', ')}) eða með skönnun á VILD-kortinu við kassann. Flestir staðir eru komnir í gang innan viku.`,
       },
       {
         id: 'gestur-borgar-med-inneign',

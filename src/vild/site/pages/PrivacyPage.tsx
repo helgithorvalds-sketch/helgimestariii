@@ -35,7 +35,7 @@ const SECTIONS: LegalSection[] = [
     title: 'Hverjir sjá upplýsingarnar',
     body: [
       'Samstarfskeðjan sem þú verslar hjá sér fornafn, innra númer og kaupin sem fóru fram hjá henni. Hún sér ekki kennitölu, netfang, símanúmer eða kaup hjá öðrum.',
-      'Vinnsluaðilar sem við notum til að reka kerfið: hýsing og gagnagrunnur innan EES, auðkenningarþjónusta fyrir rafræn skilríki, SMS-þjónusta fyrir staðfestingarkóða og tilkynningaþjónusta símans. Við gerum vinnslusamning við hvern þeirra. Listinn með nöfnum birtist hér fyrir útgáfu.',
+      'Vinnsluaðilar sem við notum til að reka kerfið: hýsing og gagnagrunnur innan EES, auðkenningarþjónusta fyrir rafræn skilríki, SMS-þjónusta fyrir staðfestingarkóða og tilkynningaþjónusta símans. Við gerum vinnslusamning við hvern þeirra.',
       'Við seljum ekki persónuupplýsingar og afhendum þær ekki þriðja aðila nema lög krefjist þess.',
     ],
   },
@@ -44,7 +44,7 @@ const SECTIONS: LegalSection[] = [
     title: 'Hversu lengi við geymum þær',
     body: [
       'Aðgangsupplýsingar og inneign: meðan aðgangurinn er virkur. Kaupasaga: í 24 mánuði eftir að inneign vegna kaupanna er nýtt eða runnin út, svo þú getir séð hvaðan hún kom og keðjan gert upp. Bókhaldsgögn sem lög krefjast: í sjö ár, án tengingar við aðganginn þinn.',
-      'Þegar þú eyðir aðganginum eyðum við eða afauðkennum persónuupplýsingar innan 30 daga. Kennitalan er eytt strax.',
+      'Þegar þú eyðir aðganginum eyðum við eða afauðkennum persónuupplýsingar innan 30 daga. Kennitölunni er eytt strax.',
     ],
   },
   {
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
       eyebrow="Persónuvernd"
       title="Persónuvernd hjá VILD"
       updated="23. október 2026"
-      intro="Hvaða upplýsingar við söfnum, til hvers, hverjir sjá þær og hversu lengi þær eru geymdar. Kennitalan er notuð einu sinni og fer aldrei á kassann."
+      intro="Hvaða upplýsingar við söfnum, til hvers, hverjir sjá þær og hversu lengi þær eru geymdar. Kennitalan er notuð einu sinni og fer aldrei á kassann. Nöfn vinnsluaðila bætast við fyrir útgáfu."
       sections={SECTIONS}
     />
   );
