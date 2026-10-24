@@ -107,7 +107,7 @@ describe('credit calculator', () => {
     fireEvent.change(price, { target: { value: '6000' } });
     fireEvent.change(pct, { target: { value: '20' } });
     await waitFor(() => {
-      expect(within(calc).getByText('6.000 kr.')).toBeInTheDocument(); // the output
+      expect(within(calc).getAllByText('6.000 kr.').length).toBeGreaterThan(0); // the output (and the credit column once it settled)
     });
     // discount: pays 4.800, loses 1.200 · credit: pays 6.000, gets 1.200 back
     expect(within(calc).getAllByLabelText('1.200 kr.').length).toBe(2);

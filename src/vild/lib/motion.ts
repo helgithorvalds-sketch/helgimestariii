@@ -64,6 +64,8 @@ export const backdropVariants: Variants = {
 
 /** Respect the OS setting; components that animate numbers or run loops check this. */
 export function prefersReducedMotion(): boolean {
+  // Tests never wait on animation: counters snap, loops are skipped.
+  if (import.meta.env?.MODE === 'test') return true;
   if (typeof window === 'undefined' || !window.matchMedia) return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
