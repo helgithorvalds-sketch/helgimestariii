@@ -2,8 +2,8 @@
 """
 Original 120 BPM score + sound effects for the SVIF fyrirtæki film.
 Reads audio/events.json (timeline and cues exported from the page with `node capture.mjs events:audio/events.json`)
-and writes audio/out/mix.wav. Every sound is synthesised here (dsp.py); no samples, and no noise whooshes:
-transitions are tonal, so nothing sounds like sandpaper.
+and writes audio/out/mix.wav. Every sound is synthesised here (dsp.py); no samples, and no noise whooshes.
+The first half rides the beat hard (the pile); from the brochure on the groove is steadier and the cues are sparse.
 """
 import json
 import os
@@ -54,12 +54,12 @@ CH = {
     'Bm': dict(root=35, notes=[62, 66, 69, 71]),    # Bm7
     'G': dict(root=31, notes=[62, 66, 67, 71]),     # Gmaj7
     'A': dict(root=33, notes=[61, 64, 69, 71]),     # A6/9-ish
-    'Asus': dict(root=33, notes=[62, 64, 69, 71]),  # Asus4 add9: the question before the drop
+    'Asus': dict(root=33, notes=[62, 64, 69, 71]),  # Asus4 add9: "Hvar á að byrja?" leans into SVIF
     'D9': dict(root=26, notes=[62, 64, 66, 69, 73]),
 }
 LOOP = ['D', 'Bm', 'G', 'A']
-STOP = (TL['stop'], TL['bookIn'])        # the music halts under "byrja?" and the brochure lands on silence + boom
 DROP = TL['bookIn']
+BUILD = DROP - BAR                       # the bar before the brochure arrives
 FINAL = TL['end']
 
 
@@ -67,7 +67,7 @@ def chord(bar):
     t = bar * BAR
     if t >= FINAL - 0.01:
         return 'D9'
-    if abs(t - TL['slamA']) < 0.01:
+    if abs(t - BUILD) < 0.01:
         return 'Asus'
     return LOOP[bar % 4]
 
@@ -81,28 +81,24 @@ def section(bar):
         s.update(kick=1, half=1, hats=1, pad=0.6, arp=0.7, chords=0.5, cut=1500)
     elif t < 8:                       # the new company: the groove arrives
         s.update(kick=1, clap=1, hats=1, bass='off', chords=1, cut=2100, pad=0.25)
-    elif t < 14:                      # the pile grows: busier hats, the arp counts the blocks
+    elif t < BUILD - 0.01:            # the pile grows: busier hats, the arp counts the blocks
         s.update(kick=1, clap=1, hats=2, bass='off', chords=1, cut=2300 + (t - 8) * 60, arp=0.6)
-    elif t < 16:                      # "Hvar á að byrja?": only the hits (cues), a held chord underneath
-        s.update(pad=0.9, cut=1400)
-    elif t < 24:                      # DROP: SVIF
-        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2800, arp=0.7, lead=1)
+    elif t < DROP:                    # "Hvar á að byrja?": the groove thins out under the question
+        s.update(kick=1, half=1, hats=1, chords=0.6, cut=1500, pad=0.7)
+    elif t < 24:                      # SVIF: the groove returns, warm and steady rather than wild
+        s.update(kick=1, clap=0.8, hats=1, bass='off', chords=0.9, cut=2300, pad=0.35, arp=0.35)
     elif t < 30:                      # the system: half-time, room to read
-        s.update(kick=1, half=1, clap=0.8, hats=1, bass='long', chords=0.8, cut=1800, pad=0.6, arp=0.5)
-    elif t < 38:                      # delivery: rolling bass, full groove
-        s.update(kick=1, clap=1, hats=2, open=1, bass='roll', chords=1, cut=2600, arp=0.6)
-    elif t < FINAL - 0.01:            # categories
-        s.update(kick=1, clap=1, hats=2, open=1, bass='off', chords=1, cut=2800, arp=0.6, lead=0.8)
+        s.update(kick=1, half=1, clap=0.7, hats=1, bass='long', chords=0.7, cut=1700, pad=0.6, arp=0.35)
+    elif t < 38:                      # delivery
+        s.update(kick=1, clap=0.8, hats=1, bass='off', chords=0.9, cut=2300, pad=0.3, arp=0.3)
+    elif t < FINAL - 0.01:            # categories: the hook comes in, gently
+        s.update(kick=1, clap=0.8, hats=2, bass='off', chords=0.9, cut=2500, arp=0.3, lead=0.6)
     else:                             # end card: one chord, bells
         s.update(pad=0.8, cut=1600)
     return s
 
 
 SEC = [section(b) for b in range(NBARS)]
-
-
-def in_stop(t):
-    return STOP[0] - 0.001 <= t < STOP[1]
 
 
 # ---------------------------------------------------------------- drums
@@ -114,7 +110,7 @@ def drums():
         s = SEC[bar]
         for step in range(16):
             t = bar * BAR + step * STEP
-            if t >= DUR - 0.01 or in_stop(t):
+            if t >= DUR - 0.01:
                 continue
             if s['kick'] and step % (8 if s['half'] else 4) == 0:
                 place(d, K, t, 0.9)
@@ -128,13 +124,12 @@ def drums():
                     place(d, pan(HC2, -0.18), t, 0.085)
             if s['open'] and step == 14 and bar % 2 == 1:
                 place(d, pan(HO, 0.3), t, 0.12)
-    # snare roll into the drop, under the last two words
+    # a light snare build over the last two beats before the brochure
     SN = snare(7)
-    a = TL['slamA'] + bt(2)
-    n = int(round((STOP[0] - a) / STEP))
+    a = DROP - bt(2)
+    n = int(round((DROP - a) / STEP))
     for i in range(n):
-        for k in range(2 if i > n * 0.5 else 1):
-            place(d, pan(SN, 0.15 if i % 2 else -0.15), a + i * STEP + k * STEP / 2, 0.05 + 0.35 * i / n)
+        place(d, pan(SN, 0.15 if i % 2 else -0.15), a + i * STEP, 0.04 + 0.18 * i / n)
     place(d, K, DROP, 1.0); kicks.append(DROP)
     place(d, K, FINAL, 1.0); kicks.append(FINAL)
     return d, sorted(set(kicks))
@@ -170,7 +165,7 @@ def bassline():
         steps = {'off': [2, 6, 10, 14], 'roll': list(range(16))}[s['bass']]
         for st in steps:
             t = t0 + st * STEP
-            if t >= DUR or in_stop(t):
+            if t >= DUR:
                 continue
             m = root + (12 if s['bass'] == 'roll' and st % 2 == 1 else 0)
             ff = mtof(m)
@@ -189,7 +184,7 @@ def chord_stabs():
         notes = CH[chord(bar)]['notes']
         for st in [0, 3, 6, 10, 12]:
             t = bar * BAR + st * STEP
-            if t >= DUR or in_stop(t):
+            if t >= DUR:
                 continue
             x = sum(pluck(mtof(m), 0.42, cutoff=s['cut'], tau=0.12, seed=m) for m in notes) / len(notes)
             put(out, x * 0.55 * s['chords'], t)
@@ -204,8 +199,6 @@ def pads():
             continue
         notes = CH[chord(bar)]['notes']
         hold = BAR if bar * BAR < FINAL - 0.01 else DUR - bar * BAR
-        if abs(bar * BAR - TL['slamA']) < 0.01:
-            hold = STOP[0] - bar * BAR     # the held chord under the question stops with the music
         n = int(SR * (hold + 1.2))
         x = sum(pad_voice(mtof(m), n, cutoff=1500, seed=m) for m in notes) / len(notes)
         put(out, x * adsr(n, a=0.3, d=0.4, s=0.85, r=0.9 if hold < BAR + .1 else 2.0, hold=hold) * 0.5 * s['pad'], bar * BAR)
@@ -222,7 +215,7 @@ def arps():
         notes = [m + 12 for m in CH[chord(bar)]['notes']]
         for st in range(16):
             t = bar * BAR + st * STEP
-            if t >= DUR or in_stop(t):
+            if t >= DUR:
                 continue
             m = notes[seq[st % 8] % len(notes)] + (12 if st >= 8 and bar % 2 else 0)
             x = fm_bell(mtof(m), dur=0.4, ratio=2.0, index=1.3, tau=0.16, itau=0.06)
@@ -342,20 +335,14 @@ def cues():
             place(out, pan(sfx_bell(93), 0.2), t, 0.18)
         elif k == 'slab':                   # each block lands on the beat, a step higher each time
             place(out, pan(sfx_thock(mtof(SCALE[i % 12] - 12)), -0.2 + 0.04 * i), t, 0.75)
-        elif k == 'slam':                   # Hvar / á / að / byrja?
-            place(out, pan(sfx_impact(22 + i), 0), t, 0.65 + 0.1 * i)
-            place(out, pan(sfx_stab([n + 12 * (i == 3) for n in [57, 62, 64, 69]], 0.9, 3000), 0), t, 0.55)
-        elif k == 'drop':                   # the brochure lands: boom, crash, a bright chord
-            place(out, pan(sfx_impact(40), 0), t, 1.0)
-            place(out, widen(crash(5, 2.4), 9, 0.6), t, 0.32)
-            place(out, pan(sfx_stab([62, 66, 69, 74, 78], 1.6), 0), t, 0.55)
-        elif k == 'absorb':                 # blocks flying into the brochure: rising pops on the eighths
-            place(out, pan(sfx_pop(mtof(SCALE[min(i, 11)] + 12)), 0.25 - 0.05 * i), t, 0.45)
+        elif k == 'drop':                   # the brochure arrives: a soft low hit and a bright chord
+            place(out, pan(sfx_impact(40), 0), t, 0.55)
+            place(out, widen(crash(5, 2.4), 9, 0.6), t, 0.16)
+            place(out, pan(sfx_stab([62, 66, 69, 74, 78], 1.6), 0), t, 0.5)
+        elif k == 'absorb':                 # every block lands in the brochure: one quick rising run of dings
+            place(out, pan(sfx_bell(SCALE[min(i, 11)] + 12, 1.1), -0.4 + 0.07 * i), t, 0.28)
         elif k == 'open':
             place(out, pan(sfx_stab([66, 69, 74, 78], 1.4, 3600), 0), t, 0.32)
-        elif k == 'offer':
-            place(out, pan(sfx_bell(86, 1.8), -0.2), t, 0.35)
-            place(out, pan(sfx_bell(90, 1.8), 0.2), t + BEAT / 4, 0.25)
         elif k == 'close':
             place(out, pan(sfx_thock(260), 0), t, 0.35)
         elif k == 'rise':
@@ -365,10 +352,9 @@ def cues():
             place(out, pan(sfx_impact(41), 0), t, 0.7)
             place(out, pan(sfx_bell(74, 2.8), 0), t, 0.4)
         elif k == 'found':                  # companies found on the sixteenths
-            place(out, pan(sfx_bell(SCALE[3 + i % 9] + 12, 0.9), -0.6 + 0.07 * (i % 18)), t, 0.16)
+            place(out, pan(sfx_bell(SCALE[3 + i % 9] + 12, 0.9), -0.5 + 0.15 * i), t, 0.12)
         elif k == 'deliver':                # a brochure lands at an address on every beat
-            place(out, pan(sfx_knock(mtof(SCALE[i % 6] - 12)), -0.3 + 0.07 * i), t, 0.6)
-            place(out, pan(sfx_bell(SCALE[3 + i % 6] + 12, 1.0), 0.2), t, 0.12)
+            place(out, pan(sfx_knock(mtof(SCALE[i % 6] - 12)), -0.3 + 0.07 * i), t, 0.45)
         elif k == 'counter':
             place(out, pan(sfx_counter(e['d']), 0.3), t, 0.22)
         elif k == 'count':
@@ -376,12 +362,12 @@ def cues():
         elif k == 'bookUp':
             place(out, pan(sfx_pop(500), 0), t, 0.3)
         elif k == 'tile':                   # categories light up on every beat
-            place(out, pan(sfx_bell(SCALE[2 + i] + 12, 1.4), -0.35 + 0.1 * i), t, 0.3)
+            place(out, pan(sfx_bell(SCALE[2 + i] + 12, 1.4), -0.35 + 0.1 * i), t, 0.16)
         elif k == 'home':
             place(out, pan(sfx_knock(147), 0), t, 0.5)
         elif k == 'end':
-            place(out, pan(sfx_impact(43), 0), t, 0.7)
-            place(out, widen(crash(5, 2.6), 9, 0.6), t, 0.28)
+            place(out, pan(sfx_impact(43), 0), t, 0.45)
+            place(out, widen(crash(5, 2.6), 9, 0.6), t, 0.14)
         elif k == 'fin':
             if i % 2 == 0:
                 place(out, pan(sfx_bell(SCALE[4 + (i // 2) % 7] + 12, 1.2), -0.7 + 0.09 * (i % 16)), t, 0.06)
@@ -391,17 +377,6 @@ def cues():
 # ---------------------------------------------------------------- mix
 def fx(x, board):
     return board(x.astype(np.float32), SR).astype(np.float64)
-
-
-def tape_stop(x, a, b_):
-    i0, i1 = int(a * SR), int(b_ * SR)
-    n = i1 - i0
-    pos = i0 + np.cumsum(np.linspace(1, 0, n) ** 1.3)
-    fade = np.linspace(1, 0.2, n)
-    fade[-int(SR * 0.02):] *= np.linspace(1, 0, int(SR * 0.02))
-    for ch in range(x.shape[0]):
-        x[ch, i0:i1] = np.interp(pos, np.arange(x.shape[1]), x[ch]) * fade
-    return x
 
 
 def main():
@@ -424,8 +399,6 @@ def main():
     fin = fx(fin, Pedalboard([Reverb(room_size=0.9, damping=0.4, wet_level=0.45, dry_level=0.8)]))
     music = drums_b * 1.0 + bass * 0.9 + chd * 0.55 + pd * 0.4 + ar * 0.55 + ld * 0.6 + fin * 0.9
     music = fx(music, Pedalboard([LowShelfFilter(cutoff_frequency_hz=140, gain_db=3.5, q=0.7), PeakFilter(cutoff_frequency_hz=2400, gain_db=-3.5, q=0.8), HighShelfFilter(cutoff_frequency_hz=9000, gain_db=1.0, q=0.7)]))
-    music = tape_stop(music, *STOP)
-    music[:, int(STOP[1] * SR) - int(0.01 * SR): int(STOP[1] * SR)] = 0
     sfx = cues()
     sfx = fx(sfx, Pedalboard([PeakFilter(cutoff_frequency_hz=2500, gain_db=-3.5, q=1.2), Reverb(room_size=0.3, damping=0.6, wet_level=0.12, dry_level=1.0, width=0.8)]))
     # duck the music a little under the effects so the hits read

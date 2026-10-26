@@ -31,9 +31,6 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
   background:
     radial-gradient(ellipse 60% 55% at 12% 100%, rgba(236,239,244,.92), rgba(236,239,244,0) 70%),
     radial-gradient(ellipse 120% 90% at 50% 50%, rgba(13,21,48,0) 60%, rgba(13,21,48,.10) 100%); }
-.veil { position: absolute; inset: 0; pointer-events: none; opacity: 0;
-  background: linear-gradient(90deg, rgba(236,239,244,.94) 0%, rgba(236,239,244,.78) 42%, rgba(236,239,244,0) 70%); }
-.flash { position: absolute; inset: 0; pointer-events: none; background: #fff; opacity: 0; }
 .grain { position: absolute; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 
@@ -56,12 +53,10 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
 .cap .eb { display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--signal); margin-bottom: 22px; }
 .cap .eb::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 6px rgba(31,85,255,.15); }
 .cap .ti { margin: 0; font-family: var(--display); font-weight: 700; font-size: 84px; line-height: 1.0; letter-spacing: -.028em; color: var(--ink); text-wrap: balance; font-variation-settings: "opsz" 96; }
+.cap.long .ti { font-size: 72px; }
 .cap .su { margin: 26px 0 0; font-size: 30px; line-height: 1.35; color: var(--ink-soft); font-weight: 500; max-width: 900px; }
 .w { display: inline-block; white-space: pre; will-change: transform, opacity, filter; }
 
-.slam { position: absolute; left: 110px; top: 210px; pointer-events: none; }
-.slam span { display: block; font-family: var(--display); font-weight: 800; font-size: 178px; line-height: .96; letter-spacing: -.045em; color: var(--ink); font-variation-settings: "opsz" 96; opacity: 0; transform-origin: 0 70%; }
-.slam span:last-child { color: var(--signal); }
 
 #pins { position: absolute; inset: 0; pointer-events: none; }
 .node-tag { position: absolute; left: 0; top: 0; padding: 18px 26px; border-radius: 18px; background: rgba(255,255,255,.95); box-shadow: 0 18px 40px -14px rgba(13,30,80,.3), 0 0 0 1px rgba(13,21,48,.06); opacity: 0; white-space: nowrap; }
@@ -100,7 +95,6 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
     <div id="stage">
       <canvas id="gl" width="1920" height="1080"></canvas>
       <div class="vignette"></div>
-      <div class="veil" id="veil"></div>
       <div id="pins"></div>
       <header class="brand" id="brand">
         <span class="logo">SV<span class="i">I<svg viewBox="0 0 40 16" aria-hidden="true"><path d="M3 14 L20 3 L37 14" fill="none" stroke="#8ea2ea" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>F</span>
@@ -108,7 +102,6 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
       </header>
       <nav class="chapters" id="chapters" aria-label="Kaflar"><div class="bars"></div><div class="name"></div></nav>
       <div id="caps"></div>
-      <div class="slam" id="slam"><span>Hvar</span><span>á</span><span>að</span><span>byrja?</span></div>
       <div class="count" id="count"><strong>0</strong><span>bæklingar <em>í hverjum mánuði</em></span></div>
       <div class="end" id="end">
         <div class="logo">SV<span class="i">I<svg viewBox="0 0 40 16" aria-hidden="true"><path d="M3 14 L20 3 L37 14" fill="none" stroke="#8ea2ea" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>F</div>
@@ -116,7 +109,6 @@ body { background: var(--frame); color: var(--ink); font-family: var(--body); ov
         <div class="line">Rétta fólkið, á réttu augnabliki.</div>
         <div class="web">svif.is</div>
       </div>
-      <div class="flash" id="flash"></div>
       <div class="grain"></div>
       <div id="loading">Hleð inn borginni…</div>
     </div>
@@ -161,6 +153,7 @@ const eback=t=>{const c1=1.5,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1
 const env=(t,a,b,fi=.6,fo=.6)=>Math.min(eio(prog(t,a,a+fi)),1-eio(prog(t,b-fo,b)));
 const V=(x,y,z)=>new THREE.Vector3(x,y,z);
 const BLUE = new THREE.Color('#1f55ff');
+const GREY = new THREE.Color('#e6eaf1'), BLUE_LIT = new THREE.Color('#1f55ff');
 // a decaying hit on every grid step between a and b: drives the camera punch on the beat
 function hit(t,a,bEnd,step,decay=9){ if(t<a||t>bEnd+1.2) return 0; const k=Math.min(Math.floor((t-a)/step+1e-6),Math.round((bEnd-a)/step)); return Math.exp(-(t-(a+k*step))*decay); }
 
@@ -299,13 +292,15 @@ function shop(gx,gz,rot,w=6,d=4.6,h=4.2){
   const grp=new THREE.Group(); grp.position.set(gx,.4,gz); grp.rotation.y=rot;
   const geo=uvBox(new THREE.BoxGeometry(d,h,w),d,h,w,2.2).translate(0,h/2,0);
   const m=new THREE.Mesh(geo,[M.white,M.white,M.white,M.white,M.groove,M.groove]); m.castShadow=m.receiveShadow=true; grp.add(m); outline(geo,grp);
-  const parts=[new THREE.BoxGeometry(d+.3,.34,w+.3).translate(0,h+.02,0)];
-  parts.push(new THREE.BoxGeometry(.8,.12,w*.82).translate(-d/2-.4,2.35,0));
-  detailMesh(parts,grp);
-  const gl=new THREE.Mesh(new THREE.BoxGeometry(.06,1.7,w*.72).translate(0,1.15,0),M.glass); gl.position.x=-d/2-.03; grp.add(gl);
-  for(let k=-1;k<=1;k++){ const win=new THREE.Mesh(new THREE.BoxGeometry(.06,.8,1.1),M.detail); win.position.set(-d/2-.03,3.25,k*1.7); grp.add(win); }
+  detailMesh([new THREE.BoxGeometry(d+.3,.34,w+.3).translate(0,h+.02,0)],grp);
+  const awnMat=M.detail.clone(), signMat=M.detail.clone();
+  const awn=new THREE.Mesh(new THREE.BoxGeometry(.95,.12,w*.82),awnMat); awn.position.set(-d/2-.45,2.25,0); awn.rotation.z=.22; awn.castShadow=true; grp.add(awn);
+  const sign=new THREE.Mesh(new THREE.BoxGeometry(.1,.5,w*.56),signMat); sign.position.set(-d/2-.06,2.78,0); grp.add(sign);
+  const gl=new THREE.Mesh(new THREE.BoxGeometry(.06,1.6,w*.72).translate(0,1.1,0),M.glass); gl.position.x=-d/2-.03; grp.add(gl);
+  const door=new THREE.Mesh(new THREE.BoxGeometry(.08,1.5,.8).translate(0,1.05,0),awnMat); door.position.set(-d/2-.05,0,w*.26); grp.add(door);
+  if(h>3.9) for(let k=-1;k<=1;k++){ const win=new THREE.Mesh(new THREE.BoxGeometry(.06,.7,1.1),M.detail); win.position.set(-d/2-.03,3.45,k*1.7); grp.add(win); }
   city.add(grp); addRiser(grp,gx,gz);
-  const bb={x:gx,z:gz,w:d,d:w,h,type:'shop',grp,rot}; buildings.push(bb); return bb;
+  const bb={x:gx,z:gz,w:d,d:w,h,type:'shop',grp,rot,lit:[awnMat,signMat]}; buildings.push(bb); return bb;
 }
 function tree(x,z,s){ trees.push({x,z,s,delay:0}); }
 
@@ -336,10 +331,10 @@ const blockDefs=[];
 for(let i=0;i<7;i++) for(let j=0;j<7;j++){
   const cx=(i-3)*PITCH, cz=(j-3)*PITCH, di=Math.abs(i-3), dj=Math.abs(j-3);
   let type;
-  const forced={'5,4':'hero','5,3':'shops','5,5':'houses','6,4':'shops','6,3':'houses','6,5':'shops','4,4':'park','1,2':'park','4,5':'shops','2,5':'shops'}[i+','+j];
+  const forced={'5,4':'hero','5,3':'shops','5,5':'shops','6,4':'houses','6,3':'houses','6,5':'houses','4,4':'park','1,2':'park','4,5':'shops','2,5':'apartments','3,6':'shops','1,6':'shops'}[i+','+j];
   if(forced) type=forced;
   else if(di<=1&&dj<=1) type='towers';
-  else { const r=rand(); type=r<.34?'houses':r<.6?'apartments':r<.74?'shops':r<.86?'park':'midrise'; }
+  else { const r=rand(); type=r<.34?'houses':r<.6?'apartments':r<.67?'shops':r<.86?'park':'midrise'; }
   blockDefs.push({i,j,cx,cz,type});
 }
 for(const bd of blockDefs){
@@ -426,8 +421,8 @@ const DOOR = V(HV.x-OFF_D/2-.6,1.6,HV.z+1.35);
 /* ---------- timeline (seconds, all on the 120 BPM grid) ---------- */
 const TL = {
   sign:b(12), owner:b(11),
-  slab0:b(16), slamA:b(28), stop:b(31.5),
-  bookIn:b(32), absorb0:b(33), open1:b(40), glowA:b(42), glowB:b(44), close1:b(46.5), rise:b(47.5), nodeIn:b(51),
+  slab0:b(16), ask:b(25),
+  bookIn:b(32), absorb0:b(34), absorbStep:b(.125), open1:b(40), glowA:b(42), glowB:b(44), close1:b(46.5), rise:b(47.5), nodeIn:b(51),
   line:b(52), vanA:b(60), vanB:b(75.5), bookUp:b(75.5), open2:b(78), tiles:b(80), tileStep:b(1), back:b(88), end:b(92),
 };
 
@@ -441,16 +436,16 @@ const VAN_S = TL.vanA-1.4;
 const vanU = t => 1-Math.pow(1-prog(t,VAN_S,TL.vanB),1.8);
 function timeForU(u){ let a=VAN_S,bb=TL.vanB; for(let k=0;k<40;k++){const m=(a+bb)/2; if(vanU(m)<u)a=m; else bb=m;} return (a+bb)/2; }
 
-const homes = buildings.filter(bb=>bb.type==='house'||bb.type==='apartment'||bb.type==='shop');
+const homes = buildings.filter(bb=>bb.type==='shop');
 function nearestOnRoute(bb){ let best=1e9,bi=0; routeSamples.forEach((p,i)=>{const d=Math.hypot(p.x-bb.x,p.z-bb.z); if(d<best){best=d;bi=i;}}); return {d:best,u:bi/800}; }
 homes.forEach(bb=>{ const n=nearestOnRoute(bb); bb.rd=n.d; bb.ru=n.u; });
-// one delivery per beat: each address lands on its own beat while the van passes
-const DROP_DUR = .8;
+// a handful of new companies on the route, at least a bar apart
+const DROP_DUR = .8, BAR_S = b(4);
 const delivered=[]; { const cands=homes.filter(bb=>!bb.hero&&bb.rd<13&&bb.ru>.06&&bb.ru<.93).sort((a,c)=>a.ru-c.ru); const used=new Set();
-  for(const c of cands){ const land=Math.ceil((timeForU(c.ru)+.35)/BEAT)*BEAT; if(land<TL.vanA+.4||land>TL.vanB+.2||used.has(land)) continue; used.add(land); c.land=land; delivered.push(c); } }
+  for(const c of cands){ const land=Math.ceil((timeForU(c.ru)+.35)/BEAT)*BEAT; if(land<TL.vanA+.4||land>TL.vanB-1||[...used].some(u=>Math.abs(u-land)<BAR_S-.01)) continue; used.add(land); c.land=land; delivered.push(c); if(delivered.length>=5) break; } }
 const others = homes.filter(bb=>!bb.hero&&!delivered.includes(bb)&&bb.rd>16).sort(()=>rand()-.5);
-const detectedExtra = others.slice(0,8);
-const finale = others.slice(8,40);
+const detectedExtra = others.slice(0,3);
+const finale = others.slice(3,11);
 const detected = [heroB, ...delivered, ...detectedExtra];
 
 /* ---------- pings ---------- */
@@ -492,11 +487,11 @@ const lines = lineOrder.map(({p},k)=>{
   const mesh=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:BLUE,transparent:true,opacity:.85,depthWrite:false,toneMapped:false})); mesh.renderOrder=3; scene.add(mesh);
   const dot=new THREE.Mesh(new THREE.SphereGeometry(.42,16,10),new THREE.MeshBasicMaterial({color:'#ffffff',toneMapped:false})); scene.add(dot);
   // each line reaches its company on a sixteenth note
-  const start = TL.line + Math.min(k, 23)*b(.25) - LINE_GROW*.0;
+  const start = TL.line + k*b(.5);
   p.act = start + LINE_GROW;
   return {mesh,dot,curve,count:geo.index.count,p,start};
 });
-finPings.forEach((p,k)=>{ p.act = TL.end + b(1) + k*b(.5); });
+finPings.forEach((p,k)=>{ p.act = TL.end + b(2) + k*b(1); });
 
 /* ---------- people ---------- */
 function person(mat){ const g=new THREE.Group(); const body=new THREE.Mesh(new THREE.CapsuleGeometry(.26,.62,4,12),mat); body.position.y=.57; const head=new THREE.Mesh(new THREE.SphereGeometry(.22,20,14),mat); head.position.y=1.32; g.add(body,head); const sh=new THREE.Mesh(flatPlane,new THREE.MeshBasicMaterial({map:texBlob,transparent:true,depthWrite:false})); sh.scale.set(1.3,1,1.3); sh.position.y=.015; g.add(sh); scene.add(g); return g; }
@@ -696,10 +691,10 @@ function buildSlabs(){
     const jx=(slabRng()-.5)*.5, jz=(slabRng()-.5)*.6, yaw=(slabRng()-.5)*.28;
     const rest = V(jx, SL.y/2 + i*SL.y, jz);
     m.visible=false; pile.add(m);
-    slabs.push({ m, rest, yaw, land: TL.slab0 + b(i), fly: TL.absorb0 + b(.5)*(TASKS.length-1-i) });
+    slabs.push({ m, rest, yaw, land: TL.slab0 + b(i), fly: TL.absorb0 + TL.absorbStep*(TASKS.length-1-i) });
   });
 }
-const FLY = b(1);   // flight time from the pile into the brochure: lands on the eighth note
+const FLY = .7;   // flight time from the pile into the brochure
 
 /* ---------- the brochure ---------- */
 const bro = new THREE.Group(); scene.add(bro);
@@ -723,7 +718,7 @@ function buildBook(){
 }
 const minis=[];
 
-/* ---------- camera: three shots, hard cuts on downbeats, a punch on the beat inside each ---------- */
+/* ---------- camera: three shots, hard cuts on downbeats ---------- */
 const UP=V(0,1,0);
 const BK0 = V(HV.x-14, 8.4, HV.z-2.9);         // where the brochure lands, in front of the office
 const CAM_D = V(HV.x-33, 9.2, HV.z+2.6);           // the drop: brochure left, pile right
@@ -775,17 +770,18 @@ function shotParam(s,t){ const K=s.keys, n=K.length; if(t<=K[0][0]) return 0; if
 const CAPS=[
   {a:.5,  b:3.7,  eb:'Fyrirtækjaskrá', t:'Á hverjum degi verða til ný fyrirtæki.'},
   {a:4.4, b:7.8,  eb:'Nýtt fyrirtæki', t:'Draumurinn er orðinn að rekstri.'},
-  {a:8.2, b:13.8, eb:'Verkefnin', t:'En nýjum rekstri fylgja ótal verkefni.', s:'Bókhald, vefsíða, auglýsingar, tryggingar og margt fleira.'},
-  {a:16.3,b:19.8, eb:'SVIF', t:'Þess vegna bjuggum við til SVIF.', s:'Bæklingur fyrir ný fyrirtæki og eigendur þeirra.'},
-  {a:20.2,b:23.6, eb:'Bæklingurinn', t:'Bestu tilboðin frá traustum fyrirtækjum.', s:'Sérkjör sem hjálpa nýjum rekstri að fara vel af stað.'},
+  {a:8.2, b:12.2, eb:'Verkefnin', t:'En nýjum rekstri fylgja ótal verkefni.', s:'Bókhald, vefsíða, auglýsingar, tryggingar og margt fleira.'},
+  {a:12.5,b:15.8, eb:'Verkefnin', t:'Hvar á að byrja?'},
+  {a:16.3,b:19.8, eb:'SVIF', t:'Þess vegna bjuggum við til SVIF.', s:'Bækling sem hjálpar nýjum fyrirtækjum að fara vel af stað.'},
+  {a:20.2,b:23.8, eb:'Bæklingurinn', t:'Við finnum traust fyrirtæki.', s:'Fyrirtæki sem bjóða nýjum fyrirtækjaeigendum sérkjör á sinni þjónustu.'},
   {a:25.6,b:29.8, eb:'Kerfið', t:'Kerfið okkar finnur ný fyrirtæki og nýja eigendur.', s:'Við greinum nýskráð fyrirtæki jafnóðum.'},
-  {a:30.3,b:33.9, eb:'Dreifingin', t:'Við sendum bæklinginn á skráð lögheimili.', s:'Beint til nýrra fyrirtækjaeigenda.'},
-  {a:34.1,b:37.8, eb:'Á réttum tíma', t:'Einmitt þegar þjónustuaðilar eru valdir.', s:'Þegar reksturinn fer af stað og ákvarðanir eru teknar til framtíðar.'},
+  {a:30.3,b:33.9, eb:'Dreifingin', t:'Við sendum bæklinginn til allra nýrra fyrirtækjaeigenda.', s:'Um allt land.'},
+  {a:34.1,b:37.8, eb:'Fyrir þig', t:'Svo þú getir kynnt þjónustuna þína fyrir þeim sem þurfa á henni að halda.'},
   {a:39.0,b:41.8, eb:'Bæklingurinn', t:'Eitt fyrirtæki í hverjum flokki.'},
   {a:42.0,b:45.7, eb:'Bæklingurinn', t:'Allt sem nýr rekstur þarf, á einum stað.'},
 ];
 const capsEl=document.getElementById('caps');
-const capEls=CAPS.map(c=>{ const el=document.createElement('div'); el.className='cap';
+const capEls=CAPS.map(c=>{ const el=document.createElement('div'); el.className='cap'+(c.t.length>52?' long':'');
   const wordsHtml=(s,cls)=>s.split(' ').map((w,i,a)=>`<span class="w ${cls}">${w}${i<a.length-1?' ':''}</span>`).join('');
   el.innerHTML=`<div class="eb">${c.eb}</div><h1 class="ti">${wordsHtml(c.t,'tw')}</h1>${c.s?`<p class="su">${wordsHtml(c.s,'sw')}</p>`:''}`;
   capsEl.appendChild(el); return {el, eb:el.querySelector('.eb'), tw:[...el.querySelectorAll('.tw')], sw:[...el.querySelectorAll('.sw')]}; });
@@ -798,8 +794,6 @@ const nodeNum=nodeTag.querySelector('strong');
 const countEl=document.getElementById('count'), countNum=countEl.querySelector('strong');
 const endEl=document.getElementById('end'), endParts=[...endEl.children];
 const brandEl=document.getElementById('brand'), chaptersEl=document.getElementById('chapters');
-const slamEls=[...document.querySelectorAll('#slam span')];
-const veilEl=document.getElementById('veil'), flashEl=document.getElementById('flash');
 const _v=new THREE.Vector3();
 function toScreen(v){ _v.copy(v).project(camera); return {x:(_v.x+1)/2*W, y:(1-_v.y)/2*H, ok:_v.z<1}; }
 const fmt=n=>Math.round(n).toLocaleString('de-DE');
@@ -816,12 +810,6 @@ function updateOverlay(t){
   barEls.forEach((el,i)=>{ const c=CHAPTERS[i]; el.style.width=(clamp((t-c[0])/(c[1]-c[0]))*100).toFixed(1)+'%'; });
   chName.innerHTML=`<b>${String(ci+1).padStart(2,'0')}</b>${CHAPTERS[ci][2]}`;
   const endOn=prog(t,TL.end-.3,TL.end+.2); chaptersEl.style.opacity=(1-endOn).toFixed(3); brandEl.style.opacity=(Math.min(prog(t,.2,.8),1-endOn)).toFixed(3);
-  // "Hvar á að byrja?": one word slammed in on each beat
-  const slamOut = eio(prog(t,TL.stop-.05,TL.stop+.12));
-  slamEls.forEach((el,i)=>{ const at=TL.slamA+b(i); const p=prog(t,at-.04,at+.12); const k=Math.exp(-Math.max(0,t-at)*10);
-    el.style.opacity=(clamp(p*1.4)*(1-slamOut)).toFixed(3); el.style.transform=`translate3d(${(Math.sin(t*90+i)*10*k).toFixed(1)}px,0,0) scale(${(1+.35*(1-eout(p))+.04*k).toFixed(3)})`; });
-  veilEl.style.opacity=(clamp(prog(t,TL.slamA-.1,TL.slamA+.1))*(1-slamOut)*.95).toFixed(3);
-  flashEl.style.opacity=(t>=TL.bookIn ? .55*Math.exp(-(t-TL.bookIn)*7) : 0).toFixed(3);
   const nOn=env(t,TL.line-.3,29.7,.4,.4); const ns=toScreen(node.position); nodeTag.style.opacity=ns.ok?nOn.toFixed(3):0; nodeTag.style.transform=`translate3d(${(ns.x+64).toFixed(1)}px,${(ns.y-50).toFixed(1)}px,0)`;
   const cnt=lines.filter(l=>t>l.p.act).length; nodeNum.textContent=fmt(Math.max(1,cnt));
   const cA=TL.vanA+b(1), cB=TL.vanA+b(9);
@@ -849,14 +837,9 @@ function render(t){
     const fw = 1-eio(prog(t,TL.vanB-.6,TL.vanB+1.4));
     if(fw>0){ const vp=vanState(t).p; camera.position.lerp(vp.clone().add(OFF),fw); tgt.lerp(vp,fw); fov=lerp(32,22,fw); }
   }
-  // the punch: a quick push on every beat while things land
-  const punch = .03*hit(t,TL.slab0,TL.slamA-b(1),b(1)) + .055*hit(t,TL.slamA,TL.slamA+b(3),b(1),7) + .05*hit(t,TL.bookIn,TL.bookIn,1,5)
-              + .016*hit(t,TL.absorb0,TL.absorb0+b(5.5),b(.5),10) + .03*hit(t,TL.glowA,TL.glowB,b(2)) + .035*hit(t,TL.nodeIn,TL.nodeIn,1,6)
-              + delivered.reduce((a,d)=>a+(t>=d.land?.018*Math.exp(-(t-d.land)*9):0),0)
-              + .022*hit(t,TL.tiles,TL.tiles+b(7),b(1)) + .05*hit(t,TL.end,TL.end,1,5);
+  // the punch: a quick push on every beat while the blocks stack up, nowhere else
+  const punch = .03*hit(t,TL.slab0,TL.slab0+b(11),b(1));
   camera.fov = fov*(1-punch); camera.updateProjectionMatrix();
-  const shake = .25*hit(t,TL.slamA,TL.slamA+b(3),b(1),8);
-  if(shake>0){ camera.position.x+=Math.sin(t*83)*shake; camera.position.y+=Math.cos(t*71)*shake*.6; }
   camera.lookAt(tgt); camera.updateMatrixWorld();
 
   for(const o of risers){ const k=eback(prog(t,o.userData.delay,o.userData.delay+.75)); o.scale.set(1,Math.max(1e-4,k),1); o.visible=k>0.002; }
@@ -869,9 +852,6 @@ function render(t){
     const walk=eio(prog(t,TL.owner,TL.owner+1.6));
     const pA=V(HV.x-13,.4,HV.z+2.2), pB=V(HV.x-6.6,.4,HV.z+3.4);
     const pos=pA.clone().lerp(pB,walk); pos.y+=Math.abs(Math.sin(walk*26))*.07*(walk<1?1:0);
-    // a hop on every "Hvar á að byrja?" beat
-    let hop=0; for(let i=0;i<4;i++){ const u=prog(t,TL.slamA+b(i),TL.slamA+b(i)+.32); if(u>0&&u<1) hop=Math.sin(Math.PI*u)*.55; }
-    pos.y+=hop;
     owner.position.copy(pos); owner.rotation.y = walk<1 ? Math.atan2(-(pB.z-pA.z),pB.x-pA.x) : -Math.PI*.42;
     const s=Math.max(1e-3,eout(prog(t,TL.owner-.2,TL.owner+.25))*(1-prog(t,23.8,24.2)));
     owner.scale.setScalar(s); owner.visible=t>TL.owner-.2 && t<24.2;
@@ -882,10 +862,9 @@ function render(t){
   pile.rotation.set(0,0,0);
   let sway = .004*landed*Math.sin(t*Math.PI*2/b(2));
   slabs.forEach(s=>{ const d=t-s.land; if(d>0&&d<1) sway += .03*Math.exp(-d*6)*Math.sin(d*22); });
-  for(let i=0;i<4;i++){ const d=t-(TL.slamA+b(i)); if(d>0&&d<1) sway += (i%2?-1:1)*.06*Math.exp(-d*5)*Math.sin(d*18+1); }
   pile.rotation.x = sway; pile.rotation.z = sway*.35;
   pile.updateMatrixWorld();
-  pileBlob.material.opacity = clamp(landed/3)*.9*(1-prog(t,TL.absorb0+b(5),TL.absorb0+b(6)));
+  pileBlob.material.opacity = clamp(landed/3)*.9*(1-prog(t,TL.absorb0-.3,TL.absorb0+.6));
   // the brochure's position (needed by the flying blocks)
   const bookState = bookAt(t);
   bookWorld.copy(bookState.bp);
@@ -913,6 +892,7 @@ function render(t){
     const mOn=clamp(prog(t,p.act,p.act+.3))*(1-prog(t,until,until+.4)) + prog(t,TL.end+.4,TL.end+1);
     updatePing(p,t,on*(t>TL.vanA-.5&&t<TL.vanB+.5?.55:1),{markerOn:clamp(mOn), burstT:p.b.land?p.b.land:null, spread:.9, scale:.8}); });
   finPings.forEach(p=>{ updatePing(p,t,clamp(prog(t,p.act,p.act+.3)),{spread:1.25, markerOn:clamp(prog(t,p.act,p.act+.3))}); });
+  [...detPings,...finPings].forEach(p=>{ const k=clamp(prog(t,p.act,p.act+.25)); for(const m of p.b.lit) m.color.copy(GREY).lerp(BLUE_LIT,k); });
   // node + lines
   const nIn=eback(prog(t,TL.nodeIn-.15,TL.nodeIn+.35)), nOut=1-eio(prog(t,29.5,30)); const nOn=Math.min(clamp(prog(t,TL.nodeIn-.15,TL.nodeIn+.2)),nOut);
   node.visible=nOn>0.001; node.scale.setScalar(Math.max(1e-3,nIn*nOut));
@@ -977,11 +957,10 @@ function soundEvents(){
   const ev=[];
   ev.push({k:'sign',t:TL.sign});
   slabs.forEach((s,i)=>ev.push({k:'slab',t:s.land,i}));
-  for(let i=0;i<4;i++) ev.push({k:'slam',t:TL.slamA+b(i),i});
-  ev.push({k:'stop',t:TL.stop},{k:'drop',t:TL.bookIn});
+  ev.push({k:'ask',t:TL.ask},{k:'drop',t:TL.bookIn});
   slabs.forEach((s,i)=>ev.push({k:'absorb',t:s.fly,i:TASKS.length-1-i}));
-  ev.push({k:'open',t:TL.open1},{k:'offer',t:TL.glowA},{k:'offer',t:TL.glowB},{k:'close',t:TL.close1},{k:'rise',t:TL.rise},{k:'node',t:TL.nodeIn});
-  lines.forEach((l,k)=>{ if(k<24) ev.push({k:'found',t:l.p.act,i:k}); });
+  ev.push({k:'open',t:TL.open1},{k:'close',t:TL.close1},{k:'rise',t:TL.rise},{k:'node',t:TL.nodeIn});
+  lines.forEach((l,k)=>ev.push({k:'found',t:l.p.act,i:k}));
   ev.push({k:'vanStart',t:TL.vanA});
   delivered.forEach((d,i)=>ev.push({k:'deliver',t:d.land,i}));
   ev.push({k:'counter',t:TL.vanA+b(1),d:b(8)},{k:'count',t:TL.vanA+b(9)});
