@@ -229,6 +229,8 @@ def analyse(site, company):
             if typ == 'annad' and name and len(ctx) < 200: typ = 'nafngreint'
             rec = contacts.get(e)
             rank = {'markadur': 0, 'stjornandi': 1, 'sala': 2, 'almennt': 3, 'nafngreint': 4, 'annad': 5}[typ]
+            if typ == 'stjornandi':   # the managing director before the office, HR or finance manager
+                rank += 0.0 if re.search(r'forstj|framkv[aæ]mdastj|\bceo\b|eigandi|stofnandi|founder|managing director', ctx, re.I) and not re.search(r'a[ðd]sto[ðd]ar', title, re.I) else 0.3 if re.search(r'a[ðd]sto[ðd]ar|rekstrarstj|s[oö]lu', title, re.I) else 0.6
             if rec is None or rank < rec['rank']:
                 contacts[e] = dict(netfang=e, tegund=typ, rank=rank, nafn=name, titill=title, heimild=url, samhengi=ctx[:160], sama_len=e.endswith('@' + host) or host.endswith(e.split('@')[1]))
     ordered = sorted(contacts.values(), key=lambda r: (r['rank'], not r['sama_len'], not bool(r['nafn']), r['netfang']))

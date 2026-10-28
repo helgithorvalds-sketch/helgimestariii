@@ -160,6 +160,9 @@ for r in csv.DictReader(open(SRC, encoding='utf-8'), delimiter=';'):
     if choice:
         e, n, t, typ_is, verif = choice
         n = person_name(n)
+        if n and t:   # a fragment of the title glued to the name ("Ásdís Gunnarsdóttir Starfsmanna")
+            tw = {x.lower().strip('-') for x in t.split()}
+            n = ' '.join(x for x in n.split() if x.lower().strip('-') not in tw and not t.lower().startswith(x.lower().strip('-')))
         local, dom = e.split('@')
         sdom = site_domain(r.get('vefur_endanlegur') or r.get('vefur'))
         # a company name mistaken for a person
