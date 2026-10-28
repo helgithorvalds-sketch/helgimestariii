@@ -82,11 +82,11 @@ class Site:
         if url in self.pages: return self.pages[url]
         if self.base and not self.allowed(url): return None
         r = None
-        for attempt in range(2):
+        for attempt in range(3):
             try:
                 r = self.s.get(url, timeout=TIMEOUT, allow_redirects=True); break
             except requests.exceptions.ConnectionError as e:
-                self.err = str(e)[:120]; time.sleep(2)
+                self.err = str(e)[:120]; time.sleep(2 + 3 * attempt)
             except Exception as e:
                 self.err = str(e)[:120]; break
         if r is None: return None
@@ -181,7 +181,17 @@ def pick_name(ctx, email):
         if re.search(r'son$|d[oó]ttir$|bur$', cand): sc += 1
         return sc
     best = max(cands, key=score)
-    return best if score(best) > 0 or len(cands) == 1 else cands[0]
+    best = best if score(best) > 0 or len(cands) == 1 else cands[0]
+    words = best.split()
+    # anchor on the word the address is made from, drop nouns/titles before and after the person
+    for i, w in enumerate(words):
+        if local and len(local) >= 3 and ascii_(w).startswith(local[:4]): words = words[i:]; break
+    while words and (NOUN_WORDS.match(words[0]) or TITLE_WORD.search(words[0])): words = words[1:]
+    while words and (NOUN_WORDS.match(words[-1]) or TITLE_WORD.search(words[-1])): words = words[:-1]
+    return ' '.join(words[:4])
+
+NOUN_WORDS = re.compile(r'^(Bókhald|Endurskoðun|Ráðgjöf|Lögfræði|Lögmenn|Lögmaður|Skrifstofa|Starfsfólk|Starfsmaður|Yfirstjórn|Fjármáladeild|Söludeild|Markaðsdeild|Deild|Stjórn|Teymi|Hönnun|Prentun|Verslun|Þjónusta|Símatími|Opið|Mánudaga|Föstudaga|Hafðu|Hafa|Samband|Netfang|Sími|Nafn|Fax|Kennitala|Reykjavík|Kópavogur|Hafnarfjörður|Akureyri|Garðabær|Ísland)$', re.I)
+TITLE_WORD = re.compile(r'(stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|bókari|hönnuður|sérfræðingur|forritari|þjónn|CEO|CFO|COO|CMO|Partner|Manager|Director)$', re.I)
 
 TITLE_RE = re.compile(r'((?:[A-Za-záéíóúýþæöð]+-?\s+og\s+)?[A-Za-záéíóúýþæöð]*(?:stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|bókari|forstjóri|framkvæmdastjóri|hönnuður|sérfræðingur|verkefnastjóri|Manager|Director|Partner|Founder|Owner|CEO|CFO|COO|CMO)\b)', re.I)
 def pick_title(ctx, name):
@@ -238,7 +248,7 @@ def render_js(site):
 def process(row, idx=0):
     company = row.get('fyrirtaeki', ''); domain = row.get('vefur', '')
     out = dict(row)
-    out.update(dict(vefur_endanlegur='', sidur=0, netfang='', tengilidur='', titill='', tegund='', heimild='', mx='', almennt_netfang='', oll_netfong='', villa=''))
+    out.update(dict(vefur_endanlegur='', sidur=0, netfang='', tengilidur='', titill='', tegund='', netfang_heimild='', mx='', almennt_netfang='', oll_netfong='', villa=''))
     if not domain: out['villa'] = 'enginn vefur'; return out
     site = Site(domain)
     try:
@@ -258,7 +268,7 @@ def process(row, idx=0):
             out['sidur'] = len(set(site.pages.values()))
     if site.blocked: out['villa'] = 'vefurinn hafnar sjálfvirkum lestri (' + str(site.status.get(f'https://{site.domain}/', '')) + ')'
     if best:
-        out.update(netfang=best['netfang'], tengilidur=best['nafn'], titill=best['titill'], tegund=best['tegund'], heimild=best['heimild'])
+        out.update(netfang=best['netfang'], tengilidur=best['nafn'], titill=best['titill'], tegund=best['tegund'], netfang_heimild=best['heimild'])
         out['mx'] = mx_ok(best['netfang'].split('@')[1])
     if general: out['almennt_netfang'] = general['netfang']
     out['oll_netfong'] = ' '.join(f"{r['netfang']}[{r['tegund']}{':' + r['nafn'] if r['nafn'] else ''}]" for r in ordered[:12])

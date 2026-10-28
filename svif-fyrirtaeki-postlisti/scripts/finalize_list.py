@@ -64,6 +64,7 @@ def phrase(flokkur, undir):
         if re.search(rx, t): return ph
     return 'þjónustu eins og ykkar'
 
+NOUNISH = re.compile(r'^(Bókhald|Endurskoðun|Ráðgjöf|Lögfræði|Skrifstofa|Starfsfólk|Stjórn|Teymi|Hönnun|Prentun|Verslun|Þjónusta|Netfang|Sími|Nafn|Reykjavík|Akureyri|Ísland|Sala|Markaður|Markaðs|Fyrirtæki|Hafðu|Hafa|Samband)$', re.I)
 MX = {}
 def mx(domain):
     if domain in MX: return MX[domain]
@@ -87,20 +88,21 @@ for r in csv.DictReader(open(SRC, encoding='utf-8'), delimiter=';'):
     reg_name, reg_mail, reg_title = r.get('skra_tengilidur', ''), r.get('skra_netfang', ''), r.get('skra_titill', '')
     choice = None
     if r.get('netfang') and typ in ('markadur', 'stjornandi'):
-        choice = (r['netfang'], site_name, r.get('titill', ''), {'markadur': 'markaðsstjóri', 'stjornandi': 'stjórnandi/eigandi'}[typ], 'á vef fyrirtækisins: ' + r.get('heimild', ''))
+        choice = (r['netfang'], site_name, r.get('titill', ''), {'markadur': 'markaðsstjóri', 'stjornandi': 'stjórnandi/eigandi'}[typ], 'á vef fyrirtækisins: ' + r.get('netfang_heimild', ''))
     elif reg_mail:
         choice = (reg_mail, reg_name, reg_title, 'nafngreindur ' + reg_title, 'í félagatali: ' + r.get('heimild', '').split(' | ')[0])
     elif r.get('netfang') and typ in ('sala', 'nafngreint'):
-        choice = (r['netfang'], site_name, r.get('titill', ''), 'sölustjóri' if typ == 'sala' else 'nafngreindur starfsmaður', 'á vef fyrirtækisins: ' + r.get('heimild', ''))
+        choice = (r['netfang'], site_name, r.get('titill', ''), 'sölustjóri' if typ == 'sala' else 'nafngreindur starfsmaður', 'á vef fyrirtækisins: ' + r.get('netfang_heimild', ''))
     elif r.get('almennt_netfang'):
-        choice = (r['almennt_netfang'], '', '', 'almennt netfang', 'á vef fyrirtækisins: ' + r.get('heimild', ''))
+        choice = (r['almennt_netfang'], '', '', 'almennt netfang', 'á vef fyrirtækisins: ' + r.get('netfang_heimild', ''))
     elif r.get('netfang'):
-        choice = (r['netfang'], site_name, r.get('titill', ''), 'netfang á vef (óflokkað)', 'á vef fyrirtækisins: ' + r.get('heimild', ''))
+        choice = (r['netfang'], site_name, r.get('titill', ''), 'netfang á vef (óflokkað)', 'á vef fyrirtækisins: ' + r.get('netfang_heimild', ''))
     row = dict(fyrirtaeki=company_display(r['fyrirtaeki']), flokkur=r.get('flokkur', ''), undirflokkur=r.get('undirflokkur', ''), vefur=r.get('vefur_endanlegur') or r.get('vefur', ''),
                netfang='', tengilidur='', titill='', tegund='', stadfesting='', mx='', kvedja='', thjonusta=phrase(r.get('flokkur', ''), r.get('undirflokkur', '')),
                onnur_netfong=r.get('oll_netfong', '')[:300], athugasemd=r.get('villa', '') or r.get('athugasemd', ''), sent='', message_id='', svar='')
     if choice:
         e, n, t, typ_is, verif = choice
+        if n and (NOUNISH.search(n.split()[0]) or len(n.split()[0]) < 3): n = ''   # not a person's name after all
         row.update(netfang=e, tengilidur=n, titill=t, tegund=typ_is, stadfesting=verif, mx=mx(e.split('@')[1]), kvedja=greeting(n))
     else:
         row['athugasemd'] = (row['athugasemd'] + '; ' if row['athugasemd'] else '') + 'ekkert netfang fannst'
@@ -109,6 +111,21 @@ for r in csv.DictReader(open(SRC, encoding='utf-8'), delimiter=';'):
 out.sort(key=lambda r: (r['netfang'] == '', r['flokkur'], r['fyrirtaeki']))
 with open(DST, 'w', newline='', encoding='utf-8') as f:
     w = csv.DictWriter(f, fieldnames=list(out[0].keys()), delimiter=';'); w.writeheader(); w.writerows(out)
+# the same list as a spreadsheet, for reading and ticking off by hand
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, PatternFill
+    from openpyxl.utils import get_column_letter
+    wb = Workbook(); ws = wb.active; ws.title = 'Póstlisti'
+    cols = list(out[0].keys()); ws.append(cols)
+    for c in ws[1]: c.font = Font(bold=True); c.fill = PatternFill('solid', fgColor='E8ECF5')
+    for r in out: ws.append([r[c] for c in cols])
+    widths = dict(fyrirtaeki=34, flokkur=28, undirflokkur=24, vefur=26, netfang=32, tengilidur=28, titill=22, tegund=24, stadfesting=50, mx=18, kvedja=16, thjonusta=24, onnur_netfong=40, athugasemd=30, sent=12, message_id=18, svar=14)
+    for i, c in enumerate(cols, 1): ws.column_dimensions[get_column_letter(i)].width = widths.get(c, 16)
+    ws.freeze_panes = 'B2'; ws.auto_filter.ref = ws.dimensions
+    wb.save(DST.rsplit('.', 1)[0] + '.xlsx')
+except Exception as e:
+    print('xlsx skipped:', e)
 n_mail = sum(1 for r in out if r['netfang'])
 from collections import Counter
 print(f'{len(out)} companies, {n_mail} with an address;', Counter(r['tegund'] for r in out if r['netfang']).most_common())
