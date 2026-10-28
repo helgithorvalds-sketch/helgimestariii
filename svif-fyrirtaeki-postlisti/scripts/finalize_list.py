@@ -76,6 +76,17 @@ def mx(domain):
         MX[domain] = 'DNS?'
     return MX[domain]
 
+NOUN_WORDS = re.compile(r'^(Bókhald|Endurskoðun|Ráðgjöf|Lögfræði|Lögmenn|Lögmaður|Skrifstofa|Starfsfólk|Starfsmaður|Yfirstjórn|Fjármáladeild|Söludeild|Markaðsdeild|Deild|Stjórn|Teymi|Hönnun|Prentun|Verslun|Þjónusta|Símatími|Opið|Hafðu|Hafa|Samband|Netfang|Sími|Símanúmer|Skilaboð|Senda|Nafn|Fax|Kennitala|Heimilisfang|Fyrirtæki|Reykjavík|Kópavogur|Hafnarfjörður|Akureyri|Garðabær|Mosfellsbær|Selfoss|Ísland|Iceland|Google|Facebook|Instagram|Linkedin|About|Services|Service|Contact|Team|Home|Menu|Email|Phone|Partner|Partners|Ads|Meta|Microsoft|Apple|Premium|Vefur|Vefsíða|Vefverslun|Tölvupóstur|Póstur|Sala|Markaður|Markaðs)$', re.I)
+TITLE_WORD = re.compile(r'(stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|lögfræðingur|bókari|hönnuður|sérfræðingur|forritari|þjónn|CEO|CFO|COO|CMO|Partner|Manager|Managing|Director|Senior|Head|Chief|Lead|Founder|Owner|Consultant|Designer|Developer|Specialist)$', re.I)
+def person_name(n):
+    """Strip labels and title words that the crawler left around a person's name; '' when nothing person-like remains."""
+    w = [x for x in clean(n).split() if x]
+    while w and (NOUN_WORDS.match(w[0]) or TITLE_WORD.search(w[0])): w = w[1:]
+    while w and (NOUN_WORDS.match(w[-1]) or TITLE_WORD.search(w[-1])): w = w[:-1]
+    w = w[:4]
+    if not w or len(w[0]) < 3 or not re.match(r'^[A-ZÁÉÍÓÚÝÞÆÖ][a-záéíóúýþæöð]+$', w[0]): return ''
+    return ' '.join(w)
+
 def company_display(name):
     n = clean(name)
     n = re.sub(r'\s*[-–]\s*(Reykjavík|Akureyri)$', '', n)
@@ -102,13 +113,22 @@ for r in csv.DictReader(open(SRC, encoding='utf-8'), delimiter=';'):
                onnur_netfong=r.get('oll_netfong', '')[:300], athugasemd=r.get('villa', '') or r.get('athugasemd', ''), sent='', message_id='', svar='')
     if choice:
         e, n, t, typ_is, verif = choice
-        if n and (NOUNISH.search(n.split()[0]) or len(n.split()[0]) < 3): n = ''   # not a person's name after all
+        n = person_name(n)
         row.update(netfang=e, tengilidur=n, titill=t, tegund=typ_is, stadfesting=verif, mx=mx(e.split('@')[1]), kvedja=greeting(n))
     else:
         row['athugasemd'] = (row['athugasemd'] + '; ' if row['athugasemd'] else '') + 'ekkert netfang fannst'
     out.append(row)
 
 out.sort(key=lambda r: (r['netfang'] == '', r['flokkur'], r['fyrirtaeki']))
+seen = {}
+for r in out:
+    e = r['netfang'].lower()
+    if not e: continue
+    if e in seen:
+        r['athugasemd'] = (r['athugasemd'] + '; ' if r['athugasemd'] else '') + f"sama netfang og {seen[e]}, ekki sent tvisvar"
+        r['sent'] = 'sleppt: sama netfang og ' + seen[e]
+    else:
+        seen[e] = r['fyrirtaeki']
 with open(DST, 'w', newline='', encoding='utf-8') as f:
     w = csv.DictWriter(f, fieldnames=list(out[0].keys()), delimiter=';'); w.writeheader(); w.writerows(out)
 # the same list as a spreadsheet, for reading and ticking off by hand

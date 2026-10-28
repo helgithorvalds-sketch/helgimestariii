@@ -126,6 +126,10 @@ class Site:
             seen.add(u)
             if self.get(u): n += 1
             if n >= MAX_PAGES - 1: break
+        if n == 0:   # menus drawn by JavaScript: try the paths Icelandic sites usually use
+            for path in ('/hafa-samband', '/hafdu-samband', '/hafa-samband/', '/samband', '/um-okkur', '/um-okkur/', '/starfsfolk', '/starfsfolk/', '/contact', '/contact-us', '/about', '/um', '/fyrirtaekid', '/teymid', '/folkid'):
+                if self.get(urljoin(self.base, path)): n += 1
+                if n >= 3: break
 
 def emails_in(html_text, soup):
     found = {}
@@ -190,8 +194,8 @@ def pick_name(ctx, email):
     while words and (NOUN_WORDS.match(words[-1]) or TITLE_WORD.search(words[-1])): words = words[:-1]
     return ' '.join(words[:4])
 
-NOUN_WORDS = re.compile(r'^(Bókhald|Endurskoðun|Ráðgjöf|Lögfræði|Lögmenn|Lögmaður|Skrifstofa|Starfsfólk|Starfsmaður|Yfirstjórn|Fjármáladeild|Söludeild|Markaðsdeild|Deild|Stjórn|Teymi|Hönnun|Prentun|Verslun|Þjónusta|Símatími|Opið|Mánudaga|Föstudaga|Hafðu|Hafa|Samband|Netfang|Sími|Nafn|Fax|Kennitala|Reykjavík|Kópavogur|Hafnarfjörður|Akureyri|Garðabær|Ísland)$', re.I)
-TITLE_WORD = re.compile(r'(stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|bókari|hönnuður|sérfræðingur|forritari|þjónn|CEO|CFO|COO|CMO|Partner|Manager|Director)$', re.I)
+NOUN_WORDS = re.compile(r'^(Bókhald|Endurskoðun|Ráðgjöf|Lögfræði|Lögmenn|Lögmaður|Skrifstofa|Starfsfólk|Starfsmaður|Yfirstjórn|Fjármáladeild|Söludeild|Markaðsdeild|Deild|Stjórn|Teymi|Hönnun|Prentun|Verslun|Þjónusta|Símatími|Opið|Mánudaga|Föstudaga|Hafðu|Hafa|Samband|Netfang|Sími|Símanúmer|Skilaboð|Senda|Nafn|Fax|Kennitala|Heimilisfang|Fyrirtæki|Reykjavík|Kópavogur|Hafnarfjörður|Akureyri|Garðabær|Mosfellsbær|Selfoss|Ísland|Iceland|Google|Facebook|Instagram|Linkedin|About|Services|Service|Contact|Team|Home|Menu|Email|Phone|Partner|Partners|Ads|Meta|Microsoft|Apple|Premium|Vefur|Vefsíða|Vefverslun|Tölvupóstur|Póstur|Sala|Markaður|Markaðs)$', re.I)
+TITLE_WORD = re.compile(r'(stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|lögfræðingur|bókari|hönnuður|sérfræðingur|forritari|þjónn|CEO|CFO|COO|CMO|Partner|Manager|Managing|Director|Senior|Head|Chief|Lead|Founder|Owner|Consultant|Designer|Developer|Specialist)$', re.I)
 
 TITLE_RE = re.compile(r'((?:[A-Za-záéíóúýþæöð]+-?\s+og\s+)?[A-Za-záéíóúýþæöð]*(?:stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|bókari|forstjóri|framkvæmdastjóri|hönnuður|sérfræðingur|verkefnastjóri|Manager|Director|Partner|Founder|Owner|CEO|CFO|COO|CMO)\b)', re.I)
 def pick_title(ctx, name):
