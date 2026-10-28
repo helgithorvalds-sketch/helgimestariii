@@ -47,7 +47,7 @@ if __name__ == '__main__':
     if cmd == 'next':
         n = int(sys.argv[3]); out = []
         for i, r in enumerate(rows):
-            if r['netfang'] and not r['sent']:
+            if r['netfang'] and not r['sent'] and r['mx'].startswith('MX:'):
                 out.append(dict(idx=i, fyrirtaeki=r['fyrirtaeki'], **mail(r)))
                 if len(out) >= n: break
         print(json.dumps(out, ensure_ascii=False, indent=1))
