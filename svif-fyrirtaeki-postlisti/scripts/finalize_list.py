@@ -80,12 +80,54 @@ NOUN_WORDS = re.compile(r'^(Bókhald|Endurskoðun|Ráðgjöf|Lögfræði|Lögmen
 TITLE_WORD = re.compile(r'(stjóri|stjórnandi|eigandi|stofnandi|fulltrúi|ráðgjafi|endurskoðandi|lögmaður|lögfræðingur|bókari|hönnuður|sérfræðingur|forritari|þjónn|CEO|CFO|COO|CMO|Partner|Manager|Managing|Director|Senior|Head|Chief|Lead|Founder|Owner|Consultant|Designer|Developer|Specialist)$', re.I)
 def person_name(n):
     """Strip labels and title words that the crawler left around a person's name; '' when nothing person-like remains."""
+    n = re.sub(r'\([^)]*\)', ' ', n)
     w = [x for x in clean(n).split() if x]
     while w and (NOUN_WORDS.match(w[0]) or TITLE_WORD.search(w[0])): w = w[1:]
     while w and (NOUN_WORDS.match(w[-1]) or TITLE_WORD.search(w[-1])): w = w[:-1]
     w = w[:4]
     if not w or len(w[0]) < 3 or not re.match(r'^[A-ZÁÉÍÓÚÝÞÆÖ][a-záéíóúýþæöð]+$', w[0]): return ''
     return ' '.join(w)
+
+SERVICE_BOX = re.compile(r'^(bokhald|bókhald|reikningar|innkaup|atvinna|starf|umsokn|umsoknir|press|frettir|kvartanir|bokari|laun|greidslur|hjalp|help|support|thjonustuver|noreply|webmaster|postmaster|dpo|privacy|security|abuse|hr|jobs|career|billing|invoice|accounting|reikning|afstemming|fjarfestatengsl|utleiga|verslun|pantanir|order|orders|netverslun|vefverslun)(?=$|[._\-0-9])', re.I)
+GENERIC_BOX = re.compile(r'^(info|upplysingar|skrifstofa|postur|mail|hello|hallo|office|kontakt|contact|sala|sales|afgreidsla|reception|mottaka|fyrirspurnir|velkomin|stofan|logmenn|endurskodun|admin|markadur|marketing|markadsdeild|kynning)$', re.I)
+EXCLUDE = re.compile(r'samtök|^félag |félag löggiltra|félag íslenskra|stofnun$|ríkis|ráðuneyti|sveitarfélag|háskól|eftirlit|you@company', re.I)
+def site_domain(url):
+    d = re.sub(r'^https?://', '', (url or '').lower()).replace('www.', '').split('/')[0]
+    return d
+def base_name(domain):
+    parts = domain.split('.')
+    return parts[-2] if len(parts) >= 2 else domain
+def others(col):
+    """[(email, type, name)] from the crawler's 'oll_netfong' column."""
+    out = []
+    for tok in (col or '').split():
+        m = re.match(r'^([^\[\s]+)\[([a-z]+)(?::(.*))?\]$', tok)
+        if m: out.append((m.group(1).lower(), m.group(2), m.group(3) or ''))
+    return out
+def better_general(chosen, row):
+    """A plainer company mailbox than a service inbox like bokhald@, when the site shows one."""
+    dom = site_domain(row.get('vefur_endanlegur') or row.get('vefur'))
+    cands = [e for e, t, n in others(row.get('oll_netfong')) if e != chosen and not SERVICE_BOX.match(e.split('@')[0]) and not BAD_PLACEHOLDER.search(e)]
+    def score(e):
+        local, d = e.split('@')
+        return (0 if local == base_name(d) or local == base_name(dom) else 1 if GENERIC_BOX.match(local) else 2, 0 if d.endswith(base_name(dom) + '.') or d == dom or base_name(d) == base_name(dom) else 1)
+    cands = [e for e in cands if score(e)[0] < 2]
+    return min(cands, key=score) if cands else ''
+BAD_PLACEHOLDER = re.compile(r'company\.com|example|%20|u003e|sentry|wixpress', re.I)
+
+from greeting import MALE, FEMALE
+def looks_like_person(n, local):
+    """True when the cleaned name is plausibly the person behind the address."""
+    if not n: return False
+    w = n.split()
+    tr = str.maketrans('áéíóúýðæöÁÉÍÓÚÝÐÆÖ', 'aeiouydaoAEIOUYDAO')
+    asc = [x.translate(tr).replace('þ', 'th').lower() for x in w]
+    loc = re.sub(r'[^a-z]', '', local.translate(tr).lower())
+    if loc and len(loc) >= 3 and (asc[0].startswith(loc[:4]) or loc.startswith(asc[0][:4]) or ''.join(x[0] for x in asc) == loc
+                                  or loc in (asc[0][0] + asc[-1], asc[0] + asc[-1][0], asc[0] + asc[-1], asc[-1]) or asc[-1].startswith(loc)): return True
+    if loc and len(loc) >= 4 and re.fullmatch(r'[a-z]+', loc) and not GENERIC_BOX.match(loc) and not SERVICE_BOX.match(loc): return False   # someone else's mailbox
+    if w[0] in MALE or w[0] in FEMALE: return True
+    return any(re.search(r'(son|dóttir|dottir|bur)$', x) for x in w)
 
 def company_display(name):
     n = clean(name)
@@ -111,19 +153,60 @@ for r in csv.DictReader(open(SRC, encoding='utf-8'), delimiter=';'):
     row = dict(fyrirtaeki=company_display(r['fyrirtaeki']), flokkur=r.get('flokkur', ''), undirflokkur=r.get('undirflokkur', ''), vefur=r.get('vefur_endanlegur') or r.get('vefur', ''),
                netfang='', tengilidur='', titill='', tegund='', stadfesting='', mx='', kvedja='', thjonusta=phrase(r.get('flokkur', ''), r.get('undirflokkur', '')),
                onnur_netfong=r.get('oll_netfong', '')[:300], athugasemd=r.get('villa', '') or r.get('athugasemd', ''), sent='', message_id='', svar='')
+    if choice and not re.fullmatch(r'[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}', choice[0]):
+        choice = None
+    if EXCLUDE.search(r['fyrirtaeki']) or BAD_PLACEHOLDER.search(r.get('netfang', '')):
+        choice = None; r['villa'] = (r.get('villa', '') + '; ' if r.get('villa') else '') + 'ekki fyrirtæki / ógilt netfang, sleppt'
     if choice:
         e, n, t, typ_is, verif = choice
         n = person_name(n)
+        local, dom = e.split('@')
+        sdom = site_domain(r.get('vefur_endanlegur') or r.get('vefur'))
+        # a company name mistaken for a person
+        cname = re.sub(r'[^a-z0-9]', '', (r['fyrirtaeki'] or '').translate(str.maketrans('áéíóúýðæöÁÉÍÓÚÝÐÆÖ', 'aeiouydaoAEIOUYDAO')).lower())
+        if n and any(len(w) >= 4 and re.sub(r'[^a-z0-9]', '', w.translate(str.maketrans('áéíóúýðæöÁÉÍÓÚÝÐÆÖ', 'aeiouydaoAEIOUYDAO')).lower()) in cname for w in n.split()): n = ''
+        if n and re.search(r'(gerð|þjónusta|stofa|stofan|hönnun|lausnir|kerfi|verslun|miðlun|ráðgjöf|félag|setur|prent|merking)$', n.split()[-1], re.I): n = ''
+        # a mailbox that is plainly the company's, whatever the crawler read next to it
+        if (GENERIC_BOX.match(local) or local == base_name(dom) or local == base_name(sdom)) and 'félagatali' not in verif:
+            n, t, typ_is = '', '', 'almennt netfang'
+        # the accounting or support inbox is not who we write to: prefer the plain company mailbox if the site shows one
+        if SERVICE_BOX.match(local) and 'félagatali' not in verif:
+            alt = better_general(e, r)
+            if alt: e, n, t, typ_is = alt, '', '', 'almennt netfang'
+            else: n, t, typ_is = '', '(þjónustupósthólf)', 'almennt netfang'
+        # an address on a foreign domain when the site shows one on its own: take the company's own
+        if sdom.endswith('.is') and not dom.endswith('.is') and 'félagatali' not in verif:
+            alt = better_general(e, r)
+            if alt: e, n, t, typ_is = alt, '', '', 'almennt netfang'
+        if n and 'félagatali' not in verif and not looks_like_person(n, e.split('@')[0]): n, t = '', ''
+        if not n and typ_is not in ('almennt netfang',) and 'félagatali' not in verif and typ_is != 'netfang á vef (óflokkað)':
+            typ_is, t = 'netfang á vef (óflokkað)', ''
         row.update(netfang=e, tengilidur=n, titill=t, tegund=typ_is, stadfesting=verif, mx=mx(e.split('@')[1]), kvedja=greeting(n))
     else:
         row['athugasemd'] = (row['athugasemd'] + '; ' if row['athugasemd'] else '') + 'ekkert netfang fannst'
     out.append(row)
 
 out.sort(key=lambda r: (r['netfang'] == '', r['flokkur'], r['fyrirtaeki']))
+# one row per company: the same firm reached through two sources (registry + research) keeps its best contact
+RANK = {'markaðsstjóri': 0, 'stjórnandi/eigandi': 1, 'nafngreindur lögmaður': 2, 'nafngreindur löggiltur endurskoðandi': 2, 'sölustjóri': 3, 'nafngreindur starfsmaður': 4, 'almennt netfang': 5, 'netfang á vef (óflokkað)': 6, '': 9}
+def ckey(r):
+    d = site_domain(r['vefur'])
+    nm = re.sub(r'[^a-z0-9]', '', r['fyrirtaeki'].lower().translate(str.maketrans('áéíóúýðæöþ', 'aeiouydaot')))
+    nm = re.sub(r'(ehf|hf|slf|sf|logmenn|logmannsstofa|endurskodun|auglysingastofa|fyrirtaekjathjonusta|b2b)$', '', nm)
+    return (base_name(d) if d and base_name(d) not in ('facebook', 'wordpress', 'squarespace', 'wixsite', 'google') else nm)
+best = {}
+for r in sorted(out, key=lambda r: RANK.get(r['tegund'], 9)):
+    k = ckey(r)
+    if not k: continue
+    if k in best and best[k] is not r:
+        if r['netfang']: r['sent'] = 'sleppt: sama fyrirtæki og ' + best[k]['fyrirtaeki']
+        r['athugasemd'] = (r['athugasemd'] + '; ' if r['athugasemd'] else '') + 'sama fyrirtæki og ' + best[k]['fyrirtaeki']
+    else:
+        best[k] = r
 seen = {}
 for r in out:
     e = r['netfang'].lower()
-    if not e: continue
+    if not e or r['sent']: continue
     if e in seen:
         r['athugasemd'] = (r['athugasemd'] + '; ' if r['athugasemd'] else '') + f"sama netfang og {seen[e]}, ekki sent tvisvar"
         r['sent'] = 'sleppt: sama netfang og ' + seen[e]
