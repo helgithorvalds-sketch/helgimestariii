@@ -10,7 +10,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const [out='out.mp4', s='0', e='52', f='30'] = process.argv.slice(2);
 const start=+s, end=+e, fps=+f;
 const browser = await chromium.launch({ args: ['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--disable-gpu-vsync'] });
-const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+const page = await browser.newPage({ viewport: { width: +(process.env.VW||1920), height: +(process.env.VH||1080) }, deviceScaleFactor: 1 });   // VW/VH: stage size (the step clips are 1080x1080)
 page.on('console', m => { if (m.type()==='error' || m.type()==='warning') console.error('[page]', m.text()); });
 page.on('pageerror', e => console.error('[pageerror]', e.message));
 // everything the page loads from the network is served from disk, so renders are reproducible offline
@@ -27,7 +27,8 @@ await page.route('https://fonts.gstatic.com/**', r => {
   r.fulfill({ body: readFileSync(path.join(here,'fonts',rel)), contentType: 'font/woff2', headers: { 'access-control-allow-origin': '*' } });
 });
 if (process.env.PR) await page.addInitScript(`window.__PR=${+process.env.PR}`);   // PR=1 renders at pixel ratio 1 (faster; enough for small clips)
-await page.goto('file://' + path.join(here,'svif-fyrirtaeki.html') + '#capture');
+const [htmlFile, htmlQuery=''] = (process.env.HTML||'svif-fyrirtaeki.html').split('?');   // HTML='skref.html?clip=2' renders a step clip
+await page.goto('file://' + path.join(here,htmlFile) + (htmlQuery?'?'+htmlQuery:'') + '#capture');
 await page.waitForFunction(() => typeof window.__ready === 'object', null, { timeout: 30000 });
 await page.evaluate(() => window.__ready);
 await page.evaluate(() => document.fonts.ready);
