@@ -9,7 +9,7 @@
 import csv, json, sys, datetime, re
 
 SUBJECT = 'SVIF – bæklingur fyrir nýstofnuð fyrirtæki'
-VIDEO = 'https://svif.is/myndband'
+VIDEO = 'https://cdn.jsdelivr.net/gh/helgithorvalds-sketch/helgimestariii@6215875e041668557347987523727639f9355d77/video/svif-fyrirtaeki/SVIF-fyrirtaeki-web.mp4'   # the file itself: opens and plays in the browser
 BODY = """Hæhæ,
 
 Helgi Már heiti ég og stend á bak við fyrirtækið SVIF.
@@ -51,7 +51,7 @@ def html_body():
     paras = []
     for para in BODY.format(video=VIDEO).split('\n\n'):
         t = _html.escape(para)
-        t = t.replace('Myndband: ' + VIDEO, 'Myndband: <a href="' + VIDEO + '" style="color:#1f55ff">svif.is/myndband</a>')
+        t = t.replace('Myndband: ' + VIDEO, 'Myndband: <a href="' + VIDEO + '" style="color:#1f55ff">Horfa á myndbandið (52 sek.)</a>')
         t = t.replace('Nánar um SVIF: ' + SITE, 'Nánar um SVIF: <a href="' + SITE + '" style="color:#1f55ff">svif.is</a>')
         t = t.replace('helgithorvalds@gmail.com', '<a href="mailto:helgithorvalds@gmail.com" style="color:#1f55ff">helgithorvalds@gmail.com</a>')
         paras.append('<p style="margin:0 0 16px">' + t.replace('\n', '<br>') + '</p>')
