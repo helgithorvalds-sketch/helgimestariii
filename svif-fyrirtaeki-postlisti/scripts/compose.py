@@ -44,16 +44,32 @@ def save(path, rows, fields):
     with open(path, 'w', newline='', encoding='utf-8') as f:
         w = csv.DictWriter(f, fieldnames=fields, delimiter=';'); w.writeheader(); w.writerows(rows)
 
+import html as _html
+SITE = 'https://svif.is'
+def html_body():
+    """The same text as HTML: paragraphs, and the two links as real hyperlinks with the address as link text."""
+    paras = []
+    for para in BODY.format(video=VIDEO).split('\n\n'):
+        t = _html.escape(para)
+        t = t.replace('Myndband: ' + VIDEO, 'Myndband: <a href="' + VIDEO + '" style="color:#1f55ff">svif.is/myndband</a>')
+        t = t.replace('Nánar um SVIF: ' + SITE, 'Nánar um SVIF: <a href="' + SITE + '" style="color:#1f55ff">svif.is</a>')
+        t = t.replace('helgithorvalds@gmail.com', '<a href="mailto:helgithorvalds@gmail.com" style="color:#1f55ff">helgithorvalds@gmail.com</a>')
+        paras.append('<p style="margin:0 0 16px">' + t.replace('\n', '<br>') + '</p>')
+    return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#1a1a1a">' + ''.join(paras) + '</div>'
+
 def mail(r):
     return dict(to=r['netfang'], subject=SUBJECT,
-                body=BODY.format(video=VIDEO))
+                body=BODY.format(video=VIDEO), html=html_body())
 
 if __name__ == '__main__':
     path, cmd = sys.argv[1], sys.argv[2]
     rows, fields = load(path)
     if cmd == 'next':
         n = int(sys.argv[3]); out = []
-        for i, r in enumerate(rows):
+        RANK = {'markaðsstjóri': 0, 'stjórnandi/eigandi': 1, 'nafngreindur lögmaður': 2, 'nafngreindur löggiltur endurskoðandi': 2, 'sölustjóri': 3, 'nafngreindur starfsmaður': 4, 'almennt netfang': 5, 'netfang á vef (óflokkað)': 6}
+        order = sorted(range(len(rows)), key=lambda i: (RANK.get(rows[i]['tegund'], 9), rows[i]['flokkur'], rows[i]['fyrirtaeki']))
+        for i in order:
+            r = rows[i]
             if r['netfang'] and not r['sent'] and r['mx'].startswith('MX:'):
                 out.append(dict(idx=i, fyrirtaeki=r['fyrirtaeki'], **mail(r)))
                 if len(out) >= n: break
@@ -62,6 +78,14 @@ if __name__ == '__main__':
         r = rows[int(sys.argv[3])]; m = mail(r); print('To:', m['to']); print('Subject:', m['subject']); print(); print(m['body'])
     elif cmd == 'sent':
         r = rows[int(sys.argv[3])]; r['sent'] = datetime.date.today().isoformat(); r['message_id'] = sys.argv[4]; save(path, rows, fields); print('sent', r['fyrirtaeki'], r['netfang'])
+    elif cmd == 'mark':   # mark idx=email=message_id ... (the address must match the row, so a shifted index can never mislabel a send)
+        n = 0
+        for tok in sys.argv[3:]:
+            idx, email, mid = tok.split('=')
+            r = rows[int(idx)]
+            assert r['netfang'].lower() == email.lower(), f'row {idx} is {r["netfang"]}, not {email}'
+            r['sent'] = datetime.date.today().isoformat(); r['message_id'] = mid; n += 1
+        save(path, rows, fields); print('marked', n)
     elif cmd == 'skip':
         r = rows[int(sys.argv[3])]; r['sent'] = 'sleppt: ' + ' '.join(sys.argv[4:]); save(path, rows, fields); print('skipped', r['fyrirtaeki'])
     elif cmd == 'stats':
