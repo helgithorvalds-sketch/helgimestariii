@@ -9,19 +9,26 @@
 import csv, json, sys, datetime, re
 
 SUBJECT = 'SVIF – bæklingur fyrir nýstofnuð fyrirtæki'
-VIDEO = 'https://cdn.jsdelivr.net/gh/helgithorvalds-sketch/helgimestariii@6215875e041668557347987523727639f9355d77/video/svif-fyrirtaeki/SVIF-fyrirtaeki-web.mp4'
-BODY = """{kvedja}
+VIDEO = 'https://svif.is/myndband'
+BODY = """Hæhæ,
 
-Ég heiti Helgi Már og stend á bak við SVIF. Hingað til höfum við tengt nýja húseigendur við fyrirtæki sem hjálpa þeim að koma sér fyrir, og nú erum við að fara af stað með sama verkefni fyrir ný fyrirtæki og eigendur þeirra.
+Helgi Már heiti ég og stend á bak við fyrirtækið SVIF.
 
-Hugmyndin er einföld: kerfið okkar finnur nýstofnuð fyrirtæki um leið og þau verða til og við sendum eigendum þeirra bækling þar sem traust fyrirtæki kynna þjónustu sína, einmitt á þeim tímapunkti sem þau eru að velja sér {thjonusta} og annað sem nýr rekstur þarf. Eitt fyrirtæki er í hverjum flokki og við sendum um 250 bæklinga á mánuði, um allt land.
+Við vorum nýlega að skoða fyrirtækið ykkar og sáum að það gæti mögulega hentað mjög vel fyrir nýtt markaðsverkefni sem við höfum verið að vinna að.
 
-Þetta stutta myndband útskýrir verkefnið á innan við mínútu:
-{video}
+Þegar fólk stofnar nýtt fyrirtæki þarf það að huga að ótal hlutum, hvort sem það er að finna tryggingar, bókhald, vefsíðu, auglýsingastofu eða aðra þjónustu sem þarf til að koma rekstrinum af stað.
+
+Þess vegna höfum við sett saman sérstakan bækling fyrir nýja fyrirtækjaeigendur þar sem fyrirtæki kynna þjónustu sína og bjóða upp á afslætti. Bæklingurinn er sendur beint til nýrra fyrirtækjaeigenda um allt land, einmitt þegar þeir eru að leita að þjónustu sem getur hjálpað þeim að koma rekstrinum af stað. Við sendum um 250 bæklinga á mánuði.
+
+Hér er stutt myndband sem útskýrir verkefnið og hvernig þetta virkar á innan við mínútu:
+
+Myndband: {video}
 
 Nánar um SVIF: https://svif.is
 
-Gætuð þið látið mig vita hvort þetta sé eitthvað sem {fyrirtaeki} hefði áhuga á að skoða nánar? Stutt já eða nei dugar. Nei er líka alveg í lagi, þá vitum við það og ónáðum ykkur ekki frekar.
+Upphaflega vorum við með bækling til nýrra húseigenda og eftir lofandi niðurstöður þar teljum við rökrétt að miðla auglýsingum einnig til nýrra fyrirtækjaeigenda.
+
+Mig langaði því að athuga hvort þetta væri eitthvað sem þið hefðuð áhuga á að skoða nánar. Það væri frábært að fá stutt svar, hvort sem það er já eða nei. Ef þetta er ekki eitthvað fyrir ykkur er það auðvitað ekkert mál, þá vitum við það og höfum ekki frekar samband vegna þessa.
 
 Bestu kveðjur,
 Helgi Már Þorvaldsson
@@ -39,7 +46,7 @@ def save(path, rows, fields):
 
 def mail(r):
     return dict(to=r['netfang'], subject=SUBJECT,
-                body=BODY.format(kvedja=r['kvedja'] or 'Góðan daginn,', thjonusta=r['thjonusta'] or 'þjónustu eins og ykkar', video=VIDEO, fyrirtaeki=r['fyrirtaeki']))
+                body=BODY.format(video=VIDEO))
 
 if __name__ == '__main__':
     path, cmd = sys.argv[1], sys.argv[2]
