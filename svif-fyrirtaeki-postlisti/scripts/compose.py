@@ -22,9 +22,7 @@ Við vorum nýlega að skoða fyrirtækið ykkar og sáum að það gæti mögul
 
 Hér er stutt myndband sem útskýrir verkefnið og hvernig þetta virkar á innan við mínútu:
 
-Myndband: {video}
-
-Nánar um SVIF: https://svif.is
+Nánari upplýsingar og kynningarmyndband: {video}
 
 Upphaflega vorum við með bækling til nýrra húseigenda og eftir lofandi niðurstöður þar teljum við rökrétt að miðla auglýsingum einnig til nýrra fyrirtækjaeigenda.
 
@@ -45,14 +43,12 @@ def save(path, rows, fields):
         w = csv.DictWriter(f, fieldnames=fields, delimiter=';'); w.writeheader(); w.writerows(rows)
 
 import html as _html
-SITE = 'https://svif.is'
 def html_body():
-    """The same text as HTML: paragraphs, and the two links as real hyperlinks with the address as link text."""
+    """The same text as HTML: paragraphs, the page link as a real hyperlink showing svif.is/fyrirtaeki, and the e-mail address as a mailto link."""
     paras = []
     for para in BODY.format(video=VIDEO).split('\n\n'):
         t = _html.escape(para)
-        t = t.replace('Myndband: ' + VIDEO, '<a href="' + VIDEO + '" style="color:#1f55ff">Myndband</a>')
-        t = t.replace('Nánar um SVIF: ' + SITE, 'Nánar um SVIF: <a href="' + SITE + '" style="color:#1f55ff">svif.is</a>')
+        t = t.replace('Nánari upplýsingar og kynningarmyndband: ' + VIDEO, 'Nánari upplýsingar og kynningarmyndband: <a href="' + VIDEO + '" style="color:#1f55ff">svif.is/fyrirtaeki</a>')
         t = t.replace('helgithorvalds@gmail.com', '<a href="mailto:helgithorvalds@gmail.com" style="color:#1f55ff">helgithorvalds@gmail.com</a>')
         paras.append('<p style="margin:0 0 16px">' + t.replace('\n', '<br>') + '</p>')
     return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#1a1a1a">' + ''.join(paras) + '</div>'

@@ -1,7 +1,7 @@
 # Tölvupóstur til fyrirtækja: SVIF fyrir ný fyrirtæki
 
 Sami póstur á öll fyrirtæki (ekkert sérsniðið, svo ekkert geti farið úrskeiðis), sendur úr Gmail Helga
-(helgithorvalds@gmail.com), hreinn texti, engin viðhengi, tveir tenglar: myndbandið á svif.is og svif.is.
+(helgithorvalds@gmail.com), hreinn texti, engin viðhengi, einn tengill: svif.is/fyrirtaeki (kynningarsíðan með myndbandinu).
 
 **Efnislína:** `SVIF – bæklingur fyrir nýstofnuð fyrirtæki`
 
@@ -24,9 +24,7 @@ að koma rekstrinum af stað. Við sendum um 250 bæklinga á mánuði.
 
 Hér er stutt myndband sem útskýrir verkefnið og hvernig þetta virkar á innan við mínútu:
 
-Myndband: https://svif.is/fyrirtaeki
-
-Nánar um SVIF: https://svif.is
+Nánari upplýsingar og kynningarmyndband: https://svif.is/fyrirtaeki
 
 Upphaflega vorum við með bækling til nýrra húseigenda og eftir lofandi niðurstöður þar teljum við
 rökrétt að miðla auglýsingum einnig til nýrra fyrirtækjaeigenda.
