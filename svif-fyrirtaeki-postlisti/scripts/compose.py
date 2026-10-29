@@ -51,7 +51,7 @@ def html_body():
     paras = []
     for para in BODY.format(video=VIDEO).split('\n\n'):
         t = _html.escape(para)
-        t = t.replace('Myndband: ' + VIDEO, 'Myndband: <a href="' + VIDEO + '" style="color:#1f55ff">Horfa á myndbandið (52 sek.)</a>')
+        t = t.replace('Myndband: ' + VIDEO, '<a href="' + VIDEO + '" style="color:#1f55ff">Myndband</a>')
         t = t.replace('Nánar um SVIF: ' + SITE, 'Nánar um SVIF: <a href="' + SITE + '" style="color:#1f55ff">svif.is</a>')
         t = t.replace('helgithorvalds@gmail.com', '<a href="mailto:helgithorvalds@gmail.com" style="color:#1f55ff">helgithorvalds@gmail.com</a>')
         paras.append('<p style="margin:0 0 16px">' + t.replace('\n', '<br>') + '</p>')
