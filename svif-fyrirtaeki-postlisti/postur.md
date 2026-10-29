@@ -24,7 +24,7 @@ að koma rekstrinum af stað. Við sendum um 250 bæklinga á mánuði.
 
 Hér er stutt myndband sem útskýrir verkefnið og hvernig þetta virkar á innan við mínútu:
 
-Myndband: https://svif.is/myndband
+Myndband: https://svif.is/fyrirtaeki
 
 Nánar um SVIF: https://svif.is
 
@@ -46,7 +46,7 @@ Textinn er Helga; aðeins stafsetning var lagfærð (upphaflega, rökrétt, fyri
 
 ## Myndbandið
 
-Síðan `svif.is/myndband` sýnir myndbandið (SVIF fyrir fyrirtæki, 52 sek.) með SVIF-útliti. Skráin sjálf
+Síðan `svif.is/fyrirtaeki` er kynningarsíða fyrirtækjabæklingsins í sama útliti og forsíða svif.is, með myndbandinu (SVIF fyrir fyrirtæki, 52 sek.) efst. Skráin sjálf
 (`video/svif-fyrirtaeki/SVIF-fyrirtaeki-web.mp4`, 15 MB) er sótt af jsDelivr-dreifineti úr þessu opinbera
 repo-i, en viðtakandinn sér aðeins svif.is-slóðina.
 

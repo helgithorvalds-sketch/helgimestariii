@@ -9,7 +9,7 @@
 import csv, json, sys, datetime, re
 
 SUBJECT = 'SVIF – bæklingur fyrir nýstofnuð fyrirtæki'
-VIDEO = 'https://cdn.jsdelivr.net/gh/helgithorvalds-sketch/helgimestariii@6215875e041668557347987523727639f9355d77/video/svif-fyrirtaeki/SVIF-fyrirtaeki-web.mp4'   # the file itself: opens and plays in the browser
+VIDEO = 'https://svif.is/fyrirtaeki'   # the SVIF fyrir fyrirtæki page on svif.is, with the film at the top
 BODY = """Hæhæ,
 
 Helgi Már heiti ég og stend á bak við fyrirtækið SVIF.

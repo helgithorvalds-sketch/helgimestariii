@@ -26,10 +26,12 @@ await page.route('https://fonts.gstatic.com/**', r => {
   const rel = r.request().url().replace('https://fonts.gstatic.com/','').replaceAll('/','_');
   r.fulfill({ body: readFileSync(path.join(here,'fonts',rel)), contentType: 'font/woff2', headers: { 'access-control-allow-origin': '*' } });
 });
+if (process.env.PR) await page.addInitScript(`window.__PR=${+process.env.PR}`);   // PR=1 renders at pixel ratio 1 (faster; enough for small clips)
 await page.goto('file://' + path.join(here,'svif-fyrirtaeki.html') + '#capture');
 await page.waitForFunction(() => typeof window.__ready === 'object', null, { timeout: 30000 });
 await page.evaluate(() => window.__ready);
 await page.evaluate(() => document.fonts.ready);
+if (process.env.HIDE) await page.addStyleTag({ content: `${process.env.HIDE} { display: none !important; }` });   // HIDE='#caps,#brand' renders without those overlays
 if (out.startsWith('events:')) {
   const ev = await page.evaluate(() => window.__events());
   writeFileSync(out.slice(7), JSON.stringify(ev, null, 1));

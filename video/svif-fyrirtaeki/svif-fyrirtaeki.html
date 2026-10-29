@@ -992,7 +992,7 @@ const ICON_PLAY='<path d="M7 4.5v15l13-7.5z"/>', ICON_PAUSE='<path d="M6 4.5h4v1
 const mmss=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 scrub.max=DUR; timeEl.textContent=`0:00 / ${mmss(DUR)}`;
 function layout(){
-  if(CAPTURE){ viewport.style.width=W+'px'; viewport.style.height=H+'px'; stage.style.transform='none'; renderer.setPixelRatio(1.5); renderer.setSize(W,H,false); return; }
+  if(CAPTURE){ viewport.style.width=W+'px'; viewport.style.height=H+'px'; stage.style.transform='none'; renderer.setPixelRatio(window.__PR||1.5); renderer.setSize(W,H,false); return; }
   const avW=document.getElementById('app').clientWidth-32, avH=window.innerHeight-80;
   const s=Math.min(avW/W, avH/H); viewport.style.width=(W*s)+'px'; viewport.style.height=(H*s)+'px'; stage.style.transform=`scale(${s})`;
   const q=clamp(s*(window.devicePixelRatio||1),.5,1); renderer.setSize(Math.round(W*q),Math.round(H*q),false);
