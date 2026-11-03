@@ -27,7 +27,9 @@ python3 fonts.py                 # sækir letur (Fraunces, Jost, Montserrat, Ope
 python3 midar2.py                # miðasíða 2x2, auð síða, Kærar þakkir, laus pláss
 node render.js midar2_framhlid.html raw.pdf - && python3 boxes.py raw.pdf sidur/midar2_framhlid.pdf
 python3 ring.py 600 -17 1700 4 && node shot.js ring.html out/ring_3x.png 3   # hringurinn á bls. 3
+python3 ring6.py && node shot.js ring6.html out/ring6_3x.png 3   # hringurinn á bls. 3, gamli stíllinn
 python3 build_svif_pages.py      # yfirlit.html + afslaettir.html úr hönnunarartifactinu
+python3 raster794.py yfirlit.html sidur/yfirlit.jpg   # 300 dpi mynd, eins og upprunalegu síðurnar
 python3 unframe.py in.jpg out.jpg  # tekur hvíta rammann af auglýsingasíðu
 python3 assemble_all.py          # setur bæklinginn saman
 ```

@@ -23,6 +23,10 @@ VALID = 'Gildir til 31.12.2026'
 LINEN = ('background:#DFD2C1;background-image:'
          'repeating-linear-gradient(90deg,rgba(74,52,42,.06) 0,rgba(74,52,42,.06) .489mm,transparent .489mm,transparent 2.2mm),'
          'repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0,rgba(255,255,255,.16) .489mm,transparent .489mm,transparent 2.2mm)')
+# bakgrunnur eins og á „Af hverju SVIF?“ (ljós pappír)
+PAPER = ('background:#F8F4EE;background-image:'
+         'repeating-linear-gradient(90deg,rgba(74,52,42,.035) 0,rgba(74,52,42,.035) .489mm,transparent .489mm,transparent 2.2mm),'
+         'repeating-linear-gradient(0deg,rgba(255,255,255,.3) 0,rgba(255,255,255,.3) .489mm,transparent .489mm,transparent 2.2mm)')
 INK, COCOA, GOLD = '#4A342A', '#7D5A44', '#9C8066'
 
 CSS = '''
@@ -133,10 +137,10 @@ def frame(path):
             f'<path d="{path}" fill="none" stroke="{COCOA}" stroke-width="0.3" opacity="0.8"/></svg>')
 
 
-def page(body):
+def page(body, bg=None):
     fonts = open(os.path.join(D, 'fonts.css')).read()
     return (f'<!doctype html><html lang="is"><head><meta charset="utf-8"><style>{fonts}{CSS}</style></head>'
-            f'<body><div style="position:absolute;inset:0;{LINEN}"></div>{body}</body></html>')
+            f'<body><div style="position:absolute;inset:0;{bg or LINEN}"></div>{body}</body></html>')
 
 
 def midar():
@@ -153,7 +157,7 @@ def midar():
              tile(X0, Y1, X0, 0, B, '#ffffff', ormsson, 'ormsson') +
              tile(X1, Y1, 0, B, B, '#16161a', maus, 'maus'))
     top_frame = frame('M9.35,80 V9.35 H190.65 V80')
-    return page(top_frame + head + tiles + perf())
+    return page(top_frame + head + tiles + perf(), PAPER)
 
 
 def aud():

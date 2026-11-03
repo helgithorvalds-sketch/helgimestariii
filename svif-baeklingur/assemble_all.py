@@ -5,13 +5,13 @@ img = lambda i: os.path.join(F, f'img-{i:03d}.jpg')
 ad = lambda i: os.path.join(D, 'out', 'ads', f'p{i:02d}.jpg')
 pdf = lambda n: os.path.join(D, 'out', n + '.pdf')
 PAGES = [  # (heiti, uppruni) – 32 síður, heftaður
-    ('Forsíða', img(0)), ('Yfirlit', pdf('yfirlit')), ('Afsláttarmiðar (kynning)', pdf('afslaettir')),
+    ('Forsíða', img(0)), ('Yfirlit', os.path.join(D,'out','yfirlit.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir.jpg')),
     ('Straumlind', img(4)), ('Ísorka', img(13)), ('Parki', img(5)), ('Íspan', img(6)), ('Sticker', img(7)), ('KORA', ad(8)),
     ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('Gardínur', ad(20)),
     ('Litamálun', img(18)), ('Múrbúðin', img(19)), ('Steindi', ad(21)), ('Steindi', ad(22)), ('HK Lagnir', ad(15)), ('Heit gólf', ad(24)),
     ('Lásar.is', img(16)), ('VÍS', ad(25)), ('RÓM Verk', img(23)),
     ('Laust auglýsingapláss 1', pdf('laust1')), ('Laust auglýsingapláss 2', pdf('laust2')), ('Laust auglýsingapláss 3', pdf('laust3')),
-    ('Af hverju SVIF', img(3)), ('Afsláttarmiðar', pdf('midar2_framhlid')), ('Auð síða (bakhlið miðanna)', pdf('aud')),
+    ('Af hverju SVIF', img(3)), ('Afsláttarmiðar', os.path.join(D,'out','midar2_framhlid.jpg')), ('Auð síða (bakhlið miðanna)', pdf('aud')),
     ('Kærar þakkir', pdf('thakkir')), ('Bakkápa', img(27)),
 ]
 assert len(PAGES) % 4 == 0 and len(PAGES) == 32
