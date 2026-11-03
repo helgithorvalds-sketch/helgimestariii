@@ -14,6 +14,9 @@ tryggingar, tölvur, fjarskipti, prentun, húsnæði, ráðgjöf o.s.frv.), með
 | `scripts/render.mjs` | Teiknar síður í Chromium fyrir vefi sem sýna netföng aðeins með JavaScript |
 | `scripts/finalize_list.py` | Velur endanlegt netfang, setur inn kveðju og orðalag eftir flokki, býr til `postlisti.csv` |
 | `scripts/greeting.py` | „Sæll Jón,“ / „Sæl Anna,“ / „Góðan daginn,“ eftir nafni |
+| `scripts/find_gap_contacts.py` | Fyrir fyrirtæki á listanum án netfangs: finnur vefinn út frá nafninu (staðfestir að hann nefni fyrirtækið, sé íslenskur og um rétta starfsemi) og les netfangið af vefnum með `contacts.py` |
+| `scripts/verify_emails.py` | Staðfestir að netföng sem fundust í vefleit standi í raun í HTML á vef fyrirtækisins (les líka netföng sem Cloudflare felur); annars er netfang vefsins sjálfs notað eða ekkert |
+| `scripts/add_found.py` | Bætir niðurstöðum við `postlisti.csv`: aðeins netföng með heimild og MX-færslu, aldrei sama netfang, lén eða nafn tvisvar, ekkert sem Helgi hefur þegar haft samband við |
 
 ## Hvernig netföngin voru fundin og staðfest
 
