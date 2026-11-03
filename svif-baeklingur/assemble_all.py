@@ -4,15 +4,17 @@ D = os.path.dirname(os.path.abspath(__file__)); F = os.path.join(D, '..', 'full'
 img = lambda i: os.path.join(F, f'img-{i:03d}.jpg')
 ad = lambda i: os.path.join(D, 'out', 'ads', f'p{i:02d}.jpg')
 pdf = lambda n: os.path.join(D, 'out', n + '.pdf')
-PAGES = [  # (heiti, uppruni)
-    ('Forsíða', img(0)), ('Yfirlit', pdf('yfirlit')), ('Afsláttarmiðar (kynning)', pdf('afslaettir')), ('Af hverju SVIF', img(3)),
-    ('Straumlind', img(4)), ('Parki', img(5)), ('Íspan', img(6)), ('Sticker', img(7)), ('KORA', ad(8)), ('HTH', img(9)),
-    ('Ormsson AEG', img(10)), ('Maus', ad(11)), ('Maus', ad(12)), ('Ísorka', img(13)), ('HK Lagnir', ad(15)),
-    ('Gluggavinir', img(17)), ('Gardínur', ad(20)), ('Litamálun', img(18)), ('Múrbúðin', img(19)), ('Steindi', ad(21)),
-    ('Steindi', ad(22)), ('Lásar.is', img(16)), ('RÓM Verk', img(23)), ('Heit gólf', ad(24)), ('Afsláttarmiðar, bakhlið', pdf('midar_bakhlid')),
-    ('Afsláttarmiðar', pdf('midar_framhlid')), ('VÍS', ad(25)), ('Bakkápa', img(27)),
+PAGES = [  # (heiti, uppruni) – 32 síður, heftaður
+    ('Forsíða', img(0)), ('Yfirlit', pdf('yfirlit')), ('Afsláttarmiðar (kynning)', pdf('afslaettir')),
+    ('Straumlind', img(4)), ('Ísorka', img(13)), ('Parki', img(5)), ('Íspan', img(6)), ('Sticker', img(7)), ('KORA', ad(8)),
+    ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('Gardínur', ad(20)),
+    ('Litamálun', img(18)), ('Múrbúðin', img(19)), ('Steindi', ad(21)), ('Steindi', ad(22)), ('HK Lagnir', ad(15)), ('Heit gólf', ad(24)),
+    ('Lásar.is', img(16)), ('VÍS', ad(25)), ('RÓM Verk', img(23)),
+    ('Laust auglýsingapláss 1', pdf('laust1')), ('Laust auglýsingapláss 2', pdf('laust2')), ('Laust auglýsingapláss 3', pdf('laust3')),
+    ('Af hverju SVIF', img(3)), ('Afsláttarmiðar', pdf('midar2_framhlid')), ('Auð síða (bakhlið miðanna)', pdf('aud')),
+    ('Kærar þakkir', pdf('thakkir')), ('Bakkápa', img(27)),
 ]
-assert len(PAGES) == 28
+assert len(PAGES) % 4 == 0 and len(PAGES) == 32
 SZ = 200 * 72 / 25.4; b = 3 * 72 / 25.4
 def build(out, quality=None, px=None):
     doc = pymupdf.open()

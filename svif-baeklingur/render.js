@@ -10,6 +10,6 @@ const { chromium } = require('playwright'); const path = require('path');
   const bad = await p.evaluate(() => [...document.images].filter(i => !i.naturalWidth).map(i => i.src));
   if (bad.length) { console.error('MYNDIR VANTAR', bad); process.exit(2); }
   if (outPdf && outPdf !== '-') await p.pdf({ path: outPdf, width: '200mm', height: '200mm', printBackground: true, pageRanges: '1' });
-  if (outPng) await p.screenshot({ path: outPng });
+  if (outPng && outPng !== '-') await p.screenshot({ path: outPng });
   await b.close();
 })().catch(e => { console.error(e); process.exit(1); });
