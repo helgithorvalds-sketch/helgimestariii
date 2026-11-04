@@ -1,7 +1,7 @@
 # Tölvupóstur til fyrirtækja: SVIF fyrir ný fyrirtæki
 
 Sami póstur á öll fyrirtæki (ekkert sérsniðið, svo ekkert geti farið úrskeiðis), sendur úr Gmail Helga
-(helgithorvalds@gmail.com), hreinn texti, engin viðhengi, einn tengill: svif.is/fyrirtaeki (kynningarsíðan með myndbandinu).
+(helgithorvalds@gmail.com), hreinn texti, engin viðhengi, einn tengill: svif.is/fyrirtaeki (kynningarsíðan með myndbandinu). Frá 4. nóv. stendur „svif.is/fyrirtæki“ á tenglinum í HTML-útgáfunni en hann fer áfram á svif.is/fyrirtaeki.
 
 **Efnislína:** `SVIF – bæklingur fyrir nýstofnuð fyrirtæki`
 
