@@ -83,6 +83,8 @@ export interface Company {
   specialOffer?: boolean;
   isDone?: boolean;
   chosenV2?: boolean;
+  /** Skráð í SVIF-bæklinginn (fyrirtækjabæklinginn). */
+  registeredInSvif?: boolean;
   createdAt: string;
 }
 
