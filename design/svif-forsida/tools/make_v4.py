@@ -46,7 +46,7 @@ TPL = r'''<!doctype html>
   <div class="corner" style="right:64px;top:62px;text-align:right">Fyrir heimilið</div>
 
   <h1>NÝJI KAFLINN</h1>
-  <div class="dv"><span class="ln"></span><img src="../src/logo-white.png" alt="Svif"><span class="ar"></span></div>
+  <div class="dv"><span class="ln"></span><img src="../src/logo-white.png" alt="Svif"><span class="ln"></span></div>
   <div class="sub">Velkomin í nýja heimilið þitt<br>Sérkjör frá traustum fyrirtækjum</div>
   <div class="corner" style="left:64px;bottom:64px">Allt fyrir<br>nýja húseigendur</div>
   <div class="web">SVIF.IS</div>
@@ -62,7 +62,7 @@ TPL = r'''<!doctype html>
   <div class="corner" style="right:64px;top:62px;text-align:right">2026</div>
 
   <h2>TIL HAMINGJU</h2>
-  <div class="dv"><span class="ln"></span><img src="../src/roof-white.png" alt=""><span class="ar"></span></div>
+  <div class="dv"><span class="ln"></span><img src="../src/roof-white.png" alt=""><span class="ln"></span></div>
   <p class="body">Í þessum bæklingi finnur þú traust fyrirtæki sem hjálpa þér að koma þér fyrir á nýju heimili, með sérkjörum fyrir nýja húseigendur.</p>
   <img class="qr" src="../src/qr-white.svg" alt="QR kóði á svif.is">
 
