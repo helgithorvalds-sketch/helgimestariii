@@ -18,15 +18,15 @@ old = [  # (titill, línur) eins og í Yfirlit.dc.html eftir litaskipti
 ]
 # ný 28 síðna röð (1-miðuð blaðsíðunúmer)
 new = [
-    ('Múr &amp; málun', [('Fagafl', 17), ('Litamálun', 18), ('Múrbúðin', 19)]),
-    ('Gluggar &amp; gler', [('Íspan', 7), ('Gluggavinir', 14), ('TME Gluggar', 15), ('Gardínur', 16)]),
-    ('Eldhús &amp; tæki', [('HTH', 10), ('Ormsson', 11)]),
-    ('Þjónusta &amp; filmur', [('sticker.is', 8), ('KORA', 9)]),
+    ('Múr &amp; málun', [('Litamálun', 17), ('Múrbúðin', 18), ('Fagafl', 24)]),
+    ('Gluggar &amp; gler', [('Gardínur', 5), ('Íspan', 10), ('Gluggavinir', 14), ('TME Gluggar', 15)]),
+    ('Eldhús &amp; tæki', [('HTH', 6), ('Ormsson', 7)]),
+    ('Þjónusta &amp; filmur', [('sticker.is', 11), ('KORA', 16)]),
     ('Lásar &amp; tryggingar', [('lásar.is', 22), ('VÍS', 23)]),
     ('Bað &amp; lagnir', [('HK Lagnir', 20), ('MS Lagnir', 21)]),
     ('Eldvarnir', [('Maus', 12)]),
-    ('Rafmagn &amp; rafbíll', [('Straumlind', 4), ('Ísorka', 5), ('RÓM Verk', 24)]),
-    ('Gólf &amp; flísar', [('Parki', 6)]),
+    ('Rafmagn &amp; rafbíll', [('Straumlind', 8), ('Ísorka', 9), ('RÓM Verk', 19)]),
+    ('Gólf &amp; flísar', [('Parki', 4)]),
 ]
 # í prentuðu útgáfunni: Þjónusta & filmur er 3. hópur vinstra megin (top 514) og Eldhús 4. (top 576)
 new[2], new[3] = new[3], new[2]

@@ -58,11 +58,9 @@ def thakkir():
 def aud():
     return page('', geisli=False)
 def laust(n):
-    body = ('<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center">'
-            f'<div style="font-family:Inter;font-weight:400;font-size:8pt;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.8)">Laust auglýsingapláss · {n}</div>'
-            '<div style="font-family:Inter;font-weight:200;font-size:30pt;letter-spacing:.06em;text-transform:uppercase;margin-top:4mm">Auglýsing kemur hér</div></div>'
-            + corner('svif.is', 'tl'))
-    return page(body, geisli=False)
+    return page('', geisli=(n % 2 == 1))
+
+
 if __name__ == '__main__':
     for name, h in [('d_thakkir', thakkir()), ('d_aud', aud()), ('d_laust1', laust(1)), ('d_laust2', laust(2)), ('d_laust3', laust(3))]:
         open(os.path.join(D, name + '.html'), 'w', encoding='utf-8').write(h); print(name)
