@@ -78,12 +78,12 @@ FRAME = '''<span class="fr h" style="left:34px;top:34px;width:250px"></span>
   <span class="fr v" style="left:34px;top:640px;height:326px"></span>
   <span class="fr v" style="right:34px;top:150px;height:816px"></span>
   <span class="fr h" style="right:34px;bottom:34px;width:300px"></span>'''
-BACK = "background-image: url(../src/bg1.jpg); background-size: 2160px auto; background-position: __BX__ __BY__; transform: scaleX(-1); filter: brightness(1.06) contrast(.96) blur(5px);"
+BACK = "background-image: url(../src/bak-solargeisli.jpg); background-size: cover; background-position: center; filter: none;"  # made by tools/back_photo.py
 
 # 20 cm trim = 1000 px, so 3 mm bleed = 15 px
 for fname, b in [('v4-svif-2026', 0), ('v4-svif-2026-prent', 15)]:
     front_y = '-62px' if b == 0 else f'{-62 * 1.03 + b:.0f}px'   # keeps the same view inside the trim
-    back = BACK.replace('__BX__', f'{-860 + b}px').replace('__BY__', f'{-420 + b}px')
+    back = BACK
     html = (TPL.replace('__NAME__', fname).replace('__LINE__', 'rgba(255,255,255,.78)').replace('__LW__', '1px')
                .replace('__B__', str(b)).replace('__FRAME__', FRAME).replace('__FRONTPOS__', front_y).replace('__BACKBG__', back))
     open(os.path.join(HERE, '..', 'designs', fname + '.html'), 'w').write(html)

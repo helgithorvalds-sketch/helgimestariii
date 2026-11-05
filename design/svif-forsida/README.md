@@ -48,6 +48,8 @@ Corner text on the front:
 | `prent/svif-2026-prent-front.jpg`, `-back.jpg` | Same pages as JPG (2433 × 2433 px, 300 dpi) |
 | `final/v4-svif-2026-*.jpg` | Screen version, mockup and board |
 
+The back photo `src/bak-solargeisli.jpg` (2600 px) is made by `tools/back_photo.py`. It cleans the patches left from text removal, mirrors the image, and adds fine grain, with no blur.
+
 Built by `tools/make_v4.py`: `designs/v4-svif-2026.html` for screen, `designs/v4-svif-2026-prent.html` with bleed.
 
 ```bash
