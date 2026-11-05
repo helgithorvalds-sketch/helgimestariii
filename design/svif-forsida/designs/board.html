@@ -37,6 +37,8 @@
     'v2-a2-nyji-kaflinn':      ['A2', 'nýji <i>kaflinn</i>', 'Sama letur og „heima“. Lína með húsi og ör, lóðréttur texti og brotnir rammar.'],
     'v2-a3-nyji-kaflinn-heima':['A3', 'NÝJI <i>KAFLINN</i>', 'A1 með myndinni úr „heima“ (stofan með sólargeislanum), aðeins bjartari.'],
     'v2-a4-nyji-kaflinn-heima':['A4', 'nýji <i>kaflinn</i>', 'A2 með myndinni úr „heima“ (stofan með sólargeislanum), aðeins bjartari.'],
+    'v3-nyji-kaflinn-hvitar-linur':  ['Hvítar línur', 'NÝJI <i>KAFLINN</i>', 'Þunnt letur og myndin úr „heima“. Jafnar hvítar línur á öllum hliðum, texti aðeins efst. Baksíða: þysjað inn á sólargeislann á veggnum.'],
+    'v3-nyji-kaflinn-litadar-linur': ['Litaðar línur', 'NÝJI <i>KAFLINN</i>', 'Sama hönnun með línum í bláum Svif-lit (lavender) í stað hvítra.'],
     'v2-b1-heima':             ['B1', 'Heima <i>er best</i>', 'Heima, aðeins bjartari. Brotnir rammar við brúnirnar, lína með húsi og ör.'],
     'v2-b2-heima':             ['B2', 'Heima <i>er best</i>', 'Nær sólargeislanum og bjartari. Svif-merkið situr inni í línunni undir fyrirsögninni.'],
     'v2-c1-heima-beige':       ['C1', 'Heima <i>á pappír</i>', 'Beige pappír með myndinni innfelldri, sem nær út af hægri brún og niður, eins og í Torrance-tilvísuninni.'],
@@ -45,7 +47,7 @@
   };
   const d = new URLSearchParams(location.search).get('d');
   const [no, title, meta] = D[d];
-  document.getElementById('no').textContent = (d.startsWith('v2-') ? 'Svif · Umferð 2 · ' : 'Svif · Tillaga ') + no;
+  document.getElementById('no').textContent = (d.startsWith('v3-') ? 'Svif · Umferð 3 · ' : d.startsWith('v2-') ? 'Svif · Umferð 2 · ' : 'Svif · Tillaga ') + no;
   document.getElementById('title').innerHTML = title;
   document.getElementById('meta').textContent = meta;
   document.getElementById('f').src = `../final/${d}-front.jpg`;

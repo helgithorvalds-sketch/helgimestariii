@@ -34,6 +34,15 @@ Note: standard Icelandic spelling is "nýi kaflinn". "Nýji" is the spoken form.
 node tools/mockup.cjs 1.5 v2-c1-heima-beige:beige   # ":beige" = beige paper surface
 ```
 
+## Round 3 – Nýji kaflinn, final details
+
+Built on A3 (thin title, heima photo), in two versions: `v3-nyji-kaflinn-hvitar-linur` (white lines) and `v3-nyji-kaflinn-litadar-linur` (lavender-blue lines, slightly thicker).
+Both are generated from `tools/make_v3.py`, so the text only needs changing in one place. Run `python3 tools/make_v3.py` and then the render commands.
+
+- Lines: the same on every side. Top-left and bottom-right corners, plus one equal segment on the left and right.
+- Front: text only at the top. Velkomin · 2026 · Nýir húseigendur · Tilboð og afslættir. "Höfuðborgarsvæðið", "Velkomstbæklingur" and "Geymdu bæklinginn" removed.
+- Back: SVIF.IS top left, "Hannað, prentað og sent af Svif" bottom right. Shorter text. The photo is zoomed in on the sunbeam on the wall and mirrored, so it does not read as the same image as the front.
+
 ## Brand (from svif.is)
 
 - Colours: ink `#232046`, lavender `#eaeaf4`, cornflower `#8fa3dc`, primary `#5b74c4`
