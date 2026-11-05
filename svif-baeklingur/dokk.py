@@ -71,10 +71,10 @@ KAFLAR = [
     ('Gólf & flísar', [('Parki', '4')]),
     ('Gluggar & gler', [('Gardínur', '5'), ('Íspan', '10'), ('Gluggavinir', '14'), ('TME Gluggar', '15')]),
     ('Eldhús & tæki', [('HTH', '6'), ('Ormsson', '7')]),
-    ('Rafmagn & rafbíll', [('Straumlind', '8'), ('Ísorka', '9'), ('RÓM Verk', '19')]),
+    ('Rafmagn & rafbíll', [('Straumlind', '8'), ('Ísorka', '9'), ('RÓM Verk', '27')]),
     ('Þjónusta & filmur', [('sticker.is', '11'), ('KORA', '16')]),
     ('Eldvarnir', [('Maus', '12–13')]),
-    ('Múr & málun', [('Litamálun', '17'), ('Múrbúðin', '18'), ('Fagafl', '27')]),
+    ('Múr, málun & smíði', [('Litamálun', '17'), ('Múrbúðin', '18'), ('Fagafl', '19')]),
     ('Bað & lagnir', [('HK Lagnir', '20'), ('MS Lagnir', '21')]),
     ('Lásar & tryggingar', [('Lásar.is', '22'), ('VÍS', '23')]),
 ]

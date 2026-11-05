@@ -148,9 +148,9 @@ body.flatt .golfskuggi{display:none}
   // 32 síður = 16 blöð. 0 forsíða, 1 yfirlit, 2 afsláttarmiðar, 3–23 auglýsingar, 24–26 laust pláss, 27 Af hverju SVIF,
   // 28 afsláttarmiðar með rifgötun (ekki á kápublaðinu), 29 auð bakhlið miðanna, 30 Kærar þakkir, 31 bakkápa.
   // Hver opna (oddatala + slétt tala) heldur saman skyldum fyrirtækjum; tveggja síðna auglýsingar (Maus, Steindi) byrja á oddatölusíðu.
-  const heiti=['Forsíða', 'Yfirlit', 'Afsláttarmiðar', 'Parki', 'Gardínur', 'HTH', 'Ormsson', 'Straumlind', 'Ísorka', 'Íspan', 'Sticker', 'Maus', 'Maus', 'Gluggavinir', 'TME Gluggar', 'KORA', 'Litamálun', 'Múrbúðin', 'RÓM Verk', 'HK Lagnir', 'MS Lagnir', 'Lásar.is', 'VÍS', 'Af hverju SVIF', 'Afsláttarmiðar', 'Auð síða', 'Fagafl', 'Auð síða', 'Kærar þakkir', 'Bakkápa'];
+  const heiti=['Forsíða', 'Yfirlit', 'Afsláttarmiðar', 'Parki', 'Gardínur', 'HTH', 'Ormsson', 'Straumlind', 'Ísorka', 'Íspan', 'Sticker', 'Maus', 'Maus', 'Gluggavinir', 'TME Gluggar', 'KORA', 'Litamálun', 'Múrbúðin', 'Fagafl', 'HK Lagnir', 'MS Lagnir', 'Lásar.is', 'VÍS', 'Af hverju SVIF', 'Afsláttarmiðar', 'Auð síða', 'RÓM Verk', 'Auð síða', 'Kærar þakkir', 'Bakkápa'];
   // Þema hverrar opnu, eftir flettingu (opna k sýnir síður 2k-1 og 2k).
-  const thema={1:'Yfirlit & afsláttarmiðar',2:'Gólf & gardínur',3:'Eldhús & tæki',4:'Rafmagn & orka',5:'Gler & filmur',6:'Eldvarnir',7:'Gluggar & ísetning',8:'Þjónusta & málun',9:'Múr & rafvirki',10:'Lagnir',11:'Lásar & tryggingar',12:'Um SVIF & afsláttarmiðar',13:'Smíði & viðhald',14:'Kærar þakkir'};
+  const thema={1:'Yfirlit & afsláttarmiðar',2:'Gólf & gardínur',3:'Eldhús & tæki',4:'Rafmagn & orka',5:'Gler & filmur',6:'Eldvarnir',7:'Gluggar & ísetning',8:'Þjónusta & málun',9:'Múr, málun & smíði',10:'Lagnir',11:'Lásar & tryggingar',12:'Um SVIF & afsláttarmiðar',13:'Rafvirki',14:'Kærar þakkir'};
   const S=heiti.length, N=S/2;
   const bok=document.getElementById('bok');
   const mynd=i=>`sidur/sida_${String(i).padStart(2,'0')}.jpg`;

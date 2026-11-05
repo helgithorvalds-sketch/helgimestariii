@@ -22,7 +22,8 @@ build('Afslaettir', 'afslaettir_dark.html', [
     ('style="position: relative; width: 670px; height: 454px; display: block"', 'style="position: relative; width: 690px; height: 454px; display: block; object-fit: contain"'),
 ], blobs={'4a5740764184436a45fbefedb470dc83': 'out/ring_crop.png'})
 build('UmSvif', 'umsvif_dark.html', [
-    ('style="width: 270px; height: 192px; display: block; flex: 0 0 270px"', 'style="width: 300px; height: 213px; display: block; flex: 0 0 300px"'),
+    ('<img src="/_blob/7fd6387f3765f216b035d8596262f1a3" alt="Línuteikning: húseigandi og iðnaðarmaður takast í hendur fyrir framan hús" style="width: 270px; height: 192px; display: block; flex: 0 0 270px">', ''),
+    ('width: 380px; flex: 0 0 380px', 'width: 560px; flex: 0 0 560px'),
     ('<img src="/_blob/096e4e0db7105769a6f86b28d15e9d59" alt="" style="width: 62px; height: 56px; object-fit: contain; display: block">', ''),
     ('<img src="/_blob/e2dff9eafd32583e7a8764d1f8c492fb" alt="" style="width: 52px; height: 56px; object-fit: contain; display: block">', ''),
     ('<img src="/_blob/f9eaf881f43ee088ea0f35606eb32b3d" alt="" style="width: 52px; height: 56px; object-fit: contain; display: block">', ''),
