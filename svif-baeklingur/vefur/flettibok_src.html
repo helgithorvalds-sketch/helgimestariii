@@ -54,18 +54,18 @@ body.flatt .golfskuggi{display:none}
 .blokk.v .botn{transform-origin:top right;transform:skewX(42deg) translateX(-1px)}
 .blokk .kantur{position:absolute;top:0;left:100%;width:var(--th);height:100%;transform-origin:top left;transform:skewY(-42deg) translateY(1px);background:repeating-linear-gradient(90deg,#FBF8F3 0 1px,#D9D0C2 1px 2px);opacity:.95}
 .blokk.v .kantur{left:auto;right:100%;transform-origin:top right;transform:skewY(42deg) translateY(1px)}
-.kast{position:absolute;top:0;width:50%;height:100%;pointer-events:none;opacity:0;z-index:30}
+.kast{position:absolute;top:0;width:50%;height:100%;pointer-events:none;opacity:0;z-index:30;will-change:opacity}
 .kast.h{left:50%;background:linear-gradient(90deg,rgba(40,30,20,.45),rgba(40,30,20,.08) 45%,transparent 80%)}
 .kast.v{left:0;background:linear-gradient(270deg,rgba(40,30,20,.45),rgba(40,30,20,.08) 45%,transparent 80%)}
 
-.blad{position:absolute;left:50%;top:0;width:var(--p);height:var(--p);transform-style:preserve-3d;transform-origin:left center}
+.blad{position:absolute;left:50%;top:0;width:var(--p);height:var(--p);transform-style:preserve-3d;transform-origin:left center;will-change:transform}
 .flotur{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--pappir);overflow:hidden;border-radius:1.5px;box-shadow:0 1px 3px rgba(40,30,20,.2)}
 .flotur img{width:100%;height:100%;max-width:100%;display:block;object-fit:cover;pointer-events:none}
 .bak{transform:rotateY(180deg)}
-.sk,.gl{position:absolute;inset:0;pointer-events:none;opacity:0}
+.sk,.gl{position:absolute;inset:0;pointer-events:none;opacity:0;will-change:opacity}
 .sk{background:linear-gradient(90deg,rgba(40,30,20,.55),rgba(40,30,20,.25) 40%,rgba(40,30,20,.12))}
 .bak .sk{background:linear-gradient(270deg,rgba(40,30,20,.55),rgba(40,30,20,.25) 40%,rgba(40,30,20,.12))}
-.gl{background:linear-gradient(112deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.16) 54%,rgba(255,255,255,0) 72%);mix-blend-mode:screen}
+.gl{background:linear-gradient(112deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.16) 54%,rgba(255,255,255,0) 72%)}
 .bak .gl{background:linear-gradient(248deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.16) 54%,rgba(255,255,255,0) 72%)}
 .flotur::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(40,30,20,.22),rgba(40,30,20,.05) 6%,transparent 14%)}
 .bak::after{background:linear-gradient(270deg,rgba(40,30,20,.22),rgba(40,30,20,.05) 6%,transparent 14%)}
@@ -195,6 +195,7 @@ body.flatt .golfskuggi{display:none}
       const b=blod[i], erFlett=i<flett;
       if(!b.busy) setja(b, erFlett?180:0);
       b.el.style.zIndex=erFlett?(i+1):(N-i);
+      const naer=(i>=flett-2&&i<=flett+1)||b.busy; b.el.style.visibility=naer?'visible':'hidden';
     }
     let x='0';
     if(flett===0) x='calc(-1 * 25%)'; else if(flett===N) x='25%';
@@ -221,7 +222,7 @@ body.flatt .golfskuggi{display:none}
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fletta(b, fra, til, done){
     const dur=reduced?160:(b.kapa?1200:950), t0=performance.now();
-    b.busy=true; b.el.style.zIndex=N+2;
+    b.busy=true; b.el.style.zIndex=N+2; b.el.style.visibility='visible';
     function rammi(now){
       const t=Math.min(1,(now-t0)/dur), e=ease(t);
       const theta=fra+(til-fra)*e;
@@ -259,6 +260,7 @@ body.flatt .golfskuggi{display:none}
   svid.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
   svid.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(dx<-40)fram(); else if(dx>40)aftur(); });
   stada();
+  document.querySelectorAll('.flotur img').forEach(im=>{ im.decoding='async'; if(im.decode) im.decode().catch(()=>{}); });
 })();
 </script>
 
