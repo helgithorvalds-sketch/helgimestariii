@@ -34,7 +34,28 @@ Note: standard Icelandic spelling is "nýi kaflinn". "Nýji" is the spoken form.
 node tools/mockup.cjs 1.5 v2-c1-heima-beige:beige   # ":beige" = beige paper surface
 ```
 
-## Round 3 – Nýji kaflinn, final
+## Final – November–December 2026 print run
+
+Front: A3 (Nýji kaflinn, heima photo, white broken frame). Back: the sunbeam on the wall.
+
+Corner text on the front:
+- Top: Nýir húseigendur · 2026 · SVIF.IS
+- Bottom: Allt fyrir nýja húseigendur · Tilboð og afslættir
+
+| File | Use |
+|------|-----|
+| `prent/svif-2026-prent.pdf` | Send to the printer: 2 pages (front, back), 206 × 206 mm = 200 × 200 mm trim + 3 mm bleed, 300 dpi |
+| `prent/svif-2026-prent-front.jpg`, `-back.jpg` | Same pages as JPG (2433 × 2433 px, 300 dpi) |
+| `final/v4-svif-2026-*.jpg` | Screen version, mockup and board |
+
+Built by `tools/make_v4.py`: `designs/v4-svif-2026.html` for screen, `designs/v4-svif-2026-prent.html` with bleed.
+
+```bash
+python3 tools/make_v4.py
+node tools/render.cjs designs/v4-svif-2026-prent.html prent/svif-2026-prent 2.36214
+```
+
+## Round 3 – Nýji kaflinn, back-photo options
 
 The front is A3 unchanged: heima photo, thin title, the same broken white frame lines. Only the corner text changed:
 - Top: Velkomin · 2026 · Nýir húseigendur · Tilboð og afslættir
