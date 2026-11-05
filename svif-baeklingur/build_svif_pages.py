@@ -18,15 +18,15 @@ old = [  # (titill, línur) eins og í Yfirlit.dc.html eftir litaskipti
 ]
 # ný 28 síðna röð (1-miðuð blaðsíðunúmer)
 new = [
-    ('Múr &amp; málun', [('Litamálun', 16), ('Múrbúðin', 17), ('Steindi', 18)]),
+    ('Múr &amp; málun', [('Litamálun', 16), ('Múrbúðin', 17)]),
     ('Gluggar &amp; gler', [('Íspan', 7), ('Gluggavinir', 14), ('Gardínur', 15)]),
     ('Eldhús &amp; tæki', [('HTH', 10), ('Ormsson', 11)]),
     ('Þjónusta &amp; filmur', [('sticker.is', 8), ('KORA', 9)]),
-    ('Lásar &amp; tryggingar', [('lásar.is', 22), ('VÍS', 23)]),
-    ('Bað &amp; lagnir', [('HK Lagnir', 20), ('Steindi', 19)]),
+    ('Lásar &amp; tryggingar', [('lásar.is', 20), ('VÍS', 21)]),
+    ('Bað &amp; lagnir', [('HK Lagnir', 18)]),
     ('Eldvarnir', [('Maus', 12)]),
-    ('Rafmagn &amp; rafbíll', [('Straumlind', 4), ('Ísorka', 5), ('RÓM Verk', 24)]),
-    ('Gólf &amp; flísar', [('Parki', 6), ('Heit gólf', 21)]),
+    ('Rafmagn &amp; rafbíll', [('Straumlind', 4), ('Ísorka', 5), ('RÓM Verk', 19)]),
+    ('Gólf &amp; flísar', [('Parki', 6)]),
 ]
 # í prentuðu útgáfunni: Þjónusta & filmur er 3. hópur vinstra megin (top 514) og Eldhús 4. (top 576)
 new[2], new[3] = new[3], new[2]
@@ -41,7 +41,7 @@ for i, (nt, nb) in enumerate(new):
 edits.append(('left: 626px; width: 140px; top: 566px', 'left: 626px; width: 140px; top: 601px'))
 edits.append(('<path d="M616,574 H460 V554 H395"></path>', '<path d="M616,609 H592 V574 H460 V554 H395"></path>'))
 edits.append(('<circle cx="616" cy="574" r="3.2"></circle>', '<circle cx="616" cy="609" r="3.2"></circle>'))
-edits.append(('24 fyrirtæki · svif.is', '19 fyrirtæki · svif.is'))
+edits.append(('24 fyrirtæki · svif.is', '17 fyrirtæki · svif.is'))
 build('Yfirlit', 'yfirlit.html', edits)
 
 build('Afslaettir', 'afslaettir.html', [

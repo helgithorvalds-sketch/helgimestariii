@@ -165,7 +165,7 @@ def aud():
 
 
 FYRIRTAEKI = ['Straumlind', 'Ísorka', 'Parki Interiors', 'Íspan Glerborg', 'Sticker.is', 'KORA', 'HTH', 'Ormsson', 'Maus',
-              'Gluggavinir', 'Gardínur.is', 'Litamálun', 'Múrbúðin', 'Steindi', 'HK Lagnir', 'Heit gólf', 'Lásar.is', 'VÍS', 'RÓM Verk']
+              'Gluggavinir', 'Gardínur.is', 'Litamálun', 'Múrbúðin', 'HK Lagnir', 'Lásar.is', 'VÍS', 'RÓM Verk']
 
 
 def thakkir():

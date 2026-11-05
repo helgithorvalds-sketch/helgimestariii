@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SVIF flettibók</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600&display=swap">
+<style>
+/* Layout: a 194×194 mm book opened flat on a studio table, lit from the upper left; a company index runs underneath so every spread can be reached directly. */
+:root{
+  --bord:#ECE9EE; --bord-dypri:#DDD3C6; --lavender:#E6E6F4; --sandur:#EBE2D6; --blek:#2A2420; --blek-mjukt:#6F655B; --linan:rgba(42,36,32,.14);
+  --pappir:#FBF9F5; --pappir-kantur:#DAD3C7; --skuggi:rgba(40,30,20,.45); --flotur:#FFFFFF;
+  --hnappur:#FFFFFF; --hnappur-blek:#2A2420; --virkur:#2A2420; --virkur-blek:#FBF9F5; --ahersla:#B5462C;
+  --display:"Fraunces","Georgia",serif; --texti:"Manrope","Helvetica Neue",Arial,sans-serif;
+  --p:min(42vw,58vh,520px); --th:12px;
+}
+:root[data-theme="dark"]{
+  --bord:#1F1B18; --bord-dypri:#141210; --blek:#F1ECE4; --blek-mjukt:#A79C90; --linan:rgba(241,236,228,.16);
+  --pappir:#FBF9F5; --pappir-kantur:#C9C1B4; --skuggi:rgba(0,0,0,.7); --flotur:#FFFFFF;
+  --hnappur:#2C2622; --hnappur-blek:#F1ECE4; --virkur:#F1ECE4; --virkur-blek:#1F1B18; --ahersla:#E0785C; color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bord);
+  background-image:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.6),rgba(255,255,255,0) 55%),linear-gradient(165deg,var(--lavender) 0%,#ECE9EF 42%,var(--sandur) 100%);
+  background-attachment:fixed;
+  color:var(--blek);font-family:var(--texti);user-select:none;-webkit-user-select:none;
+  display:flex;flex-direction:column;min-height:100%;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-block:18px 0;flex-wrap:wrap}
+.merki{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:.28em}
+.undir{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blek-mjukt);margin-top:4px}
+.pilla{display:flex;background:var(--hnappur);border-radius:999px;padding:3px;box-shadow:0 1px 6px rgba(40,30,20,.15)}
+.pilla button{border:0;background:transparent;color:var(--hnappur-blek);font:600 12px/1 var(--texti);letter-spacing:.06em;padding:9px 14px;border-radius:999px;cursor:pointer}
+.pilla button[aria-pressed="true"]{background:var(--virkur);color:var(--virkur-blek)}
+.pilla button:focus-visible,.hnappur:focus-visible,.skra button:focus-visible{outline:2px solid var(--ahersla);outline-offset:2px}
+
+.svid{flex:1 0 auto;display:flex;align-items:center;justify-content:center;perspective:2300px;perspective-origin:50% 35%;min-height:calc(var(--p) * 1.28);padding-block:20px}
+.halli{transform-style:preserve-3d;transform:rotateX(16deg);transition:transform .7s ease}
+body.flatt .halli{transform:none}
+body.flatt .svid{perspective:none}
+.bok{position:relative;width:calc(var(--p)*2);height:var(--p);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.4,.1,.2,1)}
+.golfskuggi{position:absolute;left:50%;top:calc(100% + 1vh);width:calc(var(--p)*1.9);height:calc(var(--p)*.2);transform:translateX(-50%) rotateX(84deg);border-radius:50%;background:radial-gradient(closest-side,var(--skuggi),transparent 70%);filter:blur(9px);pointer-events:none}
+body.flatt .golfskuggi{display:none}
+
+.blokk{position:absolute;top:0;width:var(--p);height:var(--p);pointer-events:none;z-index:0}
+.blokk.h{left:50%}.blokk.v{right:50%}
+.blokk .topp{position:absolute;inset:0;background:var(--pappir);border-radius:1px;box-shadow:1px 1px 0 var(--pappir-kantur),2px 2px 0 var(--flotur),3px 3px 0 var(--pappir-kantur),4px 4px 0 var(--flotur),5px 5px 0 var(--pappir-kantur),6px 6px 0 var(--flotur),7px 7px 0 var(--pappir-kantur),0 18px 34px rgba(40,30,20,.28)}
+.blokk.v .topp{box-shadow:-1px 1px 0 var(--pappir-kantur),-2px 2px 0 var(--flotur),-3px 3px 0 var(--pappir-kantur),-4px 4px 0 var(--flotur),-5px 5px 0 var(--pappir-kantur),-6px 6px 0 var(--flotur),-7px 7px 0 var(--pappir-kantur),0 18px 34px rgba(40,30,20,.28)}
+.blokk .botn{position:absolute;left:0;top:100%;width:100%;height:var(--th);transform-origin:top left;transform:skewX(-42deg) translateX(1px);background:repeating-linear-gradient(180deg,#FBF8F3 0 1px,#D9D0C2 1px 2px);opacity:.95}
+.blokk.v .botn{transform-origin:top right;transform:skewX(42deg) translateX(-1px)}
+.blokk .kantur{position:absolute;top:0;left:100%;width:var(--th);height:100%;transform-origin:top left;transform:skewY(-42deg) translateY(1px);background:repeating-linear-gradient(90deg,#FBF8F3 0 1px,#D9D0C2 1px 2px);opacity:.95}
+.blokk.v .kantur{left:auto;right:100%;transform-origin:top right;transform:skewY(42deg) translateY(1px)}
+.kast{position:absolute;top:0;width:50%;height:100%;pointer-events:none;opacity:0;z-index:30}
+.kast.h{left:50%;background:linear-gradient(90deg,rgba(40,30,20,.45),rgba(40,30,20,.08) 45%,transparent 80%)}
+.kast.v{left:0;background:linear-gradient(270deg,rgba(40,30,20,.45),rgba(40,30,20,.08) 45%,transparent 80%)}
+
+.blad{position:absolute;left:50%;top:0;width:var(--p);height:var(--p);transform-style:preserve-3d;transform-origin:left center}
+.flotur{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--pappir);overflow:hidden;border-radius:1.5px;box-shadow:0 1px 3px rgba(40,30,20,.2)}
+.flotur img{width:100%;height:100%;max-width:100%;display:block;object-fit:cover;pointer-events:none}
+.bak{transform:rotateY(180deg)}
+.sk,.gl{position:absolute;inset:0;pointer-events:none;opacity:0}
+.sk{background:linear-gradient(90deg,rgba(40,30,20,.55),rgba(40,30,20,.25) 40%,rgba(40,30,20,.12))}
+.bak .sk{background:linear-gradient(270deg,rgba(40,30,20,.55),rgba(40,30,20,.25) 40%,rgba(40,30,20,.12))}
+.gl{background:linear-gradient(112deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.16) 54%,rgba(255,255,255,0) 72%);mix-blend-mode:screen}
+.bak .gl{background:linear-gradient(248deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.5) 46%,rgba(255,255,255,.16) 54%,rgba(255,255,255,0) 72%)}
+.flotur::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(40,30,20,.22),rgba(40,30,20,.05) 6%,transparent 14%)}
+.bak::after{background:linear-gradient(270deg,rgba(40,30,20,.22),rgba(40,30,20,.05) 6%,transparent 14%)}
+.blad.kapa{width:calc(var(--p)*1.015);height:calc(var(--p)*1.03);top:calc(var(--p)*-.015)}
+.blad.kapa .flotur{box-shadow:0 2px 6px rgba(40,30,20,.3),inset 0 0 0 1px rgba(255,255,255,.35)}
+.blad.kapa .flotur.lam::after{background:linear-gradient(90deg,rgba(40,30,20,.1),transparent 10%),linear-gradient(118deg,rgba(255,255,255,0) 28%,rgba(255,255,255,.2) 42%,rgba(255,255,255,.06) 49%,rgba(255,255,255,0) 60%)}
+.blad.kapa .flotur.lam.bak::after{background:linear-gradient(270deg,rgba(40,30,20,.1),transparent 10%),linear-gradient(242deg,rgba(255,255,255,0) 28%,rgba(255,255,255,.2) 42%,rgba(255,255,255,.06) 49%,rgba(255,255,255,0) 60%)}
+.smellisvaedi{position:absolute;top:0;height:100%;width:50%;z-index:40;cursor:pointer}
+#vinstriSm{left:0}#haegriSm{right:0}
+
+.stjorn{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding-block:4px 10px}
+.hnappur{height:42px;min-width:42px;padding:0 14px;border-radius:999px;border:none;cursor:pointer;background:var(--hnappur);color:var(--hnappur-blek);font:600 13px/1 var(--texti);letter-spacing:.03em;box-shadow:0 1px 6px rgba(40,30,20,.15);transition:transform .15s,opacity .2s;display:flex;align-items:center;justify-content:center}
+.hnappur.hringur{width:42px;padding:0;font-size:18px}
+.hnappur:hover{transform:translateY(-1px)}
+.hnappur[disabled]{opacity:.3;cursor:default;transform:none}
+.teljari{font-family:var(--display);font-size:16px;color:var(--blek);width:300px;flex:none;text-align:center;font-variant-numeric:tabular-nums}
+.teljari .nafn,.teljari small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.teljari small{display:block;font-family:var(--texti);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blek-mjukt);margin-top:3px}
+.visbending{text-align:center;font-size:12px;letter-spacing:.08em;color:var(--blek-mjukt);transition:opacity .6s;min-height:16px}
+.visbending.falin{opacity:0}
+
+.skra{border-top:1px solid var(--linan);padding-block:18px 28px}
+.skra h2{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.02em;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.skra h2 span{font-family:var(--texti);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blek-mjukt)}
+.skra ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 14px}
+.skra button{width:100%;text-align:left;border:0;background:transparent;color:var(--blek);font:500 13px/1.3 var(--texti);padding:6px 8px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;min-width:0}
+.skra button b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.skra button i{font-style:normal;color:var(--blek-mjukt);font-variant-numeric:tabular-nums;flex:none}
+.skra button:hover{background:var(--hnappur)}
+.skra button[aria-current="true"]{background:var(--virkur);color:var(--virkur-blek)}
+.skra button[aria-current="true"] i{color:inherit}
+@media (prefers-reduced-motion: reduce){.bok,.halli{transition-duration:.15s}}
+@media (max-width:700px){
+  :root{--p:min(46vw,50vh);--th:8px}
+  .merki{font-size:18px}
+  .teljari{width:min(220px,46vw);font-size:14px}
+  .svid{min-height:calc(var(--p) * 1.3)}
+}
+</style>
+
+<header>
+  <div>
+    <div class="merki">SVIF</div>
+    <div class="undir">Prufuflettu · 28 síður · 194 × 194 mm</div>
+  </div>
+  <div class="pilla" role="group" aria-label="Sýn">
+    <button type="button" id="sjon2d" aria-pressed="false">2D</button>
+    <button type="button" id="sjon3d" aria-pressed="true">3D</button>
+  </div>
+</header>
+
+<div class="svid">
+  <div class="halli">
+    <div class="bok" id="bok">
+      <div class="golfskuggi"></div>
+      <div class="blokk v" id="blokkV"><div class="topp"></div><div class="kantur"></div><div class="botn"></div></div>
+      <div class="blokk h" id="blokkH"><div class="topp"></div><div class="kantur"></div><div class="botn"></div></div>
+      <div class="kast v" id="kastV"></div><div class="kast h" id="kastH"></div>
+      <div class="smellisvaedi" id="vinstriSm" aria-hidden="true"></div>
+      <div class="smellisvaedi" id="haegriSm" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<div class="visbending" id="visbending">Smelltu á bókina, strjúktu eða notaðu örvatakkana til að fletta</div>
+<div class="stjorn">
+  <button class="hnappur hringur" id="afturHn" type="button" aria-label="Fyrri opna">‹</button>
+  <div class="teljari" id="teljari">Forsíða<small>bls. 1 af 28</small></div>
+  <button class="hnappur hringur" id="framHn" type="button" aria-label="Næsta opna">›</button>
+  <button class="hnappur" id="byrjaHn" type="button">Byrja aftur</button>
+</div>
+
+<section class="skra" aria-label="Efnisyfirlit">
+  <h2>Efnisyfirlit <span>17 fyrirtæki · 18 auglýsingasíður · 2 laus pláss</span></h2>
+  <ol id="skra"></ol>
+</section>
+
+<script>
+(function(){
+  // 28 síður = 14 blöð. 0 forsíða, 1 yfirlit, 2 afsláttarmiðar, 3–20 auglýsingar, 21–22 laust pláss, 23 Af hverju SVIF,
+  // 24 afsláttarmiðar með rifgötun (ekki á kápublaðinu), 25 auð bakhlið miðanna, 26 Kærar þakkir, 27 bakkápa.
+  // Hver opna (oddatala + slétt tala) heldur saman skyldum fyrirtækjum; tveggja síðna auglýsingar (Maus, Steindi) byrja á oddatölusíðu.
+  const heiti=['Forsíða', 'Yfirlit', 'Afsláttarmiðar', 'Straumlind', 'Ísorka', 'Parki', 'Íspan', 'Sticker', 'KORA', 'HTH', 'Ormsson', 'Maus', 'Maus', 'Gluggavinir', 'Gardínur', 'Litamálun', 'Múrbúðin', 'HK Lagnir', 'RÓM Verk', 'Lásar.is', 'VÍS', 'Laust pláss', 'Laust pláss', 'Af hverju SVIF', 'Afsláttarmiðar', 'Auð síða', 'Kærar þakkir', 'Bakkápa'];
+  // Þema hverrar opnu, eftir flettingu (opna k sýnir síður 2k-1 og 2k).
+  const thema={1:'Yfirlit & afsláttarmiðar',2:'Rafmagn & orka',3:'Gólf & gler',4:'Filmur & þjónusta',5:'Eldhús & tæki',6:'Eldvarnir',7:'Gluggar & gardínur',8:'Múr & málun',9:'Lagnir & rafvirki',10:'Lásar & tryggingar',11:'Laust auglýsingapláss',12:'Um SVIF & afsláttarmiðar',13:'Kærar þakkir'};
+  const S=heiti.length, N=S/2;
+  const bok=document.getElementById('bok');
+  const mynd=i=>`sidur/sida_${String(i).padStart(2,'0')}.jpg`;
+  const blod=[];
+  const fyrsta=document.getElementById('kastV');
+  for(let i=0;i<N;i++){
+    const kapa=(i===0||i===N-1);
+    const el=document.createElement('div'); el.className='blad'+(kapa?' kapa':''); el.id='blad'+i;
+    el.innerHTML=
+      `<div class="flotur fram${i===0?' lam':''}"><img src="${mynd(2*i)}" alt="${heiti[2*i]}"><div class="sk"></div>${i===0?'<div class="gl"></div>':''}</div>`+
+      `<div class="flotur bak${i===N-1?' lam':''}"><img src="${mynd(2*i+1)}" alt="${heiti[2*i+1]}"><div class="sk"></div>${i===N-1?'<div class="gl"></div>':''}</div>`;
+    bok.insertBefore(el, fyrsta);
+    blod.push({el,kapa,skf:el.querySelector('.fram .sk'),skb:el.querySelector('.bak .sk'),glf:el.querySelector('.fram .gl'),glb:el.querySelector('.bak .gl')});
+  }
+  const teljari=document.getElementById('teljari'), afturHn=document.getElementById('afturHn'), framHn=document.getElementById('framHn');
+  const visbending=document.getElementById('visbending'), blokkV=document.getElementById('blokkV'), blokkH=document.getElementById('blokkH');
+  const kastV=document.getElementById('kastV'), kastH=document.getElementById('kastH');
+  let flett=0, hreyft=false, busy=false, anim=null;
+
+  // Efnisyfirlit: hvert fyrirtæki einu sinni, með fyrstu síðu þess (1-tölusett eins og í prentun)
+  const skra=document.getElementById('skra'); const skraHn=[];
+  const augl=[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+  for(const s of augl){
+    if(heiti[s]===heiti[s-1]) continue;
+    const li=document.createElement('li'); const b=document.createElement('button'); b.type='button';
+    const tvo=heiti[s+1]===heiti[s];
+    b.innerHTML=`<b>${heiti[s]}</b><i>${tvo?`bls. ${s+1}–${s+2}`:`bls. ${s+1}`}</i>`;
+    b.dataset.sida=s; b.addEventListener('click',()=>{ if(busy)return; flett=Math.ceil(s/2); stada(); });
+    li.appendChild(b); skra.appendChild(li); skraHn.push(b);
+  }
+
+  function setja(b, theta){
+    b.el.style.transform=`rotateY(${-theta}deg)`;
+    const tilt=Math.sin(theta*Math.PI/180);
+    const d=b.kapa?.5:.8;
+    b.skf.style.opacity=tilt*d; b.skb.style.opacity=tilt*d;
+    if(b.glf){ b.glf.style.opacity=Math.pow(Math.max(0,Math.cos((theta-34)*Math.PI/180)),9)*.6*(theta>2?1:0); }
+    if(b.glb){ b.glb.style.opacity=Math.pow(Math.max(0,Math.cos((theta-146)*Math.PI/180)),9)*.6*(theta<178?1:0); }
+  }
+  function stada(){
+    for(let i=0;i<N;i++){
+      const b=blod[i], erFlett=i<flett;
+      if(!b.busy) setja(b, erFlett?180:0);
+      b.el.style.zIndex=erFlett?(i+1):(N-i);
+    }
+    let x='0';
+    if(flett===0) x='calc(-1 * 25%)'; else if(flett===N) x='25%';
+    bok.style.transform='translateX('+x+')';
+    const th=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--th'))||12;
+    const vs=flett-(anim==='fram'?1:0), hs=N-flett-(anim==='aftur'?1:0);
+    const v=Math.max(0,vs-1), h=Math.max(0,hs-1);
+    blokkV.style.setProperty('--th',(th*v/(N-1)+1)+'px'); blokkH.style.setProperty('--th',(th*h/(N-1)+1)+'px');
+    blokkV.style.visibility=vs<=0?'hidden':'visible'; blokkH.style.visibility=hs<=0?'hidden':'visible';
+    let nafn, bls;
+    if(flett===0){ nafn='Forsíða'; bls='bls. 1 af '+S; }
+    else if(flett===N){ nafn='Bakkápa'; bls='bls. '+S+' af '+S; }
+    else {
+      const a=2*flett-1, b=2*flett;
+      nafn=heiti[a]===heiti[b]?heiti[a]:heiti[a]+' · '+heiti[b];
+      bls=(thema[flett]?thema[flett]+' · ':'')+`bls. ${a+1}–${b+1} af ${S}`;
+    }
+    teljari.innerHTML='<span class="nafn">'+nafn+'</span><small>'+bls+'</small>';
+    afturHn.disabled=flett===0; framHn.disabled=flett===N;
+    const synd=new Set(flett===0?[0]:flett===N?[S-1]:[2*flett-1,2*flett]);
+    skraHn.forEach(b=>{ const s=+b.dataset.sida; const tvo=heiti[s+1]===heiti[s]; b.setAttribute('aria-current', String(synd.has(s)||(tvo&&synd.has(s+1)))); });
+  }
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function fletta(b, fra, til, done){
+    const dur=reduced?160:(b.kapa?1200:950), t0=performance.now();
+    b.busy=true; b.el.style.zIndex=N+2;
+    function rammi(now){
+      const t=Math.min(1,(now-t0)/dur), e=ease(t);
+      const theta=fra+(til-fra)*e;
+      setja(b, theta);
+      const s=Math.sin(theta*Math.PI/180);
+      kastH.style.opacity=(theta<90?s:0)*.8; kastV.style.opacity=(theta>=90?s:0)*.8;
+      if(t<1) requestAnimationFrame(rammi); else { b.busy=false; setja(b,til); kastH.style.opacity=0; kastV.style.opacity=0; done(); }
+    }
+    requestAnimationFrame(rammi);
+  }
+  function snerti(){ if(!hreyft){hreyft=true;visbending.classList.add('falin');} }
+  // Smellir á meðan síða snýst eru taldir (+ fram, − aftur) og flettast strax á eftir, hámark 6 í bið.
+  let bidur=0;
+  function lokid(){ busy=false; anim=null; stada(); if(bidur>0){ bidur--; fram(true); } else if(bidur<0){ bidur++; aftur(true); } }
+  function fram(ur_bid){ if(busy){ if(flett+bidur<N) bidur=Math.min(6,bidur+1); return; } if(flett>=N){ bidur=0; return; } busy=true; anim='fram'; snerti(); const b=blod[flett]; flett++; stada(); fletta(b,0,180,lokid); }
+  function aftur(ur_bid){ if(busy){ if(flett+bidur>0) bidur=Math.max(-6,bidur-1); return; } if(flett<=0){ bidur=0; return; } busy=true; anim='aftur'; snerti(); flett--; const b=blod[flett]; stada(); fletta(b,180,0,lokid); }
+
+  document.getElementById('haegriSm').addEventListener('click',fram);
+  document.getElementById('vinstriSm').addEventListener('click',aftur);
+  framHn.addEventListener('click',fram); afturHn.addEventListener('click',aftur);
+  document.getElementById('byrjaHn').addEventListener('click',()=>{ if(busy)return; bidur=0; flett=0; stada(); });
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='BUTTON' && e.key===' ') return;
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();fram();}
+    if(e.key==='ArrowLeft'){e.preventDefault();aftur();}
+    if(e.key==='Home'){ if(!busy){flett=0;stada();} }
+    if(e.key==='End'){ if(!busy){flett=N;stada();} }
+  });
+  const b2=document.getElementById('sjon2d'), b3=document.getElementById('sjon3d');
+  function sjon(flatt){ document.body.classList.toggle('flatt',flatt); b2.setAttribute('aria-pressed',String(flatt)); b3.setAttribute('aria-pressed',String(!flatt)); try{localStorage.setItem('svif-syn',flatt?'2d':'3d');}catch(e){} }
+  b2.addEventListener('click',()=>sjon(true)); b3.addEventListener('click',()=>sjon(false));
+  try{ if(localStorage.getItem('svif-syn')==='2d') sjon(true); }catch(e){}
+  let x0=null;
+  const svid=document.querySelector('.svid');
+  svid.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  svid.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(dx<-40)fram(); else if(dx>40)aftur(); });
+  stada();
+})();
+</script>
+
