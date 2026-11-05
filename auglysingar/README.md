@@ -7,5 +7,9 @@ Tilbúnar auglýsingar (1080×1080, PNG í 2× upplausn, JPG og PDF).
 
 ## Fagafl
 - `fagafl/Fagafl_utgafa_1` – Ljós, 27 ára reynsla + Reykjavíkurborg og Garðabær.
-- `fagafl/Fagafl_utgafa_2` – Dökk, risastórt „27“ og þrjár verkmyndir.
+- `fagafl/Fagafl_utgafa_2` – Dökk, risastórt „27“. Nýsmíði, smíðaþjónusta og múrþjónusta dregin fram (valin útgáfa).
 - `fagafl/Fagafl_utgafa_3` – Blá, „Sveitarfélögin treysta okkur.“
+
+## TME Gluggar (SVIF-bæklingur, opna með Gluggavinum)
+- `tme/TME_Gluggar_SVIF` – Hægri síða opnunnar, 2362×2362 px (20×20 cm við 300 dpi).
+- `tme/SVIF_opna_Gluggavinir_TME.jpg` – Sýnishorn af opnunni: Gluggavinir vinstra megin, TME Gluggar hægra megin.
