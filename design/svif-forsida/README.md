@@ -57,6 +57,19 @@ python3 tools/make_v4.py
 node tools/render.cjs designs/v4-svif-2026-prent.html prent/svif-2026-prent 2.36214
 ```
 
+### Photos of the final booklet (`final/myndir/`)
+
+Composited scenes of the final cover, 2400 × 1600 px. Render with `node tools/scenes.cjs 1.5 ofanfra bunki naermynd pappir dokkt` (scenes are in `designs/scenes.html`).
+
+| File | Scene |
+|------|-------|
+| `svif-ofanfra.jpg` | Top-down on oak: front and back, coffee cup, window light |
+| `svif-bunki.jpg` | A stack of booklets (the print run) with the back beside it |
+| `svif-naermynd.jpg` | Low-angle close-up of the front, shallow depth of field |
+| `svif-pappir.jpg` | Two covers on beige paper with a window shadow (Torrance style) |
+| `svif-dokkt.jpg` | Front and back on a dark walnut table with a coffee cup |
+| `svif-yfirlit.jpg` | All five on one sheet |
+
 ## Round 3 – Nýji kaflinn, back-photo options
 
 The front is A3 unchanged: heima photo, thin title, the same broken white frame lines. Only the corner text changed:
