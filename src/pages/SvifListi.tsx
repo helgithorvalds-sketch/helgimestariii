@@ -14,6 +14,9 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { addCallLog, CallLog } from "@/services/callLogService";
 
 const SVIF_FYRIRTAEKI_SOURCE = "svif_fyrirtæki";
 
@@ -43,10 +46,65 @@ export default function SvifListi() {
     setter(next);
   };
 
+  const [logs, setLogs] = useState<Record<string, CallLog[]>>({});
+  const [callTarget, setCallTarget] = useState<Company | null>(null);
+  const [callNote, setCallNote] = useState("");
+  const [callNextDate, setCallNextDate] = useState("");
+  const [callNextTime, setCallNextTime] = useState("09:00");
+  const [savingCall, setSavingCall] = useState(false);
+
   const load = async () => {
     const list = await fetchCompanies();
     setCompanies(list);
     setLoading(false);
+    const ids = list.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource === SVIF_FYRIRTAEKI_SOURCE).map((c) => c.id);
+    if (ids.length) {
+      const { data } = await supabase.from("call_logs").select("*").in("company_id", ids).order("called_at", { ascending: false });
+      const map: Record<string, CallLog[]> = {};
+      (data || []).forEach((r: any) => {
+        (map[r.company_id] ||= []).push({ id: r.id, companyId: r.company_id, calledAt: r.called_at, notes: r.notes, createdAt: r.created_at });
+      });
+      setLogs(map);
+    }
+  };
+
+  const openCall = (c: Company) => {
+    setCallTarget(c); setCallNote(""); setCallNextDate(""); setCallNextTime("09:00");
+  };
+
+  const saveCall = async () => {
+    if (!callTarget) return;
+    const c = callTarget;
+    setSavingCall(true);
+    try {
+      const note = callNote.trim();
+      const log = await addCallLog(c.id, note || "Símtal skráð");
+      if (!log) return toast.error("Ekki tókst að vista símtal");
+      setLogs((prev) => ({ ...prev, [c.id]: [log, ...(prev[c.id] || [])] }));
+      const upd: Record<string, any> = {};
+      let notes = c.notes;
+      if (note) {
+        const stamp = new Date().toLocaleDateString("is-IS");
+        notes = c.notes ? `${c.notes}\n\n[${stamp}] ${note}` : `[${stamp}] ${note}`;
+        upd.notes = notes;
+      }
+      let nextCallAt = c.nextCallAt;
+      if (callNextDate) {
+        const [y, m, d] = callNextDate.split("-").map(Number);
+        const [hh, mm] = (callNextTime || "09:00").split(":").map(Number);
+        nextCallAt = new Date(y, m - 1, d, hh || 9, mm || 0).toISOString();
+        upd.next_call_at = nextCallAt;
+      }
+      if (Object.keys(upd).length) {
+        const { error } = await supabase.from("companies").update(upd).eq("id", c.id);
+        if (error) toast.error("Villa við vistun glósu");
+      }
+      setCompanies((prev) => prev.map((x) => (x.id === c.id ? { ...x, notes, nextCallAt } : x)));
+      toast.success("Símtal skráð");
+      setCallTarget(null);
+    } finally {
+      setSavingCall(false);
+    }
   };
 
   useEffect(() => { load(); }, []);
@@ -236,6 +294,28 @@ export default function SvifListi() {
         )}
       </div>
 
+      <Button size="sm" onClick={() => openCall(c)} className="w-full gap-2 font-bold">
+        <Phone className="w-4 h-4" />Nýtt símtal
+      </Button>
+
+      {c.nextCallAt && (
+        <p className="text-xs font-semibold text-primary">
+          Næsta símtal: {new Date(c.nextCallAt).toLocaleString("is-IS", { dateStyle: "short", timeStyle: "short" })}
+        </p>
+      )}
+
+      {(logs[c.id] || []).length > 0 && (
+        <div className="space-y-1 rounded-md border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800 p-2">
+          <span className="text-xs font-bold block">Símtöl ({logs[c.id].length})</span>
+          {logs[c.id].slice(0, 3).map((l) => (
+            <div key={l.id} className="text-xs">
+              <span className="font-semibold">{new Date(l.calledAt).toLocaleDateString("is-IS")}:</span>{" "}
+              <span className="whitespace-pre-wrap">{l.notes}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-1.5 pl-1">
         {OUTCOMES.map((o) => (
           <button
@@ -346,6 +426,34 @@ export default function SvifListi() {
         existingNames={companies.map((c) => c.name)}
         existingCompanyIds={companies.map((c) => c.companyId).filter(Boolean)}
       />
+
+      <Dialog open={!!callTarget} onOpenChange={(o) => { if (!o) setCallTarget(null); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Nýtt símtal — {callTarget?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>Glósa um símtalið</Label>
+              <Textarea rows={5} value={callNote} onChange={(e) => setCallNote(e.target.value)} placeholder="Hvað var sagt?" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Næsta símtal — dagur</Label>
+                <Input type="date" value={callNextDate} onChange={(e) => setCallNextDate(e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Tími</Label>
+                <Input type="time" value={callNextTime} onChange={(e) => setCallNextTime(e.target.value)} />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCallTarget(null)}>Hætta</Button>
+            <Button onClick={saveCall} disabled={savingCall}>{savingCall ? "Vista..." : "Vista símtal"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
