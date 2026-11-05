@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif 03 Velkomin heim</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .d3, .d3b { color: var(--ink); background: var(--lavender); }
+  /* lavender wash over the blurred hallway (brand colours from svif.is) */
+  .wash .bg { background-image: url(../src/bg2.jpg); background-size: 100% auto; background-position: 0 -125px; filter: grayscale(1) brightness(1.18) contrast(.82); }
+  .wash .tone { background: #b9bde6; mix-blend-mode: multiply; opacity: .55; }
+  .wash .lift { background: linear-gradient(180deg, rgba(234,234,244,.55), rgba(234,234,244,.15) 40%, rgba(234,234,244,.15) 70%, rgba(234,234,244,.6)); }
+  .corner { position: absolute; font-size: 15.5px; line-height: 1.12; letter-spacing: .02em; text-transform: uppercase; }
+  .d3 .kick { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font-size: 15px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; }
+  .d3 h1 { position: absolute; left: 0; right: 0; top: 342px; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 178px; line-height: .86; letter-spacing: -.015em; }
+  .d3 h1 i { font-style: italic; }
+  .d3 .sub { position: absolute; left: 0; right: 0; top: 680px; text-align: center; font-size: 17px; line-height: 1.5; letter-spacing: .03em; text-transform: uppercase; }
+  .d3 .logo { position: absolute; left: 50%; transform: translateX(-50%); bottom: 64px; width: 172px; }
+  .d3 .hair { position: absolute; left: 470px; width: 60px; top: 660px; height: 1px; background: var(--ink); opacity: .6; }
+
+  /* back */
+  .d3b .strip { position: absolute; left: 0; right: 0; top: 0; height: 330px; overflow: hidden; }
+  .d3b .strip .bg { background-position: 0 -520px; }
+  .d3b .kick { position: absolute; left: 64px; top: 392px; font-size: 14px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; }
+  .d3b h2 { position: absolute; left: 64px; top: 424px; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 70px; line-height: 1; }
+  .d3b h2 i { font-style: italic; }
+  .d3b ul { position: absolute; left: 64px; right: 64px; top: 540px; list-style: none; display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; }
+  .d3b li { font-size: 18px; padding: 13px 0; border-top: 1px solid rgba(35,32,70,.22); display: flex; justify-content: space-between; }
+  .d3b li span { opacity: .5; font-size: 14px; letter-spacing: .1em; }
+  .d3b .foot { position: absolute; left: 64px; right: 64px; bottom: 60px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .d3b .foot img.qr { width: 82px; display: block; }
+  .d3b .foot .t { font-size: 15.5px; line-height: 1.25; text-transform: uppercase; letter-spacing: .02em; }
+  .d3b .foot .logo { width: 150px; }
+</style></head><body>
+
+<div class="page d3 wash grain" id="front">
+  <div class="bg"></div><div class="layer tone"></div><div class="layer lift"></div>
+  <div class="corner" style="left:64px;top:62px">Nýtt<br>heimili</div>
+  <div class="corner" style="left:318px;top:62px">2026</div>
+  <div class="corner" style="left:590px;top:62px">Nýr<br>kafli</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">Svif<br>velkomstbæklingur</div>
+
+  <div class="kick">Til hamingju með nýja heimilið</div>
+  <h1>Velkomin<br><i>heim.</i></h1>
+  <div class="hair"></div>
+  <div class="sub">Traust fyrirtæki og sérkjör<br>fyrir nýja húseigendur</div>
+
+  <div class="corner" style="left:64px;bottom:64px">Höfuðborgar-<br>svæðið</div>
+  <img class="logo" src="../src/logo-ink.png" alt="Svif">
+  <div class="corner" style="right:64px;bottom:64px;text-align:right">Geymdu<br>bæklinginn</div>
+</div>
+
+<div class="page d3b grain" id="back">
+  <div class="strip wash"><div class="bg"></div><div class="layer tone"></div><div class="layer lift"></div></div>
+  <div class="corner" style="left:64px;top:62px">Velkomin<br>heim</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">svif.is</div>
+
+  <div class="kick">Inni í bæklingnum</div>
+  <h2>Allt fyrir <i>nýja heimilið.</i></h2>
+  <ul>
+    <li>Iðnaðarmenn <span>01</span></li>
+    <li>Gluggar og svalir <span>05</span></li>
+    <li>Málning, gólf og innréttingar <span>02</span></li>
+    <li>Garðyrkja og utanhús <span>06</span></li>
+    <li>Húsgögn og raftæki <span>03</span></li>
+    <li>Tryggingar og öryggi <span>07</span></li>
+    <li>Byggingar og viðhald <span>04</span></li>
+    <li>Þrif <span>08</span></li>
+  </ul>
+
+  <div class="foot">
+    <div style="display:flex;gap:20px;align-items:flex-end">
+      <img class="qr" src="../src/qr-ink.svg" alt="">
+      <div class="t">Viltu vera með<br>í næsta bæklingi?<br>svif.is</div>
+    </div>
+    <img class="logo" src="../src/logo-ink.png" alt="Svif">
+  </div>
+</div>
+
+</body></html>

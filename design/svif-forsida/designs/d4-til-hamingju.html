@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif 04 Til hamingju</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .d4, .d4b { color: var(--ink); background: #ecebf3; }
+  /* photo window shaped like the house in the Svif logo */
+  .house { position: absolute; overflow: hidden; clip-path: polygon(50% 0, 100% 31%, 100% 100%, 0 100%, 0 31%); }
+  .house .bg { background-size: cover; }
+  .roofline { position: absolute; overflow: visible; }
+  .label { font-size: 14px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; }
+
+  .d4 .house { left: 64px; top: 120px; width: 430px; height: 816px; }
+  .d4 .house .bg { background-image: url(../src/bg1.jpg); background-size: auto 100%; background-position: 46% 0; filter: brightness(1.02); }
+  .d4 .roofline { left: 36px; top: 76px; width: 486px; height: 183px; }
+  .d4 .txt { position: absolute; left: 548px; right: 64px; top: 300px; }
+  .d4 h1 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 72px; line-height: .98; letter-spacing: -.01em; margin-top: 26px; }
+  .d4 h1 i { font-style: italic; color: var(--primary); }
+  .d4 .rule { width: 56px; height: 1px; background: var(--ink); opacity: .6; margin: 36px 0 26px; }
+  .d4 p { font-size: 17.5px; line-height: 1.6; max-width: 320px; opacity: .85; }
+  .d4 .logo { position: absolute; right: 64px; bottom: 64px; width: 156px; }
+  .d4 .top { position: absolute; left: 548px; right: 64px; top: 64px; display: flex; justify-content: space-between; font-size: 15.5px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.12; }
+
+  /* back */
+  .d4b .house { right: 64px; top: 330px; width: 300px; height: 520px; }
+  .d4b .house .bg { background-image: url(../src/bg2.jpg); background-size: auto 100%; background-position: 70% 0; filter: brightness(1.02); }
+  .d4b .roofline { right: 44px; top: 298px; width: 340px; height: 130px; }
+  .d4b .txt { position: absolute; left: 64px; width: 470px; top: 330px; }
+  .d4b h2 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 64px; line-height: 1; margin-top: 22px; }
+  .d4b h2 i { font-style: italic; color: var(--primary); }
+  .d4b p { font-size: 18px; line-height: 1.62; margin-top: 26px; opacity: .85; }
+  .d4b .qr { display: flex; gap: 20px; align-items: center; margin-top: 44px; font-size: 15.5px; line-height: 1.25; text-transform: uppercase; letter-spacing: .02em; }
+  .d4b .qr img { width: 84px; }
+  .d4b .logo { position: absolute; left: 64px; top: 64px; width: 140px; }
+  .d4b .top { position: absolute; right: 64px; top: 64px; text-align: right; font-size: 15.5px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.12; }
+  .d4b .bottom { position: absolute; left: 64px; right: 64px; bottom: 64px; display: flex; justify-content: space-between; font-size: 15.5px; text-transform: uppercase; letter-spacing: .02em; border-top: 1px solid rgba(35,32,70,.22); padding-top: 18px; }
+</style></head><body>
+
+<div class="page d4 grain" id="front">
+  <svg class="roofline" viewBox="0 0 530 200">
+    <path d="M10 176 L265 22 L520 176" fill="none" stroke="#8fa3dc" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M392 99 V40 H418 V115" fill="none" stroke="#8fa3dc" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="house"><div class="bg layer"></div></div>
+
+  <div class="top"><span>Nýtt heimili</span><span style="text-align:right">2026</span></div>
+  <div class="txt">
+    <div class="label">Velkomstbæklingur</div>
+    <h1>Til hamingju<br><i>með nýja heimilið.</i></h1>
+    <div class="rule"></div>
+    <p>Hér hefst nýr kafli. Traust fyrirtæki og sérkjör sem hjálpa þér að koma þér fyrir á nýja heimilinu.</p>
+  </div>
+  <img class="logo" src="../src/logo-ink.png" alt="Svif">
+</div>
+
+<div class="page d4b grain" id="back">
+  <svg class="roofline" viewBox="0 0 340 130">
+    <path d="M10 112 L170 16 L330 112" fill="none" stroke="#8fa3dc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M250 62 V24 H268 V73" fill="none" stroke="#8fa3dc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="house"><div class="bg layer"></div></div>
+  <img class="logo" src="../src/logo-ink.png" alt="Svif">
+  <div class="top">Hér hefst<br>nýr kafli</div>
+
+  <div class="txt">
+    <div class="label">Bæklingurinn svífur heim</div>
+    <h2>Geymdu hann.<br><i>Hann borgar sig.</i></h2>
+    <p>Þegar þig vantar pípara, málara, smið eða aðra þjónustu fyrir nýja heimilið eru tilboðin hér, frá traustum fyrirtækjum sem við höfum valið fyrir þig.</p>
+    <div class="qr"><img src="../src/qr-ink.svg" alt=""><span>Sjáðu meira<br>á svif.is</span></div>
+  </div>
+
+  <div class="bottom"><span>svif.is</span><span>Viltu vera með í næsta bæklingi?</span></div>
+</div>
+
+</body></html>

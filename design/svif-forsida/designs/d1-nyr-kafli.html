@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif 01 Nýr kafli</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .d1 .bg { background-image: url(../src/bg2.jpg); background-size: 100% auto; background-position: 0 -125px; filter: saturate(.9) brightness(.97); }
+  .d1 .shade { background: linear-gradient(180deg, rgba(40,30,20,.28) 0%, rgba(40,30,20,0) 22%, rgba(40,30,20,0) 70%, rgba(40,30,20,.34) 100%); }
+  .d1 .tint { background: rgba(60,45,30,.10); }
+  .corner { position: absolute; font-size: 15.5px; line-height: 1.12; letter-spacing: .02em; text-transform: uppercase; font-family: "Inter", sans-serif; font-weight: 400; }
+  .d1 h1 { position: absolute; left: 0; right: 0; top: 365px; text-align: center; font-family: "Inter", sans-serif; font-weight: 400; font-size: 118px; letter-spacing: -.005em; line-height: 1; text-shadow: 0 2px 30px rgba(60,40,20,.18); }
+  .d1 .sub { position: absolute; left: 0; right: 0; top: 508px; text-align: center; font-size: 17px; line-height: 1.5; letter-spacing: .03em; text-transform: uppercase; }
+  .d1 .logo { position: absolute; left: 50%; transform: translateX(-50%); bottom: 64px; width: 172px; }
+
+  /* back */
+  .d1b .bg { background-image: url(../src/bg2.jpg); background-size: 128% auto; background-position: 62% 78%; transform: scaleX(-1); filter: blur(3px) saturate(.85) brightness(.9); }
+  .d1b .tint { background: linear-gradient(180deg, rgba(48,36,24,.42), rgba(48,36,24,.55)); }
+  .d1b .script { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-size: 96px; line-height: 1; }
+  .d1b .body { position: absolute; left: 50%; transform: translateX(-50%); top: 405px; width: 560px; text-align: center; font-size: 19px; line-height: 1.62; font-weight: 300; }
+  .d1b .body b { font-weight: 500; }
+  .d1b .qrrow { position: absolute; left: 50%; transform: translateX(-50%); top: 640px; display: flex; align-items: center; gap: 26px; }
+  .d1b .qrrow img { width: 96px; height: 96px; }
+  .d1b .qrrow .t { font-size: 15.5px; line-height: 1.35; text-transform: uppercase; letter-spacing: .02em; }
+  .d1b .logo { position: absolute; left: 50%; transform: translateX(-50%); bottom: 64px; width: 150px; }
+</style></head><body>
+
+<div class="page d1 grain" id="front">
+  <div class="bg"></div><div class="layer tint"></div><div class="layer shade"></div>
+  <div class="corner" style="left:64px;top:62px">Velkomin<br>heim</div>
+  <div class="corner" style="left:318px;top:62px">2026</div>
+  <div class="corner" style="left:590px;top:62px">Nýir<br>húseigendur</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">Höfuðborgar-<br>svæðið</div>
+
+  <h1>NÝR KAFLI</h1>
+  <div class="sub">Velkomin í nýja heimilið þitt<br>Sérkjör frá traustum fyrirtækjum</div>
+
+  <div class="corner" style="left:64px;bottom:64px">Tilboð<br>og afslættir<br>inni í bæklingnum</div>
+  <img class="logo" src="../src/logo-white.png" alt="Svif">
+  <div class="corner" style="right:64px;bottom:64px;text-align:right">Geymdu<br>bæklinginn<br>hann borgar sig</div>
+</div>
+
+<div class="page d1b grain" id="back">
+  <div class="bg"></div><div class="layer tint"></div>
+  <div class="corner" style="left:64px;top:62px">Svif<br>velkomstbæklingur</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">Nýr kafli<br>2026</div>
+
+  <div class="script">Til hamingju</div>
+  <p class="body">Þú varst að eignast nýtt heimili. Í þessum bæklingi finnur þú <b>traust fyrirtæki</b> sem hjálpa þér að koma þér fyrir, með sérkjörum fyrir nýja húseigendur. Geymdu hann á góðum stað. Hann kemur sér vel þegar þörfin kemur upp.</p>
+
+  <div class="qrrow">
+    <img src="../src/qr-white.svg" alt="">
+    <div class="t">Skannaðu<br>og sjáðu meira<br>á svif.is</div>
+  </div>
+
+  <div class="corner" style="left:64px;bottom:64px">Viltu vera með<br>í næsta bæklingi?<br>svif.is</div>
+  <img class="logo" src="../src/logo-white.png" alt="Svif">
+  <div class="corner" style="right:64px;bottom:64px;text-align:right">Hannað, prentað<br>og sent heim<br>af Svif</div>
+</div>
+
+</body></html>

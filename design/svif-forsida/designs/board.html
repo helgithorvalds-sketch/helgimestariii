@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif board</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #333; }
+  #scene { width: 1600px; padding: 72px 80px 80px; background: #eaeaf4; color: #232046; font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid rgba(35,32,70,.2); padding-bottom: 26px; margin-bottom: 40px; }
+  .no { font-size: 14px; letter-spacing: .26em; text-transform: uppercase; font-weight: 500; }
+  h1 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 68px; line-height: 1; margin-top: 12px; }
+  h1 i { font-style: italic; color: #5b74c4; }
+  .meta { text-align: right; font-size: 15px; line-height: 1.55; max-width: 560px; opacity: .8; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .pair figure img, .mock img { width: 100%; display: block; box-shadow: 0 20px 50px -20px rgba(35,32,70,.35); }
+  figcaption { font-size: 13px; letter-spacing: .22em; text-transform: uppercase; margin-top: 14px; opacity: .7; }
+  .mock { margin-top: 44px; }
+  .logo { height: 40px; }
+</style></head><body>
+<div id="scene">
+  <header>
+    <div><div class="no" id="no"></div><h1 id="title"></h1></div>
+    <div class="meta" id="meta"></div>
+  </header>
+  <div class="pair">
+    <figure><img id="f" alt=""><figcaption>Forsíða · 1:1</figcaption></figure>
+    <figure><img id="b" alt=""><figcaption>Baksíða · 1:1</figcaption></figure>
+  </div>
+  <figure class="mock"><img id="m" alt=""><figcaption>Á borði</figcaption></figure>
+</div>
+<script>
+  const D = {
+    'd1-nyr-kafli':   ['01', 'Nýr <i>kafli</i>', 'Byggt á tilvísun 2. Óskýr gangur, stór hrein fyrirsögn og texti í öllum fjórum hornum. Baksíða: „Til hamingju“ með skrift, QR-kóði á svif.is.'],
+    'd2-heima':       ['02', 'Heima <i>er best</i>', 'Byggt á tilvísun 1. Sólargeisli í stofu, stór serif-fyrirsögn, lína með húsi og ör, lóðréttur texti. Baksíða: „Til hamingju með nýja heimilið.“'],
+    'd3-velkomin':    ['03', 'Velkomin <i>heim.</i>', 'Litir Svif (lavender og blek) yfir ganginum úr tilvísun 2. Baksíða sýnir flokkana inni í bæklingnum.'],
+    'd4-til-hamingju':['04', 'Til hamingju <i>með nýja heimilið</i>', 'Myndin er skorin í húsform með þakinu úr Svif-merkinu. Baksíða: „Geymdu hann. Hann borgar sig.“'],
+    'd5-kafli-1':     ['05', 'Fyrsti kafli: <i>Nýja heimilið</i>', 'Blek-blár tvítónn af stofunni, uppsett eins og fyrsta blaðsíða í bók. Baksíða er efnisyfirlit: „Næstu kaflar“.'],
+  };
+  const d = new URLSearchParams(location.search).get('d');
+  const [no, title, meta] = D[d];
+  document.getElementById('no').textContent = 'Svif · Tillaga ' + no;
+  document.getElementById('title').innerHTML = title;
+  document.getElementById('meta').textContent = meta;
+  document.getElementById('f').src = `../final/${d}-front.jpg`;
+  document.getElementById('b').src = `../final/${d}-back.jpg`;
+  document.getElementById('m').src = `../final/${d}-mockup.jpg`;
+</script>
+</body></html>

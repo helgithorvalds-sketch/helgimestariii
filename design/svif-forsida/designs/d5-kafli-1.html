@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif 05 Kafli 1</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .d5, .d5b { background: var(--ink); }
+  /* navy duotone of the sunlit room */
+  .duo .bg { background-image: url(../src/bg1.jpg); background-size: 100% auto; background-position: 0 -150px; filter: grayscale(1) contrast(1.12) brightness(1.05); }
+  .duo .navy { background: #232046; mix-blend-mode: multiply; opacity: .82; }
+  .duo .glow { background: #8fa3dc; mix-blend-mode: screen; opacity: .2; }
+  .duo .vig { background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(20,18,44,0) 40%, rgba(20,18,44,.55) 100%); }
+  .label { font-family: "Archivo", sans-serif; font-weight: 600; font-size: 14px; letter-spacing: .42em; text-transform: uppercase; color: #c9d2f0; }
+  .d5 .k { position: absolute; left: 0; right: 0; top: 290px; text-align: center; }
+  .d5 .k .n { display: block; font-family: "Instrument Serif", serif; font-style: italic; font-size: 54px; letter-spacing: 0; text-transform: none; color: #fff; margin-top: 10px; }
+  .d5 h1 { position: absolute; left: 0; right: 0; top: 340px; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 168px; line-height: .9; letter-spacing: -.015em; }
+  .d5 h1 i { font-style: italic; }
+  .d5 .rule { position: absolute; left: 470px; width: 60px; top: 676px; height: 1px; background: #c9d2f0; }
+  .d5 .sub { position: absolute; left: 0; right: 0; top: 704px; text-align: center; font-size: 16px; letter-spacing: .22em; text-transform: uppercase; color: #dfe4f6; }
+  .d5 .logo { position: absolute; left: 50%; transform: translateX(-50%); bottom: 64px; width: 150px; }
+  .foot { position: absolute; bottom: 72px; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; color: #c9d2f0; }
+  .frame { position: absolute; inset: 28px; border: 1px solid rgba(201,210,240,.35); }
+
+  /* back: table of contents */
+  .d5b .bg { opacity: .3; filter: grayscale(1) blur(3px) contrast(1.1); background-position: 0 -300px; }
+  .d5b h2 { position: absolute; left: 120px; top: 150px; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 76px; line-height: 1; }
+  .d5b h2 i { font-style: italic; }
+  .d5b .label.top { position: absolute; left: 120px; top: 116px; }
+  .d5b ol { position: absolute; left: 120px; right: 120px; top: 290px; list-style: none; }
+  .d5b li { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; font-size: 21px; color: #f2f3fb; }
+  .d5b li .dots { flex: 1; border-bottom: 1px dotted rgba(201,210,240,.5); transform: translateY(-5px); }
+  .d5b li .no { font-family: "Instrument Serif", serif; font-style: italic; font-size: 26px; color: #c9d2f0; }
+  .d5b .qr { position: absolute; left: 120px; bottom: 130px; display: flex; gap: 22px; align-items: center; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; color: #dfe4f6; line-height: 1.6; }
+  .d5b .qr img { width: 86px; }
+  .d5b .logo { position: absolute; right: 120px; bottom: 138px; width: 138px; }
+</style></head><body>
+
+<div class="page d5 duo grain" id="front">
+  <div class="bg"></div><div class="layer navy"></div><div class="layer glow"></div><div class="layer vig"></div>
+  <div class="frame"></div>
+  <div class="k label">Fyrsti kafli</div>
+  <h1>Nýja<br><i>heimilið</i></h1>
+  <div class="rule"></div>
+  <div class="sub">Hér hefst sagan</div>
+  <div class="foot" style="left:72px">svif.is</div>
+  <img class="logo" src="../src/logo-white-roof.png" alt="Svif">
+  <div class="foot" style="right:72px">2026</div>
+</div>
+
+<div class="page d5b duo grain" id="back">
+  <div class="bg"></div><div class="layer navy"></div><div class="layer vig"></div>
+  <div class="frame"></div>
+  <div class="label top">Efnisyfirlit</div>
+  <h2>Næstu <i>kaflar</i></h2>
+  <ol>
+    <li>Iðnaðarmenn og viðhald<span class="dots"></span><span class="no">ii</span></li>
+    <li>Málning, gólf og innréttingar<span class="dots"></span><span class="no">iii</span></li>
+    <li>Húsgögn og raftæki<span class="dots"></span><span class="no">iv</span></li>
+    <li>Gluggar og svalir<span class="dots"></span><span class="no">v</span></li>
+    <li>Garðyrkja og utanhús<span class="dots"></span><span class="no">vi</span></li>
+    <li>Tryggingar og öryggi<span class="dots"></span><span class="no">vii</span></li>
+    <li>Þrif og frágangur<span class="dots"></span><span class="no">viii</span></li>
+  </ol>
+  <div class="qr"><img src="../src/qr-white.svg" alt=""><span>Sérkjör fyrir<br>nýja húseigendur<br>svif.is</span></div>
+  <img class="logo" src="../src/logo-white-roof.png" alt="Svif">
+</div>
+
+</body></html>
