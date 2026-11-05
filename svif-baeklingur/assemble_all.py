@@ -5,17 +5,16 @@ img = lambda i: os.path.join(F, f'img-{i:03d}.jpg')
 ad = lambda i: os.path.join(D, 'out', 'ads', f'p{i:02d}.jpg')
 pdf = lambda n: os.path.join(D, 'out', n + '.pdf')
 ny = lambda n: os.path.join(D, 'out', 'ads', n + '.jpg')
-PAGES = [  # (heiti, uppruni) – 32 síður, heftaður
-    ('Forsíða', ny('kapa_fram')), ('Yfirlit', os.path.join(D,'out','yfirlit_dark.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir_dark.jpg')),
+PAGES = [  # (heiti, uppruni) – 29 síður (endanlegur síðufjöldi ákveðinn síðar)
+    ('Forsíða', ny('kapa_fram')), ('Yfirlit', os.path.join(D,'out','d_yfirlit.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir_dark.jpg')),
     ('Parki', img(5)), ('Gardínur', ad(20)), ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Straumlind', img(4)), ('Ísorka', img(13)),
     ('Íspan', img(6)), ('Sticker', img(7)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('TME Gluggar', ny('tme')),
-    ('KORA', ad(8)), ('Litamálun', img(18)), ('Múrbúðin', img(19)), ('RÓM Verk', img(23)), ('HK Lagnir', ad(15)), ('MS Lagnir', ny('mslagnir')),
-    ('Lásar.is', img(16)), ('VÍS', ad(25)), ('Fagafl', ny('fagafl')),
-    ('Laust auglýsingapláss 1', os.path.join(D,'out','d_laust1.jpg')), ('Laust auglýsingapláss 2', os.path.join(D,'out','d_laust2.jpg')), ('Laust auglýsingapláss 3', os.path.join(D,'out','d_laust3.jpg')),
+    ('KORA', ad(8)), ('Litamálun', ny('litamalun')), ('Múrbúðin', img(19)), ('RÓM Verk', img(23)), ('HK Lagnir', ad(15)), ('MS Lagnir', ny('mslagnir')),
+    ('Lásar.is', img(16)), ('VÍS', ad(25)),
     ('Af hverju SVIF', os.path.join(D,'out','umsvif_dark.jpg')), ('Afsláttarmiðar', os.path.join(D,'out','midar3_framhlid.jpg')), ('Auð síða (bakhlið miðanna)', os.path.join(D,'out','d_aud.jpg')),
-    ('Kærar þakkir', os.path.join(D,'out','d_thakkir.jpg')), ('Bakkápa', ny('kapa_bak')),
+    ('Fagafl', ny('fagafl')), ('Kærar þakkir', os.path.join(D,'out','d_thakkir.jpg')), ('Bakkápa', ny('kapa_bak')),
 ]
-assert len(PAGES) % 4 == 0 and len(PAGES) == 32
+assert len(PAGES) == 29
 SZ = 200 * 72 / 25.4; b = 3 * 72 / 25.4
 def build(out, quality=None, px=None):
     doc = pymupdf.open()

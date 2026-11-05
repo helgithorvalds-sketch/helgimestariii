@@ -30,7 +30,7 @@ def rule(w=34):
     return (f'<div style="display:flex;align-items:center;gap:5mm;margin:6mm 0 6mm">'
             f'<div style="width:{w}mm;height:.22mm;background:rgba(255,255,255,.75)"></div>{roof()}'
             f'<div style="position:relative;width:{w}mm;height:.22mm;background:rgba(255,255,255,.75)">'
-            '<svg viewBox="0 0 10 10" style="position:absolute;right:-.4mm;top:-1.45mm;width:3mm;height:3mm"><path d="M2 0 L8 5 L2 10" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width=".9"/></svg></div></div>')
+            '</div></div>')
 def corner(txt, pos):
     st = {'tl': 'left:{l}mm;top:{t}mm', 'tr': 'right:{l}mm;top:{t}mm;text-align:right', 'bl': 'left:{l}mm;bottom:{t}mm', 'br': 'right:{l}mm;bottom:{t}mm;text-align:right', 'bc': 'left:0;right:0;bottom:{t}mm;text-align:center;letter-spacing:.32em'}[pos].format(l=B + 9.4, t=B + 11.2)
     return f'<div style="position:absolute;{st};font-family:Inter;font-weight:400;font-size:8.4pt;line-height:1.25;letter-spacing:.04em;text-transform:uppercase;color:#fff">{txt}</div>'
@@ -64,3 +64,37 @@ def laust(n):
 if __name__ == '__main__':
     for name, h in [('d_thakkir', thakkir()), ('d_aud', aud()), ('d_laust1', laust(1)), ('d_laust2', laust(2)), ('d_laust3', laust(3))]:
         open(os.path.join(D, name + '.html'), 'w', encoding='utf-8').write(h); print(name)
+
+
+# Yfirlit án myndar: kaflar með fyrirtækjum og blaðsíðum, í útliti Kærar þakkir
+KAFLAR = [
+    ('Gólf & flísar', [('Parki', '4')]),
+    ('Gluggar & gler', [('Gardínur', '5'), ('Íspan', '10'), ('Gluggavinir', '14'), ('TME Gluggar', '15')]),
+    ('Eldhús & tæki', [('HTH', '6'), ('Ormsson', '7')]),
+    ('Rafmagn & rafbíll', [('Straumlind', '8'), ('Ísorka', '9'), ('RÓM Verk', '19')]),
+    ('Þjónusta & filmur', [('sticker.is', '11'), ('KORA', '16')]),
+    ('Eldvarnir', [('Maus', '12–13')]),
+    ('Múr & málun', [('Litamálun', '17'), ('Múrbúðin', '18'), ('Fagafl', '27')]),
+    ('Bað & lagnir', [('HK Lagnir', '20'), ('MS Lagnir', '21')]),
+    ('Lásar & tryggingar', [('Lásar.is', '22'), ('VÍS', '23')]),
+]
+def yfirlit():
+    cols = ''
+    for titill, fyr in KAFLAR:
+        rows = ''.join(f'<div style="display:flex;justify-content:space-between;gap:3mm"><span>{n}</span>'
+                       f'<span style="color:#D8CCB6">bls. {p}</span></div>' for n, p in fyr)
+        cols += ('<div style="text-align:left">'
+                 f'<div style="font-family:Inter;font-weight:400;font-size:7.6pt;letter-spacing:.22em;text-transform:uppercase;color:#fff;'
+                 f'padding-bottom:1.6mm;border-bottom:.2mm solid rgba(255,255,255,.35);margin-bottom:2mm">{titill}</div>'
+                 f'<div style="font-family:Inter;font-weight:300;font-size:8.4pt;line-height:1.75;color:rgba(255,255,255,.88)">{rows}</div></div>')
+    body = ('<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center">'
+            '<div style="font-family:Inter;font-weight:400;font-size:7pt;letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.8)">SVIF · Fyrir nýja húseigendur</div>'
+            '<div style="font-family:Inter;font-weight:200;font-size:27pt;line-height:1.1;letter-spacing:.05em;text-transform:uppercase;margin-top:3mm">Afslættir, afslættir<br>og meiri afslættir</div>'
+            + rule(30) +
+            '<div style="font-family:Inter;font-weight:300;font-size:9.4pt;line-height:1.55;max-width:132mm;color:rgba(255,255,255,.9)">'
+            'Nýju heimili fylgja ótal verkefni. Hér eru traust fyrirtæki sem bjóða nýjum húseigendum sérkjör, flokkuð eftir verkefnum.</div>'
+            f'<div style="display:grid;grid-template-columns:repeat(3,44mm);column-gap:10mm;row-gap:5.5mm;margin-top:7mm">{cols}</div></div>'
+            + corner('svif.is', 'tl') + corner('2026', 'tr') + corner('20 fyrirtæki', 'bl') + corner('Tilboð<br>og afslættir', 'br'))
+    return page(body)
+if __name__ == '__main__':
+    open(os.path.join(D, 'd_yfirlit.html'), 'w', encoding='utf-8').write(yfirlit()); print('d_yfirlit')
