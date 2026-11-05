@@ -19,6 +19,8 @@ Changes after feedback: thinner title fonts, broken frame lines near the edges (
 |---|-------|--------------|
 | A1 | NÝJI KAFLINN | Thin sans (Inter 200). Broken frame lines. Svif logo inside the line under the title. svif.is at the bottom. |
 | A2 | nýji kaflinn | Same serif as "heima". Line with house and arrow, vertical side text, broken frame lines. |
+| A3 | NÝJI KAFLINN | A1 with the heima photo (sunlit room), a little brighter. |
+| A4 | nýji kaflinn | A2 with the heima photo (sunlit room), a little brighter. |
 | B1 | heima / ER BEST. | Brighter photo, broken frame lines, line with house and arrow. |
 | B2 | heima / ER BEST. | Closer to the sunbeam, brighter. Logo inside the line, text in the corners. |
 | C1 | heima (beige) | Beige paper with the photo inset, bleeding off the right and bottom (Torrance reference). |
