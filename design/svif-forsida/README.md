@@ -39,8 +39,8 @@ node tools/mockup.cjs 1.5 v2-c1-heima-beige:beige   # ":beige" = beige paper sur
 Front: A3 (Nýji kaflinn, heima photo, white broken frame). Back: the sunbeam on the wall.
 
 Corner text on the front:
-- Top: Nýir húseigendur · 2026 · SVIF.IS
-- Bottom: Allt fyrir nýja húseigendur · Tilboð og afslættir
+- Top: Velkomin · 2026 · Fyrir heimilið
+- Bottom: Allt fyrir nýja húseigendur · SVIF.IS (same size as in A3) · Tilboð og afslættir
 
 | File | Use |
 |------|-----|

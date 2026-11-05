@@ -42,14 +42,15 @@ TPL = r'''<!doctype html>
   <div class="bg"></div><div class="layer tint"></div><div class="layer shade"></div>
   <div class="safe">
   __FRAME__
-  <div class="corner" style="left:64px;top:62px">Nýir<br>húseigendur</div>
+  <div class="corner" style="left:64px;top:62px">Velkomin</div>
   <div class="corner" style="left:0;right:0;top:62px;text-align:center">2026</div>
-  <div class="corner" style="right:64px;top:62px;text-align:right">SVIF.IS</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">Fyrir heimilið</div>
 
   <h1>NÝJI KAFLINN</h1>
   <div class="dv"><span class="ln"></span><img src="../src/logo-white.png" alt="Svif"><span class="ar"></span></div>
   <div class="sub">Velkomin í nýja heimilið þitt<br>Sérkjör frá traustum fyrirtækjum</div>
   <div class="corner" style="left:64px;bottom:64px">Allt fyrir<br>nýja húseigendur</div>
+  <div class="web">SVIF.IS</div>
   <div class="corner" style="right:64px;bottom:64px;text-align:right">Tilboð<br>og afslættir</div>
   </div>
 </div>
