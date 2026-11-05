@@ -11,7 +11,7 @@ PAGES = [  # (heiti, uppruni) – 29 síður (endanlegur síðufjöldi ákveðin
     ('Íspan', img(6)), ('Sticker', img(7)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('TME Gluggar', ny('tme')),
     ('KORA', ad(8)), ('Litamálun', ny('litamalun')), ('Múrbúðin', img(19)), ('RÓM Verk', img(23)), ('HK Lagnir', ad(15)), ('MS Lagnir', ny('mslagnir')),
     ('Lásar.is', img(16)), ('VÍS', ad(25)),
-    ('Af hverju SVIF', os.path.join(D,'out','umsvif_dark.jpg')), ('Afsláttarmiðar', os.path.join(D,'out','midar3_framhlid.jpg')), ('Auð síða (bakhlið miðanna)', os.path.join(D,'out','d_aud.jpg')),
+    ('Af hverju SVIF', os.path.join(D,'out','umsvif_dark.jpg')), ('Afsláttarmiðar', os.path.join(D,'out','midar_thema_framhlid.jpg')), ('Auð síða (bakhlið miðanna)', os.path.join(D,'out','d_aud.jpg')),
     ('Fagafl', ny('fagafl')), ('Kærar þakkir', os.path.join(D,'out','d_thakkir.jpg')), ('Bakkápa', ny('kapa_bak')),
 ]
 assert len(PAGES) == 29
