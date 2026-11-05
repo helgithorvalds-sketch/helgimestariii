@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif A1 Nýji kaflinn</title>
+<link rel="stylesheet" href="base.css"><link rel="stylesheet" href="v2.css">
+<style>
+  .a1 .bg { background-image: url(../src/bg2.jpg); background-size: 100% auto; background-position: 0 -125px; filter: saturate(.9) brightness(.98); }
+  .a1 .tint { background: rgba(60,45,30,.12); }
+  .a1 .shade { background: linear-gradient(180deg, rgba(40,30,20,.26) 0%, rgba(40,30,20,0) 22%, rgba(40,30,20,0) 70%, rgba(40,30,20,.32) 100%); }
+  .a1 h1 { position: absolute; left: 0; right: 0; top: 362px; text-align: center; font-family: "Inter", sans-serif; font-weight: 200; font-size: 106px; letter-spacing: .035em; line-height: 1; text-shadow: 0 2px 30px rgba(60,40,20,.16); }
+  .a1 .dv { left: 170px; right: 170px; top: 512px; }
+  .a1 .dv img { width: 92px; }
+  .a1 .sub { position: absolute; left: 0; right: 0; top: 574px; text-align: center; font-size: 16.5px; line-height: 1.55; letter-spacing: .06em; text-transform: uppercase; font-weight: 300; }
+  .a1 .web { position: absolute; left: 0; right: 0; bottom: 64px; text-align: center; font-size: 15.5px; letter-spacing: .3em; font-weight: 400; }
+
+  .a1b .bg { background-image: url(../src/bg2.jpg); background-size: 128% auto; background-position: 62% 78%; transform: scaleX(-1); filter: blur(3px) saturate(.85) brightness(.95); }
+  .a1b .tint { background: linear-gradient(180deg, rgba(48,36,24,.36), rgba(48,36,24,.48)); }
+  .a1b h2 { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-family: "Inter", sans-serif; font-weight: 200; font-size: 68px; letter-spacing: .04em; line-height: 1; }
+  .a1b .dv { left: 250px; right: 250px; top: 352px; }
+  .a1b .dv img { width: 78px; }
+  .a1b .body { position: absolute; left: 50%; transform: translateX(-50%); top: 432px; width: 560px; text-align: center; font-size: 19px; line-height: 1.62; font-weight: 300; }
+  .a1b .qrrow { position: absolute; left: 50%; transform: translateX(-50%); top: 640px; display: flex; align-items: center; gap: 26px; }
+  .a1b .qrrow img { width: 92px; height: 92px; }
+  .a1b .qrrow .t { font-size: 15.5px; line-height: 1.35; text-transform: uppercase; letter-spacing: .02em; }
+</style></head><body>
+
+<div class="page a1 grain" id="front">
+  <div class="bg"></div><div class="layer tint"></div><div class="layer shade"></div>
+  <!-- broken frame: top-left corner, lower left, right side + bottom-right corner -->
+  <span class="fr h" style="left:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="left:34px;top:34px;height:250px"></span>
+  <span class="fr v" style="left:34px;top:640px;height:326px"></span>
+  <span class="fr v" style="right:34px;top:150px;height:816px"></span>
+  <span class="fr h" style="right:34px;bottom:34px;width:300px"></span>
+
+  <div class="corner" style="left:64px;top:62px">Velkomin<br>heim</div>
+  <div class="corner" style="left:318px;top:62px">2026</div>
+  <div class="corner" style="left:590px;top:62px">Nýir<br>húseigendur</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">Höfuðborgar-<br>svæðið</div>
+
+  <h1>NÝJI KAFLINN</h1>
+  <div class="dv"><span class="ln"></span><img src="../src/logo-white.png" alt="Svif"><span class="ar"></span></div>
+  <div class="sub">Velkomin í nýja heimilið þitt<br>Sérkjör frá traustum fyrirtækjum</div>
+
+  <div class="corner" style="left:64px;bottom:64px">Tilboð<br>og afslættir<br>inni í bæklingnum</div>
+  <div class="web">SVIF.IS</div>
+  <div class="corner" style="right:64px;bottom:64px;text-align:right">Geymdu<br>bæklinginn<br>hann borgar sig</div>
+</div>
+
+<div class="page a1 a1b grain" id="back">
+  <div class="bg"></div><div class="layer tint"></div>
+  <span class="fr h" style="left:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="left:34px;top:34px;height:250px"></span>
+  <span class="fr v" style="left:34px;top:640px;height:326px"></span>
+  <span class="fr v" style="right:34px;top:150px;height:816px"></span>
+  <span class="fr h" style="right:34px;bottom:34px;width:300px"></span>
+
+  <div class="corner" style="left:64px;top:62px">Svif<br>velkomstbæklingur</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">Nýji kaflinn<br>2026</div>
+
+  <h2>TIL HAMINGJU</h2>
+  <div class="dv"><span class="ln"></span><img src="../src/roof-white.png" alt=""><span class="ar"></span></div>
+  <p class="body">Þú varst að eignast nýtt heimili. Í þessum bæklingi finnur þú traust fyrirtæki sem hjálpa þér að koma þér fyrir, með sérkjörum fyrir nýja húseigendur. Geymdu hann á góðum stað. Hann kemur sér vel þegar þörfin kemur upp.</p>
+  <div class="qrrow"><img src="../src/qr-white.svg" alt=""><div class="t">Skannaðu<br>og sjáðu meira<br>á svif.is</div></div>
+
+  <div class="corner" style="left:64px;bottom:64px">Viltu vera með<br>í næsta bæklingi?<br>svif.is</div>
+  <img src="../src/logo-white.png" alt="Svif" style="position:absolute;left:50%;transform:translateX(-50%);bottom:64px;width:150px">
+  <div class="corner" style="right:64px;bottom:64px;text-align:right">Hannað, prentað<br>og sent heim<br>af Svif</div>
+</div>
+
+</body></html>

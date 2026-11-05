@@ -11,6 +11,27 @@ Each concept has a front, a back, a mockup on a wooden table and an overview boa
 | 04 | Til hamingju | Til hamingju *með nýja heimilið.* | "Geymdu hann. *Hann borgar sig.*" | Reference 1 photo cut into the house shape from the Svif logo |
 | 05 | Fyrsti kafli | Nýja *heimilið* | "Næstu kaflar": a table of contents | Reference 1 as an ink-blue duotone, laid out like the first page of a book |
 
+## Round 2 – Nýji kaflinn, Heima, and beige paper
+
+Changes after feedback: thinner title fonts, broken frame lines near the edges (not a full frame), a line with the logo or house below the title, a brighter Heima photo, and "Nýji kaflinn" instead of "Nýr kafli".
+
+| # | Front | What changed |
+|---|-------|--------------|
+| A1 | NÝJI KAFLINN | Thin sans (Inter 200). Broken frame lines. Svif logo inside the line under the title. svif.is at the bottom. |
+| A2 | nýji kaflinn | Same serif as "heima". Line with house and arrow, vertical side text, broken frame lines. |
+| B1 | heima / ER BEST. | Brighter photo, broken frame lines, line with house and arrow. |
+| B2 | heima / ER BEST. | Closer to the sunbeam, brighter. Logo inside the line, text in the corners. |
+| C1 | heima (beige) | Beige paper with the photo inset, bleeding off the right and bottom (Torrance reference). |
+| C2 | NÝJI KAFLINN (beige) | Beige paper, vertical title in the margin, photo bleeding off the top and right (Torrance reference). |
+
+Files: `final/v2-*-front.jpg`, `-back.jpg`, `-mockup.jpg` (C1 and C2 on beige paper, the rest on wood) and `-board.jpg`.
+
+Note: standard Icelandic spelling is "nýi kaflinn". "Nýji" is the spoken form. Search and replace in `designs/v2-*.html` to change it.
+
+```bash
+node tools/mockup.cjs 1.5 v2-c1-heima-beige:beige   # ":beige" = beige paper surface
+```
+
 ## Brand (from svif.is)
 
 - Colours: ink `#232046`, lavender `#eaeaf4`, cornflower `#8fa3dc`, primary `#5b74c4`

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif C1 Heima beige</title>
+<link rel="stylesheet" href="base.css"><link rel="stylesheet" href="v2.css">
+<style>
+  .c1, .c1b { color: var(--ink); }
+  .c1 h1 { position: absolute; left: 56px; top: 34px; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 220px; line-height: 1; letter-spacing: -.01em; }
+  .c1 .er { position: absolute; right: 64px; top: 186px; font-family: "Barlow", sans-serif; font-size: 28px; letter-spacing: .16em; }
+  .c1 .dv { left: 64px; right: 64px; top: 292px; }
+  .c1 .photo { left: 64px; right: 0; top: 370px; bottom: 0; }
+  .c1 .photo .bg { background-image: url(../src/bg1.jpg); background-size: 112% auto; background-position: 40% 62%; filter: brightness(1.1) contrast(.95); }
+  .c1 .photo .shade { background: linear-gradient(180deg, rgba(25,22,20,0) 55%, rgba(25,22,20,.3)); }
+  .c1 .ontop { position: absolute; left: 104px; bottom: 60px; color: #fff; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 17px; letter-spacing: .14em; line-height: 1.45; text-transform: uppercase; }
+  .c1 .logo { position: absolute; right: 64px; bottom: 62px; width: 150px; }
+  .code { position: absolute; right: 64px; top: 58px; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 16px; letter-spacing: .2em; }
+
+  .c1b .photo { left: 560px; right: 0; top: 0; height: 470px; }
+  .c1b .photo .bg { background-image: url(../src/bg1.jpg); background-size: 260% auto; background-position: 4% 58%; filter: brightness(1.08) contrast(.95); }
+  .c1b .kick { position: absolute; left: 64px; top: 150px; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: .24em; }
+  .c1b h2 { position: absolute; left: 64px; top: 190px; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 96px; line-height: 1; }
+  .c1b h2 i { font-style: italic; }
+  .c1b .dv { left: 64px; right: 64px; top: 540px; }
+  .c1b .body { position: absolute; left: 64px; top: 620px; width: 520px; font-family: "Barlow", sans-serif; font-size: 20px; line-height: 1.6; }
+  .c1b .qr { position: absolute; right: 64px; top: 624px; display: flex; gap: 20px; align-items: center; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: .14em; line-height: 1.45; text-transform: uppercase; }
+  .c1b .qr img { width: 84px; }
+  .c1b .foot { position: absolute; left: 64px; right: 64px; bottom: 62px; display: flex; justify-content: space-between; align-items: flex-end; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.45; }
+  .c1b .foot img { width: 140px; }
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="house" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 30 L32 11 L54 30"/><path d="M44 21.5 V12.5 H49.5 V26"/><path d="M15 26 V54 H49 V26"/><path d="M27 54 V39 a5 5 0 0 1 10 0 V54"/><path d="M6 54 H58"/></g></symbol>
+</defs></svg>
+
+<div class="page paper c1" id="front">
+  <span class="fr v" style="left:34px;top:34px;height:300px"></span>
+  <span class="fr h" style="right:34px;top:34px;width:180px"></span>
+  <span class="fr v" style="right:34px;top:34px;height:110px"></span>
+  <div class="code">SVIF-01</div>
+  <h1>heima</h1>
+  <div class="er">ER BEST.</div>
+  <div class="dv"><span class="ln"></span><svg width="54" height="54"><use href="#house"/></svg><span class="ar"></span></div>
+  <div class="photo"><div class="bg layer"></div><div class="layer shade"></div></div>
+  <div class="ontop">Nýtt heimili.<br>Nýr kafli.</div>
+  <img class="logo" src="../src/logo-white.png" alt="Svif">
+</div>
+
+<div class="page paper c1b" id="back">
+  <div class="photo"><div class="bg layer"></div></div>
+  <span class="fr h" style="left:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="left:34px;top:34px;height:250px"></span>
+  <span class="fr v" style="left:34px;top:620px;height:346px"></span>
+  <span class="fr h" style="right:34px;bottom:34px;width:300px"></span>
+  <div class="kick">TIL HAMINGJU</div>
+  <h2>með nýja<br><i>heimilið.</i></h2>
+  <div class="dv"><span class="ln"></span><svg width="44" height="44"><use href="#house"/></svg><span class="ar"></span></div>
+  <p class="body">Í þessum bæklingi finnur þú traust fyrirtæki sem hjálpa þér að gera nýja heimilið að þínu, með sérkjörum fyrir nýja húseigendur. Geymdu hann vel. Hann borgar sig.</p>
+  <div class="qr"><img src="../src/qr-ink.svg" alt=""><span>Allt um Svif<br>á svif.is</span></div>
+  <div class="foot"><span>Viltu vera með<br>í næsta bæklingi?</span><img src="../src/logo-ink.png" alt="Svif"></div>
+</div>
+</body></html>

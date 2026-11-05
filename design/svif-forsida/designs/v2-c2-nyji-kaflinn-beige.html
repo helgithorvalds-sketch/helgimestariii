@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif C2 Nýji kaflinn beige</title>
+<link rel="stylesheet" href="base.css"><link rel="stylesheet" href="v2.css">
+<style>
+  .c2, .c2b { color: var(--ink); }
+  /* photo bleeds off the top and right, like the Torrance reference */
+  .c2 .photo { left: 290px; right: 0; top: 0; height: 830px; }
+  .c2 .photo .bg { background-image: url(../src/bg2.jpg); background-size: 100% auto; background-position: 0 -40px; filter: saturate(.9) brightness(1.0); }
+  .c2 .photo .shade { background: linear-gradient(180deg, rgba(50,38,26,.06), rgba(50,38,26,.24)); }
+  .c2 .title { position: absolute; left: 112px; top: 64px; transform-origin: 0 0; transform: translateX(110px) rotate(90deg); white-space: nowrap; }
+  .c2 .title .small { display: block; font-family: "Jost", sans-serif; font-weight: 400; font-size: 17px; letter-spacing: .46em; margin: 0 0 10px 4px; }
+  .c2 .title .big { display: block; font-family: "Jost", sans-serif; font-weight: 300; font-size: 76px; letter-spacing: .13em; line-height: 1; }
+  .c2 .ontop { position: absolute; left: 340px; bottom: 220px; color: #fff; font-family: "Inter", sans-serif; font-weight: 200; font-size: 50px; line-height: 1.12; letter-spacing: .005em; }
+  .c2 .rule2 { position: absolute; left: 342px; bottom: 196px; width: 80px; height: 1px; background: #fff; }
+  .c2 .foot { position: absolute; left: 290px; right: 64px; bottom: 58px; display: flex; justify-content: space-between; align-items: flex-end; font-family: "Jost", sans-serif; font-weight: 400; font-size: 15px; letter-spacing: .3em; text-transform: uppercase; line-height: 1.5; }
+  .c2 .foot img { width: 136px; }
+
+  .c2b .photo { left: 700px; right: 0; top: 0; bottom: 0; }
+  .c2b .photo .bg { background-image: url(../src/bg2.jpg); background-size: auto 100%; background-position: 78% 0; filter: saturate(.9); }
+  .c2b .vt { position: absolute; left: 64px; bottom: 64px; transform-origin: 0 100%; transform: translateY(-0px) rotate(-90deg) translateY(100%); white-space: nowrap; font-family: "Jost", sans-serif; font-size: 15px; letter-spacing: .4em; }
+  .c2b .kick { position: absolute; left: 150px; top: 150px; font-family: "Jost", sans-serif; font-size: 15px; letter-spacing: .46em; }
+  .c2b h2 { position: absolute; left: 150px; top: 184px; font-family: "Jost", sans-serif; font-weight: 300; font-size: 52px; letter-spacing: .1em; line-height: 1.12; }
+  .c2b .dv { left: 150px; width: 480px; top: 340px; }
+  .c2b .dv img { width: 84px; }
+  .c2b .body { position: absolute; left: 150px; top: 400px; width: 480px; font-family: "Inter", sans-serif; font-weight: 300; font-size: 19px; line-height: 1.64; }
+  .c2b .qr { position: absolute; left: 150px; top: 676px; display: flex; gap: 22px; align-items: center; font-family: "Jost", sans-serif; font-size: 14px; letter-spacing: .3em; line-height: 1.6; text-transform: uppercase; }
+  .c2b .qr img { width: 88px; }
+</style></head><body>
+
+<div class="page paper c2" id="front">
+  <div class="photo"><div class="bg layer"></div><div class="layer shade"></div></div>
+  <span class="fr v" style="left:34px;top:34px;height:240px"></span>
+  <span class="fr h" style="left:34px;top:34px;width:200px"></span>
+  <span class="fr v" style="left:34px;top:560px;height:406px"></span>
+  <span class="fr h" style="left:34px;bottom:34px;width:220px"></span>
+  <span class="fr h" style="right:34px;bottom:34px;width:240px"></span>
+
+  <div class="title"><span class="small">HÉR HEFST</span><span class="big">NÝJI KAFLINN</span></div>
+  <div class="ontop">Velkomin í<br>nýja heimilið<br>þitt</div>
+  <div class="rule2"></div>
+  <div class="foot"><span>Velkomstbæklingur<br>2026</span><img src="../src/logo-ink.png" alt="Svif"></div>
+</div>
+
+<div class="page paper c2b" id="back">
+  <div class="photo"><div class="bg layer"></div></div>
+  <span class="fr h" style="left:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="left:34px;top:34px;height:250px"></span>
+  <span class="fr h" style="left:34px;bottom:34px;width:300px"></span>
+  <span class="fr v" style="left:34px;bottom:34px;height:120px"></span>
+  <div class="vt">SVIF.IS · HÖFUÐBORGARSVÆÐIÐ</div>
+
+  <div class="kick">NÝJI KAFLINN</div>
+  <h2>TIL<br>HAMINGJU</h2>
+  <div class="dv"><span class="ln"></span><img src="../src/logo-ink.png" alt="Svif"><span class="ar"></span></div>
+  <p class="body">Þú varst að eignast nýtt heimili. Í þessum bæklingi finnur þú traust fyrirtæki sem hjálpa þér að koma þér fyrir, með sérkjörum fyrir nýja húseigendur. Geymdu hann á góðum stað. Hann kemur sér vel þegar þörfin kemur upp.</p>
+  <div class="qr"><img src="../src/qr-ink.svg" alt=""><span>Skannaðu og<br>sjáðu meira<br>á svif.is</span></div>
+</div>
+</body></html>

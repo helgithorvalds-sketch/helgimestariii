@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif B2 Heima er best</title>
+<link rel="stylesheet" href="base.css"><link rel="stylesheet" href="v2.css">
+<style>
+  /* closer crop on the sunbeam and the chair, a touch brighter */
+  .b2 .bg { background-image: url(../src/bg1.jpg); background-size: 118% auto; background-position: 62% 46%; filter: brightness(1.12) contrast(.94) saturate(1.02); }
+  .b2 .shade { background: linear-gradient(180deg, rgba(25,22,20,.2), rgba(25,22,20,0) 30%, rgba(25,22,20,0) 66%, rgba(25,22,20,.34)); }
+  .b2 .kick { position: absolute; left: 64px; top: 58px; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 16px; letter-spacing: .2em; }
+  .b2 .code { position: absolute; right: 64px; top: 58px; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 16px; letter-spacing: .2em; }
+  .b2 h1 { position: absolute; left: 0; right: 0; top: 112px; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 232px; line-height: 1; letter-spacing: -.01em; text-shadow: 0 2px 40px rgba(40,30,20,.14); }
+  .b2 h1 i { font-style: italic; }
+  .b2 .dv { left: 150px; right: 150px; top: 362px; }
+  .b2 .dv img { width: 104px; }
+  .b2 .er { position: absolute; left: 0; right: 0; top: 438px; text-align: center; font-family: "Barlow", sans-serif; font-size: 26px; letter-spacing: .3em; }
+  .b2 .foot { position: absolute; left: 64px; right: 64px; bottom: 62px; display: flex; justify-content: space-between; align-items: flex-end; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.45; }
+
+  .b2b .bg { background-image: url(../src/bg1.jpg); background-size: 150% auto; background-position: 18% 72%; filter: brightness(.86) blur(2px); }
+  .b2b .shade { background: rgba(25,22,20,.28); }
+  .b2b h2 { position: absolute; left: 0; right: 0; top: 200px; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 96px; line-height: .98; }
+  .b2b h2 i { font-style: italic; }
+  .b2b .dv { left: 250px; right: 250px; top: 430px; }
+  .b2b .dv img { width: 84px; }
+  .b2b .body { position: absolute; left: 50%; transform: translateX(-50%); top: 490px; width: 580px; text-align: center; font-family: "Barlow", sans-serif; font-size: 20px; line-height: 1.6; }
+  .b2b .qr { position: absolute; left: 50%; transform: translateX(-50%); top: 676px; display: flex; align-items: center; gap: 22px; font-family: "Barlow", sans-serif; font-weight: 500; letter-spacing: .12em; font-size: 16px; text-transform: uppercase; line-height: 1.45; }
+  .b2b .qr img { width: 84px; }
+</style></head><body>
+
+<div class="page b2 grain" id="front">
+  <div class="bg"></div><div class="layer shade"></div>
+  <!-- broken frame, mirrored -->
+  <span class="fr h" style="right:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="right:34px;top:34px;height:300px"></span>
+  <span class="fr v" style="left:34px;top:110px;height:600px"></span>
+  <span class="fr h" style="left:34px;bottom:34px;width:300px"></span>
+  <span class="fr v" style="left:34px;bottom:34px;height:120px"></span>
+  <span class="fr v" style="right:34px;bottom:34px;height:180px"></span>
+
+  <div class="kick">NÝTT HEIMILI</div>
+  <div class="code">2026</div>
+  <h1>heima</h1>
+  <div class="dv"><span class="ln"></span><img src="../src/logo-white.png" alt="Svif"><span class="ar"></span></div>
+  <div class="er">ER BEST.</div>
+
+  <div class="foot"><span>Velkomstbæklingur<br>fyrir nýja húseigendur</span><span style="text-align:right">Nýr kafli<br>svif.is</span></div>
+</div>
+
+<div class="page b2 b2b grain" id="back">
+  <div class="bg"></div><div class="layer shade"></div>
+  <span class="fr h" style="right:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="right:34px;top:34px;height:300px"></span>
+  <span class="fr v" style="left:34px;top:110px;height:600px"></span>
+  <span class="fr h" style="left:34px;bottom:34px;width:300px"></span>
+  <span class="fr v" style="left:34px;bottom:34px;height:120px"></span>
+  <span class="fr v" style="right:34px;bottom:34px;height:180px"></span>
+  <div class="kick">SVIF.IS</div>
+  <div class="code">TIL HAMINGJU</div>
+
+  <h2>Geymdu hann.<br><i>Hann borgar sig.</i></h2>
+  <div class="dv"><span class="ln"></span><img src="../src/logo-white.png" alt="Svif"><span class="ar"></span></div>
+  <p class="body">Þegar þig vantar pípara, málara, smið eða aðra þjónustu fyrir nýja heimilið eru tilboðin hér, frá traustum fyrirtækjum sem við höfum valið fyrir þig.</p>
+  <div class="qr"><img src="../src/qr-white.svg" alt=""><div>Sjáðu meira<br>á svif.is</div></div>
+
+  <div class="foot"><span>Viltu vera með<br>í næsta bæklingi?</span><span style="text-align:right">Hannað, prentað<br>og sent heim af Svif</span></div>
+</div>
+</body></html>

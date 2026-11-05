@@ -39,6 +39,11 @@
   .vig { background: radial-gradient(ellipse 75% 70% at 52% 58%, rgba(0,0,0,0) 55%, rgba(30,20,10,.28) 100%); }
   .grain { opacity: .12; mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.4 -.2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>"); }
+  body.beige #scene { background: #d9d0c2; }
+  body.beige .plane { background: #e4dccf; filter: none; }
+  body.beige .plane::before { content: ""; position: absolute; inset: 0; opacity: .55; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .9  0 0 0 0 .87  0 0 0 0 .82  0 0 0 .6 0'/></filter><rect width='400' height='400' filter='url(%23p)'/></svg>"); }
+  body.beige .shade { filter: blur(10px); }
 </style></head><body>
 <div id="scene">
   <div class="plane">
@@ -52,7 +57,7 @@
   <div class="light grain"></div>
 </div>
 <script>
-  const d = new URLSearchParams(location.search).get('d');
+  const q = new URLSearchParams(location.search); const d = q.get('d'); if (q.get('s') === 'beige') document.body.classList.add('beige');
   document.getElementById('imgFront').src = `../final/${d}-front.jpg`;
   document.getElementById('imgBack').src = `../final/${d}-back.jpg`;
 </script>

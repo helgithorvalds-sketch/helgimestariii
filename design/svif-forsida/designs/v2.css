@@ -1,0 +1,24 @@
+/* round 2: shared pieces (broken frame lines, divider with logo, beige paper) */
+.fr { position: absolute; background: currentColor; opacity: .75; pointer-events: none; }
+.fr.h { height: 1px; }
+.fr.v { width: 1px; }
+
+.corner { position: absolute; font-size: 15.5px; line-height: 1.12; letter-spacing: .02em; text-transform: uppercase; font-family: "Inter", sans-serif; font-weight: 400; }
+
+/* divider: line, icon/logo, line, arrow */
+.dv { position: absolute; display: flex; align-items: center; gap: 26px; }
+.dv .ln { flex: 1; height: 1px; background: currentColor; opacity: .9; }
+.dv .ar { flex: 1; position: relative; height: 1px; background: currentColor; opacity: .9; }
+.dv .ar::after { content: ""; position: absolute; right: 0; top: -7px; width: 13px; height: 13px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); transform-origin: 100% 0; }
+.dv img { display: block; }
+.dv svg { display: block; overflow: visible; }
+
+.thin { font-family: "Inter", sans-serif; font-weight: 200; }
+.jost { font-family: "Jost", sans-serif; }
+
+/* beige paper */
+.paper { background: #ebe5da; color: #2a2622; }
+.paper::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .92  0 0 0 0 .89  0 0 0 0 .84  0 0 0 .5 0'/></filter><rect width='400' height='400' filter='url(%23p)'/></svg>"); }
+.photo { position: absolute; overflow: hidden; }
+.photo .bg { background-size: cover; }

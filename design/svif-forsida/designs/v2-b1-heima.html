@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Svif B1 Heima er best</title>
+<link rel="stylesheet" href="base.css"><link rel="stylesheet" href="v2.css">
+<style>
+  /* a touch brighter than round 1 */
+  .b1 .bg { background-image: url(../src/bg1.jpg); background-size: 100% auto; background-position: 0 -62px; filter: brightness(1.1) contrast(.95) saturate(1.02); }
+  .b1 .shade { background: radial-gradient(ellipse 62% 34% at 50% 38%, rgba(30,26,22,.16), rgba(30,26,22,0) 70%), linear-gradient(180deg, rgba(25,22,20,.14), rgba(25,22,20,0) 25%, rgba(25,22,20,0) 72%, rgba(25,22,20,.32)); }
+  .code { position: absolute; right: 64px; top: 50px; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 17px; letter-spacing: .08em; }
+  .b1 h1 { position: absolute; left: 0; right: 0; top: 214px; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 250px; line-height: 1; letter-spacing: -.01em; text-shadow: 0 2px 40px rgba(40,30,20,.12); }
+  .b1 .er { position: absolute; left: 0; right: 0; top: 462px; text-align: center; font-family: "Barlow", sans-serif; font-size: 30px; letter-spacing: .14em; }
+  .b1 .dv { left: 210px; right: 150px; top: 522px; }
+  .b1 .tag { position: absolute; left: 0; right: 0; top: 600px; text-align: center; font-family: "Barlow", sans-serif; font-weight: 500; font-size: 18px; line-height: 1.45; letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 1px 12px rgba(40,30,20,.3); }
+  .b1 .logo { position: absolute; left: 50%; transform: translateX(-50%); bottom: 72px; width: 168px; }
+  .vert { position: absolute; right: 52px; bottom: 72px; transform-origin: right bottom; transform: rotate(-90deg) translateX(100%); white-space: nowrap; font-family: "Barlow", sans-serif; font-size: 16.5px; }
+  .vert b { font-weight: 600; } .vert span { opacity: .85; }
+
+  .b1b .bg { background-image: url(../src/bg1.jpg); background-size: 175% auto; background-position: 92% 70%; filter: brightness(.82) blur(1.5px); }
+  .b1b .shade { background: linear-gradient(180deg, rgba(20,18,16,.2), rgba(20,18,16,.3)); }
+  .b1b h2 { position: absolute; left: 0; right: 0; top: 190px; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 92px; line-height: .98; }
+  .b1b h2 i { font-style: italic; }
+  .b1b .dv { left: 300px; right: 240px; top: 418px; }
+  .b1b .body { position: absolute; left: 50%; transform: translateX(-50%); top: 500px; width: 560px; text-align: center; font-family: "Barlow", sans-serif; font-size: 20px; line-height: 1.6; }
+  .b1b .qr { position: absolute; left: 50%; transform: translateX(-50%); top: 690px; display: flex; align-items: center; gap: 22px; font-family: "Barlow", sans-serif; font-weight: 500; letter-spacing: .12em; font-size: 16px; text-transform: uppercase; line-height: 1.45; }
+  .b1b .qr img { width: 84px; }
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="house" viewBox="0 0 64 64"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 30 L32 11 L54 30"/><path d="M44 21.5 V12.5 H49.5 V26"/><path d="M15 26 V54 H49 V26"/><path d="M27 54 V39 a5 5 0 0 1 10 0 V54"/><path d="M6 54 H58"/></g></symbol>
+</defs></svg>
+
+<div class="page b1 grain" id="front">
+  <div class="bg"></div><div class="layer shade"></div>
+  <span class="fr h" style="left:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="left:34px;top:34px;height:250px"></span>
+  <span class="fr v" style="left:34px;top:640px;height:326px"></span>
+  <span class="fr v" style="right:34px;top:150px;height:560px"></span>
+  <span class="fr h" style="right:34px;bottom:34px;width:300px"></span>
+  <div class="code">SVIF-01</div>
+
+  <h1>heima</h1>
+  <div class="er">ER BEST.</div>
+  <div class="dv"><span class="ln"></span><svg width="58" height="58"><use href="#house"/></svg><span class="ar"></span></div>
+  <div class="tag">Nýtt heimili.<br>Nýr kafli.</div>
+
+  <img class="logo" src="../src/logo-white.png" alt="Svif">
+  <div class="vert"><b>velkomstbæklingur</b> <span>fyrir nýja húseigendur.</span></div>
+</div>
+
+<div class="page b1 b1b grain" id="back">
+  <div class="bg"></div><div class="layer shade"></div>
+  <span class="fr h" style="left:34px;top:34px;width:250px"></span>
+  <span class="fr v" style="left:34px;top:34px;height:250px"></span>
+  <span class="fr v" style="left:34px;top:640px;height:326px"></span>
+  <span class="fr v" style="right:34px;top:150px;height:560px"></span>
+  <span class="fr h" style="right:34px;bottom:34px;width:300px"></span>
+  <div class="code">SVIF.IS</div>
+
+  <h2>Til hamingju<br><i>með nýja heimilið.</i></h2>
+  <div class="dv"><span class="ln"></span><svg width="44" height="44"><use href="#house"/></svg><span class="ar"></span></div>
+  <p class="body">Í þessum bæklingi finnur þú traust fyrirtæki sem hjálpa þér að gera nýja heimilið að þínu, með sérkjörum fyrir nýja húseigendur. Geymdu hann vel. Hann borgar sig.</p>
+  <div class="qr"><img src="../src/qr-white.svg" alt=""><div>Allt um Svif<br>á svif.is</div></div>
+
+  <img src="../src/logo-white.png" alt="Svif" style="position:absolute;left:50%;transform:translateX(-50%);bottom:72px;width:168px">
+  <div class="vert"><b>svif.is</b> <span>bæklingurinn svífur heim.</span></div>
+</div>
+</body></html>
