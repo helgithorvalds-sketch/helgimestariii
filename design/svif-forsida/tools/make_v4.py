@@ -29,13 +29,12 @@ TPL = r'''<!doctype html>
   /* back: zoomed in on the sunlit wall, mirrored, so it does not read as the same photo */
   .v3b .bg { __BACKBG__ }
   .v3b .tint { background: linear-gradient(180deg, rgba(20,18,16,.16), rgba(20,18,16,.26)); }
-  .v3b h2 { position: absolute; left: 0; right: 0; top: 268px; text-align: center; font-family: "Inter", sans-serif; font-weight: 200; font-size: 68px; letter-spacing: .04em; line-height: 1; }
-  .v3b .dv { left: 250px; right: 250px; top: 370px; }
+  .v3b h2 { position: absolute; left: 0; right: 0; top: 318px; text-align: center; font-family: "Inter", sans-serif; font-weight: 200; font-size: 68px; letter-spacing: .04em; line-height: 1; }
+  .v3b .dv { left: 250px; right: 250px; top: 420px; }
   .v3b .dv img { width: 78px; }
-  .v3b .body { position: absolute; left: 50%; transform: translateX(-50%); top: 450px; width: 560px; text-align: center; font-size: 19px; line-height: 1.62; font-weight: 300; }
-  .v3b .qrrow { position: absolute; left: 50%; transform: translateX(-50%); top: 600px; display: flex; align-items: center; gap: 26px; }
-  .v3b .qrrow img { width: 92px; height: 92px; }
-  .v3b .qrrow .t { font-size: 15.5px; line-height: 1.35; text-transform: uppercase; letter-spacing: .02em; }
+  .v3b .body { position: absolute; left: 50%; transform: translateX(-50%); top: 500px; width: 560px; text-align: center; font-size: 19px; line-height: 1.62; font-weight: 300; }
+  /* QR alone in the bottom-left corner, level with the bottom corner text */
+  .v3b .qr { position: absolute; left: 64px; bottom: 64px; width: 100px; height: 100px; }  /* 100 px = 20 mm printed */
 </style></head><body>
 
 <div class="page v3 grain" id="front">
@@ -43,7 +42,7 @@ TPL = r'''<!doctype html>
   <div class="safe">
   __FRAME__
   <div class="corner" style="left:64px;top:62px">Velkomin</div>
-  <div class="corner" style="left:0;right:0;top:62px;text-align:center">2026</div>
+  <div class="corner" style="left:0;right:0;top:62px;text-align:center">65°N · 19°W</div>
   <div class="corner" style="right:64px;top:62px;text-align:right">Fyrir heimilið</div>
 
   <h1>NÝJI KAFLINN</h1>
@@ -60,11 +59,12 @@ TPL = r'''<!doctype html>
   <div class="safe">
   __FRAME__
   <div class="corner" style="left:64px;top:62px">SVIF.IS</div>
+  <div class="corner" style="right:64px;top:62px;text-align:right">2026</div>
 
   <h2>TIL HAMINGJU</h2>
   <div class="dv"><span class="ln"></span><img src="../src/roof-white.png" alt=""><span class="ar"></span></div>
   <p class="body">Í þessum bæklingi finnur þú traust fyrirtæki sem hjálpa þér að koma þér fyrir á nýju heimili, með sérkjörum fyrir nýja húseigendur.</p>
-  <div class="qrrow"><img src="../src/qr-white.svg" alt=""><div class="t">Skannaðu<br>og sjáðu meira<br>á svif.is</div></div>
+  <img class="qr" src="../src/qr-white.svg" alt="QR kóði á svif.is">
 
   <img src="../src/logo-white.png" alt="Svif" style="position:absolute;left:50%;transform:translateX(-50%);bottom:64px;width:150px">
   <div class="corner" style="right:64px;bottom:64px;text-align:right">Hannað, prentað<br>og sent af Svif</div>

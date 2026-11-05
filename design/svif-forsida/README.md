@@ -36,10 +36,10 @@ node tools/mockup.cjs 1.5 v2-c1-heima-beige:beige   # ":beige" = beige paper sur
 
 ## Final – November–December 2026 print run
 
-Front: A3 (Nýji kaflinn, heima photo, white broken frame). Back: the sunbeam on the wall.
+Front: A3 (Nýji kaflinn, heima photo, white broken frame). Back: the sunbeam on the wall, with SVIF.IS top left, 2026 top right, the QR code alone in the bottom-left corner, the logo bottom centre and "Hannað, prentað og sent af Svif" bottom right.
 
 Corner text on the front:
-- Top: Velkomin · 2026 · Fyrir heimilið
+- Top: Velkomin · 65°N · 19°W · Fyrir heimilið
 - Bottom: Allt fyrir nýja húseigendur · SVIF.IS (same size as in A3) · Tilboð og afslættir
 
 | File | Use |
