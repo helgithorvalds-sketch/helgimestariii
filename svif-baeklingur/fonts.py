@@ -8,6 +8,6 @@ def fetch_css(url):
         if not os.path.exists(fn): subprocess.run(['curl','-sS','-o',fn,u],check=True)
         return f'url(fonts/{os.path.basename(fn)})'
     return re.sub(r'url\((https://fonts\.gstatic\.com/[^)]+)\)',repl,css)
-url='https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Jost:wght@400;500;600&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&family=Archivo+Black&family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap'
+url='https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Jost:wght@400;500;600&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&family=Inter:wght@200;300;400;500&family=Archivo+Black&family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap'
 open(os.path.join(D,'fonts.css'),'w').write(fetch_css(url))
 print('ok')

@@ -6,14 +6,14 @@ ad = lambda i: os.path.join(D, 'out', 'ads', f'p{i:02d}.jpg')
 pdf = lambda n: os.path.join(D, 'out', n + '.pdf')
 ny = lambda n: os.path.join(D, 'out', 'ads', n + '.jpg')
 PAGES = [  # (heiti, uppruni) – 32 síður, heftaður
-    ('Forsíða', img(0)), ('Yfirlit', os.path.join(D,'out','yfirlit.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir.jpg')),
+    ('Forsíða', ny('kapa_fram')), ('Yfirlit', os.path.join(D,'out','yfirlit.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir.jpg')),
     ('Straumlind', img(4)), ('Ísorka', img(13)), ('Parki', img(5)), ('Íspan', img(6)), ('Sticker', img(7)), ('KORA', ad(8)),
     ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('TME Gluggar', ny('tme')),
     ('Gardínur', ad(20)), ('Fagafl', ny('fagafl')), ('Litamálun', img(18)), ('Múrbúðin', img(19)), ('HK Lagnir', ad(15)), ('MS Lagnir', ny('mslagnir')),
     ('Lásar.is', img(16)), ('VÍS', ad(25)), ('RÓM Verk', img(23)),
-    ('Laust auglýsingapláss 1', pdf('laust1')), ('Laust auglýsingapláss 2', pdf('laust2')), ('Laust auglýsingapláss 3', pdf('laust3')),
-    ('Af hverju SVIF', img(3)), ('Afsláttarmiðar', os.path.join(D,'out','midar2_framhlid.jpg')), ('Auð síða (bakhlið miðanna)', pdf('aud')),
-    ('Kærar þakkir', pdf('thakkir')), ('Bakkápa', img(27)),
+    ('Laust auglýsingapláss 1', os.path.join(D,'out','d_laust1.jpg')), ('Laust auglýsingapláss 2', os.path.join(D,'out','d_laust2.jpg')), ('Laust auglýsingapláss 3', os.path.join(D,'out','d_laust3.jpg')),
+    ('Af hverju SVIF', img(3)), ('Afsláttarmiðar', os.path.join(D,'out','midar2_framhlid.jpg')), ('Auð síða (bakhlið miðanna)', os.path.join(D,'out','d_aud.jpg')),
+    ('Kærar þakkir', os.path.join(D,'out','d_thakkir.jpg')), ('Bakkápa', ny('kapa_bak')),
 ]
 assert len(PAGES) % 4 == 0 and len(PAGES) == 32
 SZ = 200 * 72 / 25.4; b = 3 * 72 / 25.4

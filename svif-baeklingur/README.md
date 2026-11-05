@@ -2,12 +2,17 @@
 
 32 síður, heftaður, 194 x 194 mm, 3 mm blæði (200 x 200 mm skjöl með T## Uppsetning
 
-1 forsíða · 2 yfirlit · 3 afsláttarmiðar (kynning, gamli hringurinn) · 4–24 auglýsingar (bestu afslættirnir
+1 forsíða („Nýji kaflinn“) · 2 yfirlit · 3 afsláttarmiðar (kynning, gamli hringurinn) · 4–24 auglýsingar (bestu afslættirnir
 fremst; Gluggavinir og TME Gluggar saman á 14–15, Gardínur og Fagafl 16–17, HK Lagnir og MS Lagnir 20–21,
 Lásar og VÍS 22–23) · 25–27 laust auglýsingapláss · 28 Af hverju SVIF · 29 afsláttarmiðar ·
-30 auð síða (bakhlið miðanna) · 31 Kærar þakkir með öllum 20 fyrirtækjunum · 32 bakkápa.
+30 auð síða (bakhlið miðanna) · 31 Kærar þakkir með öllum 20 fyrirtækjunum · 32 bakkápa („Til hamingju“).
 Steindi, Heit gólf og MJ Lausnir eru farin út. TME, Fagafl (útgáfa 2) og MS Lagnir koma af greininni
 claude/adoring-heisenberg-mywx1q (auglysingar/), gerðar úr PDF í 300 dpi með speglaðri 3 mm blæðingu (`sidur/nyjar/`).
+
+## Útlit kápunnar
+
+Forsíða og bakkápa eru nýju myndirnar (dökkur hlýr grár grunnur, mjóar hvítar hornlínur, Inter). `dokk.py` gerir
+Kærar þakkir, auðu síðuna og lausu plássin í sama útliti (`sidur/d_*.jpg`, 300 dpi).
 
 ## Á vefnum
 
