@@ -17,13 +17,17 @@ def tile(key, x, y, el, er, eb):
 
 html = m2.midar()
 a = html.index('<div class="tile"'); b = html.index('<svg class="perf"')
-tiles = (tile('parki', m2.X0, m2.Y0, m2.X0, 0, 0) + tile('ispan', m2.X1, m2.Y0, 0, m2.B, 0) +
-         tile('ormsson', m2.X0, m2.Y1, m2.X0, 0, m2.B) + tile('maus', m2.X1, m2.Y1, 0, m2.B, m2.B))
+tiles = (tile('ispan', m2.X0, m2.Y0, m2.X0, 0, 0) + tile('parki', m2.X1, m2.Y0, 0, m2.B, 0) +
+         tile('maus', m2.X0, m2.Y1, m2.X0, 0, m2.B) + tile('ormsson', m2.X1, m2.Y1, 0, m2.B, m2.B))  # speglað: Parki/Ormsson lenda vinstra megin
 css = m.CSS
 for k, (bg, ink, acc, dark) in THEME.items():
     css += (f'#t_{k}{{color:{ink}}}#t_{k} .ey,#t_{k} .sm{{color:{acc}!important}}#t_{k} .lead{{color:{ink}!important;opacity:.9}}'
             f'#t_{k} .foot{{color:{ink}!important;opacity:.75}}#t_{k} .foot b{{color:{ink}!important}}#t_{k} .tag{{border-color:{ink}!important;color:{ink}}}')
 html = html[:a] + tiles + html[b:]
 html = html.replace('</style>', css + '</style>', 1)
+i = html.index('<body>') + len('<body>')
+j = html.index('</div>', html.index('class="grunnur"')) + len('</div>')
+html = html[:j] + '<div class="flip" style="position:absolute;inset:0;transform:scaleX(-1)">' + html[j:].replace('</body>', '</div></body>', 1)
+html = html.replace('</style>', '.flip .mi{transform:scaleX(-1)}.flip>div:not(.tile){transform:scaleX(-1)}</style>', 1)
 open(os.path.join(D, 'midar_thema_framhlid.html'), 'w', encoding='utf-8').write(html)
 print('ok')

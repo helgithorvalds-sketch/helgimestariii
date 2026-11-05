@@ -71,12 +71,12 @@ KAFLAR = [
     ('Gólf & flísar', [('Parki', '4')]),
     ('Gluggar & gler', [('Gardínur', '5'), ('Íspan', '10'), ('Gluggavinir', '14'), ('TME Gluggar', '15')]),
     ('Eldhús & tæki', [('HTH', '6'), ('Ormsson', '7')]),
-    ('Rafmagn & rafbíll', [('Straumlind', '8'), ('Ísorka', '9'), ('RÓM Verk', '27')]),
-    ('Þjónusta & filmur', [('sticker.is', '11'), ('KORA', '16')]),
+    ('Rafmagn & rafbíll', [('Straumlind', '8'), ('Ísorka', '9'), ('RÓM Verk', '16')]),
+    ('Þjónusta & filmur', [('sticker.is', '11'), ('KORA', '17')]),
     ('Eldvarnir', [('Maus', '12–13')]),
-    ('Múr, málun & smíði', [('Litamálun', '17'), ('Múrbúðin', '18'), ('Fagafl', '19')]),
-    ('Bað & lagnir', [('HK Lagnir', '20'), ('MS Lagnir', '21')]),
-    ('Lásar & tryggingar', [('Lásar.is', '22'), ('VÍS', '23')]),
+    ('Múr, málun & smíði', [('Litamálun', '18'), ('Múrbúðin', '19'), ('Fagafl', '20')]),
+    ('Bað & lagnir', [('HK Lagnir', '21'), ('MS Lagnir', '22')]),
+    ('Lásar & tryggingar', [('Lásar.is', '23'), ('VÍS', '24')]),
 ]
 def yfirlit():
     cols = ''
