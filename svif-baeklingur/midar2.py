@@ -139,25 +139,29 @@ def frame(path):
 
 def page(body, bg=None):
     fonts = open(os.path.join(D, 'fonts.css')).read()
-    return (f'<!doctype html><html lang="is"><head><meta charset="utf-8"><style>{fonts}{CSS}</style></head>'
-            f'<body><div style="position:absolute;inset:0;{bg or LINEN}"></div>{body}</body></html>')
+    from dokk import bg as dokk_bg
+    extra = ('.grunnur{' + dokk_bg(False) + '}') if bg and bg.startswith('background-color:#4A4437') else ''
+    return (f'<!doctype html><html lang="is"><head><meta charset="utf-8"><style>{fonts}{CSS}{extra}</style></head>'
+            f'<body><div class="grunnur" style="position:absolute;inset:0;{bg or LINEN}"></div>{body}</body></html>')
 
 
 def midar():
     # haus: í tveimur dálkum svo rifgötunin (x = 105 mm) fari ekki í gegnum textann
-    head = (f'<div style="position:absolute;left:{X0 + 6}mm;width:{X1 - X0 - 12}mm;top:{B + 30}mm;color:{INK}">'
-            f'<div style="font-family:Jost;font-size:6.6pt;letter-spacing:.32em;text-transform:uppercase;color:{COCOA}">SVIF · Sértilboð</div>'
-            f'<div style="font-family:\'Bodoni Moda\',serif;font-weight:500;font-size:25pt;line-height:1.02;letter-spacing:-.01em;margin-top:2mm">Afsláttarmiðar</div>'
-            f'<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-weight:600;font-size:17pt;line-height:1.1;color:{GOLD};margin-top:1mm">fyrir nýja húseigendur</div></div>'
-            f'<div style="position:absolute;left:{X1 + 6}mm;width:{197 - 7 - X1 - 6}mm;top:{B + 33.5}mm;font-family:Jost;font-size:8.2pt;line-height:1.5;color:{COCOA}">'
+    head = (f'<div style="position:absolute;left:{X0 + 6}mm;width:{X1 - X0 - 12}mm;top:{B + 30}mm;color:#fff">'
+            f'<div style="font-family:Inter;font-weight:400;font-size:6.6pt;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.8)">SVIF · Sértilboð</div>'
+            f'<div style="font-family:Inter;font-weight:200;font-size:24pt;line-height:1.05;letter-spacing:.05em;text-transform:uppercase;margin-top:2.4mm">Afsláttarmiðar</div>'
+            f'<div style="font-family:Inter;font-weight:300;font-size:11pt;line-height:1.3;color:#D8CCB6;margin-top:1.6mm">fyrir nýja húseigendur</div></div>'
+            f'<div style="position:absolute;left:{X1 + 6}mm;width:{197 - 7 - X1 - 6}mm;top:{B + 33.5}mm;font-family:Inter;font-weight:300;font-size:8pt;line-height:1.55;color:rgba(255,255,255,.85)">'
             'Rífðu miðann úr eftir rifgötuninni og framvísaðu honum, eða nefndu SVIF þegar þú hefur samband. '
             'Hver miði gildir einu sinni. Tilboðin gilda til 31. des. 2026.</div>')
     tiles = (tile(X0, Y0, X0, 0, 0, '#ffffff', parki, 'parki') +
              tile(X1, Y0, 0, B, 0, '#ffffff', ispan, 'ispan') +
              tile(X0, Y1, X0, 0, B, '#ffffff', ormsson, 'ormsson') +
              tile(X1, Y1, 0, B, B, '#16161a', maus, 'maus'))
-    top_frame = frame('M9.35,80 V9.35 H190.65 V80')
-    return page(top_frame + head + tiles + perf(), PAPER)
+    from dokk import bg as dokk_bg
+    top_frame = ('<svg viewBox="0 0 200 200" style="position:absolute;left:0;top:0;width:200mm;height:200mm" aria-hidden="true">'
+                 '<g fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".22"><path d="M9.6,58 V9.6 H58"/><path d="M190.3,32.1 V86"/></g></svg>')
+    return page(top_frame + head + tiles + perf(), 'background-color:#4A4437')
 
 
 def aud():

@@ -12,7 +12,9 @@ claude/adoring-heisenberg-mywx1q (auglysingar/), gerðar úr PDF í 300 dpi með
 ## Útlit kápunnar
 
 Forsíða og bakkápa eru nýju myndirnar (dökkur hlýr grár grunnur, mjóar hvítar hornlínur, Inter). `dokk.py` gerir
-Kærar þakkir, auðu síðuna og lausu plássin í sama útliti (`sidur/d_*.jpg`, 300 dpi).
+Kærar þakkir, auðu síðuna og lausu plássin í sama útliti (`sidur/d_*.jpg`, 300 dpi). `darkdc.py` + `build_dark_pages.py`
+setja Yfirlit, Afsláttarmiða-kynninguna og Af hverju SVIF í sama útlit með ljósum útgáfum af húsmyndunum (`ljos/`).
+Haus miðasíðunnar (bls. 29) er líka dökkur. 3D-mockup: `SVIF_baeklingur_3D_mockup.jpg` (`mockup/mockup.html`).
 
 ## Á vefnum
 
