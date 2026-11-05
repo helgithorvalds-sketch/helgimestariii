@@ -109,7 +109,7 @@ body.flatt .golfskuggi{display:none}
 <header>
   <div>
     <div class="merki">SVIF</div>
-    <div class="undir">Prufuflettu · 28 síður · 194 × 194 mm</div>
+    <div class="undir">Prufuflettu · 32 síður · 194 × 194 mm</div>
   </div>
   <div class="pilla" role="group" aria-label="Sýn">
     <button type="button" id="sjon2d" aria-pressed="false">2D</button>
@@ -133,24 +133,24 @@ body.flatt .golfskuggi{display:none}
 <div class="visbending" id="visbending">Smelltu á bókina, strjúktu eða notaðu örvatakkana til að fletta</div>
 <div class="stjorn">
   <button class="hnappur hringur" id="afturHn" type="button" aria-label="Fyrri opna">‹</button>
-  <div class="teljari" id="teljari">Forsíða<small>bls. 1 af 28</small></div>
+  <div class="teljari" id="teljari">Forsíða<small>bls. 1 af 32</small></div>
   <button class="hnappur hringur" id="framHn" type="button" aria-label="Næsta opna">›</button>
   <button class="hnappur" id="byrjaHn" type="button">Byrja aftur</button>
 </div>
 
 <section class="skra" aria-label="Efnisyfirlit">
-  <h2>Efnisyfirlit <span>17 fyrirtæki · 18 auglýsingasíður · 2 laus pláss</span></h2>
+  <h2>Efnisyfirlit <span>20 fyrirtæki · 21 auglýsingasíða · 3 laus pláss</span></h2>
   <ol id="skra"></ol>
 </section>
 
 <script>
 (function(){
-  // 28 síður = 14 blöð. 0 forsíða, 1 yfirlit, 2 afsláttarmiðar, 3–20 auglýsingar, 21–22 laust pláss, 23 Af hverju SVIF,
-  // 24 afsláttarmiðar með rifgötun (ekki á kápublaðinu), 25 auð bakhlið miðanna, 26 Kærar þakkir, 27 bakkápa.
+  // 32 síður = 16 blöð. 0 forsíða, 1 yfirlit, 2 afsláttarmiðar, 3–23 auglýsingar, 24–26 laust pláss, 27 Af hverju SVIF,
+  // 28 afsláttarmiðar með rifgötun (ekki á kápublaðinu), 29 auð bakhlið miðanna, 30 Kærar þakkir, 31 bakkápa.
   // Hver opna (oddatala + slétt tala) heldur saman skyldum fyrirtækjum; tveggja síðna auglýsingar (Maus, Steindi) byrja á oddatölusíðu.
-  const heiti=['Forsíða', 'Yfirlit', 'Afsláttarmiðar', 'Straumlind', 'Ísorka', 'Parki', 'Íspan', 'Sticker', 'KORA', 'HTH', 'Ormsson', 'Maus', 'Maus', 'Gluggavinir', 'Gardínur', 'Litamálun', 'Múrbúðin', 'HK Lagnir', 'RÓM Verk', 'Lásar.is', 'VÍS', 'Laust pláss', 'Laust pláss', 'Af hverju SVIF', 'Afsláttarmiðar', 'Auð síða', 'Kærar þakkir', 'Bakkápa'];
+  const heiti=['Forsíða', 'Yfirlit', 'Afsláttarmiðar', 'Straumlind', 'Ísorka', 'Parki', 'Íspan', 'Sticker', 'KORA', 'HTH', 'Ormsson', 'Maus', 'Maus', 'Gluggavinir', 'TME Gluggar', 'Gardínur', 'Fagafl', 'Litamálun', 'Múrbúðin', 'HK Lagnir', 'MS Lagnir', 'Lásar.is', 'VÍS', 'RÓM Verk', 'Laust pláss', 'Laust pláss', 'Laust pláss', 'Af hverju SVIF', 'Afsláttarmiðar', 'Auð síða', 'Kærar þakkir', 'Bakkápa'];
   // Þema hverrar opnu, eftir flettingu (opna k sýnir síður 2k-1 og 2k).
-  const thema={1:'Yfirlit & afsláttarmiðar',2:'Rafmagn & orka',3:'Gólf & gler',4:'Filmur & þjónusta',5:'Eldhús & tæki',6:'Eldvarnir',7:'Gluggar & gardínur',8:'Múr & málun',9:'Lagnir & rafvirki',10:'Lásar & tryggingar',11:'Laust auglýsingapláss',12:'Um SVIF & afsláttarmiðar',13:'Kærar þakkir'};
+  const thema={1:'Yfirlit & afsláttarmiðar',2:'Rafmagn & orka',3:'Gólf & gler',4:'Filmur & þjónusta',5:'Eldhús & tæki',6:'Eldvarnir',7:'Gluggar & ísetning',8:'Gardínur & viðhald',9:'Múr & málun',10:'Lagnir',11:'Lásar & tryggingar',12:'Rafvirki',13:'Laust auglýsingapláss',14:'Um SVIF & afsláttarmiðar',15:'Kærar þakkir'};
   const S=heiti.length, N=S/2;
   const bok=document.getElementById('bok');
   const mynd=i=>`sidur/sida_${String(i).padStart(2,'0')}.jpg`;
@@ -172,7 +172,7 @@ body.flatt .golfskuggi{display:none}
 
   // Efnisyfirlit: hvert fyrirtæki einu sinni, með fyrstu síðu þess (1-tölusett eins og í prentun)
   const skra=document.getElementById('skra'); const skraHn=[];
-  const augl=[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+  const augl=[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
   for(const s of augl){
     if(heiti[s]===heiti[s-1]) continue;
     const li=document.createElement('li'); const b=document.createElement('button'); b.type='button';
