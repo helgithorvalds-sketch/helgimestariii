@@ -96,7 +96,7 @@ export const STAGE_LABELS: Record<CompanyStage, string> = {
   paid: "Greitt",
   lead: "Til að hringja",
   svif: "Svif",
-  svif_fyrirtæki: "Svif Akureyri",
+  svif_fyrirtæki: "Svif fyrirtæki",
 };
 
 

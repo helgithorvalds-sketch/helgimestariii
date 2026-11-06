@@ -224,6 +224,7 @@ export function enrichWithSvar(c: Company, s: SvifSvar): Company {
     // Undirgeiri sem er ekki á flokkakortinu (t.d. „Tryggingar“) víkur fyrir rétta plássinu.
     category: flokkurFor(c.category) ? c.category : seed.category,
     pitch: c.pitch || seed.pitch,
+    estimatedPrice: c.estimatedPrice || seed.estimatedPrice,
     lastCallOutcome: c.lastCallOutcome || seed.lastCallOutcome,
     rejected: c.rejected || seed.rejected,
     contacts: [...(c.contacts || []), ...newContacts],
@@ -258,7 +259,8 @@ export function svarToCompany(s: SvifSvar): Omit<Company, "id" | "createdAt"> {
     rejectedAt: s.status === "nei" ? new Date().toISOString() : undefined,
     lastCallOutcome: OUTCOME_BY_STATUS[s.status],
     registeredInSvif: false,
-    estimatedPrice: 0,
+    // Mánaðarverð plássins, svo áætlun símtala sýni rétta upphæð.
+    estimatedPrice: VERD[flokkurFor(s.undirgeiri)?.tier || "einn"].ein,
     contacts,
     checklist: [],
     notes: notesLines.join("\n"),

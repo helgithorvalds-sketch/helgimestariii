@@ -474,9 +474,9 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
       </div>
     )}
 
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Schedule - 2/3 */}
-      <div className={cn("col-span-2 rounded-xl border bg-card p-4", unscheduledFirst ? "order-2" : "order-1")}>
+      <div className={cn("lg:col-span-2 min-w-0 rounded-xl border bg-card p-4", unscheduledFirst ? "order-2" : "order-1")}>
         <div className="flex items-center gap-2 mb-4">
           <Phone className="w-5 h-5 text-primary" />
           <h2 className="text-lg font-bold text-foreground">Áætlun símtala</h2>
@@ -777,7 +777,7 @@ export function CallSchedule({ companies, onCompanyClick, onCompanyUpdate, refre
       </div>
 
       {/* Unscheduled - 1/3 */}
-      <div className={cn("col-span-1 rounded-xl border bg-card p-4", unscheduledFirst ? "order-1" : "order-2")}>
+      <div className={cn("lg:col-span-1 min-w-0 rounded-xl border bg-card p-4", unscheduledFirst ? "order-1" : "order-2")}>
         <div className="flex items-center gap-2 mb-4">
           <AlertCircle className="w-5 h-5 text-amber-500" />
           <h2 className="text-lg font-bold text-foreground">{unscheduledTitle}</h2>
