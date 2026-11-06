@@ -109,6 +109,7 @@ export default function SvifListi() {
   const [callTaskDate, setCallTaskDate] = useState("");
   const [callTaskTime, setCallTaskTime] = useState("");
   const [savingCall, setSavingCall] = useState(false);
+  const [info, setInfo] = useState<{ c: Company; flokkur: string; keppinautar: Company[] } | null>(null);
 
   const toggleSet = (set: Set<string>, id: string, setter: (s: Set<string>) => void) => {
     const next = new Set(set);
@@ -909,7 +910,7 @@ export default function SvifListi() {
                                 return (
                                   <button
                                     key={c.id}
-                                    onClick={() => { setSearch(c.name); setSia("allir"); setShowSvor(true); }}
+                                    onClick={() => setInfo({ c, flokkur: f.undirgeiri, keppinautar: f.companies.filter((x) => x.id !== c.id) })}
                                     title={[STADA_PILL[s].label, sv?.thjonusta].filter(Boolean).join(" · ")}
                                     className={cn(
                                       "text-xs rounded-md border px-2 py-1 text-left hover:bg-muted max-w-full",
@@ -1096,6 +1097,102 @@ export default function SvifListi() {
         existingNames={companies.map((c) => c.name)}
         existingCompanyIds={companies.map((c) => c.companyId).filter(Boolean)}
       />
+
+      <Dialog open={!!info} onOpenChange={(o) => { if (!o) setInfo(null); }}>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+          {info && (() => {
+            const { c } = info;
+            const sv = svarFor(c);
+            const s = stadaOf(c);
+            const contacts = (c.contacts || []).filter((p) => p.name || p.phone || p.email);
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-black">{c.name}</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 text-sm">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full", STADA_PILL[s].cls)}>{STADA_PILL[s].label}</span>
+                    <span className="text-xs font-semibold">{info.flokkur}</span>
+                  </div>
+                  {(sv?.thjonusta || c.pitch) && <p className="text-muted-foreground">{sv?.thjonusta || c.pitch}</p>}
+
+                  <div className="rounded-lg border p-3 space-y-1">
+                    <p className="text-xs font-bold uppercase text-muted-foreground">Eigandi / tengiliður</p>
+                    <p className="font-bold">{sv?.person || c.owner || "—"}{sv?.title && <span className="font-normal text-muted-foreground"> · {sv.title}</span>}</p>
+                    {(sv?.phone || c.phone) && (
+                      <a href={`tel:${tel(sv?.phone || c.phone || "")}`} className="flex items-center gap-1.5 text-primary font-semibold">
+                        <Phone className="w-3.5 h-3.5" />{sv?.phone || c.phone}{sv?.phoneNote && <span className="text-xs text-muted-foreground font-normal">({sv.phoneNote})</span>}
+                      </a>
+                    )}
+                    {sv?.alt && (
+                      <a href={`tel:${tel(sv.alt.phone)}`} className="flex items-center gap-1.5 text-primary">
+                        <Phone className="w-3.5 h-3.5" />{sv.alt.phone} <span className="text-xs text-muted-foreground">{sv.alt.name}</span>
+                      </a>
+                    )}
+                    {(sv?.email || c.email) && (
+                      <a href={`mailto:${sv?.email || c.email}`} className="flex items-center gap-1.5 text-primary">
+                        <Mail className="w-3.5 h-3.5" />{sv?.email || c.email}
+                      </a>
+                    )}
+                    {(c.websiteUrl || sv?.web) && (
+                      <a href={(c.websiteUrl || sv!.web).startsWith("http") ? (c.websiteUrl || sv!.web) : `https://${c.websiteUrl || sv!.web}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary">
+                        <Globe className="w-3.5 h-3.5" />{host(c.websiteUrl || sv!.web)}
+                      </a>
+                    )}
+                    {c.address && <p className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{c.address}</p>}
+                    {c.companyId && <p className="text-xs text-muted-foreground">kt. {c.companyId}</p>}
+                  </div>
+
+                  {contacts.length > 1 && (
+                    <div className="rounded-lg border p-3 space-y-1">
+                      <p className="text-xs font-bold uppercase text-muted-foreground">Aðrir tengiliðir</p>
+                      {contacts.map((p) => (
+                        <p key={p.id}>{p.name} {p.phone && <a className="text-primary" href={`tel:${tel(p.phone)}`}>{p.phone}</a>} {p.email && <a className="text-primary" href={`mailto:${p.email}`}>{p.email}</a>}</p>
+                      ))}
+                    </div>
+                  )}
+
+                  {sv?.quote && (
+                    <div className="rounded-lg border p-3 space-y-1 bg-muted/40">
+                      <p className="text-xs font-bold uppercase text-muted-foreground">
+                        Svar ({sv.source}){sv.date && ` · ${sv.date}`}
+                      </p>
+                      <p className="text-xs">Frá: <span className="font-semibold">{sv.person}</span>{sv.email && ` <${sv.email}>`}</p>
+                      <p className="italic">„{sv.quote}“</p>
+                    </div>
+                  )}
+                  {sv?.warn && <p className="text-xs font-semibold text-amber-700">⚠ {sv.warn}</p>}
+
+                  <div className="rounded-lg border p-3 space-y-1">
+                    <p className="text-xs font-bold uppercase text-muted-foreground">Keppir við í „{info.flokkur}“</p>
+                    {info.keppinautar.length === 0 ? <p className="text-muted-foreground">Enginn annar — eina fyrirtækið í flokknum.</p> : info.keppinautar.map((k) => {
+                      const ks = svarFor(k);
+                      return (
+                        <button key={k.id} onClick={() => setInfo({ c: k, flokkur: info.flokkur, keppinautar: [c, ...info.keppinautar.filter((x) => x.id !== k.id)] })} className="block text-left w-full hover:bg-muted rounded px-1 py-0.5">
+                          <span className={cn("font-semibold", stadaOf(k) === "nei" && "line-through text-muted-foreground")}>{k.name}</span>
+                          {ks?.thjonusta && <span className="block text-xs text-muted-foreground">{ks.thjonusta}</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {c.notes && (
+                    <div className="rounded-lg border p-3">
+                      <p className="text-xs font-bold uppercase text-muted-foreground mb-1">Glósur</p>
+                      <p className="whitespace-pre-wrap">{c.notes}</p>
+                    </div>
+                  )}
+                </div>
+                <DialogFooter className="gap-2">
+                  <Button variant="outline" onClick={() => { setInfo(null); setSelected(c); }}><Pencil className="w-4 h-4 mr-1" />Breyta</Button>
+                  <Button onClick={() => { setInfo(null); openCall(c); }}><PhoneCall className="w-4 h-4 mr-1" />Nýtt símtal</Button>
+                </DialogFooter>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!callTarget} onOpenChange={(o) => { if (!o) closeCall(); }}>
         <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
