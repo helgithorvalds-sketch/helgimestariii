@@ -6,6 +6,7 @@ Tilbúnar auglýsingar (1080×1080, PNG í 2× upplausn, JPG og PDF).
 - `ms-lagnir/MS_Lagnir_nyir_huseigendur` – Skoðun og verðtilboð á 0 krónur, fyrir nýja húseigendur.
 
 ## Fagafl
+- `fagafl/Fagafl_lokautgafa` – **Samþykkt af Sigurði 6. nóv.** „Reykjavíkurborg og húsfélög treysta okkur.“
 - `fagafl/Fagafl_utgafa_1` – Ljós, 27 ára reynsla + Reykjavíkurborg og Garðabær.
 - `fagafl/Fagafl_utgafa_2` – Dökk, risastórt „27“. Nýsmíði, smíðaþjónusta og múrþjónusta dregin fram (valin útgáfa).
 - `fagafl/Fagafl_utgafa_3` – Blá, „Sveitarfélögin treysta okkur.“
