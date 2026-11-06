@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hringiðan – Innflutningsgjöf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* Hringiðan brand: blue #006CB8 (site primary), logo blue #006EB6,
+     cyan #10B5EC / #00ADE6, navy #003C62, typeface Raleway */
+  :root {
+    --navy: #003C62;
+    --navy-deep: #00233B;
+    --blue: #006CB8;
+    --cyan: #10B5EC;
+    --ice: #EAF5FC;
+    --line: #DCE7F0;
+    --muted: #6E8597;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0b1620; }
+  body {
+    font-family: "Raleway", Arial, sans-serif;
+    font-feature-settings: "lnum" 1, "pnum" 1;
+    -webkit-font-smoothing: antialiased;
+    display: flex; justify-content: center; padding: 40px 0;
+  }
+
+  .flyer {
+    position: relative; overflow: hidden;
+    width: 900px; height: 1200px;
+    padding: 60px 64px 44px;
+    color: #fff;
+    background:
+      radial-gradient(900px 600px at 105% -10%, rgba(16,181,236,.28), transparent 60%),
+      radial-gradient(700px 500px at -20% 110%, rgba(0,108,184,.45), transparent 60%),
+      linear-gradient(165deg, var(--navy) 0%, var(--navy-deep) 100%);
+  }
+  /* The logo's whirlpool, scaled up as a watermark */
+  .flyer::before {
+    content: ""; position: absolute; right: -170px; top: -60px;
+    width: 720px; height: 485px;
+    background: url(assets/hringidan-mark.png) no-repeat center / contain;
+    opacity: .10; transform: rotate(-8deg);
+    pointer-events: none;
+  }
+  .flyer > * { position: relative; }
+
+  /* Header */
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .logo { height: 46px; display: block; }
+  .since {
+    font-size: 12px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase;
+    color: rgba(255,255,255,.7);
+    border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 9px 16px 9px 19px;
+  }
+
+  .eyebrow {
+    margin-top: 54px;
+    font-size: 15px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--cyan);
+  }
+  h1 {
+    margin-top: 14px;
+    font-size: 58px; line-height: 1.04; font-weight: 800; letter-spacing: -.02em;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, #5fd3ff, var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede {
+    margin-top: 16px; font-size: 21px; font-weight: 500; color: rgba(255,255,255,.78);
+  }
+
+  /* Cards row */
+  .cards { display: grid; grid-template-columns: 1.08fr 1fr; gap: 22px; margin-top: 40px; }
+  .card {
+    background: #fff; color: var(--navy); border-radius: 22px;
+    box-shadow: 0 24px 60px -24px rgba(0,0,0,.55);
+  }
+  .card-label {
+    font-size: 12px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--muted);
+  }
+
+  /* Moving checklist */
+  .checklist { padding: 28px 32px 30px; }
+  .checklist ul { list-style: none; margin-top: 20px; display: grid; gap: 16px; }
+  .checklist li { display: flex; align-items: center; gap: 20px; font-size: 34px; font-weight: 500; }
+  .box {
+    flex: none; width: 46px; height: 46px; border-radius: 9px;
+    display: grid; place-items: center; background: var(--navy);
+  }
+  .box svg { width: 24px; height: 24px; }
+  .checklist li.done span { color: #47657c; }
+  .checklist li.todo { margin-top: 6px; font-size: 40px; font-weight: 800; color: var(--navy); }
+  .checklist li.todo .box {
+    width: 54px; height: 54px; background: #fff; border: 4px solid var(--cyan); border-radius: 10px;
+    box-shadow: 0 0 0 6px rgba(16,181,236,.14);
+  }
+  .checklist li.todo small {
+    display: block; font-size: 15px; font-weight: 600; color: var(--blue); letter-spacing: .01em; margin-top: 2px;
+  }
+
+  /* Price comparison */
+  .compare { padding: 26px 26px 24px; display: flex; flex-direction: column; }
+  .compare-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .compare-head .unit { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .compare-sub { font-size: 14px; font-weight: 600; color: var(--navy); margin-top: 6px; }
+  .rows { margin-top: 18px; display: grid; gap: 15px; }
+  .row-top { display: flex; justify-content: space-between; font-size: 16px; font-weight: 600; }
+  .row-top b { font-weight: 700; }
+  .bar { margin-top: 7px; height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: inherit; background: #a9bccb; }
+  .winner {
+    margin-top: auto; padding: 18px 20px 16px; border-radius: 16px; color: #fff;
+    background: linear-gradient(120deg, var(--blue), #0a8fd6 60%, var(--cyan));
+    box-shadow: 0 14px 30px -14px rgba(0,108,184,.8);
+  }
+  .winner-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .winner-top span { font-size: 19px; font-weight: 800; }
+  .winner-top b { font-size: 36px; font-weight: 900; letter-spacing: -.02em; }
+  .winner p { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.88); margin-top: 2px; }
+
+  /* Offer */
+  .offer {
+    margin-top: 46px; display: grid; grid-template-columns: 1fr auto auto; gap: 26px; align-items: center;
+  }
+  .offer h2 { font-size: 30px; line-height: 1.18; font-weight: 500; }
+  .offer h2 strong { font-weight: 800; }
+  .value { margin-top: 8px; font-size: 16px; font-weight: 600; color: rgba(255,255,255,.75); }
+  .value b { color: #fff; font-weight: 800; }
+  .perks { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
+  .perks li { display: flex; gap: 12px; align-items: center; font-size: 17px; font-weight: 600; color: rgba(255,255,255,.92); }
+  .perks svg { flex: none; width: 20px; height: 20px; }
+
+  .badge {
+    position: relative; width: 176px; height: 176px; border-radius: 50%;
+    display: grid; place-items: center; text-align: center;
+    background: radial-gradient(circle at 30% 25%, #4fd0ff, var(--cyan) 40%, var(--blue) 100%);
+    box-shadow: 0 0 0 8px rgba(16,181,236,.16), 0 0 0 16px rgba(16,181,236,.07), 0 20px 40px -10px rgba(0,0,0,.5);
+    transform: rotate(-8deg);
+  }
+  .badge b { display: block; font-size: 62px; font-weight: 900; line-height: .9; letter-spacing: -.03em; }
+  .badge span { display: block; font-size: 16px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .badge em { display: block; font-style: normal; font-size: 22px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; margin-top: 4px; }
+
+  .qr {
+    width: 166px; height: 166px; background: #fff; border-radius: 20px; padding: 14px; position: relative;
+    box-shadow: 0 20px 40px -14px rgba(0,0,0,.55);
+  }
+  .qr > img { width: 100%; height: 100%; display: block; }
+  .qr .qr-mark {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 40px; height: 34px; background: #fff; border-radius: 6px; padding: 4px;
+    display: grid; place-items: center;
+  }
+  .qr .qr-mark img { width: 100%; }
+
+  .cta {
+    margin-top: 30px; font-size: 14px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+    color: rgba(255,255,255,.7); line-height: 1.75;
+  }
+  .cta b { color: #fff; font-weight: 800; }
+
+  .fine {
+    position: absolute; left: 64px; right: 64px; bottom: 34px;
+    padding-top: 16px; border-top: 1px solid rgba(255,255,255,.16);
+    font-size: 11px; line-height: 1.6; font-weight: 500; color: rgba(255,255,255,.55);
+  }
+</style>
+</head>
+<body>
+<main class="flyer">
+
+  <header class="top">
+    <img class="logo" src="assets/hringidan-logo-white.png" alt="Hringiðan">
+    <span class="since">Síðan 1995</span>
+  </header>
+
+  <p class="eyebrow">Til hamingju með nýja heimilið!</p>
+  <h1>Fyrstu <em>3 mánuðirnir</em><br>eru á okkur.</h1>
+  <p class="lede">Flutningar kosta nóg. Netið og farsíminn þurfa ekki að bætast við.</p>
+
+  <section class="cards">
+    <div class="card checklist">
+      <p class="card-label">Flutningalistinn</p>
+      <ul>
+        <li class="done"><i class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Lyklar</span></li>
+        <li class="done"><i class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Kassar</span></li>
+        <li class="done"><i class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Flutningabíll</span></li>
+        <li class="todo"><i class="box"></i><div>Net &amp; farsími<small>Eina sem vantar – og það er frítt.</small></div></li>
+      </ul>
+    </div>
+
+    <div class="card compare">
+      <div class="compare-head">
+        <p class="card-label">Netið í 3 mánuði</p>
+        <span class="unit">kr.</span>
+      </div>
+      <p class="compare-sub">1 Gbit/s heimilisnet*</p>
+      <div class="rows">
+        <div><div class="row-top"><span>Sýn</span><b>47.970</b></div><div class="bar"><i style="width:100%"></i></div></div>
+        <div><div class="row-top"><span>Síminn</span><b>34.200</b></div><div class="bar"><i style="width:71.3%"></i></div></div>
+        <div><div class="row-top"><span>Nova</span><b>33.540</b></div><div class="bar"><i style="width:69.9%"></i></div></div>
+      </div>
+      <div class="winner" style="margin-top:20px">
+        <div class="winner-top"><span>Hringiðan</span><b>0 kr.</b></div>
+        <p>Og farsíminn fylgir líka frítt.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="offer">
+    <div>
+      <h2>Kláraðu listann og fáðu<br><strong>3 mánuði frítt!</strong></h2>
+      <p class="value">Innflutningsgjöf að verðmæti allt að <b>56.940 kr.</b>**</p>
+      <ul class="perks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Engin binding, engin stofngjöld</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>WiFi router fylgir öllum tengingum</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Farsímanet Símans – þekja um allt land</li>
+      </ul>
+    </div>
+    <div class="badge"><div><b>3</b><span>mánuðir</span><em>frítt</em></div></div>
+    <div class="qr">
+      <img src="assets/qr.svg" alt="QR kóði á hringidan.is/pontun">
+      <div class="qr-mark"><img src="assets/hringidan-mark.png" alt=""></div>
+    </div>
+  </section>
+
+  <p class="cta">Skannaðu kóðann, hringdu í <b>525 2400</b><br>eða farðu á <b>hringidan.is/pontun</b></p>
+
+  <footer class="fine">
+    Gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. desember 2026. Fyrstu 3 mánuðir internet- og farsímaáskriftar án endurgjalds, ein innflutningsgjöf á hvert heimili.
+    *Ódýrasta 1 Gbit/s heimilisnet hvers fyrirtækis × 3 mánuðir, skv. Fjarskiptavaktin.is, 6. nóvember 2026.
+    **Miðað við 1 Gíg ljósleiðara (11.990 kr./mán.) og ótakmarkaðan farsíma (6.990 kr./mán.) skv. verðskrá Hringiðunnar, nóvember 2026.
+  </footer>
+
+</main>
+</body>
+</html>
