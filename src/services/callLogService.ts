@@ -32,6 +32,22 @@ export async function fetchCallLogs(companyId: string): Promise<CallLog[]> {
   return (data || []).map(rowToCallLog);
 }
 
+/** Símtöl margra fyrirtækja í einu, nýjustu fyrst. */
+export async function fetchCallLogsForCompanies(companyIds: string[]): Promise<CallLog[]> {
+  if (companyIds.length === 0) return [];
+  const { data, error } = await supabase
+    .from("call_logs")
+    .select("*")
+    .in("company_id", companyIds)
+    .order("called_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching call logs:", error);
+    return [];
+  }
+  return (data || []).map(rowToCallLog);
+}
+
 export async function fetchRecentCallLogs(limit: number = 30): Promise<CallLog[]> {
   const { data, error } = await supabase
     .from("call_logs")

@@ -15,7 +15,7 @@ import { fetchCompanies, updateCompany, deleteCompany, addCompany, addCompanies 
 import { CompanyModal } from "@/components/CompanyModal";
 import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
-import { addCallLog, fetchCompaniesWithCallLogs } from "@/services/callLogService";
+import { CallLog, addCallLog, fetchCompaniesWithCallLogs, fetchCallLogsForCompanies } from "@/services/callLogService";
 import { Task, fetchAllTasks, addTask, toggleTaskCompleted, deleteTask } from "@/services/taskService";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -85,6 +85,8 @@ export default function SvifListi() {
   const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
   const [callRefresh, setCallRefresh] = useState(0);
   const [tasks, setTasks] = useState<Task[]>([]);
+  /** Símtöl hvers fyrirtækis á síðunni, nýjustu fyrst. */
+  const [logs, setLogs] = useState<Record<string, CallLog[]>>({});
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   // Símtalsgluggi
@@ -120,6 +122,22 @@ export default function SvifListi() {
   };
 
   useEffect(() => { load(); }, []);
+
+  const pageIds = useMemo(
+    () => companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource === SVIF_FYRIRTAEKI_SOURCE).map((c) => c.id),
+    [companies]
+  );
+  const idsKey = pageIds.join(",");
+  // Sækir símtölin aftur þegar fyrirtækjum fjölgar eða símtal er skráð í áætluninni.
+  useEffect(() => {
+    if (!pageIds.length) return;
+    fetchCallLogsForCompanies(pageIds).then((all) => {
+      const map: Record<string, CallLog[]> = {};
+      for (const l of all) (map[l.companyId] ||= []).push(l);
+      setLogs(map);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idsKey, callRefresh]);
 
   const svifFyrirtæki = useMemo(
     () => companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource === SVIF_FYRIRTAEKI_SOURCE),
@@ -418,6 +436,7 @@ export default function SvifListi() {
           toast.error("Ekki tókst að vista símtalaskrá");
           return;
         }
+        if (callLog) setLogs((prev) => ({ ...prev, [c.id]: [callLog, ...(prev[c.id] || [])] }));
         setLoggedIds((prev) => new Set(prev).add(c.id));
         setCallRefresh((n) => n + 1);
       }
@@ -456,6 +475,23 @@ export default function SvifListi() {
         {c.industry && <span className="inline-flex items-center gap-1 text-muted-foreground"><Tag className="w-3 h-3" />{c.industry}</span>}
         {c.category && <span className="font-semibold">› {c.category}</span>}
         {tier && <span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL[tier])}>{TIER_LABEL[tier]} · {kr(VERD[tier].ein)} kr.</span>}
+      </div>
+    );
+  };
+
+  /** Síðustu þrjú símtölin við fyrirtækið. */
+  const renderLogs = (c: Company) => {
+    const list = logs[c.id] || [];
+    if (list.length === 0) return null;
+    return (
+      <div className="space-y-1 rounded-md border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800 p-2">
+        <span className="text-xs font-bold block">Símtöl ({list.length})</span>
+        {list.slice(0, 3).map((l) => (
+          <div key={l.id} className="text-xs">
+            <span className="font-semibold">{new Date(l.calledAt).toLocaleDateString("is-IS")}:</span>{" "}
+            <span className="whitespace-pre-wrap">{l.notes}</span>
+          </div>
+        ))}
       </div>
     );
   };
@@ -601,6 +637,12 @@ export default function SvifListi() {
             </div>
           )
         )}
+        {c.nextCallAt && (
+          <p className="text-xs font-semibold text-primary">
+            Næsta símtal: {new Date(c.nextCallAt).toLocaleString("is-IS", { dateStyle: "short", timeStyle: "short" })}
+          </p>
+        )}
+        {renderLogs(c)}
 
         <div className="flex flex-wrap gap-1.5 pt-1 border-t">
           <Button size="sm" className="gap-1 flex-1 min-w-[80px]" onClick={() => openCall(c)}>
@@ -686,6 +728,7 @@ export default function SvifListi() {
             {c.notes}
           </div>
         )}
+        {renderLogs(c)}
 
         <div className="flex flex-wrap gap-1.5 pt-2 border-t">
           <Button size="sm" className="gap-1 flex-1 min-w-[80px]" onClick={() => openCall(c)}>
