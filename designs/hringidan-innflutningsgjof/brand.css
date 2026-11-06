@@ -1,0 +1,32 @@
+/* Hringiðan brand tokens, shared by the 1:1 flyer concepts.
+   Blue #006CB8 (site primary), cyan #10B5EC (logo swirl), navy #003C62, typeface Raleway. */
+:root {
+  --navy: #003C62;
+  --navy-deep: #00233B;
+  --blue: #006CB8;
+  --cyan: #10B5EC;
+  --ice: #EEF6FC;
+  --line: #DCE7F0;
+  --muted: #6E8597;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0b1620; }
+body {
+  font-family: "Raleway", Arial, sans-serif;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+  display: flex; justify-content: center; padding: 40px 0;
+}
+.flyer { position: relative; overflow: hidden; width: 1080px; height: 1080px; }
+.flyer > * { position: relative; }
+.eyebrow { font-size: 16px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; }
+.check { flex: none; width: 22px; height: 22px; }
+.qr { background: #fff; border-radius: 18px; padding: 12px; position: relative; flex: none; }
+.qr > img { width: 100%; height: 100%; display: block; }
+.qr .qr-mark {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 26%; aspect-ratio: 1.2; background: #fff; border-radius: 6px; padding: 4px;
+  display: grid; place-items: center;
+}
+.qr .qr-mark img { width: 100%; }
+.fine { font-size: 11.5px; line-height: 1.6; font-weight: 500; }

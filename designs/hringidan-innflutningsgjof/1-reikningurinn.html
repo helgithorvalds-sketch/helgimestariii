@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hringiðan – Reikningurinn</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand.css">
+<style>
+  .flyer {
+    color: #fff; padding: 64px;
+    background:
+      radial-gradient(700px 700px at 85% 55%, rgba(16,181,236,.30), transparent 62%),
+      linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+  }
+  .flyer::before {
+    content: ""; position: absolute; left: -220px; bottom: -150px; width: 760px; height: 512px;
+    background: url(assets/hringidan-mark.png) no-repeat center / contain;
+    opacity: .07; transform: rotate(12deg);
+  }
+  .logo { height: 44px; display: block; }
+
+  .grid { display: grid; grid-template-columns: 1fr 460px; gap: 48px; margin-top: 128px; align-items: center; }
+  .eyebrow { color: var(--cyan); font-size: 14px; }
+  h1 { margin-top: 18px; font-size: 70px; line-height: 1.02; font-weight: 800; letter-spacing: -.025em; }
+  h1 span { color: var(--cyan); }
+  .lede { margin-top: 22px; font-size: 21px; line-height: 1.45; font-weight: 500; color: rgba(255,255,255,.8); }
+  .lede b { color: #fff; font-weight: 700; }
+  .perks { list-style: none; margin-top: 30px; display: grid; gap: 12px; }
+  .perks li { display: flex; gap: 12px; align-items: center; font-size: 18px; font-weight: 600; }
+
+  /* Receipt */
+  .receipt {
+    position: relative;
+    background: #fff; color: var(--navy); padding: 36px 36px 54px;
+    border-radius: 14px 14px 0 0;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,.45));
+    /* torn zigzag bottom edge */
+    -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 14px) no-repeat,
+                  conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 28px 14px repeat-x;
+            mask: linear-gradient(#000 0 0) top / 100% calc(100% - 14px) no-repeat,
+                  conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 28px 14px repeat-x;
+  }
+  .receipt-wrap { position: relative; transform: rotate(2.5deg); }
+  .r-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 2px dashed var(--line); }
+  .r-head img { height: 26px; }
+  .r-head span { font-size: 12px; font-weight: 800; letter-spacing: .2em; color: var(--muted); text-transform: uppercase; }
+  .r-sub { margin-top: 16px; font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .lines { margin-top: 16px; display: grid; gap: 16px; }
+  .line { display: flex; justify-content: space-between; gap: 12px; font-size: 19px; font-weight: 600; }
+  .line small { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 1px; }
+  .line b { font-weight: 700; white-space: nowrap; }
+  .line.gift { margin-top: 6px; padding: 12px 14px; border-radius: 10px; background: #E5F6FD; color: var(--blue); }
+  .line.gift b { color: var(--blue); font-weight: 800; }
+  .total { margin-top: 20px; padding-top: 18px; border-top: 2px dashed var(--line); display: flex; justify-content: space-between; align-items: baseline; }
+  .total span { font-size: 15px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+  .total b { font-size: 88px; font-weight: 900; letter-spacing: -.04em; line-height: 1; }
+
+  .stamp {
+    position: absolute; right: -30px; top: -58px; width: 150px; height: 150px; border-radius: 50%;
+    border: 4px solid var(--cyan); color: var(--cyan); display: grid; place-items: center; text-align: center;
+    transform: rotate(-18deg); background: #fff;
+    box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px var(--cyan);
+  }
+  .stamp b { display: block; font-size: 44px; font-weight: 900; line-height: .9; }
+  .stamp span { display: block; font-size: 12px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+
+  .bottom {
+    position: absolute; left: 64px; right: 64px; bottom: 54px;
+    display: flex; align-items: center; gap: 26px;
+  }
+  .bottom .qr { width: 128px; height: 128px; padding: 10px; border-radius: 16px; }
+  .cta { font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.7); line-height: 1.8; }
+  .cta b { color: #fff; font-weight: 800; }
+  .bottom .fine { margin-left: auto; max-width: 360px; color: rgba(255,255,255,.5); }
+</style>
+</head>
+<body>
+<main class="flyer">
+  <img class="logo" src="assets/hringidan-logo-white.png" alt="Hringiðan">
+
+  <div class="grid">
+    <section>
+      <p class="eyebrow">Til hamingju með nýja heimilið</p>
+      <h1>Fyrstu <span>3 mánuðirnir</span> kosta 0&nbsp;kr.</h1>
+      <p class="lede">Flutningar kosta nóg. Við sjáum um <b>netið og farsímann</b> á meðan þú kemur þér fyrir.</p>
+      <ul class="perks">
+        <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Engin binding, engin stofngjöld</li>
+        <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>WiFi router fylgir með</li>
+        <li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Farsímanet Símans um allt land</li>
+      </ul>
+    </section>
+
+    <div class="receipt-wrap">
+    <section class="receipt">
+      <div class="r-head"><img src="assets/hringidan-logo.png" alt="Hringiðan"></div>
+      <p class="r-sub">Fyrstu 3 mánuðirnir</p>
+      <div class="lines">
+        <div class="line"><div>Ljósleiðari 1 Gíg<small>3 × 11.990 kr.</small></div><b>35.970</b></div>
+        <div class="line"><div>Ótakmarkaður farsími<small>3 × 6.990 kr.</small></div><b>20.970</b></div>
+        <div class="line"><div>WiFi router &amp; stofngjald</div><b>0</b></div>
+        <div class="line gift"><div>Innflutningsgjöf</div><b>−56.940</b></div>
+      </div>
+      <div class="total"><span>Samtals</span><b>0 kr.</b></div>
+    </section>
+      <div class="stamp"><div><b>3</b><span>mán. frítt</span></div></div>
+    </div>
+  </div>
+
+  <footer class="bottom">
+    <div class="qr"><img src="assets/qr.svg" alt="QR kóði á hringidan.is/pontun"><div class="qr-mark"><img src="assets/hringidan-mark.png" alt=""></div></div>
+    <p class="cta">Skannaðu kóðann<br>eða farðu á <b>hringidan.is/pontun</b><br>Sími <b>525 2400</b></p>
+    <p class="fine">Gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. desember 2026. Ein innflutningsgjöf á hvert heimili. Verð skv. verðskrá Hringiðunnar, nóvember 2026.</p>
+  </footer>
+</main>
+</body>
+</html>

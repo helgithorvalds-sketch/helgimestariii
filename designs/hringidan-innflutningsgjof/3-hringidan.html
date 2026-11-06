@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hringiðan – Vandinn og lausnin</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand.css">
+<style>
+  .flyer { color: #fff; background: #fff; }
+
+  /* Hero: brand gradient with the whirlpool */
+  .hero {
+    height: 600px; padding: 60px 64px 0; overflow: hidden;
+    background:
+      radial-gradient(600px 500px at 78% 60%, rgba(255,255,255,.22), transparent 60%),
+      linear-gradient(135deg, var(--navy) 0%, var(--blue) 55%, var(--cyan) 100%);
+  }
+  .hero::after { /* the logo's whirlpool, in white */
+    content: ""; position: absolute; right: -120px; top: 110px; width: 640px; height: 431px;
+    background: url(assets/hringidan-mark.png) no-repeat center / contain;
+    filter: brightness(0) invert(1); opacity: .16; transform: rotate(-6deg);
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .logo { height: 44px; display: block; }
+  .tag { font-size: 13px; font-weight: 800; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.8); }
+
+  .big { display: flex; align-items: center; gap: 30px; margin-top: 46px; }
+  .big .three { font-size: 380px; font-weight: 900; line-height: .78; letter-spacing: -.06em; }
+  .big .words { font-size: 84px; font-weight: 900; line-height: .96; letter-spacing: -.03em; text-transform: uppercase; }
+  .big .words span { display: block; font-size: 26px; font-weight: 700; letter-spacing: .08em; text-transform: none; margin-top: 16px; color: rgba(255,255,255,.85); }
+
+  .hero .eyebrow { margin-top: 62px; font-size: 14px; color: rgba(255,255,255,.85); }
+
+  /* Problem / solution */
+  .body { padding: 44px 64px 0; color: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .col { border-radius: 20px; padding: 26px 28px 28px; }
+  .problem { background: var(--ice); }
+  .solution { background: var(--navy); color: #fff; position: relative; overflow: hidden; }
+  .solution::after { content: ""; position: absolute; inset: 0 0 auto auto; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(16,181,236,.45), transparent 70%); transform: translate(40%,-40%); }
+  .col .label { font-size: 12px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+  .solution .label { color: var(--cyan); }
+  .col h3 { margin-top: 10px; font-size: 25px; line-height: 1.2; font-weight: 800; }
+  .col p { margin-top: 10px; font-size: 16px; line-height: 1.5; font-weight: 500; color: #3f5c72; }
+  .solution p { color: rgba(255,255,255,.8); }
+  .col p b { font-weight: 800; color: var(--navy); }
+  .solution p b { color: #fff; }
+
+  .foot { position: absolute; left: 64px; right: 64px; bottom: 44px; display: flex; align-items: center; gap: 24px; color: var(--navy); }
+  .foot .qr { width: 112px; height: 112px; padding: 0; border-radius: 0; }
+  .cta { font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); line-height: 1.8; }
+  .cta b { color: var(--navy); font-weight: 800; }
+  .foot .fine { margin-left: auto; max-width: 400px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main class="flyer">
+  <section class="hero">
+    <div class="top">
+      <img class="logo" src="assets/hringidan-logo-white.png" alt="Hringiðan">
+      <span class="tag">Innflutningsgjöf</span>
+    </div>
+    <p class="eyebrow">Til hamingju með nýja heimilið</p>
+    <div class="big">
+      <div class="three">3</div>
+      <div class="words">Mánuðir<br>frítt<span>Internet + farsími</span></div>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="col problem">
+      <p class="label">Vandinn</p>
+      <h3>Nýtt heimili. Endalaus útgjöld.</h3>
+      <p>Hjá stóru félögunum kostar 1 Gbit/s netið eitt og sér <b>33.540–47.970 kr.</b> fyrstu 3 mánuðina.*</p>
+    </div>
+    <div class="col solution">
+      <p class="label">Lausnin</p>
+      <h3>Hringiðan gefur þér fyrstu 3 mánuðina.</h3>
+      <p>Netið <b>og</b> farsíminn frítt – gjöf að verðmæti allt að <b>56.940 kr.</b>** Engin binding.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="qr"><img src="assets/qr.svg" alt="QR kóði á hringidan.is/pontun"><div class="qr-mark"><img src="assets/hringidan-mark.png" alt=""></div></div>
+    <p class="cta">Skannaðu kóðann<br>eða farðu á <b>hringidan.is/pontun</b><br>Sími <b>525 2400</b></p>
+    <p class="fine">Gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. desember 2026, ein gjöf á hvert heimili. *Nova, Síminn og Sýn: ódýrasta 1 Gbit/s heimilisnet × 3, skv. Fjarskiptavaktin.is, 6. nóv. 2026. **1 Gíg ljósleiðari (11.990 kr.) og ótakmarkaður farsími (6.990 kr.) × 3 mánuðir.</p>
+  </footer>
+</main>
+</body>
+</html>

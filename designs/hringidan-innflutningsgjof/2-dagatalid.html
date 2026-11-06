@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hringiðan – Dagatalið</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand.css">
+<style>
+  .flyer {
+    color: var(--navy); padding: 64px 64px 0;
+    background:
+      radial-gradient(800px 500px at 100% 0%, rgba(16,181,236,.20), transparent 60%),
+      linear-gradient(180deg, #F7FBFE 0%, var(--ice) 100%);
+  }
+  .flyer::before {
+    content: ""; position: absolute; right: -160px; top: -40px; width: 640px; height: 431px;
+    background: url(assets/hringidan-mark.png) no-repeat center / contain; opacity: .09;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .logo { height: 44px; display: block; }
+  .eyebrow { color: var(--blue); font-size: 14px; }
+
+  h1 { margin-top: 56px; font-size: 92px; line-height: .98; font-weight: 900; letter-spacing: -.035em; }
+  h1 span {
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { margin-top: 20px; font-size: 23px; font-weight: 500; color: #3f5c72; }
+  .lede b { color: var(--navy); font-weight: 800; }
+
+  /* Calendar pages */
+  .months { margin-top: 56px; display: grid; grid-template-columns: repeat(3, 1fr) 0.82fr; gap: 18px; align-items: end; }
+  .month {
+    background: #fff; border-radius: 20px; overflow: hidden; text-align: center;
+    box-shadow: 0 22px 40px -22px rgba(0,60,98,.45), 0 0 0 1px rgba(0,60,98,.06);
+    position: relative;
+  }
+  .month::before, .month::after { /* binder rings */
+    content: ""; position: absolute; top: 12px; width: 12px; height: 12px; border-radius: 50%;
+    background: rgba(255,255,255,.55);
+  }
+  .month::before { left: 30%; } .month::after { right: 30%; }
+  .month header {
+    background: linear-gradient(120deg, var(--blue), var(--cyan)); color: #fff;
+    padding: 32px 0 14px; font-size: 13px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase;
+  }
+  .month .num { font-size: 76px; font-weight: 900; letter-spacing: -.04em; padding: 22px 0 0; line-height: 1; }
+  .month .num small { font-size: 26px; font-weight: 800; letter-spacing: 0; }
+  .month p { font-size: 14px; font-weight: 700; color: var(--muted); padding: 10px 0 28px; }
+  .month.after { box-shadow: none; background: rgba(255,255,255,.55); border: 2px dashed #c5d6e3; }
+  .month.after header { background: transparent; color: var(--muted); padding-top: 22px; }
+  .month.after .num { font-size: 15px; font-weight: 700; letter-spacing: 0; color: #3f5c72; padding: 16px 14px 0; line-height: 1.5; }
+  .month.after p { padding-top: 6px; }
+
+  .compare { margin-top: 60px; }
+  .compare p { font-size: 15px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .chips { margin-top: 14px; display: flex; gap: 12px; }
+  .chip { font-size: 18px; }
+  .chip { padding: 12px 22px; border-radius: 99px; background: #fff; border: 1px solid var(--line); font-weight: 700; color: var(--navy); }
+  .chip.us { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  .bar {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 200px; padding: 0 64px;
+    background: var(--navy); color: #fff; display: flex; align-items: center; gap: 32px;
+  }
+  .bar h2 { font-size: 30px; font-weight: 800; line-height: 1.15; }
+  .bar h2 span { color: var(--cyan); }
+  .bar .cta { margin-top: 10px; font-size: 14px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+  .bar .cta b { color: #fff; }
+  .bar .fine { margin-top: 12px; color: rgba(255,255,255,.5); max-width: 640px; }
+  .bar .qr { margin-left: auto; width: 140px; height: 140px; padding: 11px; }
+</style>
+</head>
+<body>
+<main class="flyer">
+  <div class="top">
+    <img class="logo" src="assets/hringidan-logo.png" alt="Hringiðan">
+    <p class="eyebrow">Innflutningsgjöf</p>
+  </div>
+
+  <h1>Þrír mánuðir.<br><span>Núll krónur.</span></h1>
+  <p class="lede">Nýtt heimili? Fáðu <b>internet og farsíma frítt</b> fyrstu 3 mánuðina.</p>
+
+  <section class="months">
+    <div class="month"><header>Mánuður 1</header><div class="num">0 <small>kr.</small></div><p>Net + farsími</p></div>
+    <div class="month"><header>Mánuður 2</header><div class="num">0 <small>kr.</small></div><p>Net + farsími</p></div>
+    <div class="month"><header>Mánuður 3</header><div class="num">0 <small>kr.</small></div><p>Net + farsími</p></div>
+    <div class="month after"><header>Svo</header><div class="num">Engin binding. Hættu hvenær sem er.</div><p>&nbsp;</p></div>
+  </section>
+
+  <section class="compare">
+    <p>3 mánuðir af 1 Gbit/s neti annars staðar*</p>
+    <div class="chips">
+      <span class="chip">Sýn 47.970 kr.</span>
+      <span class="chip">Síminn 34.200 kr.</span>
+      <span class="chip">Nova 33.540 kr.</span>
+      <span class="chip us">Hringiðan 0 kr.</span>
+    </div>
+  </section>
+
+  <footer class="bar">
+    <div>
+      <h2>Gjöf að verðmæti allt að <span>56.940 kr.</span>**</h2>
+      <p class="cta">Skannaðu kóðann · <b>hringidan.is/pontun</b> · <b>525 2400</b></p>
+      <p class="fine">Gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. desember 2026, ein gjöf á hvert heimili. *Ódýrasta 1 Gbit/s heimilisnet hvers fyrirtækis × 3, skv. Fjarskiptavaktin.is, 6. nóv. 2026. **1 Gíg ljósleiðari (11.990 kr.) og ótakmarkaður farsími (6.990 kr.) × 3 mánuðir.</p>
+    </div>
+    <div class="qr"><img src="assets/qr.svg" alt="QR kóði á hringidan.is/pontun"><div class="qr-mark"><img src="assets/hringidan-mark.png" alt=""></div></div>
+  </footer>
+</main>
+</body>
+</html>
