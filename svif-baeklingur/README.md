@@ -39,7 +39,8 @@ Allar SVIF-síður eru rastaðar í 300 dpi (`raster794.py` / `render.js` + 3,12
 
 ## Afsláttarmiðar
 
-* Bls. 3: hringurinn með beige-hvítum miðum (`midar3.py` → `ring6.py`).
+* Bls. 3: hringurinn með beige-hvítum miðum. Miðarnir eru rendraðir í 8x (`coupshot.js` úr `midar3_stakir.html`) og
+  sívalningsvörpunin reiknuð í numpy (`ring_np.py`, sama rúmfræði og `ring6.py`) – Chrome 3D gaf óskýran/tröppóttan texta.
 * Bls. 29: Parki, Íspan, Ormsson og Maus í litum hvers fyrirtækis (`midasida_thema.py`, `ring_theme.py`),
   92 x 50 mm hver, 2 x 2 neðst á síðunni, þétt saman og út í kant.
 * Rifgötun í heilum línum: lóðréttar 10 mm og 102 mm frá kili, láréttar 94 mm og 144 mm frá efri brún.
@@ -60,6 +61,7 @@ python3 dokk.py                  # d_yfirlit, d_thakkir, d_aud (HTML) → render
 python3 build_dark_pages.py      # afslaettir_dark.html, umsvif_dark.html
 python3 raster794.py afslaettir_dark.html out/afslaettir_dark.jpg
 python3 midar3.py && python3 midasida_thema.py   # miðar (hringur + bls. 29)
+node coupshot.js midar3_stakir.html out/ring6 8 && python3 ring_np.py 6   # hringurinn á bls. 3 → out/ring_crop.png
 python3 assemble_all.py          # out/SVIF_baeklingur_prent.pdf (< 20 MB) og _skodun.pdf
 python3 embed.py                 # public_flett/baeklingur.html fyrir svif.is
 ```

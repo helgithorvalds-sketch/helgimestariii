@@ -3,7 +3,7 @@ import math, os
 from PIL import Image, ImageOps
 D=os.path.dirname(os.path.abspath(__file__))
 ORDER=['parki','ispan','sticker','ormsson','gardinur','maus']   # 0° fremst, svo réttsælis (60° hver)
-W=400.0; tilt=-10.0; persp=1800.0; yaw=-8.0; N=18
+W=400.0; tilt=-10.0; persp=1800.0; yaw=-8.0; N=36
 im0=Image.open(f'{D}/out/ring6/parki.png'); H=W*im0.height/im0.width
 GAP=W*0.06; circ=6*(W+GAP); R=circ/(2*math.pi); dpp=360/circ; sw=W/N
 for n in ORDER: ImageOps.mirror(Image.open(f'{D}/out/ring6/{n}.png')).save(f'{D}/out/ring6/m_{n}.png')
