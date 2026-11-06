@@ -22,7 +22,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   SVOR, FLOKKAR, VERD, TIER_LABEL, GEIRA_ROD, SVIF_FYRIRTAEKI_SOURCE,
-  Flokkur, FlokkurTier, normName, svarToCompany, flokkurFor, matchesSvar, enrichWithSvar,
+  Flokkur, FlokkurTier, normName, svarToCompany, flokkurFor, matchesSvar, enrichWithSvar, svarFor, tierFor, verdFor,
 } from "@/data/svifFyrirtaekiSvor";
 
 /** Svarstaðan er geymd í símtalaútkomunni: já = interested, spyr = call_again, nei = rejected. */
@@ -59,10 +59,18 @@ const STADA_PILL: Record<Stada, { label: string; cls: string }> = {
   nei: { label: "Nei", cls: "bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-300" },
 };
 
+/** Grænt: eitt fyrirtæki. Gult: tvö keppa. Rautt: þrjú eða fleiri. Grátt: enginn enn. */
 const TIER_PILL: Record<FlokkurTier, string> = {
-  laus: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300",
-  einn: "bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300",
-  keppni: "bg-orange-100 text-orange-800 dark:bg-orange-950/50 dark:text-orange-300",
+  laus: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+  einn: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300",
+  tveir: "bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300",
+  margir: "bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-300",
+};
+const TIER_ROW: Record<FlokkurTier, string> = {
+  laus: "border-l-slate-300",
+  einn: "border-l-emerald-500",
+  tveir: "border-l-amber-400",
+  margir: "border-l-red-500",
 };
 
 const kr = (n: number) => n.toLocaleString("is-IS");
@@ -78,7 +86,7 @@ export default function SvifListi() {
   const [selected, setSelected] = useState<Company | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [openNotes, setOpenNotes] = useState<Set<string>>(new Set());
-  const [showFlokkar, setShowFlokkar] = useState(false);
+  const [showFlokkar, setShowFlokkar] = useState(true);
   const [showSvor, setShowSvor] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -151,7 +159,7 @@ export default function SvifListi() {
     for (const s of SVOR) {
       const c = svifFyrirtæki.find((x) => matchesSvar(x, s));
       if (!c) missing.push(s);
-      else if (!c.category || !c.pitch || !c.estimatedPrice) enrich.push({ c, s });
+      else if (!c.category || !flokkurFor(c.category) || !c.pitch || !c.estimatedPrice) enrich.push({ c, s });
     }
     return { missingSvor: missing, enrichable: enrich };
   }, [svifFyrirtæki]);
@@ -216,31 +224,51 @@ export default function SvifListi() {
       });
   }, [tasks, chosen, specialOffers]);
 
-  /** Flokkakortið: hvert pláss með þeim sem sækja um það. */
-  const flokkayfirlit = useMemo(() => {
-    const byUndir = new Map<string, Company[]>();
+  /** Fyrirtæki í hverjum flokki, eftir flokksheiti (normað). */
+  const byUndir = useMemo(() => {
+    const map = new Map<string, Company[]>();
     for (const c of svifFyrirtæki) {
       const key = normName(c.category || "");
       if (!key) continue;
-      byUndir.set(key, [...(byUndir.get(key) || []), c]);
+      map.set(key, [...(map.get(key) || []), c]);
     }
+    return map;
+  }, [svifFyrirtæki]);
+
+  /** Hve mörg sækja um flokkinn, án þeirra sem sögðu nei. Þetta ræður lit og verði. */
+  const countIn = (undirgeiri?: string) =>
+    (byUndir.get(normName(undirgeiri || "")) || []).filter((c) => stadaOf(c) !== "nei").length;
+
+  /** Flokkakortið: hvert pláss með þeim sem sækja um það, þeim sem bjóða það líka, fjölda og verði. */
+  const flokkayfirlit = useMemo(() => {
     const known = new Set(FLOKKAR.map((f) => normName(f.undirgeiri)));
     const extra: Flokkur[] = [...byUndir.keys()]
       .filter((k) => !known.has(k))
-      .map((k) => ({ geiri: byUndir.get(k)![0].industry || "Annað", undirgeiri: byUndir.get(k)![0].category!, tier: "einn" }));
+      .map((k) => ({ geiri: byUndir.get(k)![0].industry || "Annað", undirgeiri: byUndir.get(k)![0].category!, lysing: "" }));
     const all: Flokkur[] = [...FLOKKAR, ...extra];
     const geirar = [...GEIRA_ROD, ...all.map((f) => f.geiri).filter((g) => !GEIRA_ROD.includes(g))];
-    return geirar
-      .map((geiri) => ({
-        geiri,
-        rows: all.filter((f) => f.geiri === geiri).map((f) => ({ ...f, companies: byUndir.get(normName(f.undirgeiri)) || [] })),
-      }))
+    const rows = all.map((f) => {
+      const companies = byUndir.get(normName(f.undirgeiri)) || [];
+      const einnig = svifFyrirtæki.filter((c) => {
+        if (companies.includes(c)) return false;
+        const s = svarFor(c);
+        return !!s?.einnig?.some((e) => normName(e) === normName(f.undirgeiri));
+      });
+      const count = companies.filter((c) => stadaOf(c) !== "nei").length;
+      return { ...f, companies, einnig, count, tier: tierFor(count), verd: verdFor(count) };
+    });
+    const groups = geirar
+      .map((geiri) => ({ geiri, rows: rows.filter((r) => r.geiri === geiri) }))
       .filter((g) => g.rows.length > 0);
-  }, [svifFyrirtæki]);
+    const summary = { laus: 0, einn: 0, tveir: 0, margir: 0 };
+    for (const r of rows) summary[r.tier]++;
+    return { groups, summary };
+  }, [byUndir, svifFyrirtæki]);
 
   const manadartekjur = useMemo(
-    () => svifFyrirtæki.reduce((sum, c) => sum + (c.registeredInSvif ? VERD[flokkurFor(c.category)?.tier || "einn"].ein : 0), 0),
-    [svifFyrirtæki]
+    () => svifFyrirtæki.reduce((sum, c) => sum + (c.registeredInSvif ? verdFor(countIn(c.category)).ein : 0), 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [svifFyrirtæki, byUndir]
   );
 
   const persist = async (updated: Company, msg?: string) => {
@@ -466,17 +494,28 @@ export default function SvifListi() {
       ? svifFyrirtæki.filter((x) => x.id !== c.id && normName(x.category || "") === normName(c.category || "") && stadaOf(x) !== "nei")
       : [];
 
-  /** Geiri › undirgeiri með verðmerki. */
+  /** Geiri › flokkur með fjölda sem keppir og verðinu sem það gefur. */
   const renderSlot = (c: Company) => {
-    const tier = flokkurFor(c.category)?.tier;
     if (!c.industry && !c.category) return null;
+    const count = countIn(c.category);
+    const tier = tierFor(count);
     return (
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
         {c.industry && <span className="inline-flex items-center gap-1 text-muted-foreground"><Tag className="w-3 h-3" />{c.industry}</span>}
         {c.category && <span className="font-semibold">› {c.category}</span>}
-        {tier && <span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL[tier])}>{TIER_LABEL[tier]} · {kr(VERD[tier].ein)} kr.</span>}
+        {c.category && (
+          <span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL[tier])}>
+            {count <= 1 ? TIER_LABEL[tier] : `${count} keppa`} · {kr(verdFor(count).ein)} kr.
+          </span>
+        )}
       </div>
     );
+  };
+
+  /** Hvað fyrirtækið gerir nákvæmlega, úr svaralistanum. */
+  const renderThjonusta = (c: Company) => {
+    const s = svarFor(c);
+    return s?.thjonusta ? <p className="text-xs text-muted-foreground">{s.thjonusta}</p> : null;
   };
 
   /** Síðustu þrjú símtölin við fyrirtækið. */
@@ -592,6 +631,7 @@ export default function SvifListi() {
               {c.registeredInSvif && <span className="text-[11px] font-bold uppercase rounded px-1.5 py-0.5 bg-emerald-600 text-white">Skráð</span>}
             </div>
             {c.owner && <p className="text-xs font-medium text-primary">{c.owner}</p>}
+            {renderThjonusta(c)}
           </div>
           <div className="flex items-center flex-shrink-0">
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => toggleSet(openNotes, c.id, setOpenNotes)} aria-label="Glósa">
@@ -687,6 +727,7 @@ export default function SvifListi() {
               <span className={cn("ml-2 text-xs font-bold px-2 py-0.5 rounded-full align-middle", STADA_PILL[stada].cls)}>{STADA_PILL[stada].label}</span>
             </h3>
             {c.owner && <p className="text-sm font-medium text-primary">{c.owner}</p>}
+            {renderThjonusta(c)}
           </div>
           <button onClick={() => setSelected(c)} className="text-muted-foreground hover:text-foreground p-1 rounded-md hover:bg-muted" aria-label="Breyta">
             <Pencil className="w-4 h-4" />
@@ -820,6 +861,94 @@ export default function SvifListi() {
           </div>
         ) : (
           <>
+            {/* Flokkar og verð: hvað hver flokkur er, hverjir keppa um hann og hvað það gefur í verði */}
+            <section className="rounded-2xl border-2 border-border bg-card p-4 space-y-4">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <button onClick={() => setShowFlokkar((v) => !v)} className="flex items-center gap-3 text-left flex-wrap">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold shadow-sm bg-foreground text-background">
+                    <Tag className="w-3.5 h-3.5" />
+                    Flokkar og verð
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {flokkayfirlit.summary.laus} lausir · {flokkayfirlit.summary.einn} með einn · {flokkayfirlit.summary.tveir} með tvo · {flokkayfirlit.summary.margir} með þrjá eða fleiri
+                  </span>
+                  {showFlokkar ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                </button>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs">
+                  <span><span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL.einn)}>Einn</span> {kr(VERD.einn.ein)} kr.</span>
+                  <span><span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL.tveir)}>Tveir</span> {kr(VERD.keppni.ein)} kr.</span>
+                  <span><span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL.margir)}>3+</span> {kr(VERD.keppni.ein)} kr.</span>
+                  <span><span className={cn("font-bold px-2 py-0.5 rounded-full", TIER_PILL.laus)}>Laus</span> selja á {kr(VERD.einn.ein)} kr.</span>
+                </div>
+              </div>
+
+              {showFlokkar && (
+                <div className="space-y-4">
+                  <p className="text-xs text-muted-foreground">
+                    Fjöldinn sem ræður verðinu er þeir sem sögðu já, spyrja eða bíða; þeir sem sögðu nei eru yfirstrikaðir og telja ekki. Tvær síður: {kr(VERD.einn.tvaer)} kr. ef einn, {kr(VERD.keppni.tvaer)} kr. ef fleiri. „Bjóða þetta líka“ eru fyrirtæki með þetta sem aukaþjónustu; þau telja ekki en gott að vita af þeim.
+                  </p>
+                  {flokkayfirlit.groups.map((g) => (
+                    <div key={g.geiri}>
+                      <h3 className="text-sm font-bold mb-1.5">{g.geiri}</h3>
+                      <div className="space-y-1.5">
+                        {g.rows.map((f) => (
+                          <div key={f.undirgeiri} className={cn("rounded-lg border border-l-4 bg-background px-3 py-2 text-sm", TIER_ROW[f.tier])}>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                              <span className="font-semibold">{f.undirgeiri}</span>
+                              <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap", TIER_PILL[f.tier])}>
+                                {f.count === 0 ? "Laus" : f.count === 1 ? "1 fyrirtæki" : `${f.count} keppa`} · {kr(f.verd.ein)} kr.
+                              </span>
+                              {f.lysing && <span className="text-xs text-muted-foreground">{f.lysing}</span>}
+                            </div>
+                            <div className="flex flex-wrap gap-1.5 mt-1.5">
+                              {f.companies.length === 0 ? (
+                                <span className="text-xs text-muted-foreground">Enginn sækir um. Hægt að selja plássið.</span>
+                              ) : f.companies.map((c) => {
+                                const s = stadaOf(c);
+                                const sv = svarFor(c);
+                                return (
+                                  <button
+                                    key={c.id}
+                                    onClick={() => { setSearch(c.name); setSia("allir"); setShowSvor(true); }}
+                                    title={[STADA_PILL[s].label, sv?.thjonusta].filter(Boolean).join(" · ")}
+                                    className={cn(
+                                      "text-xs rounded-md border px-2 py-1 text-left hover:bg-muted max-w-full",
+                                      c.registeredInSvif && "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40",
+                                      s === "nei" && "line-through text-muted-foreground",
+                                    )}
+                                  >
+                                    <span className="font-semibold">
+                                      {c.registeredInSvif && <Check className="inline w-3 h-3 mr-0.5 text-emerald-600" />}
+                                      {c.name}
+                                      {s === "spyr" && <span className="text-amber-600"> ?</span>}
+                                      {s === "bidur" && <span className="text-muted-foreground"> (bíður)</span>}
+                                    </span>
+                                    {sv?.thjonusta && <span className="block text-[11px] text-muted-foreground no-underline">{sv.thjonusta}</span>}
+                                  </button>
+                                );
+                              })}
+                              {f.einnig.map((c) => (
+                                <button
+                                  key={"e" + c.id}
+                                  onClick={() => { setSearch(c.name); setSia("allir"); setShowSvor(true); }}
+                                  className="text-xs rounded-md border border-dashed px-2 py-1 text-muted-foreground hover:bg-muted"
+                                  title="Býður þetta líka, en sækir um annan flokk"
+                                >
+                                  {c.name} <span className="opacity-70">býður þetta líka</span>
+                                </button>
+                              ))}
+                            </div>
+                            {f.skipting && <p className="text-xs text-muted-foreground mt-1.5"><span className="font-semibold">Má skipta:</span> {f.skipting}</p>}
+                            {f.note && <p className="text-xs text-muted-foreground mt-1">{f.note}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+
             {/* Svör úr herferðinni: sérkafli, aðskilinn frá hinum köflunum */}
             <section className="rounded-2xl border-2 border-indigo-300 dark:border-indigo-800 bg-indigo-50/30 dark:bg-indigo-950/10 p-4 space-y-4">
               <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -832,61 +961,7 @@ export default function SvifListi() {
                   <span className="text-xs text-muted-foreground">{counts.ja} já · {counts.spyr} spyrja · {counts.bidur} bíða · {counts.nei} nei</span>
                   {showSvor ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                 </button>
-                <Button variant="outline" size="sm" onClick={() => setShowFlokkar((v) => !v)} className="gap-1.5">
-                  <Tag className="w-3.5 h-3.5" />
-                  {showFlokkar ? "Fela flokkakort" : "Flokkakort: laust og keppni"}
-                </Button>
               </div>
-
-              {showFlokkar && (
-                <div className="rounded-xl border bg-card p-4 space-y-4">
-                  <p className="text-xs text-muted-foreground">
-                    Einn í flokki: {kr(VERD.einn.ein)} kr. (2 síður {kr(VERD.einn.tvaer)}). Keppni, tveir eða fleiri: {kr(VERD.keppni.ein)} kr. (2 síður {kr(VERD.keppni.tvaer)}). Lausir flokkar eru til sölu á {kr(VERD.laus.ein)} kr.
-                  </p>
-                  {flokkayfirlit.map((g) => (
-                    <div key={g.geiri}>
-                      <h3 className="text-sm font-bold mb-1.5">{g.geiri}</h3>
-                      <div className="divide-y rounded-lg border">
-                        {g.rows.map((f) => (
-                          <div key={f.undirgeiri} className="grid grid-cols-1 md:grid-cols-[1.4fr_auto_2fr] gap-x-3 gap-y-1 px-3 py-2 text-sm items-start">
-                            <div>
-                              <span className="font-semibold">{f.undirgeiri}</span>
-                              {f.note && <p className="text-xs text-muted-foreground">{f.note}</p>}
-                            </div>
-                            <span className={cn("justify-self-start text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap", TIER_PILL[f.tier])}>
-                              {TIER_LABEL[f.tier]} · {kr(VERD[f.tier].ein)}
-                            </span>
-                            <div className="flex flex-wrap gap-1.5">
-                              {f.companies.length === 0 ? (
-                                <span className="text-xs text-muted-foreground">Enginn sækir um</span>
-                              ) : f.companies.map((c) => {
-                                const s = stadaOf(c);
-                                return (
-                                  <button
-                                    key={c.id}
-                                    onClick={() => { setSearch(c.name); setSia("allir"); setShowSvor(true); }}
-                                    className={cn(
-                                      "text-xs rounded-full border px-2 py-0.5 hover:bg-muted",
-                                      c.registeredInSvif && "border-emerald-500 bg-emerald-50 font-semibold dark:bg-emerald-950/40",
-                                      s === "nei" && "line-through text-muted-foreground",
-                                    )}
-                                    title={STADA_PILL[s].label}
-                                  >
-                                    {c.registeredInSvif && <Check className="inline w-3 h-3 mr-0.5 text-emerald-600" />}
-                                    {c.name}
-                                    {s === "spyr" && <span className="text-amber-600"> ?</span>}
-                                    {s === "bidur" && <span className="text-muted-foreground"> (bíður)</span>}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
 
               {showSvor && (
                 <>
@@ -1030,7 +1105,12 @@ export default function SvifListi() {
           {callTarget && (
             <div className="rounded-lg border bg-muted/40 p-3 space-y-1.5 text-sm">
               {callTarget.owner && <p><span className="text-muted-foreground">Svaraði:</span> <span className="font-medium">{callTarget.owner}</span></p>}
-              {callTarget.category && <p><span className="text-muted-foreground">Pláss:</span> {callTarget.category}{flokkurFor(callTarget.category) && <> · {kr(VERD[flokkurFor(callTarget.category)!.tier].ein)} kr.</>}</p>}
+              {callTarget.category && (
+                <p>
+                  <span className="text-muted-foreground">Flokkur:</span> {callTarget.category} · {kr(verdFor(countIn(callTarget.category)).ein)} kr.
+                  {countIn(callTarget.category) > 1 && <span className="text-muted-foreground"> ({countIn(callTarget.category)} keppa)</span>}
+                </p>
+              )}
               {callTarget.websiteUrl && (
                 <a href={callTarget.websiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
                   <Globe className="w-3.5 h-3.5" />{host(callTarget.websiteUrl)}<ExternalLink className="w-3 h-3" />
