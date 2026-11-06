@@ -46,6 +46,7 @@ function rowToCompany(row: any): Company {
     specialOffer: row.special_offer ?? false,
     isDone: row.is_done ?? false,
     chosenV2: row.chosen_v2 ?? false,
+    registeredInSvif: row.registered_in_svif ?? false,
     createdAt: row.created_at,
   };
 }
@@ -94,6 +95,7 @@ function companyToRow(company: Omit<Company, "id" | "createdAt">) {
     special_offer: company.specialOffer ?? false,
     is_done: company.isDone ?? false,
     chosen_v2: company.chosenV2 ?? false,
+    registered_in_svif: company.registeredInSvif ?? false,
   };
 }
 
@@ -129,6 +131,21 @@ export async function addCompany(company: Omit<Company, "id" | "createdAt">): Pr
     return null;
   }
   return rowToCompany(data);
+}
+
+/** Vistar mörg fyrirtæki í einu. Skilar þeim sem voru vistuð, eða null ef innsetningin brást. */
+export async function addCompanies(companies: Omit<Company, "id" | "createdAt">[]): Promise<Company[] | null> {
+  if (companies.length === 0) return [];
+  const { data, error } = await supabase
+    .from("companies")
+    .insert(companies.map(companyToRow))
+    .select();
+
+  if (error) {
+    console.error("Error adding companies:", error);
+    return null;
+  }
+  return (data || []).map(rowToCompany);
 }
 
 export async function updateCompany(company: Company): Promise<Company | null> {
