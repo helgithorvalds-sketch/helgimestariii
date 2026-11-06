@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hringiðan – Wi-Fi</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand.css">
+<style>
+  .flyer {
+    color: #fff; padding: 64px;
+    background:
+      radial-gradient(600px 600px at 80% 30%, rgba(255,255,255,.20), transparent 65%),
+      linear-gradient(140deg, var(--navy) 0%, var(--blue) 55%, var(--cyan) 115%);
+  }
+  .flyer::before { /* concentric signal rings */
+    content: ""; position: absolute; right: -380px; top: -260px; width: 1200px; height: 1200px; border-radius: 50%;
+    background: repeating-radial-gradient(circle, transparent 0 70px, rgba(255,255,255,.07) 70px 72px);
+  }
+  .logo { height: 44px; display: block; }
+  .text { width: 470px; margin-top: 100px; }
+  .eyebrow { color: #8fe0ff; font-size: 14px; }
+  h1 { margin-top: 18px; font-size: 64px; line-height: 1.02; font-weight: 300; letter-spacing: -.02em; }
+  h1 b { display: block; font-weight: 900; }
+  .lede { margin-top: 22px; font-size: 20px; line-height: 1.5; font-weight: 500; color: rgba(255,255,255,.85); }
+  .lede b { color: #fff; font-weight: 800; }
+
+  /* phone */
+  .perks { list-style: none; margin-top: 28px; display: grid; gap: 12px; }
+  .perks li { display: flex; gap: 12px; align-items: center; font-size: 18px; font-weight: 600; }
+  .phone {
+    position: absolute; right: 70px; top: 120px; width: 420px; height: 1000px; border-radius: 62px;
+    background: #0d1b26; padding: 16px;
+    box-shadow: 0 60px 90px -30px rgba(0,0,0,.6), inset 0 0 0 2px rgba(255,255,255,.18);
+  }
+  .screen { height: 100%; border-radius: 48px; background: #F2F5F8; color: #0d1b26; padding: 22px 22px; overflow: hidden; }
+  .status { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; padding: 0 16px; }
+  .island { width: 110px; height: 30px; border-radius: 99px; background: #0d1b26; margin: -26px auto 0; }
+  .nav { margin-top: 26px; font-size: 15px; font-weight: 600; color: var(--blue); }
+  .title { margin-top: 8px; font-size: 34px; font-weight: 800; letter-spacing: -.01em; }
+  .group { margin-top: 18px; background: #fff; border-radius: 16px; overflow: hidden; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #e7edf2; font-size: 16px; font-weight: 600; }
+  .row:last-child { border-bottom: 0; }
+  .row .name { flex: 1; }
+  .row .name small { display: block; font-size: 12.5px; font-weight: 600; color: #7d8d99; margin-top: 2px; }
+  .row svg { flex: none; }
+  .row.on .name { color: #0d1b26; font-weight: 800; }
+  .row.on .name small { color: var(--blue); font-weight: 700; }
+  .toggle { width: 50px; height: 30px; border-radius: 99px; background: #34c759; position: relative; }
+  .toggle::after { content: ""; position: absolute; right: 2px; top: 2px; width: 26px; height: 26px; border-radius: 50%; background: #fff; }
+  .section { margin: 20px 16px 0; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; color: #7d8d99; text-transform: uppercase; }
+
+  .banner { margin-top: 18px; display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; background: linear-gradient(120deg, var(--blue), var(--cyan)); color: #fff; }
+  .banner img { width: 40px; filter: brightness(0) invert(1); }
+  .banner b { display: block; font-size: 16px; font-weight: 800; }
+  .banner span { font-size: 13px; font-weight: 600; opacity: .9; }
+  .foot { position: absolute; left: 64px; bottom: 54px; width: 470px; }
+  .foot .row2 { display: flex; align-items: center; gap: 22px; }
+  .foot .qr { width: 116px; height: 116px; padding: 9px; border-radius: 14px; }
+  .cta { font-size: 14px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.75); line-height: 1.8; }
+  .cta b { color: #fff; font-weight: 800; }
+  .foot .fine { margin-top: 18px; color: rgba(255,255,255,.6); }
+</style>
+</head>
+<body>
+<main class="flyer">
+  <img class="logo" src="assets/hringidan-logo-white.png" alt="Hringiðan">
+
+  <section class="text">
+    <p class="eyebrow">Til hamingju með nýja heimilið</p>
+    <h1>Tengdu nýja heimilið.<b>Frítt.</b></h1>
+    <p class="lede">Internet og farsími <b>frítt fyrstu 3 mánuðina</b> – á meðan hinir rukka tugi þúsunda.*</p>
+    <ul class="perks"><li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Engin binding, engin stofngjöld</li><li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>WiFi router fylgir með</li></ul>
+  </section>
+
+  <div class="phone"><div class="screen">
+    <div class="status"><span>9:41</span><span>5G ▮▮▮</span></div>
+    <div class="island"></div>
+    <p class="nav">‹ Stillingar</p>
+    <p class="title">Wi-Fi</p>
+    <div class="group">
+      <div class="row"><span class="name" style="font-weight:700">Wi-Fi</span><span class="toggle"></span></div>
+      <div class="row on">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006CB8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        <span class="name">Hringidan_Nyja_Heimilid<small>Tengt · 0 kr. í 3 mánuði</small></span>
+        <svg width="22" height="18" viewBox="0 0 24 18"><path d="M12 17l3-3.6a5 5 0 0 0-6 0zM4.2 7.6l2.2 2.6a8.6 8.6 0 0 1 11.2 0l2.2-2.6a12 12 0 0 0-15.6 0zM.5 3.2l2.2 2.6a14.4 14.4 0 0 1 18.6 0l2.2-2.6a17.8 17.8 0 0 0-23 0z" fill="#0d1b26"/></svg>
+      </div>
+    </div>
+    <p class="section">Önnur net · 3 mánuðir*</p>
+    <div class="group">
+      <div class="row"><span class="name">Syn_Heima<small>47.970 kr.</small></span><svg width="14" height="16" viewBox="0 0 14 16"><rect x="1" y="7" width="12" height="9" rx="2" fill="#9aa8b3"/><path d="M4 7V5a3 3 0 0 1 6 0v2" stroke="#9aa8b3" stroke-width="2" fill="none"/></svg></div>
+      <div class="row"><span class="name">Siminn_Heima<small>34.200 kr.</small></span><svg width="14" height="16" viewBox="0 0 14 16"><rect x="1" y="7" width="12" height="9" rx="2" fill="#9aa8b3"/><path d="M4 7V5a3 3 0 0 1 6 0v2" stroke="#9aa8b3" stroke-width="2" fill="none"/></svg></div>
+      <div class="row"><span class="name">Nova_Heima<small>33.540 kr.</small></span><svg width="14" height="16" viewBox="0 0 14 16"><rect x="1" y="7" width="12" height="9" rx="2" fill="#9aa8b3"/><path d="M4 7V5a3 3 0 0 1 6 0v2" stroke="#9aa8b3" stroke-width="2" fill="none"/></svg></div>
+    </div>
+    <p class="section">Farsími</p>
+    <div class="group">
+      <div class="row on"><span class="name">Hringiðan · Ótakmarkað<small>Virkt · 0 kr. í 3 mánuði</small></span><span class="toggle"></span></div>
+      <div class="row"><span class="name">Kerfi<small>Farsímanet Símans · 5G</small></span></div>
+    </div>
+    <div class="banner"><img src="assets/hringidan-mark.png" alt=""><div><b>Velkomin heim!</b><span>Innflutningsgjöfin þín er virk.</span></div></div>
+  </div></div>
+
+  <footer class="foot">
+    <div class="row2">
+      <div class="qr"><img src="assets/qr.svg" alt="QR kóði á hringidan.is/pontun"><div class="qr-mark"><img src="assets/hringidan-mark.png" alt=""></div></div>
+      <p class="cta">Skannaðu kóðann<br>eða farðu á <b>hringidan.is/pontun</b><br>Sími <b>525 2400</b></p>
+    </div>
+    <p class="fine">Gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. des. 2026, ein gjöf á hvert heimili. Engin binding. *Ódýrasta 1 Gbit/s heimilisnet Sýnar, Símans og Nova × 3 mánuðir skv. Fjarskiptavaktin.is, 6. nóv. 2026.</p>
+  </footer>
+</main>
+</body>
+</html>

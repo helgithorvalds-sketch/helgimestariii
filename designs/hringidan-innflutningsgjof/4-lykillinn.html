@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hringiðan – Lykillinn</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand.css">
+<style>
+  .flyer {
+    color: #fff; padding: 64px;
+    background:
+      radial-gradient(520px 520px at 74% 46%, rgba(16,181,236,.34), transparent 65%),
+      radial-gradient(900px 700px at 0% 100%, rgba(0,108,184,.35), transparent 60%),
+      linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+  }
+  .logo { height: 44px; display: block; }
+  .text { width: 500px; margin-top: 96px; }
+  .eyebrow { color: var(--cyan); font-size: 14px; }
+  h1 { margin-top: 20px; font-size: 66px; line-height: 1.04; font-weight: 300; letter-spacing: -.02em; }
+  h1 b { display: block; font-weight: 900; color: #fff; }
+  h1 b span { color: var(--cyan); }
+  .lede { margin-top: 24px; font-size: 21px; line-height: 1.5; font-weight: 500; color: rgba(255,255,255,.8); }
+  .lede b { color: #fff; font-weight: 800; }
+
+  .perks { list-style: none; margin-top: 30px; display: grid; gap: 12px; }
+  .perks li { display: flex; gap: 12px; align-items: center; font-size: 18px; font-weight: 600; }
+  .art { position: absolute; right: 10px; top: 120px; width: 520px; height: 640px; }
+
+  .foot { position: absolute; left: 64px; right: 64px; bottom: 54px; display: flex; align-items: center; gap: 26px; }
+  .foot .qr { width: 128px; height: 128px; padding: 10px; border-radius: 16px; }
+  .cta { font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.7); line-height: 1.8; }
+  .cta b { color: #fff; font-weight: 800; }
+  .foot .fine { margin-left: auto; max-width: 380px; color: rgba(255,255,255,.5); }
+</style>
+</head>
+<body>
+<main class="flyer">
+  <img class="logo" src="assets/hringidan-logo-white.png" alt="Hringiðan">
+
+  <section class="text">
+    <p class="eyebrow">Til hamingju með nýja heimilið</p>
+    <h1>Þú fékkst lyklana.<b>Við gefum <span>netið.</span></b></h1>
+    <p class="lede">Internet og farsími <b>frítt í 3 mánuði</b> – innflutningsgjöf að verðmæti allt að <b>56.940 kr.</b>*</p>
+    <ul class="perks"><li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Engin binding, engin stofngjöld</li><li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>WiFi router fylgir með</li><li><svg class="check" viewBox="0 0 24 24" fill="none" stroke="#10B5EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Farsímanet Símans um allt land</li></ul>
+  </section>
+
+  <svg class="art" viewBox="0 0 520 640" aria-hidden="true">
+    <defs>
+      <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#d6e1e9"/><stop offset="1" stop-color="#a7b9c7"/>
+      </linearGradient>
+      <linearGradient id="tagShade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef6fc"/>
+      </linearGradient>
+      <mask id="keyHole">
+        <rect x="-200" y="-200" width="800" height="800" fill="#fff"/>
+        <circle cx="-25" cy="0" r="21" fill="#000"/>
+      </mask>
+      <mask id="tagHole">
+        <rect x="-50" y="-50" width="400" height="400" fill="#fff"/>
+        <circle cx="100" cy="32" r="13" fill="#000"/>
+      </mask>
+      <filter id="drop" filterUnits="userSpaceOnUse" x="-100" y="-100" width="720" height="840">
+        <feDropShadow dx="0" dy="22" stdDeviation="20" flood-color="#000" flood-opacity=".45"/>
+      </filter>
+    </defs>
+
+    <!-- key, hanging from the ring -->
+    <g filter="url(#drop)"><g transform="translate(191 226) rotate(110)">
+      <g mask="url(#keyHole)" fill="url(#silver)">
+        <circle cx="0" cy="0" r="74"/>
+        <rect x="50" y="-19" width="272" height="38" rx="7"/>
+        <path d="M228 19 V52 H250 V36 H270 V60 H292 V19 Z"/>
+      </g>
+      <rect x="80" y="-3" width="232" height="5" rx="2.5" fill="#8fa3b3" opacity=".6"/>
+    </g></g>
+
+    <!-- ring -->
+    <circle cx="200" cy="140" r="62" fill="none" stroke="url(#silver)" stroke-width="12" filter="url(#drop)"/>
+
+    <!-- string from ring to tag -->
+    <path d="M252 174 C 300 190, 340 230, 371 268" fill="none" stroke="#10B5EC" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- luggage tag -->
+    <g filter="url(#drop)"><g transform="translate(285 215) rotate(18)">
+      <path mask="url(#tagHole)" d="M40 0 H160 L200 40 V290 Q200 300 190 300 H10 Q0 300 0 290 V40 Z" fill="url(#tagShade)"/>
+      <circle cx="100" cy="32" r="17" fill="none" stroke="#10B5EC" stroke-width="3"/>
+      <image href="assets/hringidan-mark.png" x="70" y="62" width="60" height="40"/>
+      <text x="100" y="128" text-anchor="middle" font-family="Raleway" font-weight="800" font-size="11" letter-spacing="3" fill="#6E8597">INNFLUTNINGSGJÖF</text>
+      <text x="100" y="222" text-anchor="middle" font-family="Raleway" font-weight="900" font-size="112" fill="#003C62" letter-spacing="-4">3</text>
+      <text x="100" y="252" text-anchor="middle" font-family="Raleway" font-weight="800" font-size="19" fill="#006CB8">mánuðir frítt</text>
+      <text x="100" y="276" text-anchor="middle" font-family="Raleway" font-weight="600" font-size="13" fill="#6E8597">Internet + farsími</text>
+    </g></g>
+  </svg>
+
+  <footer class="foot">
+    <div class="qr"><img src="assets/qr.svg" alt="QR kóði á hringidan.is/pontun"><div class="qr-mark"><img src="assets/hringidan-mark.png" alt=""></div></div>
+    <p class="cta">Skannaðu kóðann<br>eða farðu á <b>hringidan.is/pontun</b><br>Sími <b>525 2400</b></p>
+    <p class="fine">Gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. desember 2026, ein gjöf á hvert heimili. *1 Gíg ljósleiðari (11.990 kr.) og ótakmarkaður farsími (6.990 kr.) × 3 mánuðir. Engin binding, engin stofngjöld.</p>
+  </footer>
+</main>
+</body>
+</html>
