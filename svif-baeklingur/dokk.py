@@ -41,9 +41,9 @@ def page(body, geisli=True):
             '.grunnur{position:absolute;inset:0;' + bg(geisli) + '}'
             f'</style></head><body><div class="grunnur"></div>{frame()}{body}</body></html>')
 
-FYRIRTAEKI = ['Straumlind', 'Hringiðan', 'Ísorka', 'Parki Interiors', 'Íspan Glerborg', 'Sticker.is', 'KORA', 'HTH', 'Ormsson', 'Maus',
-              'Gluggavinir', 'TME Gluggar', 'Gardínur.is', 'Fagafl', 'Litamálun', 'Múrbúðin', 'HK Lagnir', 'MS Lagnir',
-              'Lásar.is', 'VÍS', 'RÓM Verk']
+FYRIRTAEKI = ['Fagafl', 'Gardínur.is', 'Gluggavinir', 'Heit gólf', 'HK Lagnir', 'Hringiðan', 'HTH', 'Ísorka',
+              'Íspan Glerborg', 'KORA', 'Lásar.is', 'Litamálun', 'Maus', 'MS Lagnir', 'Múrbúðin', 'Ormsson',
+              'Parki Interiors', 'RÓM Verk', 'Steindi', 'Sticker.is', 'Straumlind', 'TME Gluggar', 'VÍS']
 def thakkir():
     items = ''.join(f'<div style="width:40mm">{n}</div>' for n in FYRIRTAEKI)
     body = ('<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center">'
@@ -68,15 +68,15 @@ if __name__ == '__main__':
 
 # Yfirlit án myndar: kaflar með fyrirtækjum og blaðsíðum, í útliti Kærar þakkir
 KAFLAR = [
-    ('Gólf & flísar', [('Parki', '4')]),
+    ('Gólf & flísar', [('Parki', '4'), ('Heit gólf', '25')]),
     ('Gluggar & gler', [('Gardínur', '5'), ('Íspan', '11'), ('Gluggavinir', '14'), ('TME Gluggar', '15')]),
     ('Eldhús & tæki', [('HTH', '6'), ('Ormsson', '7')]),
     ('Rafmagn & net', [('Straumlind', '8'), ('Hringiðan', '9'), ('Ísorka', '10'), ('RÓM Verk', '21')]),
     ('Þjónusta & filmur', [('sticker.is', '16'), ('KORA', '17')]),
     ('Eldvarnir', [('Maus', '12–13')]),
-    ('Múr, málun & smíði', [('Litamálun', '18'), ('Múrbúðin', '19'), ('Fagafl', '20')]),
+    ('Múr, málun & smíði', [('Litamálun', '18'), ('Múrbúðin', '19'), ('Fagafl', '20'), ('Steindi', '24')]),
     ('Bað & lagnir', [('HK Lagnir', '22'), ('MS Lagnir', '23')]),
-    ('Lásar & tryggingar', [('Lásar.is', '24'), ('VÍS', '25')]),
+    ('Lásar & tryggingar', [('Lásar.is', '26'), ('VÍS', '27')]),
 ]
 def yfirlit():
     cols = ''
@@ -94,7 +94,7 @@ def yfirlit():
             '<div style="font-family:Inter;font-weight:300;font-size:9.4pt;line-height:1.55;max-width:132mm;color:rgba(255,255,255,.9)">'
             'Nýju heimili fylgja ótal verkefni. Hér eru traust fyrirtæki sem bjóða nýjum húseigendum sérkjör, flokkuð eftir verkefnum.</div>'
             f'<div style="display:grid;grid-template-columns:repeat(3,44mm);column-gap:10mm;row-gap:5.5mm;margin-top:7mm">{cols}</div></div>'
-            + corner('svif.is', 'tl') + corner('2026', 'tr') + corner('21 fyrirtæki', 'bl') + corner('Tilboð<br>og afslættir', 'br'))
+            + corner('svif.is', 'tl') + corner('2026', 'tr') + corner('23 fyrirtæki', 'bl') + corner('Tilboð<br>og afslættir', 'br'))
     return page(body)
 if __name__ == '__main__':
     open(os.path.join(D, 'd_yfirlit.html'), 'w', encoding='utf-8').write(yfirlit()); print('d_yfirlit')

@@ -1,56 +1,71 @@
-# SVIF bæklingur – útgáfa 3. nóv. 2026
+# SVIF bæklingur – útgáfa 6. nóv. 2026
 
-32 síður, heftaður, 194 x 194 mm, 3 mm blæði (200 x 200 mm skjöl með T## Uppsetning
+32 síður, heftaður, 194 x 194 mm, 3 mm blæði (200 x 200 mm skjöl með TrimBox/BleedBox), 300 dpi.
 
-1 forsíða („Nýji kaflinn“) · 2 yfirlit · 3 afsláttarmiðar (kynning, gamli hringurinn) · 4–24 auglýsingar (bestu afslættirnir
-fremst; Gluggavinir og TME Gluggar saman á 14–15, Gardínur og Fagafl 16–17, HK Lagnir og MS Lagnir 20–21,
-Lásar og VÍS 22–23) · 25–27 laust auglýsingapláss · 28 Af hverju SVIF · 29 afsláttarmiðar ·
-30 auð síða (bakhlið miðanna) · 31 Kærar þakkir með öllum 20 fyrirtækjunum · 32 bakkápa („Til hamingju“).
-Steindi, Heit gólf og MJ Lausnir eru farin út. TME, Fagafl (útgáfa 2) og MS Lagnir koma af greininni
-claude/adoring-heisenberg-mywx1q (auglysingar/), gerðar úr PDF í 300 dpi með speglaðri 3 mm blæðingu (`sidur/nyjar/`).
+## Uppsetning
 
-## Útlit kápunnar
+| Bls. | Efni |
+|---|---|
+| 1 | Forsíða („Nýji kaflinn“) |
+| 2 | Yfirlit – kaflar, fyrirtæki og blaðsíðutöl (23 fyrirtæki) |
+| 3 | Afsláttarmiðar (kynning, gamli hringurinn, vísar á bls. 29) |
+| 4–5 | Parki · Gardínur |
+| 6–7 | HTH · Ormsson AEG |
+| 8–9 | Straumlind · Hringiðan |
+| 10–11 | Ísorka · Íspan |
+| 12–13 | Maus (opna) |
+| 14–15 | Gluggavinir · TME Gluggar |
+| 16–17 | Sticker · KORA |
+| 18–19 | Litamálun · Múrbúðin |
+| 20–21 | Fagafl · RÓM Verk |
+| 22–23 | HK Lagnir · MS Lagnir |
+| 24–25 | Steindi („Sláum í gegn“) · Heit gólf |
+| 26–27 | Lásar.is · VÍS |
+| 28 | Af hverju SVIF |
+| 29 | Afsláttarmiðar (rifnir úr) – hægri síða |
+| 30 | Auð síða (bakhlið miðanna) |
+| 31 | Kærar þakkir – öll 23 fyrirtækin í stafrófsröð |
+| 32 | Bakkápa („Til hamingju“) |
 
-Forsíða og bakkápa eru nýju myndirnar (dökkur hlýr grár grunnur, mjóar hvítar hornlínur, Inter). `dokk.py` gerir
-Kærar þakkir, auðu síðuna og lausu plássin í sama útliti (`sidur/d_*.jpg`, 300 dpi). `darkdc.py` + `build_dark_pages.py`
-setja Yfirlit, Afsláttarmiða-kynninguna og Af hverju SVIF í sama útlit með ljósum útgáfum af húsmyndunum (`ljos/`).
-Haus miðasíðunnar (bls. 29) er líka dökkur. 3D-mockup: `SVIF_baeklingur_3D_mockup.jpg` (`mockup/mockup.html`).
+Tveggja síðna auglýsingar byrja á sléttri síðu (vinstri). Miðasíðan er oddatölusíða (hægri) með auða bakhlið,
+ekki á kápublaðinu. MJ Lausnir er farið út; hvíti ramminn er farinn af öllum auglýsingum (`unframe.py`).
+
+## Útlit
+
+Forsíða og bakkápa eru prentmyndirnar af greininni `claude/kind-dirac-lm09hh` (`design/svif-forsida/prent/`).
+`dokk.py` gerir Yfirlit, Kærar þakkir og auðu síðuna í sama dökka útliti (Inter, hornlínur, kornóttur grunnur),
+`darkdc.py` + `build_dark_pages.py` setja Afsláttarmiða-kynninguna og Af hverju SVIF í sama útlit.
+Allar SVIF-síður eru rastaðar í 300 dpi (`raster794.py` / `render.js` + 3,125x) til að forðast rendur í litstiglum.
+
+## Afsláttarmiðar
+
+* Bls. 3: hringurinn með beige-hvítum miðum (`midar3.py` → `ring6.py`).
+* Bls. 29: Parki, Íspan, Ormsson og Maus í litum hvers fyrirtækis (`midasida_thema.py`, `ring_theme.py`),
+  92 x 50 mm hver, 2 x 2 neðst á síðunni, þétt saman og út í kant.
+* Rifgötun í heilum línum: lóðréttar 10 mm og 102 mm frá kili, láréttar 94 mm og 144 mm frá efri brún.
+* Stakar miðamyndir fyrir tölvupósta: https://svif.is/baeklingur/midar/svif_afslattarmidi_{parki,ispan,ormsson,maus}.jpg
 
 ## Á vefnum
 
 Flettibókin er á https://svif.is/baeklingur (Lovable-verkefnið „Svif“, skráin public/baeklingur/flettibok.html).
-`embed.py` býr til sjálfstæða HTML-skrá með síðunum innbyggðum úr `vefur/flettibok_src.html` + síðumyndum.
-
-## Afsláttarmiðar (bls. 29, hægri síða, kjölur vinstra megin)
-
-* Parki, Íspan, Ormsson og Maus, 92 x 50 mm hver, 2 x 2 neðst á síðunni, þétt saman og út í kant.
-* Rifgötun í heilum línum: lóðréttar 10 mm og 102 mm frá kili, láréttar 94 mm og 144 mm frá efri brún.
-* Miðablaðið (bls. 29–30) er ekki kápublaðið, svo kápan rifnar ekki með.
-* Íspan-merkið í réttum lit (dökkblátt #004785 og grænblátt #008c9a), eins og í auglýsingunni.
-
-## Aðrar breytingar
-
-* MJ Lausnir farnar út; yfirlit með nýjum blaðsíðutölum.
-* Hvíti ramminn tekinn af auglýsingunum (KORA, Maus x2, HK Lagnir, Gardínur, Steindi x2, Heit gólf, VÍS).
-
- 16–17).
+`embed.py` býr til sjálfstæða HTML-skrá (`public_flett/baeklingur.html`, ~5 MB) úr `flett/index.html` + 32 síðumyndum
+(1100 px, úr TrimBox prent-PDF-sins). Skráin er afrituð óbreytt yfir með MD5-athugun og síðan birt með deploy.
+3D-mockup: `SVIF_baeklingur_3D_mockup.jpg` (`mockup/mockup.html`, forsíða + opna 28–29).
 
 ## Smíði
 
 ```sh
-python3 fonts.py                 # sækir letur (Fraunces, Jost, Montserrat, Open Sans, Archivo Black)
-python3 midar2.py                # miðasíða 2x2, auð síða, Kærar þakkir, laus pláss
-node render.js midar2_framhlid.html raw.pdf - && python3 boxes.py raw.pdf sidur/midar2_framhlid.pdf
-python3 ring.py 600 -17 1700 4 && node shot.js ring.html out/ring_3x.png 3   # hringurinn á bls. 3
-python3 ring6.py && node shot.js ring6.html out/ring6_3x.png 3   # hringurinn á bls. 3, gamli stíllinn
-python3 build_svif_pages.py      # yfirlit.html + afslaettir.html úr hönnunarartifactinu
-python3 raster794.py yfirlit.html sidur/yfirlit.jpg   # 300 dpi mynd, eins og upprunalegu síðurnar
-python3 unframe.py in.jpg out.jpg  # tekur hvíta rammann af auglýsingasíðu
-python3 assemble_all.py          # setur bæklinginn saman
+python3 fonts.py                 # sækir letur
+python3 dokk.py                  # d_yfirlit, d_thakkir, d_aud (HTML) → render.js + 3.125 → out/*.jpg
+python3 build_dark_pages.py      # afslaettir_dark.html, umsvif_dark.html
+python3 raster794.py afslaettir_dark.html out/afslaettir_dark.jpg
+python3 midar3.py && python3 midasida_thema.py   # miðar (hringur + bls. 29)
+python3 assemble_all.py          # out/SVIF_baeklingur_prent.pdf (< 20 MB) og _skodun.pdf
+python3 embed.py                 # public_flett/baeklingur.html fyrir svif.is
 ```
 
 Lokaskjölin eru í artifactinu „SVIF PDF“ (https://claude.ai/artifact/QxDjcwAYxAVfvZp95XsJ8o)
-og 3D flettibókin í „SVIF flettibók 28“ (https://claude.ai/artifact/RTQihiKvmPMbYpubq86Qqh).
+og 3D flettibókin í https://claude.ai/artifact/RTQihiKvmPMbYpubq86Qqh.
 
 ## Á eftir að staðfesta
 

@@ -1,20 +1,20 @@
-"""Setur saman SVIF bæklinginn (28 síður, 200 x 200 mm með 3 mm blæði) í nýrri röð."""
+"""Setur saman SVIF bæklinginn (32 síður, 200 x 200 mm með 3 mm blæði) í nýrri röð."""
 import pymupdf, os, sys
 D = os.path.dirname(os.path.abspath(__file__)); F = os.path.join(D, '..', 'full')
 img = lambda i: os.path.join(F, f'img-{i:03d}.jpg')
 ad = lambda i: os.path.join(D, 'out', 'ads', f'p{i:02d}.jpg')
 pdf = lambda n: os.path.join(D, 'out', n + '.pdf')
 ny = lambda n: os.path.join(D, 'out', 'ads', n + '.jpg')
-PAGES = [  # (heiti, uppruni) – 30 síður
+PAGES = [  # (heiti, uppruni) – 32 síður
     ('Forsíða', ny('kapa_fram')), ('Yfirlit', os.path.join(D,'out','d_yfirlit.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir_dark.jpg')),
     ('Parki', img(5)), ('Gardínur', ad(20)), ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Straumlind', img(4)), ('Hringiðan', ny('hringidan')),
     ('Ísorka', img(13)), ('Íspan', img(6)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('TME Gluggar', ny('tme')),
     ('Sticker', img(7)), ('KORA', ad(8)), ('Litamálun', ny('litamalun')), ('Múrbúðin', img(19)), ('Fagafl', ny('fagafl')), ('RÓM Verk', img(23)),
-    ('HK Lagnir', ad(15)), ('MS Lagnir', ny('mslagnir')), ('Lásar.is', img(16)), ('VÍS', ad(25)),
+    ('HK Lagnir', ad(15)), ('MS Lagnir', ny('mslagnir')), ('Steindi', ad(21)), ('Heit gólf', ad(24)), ('Lásar.is', img(16)), ('VÍS', ad(25)),
     ('Af hverju SVIF', os.path.join(D,'out','umsvif_dark.jpg')), ('Afsláttarmiðar', os.path.join(D,'out','midar_thema_framhlid.jpg')),
     ('Auð síða (bakhlið miðanna)', os.path.join(D,'out','d_aud.jpg')), ('Kærar þakkir', os.path.join(D,'out','d_thakkir.jpg')), ('Bakkápa', ny('kapa_bak')),
 ]
-assert len(PAGES) == 30
+assert len(PAGES) == 32
 SZ = 200 * 72 / 25.4; b = 3 * 72 / 25.4
 def build(out, quality=None, px=None):
     doc = pymupdf.open()

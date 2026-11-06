@@ -18,7 +18,8 @@ h = re.sub(r'<path d="(M(?:206|616),[^"]*)"></path>', path, h)
 h = re.sub(r'<circle cx="([\d.]+)" cy="([\d.]+)" r="4.5"></circle>', gold, h)
 open('yfirlit_dark.html', 'w', encoding='utf-8').write(h)
 build('Afslaettir', 'afslaettir_dark.html', [
-    ('Sex fyrirtæki í bókinni bjóða nýjum húseigendum afslátt.', 'Fjögur fyrirtæki í bókinni bjóða nýjum húseigendum afslátt.'),
+    ('Sex fyrirtæki í bókinni bjóða nýjum húseigendum afslátt.', 'Fyrirtæki í bókinni bjóða nýjum húseigendum sérkjör og afsláttarmiða.'),
+    ('>aftast í bókinni</span>', '>aftast í bókinni, á bls. 29</span>'),
     ('style="position: relative; width: 670px; height: 454px; display: block"', 'style="position: relative; width: 690px; height: 454px; display: block; object-fit: contain"'),
 ], blobs={'4a5740764184436a45fbefedb470dc83': 'out/ring_crop.png'})
 build('UmSvif', 'umsvif_dark.html', [
