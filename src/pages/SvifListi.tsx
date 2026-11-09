@@ -360,6 +360,7 @@ export default function SvifListi() {
 
   const toggleOff = (c: Company) => {
     const rejected = !c.rejected;
+    if (!window.confirm(rejected ? `Ertu viss um að þú viljir merkja „${c.name}“ sem off?` : `Endurvirkja „${c.name}“?`)) return;
     const rejectedAt = rejected ? new Date().toISOString() : undefined;
     return patch(c, { rejected, rejectedAt }, { rejected, rejected_at: rejectedAt || null }, rejected ? "Merkt sem off" : "Endurvirkjað");
   };
@@ -946,6 +947,15 @@ export default function SvifListi() {
                                     )}
                                   >
                                     {c.isDone ? "✓ Búið að hringja" : "Merkja hringt"}
+                                  </button>
+                                  <button
+                                    onClick={() => toggleOff(c)}
+                                    className={cn(
+                                      "w-full text-[11px] font-bold px-2 py-0.5 border-t",
+                                      c.rejected ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted",
+                                    )}
+                                  >
+                                    {c.rejected ? "Endurvirkja" : "Off"}
                                   </button>
                                   </div>
                                 );
