@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=Inter:wght@400;500&display=swap">
+<style>body{margin:0;background:#222}canvas{width:1024px;height:1024px}</style></head>
+<body><span style="font-family:Jost;font-weight:300">.</span><span style="font-family:Inter;font-weight:500">.</span><canvas id="c" width="2048" height="2048"></canvas>
+<script>
+(async () => {
+  const q = new URLSearchParams(location.search);
+  await document.fonts.load('300 100px Jost'); await document.fonts.load('500 40px Inter'); await document.fonts.ready;
+  const load = (src) => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
+  const photo = await load(q.get('photo') || './biz-photo.jpg');
+  const logo = await load('/svif/logo-cream.png');
+  const c = document.getElementById('c'), g = c.getContext('2d'), W = 2048;
+  g.drawImage(photo, 0, 0, W, W);
+  // gentle darkening at top for the title, like the printed cover
+  const gr = g.createLinearGradient(0, 0, 0, W); gr.addColorStop(0, 'rgba(30,26,22,0.30)'); gr.addColorStop(0.5, 'rgba(30,26,22,0.08)'); gr.addColorStop(1, 'rgba(30,26,22,0.22)');
+  g.fillStyle = gr; g.fillRect(0, 0, W, W);
+  const cream = 'rgba(246,245,236,0.92)';
+  g.strokeStyle = 'rgba(246,245,236,0.55)'; g.lineWidth = 2.4;
+  const L = 70, R = W - 70;
+  // hairline frame that stops short of the corners (like the flyer)
+  g.beginPath(); g.moveTo(L, L); g.lineTo(L + 500, L); g.moveTo(L, L); g.lineTo(L, L + 500);
+  g.moveTo(R, R); g.lineTo(R - 600, R); g.moveTo(R, R); g.lineTo(R, R - 600);
+  g.moveTo(R, 300); g.lineTo(R, 900); g.moveTo(L, 1300); g.lineTo(L, 1700); g.stroke();
+  const label = (t, x, y, align = 'left', size = 36) => { g.font = `500 ${size}px Inter`; g.letterSpacing = '4px'; g.fillStyle = cream; g.textAlign = align; t.split('\n').forEach((s, i) => g.fillText(s, x, y + i * size * 1.15)); };
+  label('VELKOMIN', 130, 160); label('65°N · 19°W', W / 2, 160, 'center'); label(q.get('tr') || 'FYRIR REKSTURINN', W - 130, 160, 'right');
+  label(q.get('bl') || 'ALLT FYRIR\nNÝ FYRIRTÆKI', 130, 1860); label('S V I F . I S', W / 2, 1902, 'center'); label('TILBOÐ\nOG AFSLÆTTIR', W - 130, 1860, 'right');
+  // title
+  g.font = '300 236px Jost'; g.letterSpacing = '18px'; g.fillStyle = 'rgba(250,248,242,0.97)'; g.textAlign = 'center';
+  g.fillText(q.get('title') || 'NÝR REKSTUR', W / 2 + 9, 860);
+  // rule with logo
+  const ly = 975; g.strokeStyle = 'rgba(246,245,236,0.6)'; g.lineWidth = 2.4;
+  g.beginPath(); g.moveTo(340, ly); g.lineTo(870, ly); g.moveTo(1180, ly); g.lineTo(1710, ly); g.stroke();
+  g.beginPath(); g.moveTo(1690, ly - 12); g.lineTo(1710, ly); g.lineTo(1690, ly + 12); g.stroke();
+  const lw = 250, lh = lw * logo.height / logo.width; g.drawImage(logo, W / 2 - lw / 2, ly - lh / 2 - 6, lw, lh);
+  g.font = '400 50px Jost'; g.letterSpacing = '7px'; g.fillStyle = cream; g.textAlign = 'center';
+  g.fillText(q.get('s1') || 'VELKOMIN Í REKSTURINN', W / 2, 1110); g.fillText(q.get('s2') || 'SÉRKJÖR FRÁ TRAUSTUM FYRIRTÆKJUM', W / 2, 1180);
+  window.__png = c.toDataURL('image/jpeg', 0.92);
+})();
+</script></body></html>

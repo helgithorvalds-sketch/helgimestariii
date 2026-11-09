@@ -1,0 +1,860 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+/* phones held sideways: too short for the stacked phone layouts */
+@custom-variant short-land (@media (orientation: landscape) and (max-height: 500px));
+/* short phones upright (SE class): the hero column tightens so the booklet fits under the CTAs */
+@custom-variant short-port (@media (orientation: portrait) and (max-width: 767px) and (max-height: 700px));
+
+@theme inline {
+  --font-display: "Jost", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ink: var(--ink);
+  --color-cream: var(--cream);
+  --color-peach: var(--peach);
+  --color-chalk: var(--chalk);
+  --color-sand: var(--sand);
+  --color-rose: var(--rose);
+  --color-rose-deep: var(--rose-deep);
+  --color-stage: var(--stage);
+  --color-stage-deep: var(--stage-deep);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/*
+  Palette from the Nýji kaflinn flyer:
+  white beige F6F5EC · peach cream EFE7DA · chalk beige E1DACA · neutral C1B6A4 · brandy rose B29079
+  plus the flyer's dark warm cover (stage) and a warm near-black ink.
+*/
+:root {
+  --radius: 0.75rem;
+
+  --cream: #f6f5ec;
+  --peach: #efe7da;
+  --chalk: #e1daca;
+  --sand: #c1b6a4;
+  --rose: #b29079;
+  --rose-deep: #9a7a64;
+  --stage: #4a4438;
+  --stage-deep: #2e2a24;
+  --ink: #2a2420;
+  --ink-soft: #6f655b;
+  /* rose dark enough for small text on cream / peach (≥ 4.5:1) */
+  --rose-ink: #7d604c;
+
+  /* one grid line for every section: content max 1240 px, gutter 20 → 72 px */
+  --gutter: clamp(20px, 5vw, 72px);
+  --container: 1240px;
+
+  --background: #f6f5ec;
+  --foreground: #2a2420;
+  --surface: #f6f5ec;
+  --surface-2: #efe7da;
+
+  --card: #fbf9f4;
+  --card-foreground: #2a2420;
+  --popover: #fbf9f4;
+  --popover-foreground: #2a2420;
+
+  --primary: #b29079;
+  --primary-foreground: #fbf9f4;
+  --secondary: #efe7da;
+  --secondary-foreground: #2a2420;
+  --muted: #e1daca;
+  --muted-foreground: #6f655b;
+  --accent: #c1b6a4;
+  --accent-foreground: #2a2420;
+
+  --destructive: oklch(0.55 0.18 27);
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(42, 36, 32, 0.14);
+  --input: rgba(42, 36, 32, 0.2);
+  --ring: #b29079;
+
+  /* motion tokens (mirrored in src/components/motion/tokens.ts) */
+  --ease-arrive: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-settle: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-glide: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-breathe: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-leave: cubic-bezier(0.5, 0, 0.75, 0);
+
+  /* the dark stage (flyer cover) */
+  --stage-gradient: radial-gradient(120% 95% at 28% 8%, #6e6455 0%, #4a4438 46%, #2e2a24 100%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: auto;
+    font-size: clamp(15px, 0.85rem + 0.2vw, 18px);
+  }
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    overflow-x: hidden;
+  }
+  img,
+  video {
+    max-width: 100%;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--rose) 45%, transparent);
+    color: var(--ink);
+  }
+  /* in the base layer so utilities (e.g. the hairline fields) can override it; currentColor keeps
+     ≥ 3:1 on both stages (ink on cream, cream on the dark stage) */
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* the shared grid: every section's content starts on the same vertical line */
+@utility site-container {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+}
+
+/* ---------- Flyer typography helpers ---------- */
+
+/* Thin, tracked capitals, like "NÝJI KAFLINN" on the cover. */
+@utility display-caps {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.04;
+}
+
+/* The serif-italic accent word, like "KAFLINN" on the print sheet. */
+@utility display-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Small tracked labels, like "VELKOMIN · 65°N 19°W · FYRIR HEIMILIÐ". */
+@utility label-caps {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: max(10.5px, 0.72rem);
+}
+
+/* The flyer's sunbeam: a soft diagonal band of light. */
+@utility light-beam {
+  background-image: linear-gradient(
+    118deg,
+    transparent 32%,
+    rgba(255, 250, 240, 0.55) 46%,
+    rgba(255, 250, 240, 0.5) 54%,
+    transparent 70%
+  );
+}
+@utility light-beam-dark {
+  background-image: linear-gradient(
+    118deg,
+    transparent 30%,
+    rgba(255, 246, 230, 0.16) 45%,
+    rgba(255, 246, 230, 0.13) 55%,
+    transparent 72%
+  );
+}
+
+/* Fine paper grain on dark stages. */
+@utility grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 0.6px, transparent 0.7px);
+  background-size: 3px 3px;
+}
+
+/* The dark stage: the flyer cover's warm taupe with its diagonal sunbeam. */
+@utility stage-bg {
+  background-color: var(--stage-deep);
+  background-image: var(--stage-gradient);
+}
+@utility stage-beam {
+  background-image: linear-gradient(
+    118deg,
+    transparent 30%,
+    rgba(255, 236, 206, 0.13) 44%,
+    rgba(255, 236, 206, 0.1) 52%,
+    transparent 66%
+  );
+  /* fade out at the section's bottom edge so dark sections meet without a seam */
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+/* ======================================================================
+   Reveal system (research §3). Hidden states exist only under html.js and
+   only until the shared observer sets [data-in]. No JS → everything visible.
+   Every reveal carries --rd (role delay); --rs scales durations on fast scroll.
+   ====================================================================== */
+
+[data-reveal] {
+  --rs: 1;
+}
+
+/* fade: labels, small type */
+.js [data-reveal="fade"]:not([data-in]) {
+  opacity: 0;
+}
+[data-reveal="fade"][data-in] {
+  transition: opacity calc(600ms * var(--rs)) var(--ease-breathe)
+    calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+
+/* block: paragraphs, cards, forms (fade + short rise) */
+[data-reveal="block"] {
+  --rise: 16px;
+}
+[data-reveal="block"][data-rise="card"] {
+  --rise: 28px;
+}
+@media (max-width: 767px) {
+  [data-reveal="block"] {
+    --rise: 12px;
+  }
+  [data-reveal="block"][data-rise="card"] {
+    --rise: 20px;
+  }
+}
+.js [data-reveal="block"]:not([data-in]) {
+  opacity: 0;
+  transform: translate3d(0, var(--rise), 0);
+}
+[data-reveal="block"][data-in] {
+  transition:
+    opacity calc(900ms * var(--rs)) var(--ease-breathe) calc(var(--rd, 0ms) + var(--rb, 0ms)),
+    transform calc(1000ms * var(--rs)) var(--ease-settle) calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+
+/* mask: heading lines rise out of their own clip box; padding keeps Á É Í Ó Ú Ý Þ and
+   italic descenders inside the clip without changing the layout */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding: 0.22em 0.12em 0.2em;
+  margin: -0.22em -0.12em -0.2em;
+}
+@supports (overflow: clip) {
+  .mask-line {
+    overflow: clip;
+    overflow-x: visible;
+  }
+}
+.mask-inner {
+  display: block;
+}
+.js [data-reveal="mask"]:not([data-in]) .mask-inner {
+  transform: translate3d(0, calc(100% + 0.45em), 0);
+}
+[data-reveal="mask"][data-in] .mask-inner {
+  transition: transform calc(var(--ld, 1000ms) * var(--rs)) var(--ease-arrive)
+    calc(var(--rd, 0ms) + var(--rb, 0ms) + var(--li, 0ms));
+}
+[data-reveal="mask"][data-in] .mask-accent .mask-inner {
+  transition-duration: calc(var(--ad, 900ms) * var(--rs));
+}
+[data-anim] .mask-inner,
+[data-anim] > .curtain-media,
+[data-anim] > .depth-body {
+  will-change: transform;
+}
+
+/* curtain: media frames open bottom → top while the picture settles 1.08 → 1 */
+.curtain {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  --round: 0px;
+  border-radius: var(--round);
+}
+.curtain > .curtain-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 50% 60%;
+}
+/* media that sizes the frame itself (iframes, stacked content) */
+.curtain > .curtain-media.curtain-flow {
+  position: relative;
+  inset: auto;
+  height: auto;
+}
+.js [data-reveal="curtain"]:not([data-in]) {
+  clip-path: inset(100% 0 0 0 round var(--round));
+}
+.js [data-reveal="curtain"]:not([data-in]) > .curtain-media {
+  transform: scale(1.08);
+}
+[data-reveal="curtain"][data-in] {
+  clip-path: inset(0 0 0 0 round var(--round));
+  transition: clip-path calc(1200ms * var(--rs)) var(--ease-curtain)
+    calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+[data-reveal="curtain"][data-in] > .curtain-media {
+  transition: transform calc(1600ms * var(--rs)) var(--ease-arrive)
+    calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-reveal="curtain"][data-done][data-zoom] > .curtain-media {
+    transition: transform 800ms var(--ease-settle);
+  }
+  .group:hover [data-reveal="curtain"][data-done][data-zoom] > .curtain-media,
+  [data-reveal="curtain"][data-done][data-zoom]:hover > .curtain-media {
+    transform: scale(1.035);
+    transition-duration: 1200ms;
+  }
+}
+
+/* hairline: drawn with scaleX (or scaleY) */
+.hairline {
+  display: block;
+  background: currentColor;
+}
+.hairline[data-axis="x"] {
+  height: 1px;
+}
+.hairline[data-axis="y"] {
+  width: 1px;
+}
+.js [data-reveal="hairline"][data-axis="x"]:not([data-in]) {
+  transform: scaleX(0);
+}
+.js [data-reveal="hairline"][data-axis="y"]:not([data-in]) {
+  transform: scaleY(0);
+}
+[data-reveal="hairline"][data-in] {
+  transition: transform calc(1200ms * var(--rs)) var(--ease-glide)
+    calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+
+/* depth: printed objects settle onto the page (3D-ish, long lens) */
+[data-reveal="depth"] {
+  perspective: 1600px;
+}
+.depth-body {
+  transform-origin: 50% 100%;
+}
+.js [data-reveal="depth"]:not([data-in]) > .depth-body {
+  opacity: 0;
+  transform: translate3d(0, 48px, 0) rotateX(9deg) scale(0.965);
+}
+.js [data-reveal="depth"]:not([data-in]) > .depth-shadow {
+  opacity: 0.25;
+  transform: scaleX(0.8);
+}
+[data-reveal="depth"][data-in] > .depth-body {
+  transition:
+    transform calc(1400ms * var(--rs)) var(--ease-arrive) calc(var(--rd, 0ms) + var(--rb, 0ms)),
+    opacity calc(900ms * var(--rs)) var(--ease-breathe) calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+[data-reveal="depth"][data-in] > .depth-shadow {
+  transition:
+    transform calc(1400ms * var(--rs)) var(--ease-arrive) calc(var(--rd, 0ms) + var(--rb, 0ms)),
+    opacity calc(1400ms * var(--rs)) var(--ease-arrive) calc(var(--rd, 0ms) + var(--rb, 0ms));
+}
+@media (max-width: 767px) {
+  .js [data-reveal="depth"]:not([data-in]) > .depth-body {
+    transform: translate3d(0, 32px, 0) rotateX(6deg) scale(0.975);
+  }
+}
+
+/* snapped (already scrolled past) */
+[data-instant],
+[data-instant] * {
+  transition: none !important;
+}
+
+/* failsafe: if the app never hydrates, show everything after 3.5 s */
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}
+html.js:not(.rv) [data-reveal]:not([data-in]):not([data-hero] *),
+html.js:not(.rv) [data-reveal]:not([data-in]):not([data-hero] *) .mask-inner,
+html.js:not(.rv) [data-reveal]:not([data-in]):not([data-hero] *) > .curtain-media,
+html.js:not(.rv) [data-reveal]:not([data-in]):not([data-hero] *) > .depth-body {
+  animation: reveal-failsafe 400ms var(--ease-breathe) 3.5s forwards;
+}
+
+/* The first viewport (page heroes, [data-hero]) plays from first paint with CSS animations, not at
+   hydration: frame lines draw, eyebrow, H1 lines rise, the accent lands, the sub fades up, while the
+   CTAs are simply there. Same tokens and role delays (--rd, --li) as the observer-driven reveals;
+   the observer only marks these elements [data-in] (see reveal-observer.ts). */
+@keyframes rv-mask {
+  from {
+    transform: translate3d(0, calc(100% + 0.45em), 0);
+  }
+  to {
+    transform: none;
+  }
+}
+/* no `to` keyframe: the fade ends at the element's own opacity (hairlines rest at 0.24–0.26) */
+@keyframes rv-appear {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes rv-block {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--rise, 16px), 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes rv-hx {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes rv-hy {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: none;
+  }
+}
+[data-hero] {
+  --hero-base: 180ms;
+}
+.js [data-hero] [data-reveal="mask"] .mask-inner {
+  animation: rv-mask var(--ld, 1000ms) var(--ease-arrive)
+    calc(var(--hero-base) + var(--rd, 0ms) + var(--li, 0ms)) both;
+}
+.js [data-hero] [data-reveal="mask"] .mask-accent .mask-inner {
+  animation-duration: var(--ad, 900ms);
+}
+.js [data-hero] [data-reveal="fade"] {
+  animation: rv-appear 600ms var(--ease-breathe) calc(var(--hero-base) + var(--rd, 0ms)) both;
+}
+.js [data-hero] [data-reveal="block"] {
+  animation: rv-block 1000ms var(--ease-settle) calc(var(--hero-base) + var(--rd, 0ms)) both;
+}
+.js [data-hero] [data-reveal="hairline"][data-axis="x"] {
+  animation: rv-hx 1200ms var(--ease-glide) calc(var(--rd, 0ms)) both;
+}
+.js [data-hero] [data-reveal="hairline"][data-axis="y"] {
+  animation: rv-hy 1200ms var(--ease-glide) calc(var(--rd, 0ms)) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-hero] [data-reveal="mask"] .mask-inner,
+  .js [data-hero] [data-reveal="hairline"][data-axis="x"],
+  .js [data-hero] [data-reveal="hairline"][data-axis="y"] {
+    animation: none;
+  }
+  .js [data-hero] [data-reveal] {
+    animation: rv-appear 400ms var(--ease-breathe) min(var(--rd, 0ms), 240ms) both !important;
+  }
+}
+
+/* reduced motion: opacity cross-fades only (400 ms), every end state composed */
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal]:not([data-in]) {
+    opacity: 0;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .js [data-reveal]:not([data-in]) .mask-inner,
+  .js [data-reveal]:not([data-in]) > .curtain-media,
+  .js [data-reveal]:not([data-in]) > .depth-body,
+  .js [data-reveal]:not([data-in]) > .depth-shadow {
+    transform: none !important;
+    opacity: 1;
+  }
+  [data-reveal][data-in],
+  [data-reveal][data-in] .mask-inner,
+  [data-reveal][data-in] > .curtain-media,
+  [data-reveal][data-in] > .depth-body {
+    transition: opacity 400ms var(--ease-breathe) min(var(--rd, 0ms), 240ms) !important;
+  }
+  [data-reveal="curtain"][data-in] {
+    clip-path: inset(0 0 0 0 round var(--round));
+  }
+}
+
+/* ======================================================================
+   Interaction (research §4): short, quiet, fine pointers only
+   ====================================================================== */
+
+/* double-wipe underline: in from the left, out to the right */
+.link-wipe {
+  position: relative;
+  text-decoration: none;
+}
+.link-wipe::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 400ms var(--ease-leave);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-wipe:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform 500ms var(--ease-settle);
+  }
+}
+.link-wipe[data-active]::after {
+  transform: scaleX(1);
+}
+
+.press {
+  transition: transform 250ms var(--ease-settle);
+}
+.press:active {
+  transform: scale(0.985);
+  transition-duration: 100ms;
+}
+
+/* Focus on the dark stages: a solid pill's text (and so its currentColor ring) is ink, but the ring
+   is drawn outside the pill, on the stage, where ink would be ~1.5:1. There it is cream (≥ 9:1). */
+[data-header="dark"] .press:focus-visible,
+header[data-tone="dark"] .press:focus-visible,
+.film-dialog .press:focus-visible {
+  outline-color: var(--cream);
+}
+
+/* sections focused after an anchor glide (tabindex -1): no ring around a whole section */
+[data-focus-target]:focus {
+  outline: none;
+}
+
+/* no JS: the header cannot invert over light sections, so it stays with the dark hero */
+html:not(.js) header {
+  position: absolute;
+}
+
+/* locked page (lightbox / menu) */
+html.scroll-locked,
+html.scroll-locked body {
+  overflow: hidden;
+}
+
+/* accordion: height + opacity, 400 ms settle both ways (an opening and a closing item trade height
+   on the same curve, so the rows below never lurch) */
+@keyframes acc-open {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes acc-close {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+.acc-content {
+  overflow: hidden;
+}
+.acc-content[data-state="open"] {
+  animation: acc-open 400ms var(--ease-settle);
+}
+.acc-content[data-state="closed"] {
+  animation: acc-close 400ms var(--ease-settle);
+}
+
+/* "Meira" (MoreText). Continuation mode: the line stays, the rest opens under it. Swap mode (the full
+   text is a different paragraph): the line and the full text trade height on one curve (400 ms settle),
+   the outgoing one fades out in the first 35 %, the incoming one fades in after it, so the same
+   sentence is never on screen twice. */
+@keyframes more-open {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+  35% {
+    opacity: 0;
+  }
+  100% {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+@keyframes more-close {
+  0% {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  35% {
+    opacity: 0;
+  }
+  100% {
+    height: 0;
+    opacity: 0;
+  }
+}
+.more-content {
+  overflow: hidden;
+}
+.more-content[data-state="open"] {
+  animation: more-open 400ms var(--ease-settle);
+}
+.more-content[data-state="closed"] {
+  animation: more-close 400ms var(--ease-settle);
+}
+.more-line {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 400ms var(--ease-settle),
+    opacity 260ms var(--ease-settle) 140ms;
+}
+.more-line[data-state="open"] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 400ms var(--ease-settle),
+    opacity 140ms var(--ease-leave);
+}
+.more-line > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* lightbox */
+@keyframes lb-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes lb-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.985);
+  }
+}
+.lb-backdrop {
+  animation: lb-in 600ms var(--ease-arrive) both;
+}
+.lb-panel {
+  animation: lb-rise 600ms var(--ease-arrive) both;
+}
+@keyframes lb-out {
+  to {
+    opacity: 0;
+  }
+}
+.lb-backdrop[data-closing] {
+  animation: lb-out 300ms var(--ease-leave) both;
+}
+
+/* the film: a native modal dialog over the whole viewport, with its own backdrop layer */
+.film-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cream);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+.film-dialog:not([open]) {
+  display: none;
+}
+.film-dialog::backdrop {
+  background: transparent;
+}
+/* frame 0 over the video; it breathes away once the first frame is on screen */
+.film-poster {
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 500ms var(--ease-breathe);
+}
+.film-poster[data-hidden] {
+  opacity: 0;
+}
+@keyframes film-end {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+}
+.film-end {
+  animation: film-end 800ms var(--ease-settle) both;
+}
+
+/* mobile menu panel: a sheet over the rest of the screen (no live page showing under it); held
+   sideways it is shorter than its list, so it scrolls itself (the page stays locked) */
+.menu-panel {
+  height: calc(100vh - 100%);
+  height: calc(100dvh - 100%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition:
+    clip-path 400ms var(--ease-leave),
+    visibility 0s linear 400ms;
+}
+.menu-panel[data-open] {
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  transition: clip-path 700ms var(--ease-curtain);
+}
+
+/* route change (TanStack view transitions) */
+::view-transition-old(root) {
+  animation: 300ms var(--ease-leave) both vt-out;
+}
+::view-transition-new(root) {
+  animation: 600ms var(--ease-settle) both vt-in;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 200ms;
+  }
+  @keyframes vt-in {
+    from {
+      opacity: 0;
+    }
+  }
+  .menu-panel {
+    clip-path: none;
+    opacity: 0;
+    transition:
+      opacity 300ms var(--ease-breathe),
+      visibility 0s linear 300ms;
+  }
+  .menu-panel[data-open] {
+    clip-path: none;
+    opacity: 1;
+    transition: opacity 300ms var(--ease-breathe);
+  }
+  .lb-panel,
+  .film-end {
+    animation-name: lb-in;
+  }
+}
+
+/* Hero H1: the largest caps on every page (≥ the section H2 "lg"), sized so the longest caps line
+   ("Á HÖFUÐBORGARSVÆÐINU.", ≈ 13.9 em with tracking) stays on one line in the hero column
+   (StageHero: lg:max-w-[min(62%,48rem)] of the 1240 px container) at every width. */
+.hero-title {
+  font-size: clamp(1.15rem, 6vw, 1.85rem);
+}
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+  }
+}
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: clamp(1.7rem, 0.6rem + 2.3vw, 3rem);
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-title {
+    font-size: clamp(1.1rem, 2.9vw, 1.5rem);
+  }
+}
+
+/* one opacity cross-fade for content that arrives after data loads */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.fade-in {
+  animation: fade-in 600ms var(--ease-breathe) both;
+}

@@ -1,0 +1,540 @@
+/* Pinned 3D story stage — see StoryStage.tsx. Tokens: arrive .19,1,.22,1 · settle .165,.84,.44,1 ·
+   glide .65,0,.35,1 · breathe .45,0,.55,1 · leave .5,0,.75,0 */
+.story-track {
+  position: relative;
+  height: calc(var(--story-steps) * 92svh + 100svh);
+}
+/* the title above the story (StoryChrome StoryHeader): cream into the stage colour */
+.story-head {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(to bottom, var(--cream) 0%, #d9cfc0 100%);
+}
+/* Desktop: the stage slides up under the title (the progress reads the track's own rect, so the
+   mapping is unchanged). The title sits on the scene's empty sky, the scene is in view from the
+   first screen, and the header's cream fades out over the stage's top instead of ending on it.
+   Phones, portrait tablets and the static layout keep the header above the stage. */
+@media (min-width: 768px) {
+  html.js .story:is([data-story-mode="live"], [data-story-mode="pending"]) {
+    --story-overlap: 35svh;
+  }
+  html.js .story:is([data-story-mode="live"], [data-story-mode="pending"]) .story-head {
+    background: linear-gradient(
+      to bottom,
+      var(--cream) 0%,
+      var(--cream) calc(100% - var(--story-overlap)),
+      rgb(246 245 236 / 0) 100%
+    );
+  }
+}
+@media (max-width: 767px),
+  (orientation: portrait) and (max-width: 1100px),
+  (orientation: landscape) and (max-height: 500px) and (pointer: coarse),
+  (prefers-reduced-motion: reduce) {
+  html.js .story:is([data-story-mode="live"], [data-story-mode="pending"]) {
+    --story-overlap: 0px;
+  }
+  html.js .story:is([data-story-mode="live"], [data-story-mode="pending"]) .story-head {
+    background: linear-gradient(to bottom, var(--cream) 0%, #d9cfc0 100%);
+  }
+}
+.story-track {
+  margin-top: calc(-1 * var(--story-overlap, 0px));
+}
+.story-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: #d9cfc0;
+}
+.story-canvas-wrap {
+  position: absolute;
+  inset: 0;
+}
+.story-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.story-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+.story-poster[data-show="1"] {
+  opacity: 1;
+}
+.story-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+.story-labels[data-ready="1"] {
+  opacity: 1;
+}
+.story-lead {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  background: rgba(42, 36, 32, 0.45);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.story-cap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-bottom: 9px;
+  font: 500 10.5px/1 var(--font-sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  /* a quiet clay-coloured halo keeps the caption legible where it crosses a facade or a roof */
+  text-shadow:
+    0 0 2px #d9cfc0,
+    0 0 6px #d9cfc0,
+    0 0 12px rgba(217, 207, 192, 0.9);
+  will-change: transform, opacity;
+}
+/* Edges of the world: the stage fades into its own colour at the top and bottom, so the pinned
+   canvas never ends on a hard line (the StoryHeader / StoryFooter gradients continue from it). */
+.story-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, #d9cfc0 0%, rgba(217, 207, 192, 0.85) 4%, rgba(217, 207, 192, 0) 15%),
+    linear-gradient(to bottom, #d9cfc0 0%, rgba(217, 207, 192, 0) 9%),
+    radial-gradient(130% 95% at 55% 42%, transparent 58%, rgba(46, 42, 36, 0.12) 100%),
+    linear-gradient(
+      to top right,
+      rgba(239, 231, 218, 0.88) 0%,
+      rgba(239, 231, 218, 0.5) 28%,
+      transparent 48%
+    );
+}
+
+/* copy: on the site's grid line (same left edge as every other section) */
+.story-copy {
+  position: absolute;
+  z-index: 1;
+  left: max(var(--gutter), (100% - var(--container)) / 2);
+  bottom: clamp(28px, 8svh, 88px);
+  width: min(460px, 38vw);
+  color: var(--ink);
+}
+/* a quiet paper-coloured wash behind the copy: roofs, coupons and the plinth never show through
+   the type or the progress hairline. Its box ends exactly on the stage's bottom edge (the copy's
+   own bottom offset), where the radial gradient has reached 0, so the wash is never cut by the
+   stage's edge when the stage scrolls out. */
+.story-copy::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -34% -30% calc(-1 * clamp(28px, 8svh, 88px)) -26%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(236, 229, 217, 0.94) 0%,
+    rgba(236, 229, 217, 0.8) 52%,
+    rgba(236, 229, 217, 0) 100%
+  );
+}
+.story-progress {
+  position: relative;
+  height: 1px;
+  margin-bottom: 26px;
+  background: rgba(42, 36, 32, 0.16);
+}
+.story-progress-fill {
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 36, 32, 0.72);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+.story-tick {
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 7px;
+  background: rgba(42, 36, 32, 0.35);
+}
+.story-copy-stack {
+  display: grid;
+}
+/* Step swap (research 01 §5.2): one step's copy at a time. The outgoing step only fades (240 ms
+   leave) and its parts reset once invisible; the incoming step starts after it has gone. */
+.story-step {
+  grid-area: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms cubic-bezier(0.5, 0, 0.75, 0);
+}
+.story-step[data-active="1"] {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 500ms cubic-bezier(0.165, 0.84, 0.44, 1) 260ms;
+}
+.story-step-n {
+  display: flex;
+  align-items: center;
+  font: 500 10.5px/1 var(--font-sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(42, 36, 32, 0.62);
+}
+.story-step-n span {
+  margin-left: 0.5em;
+  color: rgba(42, 36, 32, 0.58);
+}
+.story-step-rule {
+  display: inline-block;
+  width: 34px;
+  height: 1px;
+  margin: 0 14px;
+  background: rgba(42, 36, 32, 0.4);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0s linear 300ms;
+}
+.story-step[data-active="1"] .story-step-rule {
+  transform: scaleX(1);
+  transition: transform 1200ms cubic-bezier(0.65, 0, 0.35, 1) 340ms;
+}
+.story-title {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: clamp(1.3rem, 0.85rem + 1.45vw, 2.3rem);
+  line-height: 1.14;
+  text-wrap: balance;
+}
+.story-mask {
+  display: block;
+  overflow: hidden;
+  /* room for Icelandic accents (Á, Ö, Ð) above the cap height */
+  padding-top: 0.16em;
+  margin-top: -0.16em;
+  padding-bottom: 0.06em;
+}
+.story-mask-inner {
+  display: block;
+  transform: translateY(110%);
+  /* reset only once the step is invisible: the outgoing title never drops */
+  transition: transform 0s linear 300ms;
+}
+.story-step[data-active="1"] .story-mask-inner {
+  transform: none;
+  transition: transform 1000ms cubic-bezier(0.19, 1, 0.22, 1) 280ms;
+}
+.story-body {
+  margin-top: 16px;
+  max-width: 34rem;
+  font: 400 15.5px/1.65 var(--font-sans);
+  color: rgba(42, 36, 32, 0.74);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0s linear 300ms,
+    transform 0s linear 300ms;
+}
+.story-step[data-active="1"] .story-body {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 800ms cubic-bezier(0.165, 0.84, 0.44, 1) 460ms,
+    transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1) 460ms;
+}
+/* a source line under the body (rides on the body's fade) */
+.story-note {
+  display: block;
+  margin-top: 10px;
+  font: 500 10px/1.4 var(--font-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(42, 36, 32, 0.66);
+}
+
+/* touch: the progress fill moves with the step's tween instead of jumping */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+  .story-progress-fill {
+    transition: transform 1200ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+}
+
+/* phones and portrait tablets: canvas on top, copy below (step-triggered, not scrubbed). The copy
+   panel is as tall as its tallest step (StoryStage measures it into --copy-h); the canvas takes the
+   rest, so there is no empty band under the copy. Without the measurement: 60 / 40. */
+@media (max-width: 767px), (orientation: portrait) and (max-width: 1100px) {
+  .story-sticky {
+    --canvas-h: clamp(52svh, 100svh - var(--copy-h, 40svh), 74svh);
+  }
+  .story-canvas-wrap {
+    bottom: auto;
+    height: var(--canvas-h);
+  }
+  .story-vignette {
+    background:
+      linear-gradient(to top, rgba(239, 231, 218, 0.9) 0%, rgba(239, 231, 218, 0) 9%),
+      radial-gradient(130% 95% at 50% 45%, transparent 60%, rgba(46, 42, 36, 0.1) 100%);
+  }
+  .story-copy {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: var(--canvas-h);
+    width: auto;
+    padding: 22px max(22px, (100% - var(--container)) / 2) 0;
+    background: var(--peach);
+  }
+  .story-copy::before {
+    content: none;
+  }
+  .story-progress {
+    margin-bottom: 20px;
+  }
+  .story-title {
+    margin-top: 14px;
+    font-size: clamp(1.2rem, 0.9rem + 1.6vw, 1.6rem);
+  }
+  .story-body {
+    margin-top: 12px;
+    font-size: 14.5px;
+  }
+  .story-cap {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+}
+/* tall phones (about 1:2 and taller): the step-01 lineup is as wide as the screen and no taller, so
+   a canvas past ~2/3 of the screen only adds empty clay above and below it */
+@media (max-width: 767px) and (max-aspect-ratio: 1/2) {
+  .story-sticky {
+    --canvas-h: clamp(52svh, 100svh - var(--copy-h, 40svh), 66svh);
+  }
+}
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1100px) {
+  .story-sticky {
+    --canvas-h: clamp(56svh, 100svh - var(--copy-h, 36svh), 76svh);
+  }
+  .story-copy {
+    padding: 30px var(--gutter) 0;
+  }
+  .story-title {
+    font-size: 2rem;
+  }
+  .story-body {
+    max-width: 36rem;
+    font-size: 16px;
+  }
+}
+/* phones held sideways: canvas left, copy right, both full height */
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .story-canvas-wrap {
+    inset: 0 42% 0 0;
+    height: auto;
+  }
+  .story-vignette {
+    background:
+      linear-gradient(to left, rgba(239, 231, 218, 0.9) 0%, rgba(239, 231, 218, 0) 10%),
+      radial-gradient(130% 95% at 50% 45%, transparent 60%, rgba(46, 42, 36, 0.1) 100%);
+  }
+  .story-copy {
+    inset: 0 0 0 58%;
+    width: auto;
+    padding: 20px 24px 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--peach);
+  }
+  .story-copy::before {
+    content: none;
+  }
+  .story-progress {
+    margin-bottom: 14px;
+  }
+  .story-title {
+    margin-top: 10px;
+    font-size: clamp(1rem, 2.6vw, 1.15rem);
+  }
+  .story-body {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .story-note {
+    margin-top: 6px;
+  }
+  .story-cap {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+}
+
+/* ---------------------------------------------------------------- static layout
+   Reduced motion, no WebGL, no JS: the steps as a stacked list with their end frames, on the
+   stage colour so the StoryHeader / StoryFooter gradients run into it without a seam. Both layouts
+   are in the server HTML; CSS picks one, so the height is the same before and after hydration. */
+.story-static-list {
+  display: none;
+  background: #d9cfc0;
+  padding-block: 3rem 4rem;
+}
+html:not(.js) .story-track {
+  display: none;
+}
+html:not(.js) .story-static-list,
+[data-story-mode="static"] .story-static-list {
+  display: block;
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-track {
+    display: none;
+  }
+  .story-static-list {
+    display: block;
+  }
+}
+.story-static-item {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+  display: grid;
+  align-items: center;
+  gap: 1.5rem;
+}
+.story-static-item + .story-static-item {
+  margin-top: 4rem;
+}
+@media (min-width: 768px) {
+  .story-static-item {
+    grid-template-columns: 1.35fr 1fr;
+    gap: 3rem;
+  }
+  .story-static-item + .story-static-item {
+    margin-top: 6rem;
+  }
+}
+.story-static-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.story-static-list .story-title {
+  margin-top: 14px;
+}
+.story-static-list .story-step-rule {
+  transform: none;
+}
+.story-static-list .story-body {
+  opacity: 1;
+  transform: none;
+}
+
+/* the band under the story (film button): continues from whatever colour the stage ends on */
+.story-foot {
+  background: linear-gradient(to bottom, #d9cfc0 0%, var(--cream) 100%);
+}
+@media (max-width: 767px),
+  (orientation: portrait) and (max-width: 1100px),
+  (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  [data-story-mode="live"] .story-foot,
+  [data-story-mode="pending"] .story-foot {
+    background: linear-gradient(to bottom, var(--peach) 0%, var(--cream) 100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .story .story-foot {
+    background: linear-gradient(to bottom, #d9cfc0 0%, var(--cream) 100%);
+  }
+}
+html:not(.js) .story .story-foot {
+  background: linear-gradient(to bottom, #d9cfc0 0%, var(--cream) 100%);
+}
+
+@keyframes story-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.story-fade-in {
+  animation: story-fade-in 400ms cubic-bezier(0.45, 0, 0.55, 1) both;
+}
+
+/* ---------------------------------------------------------------- hero still
+   The resting booklet when there is no live canvas (reduced motion, no WebGL, no JS). Phones and
+   portrait tablets: the portrait stills fill their box (the copy sits above them). Everywhere else
+   the still (cropped to the booklet and its shadow) gets its own box right of the copy, so it never
+   runs under the H1: CSS starts the box after the copy column's max width; with JS HeroBooklet sets
+   --still-left just past the H1's text. Keep the media query in sync with HERO_STILL_SIDE. */
+.hero-still {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-still img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  object-fit: contain;
+}
+@media (max-width: 1023px) and (orientation: portrait) {
+  .hero-still img {
+    object-fit: cover;
+  }
+}
+@media (min-width: 1024px),
+  (min-width: 768px) and (orientation: landscape),
+  (orientation: landscape) and (max-height: 500px) {
+  .hero-still {
+    /* under the top frame line, above the bottom one; right edge on the page gutter */
+    top: calc(clamp(4.5rem, 4rem + 1.2vw, 5.6rem) + 2.5rem);
+    right: var(--gutter);
+    bottom: 4.5rem;
+    left: var(
+      --still-left,
+      calc(
+        max(var(--gutter), (100% - var(--container)) / 2) +
+          min(0.62 * min(100% - 2 * var(--gutter), var(--container)), 48rem) + 2rem
+      )
+    );
+  }
+  .hero-still img {
+    /* about the live booklet's size: never wider than the stage is tall */
+    max-width: 92svh;
+    max-height: 92svh;
+    object-position: 50% 42%;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-still {
+    top: calc(clamp(4.5rem, 4rem + 1.2vw, 5.6rem) + 0.5rem);
+    bottom: 2.25rem;
+    left: var(
+      --still-left,
+      calc(max(var(--gutter), (100% - var(--container)) / 2) + 0.56 * min(100% - 2 * var(--gutter), var(--container)) + 1rem)
+    );
+  }
+}

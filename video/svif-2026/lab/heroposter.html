@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{width:100vw;height:100vh;display:block}</style></head>
+<body><canvas id="c"></canvas><script type="module">
+import { createHeroScene } from "@three/hero";
+const q = new URLSearchParams(location.search);
+const s = createHeroScene(document.getElementById("c"), { mobile: q.has("m"), cover: q.get("cover") || undefined });
+s.resize(innerWidth, innerHeight);
+window.__seek = (o) => s.frame({ arrive: 1, open: o, tiltX: 0, tiltY: 0 });
+window.__ready = s.ready.then(() => { window.__seek(+(q.get("open") ?? 0)); return true; });
+</script></body></html>
