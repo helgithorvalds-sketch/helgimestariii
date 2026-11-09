@@ -1128,6 +1128,7 @@ export default function SvifListi() {
         onAdd={handleAdd}
         existingNames={companies.map((c) => c.name)}
         existingCompanyIds={companies.map((c) => c.companyId).filter(Boolean)}
+        sectors={FLOKKAR}
       />
 
       <Dialog open={!!info} onOpenChange={(o) => { if (!o) setInfo(null); }}>
