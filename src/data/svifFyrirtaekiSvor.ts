@@ -109,6 +109,7 @@ export const FLOKKAR: Flokkur[] = [
   { geiri: "Vefur og tækni", undirgeiri: "Vefsíðugerð", lysing: "Heimasíða eða vefverslun fyrir nýtt fyrirtæki.", skipting: "Gonora: ódýr áskrift. Vefapp: sérsmíði og bókunarkerfi. Allra Átta: WordPress og Shopify. Hinir skarast við þessa." },
   { geiri: "Vefur og tækni", undirgeiri: "Auglýsingar og markaðssetning", lysing: "Auglýsingar á Google og samfélagsmiðlum, herferðir og efni.", skipting: "Pikk: Google og Meta. Birta: samfélagsmiðlar, efni og myndbönd. Vörar: full auglýsingastofa með mörkun." },
   { geiri: "Vefur og tækni", undirgeiri: "Tölvurekstur og netöryggi", lysing: "Tölvukerfi, Microsoft 365, afritun og öryggi í áskrift." },
+  { geiri: "Vefur og tækni", undirgeiri: "Tölvuaðstoð og ráðgjöf", lysing: "Tölvuaðstoð, viðgerðir og ráðgjöf í tölvumálum." },
   { geiri: "Vefur og tækni", undirgeiri: "Net, sími og lén", lysing: "Ljósleiðari, farsími, lén og tölvupóstur." },
   { geiri: "Vefur og tækni", undirgeiri: "Símsvörun og fyrirtækjaskráning", lysing: "Símsvörun og skráning í 1819 og á kort." },
   { geiri: "Vefur og tækni", undirgeiri: "Tölvur og tæki", lysing: "Tölvur, skjáir, símar og raftæki.", note: "ELKO bíður." },
