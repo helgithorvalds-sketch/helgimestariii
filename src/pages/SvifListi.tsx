@@ -364,6 +364,15 @@ export default function SvifListi() {
     return patch(c, { rejected, rejectedAt }, { rejected, rejected_at: rejectedAt || null }, rejected ? "Merkt sem off" : "Endurvirkjað");
   };
 
+  const toggleCalled = (c: Company) => {
+    const msg = c.isDone
+      ? `Taka „${c.name}“ af lista yfir hringd fyrirtæki?`
+      : `Ertu búinn að hringja í „${c.name}“?`;
+    if (!window.confirm(msg)) return;
+    return patch(c, { isDone: !c.isDone }, { is_done: !c.isDone },
+      !c.isDone ? `${c.name} merkt sem hringt` : `${c.name} ekki lengur merkt hringt`);
+  };
+
   const setOutcome = (c: Company, outcome: string) => {
     const next = (c.lastCallOutcome === outcome ? undefined : outcome) as Company["lastCallOutcome"];
     return patch(c, { lastCallOutcome: next }, { last_call_outcome: next || null },
@@ -908,13 +917,13 @@ export default function SvifListi() {
                                 const s = stadaOf(c);
                                 const sv = svarFor(c);
                                 return (
+                                  <div key={c.id} className={cn("rounded-md border max-w-full", c.isDone && "ring-2 ring-emerald-500")}>
                                   <button
-                                    key={c.id}
                                     onClick={() => setInfo({ c, flokkur: f.undirgeiri, keppinautar: f.companies.filter((x) => x.id !== c.id) })}
                                     title={[STADA_PILL[s].label, sv?.thjonusta].filter(Boolean).join(" · ")}
                                     className={cn(
-                                      "text-xs rounded-md border px-2 py-1 text-left hover:bg-muted max-w-full",
-                                      c.registeredInSvif && "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40",
+                                      "text-xs px-2 py-1 text-left hover:bg-muted w-full block",
+                                      c.registeredInSvif && "bg-emerald-50 dark:bg-emerald-950/40",
                                       s === "nei" && "line-through text-muted-foreground",
                                     )}
                                   >
@@ -926,6 +935,19 @@ export default function SvifListi() {
                                     </span>
                                     {sv?.thjonusta && <span className="block text-[11px] text-muted-foreground no-underline">{sv.thjonusta}</span>}
                                   </button>
+                                  {c.notes?.trim() && (
+                                    <p className="text-[11px] px-2 pb-1 whitespace-pre-wrap max-w-xs border-t pt-1">{c.notes.trim()}</p>
+                                  )}
+                                  <button
+                                    onClick={() => toggleCalled(c)}
+                                    className={cn(
+                                      "w-full text-[11px] font-bold px-2 py-0.5 border-t",
+                                      c.isDone ? "bg-emerald-600 text-primary-foreground" : "text-muted-foreground hover:bg-muted",
+                                    )}
+                                  >
+                                    {c.isDone ? "✓ Búið að hringja" : "Merkja hringt"}
+                                  </button>
+                                  </div>
                                 );
                               })}
                               {f.einnig.map((c) => (
