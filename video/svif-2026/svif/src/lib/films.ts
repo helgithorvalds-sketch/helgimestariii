@@ -34,31 +34,32 @@ export const FILM_HEIMILI: Film = {
   captions: "/svif/film/svif-heimili.is.vtt",
   transcript: [
     {
-      scene: "Nýji kaflinn svífur yfir dökku sviði.",
+      scene: "Nýji kaflinn lendir á dökku sviði og opnast. Flett er hratt í gegnum allar síðurnar og svo lokast hann.",
       words: "Við tengjum ykkur við alla nýja húseigendur á höfuðborgarsvæðinu.",
     },
     {
-      scene:
-        "Hús úr ljósum leir. Á stalli fyrir framan það rísa tryggingar, málning, húsgögn, gluggar, gólfefni og rafmagn.",
-      words: "Um 80% nýrra húseigenda ráðast í framkvæmdir eftir húsakaup.",
+      scene: "Hús úr ljósum leir með skilti sem á stendur SELT. Í kringum það birtast tryggingar, málning, húsgögn, gluggar, gólfefni og rafmagn.",
+      words: "Um 80% nýrra húseigenda ráðast í framkvæmdir eftir húsakaup. Nýju heimili fylgja ótal verkefni.",
     },
     {
-      scene: "Hlutirnir hverfa inn í Nýja kaflann, sem lendir og opnast.",
-      words: "Þess vegna bjuggum við til SVIF. Traust fyrirtæki fyrir hvert verkefni heimilisins.",
+      scene: "Hlutirnir dofna og Nýji kaflinn lendir á auða svæðinu og opnast. Flett er í gegnum nokkrar síður.",
+      words: "Þess vegna bjuggum við til SVIF.",
     },
     {
-      scene: "Síðum er flett og fjórir afsláttarmiðar raðast yfir bæklinginn.",
-      words:
-        "Örfá traust fyrirtæki í hverjum flokki. Hvert þeirra býður nýjum húseigendum sérkjör.",
+      scene: "Fjórir afsláttarmiðar lyftast upp úr bæklingnum og hver þeirra lendir hjá verkefninu sem hann á við.",
+      words: "Traust fyrirtæki með afslátt fyrir hvert verkefni.",
     },
     {
-      scene: "Hverfi rís í kringum húsið. Heimili nýrra eigenda fá rósrauðan lit og pinna.",
-      words: "Kerfið finnur nýja húseigendur. Við sjáum þegar kaupsamningi er þinglýst.",
+      scene: "Auglýsing verður til á síðu: hjálparlínur dragast og mynd, texti og afsláttarmiði falla á sinn stað.",
+      words: "Við hönnum auglýsinguna þína.",
     },
     {
-      scene:
-        "Bæklingar eru prentaðir og fljúga heim til nýju eigendanna. Sá síðasti rennur inn um lúguna.",
-      words: "Við hönnum, prentum og sendum. Þú sendir merki og tilboð. Við sjáum um allt hitt.",
+      scene: "Prentvél úr leir. Prentuð eintök raðast í snyrtilegan stafla.",
+      words: "Við prentum bæklinginn. 350–500 eintök á mánuði.",
+    },
+    {
+      scene: "Höfuðborgarsvæðið úr lofti. Sendibíll SVIF ekur um göturnar og eintök berast að dyrum nýrra eigenda. Það síðasta fer inn um lúguna.",
+      words: "Og sendum vikulega til allra nýrra húseigenda. Fólk fær afsláttinn þinn þegar þörfin vaknar.",
     },
     { scene: "Lokaspjald.", words: "Bókaðu pláss í næsta bæklingi. svif.is" },
   ],
@@ -66,7 +67,7 @@ export const FILM_HEIMILI: Film = {
   poster: "/svif/film/svif-heimili-poster.jpg",
   label: "Svona virkar SVIF",
   title: "Nýji kaflinn",
-  seconds: 50,
+  seconds: 53,
 };
 
 export const FILM_FYRIRTAEKI: Film = {
@@ -77,37 +78,33 @@ export const FILM_FYRIRTAEKI: Film = {
   captions: "/svif/film/svif-fyrirtaeki.is.vtt",
   transcript: [
     {
-      scene: "Bæklingurinn svífur yfir dökku sviði.",
+      scene: "Bæklingurinn lendir á dökku sviði og opnast. Flett er hratt í gegnum síðurnar og svo lokast hann.",
       words: "Við tengjum ykkur við öll ný fyrirtæki á Íslandi.",
     },
     {
-      scene:
-        "Róleg gata með skrifstofuhúsum. Ný skrifstofa rís og fyrir framan hana bókhald, tryggingar, vefsíða, banki, tölvur og hönnun.",
-      words: "Á hverjum degi verða til ný fyrirtæki. Nýjum rekstri fylgja ótal verkefni.",
+      scene: "Nýjar skrifstofur opna hver á eftir annarri og bókhald, tryggingar, vefsíða, banki, tölvur og hönnun birtast í kring.",
+      words: "Hundruð nýrra fyrirtækja í hverjum mánuði. Nýjum rekstri fylgja ótal verkefni.",
     },
     {
-      scene:
-        "Hlutirnir hverfa inn í bæklinginn, sem opnast á síðu með einum reit fyrir hvern flokk.",
-      words:
-        "Þess vegna bjuggum við til SVIF. Eitt fyrirtæki í hverjum flokki. Með sérkjörum fyrir nýjan rekstur.",
+      scene: "Bæklingurinn opnast á síðu með flokkum sem lýsast upp hver á fætur öðrum.",
+      words: "Sérkjör frá þeim sem nýr rekstur þarf. Eitt fyrirtæki í hverjum flokki.",
     },
     {
-      scene: "Gatan verður að hverfi. Nýskráð fyrirtæki fá rósrauðan lit og pinna.",
-      words: "Kerfið finnur nýskráð fyrirtæki. Um allt land.",
+      scene: "Perlulík kúla svífur yfir hverfinu og dregur fínar línur niður að nýskráðum fyrirtækjum, sem verða rósrauð.",
+      words: "Kerfið finnur nýskráð fyrirtæki.",
     },
     {
-      scene:
-        "Bæklingar eru prentaðir og fljúga til nýju fyrirtækjanna. Sá síðasti rennur inn um lúguna á nýju skrifstofunni.",
-      words: "Við hönnum, prentum og sendum. Um 250 eintök á mánuði, á fyrstu vikum rekstrarins.",
+      scene: "Sendibíll SVIF ekur um göturnar og bæklingar berast nýju fyrirtækjunum. Sá síðasti fer í póstkassann á nýju skrifstofunni.",
+      words: "Við sendum bæklinginn til nýrra fyrirtækja. Um 250 á mánuði, um allt land.",
     },
-    { scene: "Lokaspjald.", words: "Rétta fólkið á réttum tíma. svif.is" },
+    { scene: "Lokaspjald.", words: "Bókið pláss í næsta bæklingi. svif.is" },
   ],
   frame0: "/svif/film/svif-fyrirtaeki-frame0.jpg",
   poster: "/svif/film/svif-fyrirtaeki-poster.jpg",
   label: "SVIF fyrir ný fyrirtæki, kynningarmyndband",
   title: "Fyrir ný fyrirtæki",
-  seconds: 49,
+  seconds: 43,
 };
 
-/** "50 sek." */
+/** "53 sek." */
 export const filmMeta = (f: Film) => `${f.seconds} sek.`;

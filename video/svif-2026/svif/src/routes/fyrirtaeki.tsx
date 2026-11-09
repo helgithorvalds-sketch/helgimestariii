@@ -1,22 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { BIZ_STEPS } from "@/content/story-copy";
 import { useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
 import { VideoLightbox, type FilmHandle } from "@/components/VideoLightbox";
 import { FILM_FYRIRTAEKI, filmMeta } from "@/lib/films";
 import { Sequence, Reveal } from "@/components/motion/Reveal";
 import { Eyebrow, DisplayTitle, Pill, PillArrow, FilmButton } from "@/components/SvifBits";
-import { WhySection as WhyCards, type WhyReason } from "@/components/WhySection";
 import { StageHero } from "@/components/StageHero";
-import { StoryHeader, StoryFooter } from "@/components/StoryChrome";
+import { StoryFooter } from "@/components/StoryChrome";
 import { ContentsList, type ContentsRow } from "@/components/ContentsList";
 import { BookingSection } from "@/components/BookingSection";
-import { BusinessStorySection, type StoryStep } from "@/components/story/BusinessStorySection";
-import { FaqSection, type Faq } from "@/components/FaqSection";
+import { BusinessStorySection } from "@/components/story/BusinessStorySection";
+import { IdeaSection } from "@/components/idea/IdeaSection";
+import { IDEA_BIZ } from "@/components/idea/copy";
 import { SiteFooter } from "@/components/SiteFooter";
 
+/* research/06-round2-spec.md §6 */
 const TITLE = "SVIF · Bæklingur til nýrra fyrirtækja";
 const DESCRIPTION =
-  "Nýir fyrirtækjaeigendur um allt land fá bækling með sérkjörum frá völdum fyrirtækjum, á fyrstu vikum rekstrarins. Eitt fyrirtæki í hverjum flokki.";
+  "Nýstofnuð fyrirtæki um allt land fá bækling með sérkjörum á fyrstu vikum rekstrarins, um 250 á mánuði. Eitt fyrirtæki í hverjum flokki.";
+const SHARE_DESCRIPTION =
+  "Bæklingur með sérkjörum til nýstofnaðra fyrirtækja um allt land. Um 250 eintök á mánuði, eitt fyrirtæki í hverjum flokki.";
 const URL = "https://svif.is/fyrirtaeki";
 /** frame 0 of the company film: also the share image */
 const SHARE_IMAGE = `https://svif.is${FILM_FYRIRTAEKI.poster}`;
@@ -27,7 +31,7 @@ export const Route = createFileRoute("/fyrirtaeki")({
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { property: "og:description", content: SHARE_DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: URL },
       { property: "og:site_name", content: "Svif" },
@@ -35,7 +39,7 @@ export const Route = createFileRoute("/fyrirtaeki")({
       { property: "og:image", content: SHARE_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:description", content: SHARE_DESCRIPTION },
       { name: "twitter:image", content: SHARE_IMAGE },
     ],
     links: [{ rel: "canonical", href: URL }],
@@ -43,64 +47,15 @@ export const Route = createFileRoute("/fyrirtaeki")({
   component: FyrirtaekiPage,
 });
 
+/* the header's same-page links (round 2: "Spurt og svarað" replaces "Af hverju SVIF" and "Spurningar";
+   the old anchors live on as aliases inside #meira) */
 const headerLinks = [
   { name: "Svona virkar það", href: "#svona-virkar" },
-  { name: "Af hverju SVIF", href: "#af-hverju" },
+  { name: "Spurt og svarað", href: "#meira" },
   { name: "Flokkar", href: "#flokkar" },
-  { name: "Spurningar", href: "#spurningar" },
   { name: "Nýji kaflinn", href: "/" },
 ];
 
-const steps: StoryStep[] = [
-  {
-    n: "01",
-    chapter: "Ný fyrirtæki",
-    title: "Hundruð nýrra fyrirtækja í hverjum mánuði",
-    body: "Hvert þeirra velur sér þjónustu á fyrstu vikunum.",
-  },
-  {
-    n: "02",
-    chapter: "Bæklingurinn",
-    title: "Bæklingur fyrir nýja fyrirtækjaeigendur",
-    body: "Eitt fyrirtæki í hverjum flokki. Auglýsingin ykkar stendur ein.",
-  },
-  {
-    n: "03",
-    chapter: "Kerfið",
-    title: "Kerfið finnur nýskráð fyrirtæki",
-    body: "Við fylgjumst með nýskráningum um allt land.",
-  },
-  {
-    n: "04",
-    chapter: "Dreifingin",
-    title: "Við hönnum, prentum og sendum",
-    body: "Um 250 eintök á mánuði, á fyrstu vikum rekstrarins.",
-  },
-];
-
-/* Same card system as the home page: one render from the business story per reason. */
-const reasons: WhyReason[] = [
-  {
-    title: "Þar sem eftirspurnin er",
-    line: "Engin óþarfa dreifing.",
-    img: "/svif/story/why-biz-1.jpg",
-  },
-  {
-    title: "Fullkomin tímasetning",
-    line: "Flest er valið á fyrstu vikum rekstrarins.",
-    img: "/svif/story/why-biz-2.jpg",
-  },
-  {
-    title: "Eitt í hverjum flokki",
-    line: "Enginn samkeppnisaðili á næstu síðu.",
-    img: "/svif/story/why-biz-3.jpg",
-  },
-  {
-    title: "Sérkjörin vinna fyrir ykkur",
-    line: "Auglýsingu er hent. Sérkjör eru geymd.",
-    img: "/svif/story/why-biz-4.jpg",
-  },
-];
 
 const categories: ContentsRow[] = [
   "Bókhald & endurskoðun",
@@ -118,29 +73,6 @@ const categories: ContentsRow[] = [
   "Bílar & flutningar",
   "Launakerfi",
 ].map((name, i) => ({ name, ref: String(i + 1).padStart(2, "0") }));
-
-const faqs: Faq[] = [
-  {
-    q: "Hverjir fá bæklinginn?",
-    a: "Eigendur nýskráðra fyrirtækja um allt land, á fyrstu vikum rekstrarins. Um 250 eintök á mánuði.",
-  },
-  {
-    q: "Hvað kostar að auglýsa?",
-    a: "Verðið fer eftir stærð og staðsetningu auglýsingar. Samningur er til þriggja mánaða og greitt er fyrir hverja dreifingu. Eftir þrjá mánuði metum við árangurinn saman.",
-  },
-  {
-    q: "Hver hannar auglýsinguna?",
-    a: "Við gerum það. Þið sendið merki, myndir og skilaboð og fáið próförk til samþykktar fyrir prentun.",
-  },
-  {
-    q: "Hver er uppsagnarfresturinn?",
-    a: "Samningurinn er til þriggja mánaða í senn. Að þeim loknum tökum við saman árangurinn og þið ákveðið framhaldið.",
-  },
-  {
-    q: "Af hverju eru sérkjör í bæklingnum?",
-    a: "Auglýsingu er hent, en sérkjör sem nýr rekstur á eftir að nota eru geymd. Þannig er bæklingurinn enn á borðinu þegar þörfin kemur.",
-  },
-];
 
 function FyrirtaekiPage() {
   const film = useRef<FilmHandle>(null);
@@ -161,15 +93,14 @@ function FyrirtaekiPage() {
       <Header links={headerLinks} cta={{ name: "Bóka pláss", href: "#samband" }} logoHref="/" />
       <Hero onFilm={openFilm} onWarm={warmFilm} />
       <BusinessStorySection
-        steps={steps}
-        header={<StoryHeader eyebrow="Frá stofnun að póstkassa" />}
+        steps={BIZ_STEPS}
         footer={
           <StoryFooter onFilm={openFilm} onWarm={warmFilm} meta={filmMeta(FILM_FYRIRTAEKI)} />
         }
       />
-      <WhySection />
+      {/* reasons and common questions, one at a time, with the business vignettes */}
+      <IdeaSection copy={IDEA_BIZ} kind="biz" />
       <Categories />
-      <FaqSection faqs={faqs} />
       <BookingSection brochure="Fyrirtækjabæklingur" tagline="SVIF · Fyrir ný fyrirtæki" />
       <SiteFooter line="SVIF · bæklingur fyrir ný fyrirtæki" />
       <VideoLightbox ref={film} film={FILM_FYRIRTAEKI} />
@@ -216,17 +147,12 @@ function Hero({ onFilm, onWarm }: { onFilm: () => void; onWarm: () => void }) {
   );
 }
 
-/* ---------- AF HVERJU (dark, four visual cards: the shared system) ---------- */
-function WhySection() {
-  return <WhyCards reasons={reasons} corner="svif.is" />;
-}
-
-/* ---------- FLOKKAR (peach): contents list + the cover ---------- */
+/* ---------- FLOKKAR (peach, after the dark stepper): contents list + the cover ---------- */
 function Categories() {
   return (
     <section
       id="flokkar"
-      className="relative scroll-mt-20 bg-[color:var(--peach)] py-24 md:py-32 lg:py-40"
+      className="section-peach relative scroll-mt-20 py-24 md:py-32 lg:py-40"
     >
       {/* both columns end on one line: the title tops the left column, the cover ends it with the list */}
       <div className="site-container grid gap-14 lg:grid-cols-12 lg:gap-12">

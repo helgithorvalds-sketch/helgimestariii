@@ -146,3 +146,27 @@ export function createStory(
   };
   return story;
 }
+
+/**
+ * Round 2 (additive): frame the camera for the part of the canvas the scene owns. The titles sit
+ * above the scene, so the scene area is rows [top, bottom] of a w×h canvas. Afterwards
+ * `camera.aspect` is that area's aspect (stories fit their compositions to it, createStory's
+ * pull-back included) and the optical centre sits in the area's middle, at the same scale, while
+ * the canvas still draws the world above and below it (no hard edge under the titles).
+ * `clearSceneArea` restores the plain full-canvas camera.
+ */
+export function frameSceneArea(camera: THREE.PerspectiveCamera, w: number, h: number, top: number, bottom: number) {
+  const sH = Math.max(1, bottom - top);
+  const c = (top + bottom) / 2;
+  camera.aspect = w / sH;
+  camera.zoom = 1;
+  camera.setViewOffset(w, sH, 0, sH / 2 - c, w, h);
+  camera.updateProjectionMatrix();
+}
+
+export function clearSceneArea(camera: THREE.PerspectiveCamera, w: number, h: number) {
+  camera.clearViewOffset();
+  camera.aspect = w / Math.max(1, h);
+  camera.zoom = 1;
+  camera.updateProjectionMatrix();
+}

@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="utf-8"><title>hero intro</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:radial-gradient(120% 95% at 28% 8%, #6e6455 0%, #4a4438 46%, #2e2a24 100%)}
+.beam{position:absolute;inset:0;background:linear-gradient(118deg, transparent 30%, rgba(255,236,206,.13) 44%, rgba(255,236,206,.1) 52%, transparent 66%);pointer-events:none}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#g{position:absolute;left:8px;bottom:6px;font:11px sans-serif;color:#d8d0c0;opacity:.7}
+.box{position:absolute;inset:0;outline:1px dashed rgba(246,245,236,.18);outline-offset:-1px;pointer-events:none}
+</style></head><body><div class="beam"></div><canvas id="c"></canvas><div class="box"></div><div id="g"></div>
+<script>{const q=new URLSearchParams(location.search);if(q.get("rest"))window.__REST=q.get("rest").split(",").map(Number);if(q.get("read"))window.__READ=q.get("read").split(",").map(Number);if(q.get("as"))window.__AS=+q.get("as");if(q.get("cc"))window.__CC=+q.get("cc");for(const k of ["ro","si","he","su"])if(q.get(k))window["__"+k.toUpperCase()]=+q.get(k);}</script><script type="module" src="./hero-intro.ts"></script></body></html>

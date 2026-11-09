@@ -309,6 +309,14 @@ export interface District {
   marks: DistrictMark[];
   /** the open square in front of the new office */
   square: { x: number; z0: number; z1: number };
+  /**
+   * Round 2 (additive): every building's world box at full height (marked ones included) and the
+   * trees', for the collision lab; `plateTop` is the height the blocks' buildings stand at.
+   */
+  buildings: { box: THREE.Box3; kind: "office" | "tree"; marked: boolean }[];
+  plateTop: number;
+  /** z range of the main street (between the main row's plate and the row across it) */
+  street: { z0: number; z1: number };
 }
 
 export interface DistrictOptions {
@@ -323,6 +331,13 @@ export interface DistrictOptions {
   /** distance band (world units from origin) the marked companies are picked from */
   markRing?: [number, number];
   lite?: boolean;
+  /**
+   * Round 2 (additive): x of MAIN_STREET lots the story builds itself (left empty here), and
+   * hand-chosen spots for the marked companies: the lot nearest each [x, z] (within 2.2) is
+   * marked, in the given order. Without `markSpots` the ring/sector pick of round 1 is used.
+   */
+  skipMain?: number[];
+  markSpots?: [number, number][];
 }
 
 const BLOCK_P = 8.2; // block period in z
@@ -332,6 +347,8 @@ const CROSS_W = 2.8;
 const SINK = 3.4;
 /** pale paving of the blocks and the square */
 export const PAL_PLATE = "#e0d8ca";
+/** thickness of the blocks' paving plates (round 2: plates sit on the ground, buildings on the plates) */
+export const PLATE_T = 0.016;
 
 /** The hand-placed main street: the new office stands in the free lot at x = 0. */
 export const MAIN_STREET: (OfficeOptions & { x: number; first: boolean })[] = [
@@ -355,15 +372,18 @@ export function createDistrict(o: DistrictOptions = {}): District {
   const plazaX = CROSS / 2 - CROSS_W / 2;
   const pz0 = 0.85;
   const pz1 = BLOCK_P - 1.3;
+  const PT = PLATE_T;
   const group = new THREE.Group();
   group.name = "district";
   const shadowMat = blobShadowMat(0.78);
+  const skipMain = o.skipMain ?? [];
 
   type Lot = { x: number; z: number; w: number; d: number; face: number; dist: number; main?: OfficeOptions };
   const lots: Lot[] = [];
   /** the pale plates the blocks stand on (streets stay ground-coloured) */
   const plates: { x0: number; x1: number; z0: number; z1: number }[] = [];
-  const trees: [number, number, number][] = [];
+  /** [x, z, dist, onPlate] */
+  const trees: [number, number, number, boolean][] = [];
   const maxD = Math.hypot(halfX, Math.max(-zMin, zMax));
 
   // rows: block k has a row facing +z at z = kP and one facing -z at z = kP - BACK
@@ -399,15 +419,16 @@ export function createDistrict(o: DistrictOptions = {}): District {
         const plaza = k === 1 && c === 0;
         if (face === 1 && Math.abs(c * CROSS) - CROSS / 2 < halfX) {
           const pz0b = plaza ? pz1 + 0.15 : k * BLOCK_P - BACK - 1.32;
-          const pz1b = k === 0 && c === 0 ? 0.85 : k * BLOCK_P + 1.32;
-          if (pz1b > zMin - 1 && pz0b < zMax + 1) plates.push({ x0: Math.max(s0 - 0.3, -halfX - 1.5), x1: Math.min(s1 + 0.3, halfX + 1.5), z0: pz0b, z1: pz1b });
+          // a plate never runs on past the last row it carries (round 2: the district may stop at zMax)
+          const pz1b = k === 0 && c === 0 ? 0.85 : Math.min(k * BLOCK_P + 1.32, zMax + 1.05);
+          if (pz1b > zMin - 1 && pz0b < zMax + 1 && pz1b - pz0b > 1) plates.push({ x0: Math.max(s0 - 0.3, -halfX - 1.5), x1: Math.min(s1 + 0.3, halfX + 1.5), z0: pz0b, z1: pz1b });
         }
         for (const it of items) {
           const lx = it.x + shift;
           if (Math.abs(lx) > halfX) continue;
           if (Math.abs(lx) < plazaX && z > pz0 && z < pz1) continue; // the open square
           if (it.tree) {
-            trees.push([lx, z, Math.hypot(lx, z)]);
+            trees.push([lx, z, Math.hypot(lx, z), true]);
             continue;
           }
           // the row across the square turns to face it
@@ -418,39 +439,70 @@ export function createDistrict(o: DistrictOptions = {}): District {
     }
   }
 
-  // choose marked lots: one per angular sector, inside the ring the overview camera sees
-  const nMarked = o.marked ?? 6;
-  const [m0, m1] = o.markRing ?? [5.5, 12];
-  // only where the overview camera looks (behind and beside the square), never right next to the new office
-  const candidates = lots.filter((l) => l.dist > m0 && l.dist < m1 && l.z < 3 && l.z > -8.5 && l.x > -10.5 && l.x < 7);
+  // choose marked lots
   const marked: Lot[] = [];
-  const off = 0.35;
-  for (let k = 0; k < Math.min(nMarked, candidates.length); k++) {
-    const want = off + (k / nMarked) * Math.PI * 2;
-    let best: Lot | null = null;
-    let bd = 1e9;
-    for (const c of candidates) {
-      if (marked.includes(c)) continue;
-      // keep lit companies apart so each one reads on its own
-      if (marked.some((m) => Math.hypot(m.x - c.x, m.z - c.z) < 4.2)) continue;
-      let da = Math.abs(Math.atan2(c.z, c.x) - want) % (Math.PI * 2);
-      if (da > Math.PI) da = Math.PI * 2 - da;
-      const score = da + Math.abs(c.dist - (m0 + m1) / 2) * 0.04;
-      if (score < bd) {
-        bd = score;
-        best = c;
+  if (o.markSpots) {
+    for (const [sx, sz] of o.markSpots) {
+      let best: Lot | null = null;
+      let bd = 2.2;
+      for (const c of lots) {
+        if (marked.includes(c)) continue;
+        const d = Math.hypot(c.x - sx, c.z - sz);
+        if (d < bd) {
+          bd = d;
+          best = c;
+        }
       }
+      if (best) marked.push(best);
     }
-    if (best) marked.push(best);
+  } else {
+    // round 1: one per angular sector, inside the ring the overview camera sees
+    const nMarked = o.marked ?? 6;
+    const [m0, m1] = o.markRing ?? [5.5, 12];
+    // only where the overview camera looks (behind and beside the square), never right next to the new office
+    const candidates = lots.filter((l) => l.dist > m0 && l.dist < m1 && l.z < 3 && l.z > -8.5 && l.x > -10.5 && l.x < 7);
+    const off = 0.35;
+    for (let k = 0; k < Math.min(nMarked, candidates.length); k++) {
+      const want = off + (k / nMarked) * Math.PI * 2;
+      let best: Lot | null = null;
+      let bd = 1e9;
+      for (const c of candidates) {
+        if (marked.includes(c)) continue;
+        // keep lit companies apart so each one reads on its own
+        if (marked.some((m) => Math.hypot(m.x - c.x, m.z - c.z) < 4.2)) continue;
+        let da = Math.abs(Math.atan2(c.z, c.x) - want) % (Math.PI * 2);
+        if (da > Math.PI) da = Math.PI * 2 - da;
+        const score = da + Math.abs(c.dist - (m0 + m1) / 2) * 0.04;
+        if (score < bd) {
+          bd = score;
+          best = c;
+        }
+      }
+      if (best) marked.push(best);
+    }
+    // they light up from the nearest outwards
+    marked.sort((a, b) => a.dist - b.dist);
   }
-  // they light up from the nearest outwards
-  marked.sort((a, b) => a.dist - b.dist);
 
   const streetGroup = new THREE.Group();
   const waveGroups: THREE.Group[] = Array.from({ length: W }, () => new THREE.Group());
   const waveOf = (d: number) => Math.min(W - 1, Math.floor((d / (maxD * 0.72)) * W));
   const marks: DistrictMark[] = [];
   const markGroups: { g: THREE.Group; wave: number }[] = [];
+  const buildings: District["buildings"] = [];
+  const tmpBox = new THREE.Box3();
+  /** world box of a placed building (its contact shadow left out) */
+  const boxOf = (b: THREE.Object3D) => {
+    b.updateMatrixWorld(true);
+    const box = new THREE.Box3();
+    b.traverse((c) => {
+      const m = c as THREE.Mesh;
+      if (!m.isMesh || (m.material as THREE.Material).transparent) return;
+      if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
+      box.union(tmpBox.copy(m.geometry.boundingBox!).applyMatrix4(m.matrixWorld));
+    });
+    return box;
+  };
 
   const optsFor = (l: Lot, isMarked: boolean): OfficeOptions => {
     const k = r();
@@ -476,31 +528,38 @@ export function createDistrict(o: DistrictOptions = {}): District {
     };
   };
 
-  // the main street, in finer detail: the two neighbours stand from the start, the rest rise with the district
+  // the main street, in finer detail. Round 1: the two neighbours stood from the start and the rest
+  // rose with the district; round 2 stories pass `skipMain` for the lots they build themselves and
+  // leave the district standing (rise(1)), so every main-street building here is static.
   for (const m of MAIN_STREET) {
+    if (skipMain.some((x) => Math.abs(x - m.x) < 0.01)) continue;
     const b = createOffice({ ...m, back: true, sides: true, seg: 2, shadowMat, glassTone: "soft" });
-    b.position.set(m.x, 0, 0);
-    (m.first ? streetGroup : waveGroups[0]).add(b);
+    b.position.set(m.x, PT, 0);
+    (m.first || skipMain.length ? streetGroup : waveGroups[0]).add(b);
+    buildings.push({ box: boxOf(b), kind: "office", marked: false });
   }
 
   for (const l of lots) {
     const isMarked = marked.includes(l);
     const b = createOffice(optsFor(l, isMarked));
-    b.position.set(l.x, 0, l.z);
+    b.position.set(l.x, PT, l.z);
     b.rotation.y = l.face > 0 ? 0 : Math.PI;
     if (isMarked) {
       const mg = new THREE.Group();
-      mg.position.set(l.x, 0, l.z);
+      mg.position.set(l.x, PT, l.z);
       b.position.set(0, 0, 0);
       mg.add(b);
       group.add(mg);
+      buildings.push({ box: boxOf(b).translate(mg.position), kind: "office", marked: true });
       const info = b.userData.info as OfficeInfo;
-      const glowMat = clay("#a4826b", { roughness: 0.62, sheen: 0.45 });
-      glowMat.emissive = new THREE.Color(PAL.rose);
-      glowMat.emissiveIntensity = 0;
-      const doorGlow = accent(PAL.rose);
-      const targets = [...info.roof.map((m) => ({ m, on: glowMat as THREE.Material })), ...info.door.map((m) => ({ m, on: doorGlow as THREE.Material }))];
-      const base = targets.map((t) => t.m.material as THREE.Material);
+      // round 2: the roof and the door get their own materials and blend to rose (no hard swap)
+      const targets = [...info.roof.map((m) => ({ m, to: new THREE.Color("#a98470") })), ...info.door.map((m) => ({ m, to: new THREE.Color(PAL.rose) }))];
+      const own = targets.map((t) => {
+        const m = (t.m.material as THREE.MeshPhysicalMaterial).clone();
+        t.m.material = m;
+        return { m, base: m.color.clone(), to: t.to };
+      });
+      const rose = new THREE.Color(PAL.rose);
       // keep only the meshes that change colour separate; merge the rest of the building
       const holder = new THREE.Group();
       holder.rotation.y = b.rotation.y;
@@ -509,48 +568,57 @@ export function createDistrict(o: DistrictOptions = {}): District {
       holder.add(mergeByMaterial(b));
       mg.remove(b);
       disposeTree(b);
-      const top = new THREE.Vector3(l.x, info.h + 0.2, l.z);
-      const door = new THREE.Vector3(l.x + (l.face > 0 ? info.doorPos.x : -info.doorPos.x), 0, l.z + l.face * info.doorPos.z);
-      let lastOn = -1;
+      const top = new THREE.Vector3(l.x, PT + info.h + 0.2, l.z);
+      const door = new THREE.Vector3(l.x + (l.face > 0 ? info.doorPos.x : -info.doorPos.x), PT, l.z + l.face * info.doorPos.z);
+      let lastV = -1;
       marks.push({
-        pos: new THREE.Vector3(l.x, 0, l.z),
+        pos: new THREE.Vector3(l.x, PT, l.z),
         top,
         door,
         face: l.face,
         group: mg,
         setGlow: (v: number) => {
-          const on = v > 0.5 ? 1 : 0;
-          if (on !== lastOn) {
-            targets.forEach((t, i) => (t.m.material = on ? t.on : base[i]));
-            lastOn = on;
+          const k = Math.min(1, Math.max(0, v));
+          if (k === lastV) return;
+          lastV = k;
+          for (const o of own) {
+            o.m.color.copy(o.base).lerp(o.to, k);
+            o.m.emissive.copy(rose);
+            o.m.emissiveIntensity = 0.3 * k;
           }
-          glowMat.emissiveIntensity = 0.32 * v;
         },
       });
       markGroups.push({ g: mg, wave: waveOf(l.dist) });
       continue;
     }
+    buildings.push({ box: boxOf(b), kind: "office", marked: false });
     waveGroups[waveOf(l.dist)].add(b);
   }
 
   // trees: along the square, and in the odd gap between buildings
   const treeR = rng((o.seed ?? 21) + 5);
-  const spots: [number, number, number][] = [...trees];
-  for (const x of [-4.6, -3.7, 3.7, 4.6]) spots.push([x, pz1 - 0.5, 8]);
-  for (const sx of [-1, 1]) spots.push([sx * (plazaX - 0.75), pz0 + 3.2, 6]);
-  for (const [x, z, dist] of spots) {
+  const spots: [number, number, number, boolean][] = [...trees];
+  for (const x of [-4.6, -3.7, 3.7, 4.6]) spots.push([x, pz1 - 0.5, 8, false]);
+  for (const sx of [-1, 1]) spots.push([sx * (plazaX - 0.75), pz0 + 3.2, 6, false]);
+  for (const [x, z, dist, onPlate] of spots) {
     const t = tree(treeR, shadowMat);
-    t.position.set(x + (treeR() - 0.5) * 0.25, 0, z + (treeR() - 0.5) * 0.25);
-    t.scale.setScalar(0.72 + treeR() * 0.18);
+    t.position.set(x + (treeR() - 0.5) * 0.25, onPlate ? PT : 0, z + (treeR() - 0.5) * 0.25);
+    const sc = 0.72 + treeR() * 0.18;
+    t.scale.setScalar(sc);
     waveGroups[Math.max(1, waveOf(dist))].add(t);
+    buildings.push({
+      box: new THREE.Box3(new THREE.Vector3(t.position.x - 0.4 * sc, t.position.y, t.position.z - 0.4 * sc), new THREE.Vector3(t.position.x + 0.4 * sc, t.position.y + 1.1 * sc, t.position.z + 0.4 * sc)),
+      kind: "tree",
+      marked: false,
+    });
   }
 
   const plateMat = M("plate", () => clay(PAL_PLATE, { roughness: 0.95, sheen: 0.1 }));
   for (const p of plates) {
     const pw = p.x1 - p.x0;
     const pd = p.z1 - p.z0;
-    const m = new THREE.Mesh(new THREE.BoxGeometry(pw, 0.03, pd), plateMat);
-    m.position.set((p.x0 + p.x1) / 2, 0, (p.z0 + p.z1) / 2);
+    const m = new THREE.Mesh(new THREE.BoxGeometry(pw, PT, pd), plateMat);
+    m.position.set((p.x0 + p.x1) / 2, PT / 2, (p.z0 + p.z1) / 2);
     m.receiveShadow = true;
     waveGroups[waveOf(Math.max(0, Math.hypot((p.x0 + p.x1) / 2, (p.z0 + p.z1) / 2) - 4))].add(m);
   }
@@ -578,11 +646,19 @@ export function createDistrict(o: DistrictOptions = {}): District {
       const a = (mg.wave / W) * 0.6;
       const k = seg(t, a, a + 0.4, easeOutQuint);
       mg.g.visible = k > 0.001;
-      mg.g.position.y = (k - 1) * SINK;
+      mg.g.position.y = PT + (k - 1) * SINK;
     }
   };
   rise(1);
-  return { group, rise, marks, square: { x: plazaX, z0: pz0, z1: pz1 } };
+  return {
+    group,
+    rise,
+    marks,
+    square: { x: plazaX, z0: pz0, z1: pz1 },
+    buildings,
+    plateTop: PT,
+    street: { z0: 1.32, z1: BLOCK_P - BACK - 1.32 },
+  };
 }
 
 /** free the source geometry of a group that has been merged */

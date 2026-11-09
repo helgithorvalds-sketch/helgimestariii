@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { HOME_STEPS } from "@/content/story-copy";
 import { useEffect, useRef } from "react";
 import { trackClickOnce } from "@/lib/track-click";
 import { Header } from "@/components/Header";
@@ -6,30 +7,38 @@ import { VideoLightbox, type FilmHandle } from "@/components/VideoLightbox";
 import { FILM_HEIMILI, filmMeta } from "@/lib/films";
 import { Sequence, Reveal } from "@/components/motion/Reveal";
 import { Eyebrow, DisplayTitle, Pill, PillArrow } from "@/components/SvifBits";
-import { WhySection as WhyCards, type WhyReason } from "@/components/WhySection";
 import { StageHero } from "@/components/StageHero";
-import { StoryHeader, StoryFooter } from "@/components/StoryChrome";
+import { StoryFooter } from "@/components/StoryChrome";
 import { ContentsList, type ContentsRow } from "@/components/ContentsList";
 import { BookingSection } from "@/components/BookingSection";
-import { HomeStorySection, type StoryStep } from "@/components/story/HomeStorySection";
-import { FaqSection, type Faq } from "@/components/FaqSection";
+import { HomeStorySection } from "@/components/story/HomeStorySection";
+import { IdeaSection } from "@/components/idea/IdeaSection";
 import { SiteFooter } from "@/components/SiteFooter";
 
 const SITE_URL = "https://svif.is";
 const OG_IMAGE = `${SITE_URL}/svif/og-kafli.jpg`;
 const LOGO_INK = `${SITE_URL}/svif/logo-ink.png`;
+/* research/06-round2-spec.md §6 */
+const DESCRIPTION =
+  "Í hverri viku fá nýir húseigendur á höfuðborgarsvæðinu Nýja kaflann inn um lúguna: 350–500 heimili á mánuði. Bókaðu pláss fyrir fyrirtækið þitt.";
 const SHARE_DESCRIPTION =
-  "Bæklingur sem nýir húseigendur fá inn um lúguna. Auglýstu hjá þeim sem voru að kaupa.";
+  "Bæklingur með sérkjörum sem nýir húseigendur fá inn um lúguna. Sendur í hverri viku, 350–500 heimili á mánuði.";
+const ORG_DESCRIPTION =
+  "SVIF sendir Nýja kaflann í hverri viku til nýrra húseigenda á höfuðborgarsvæðinu, með sérkjörum frá völdum fyrirtækjum.";
+
+/* the header's same-page links (round 2: "Spurt og svarað" replaces "Af hverju SVIF" and "Spurningar") */
+const NAV = [
+  { name: "Svona virkar það", href: "#svona-virkar" },
+  { name: "Spurt og svarað", href: "#meira" },
+  { name: "Bæklingurinn", href: "/baeklingur" },
+  { name: "Ný fyrirtæki", href: "/fyrirtaeki" },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "SVIF · Nýji kaflinn · auglýsingar heim til nýrra húseigenda" },
-      {
-        name: "description",
-        content:
-          "Nýir húseigendur á höfuðborgarsvæðinu fá Nýja kaflann inn um lúguna, með sérkjörum frá völdum fyrirtækjum. Bókaðu pláss fyrir fyrirtækið þitt.",
-      },
+      { name: "description", content: DESCRIPTION },
       {
         property: "og:title",
         content: "SVIF · Nýji kaflinn · auglýsingar heim til nýrra húseigenda",
@@ -64,8 +73,7 @@ export const Route = createFileRoute("/")({
           name: "SVIF",
           url: SITE_URL,
           logo: LOGO_INK,
-          description:
-            "SVIF sendir bæklinginn Nýja kaflann heim til nýrra húseigenda á höfuðborgarsvæðinu, með sérkjörum frá völdum fyrirtækjum.",
+          description: ORG_DESCRIPTION,
           areaServed: "IS",
           contactPoint: [
             {
@@ -89,13 +97,12 @@ function Index() {
 
   return (
     <main className="overflow-x-clip bg-background text-foreground">
-      <Header />
+      <Header links={NAV} />
       <Hero />
       <HowSection />
-      <WhySection />
+      <IdeaSection />
       <ForBusinesses />
       <BusinessBrochure />
-      <FaqSection faqs={faqs} />
       <BookingSection />
       <SiteFooter />
     </main>
@@ -111,7 +118,7 @@ function Hero() {
       caps="Við tengjum ykkur við"
       accent="alla nýja húseigendur"
       capsAfter="á höfuðborgarsvæðinu."
-      sub="Nýir húseigendur fá Nýja kaflann inn um lúguna."
+      sub="Í hverri viku fá nýir húseigendur Nýja kaflann heim."
       actions={
         <>
           <Pill href="#samband" variant="solid" size="md">
@@ -126,56 +133,21 @@ function Hero() {
       corners={{
         tl: "Velkomin",
         tr: "65°N · 19°W",
-        bl: "Um 500 heimili á mánuði",
+        bl: "350–500 heimili á mánuði",
         br: "Hannað, prentað og sent af SVIF",
       }}
     />
   );
 }
 
-/* ---------- SVONA VIRKAR ÞAÐ (pinned 3D story) ---------- */
-
-const steps: StoryStep[] = [
-  {
-    n: "01",
-    chapter: "Nýtt heimili",
-    title: "Um 80% nýrra húseigenda ráðast í framkvæmdir eftir húsakaup",
-    body: "Nýju heimili fylgja ótal verkefni.",
-    note: "Heimild: HIRI, Bandaríkin 2025",
-  },
-  {
-    n: "02",
-    chapter: "Bæklingurinn",
-    title: "Þess vegna bjuggum við til SVIF",
-    body: "Traust fyrirtæki fyrir hvert verkefni heimilisins.",
-  },
-  {
-    n: "03",
-    chapter: "Traust fyrirtæki",
-    title: "Örfá traust fyrirtæki í hverjum flokki",
-    body: "Hvert þeirra býður nýjum húseigendum sérkjör.",
-  },
-  {
-    n: "04",
-    chapter: "Kerfið",
-    title: "Kerfið finnur nýja húseigendur",
-    body: "Við sjáum þegar kaupsamningi er þinglýst og sendum bæklinginn þangað. Um 500 heimili á mánuði.",
-  },
-  {
-    n: "05",
-    chapter: "Dreifingin",
-    title: "Við hönnum, prentum og sendum",
-    body: "Þú sendir merki og tilboð. Við sjáum um allt hitt.",
-  },
-];
+/* ---------- SVONA VIRKAR ÞAÐ (pinned 3D story; it renders its own heading inside the stage) ---------- */
 
 function HowSection() {
   const film = useRef<FilmHandle>(null);
   return (
     <>
       <HomeStorySection
-        steps={steps}
-        header={<StoryHeader eyebrow="Frá sölu að póstlúgu" />}
+        steps={HOME_STEPS}
         footer={
           <StoryFooter
             onFilm={() => film.current?.open()}
@@ -189,41 +161,7 @@ function HowSection() {
   );
 }
 
-/* ---------- AF HVERJU SVIF (dark, four visual cards) ---------- */
-
-/* The owner's four reasons. Each card shows the title and one short line; "Meira" opens the
-   owner's full text in place (height + opacity, the FAQ's motion). Card 02 has no more text. */
-const reasons: WhyReason[] = [
-  {
-    title: "Þar sem eftirspurnin er",
-    line: "Engin óþarfa dreifing.",
-    full: "Engin óþarfa dreifing. Bæklingurinn fer beint til nýrra húseigenda á þeim tímapunkti þegar þeir eru að koma sér fyrir, skipuleggja framkvæmdir og leita að þjónustu fyrir nýja heimilið sitt.",
-    img: "/svif/story/why-1.jpg",
-  },
-  {
-    title: "Fullkomin tímasetning",
-    line: "Flestir nýir húseigendur breyta og bæta á fyrsta árinu.",
-    img: "/svif/story/why-2.jpg",
-  },
-  {
-    title: "Afslátturinn gefur bæklingnum virði",
-    line: "Auglýsingu er hent. Afsláttur er geymdur.",
-    full: "Það er auðvelt að fletta framhjá venjulegum auglýsingum. Með sérkjörum og afsláttum verður bæklingurinn hins vegar að einhverju sem nýir húseigendur hafa raunverulegan ávinning af því að geyma og skoða þegar þörfin kemur upp.",
-    img: "/svif/story/why-3.jpg",
-  },
-  {
-    title: "Afslátturinn vinnur fyrir þig",
-    line: "Fyrirtækið þitt er þegar komið inn á heimilið.",
-    full: "Þegar þörfin fyrir pípara, málara, smið eða aðra þjónustu kemur upp, er fyrirtækið þitt þegar komið inn á heimilið. Nýi húseigandinn hefur séð tilboðið þitt og hefur ástæðu til að leita til þín fyrst.",
-    img: "/svif/story/why-4.jpg",
-  },
-];
-
-function WhySection() {
-  return <WhyCards reasons={reasons} corner="svif.is" />;
-}
-
-/* ---------- FYRIR FYRIRTÆKI (cream): the contents page ---------- */
+/* ---------- FLOKKAR (peach): the contents page ---------- */
 
 /** Straight from the booklet's efnisyfirlit (Nýji kaflinn, p. 2). */
 const contents: ContentsRow[] = [
@@ -242,7 +180,7 @@ function ForBusinesses() {
   return (
     <section
       id="fyrir-fyrirtaeki"
-      className="relative scroll-mt-20 bg-[color:var(--cream)] py-24 md:py-32 lg:py-40"
+      className="section-peach relative scroll-mt-20 py-24 md:py-32 lg:py-40"
     >
       <div className="site-container grid items-center gap-16 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
@@ -264,6 +202,7 @@ function ForBusinesses() {
 
         <div className="lg:col-span-7 lg:pl-6">
           <PrintedPages
+            tone="peach"
             back={{ src: "/svif/kafli/p00.jpg", alt: "Forsíða Nýja kaflans" }}
             front={{
               src: "/svif/kafli/p01.jpg",
@@ -324,13 +263,13 @@ function PrintedPages({
   );
 }
 
-/* ---------- FYRIRTÆKJABÆKLINGUR (peach): the new business booklet ---------- */
+/* ---------- FYRIRTÆKJABÆKLINGUR (cream, so it does not merge with the peach categories) ---------- */
 
 function BusinessBrochure() {
   return (
     <section
       id="fyrirtaekjabaeklingur"
-      className="relative overflow-hidden bg-[color:var(--peach)] py-24 md:py-32 lg:py-40"
+      className="section-cream relative overflow-hidden py-24 md:py-32 lg:py-40"
     >
       <div className="site-container grid items-center gap-14 md:grid-cols-12 md:gap-12">
         <div className="md:order-2 md:col-span-6 md:col-start-7">
@@ -389,29 +328,3 @@ function BusinessBrochure() {
     </section>
   );
 }
-
-/* ---------- SPURNINGAR ---------- */
-
-/* The owner's answers, with grammar fixes only (copy audit §3.7). */
-const faqs: Faq[] = [
-  {
-    q: "Hvar og hversu oft er bæklingnum dreift?",
-    a: "Við byrjum á höfuðborgarsvæðinu og dreifum um 500 bæklingum á mánuði. Á þriggja mánaða samningstíma nær auglýsingin þín því til um 1.500 heimila þar sem eftirspurnin er mest. Við bætum stærstu þéttbýliskjörnum landsins við eftir því sem dreifingin stækkar.",
-  },
-  {
-    q: "Hvað kostar að auglýsa?",
-    a: "Verð fer eftir stærð og staðsetningu auglýsingarinnar í bæklingnum ásamt fjölda heimila í dreifingunni. Við bjóðum upp á þriggja mánaða samning: þú borgar fyrir hverja dreifingu og eftir þrjá mánuði höldum við samtal þar sem við metum árangurinn og ræðum hvort þú viljir halda áfram eða breyta plássinu.",
-  },
-  {
-    q: "Hver hannar auglýsinguna?",
-    a: "Við gerum það með þér. Þú sendir okkur merki, myndir og helstu skilaboð. Við hönnum auglýsinguna svo hún passi við útlit bæklingsins og þú færð uppkast til samþykktar áður en farið er í prentun.",
-  },
-  {
-    q: "Hver er uppsagnarfresturinn?",
-    a: "Þú gerir samning um þrjá mánuði í senn. Greiðsla fer fram fyrir hverja dreifingu og að þeim tíma loknum tökum við saman árangurinn og höfum samband til að athuga hvort þú viljir halda samningnum áfram eða breyta plássinu.",
-  },
-  {
-    q: "Af hverju eru afslættir í bæklingnum?",
-    a: "Af því að þeir gefa bæklingnum virði. Auglýsingu er hent, en afsláttur sem fólk á eftir að nota er geymdur. Afslátturinn þinn tryggir að bæklingurinn lifi áfram á heimilinu og að hringt sé í þig þegar þörfin vaknar.",
-  },
-];

@@ -157,6 +157,15 @@
   }
 }
 
+/* Section backgrounds (round 2): "Flokkað eftir verkefnum heimilisins" sits on peach (the colour the
+   business teaser had), the business teaser moves to cream, so the two light sections never merge. */
+@utility section-peach {
+  background-color: var(--peach);
+}
+@utility section-cream {
+  background-color: var(--cream);
+}
+
 /* the shared grid: every section's content starts on the same vertical line */
 @utility site-container {
   width: min(100% - 2 * var(--gutter), var(--container));

@@ -1,123 +1,329 @@
 import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import type { Stage } from "../core";
-import { createStory, makeDirector, type StoryModule, type WorldLabel, type Story } from "../story";
+import { createStory, type StoryModule, type WorldLabel, type Story, type Pose } from "../story";
 import { createGround } from "../builders/house";
-import { mergeByMaterial } from "../builders/town";
 import { createBooklet } from "../builders/brochure";
-import { miniBooklet } from "../builders/mini";
-import {
-  createOffice,
-  createDistrict,
-  tuneOfficeGlass,
-  PAL_PLATE,
-  type OfficeInfo,
-} from "../builders/office";
-import { BIZ_NEEDS } from "../builders/bizprops";
-import { clay, accent, paper } from "../materials";
-import { contactShadow, canvasTex } from "../textures";
+import { createCopy, twoGroupBox } from "../builders/copy";
+import { createOffice, createDistrict, tuneOfficeGlass, PAL_PLATE, PLATE_T, type OfficeInfo, type OfficeOptions } from "../builders/office";
+import { BIZ_NEEDS, createNewSign } from "../builders/bizprops";
+import { createOrb, createArc, type Arc, type OrbTuning } from "../builders/orb";
+import { createVan } from "../builders/van";
+import { makeFade, setShadow } from "../builders/fade";
+import { mergeByLook } from "../builders/merge";
+import { paper } from "../materials";
+import { contactShadow } from "../textures";
 import { PAL } from "../palette";
-import { seg, easeOut, easeInOut, easeOutQuint, lerp } from "../anim";
+import { seg, easeOut, easeInOut, easeOutQuint, lerp, clamp } from "../anim";
+import type { HomeCollider } from "./home";
 
 /**
- * The new-business story (/fyrirtaeki), four steps on one global timeline g ∈ [0, 4]:
- *   0 Ný fyrirtæki – a quiet street of offices; a new one rises; what a company needs lines up
- *   1 Bæklingurinn – the needs condense into the business booklet, which opens on its categories
- *   2 Kerfið       – the street pulls back to a district; newly registered companies light up
- *   3 Dreifingin   – printed, flown out, the last copy slides into the new office's door
- * Same rules as the home story: each step moves in its first ~60%, then holds still.
+ * The new-business story (/fyrirtaeki, "Svona virkar það · frá stofnun að póstkassa"), four steps
+ * on one global timeline g ∈ [0, 4]. Step k spans [k−1, k]; each moves in its first ~60–70% and
+ * then holds still. Round 2 (BIBLE-R2 §4).
+ *
+ *   01 Ný fyrirtæki – on a downtown street three new offices open one after another (each is built
+ *                     from its base, gets a rose door and a NÝTT board by its door); then what every
+ *                     new company needs settles in front of them, with callouts (Bókhald, Tryggingar,
+ *                     Vefsíða, Banki, Tölvur, Hönnun).
+ *   02 Bæklingurinn – the needs fade away; the business booklet (Nýr rekstur) settles onto the square,
+ *                     opens and turns two real pages to its FLOKKAR page, where the eight categories
+ *                     light up one after another: each tile lifts briefly in rose and lands with a
+ *                     small rose mark ("eitt fyrirtæki í hverjum flokki").
+ *   03 Kerfið       – the camera rises over the district; the system, a pearl of light inside a thin
+ *                     glass shell, settles in over the street and sends hairline arcs down to the
+ *                     newly registered companies one by one (a bead of light runs down each line,
+ *                     the company turns rose, "NÝTT FYRIRTÆKI"); a counter above the orb ticks up.
+ *   04 Dreifing     – the SVIF van drives in along the street, copies arc to the doors of the lit
+ *                     companies as it passes, it stops at our office and the last copy ends half-way
+ *                     through the letterbox ("Í póstkassann").
+ *
+ * Where things are: the main street runs along z = 0 (facades at z ≈ 0.76, facing +z); our office
+ * stands at the origin with the two other new ones at x = −2.55 and 2.6; the square (needs,
+ * booklet) lies in front, the van's lane at z = 2.25 runs along it and east along the street; the
+ * lit companies stand on both sides of that street east of the square; the orb hovers over the
+ * street between them and us. The district is complete from the first frame (nothing rises
+ * through the ground); the new offices grow from their bases, props and the booklet settle from
+ * just above while fading in, exits fade with a small lift. Compositions are centred; the camera
+ * fits each shot to the canvas area the scene owns (dollying back on narrow screens). Phones
+ * (`lite`) get a smaller district, no glass transmission on the orb and a deeper arrangement of the
+ * needs. lab/collide.ts checks the whole timeline through the optional `colliders` hook.
  */
 export interface BusinessStoryOptions {
   base?: string;
   /** reduced detail for phones */
   lite?: boolean;
+  /** collision lab: receives every object that must never intersect another (or the ground) */
+  colliders?: BizCollider[];
+  /** the lab's look tuning for the orb (defaults are the designed look) */
+  orb?: OrbTuning;
 }
 
+export type BizCollider = HomeCollider;
+
+/** Timeline (global g). */
 export const BUSINESS_T = {
-  office: [0.02, 0.24] as const, // the new office rises
-  needs: [0.1, 0.6] as const, // props rise, staggered
-  descend: [1.0, 1.32] as const,
-  condense: [1.04, 1.3] as const,
-  open: [1.3, 1.52] as const,
-  tiles: [1.46, 1.62] as const, // category cards lift off the page
-  away: [2.0, 2.16] as const, // cards settle, booklet closes and leaves
-  rise: [2.04, 2.42] as const, // the district rises
-  marks: [2.34, 2.6] as const, // new companies light up
-  pinsAway: [3.0, 3.12] as const, // pins fold away as the camera comes down
-  stack: [3.04, 3.2] as const,
-  send: [3.2, 3.4] as const,
-  ours: [3.32, 3.54] as const,
-  insert: [3.54, 3.6] as const,
+  // 01 Ný fyrirtæki
+  office: [0.02, 0.2] as const, // our office is built (grows from its base)
+  openings: 0.12, // the two neighbours follow, this far apart
+  signAfter: 0.05, // a NÝTT board settles by each door this long after its office stands
+  needs: [0.33, 0.74] as const, // six needs settle in, symmetric pairs from the offices outwards
+  // 02 Bæklingurinn
+  clear: [1.0, 1.12] as const, // the needs fade away with a small lift
+  land: [1.08, 1.26] as const, // the booklet settles in (fades in as it lowers 0.5)
+  open: [1.26, 1.36] as const,
+  leaf0: [1.35, 1.43] as const,
+  leaf1: [1.41, 1.49] as const,
+  lights: [1.52, 1.8] as const, // the eight categories light up, one after another
+  // 03 Kerfið
+  away: [2.0, 2.12] as const, // the booklet leaves (fade + lift) as the camera rises
+  orb: [2.12, 2.3] as const, // the orb settles in over the street
+  finds: [2.3, 2.7] as const, // one company at a time: line, bead, light, label
+  // 04 Dreifing
+  exit: [3.0, 3.08] as const, // the orb and its lines leave as the camera comes down
+  drive: [3.0, 3.42] as const, // a steady drive along the street, braking to a stop at our office
+  doors: [3.42, 3.47] as const,
+  ours: [3.44, 3.54] as const,
+  insert: [3.54, 3.58] as const,
 };
 
-/** the eight categories on the booklet's spread; one is lifted in rose */
-const CATS = [
-  "Bókhald",
-  "Tryggingar",
-  "Vefsíða",
-  "Banki",
-  "Tölvur",
-  "Hönnun",
-  "Lögfræði",
-  "Prentun",
+/** where each step rests (phones tween here; the posters are rendered here) */
+export const BUSINESS_REST = [0.92, 1.92, 2.92, 3.96];
+
+/* ------------------------------------------------------------------ world layout */
+
+const PT = PLATE_T;
+const BS = 0.6; // booklet scale (1.2 × 1.2 closed, 2.4 × 1.2 open)
+const BOOK_Z = 2.36;
+const NEW_L = -2.55;
+const NEW_R = 2.6;
+const LANE_Z = 2.25;
+const VAN_STOP_X = -1.75;
+const BRAKE_X = 4.5;
+/**
+ * The needs stand on a gentle arc on the square in front of the offices (symmetric pairs; the way
+ * to our door stays clear in the middle). Phones get two columns, three rows deep, from higher up.
+ */
+const ARC_WIDE: [number, number, string][] = [
+  [-3.45, 1.95, "bokhald"],
+  [-2.62, 2.88, "tryggingar"],
+  [-1.68, 3.42, "vefsida"],
+  [1.68, 3.42, "banki"],
+  [2.62, 2.88, "tolvur"],
+  [3.45, 1.95, "honnun"],
 ];
-const ROSE_CAT = 3;
+const ARC_DEEP: [number, number, string][] = [
+  [-2.05, 1.78, "bokhald"],
+  [-1.9, 2.78, "tryggingar"],
+  [-1.6, 3.78, "vefsida"],
+  [1.6, 3.78, "banki"],
+  [1.9, 2.78, "tolvur"],
+  [2.05, 1.78, "honnun"],
+];
+/** the eight categories on the booklet's FLOKKAR page, in the order they light up */
+const CATS = ["Bókhald", "Tryggingar", "Vefsíða", "Banki", "Tölvur", "Hönnun", "Lögfræði", "Prentun"];
 
-// page layout, in canvas px of a 1024² page (the page is 2×2 booklet units)
-const PG = 1024;
-const GRID = { x0: 124, x1: 900, y0: 262, y1: 892, cols: 2, rows: 4, gx: 30, gy: 26 };
-const tileRect = (i: number) => {
-  const tw = (GRID.x1 - GRID.x0 - GRID.gx * (GRID.cols - 1)) / GRID.cols;
-  const th = (GRID.y1 - GRID.y0 - GRID.gy * (GRID.rows - 1)) / GRID.rows;
-  const c = i % GRID.cols;
-  const r = Math.floor(i / GRID.cols);
-  return { x: GRID.x0 + c * (tw + GRID.gx), y: GRID.y0 + r * (th + GRID.gy), w: tw, h: th };
+/* ------------------------------------------------------------------ camera */
+
+interface Shot {
+  g: number;
+  /** target */
+  t: [number, number, number];
+  /** degrees: yaw 0 = looking towards −z from the +z side; pitch = elevation */
+  yaw: number;
+  pitch: number;
+  fov: number;
+  /** half-height that must fit, and the half-width that must stay visible (narrow screens) */
+  h: number;
+  w: number;
+  /** half-size of the sun's shadow box */
+  sun: number;
+}
+
+const ORB_WIDE = new THREE.Vector3(6.6, 4.55, 2.0);
+const ORB_DEEP = new THREE.Vector3(5.4, 4.35, 2.0);
+
+const shotsFor = (orb: THREE.Vector3, deep: boolean): Shot[] => [
+  // 01: the empty lot in the row (our office is built at once), then the whole row and the arc
+  { g: 0.0, t: [0, 0.72, 0.6], yaw: 0, pitch: 17, fov: 30, h: deep ? 1.3 : 1.42, w: deep ? 1.8 : 3.1, sun: 5 },
+  { g: 0.5, t: deep ? [0, 0.58, 2.05] : [0, 0.68, 1.72], yaw: 0, pitch: deep ? 30 : 21, fov: 30, h: deep ? 1.92 : 1.8, w: deep ? 2.7 : 4.4, sun: 7 },
+  { g: 1.0, t: deep ? [0, 0.58, 2.05] : [0, 0.68, 1.72], yaw: 0, pitch: deep ? 30 : 21, fov: 30, h: deep ? 1.92 : 1.8, w: deep ? 2.7 : 4.4, sun: 7 },
+  // 02: above the square where the booklet lands; the open spread fills the frame
+  { g: 1.3, t: [0, 0.02, BOOK_Z + 0.02], yaw: 0, pitch: 54, fov: 30, h: 0.8, w: 1.4, sun: 2.6 },
+  { g: 2.0, t: [0, 0.02, BOOK_Z + 0.02], yaw: 0, pitch: 54, fov: 30, h: 0.8, w: 1.4, sun: 2.6 },
+  // 03: up over the district, the orb in the middle
+  { g: 2.3, t: [orb.x, 1.05, 0.45], yaw: 0, pitch: 50, fov: 30, h: deep ? 5.1 : 5.7, w: deep ? 8.2 : 10.6, sun: 16 },
+  { g: 3.0, t: [orb.x, 1.05, 0.45], yaw: 0, pitch: 50, fov: 30, h: deep ? 5.1 : 5.7, w: deep ? 8.2 : 10.6, sun: 16 },
+  // 04: down to the street as the van comes in, follow it west to its stop at our office, then the door
+  { g: 3.14, t: [deep ? 10.5 : 12.5, 0.3, LANE_Z], yaw: -10, pitch: 34, fov: 30, h: 3.3, w: deep ? 4.4 : 5.2, sun: 10 },
+  { g: 3.3, t: [3.0, 0.35, 2.0], yaw: -6, pitch: 29, fov: 30, h: 2.5, w: deep ? 3.0 : 3.6, sun: 7 },
+  { g: 3.44, t: [-0.9, 0.38, 1.6], yaw: -2, pitch: 25, fov: 30, h: 1.9, w: deep ? 2.4 : 2.9, sun: 6 },
+  { g: 3.62, t: [0, 0.36 + PT, 0.78], yaw: 0, pitch: 22, fov: 28, h: 0.44, w: 0.9, sun: 2.4 },
+  { g: 4.0, t: [0, 0.36 + PT, 0.78], yaw: 0, pitch: 22, fov: 28, h: 0.44, w: 0.9, sun: 2.4 },
+];
+
+/* ------------------------------------------------------------------ helpers */
+
+const tmpA = new THREE.Vector3();
+const bez = (a: THREE.Vector3, c: THREE.Vector3, b: THREE.Vector3, t: number, out: THREE.Vector3) => {
+  const u = 1 - t;
+  return out.set(
+    u * u * a.x + 2 * u * t * c.x + t * t * b.x,
+    u * u * a.y + 2 * u * t * c.y + t * t * b.y,
+    u * u * a.z + 2 * u * t * c.z + t * t * b.z,
+  );
 };
+const bez3 = (a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, d: THREE.Vector3, t: number, out: THREE.Vector3) => {
+  const u = 1 - t;
+  const k0 = u * u * u;
+  const k1 = 3 * u * u * t;
+  const k2 = 3 * u * t * t;
+  const k3 = t * t * t;
+  return out.set(
+    k0 * a.x + k1 * b.x + k2 * c.x + k3 * d.x,
+    k0 * a.y + k1 * b.y + k2 * c.y + k3 * d.y,
+    k0 * a.z + k1 * b.z + k2 * c.z + k3 * d.z,
+  );
+};
+const deg = THREE.MathUtils.degToRad;
 
-/** pins read from the wide district shot */
-const PIN_S = 1.3;
+/** a flat paint on the ground (a street, the square): no thickness, never a step to drive over */
+function groundPaint(w: number, d: number, color: string, y: number) {
+  const g = new THREE.PlaneGeometry(w, d);
+  g.rotateX(-Math.PI / 2);
+  const m = new THREE.Mesh(
+    g,
+    new THREE.MeshStandardMaterial({ color, roughness: 0.96, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 }),
+  );
+  m.position.y = y;
+  m.receiveShadow = true;
+  m.renderOrder = -3;
+  return m;
+}
 
-const FONT_STACK = '"Jost", "Helvetica Neue", Arial, sans-serif';
-
-export function createBusinessStory(
-  stage: Stage,
-  o: BusinessStoryOptions = {},
-): Story & { ready: Promise<void> } {
+export function createBusinessStory(stage: Stage, o: BusinessStoryOptions = {}): Story & { ready: Promise<void> } {
   const base = o.base ?? "/svif/";
   const lite = !!o.lite;
   const { scene, renderer } = stage;
+  const reg = o.colliders;
   const world = new THREE.Group();
   scene.add(world);
   world.add(createGround(400, PAL.ground));
+  const textures: THREE.Texture[] = [];
+  const ORB = lite ? ORB_DEEP : ORB_WIDE;
+  const SHOTS = shotsFor(ORB, lite);
+  const T = BUSINESS_T;
 
-  // ---------- the street + the district around it ----------
-  const district = createDistrict({
-    seed: 23,
-    lite,
-    halfX: lite ? 14 : 23,
-    zMin: lite ? -19 : -26,
-    zMax: lite ? 19 : 24,
-    waves: 5,
-    marked: lite ? 5 : 6,
-    markRing: [5.5, 12],
-  });
+  /* ================================================================ the district */
+  const halfX = lite ? 17 : 26;
+  const zMin = lite ? -12 : -22;
+  const zMax = 5;
+  const MARK_SPOTS: [number, number][] = lite
+    ? [
+        [10.2, 0],
+        [12.4, 4.7],
+      ]
+    : [
+        [10.2, 0],
+        [12.4, 4.7],
+        [15.2, 0],
+      ];
+  const district = createDistrict({ seed: 23, lite, halfX, zMin, zMax, waves: 4, skipMain: [NEW_L, NEW_R], markSpots: MARK_SPOTS });
   world.add(district.group);
-  // a pale paved square in front of the new office. Phones (lite camera) saw even a ground-coloured
-  // square's front edge as a thin aliased line across the frame, so lite has no square at all: the
-  // props and the booklet stand on the ground there (films and desktop are unchanged)
+  for (const b of district.buildings) {
+    const c = b.box.getCenter(new THREE.Vector3());
+    reg?.push({ name: `biz-${b.kind}@${c.x.toFixed(1)},${c.z.toFixed(1)}`, box: () => b.box, active: () => true });
+  }
+  // the square in front of the offices and the streets the van drives: paint on the ground
   const sq = district.square;
-  if (!lite) {
-    const square = new THREE.Mesh(
-      new RoundedBoxGeometry(sq.x * 2 - 0.3, 0.03, sq.z1 - sq.z0 - 0.3, 2, 0.012),
-      clay(PAL_PLATE, { roughness: 0.95, sheen: 0.1 }),
-    );
-    square.position.set(0, 0.0, (sq.z0 + sq.z1) / 2);
-    square.receiveShadow = true;
-    world.add(square);
+  const squareW = sq.x * 2 - 0.3;
+  const square = groundPaint(squareW, sq.z1 - 0.15 - 1.0, PAL_PLATE, 0.0035);
+  square.position.set(0, 0.0035, (1.0 + sq.z1 - 0.15) / 2);
+  world.add(square);
+  const st = district.street;
+  const streetCol = "#cfc3b1";
+  for (const sx of [-1, 1]) {
+    const x0 = sx * (squareW / 2);
+    const x1 = sx * (halfX + 4);
+    const m = groundPaint(Math.abs(x1 - x0), st.z1 - st.z0, streetCol, 0.0025);
+    m.position.set((x0 + x1) / 2, 0.0025, (st.z0 + st.z1) / 2);
+    world.add(m);
+    // the cross street at the square's corner (between the block segments)
+    const cx = sx * 7.5;
+    const n = groundPaint(2.8, st.z0 - (zMin - 3), streetCol, 0.0025);
+    n.position.set(cx, 0.0025, (zMin - 3 + st.z0) / 2);
+    world.add(n);
+    const n2 = groundPaint(2.8, zMax + 1.3 - st.z1, streetCol, 0.0025);
+    n2.position.set(cx, 0.0025, (st.z1 + zMax + 1.3) / 2);
+    world.add(n2);
   }
 
-  // ---------- the new office ----------
-  const N0 = createOffice({
+  /* ================================================================ 01: the new offices */
+  interface NewOffice {
+    x: number;
+    grow: THREE.Group;
+    info: OfficeInfo;
+    sh: THREE.Mesh;
+    roofMats: THREE.MeshPhysicalMaterial[];
+    roofBase: THREE.Color[];
+    sign: ReturnType<typeof createNewSign>;
+    signFade: ReturnType<typeof makeFade>;
+    signAt: THREE.Vector3;
+    start: number;
+    door: THREE.Vector3;
+    top: THREE.Vector3;
+    name: string;
+  }
+  const roseRoof = new THREE.Color("#a98470");
+  const newOffice = (name: string, x: number, start: number, signDx: number, opts: OfficeOptions): NewOffice => {
+    const g = createOffice({ ...opts, back: true, sides: true, seg: 3 });
+    const info = g.userData.info as OfficeInfo;
+    // the roof keeps its own materials: it turns rose when the system finds the company (step 03)
+    const roofMats: THREE.MeshPhysicalMaterial[] = [];
+    const roofBase: THREE.Color[] = [];
+    const holder = new THREE.Group();
+    for (const m of info.roof) {
+      const own = (m.material as THREE.MeshPhysicalMaterial).clone();
+      m.material = own;
+      roofMats.push(own);
+      roofBase.push(own.color.clone());
+      holder.add(m);
+    }
+    mergeByLook(g);
+    g.add(holder);
+    const grow = new THREE.Group();
+    grow.add(g);
+    grow.position.set(x, PT, 0);
+    world.add(grow);
+    const w = opts.w ?? 2;
+    const d = opts.d ?? 1.5;
+    const sh = contactShadow(w * 1.5, d * 1.6, 0.8);
+    sh.position.set(x, PT + 0.005, 0);
+    world.add(sh);
+    const doorX = x + info.doorPos.x;
+    const sign = createNewSign({ scale: 1.25 });
+    sign.group.position.set(doorX + signDx, 0.004, 1.03);
+    world.add(sign.group);
+    textures.push(sign.texture);
+    const signFade = makeFade(sign.group, { fadeTransparent: true });
+    signFade.set(0);
+    const n: NewOffice = {
+      x,
+      grow,
+      info,
+      sh,
+      roofMats,
+      roofBase,
+      sign,
+      signFade,
+      signAt: sign.group.position.clone(),
+      start,
+      door: new THREE.Vector3(doorX, PT, info.doorPos.z),
+      top: new THREE.Vector3(x, PT + info.h + 0.09, 0),
+      name,
+    };
+    return n;
+  };
+  const hero = newOffice("office-hero", 0, T.office[0], 0.8, {
     w: 2.2,
     d: 1.5,
     floors: 3,
@@ -126,81 +332,88 @@ export function createBusinessStory(
     door: PAL.rose,
     awning: PAL.rose,
     slot: true,
-    back: true,
-    sides: true,
-    seg: 3,
     rooftop: -1,
   });
-  const n0Info = N0.userData.info as OfficeInfo;
-  const n0Shadow = contactShadow(2.2 * 1.5, 1.5 * 1.6, 0.8);
-  n0Shadow.position.y = 0.021; // above the block plate that rises under the street later
-  N0.add(n0Shadow);
-  const n0Root = new THREE.Group();
-  n0Root.add(mergeByMaterial(N0));
-  N0.traverse((c) => (c as THREE.Mesh).isMesh && (c as THREE.Mesh).geometry.dispose());
-  world.add(n0Root);
-  const slot = n0Info.slot!.clone();
-  const n0Pin = pin();
-  n0Pin.position.set(0, n0Info.h + 0.2 + 1.55 * PIN_S, 0);
-  world.add(n0Pin);
-
-  // ---------- step 0: what a new company needs ----------
-  const ROW_Z = 2.75;
-  // phones get a tighter row (and a closer camera below) so the six objects stay legible
-  const SP = lite ? 1.04 : 1.34;
-  const ROW_X = [-2.5, -1.5, -0.5, 0.5, 1.5, 2.5].map((k) => k * SP);
-  const PROP_S = lite ? 1.0 : 1.12;
-  const plinth = new THREE.Mesh(
-    new RoundedBoxGeometry(SP * 5 + 1.6, 0.14, 1.05, 4, 0.05),
-    clay(PAL.clayWarm, { roughness: 0.86 }),
-  );
-  plinth.castShadow = plinth.receiveShadow = true;
-  world.add(plinth);
-  const plinthShadow = contactShadow(SP * 5 + 2.7, 1.9, 0.55);
-  plinthShadow.position.set(0, 0.035, ROW_Z);
-  world.add(plinthShadow);
-  const CAM0 = new THREE.Vector3(1.2, 3.9, 14.0);
-  const BS = 0.62; // booklet scale in the world
-  const B0 = new THREE.Vector3(0.58, 0.018, 2.75); // landed position (spine at x≈-0.04), on the square
-  const sink = new THREE.Vector3(B0.x - 0.6 * BS, 0.28, B0.z);
-  const props = BIZ_NEEDS.map((n, i) => {
-    const g = new THREE.Group();
-    const obj = n.make();
-    obj.scale.setScalar(PROP_S);
-    g.add(obj);
-    world.add(g);
-    // objects stand on the plinth (its top is 0.17 above the ground: the square is 0.03 thick)
-    const home = new THREE.Vector3(ROW_X[i], 0.17, ROW_Z);
-    const ctrl = new THREE.Vector3((home.x + sink.x) / 2, 1.9, (home.z + sink.z) / 2);
-    const face = Math.atan2(CAM0.x - home.x, CAM0.z - home.z);
-    // the callout's hairline ends just above this object's own top (below the low caption row)
-    const top = new THREE.Box3().setFromObject(obj).max.y;
-    const anchor = new THREE.Vector3(home.x, home.y + Math.min(1.1, top + 0.08), home.z);
-    const at = new THREE.Vector3(home.x, home.y + 1.55, home.z);
-    // on portrait screens every other caption sits lower, so neighbours never collide
-    const atLow = new THREE.Vector3(home.x, home.y + 1.24, home.z);
-    return { g, home, ctrl, face, anchor, at, atLow, id: n.id, text: n.text, i };
+  const officeL = newOffice("office-L", NEW_L, T.office[0] + T.openings, 0.62, {
+    w: 2.15,
+    d: 1.5,
+    floors: 2,
+    style: "shop",
+    body: PAL.clay,
+    door: PAL.rose,
+    awning: PAL.rose,
   });
+  const officeR = newOffice("office-R", NEW_R, T.office[0] + 2 * T.openings, 0.76, {
+    w: 2.2,
+    d: 1.5,
+    floors: 2,
+    style: "grid",
+    body: "#ece5d8",
+    door: PAL.rose,
+    awning: PAL.rose,
+  });
+  const offices = [hero, officeL, officeR];
+  const slot = hero.info.slot!.clone().add(new THREE.Vector3(0, PT, 0));
+  const OFFICE_DUR = T.office[1] - T.office[0];
+  const growth = (n: NewOffice, g: number) => seg(g, n.start, n.start + OFFICE_DUR, easeOutQuint);
+  for (const n of offices) {
+    reg?.push({
+      name: n.name,
+      obj: n.grow,
+      active: (g) => growth(n, g) > 0.01,
+      allow: (other, g) => n === hero && other === "copy-ours" && g >= T.insert[0] - 0.004,
+    });
+    reg?.push({ name: n.name.replace("office", "sign"), obj: n.sign.group, active: () => n.signFade.value > 0.02 && n.sign.group.visible });
+  }
 
-  // ---------- step 1: the business booklet ----------
+  /* ================================================================ 01: the needs */
+  const CAM01 = lite ? new THREE.Vector3(0, 6.5, 13) : new THREE.Vector3(0, 3.4, 12);
+  const ARC_POS = lite ? ARC_DEEP : ARC_WIDE;
+  const needLabelY = (z: number) => (lite ? (z > 3.2 ? 1.04 : z > 2.2 ? 1.24 : 1.36) : 1.58);
+  const props = ARC_POS.map(([ax, az, id], slotIdx) => {
+    const n = BIZ_NEEDS.find((x) => x.id === id)!;
+    const root = new THREE.Group();
+    const obj = n.make();
+    mergeByLook(obj);
+    obj.scale.setScalar(1.15);
+    root.add(obj);
+    const at = new THREE.Vector3(ax, 0, az);
+    root.position.copy(at);
+    root.rotation.y = Math.atan2(CAM01.x - at.x, CAM01.z - at.z);
+    world.add(root);
+    // stand every prop on the ground: its lowest point at y = 0, never below
+    const box = new THREE.Box3().setFromObject(obj);
+    const lift = Math.max(0, -box.min.y) + 0.001;
+    obj.position.y = lift;
+    const top = box.max.y + lift;
+    const sh = contactShadow(1.0, 1.0, 0.5);
+    sh.position.set(at.x, 0.006, at.z);
+    world.add(sh);
+    const fade = makeFade(root);
+    fade.set(0);
+    // symmetric pairs from the offices outwards: beside the doors first, then the middle, then the
+    // pair nearest the camera
+    const order = [0, 2, 4, 5, 3, 1][slotIdx];
+    return { id, text: n.text, root, obj, at, top, fade, sh, order, slotIdx };
+  });
+  for (const p of props) reg?.push({ name: "need-" + p.id, obj: p.root, active: () => p.fade.value > 0.02 && p.root.visible });
+  const needStart = (order: number) => T.needs[0] + order * ((T.needs[1] - T.needs[0] - 0.2) / 5);
+
+  /* ================================================================ 02: the booklet */
   const book = createBooklet({
     base: base + "kafli/",
     renderer,
     cover: "biz-cover.jpg",
-    // inside pages are drawn below; reuse the cover image so nothing extra is fetched
-    insideCover: "biz-cover.jpg",
-    firstPage: "biz-cover.jpg",
-    back: "biz-cover.jpg",
-    leaves: [],
+    insideCover: "biz/b01.webp",
+    // two real leaves; the second leaf's back and the page block's top are drawn below
+    leaves: [
+      ["biz/b02.webp", "biz/b03.webp"],
+      ["biz/b04.webp", "biz/b04.webp"],
+    ],
+    firstPage: "biz/b04.webp",
+    back: "biz/b13.webp",
   });
-  const bookRoot = new THREE.Group();
-  bookRoot.add(book.group);
-  book.group.scale.setScalar(BS);
-  world.add(bookRoot);
-  const bookShadow = contactShadow(2.0, 1.7, 0.55);
-  world.add(bookShadow);
-
-  // pages drawn in the flyer style (dark taupe, cream Jost caps, hairlines)
+  const PG = 1024;
   const leftCanvas = document.createElement("canvas");
   const rightCanvas = document.createElement("canvas");
   leftCanvas.width = leftCanvas.height = rightCanvas.width = rightCanvas.height = PG;
@@ -209,222 +422,253 @@ export function createBusinessStory(
   for (const t of [leftTex, rightTex]) {
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    textures.push(t);
   }
-  // the page block's top face = right page; the cover's inside = left page
+  // the page block's top face = the right-hand page once both leaves are turned; the second
+  // leaf's back = the left-hand page (brochure.ts: children [0] back, [1] block, [2] cover pivot,
+  // then one mesh per inner leaf)
   const block = book.group.children[1] as THREE.Mesh;
-  const blockMats = block.material as THREE.MeshPhysicalMaterial[];
+  const blockMats = (block.material as THREE.MeshPhysicalMaterial[]).slice();
   blockMats[2] = paper(rightTex, "#ffffff", 0.08);
   block.material = blockMats;
-  const coverPivot = book.group.children[2] as THREE.Group;
-  const coverMesh = coverPivot.children[0] as THREE.Mesh;
-  const coverMats = coverMesh.material as THREE.MeshPhysicalMaterial[];
-  coverMats[3] = paper(leftTex, "#ffffff", 0.08);
-  coverMesh.material = coverMats;
-  const back = book.group.children[0] as THREE.Mesh;
-  const backMats = back.material as THREE.MeshPhysicalMaterial[];
-  backMats[2] = paper(null, "#4a4438", 0);
-  back.material = backMats;
+  const leaf2 = book.group.children[4] as THREE.Mesh;
+  const leafMats = (leaf2.material as THREE.MeshPhysicalMaterial[]).slice();
+  leafMats[3] = paper(leftTex, "#ffffff", 0.08);
+  leaf2.material = leafMats;
+  const blockTop = block.position.y + (block.geometry as THREE.BoxGeometry).parameters.height / 2;
 
-  // category cards: thin 3D tiles lying in the page grid, children of the booklet
+  // the category tiles: thin printed cards lying in the page's grid (children of the booklet, so
+  // they fade and move with it); each has three faces: plain, lit (rose) and marked
+  const GRID = { x0: 124, x1: 900, y0: 262, y1: 892, cols: 2, rows: 4, gx: 30, gy: 26 };
+  const tileRect = (i: number) => {
+    const tw = (GRID.x1 - GRID.x0 - GRID.gx * (GRID.cols - 1)) / GRID.cols;
+    const th = (GRID.y1 - GRID.y0 - GRID.gy * (GRID.rows - 1)) / GRID.rows;
+    const c = i % GRID.cols;
+    const r = Math.floor(i / GRID.cols);
+    return { x: GRID.x0 + c * (tw + GRID.gx), y: GRID.y0 + r * (th + GRID.gy), w: tw, h: th };
+  };
   const CARD_T = 0.012;
-  const pageTop = book.T - 0.006; // top of the page block (booklet units)
-  const cardEdge = paper(null, "#f1ebe0", 0);
-  const cardUnder = paper(null, "#3b362d", 0);
-  const cardCanvases: HTMLCanvasElement[] = [];
-  const cards = CATS.map((name, i) => {
+  const cardSide = paper(null, "#f1ebe0", 0);
+  const tiles = CATS.map((name, i) => {
     const rc = tileRect(i);
     const cw = (rc.w / PG) * 2;
     const ch = (rc.h / PG) * 2;
-    const cv = document.createElement("canvas");
-    cv.width = 640;
-    cv.height = Math.round((640 * rc.h) / rc.w);
-    cardCanvases.push(cv);
-    const tex = new THREE.CanvasTexture(cv);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-    const m = new THREE.Mesh(new THREE.BoxGeometry(cw, CARD_T, ch), [
-      cardEdge,
-      cardEdge,
-      paper(tex, "#ffffff", i === ROSE_CAT ? 0.3 : 0.15),
-      cardUnder,
-      cardEdge,
-      cardEdge,
-    ]);
+    const faces = (["plain", "lit", "marked"] as const).map((kind) => {
+      const cv = document.createElement("canvas");
+      cv.width = 512;
+      cv.height = Math.round((512 * rc.h) / rc.w);
+      const tex = new THREE.CanvasTexture(cv);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      textures.push(tex);
+      return { cv, tex, kind };
+    });
+    const faceMat = paper(faces[0].tex, "#ffffff", 0.14);
+    const m = new THREE.Mesh(twoGroupBox(cw, CARD_T, ch, "top"), [cardSide, faceMat]);
     m.castShadow = true;
     m.receiveShadow = true;
     const x = -1 + ((rc.x + rc.w / 2) / PG) * 2 + 0.012;
     const z = -1 + ((rc.y + rc.h / 2) / PG) * 2;
-    const y = pageTop + CARD_T / 2 + 0.0004;
+    const y = blockTop + CARD_T / 2 + 0.0004;
     m.position.set(x, y, z);
     m.visible = false;
     book.group.add(m);
-    return { m, tex, name, i, x, y, z, cv };
+    return { m, faceMat, faces, name, i, x, y, z };
   });
-
+  const bookRoot = new THREE.Group();
+  book.group.scale.setScalar(BS);
+  bookRoot.add(book.group);
+  // closed it lies right of centre (x 0 … 1.2); open, the spread is centred (x −1.2 … 1.2)
+  bookRoot.position.set(BS, 0, BOOK_Z);
+  world.add(bookRoot);
+  const bookFade = makeFade(book.group, { topDown: true });
+  bookFade.set(0);
+  const bookShadow = contactShadow(1.6, 1.6, 0.5);
+  world.add(bookShadow);
+  reg?.push({ name: "booklet", obj: book.group, active: () => bookFade.value > 0.02 && bookRoot.visible });
   const drawPages = () => {
     drawLeftPage(leftCanvas.getContext("2d")!, PG);
-    drawRightPage(rightCanvas.getContext("2d")!, PG);
-    cards.forEach((c) =>
-      drawCard(c.cv.getContext("2d")!, c.cv.width, c.cv.height, c.name, c.i === ROSE_CAT),
-    );
+    drawRightPage(rightCanvas.getContext("2d")!, PG, tileRect);
+    for (const t of tiles) for (const f of t.faces) {
+      drawCard(f.cv.getContext("2d")!, f.cv.width, f.cv.height, t.name, f.kind);
+      f.tex.needsUpdate = true;
+    }
     leftTex.needsUpdate = true;
     rightTex.needsUpdate = true;
-    cards.forEach((c) => (c.tex.needsUpdate = true));
   };
   drawPages();
-  // redraw once the brand face has loaded (falls back to a neutral sans until then)
-  const ready: Promise<void> =
-    typeof document !== "undefined" && document.fonts && document.fonts.load
-      ? Promise.all([document.fonts.load(`300 48px Jost`), document.fonts.load(`400 24px Jost`)])
-          .then(() => drawPages())
-          .catch(() => undefined)
-      : Promise.resolve();
+  const LIGHT_STEP = (T.lights[1] - T.lights[0] - 0.06) / (CATS.length - 1);
+  const LIGHT_DUR = 0.06;
+  const lightStart = (i: number) => T.lights[0] + i * LIGHT_STEP;
 
-  // ---------- step 2: marks ----------
-  const haloTex = canvasTex(128, 128, (c, w, h) => {
-    const r = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
-    r.addColorStop(0, "rgba(178,144,121,0.62)");
-    r.addColorStop(0.45, "rgba(178,144,121,0.26)");
-    r.addColorStop(1, "rgba(178,144,121,0)");
-    c.fillStyle = r;
-    c.fillRect(0, 0, w, h);
-  }); // sRGB, so the pool really is the brand rose
-  const ringGeo = new THREE.RingGeometry(0.96, 1, 96);
-  ringGeo.rotateX(-Math.PI / 2);
-  const haloGeo = new THREE.PlaneGeometry(6, 6);
+  /* ================================================================ 03: the system */
+  const orb = createOrb({ lite, radius: lite ? 0.95 : 1.08, tune: o.orb });
+  orb.group.position.copy(ORB);
+  world.add(orb.group);
+  orb.pool.position.set(ORB.x, 0.006, ORB.z);
+  world.add(orb.pool);
+  orb.setFade(0);
+  const ORB_BOX = new THREE.Box3();
+  reg?.push({
+    name: "orb",
+    box: () => ORB_BOX.setFromCenterAndSize(orb.group.position, tmpA.setScalar(orb.radius * 2)),
+    active: (g) => g > T.orb[0] && g < T.exit[1],
+  });
+  // the companies the system finds, in order: ours, then east along the street, our neighbours between
+  interface Found {
+    name: string;
+    top: THREE.Vector3;
+    door: THREE.Vector3;
+    face: number;
+    setGlow: (v: number) => void;
+    arc: Arc;
+    halo: THREE.Mesh;
+  }
+  const haloGeo = new THREE.PlaneGeometry(1, 1);
   haloGeo.rotateX(-Math.PI / 2);
-  const marks = district.marks.map((mk) => {
-    const p = pin();
-    p.position.copy(mk.top).add(new THREE.Vector3(0, 1.55 * PIN_S, 0));
-    world.add(p);
-    const halo = new THREE.Mesh(
-      haloGeo,
-      new THREE.MeshBasicMaterial({
-        map: haloTex,
-        transparent: true,
-        depthWrite: false,
-        opacity: 0,
-        toneMapped: false,
-      }),
-    );
-    halo.position.set(mk.pos.x, 0.024, mk.pos.z);
+  const haloMat = (() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const g = c.getContext("2d")!;
+    const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    r.addColorStop(0, "rgba(201,154,128,0.5)");
+    r.addColorStop(0.45, "rgba(201,154,128,0.2)");
+    r.addColorStop(1, "rgba(201,154,128,0)");
+    g.fillStyle = r;
+    g.fillRect(0, 0, 128, 128);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    textures.push(t);
+    return new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, opacity: 1, toneMapped: false });
+  })();
+  const mkFound = (name: string, top: THREE.Vector3, door: THREE.Vector3, face: number, setGlow: (v: number) => void, size: number): Found => {
+    const from = orb.surfacePoint(top, new THREE.Vector3()).add(orb.group.position);
+    const arc = createArc(from, top, { radius: lite ? 0.014 : 0.011 });
+    world.add(arc.group);
+    const halo = new THREE.Mesh(haloGeo, haloMat.clone());
+    halo.scale.set(size, 1, size);
+    halo.position.set(top.x, PT + 0.007, top.z);
     halo.renderOrder = -1;
+    halo.visible = false;
     world.add(halo);
-    const ring = new THREE.Mesh(
-      ringGeo,
-      new THREE.MeshBasicMaterial({
-        color: PAL.rose,
-        transparent: true,
-        depthWrite: false,
-        opacity: 0,
-        toneMapped: false,
-      }),
-    );
-    ring.position.set(mk.pos.x, 0.027, mk.pos.z);
-    world.add(ring);
-    // where a delivered copy lands: in front of its door
-    const dest = new THREE.Vector3(mk.door.x, 0.3, mk.door.z + mk.face * 0.9);
-    return { mk, pin: p, halo, ring, dest };
-  });
-
-  // ---------- step 3: print & deliver ----------
-  const coverUrl = base + "kafli/biz-cover.jpg";
-  const STACK = new THREE.Vector3(-2.1, 0.015, 2.5);
-  const stackN = lite ? 7 : 8;
-  const stack = Array.from({ length: stackN }, (_, i) => {
-    const b = miniBooklet(coverUrl, renderer, 0.5);
-    world.add(b);
-    const from = new THREE.Vector3(STACK.x, STACK.y + 0.016 + i * 0.03, STACK.z);
-    const m = marks[i % Math.max(1, marks.length)];
-    // the arc climbs with the distance so it clears the rooftops on the way
-    const ctrl = m
-      ? from
-          .clone()
-          .lerp(m.dest, 0.5)
-          .add(new THREE.Vector3(0, 3.2 + 0.28 * from.distanceTo(m.dest), 0))
-      : from.clone();
-    return { b, from, ctrl, dest: m ? m.dest : from, i, flies: i < marks.length };
-  });
-  const stackShadow = contactShadow(0.9, 0.9, 0.6);
-  stackShadow.position.set(STACK.x, STACK.y + 0.004, STACK.z);
-  world.add(stackShadow);
-  const flyer = miniBooklet(coverUrl, renderer, 0.15);
-  world.add(flyer);
-  const flyStart = new THREE.Vector3(STACK.x, 0.3, STACK.z);
-  const flyFront = slot.clone().add(new THREE.Vector3(0, 0, 0.34));
-  const flyCtrl = new THREE.Vector3(
-    (flyStart.x + flyFront.x) / 2,
-    2.2,
-    (flyStart.z + flyFront.z) / 2 + 0.8,
-  );
-  const flyIn = slot.clone().add(new THREE.Vector3(0, 0, 0.03));
-
-  // ---------- modules ----------
-  const bezier = (
-    a: THREE.Vector3,
-    c: THREE.Vector3,
-    b: THREE.Vector3,
-    t: number,
-    out: THREE.Vector3,
-  ) => {
-    const u = 1 - t;
-    out.set(
-      u * u * a.x + 2 * u * t * c.x + t * t * b.x,
-      u * u * a.y + 2 * u * t * c.y + t * t * b.y,
-      u * u * a.z + 2 * u * t * c.z + t * t * b.z,
-    );
-    return out;
+    return { name, top, door, face, setGlow, arc, halo };
   };
+  const officeGlow = (n: NewOffice) => (v: number) => {
+    for (let i = 0; i < n.roofMats.length; i++) {
+      const m = n.roofMats[i];
+      m.color.copy(n.roofBase[i]).lerp(roseRoof, v);
+      m.emissive.setStyle(PAL.rose);
+      m.emissiveIntensity = 0.3 * v;
+    }
+  };
+  const marks = district.marks;
+  const found: Found[] = [];
+  found.push(mkFound("ours", hero.top, hero.door, 1, officeGlow(hero), 4.6));
+  if (marks[0]) found.push(mkFound("m0", marks[0].top, marks[0].door, marks[0].face, marks[0].setGlow, 4.4));
+  found.push(mkFound("L", officeL.top, officeL.door, 1, officeGlow(officeL), 4.2));
+  if (marks[1]) found.push(mkFound("m1", marks[1].top, marks[1].door, marks[1].face, marks[1].setGlow, 4.4));
+  found.push(mkFound("R", officeR.top, officeR.door, 1, officeGlow(officeR), 4.2));
+  if (marks[2]) found.push(mkFound("m2", marks[2].top, marks[2].door, marks[2].face, marks[2].setGlow, 4.4));
+  const FIND_STEP = (T.finds[1] - T.finds[0] - 0.1) / Math.max(1, found.length - 1);
+  const findStart = (i: number) => T.finds[0] + i * FIND_STEP;
+  // one company's sequence, relative to its start: the line draws, a bead of light runs down it,
+  // the company turns rose, its label draws
+  const F_DRAW = [0, 0.045] as const;
+  const F_BEAD = [0.035, 0.07] as const;
+  const F_LIT = [0.062, 0.088] as const;
+  const F_LABEL = [0.072, 0.1] as const;
+
+  /* ================================================================ 04: the van and the deliveries */
+  const coverUrl = base + "kafli/biz-cover.jpg";
+  const van = createVan({ logoUrl: base + "logo-ink.png", renderer });
+  world.add(van.group);
+  const vanFade = makeFade(van.group, { fadeTransparent: true });
+  vanFade.set(0);
+  reg?.push({ name: "van", obj: van.group, active: () => van.group.visible && vanFade.value > 0.02 });
+  const VAN_FROM_X = lite ? 21 : 26;
+  // a steady drive along the street, then one smooth braking to a stop in front of our office
+  const cruiseLen = VAN_FROM_X - BRAKE_X;
+  const brakeLen = BRAKE_X - VAN_STOP_X;
+  const uc = cruiseLen / (cruiseLen + 2 * brakeLen);
+  const vanXAt = (u: number) => {
+    if (u <= uc) return VAN_FROM_X - cruiseLen * (u / uc);
+    const s = (u - uc) / (1 - uc);
+    return BRAKE_X - brakeLen * (1 - (1 - s) * (1 - s));
+  };
+  const vanX = (g: number) => vanXAt(seg(g, T.drive[0], T.drive[1], (x) => x));
+  const whenVanAt = (x: number) => {
+    let u: number;
+    if (x >= BRAKE_X) u = ((VAN_FROM_X - x) / cruiseLen) * uc;
+    else u = uc + (1 - Math.sqrt(clamp(1 - (BRAKE_X - x) / brakeLen, 0, 1))) * (1 - uc);
+    return lerp(T.drive[0], T.drive[1], clamp(u, 0, 1));
+  };
+  // a copy to every lit company but ours, as the van passes its door
+  const DROP_DUR = 0.045;
+  const drops = found
+    .filter((f) => f.name !== "ours")
+    .map((f, i) => {
+      const m = createCopy(coverUrl, renderer, 0.42);
+      world.add(m);
+      const fade = makeFade(m, { clone: true });
+      fade.set(0);
+      const t0 = whenVanAt(f.door.x + 0.4);
+      const to = f.door.clone().add(new THREE.Vector3(0, 0.12, f.face * 0.18));
+      return { f, m, fade, t0, to, i };
+    });
+  for (const d of drops) reg?.push({ name: "copy-drop-" + d.i, obj: d.m, active: () => d.fade.value > 0.02 && d.m.visible, allow: (n) => n.startsWith("biz-") || n.startsWith("office-") });
+  // the last one: our letterbox
+  const ours = createCopy(coverUrl, renderer, 0.15);
+  world.add(ours);
+  const oursFade = makeFade(ours, { clone: true });
+  oursFade.set(0);
+  reg?.push({ name: "copy-ours", obj: ours, active: () => oursFade.value > 0.02 && ours.visible, allow: (n, g) => n === "office-hero" && g >= T.insert[0] - 0.004 });
+
+  /* ================================================================ modules */
 
   const streetMod: StoryModule = {
     update(g) {
-      const k = seg(g, BUSINESS_T.office[0], BUSINESS_T.office[1], easeOutQuint);
-      n0Root.visible = k > 0.001;
-      n0Root.position.y = (k - 1) * 2.4;
-      district.rise(seg(g, BUSINESS_T.rise[0], BUSINESS_T.rise[1], (x) => x));
+      for (const n of offices) {
+        const k = growth(n, g);
+        n.grow.visible = k > 0.001;
+        n.grow.scale.y = Math.max(0.001, k);
+        setShadow(n.sh, 0.8, k);
+        // the NÝTT board settles by the door once the office stands
+        const a = n.start + OFFICE_DUR + T.signAfter;
+        const s = seg(g, a, a + 0.1, easeOutQuint);
+        n.signFade.set(seg(g, a, a + 0.06));
+        n.sign.group.position.set(n.signAt.x, n.signAt.y + (1 - s) * 0.35, n.signAt.z);
+      }
     },
   };
 
   const needsMod: StoryModule = {
     update(g) {
-      const [n0, n1] = BUSINESS_T.needs;
-      const [c0, c1] = BUSINESS_T.condense;
-      const up = seg(g, n0 - 0.04, n0 + 0.16, easeOutQuint);
-      // every object has left the plinth before it sinks, and it is gone before the booklet touches down
-      const down = seg(g, c0 + 0.06, c0 + 0.16, easeInOut);
-      const pk = up * (1 - down);
-      plinth.visible = pk > 0.001;
-      plinth.position.set(0, lerp(-0.2, 0.1, pk), ROW_Z);
-      (plinthShadow.material as THREE.MeshBasicMaterial).opacity = 0.55 * pk;
       for (const p of props) {
-        const a = n0 + 0.08 + p.i * ((n1 - n0 - 0.32) / 5);
-        const rise = seg(g, a, a + 0.24, easeOutQuint);
-        const f0 = c0 + p.i * 0.012;
-        const fly = seg(g, f0, Math.min(c1, f0 + 0.18), easeInOut);
-        if (fly > 0) bezier(p.home, p.ctrl, sink, fly, p.g.position);
-        else p.g.position.set(p.home.x, lerp(p.home.y - 0.35, p.home.y, rise), p.home.z);
-        const s = lerp(0.82, 1, rise) * (1 - fly * 0.85);
-        p.g.scale.setScalar(Math.max(0.0001, s));
-        p.g.visible = rise > 0.001 && fly < 0.999;
-        p.g.rotation.y = p.face + (1 - rise) * 0.9 + fly * 2.4;
+        const a = needStart(p.order);
+        const inn = seg(g, a, a + 0.2, easeOutQuint);
+        const outA = T.clear[0] + (5 - p.order) * 0.012;
+        const out = seg(g, outA, outA + 0.07, easeInOut);
+        const op = clamp(seg(g, a, a + 0.12) - out, 0, 1);
+        p.root.position.set(p.at.x, (1 - inn) * 0.42 + out * 0.3, p.at.z);
+        p.fade.set(op);
+        setShadow(p.sh, 0.5, op * (1 - (1 - inn) * 0.8));
       }
     },
     labels(g, out: WorldLabel[]) {
-      const [n0, n1] = BUSINESS_T.needs;
-      const fade = 1 - seg(g, 1.0, 1.08);
+      const gone = 1 - seg(g, T.clear[0], T.clear[0] + 0.05);
+      if (gone <= 0) return;
       for (const p of props) {
-        const a = n0 + 0.08 + p.i * ((n1 - n0 - 0.32) / 5);
-        const draw = seg(g, a + 0.12, a + 0.28);
-        const op = seg(g, a + 0.2, a + 0.32) * fade;
+        const a = needStart(p.order);
+        const draw = seg(g, a + 0.1, a + 0.24);
+        const op = seg(g, a + 0.15, a + 0.27) * gone;
         if (draw <= 0) continue;
-        const low = stage.camera.aspect < 1.1 && p.i % 2 === 1;
         out.push({
           id: "need-" + p.id,
           text: p.text,
-          anchor: p.anchor,
-          world: low ? p.atLow : p.at,
+          anchor: new THREE.Vector3(p.at.x, p.top + 0.07, p.at.z),
+          world: new THREE.Vector3(p.at.x, needLabelY(p.at.z), p.at.z),
           opacity: op,
-          draw: draw * fade,
+          draw: draw * gone,
           kind: "callout",
         });
       }
@@ -433,182 +677,225 @@ export function createBusinessStory(
 
   const bookMod: StoryModule = {
     update(g) {
-      const d = seg(g, BUSINESS_T.descend[0], BUSINESS_T.descend[1], easeOutQuint);
-      const leave = seg(g, BUSINESS_T.away[0] + 0.06, BUSINESS_T.away[1] + 0.12, easeInOut);
-      bookRoot.visible = d > 0.001 && leave < 0.999;
-      const y = lerp(3.4, B0.y, d) + leave * 5.5;
-      bookRoot.position.set(B0.x, y, B0.z + (1 - d) * 0.6);
-      bookRoot.rotation.set(
-        lerp(0.9, 0, d) - leave * 0.4,
-        lerp(-0.7, 0, d) + leave * 0.6,
-        lerp(0.25, 0, d),
-      );
-      const open =
-        seg(g, BUSINESS_T.open[0], BUSINESS_T.open[1], easeInOut) *
-        (1 - seg(g, BUSINESS_T.away[0], BUSINESS_T.away[1], easeInOut));
-      book.setCover(open * Math.PI * 0.995);
-      bookShadow.position.set(B0.x - 0.62 * open * BS, B0.y + 0.004, B0.z);
-      bookShadow.scale.set(1 + open, 1, 1);
-      (bookShadow.material as THREE.MeshBasicMaterial).opacity = 0.55 * d * (1 - leave);
-      // the category cards: all lift a hair, the rose one rises and tips toward us
-      const settle = 1 - seg(g, BUSINESS_T.away[0] - 0.04, BUSINESS_T.away[0] + 0.03, easeInOut);
-      for (const c of cards) {
-        c.m.visible = open > 0.12;
-        const a = BUSINESS_T.tiles[0] + c.i * 0.008;
-        const k = seg(g, a, a + 0.1, easeOutQuint) * settle;
-        if (c.i === ROSE_CAT) {
-          const kr = seg(g, BUSINESS_T.tiles[0] + 0.03, BUSINESS_T.tiles[1], easeOutQuint) * settle;
-          c.m.position.set(c.x, c.y + kr * 0.13, c.z + kr * 0.05);
-          c.m.rotation.set(kr * 0.1, 0, 0);
-        } else {
-          c.m.position.set(c.x, c.y + k * 0.035, c.z);
-        }
+      const land = seg(g, T.land[0], T.land[1], easeOutQuint);
+      const vis = seg(g, T.land[0], T.land[0] + 0.1);
+      const leave = seg(g, T.away[0], T.away[1], easeInOut);
+      const op = vis * (1 - leave);
+      bookRoot.visible = op > 0.002;
+      bookFade.set(op);
+      bookRoot.position.y = (1 - land) * 0.5 + leave * 0.3;
+      setShadow(bookShadow, 0.5, op * (0.35 + 0.65 * land));
+      const open = seg(g, T.open[0], T.open[1], easeInOut);
+      book.setCover(open * Math.PI);
+      book.setLeaf(0, seg(g, T.leaf0[0], T.leaf0[1], easeInOut) * Math.PI);
+      const l1 = seg(g, T.leaf1[0], T.leaf1[1], easeInOut);
+      book.setLeaf(1, l1 * Math.PI);
+      // the contact shadow follows the spread
+      bookShadow.position.set(BS - BS * open, 0.006, BOOK_Z);
+      bookShadow.scale.set(1 + open * 1.0, 1, 1);
+      // the categories: visible once the FLOKKAR page is exposed; each lifts in rose, lands marked
+      const exposed = l1 > 0.55;
+      for (const t of tiles) {
+        t.m.visible = exposed;
+        const a = lightStart(t.i);
+        const p = seg(g, a, a + LIGHT_DUR, (x) => x);
+        const up = easeOut(seg(p, 0, 0.38));
+        const down = easeInOut(seg(p, 0.6, 1));
+        const k = up * (1 - down);
+        t.m.position.set(t.x, t.y + k * 0.16, t.z + k * 0.02);
+        t.m.rotation.set(k * 0.14, 0, 0);
+        const face = p <= 0 ? 0 : p < 1 ? 1 : 2;
+        const tex = t.faces[face].tex;
+        if (t.faceMat.map !== tex) t.faceMat.map = tex;
       }
     },
   };
 
-  const marksMod: StoryModule = {
+  const systemMod: StoryModule = {
     update(g) {
-      const n = marks.length;
-      const keep = 1 - seg(g, BUSINESS_T.pinsAway[0], BUSINESS_T.pinsAway[1], easeInOut);
-      marks.forEach((m, i) => {
-        const a =
-          BUSINESS_T.marks[0] +
-          (i / Math.max(1, n - 1)) * (BUSINESS_T.marks[1] - BUSINESS_T.marks[0] - 0.08);
-        const v = seg(g, a, a + 0.08);
-        m.mk.setGlow(v);
-        m.pin.visible = v * keep > 0.01;
-        m.pin.scale.setScalar(Math.max(0.0001, PIN_S * easeOut(v) * keep));
-        (m.halo.material as THREE.MeshBasicMaterial).opacity = v;
-        m.halo.visible = v > 0.001;
-        const rv = seg(g, a, a + 0.22);
-        m.ring.visible = rv > 0.001 && rv < 0.999;
-        m.ring.scale.setScalar(lerp(0.9, 3.6, easeOut(rv)));
-        (m.ring.material as THREE.MeshBasicMaterial).opacity =
-          0.7 * Math.sin(Math.PI * rv) * (1 - rv * 0.4);
-      });
-      const hv = seg(g, BUSINESS_T.marks[0] - 0.04, BUSINESS_T.marks[0] + 0.04);
-      n0Pin.visible = hv * keep > 0.01;
-      n0Pin.scale.setScalar(Math.max(0.0001, PIN_S * easeOut(hv) * keep));
+      const arrive = seg(g, T.orb[0], T.orb[1], easeOutQuint);
+      const vis = seg(g, T.orb[0], T.orb[0] + 0.1);
+      const exit = seg(g, T.exit[0], T.exit[1], easeInOut);
+      const op = vis * (1 - exit);
+      orb.setFade(op);
+      orb.group.position.set(ORB.x, ORB.y + (1 - arrive) * 0.6 + exit * 0.35, ORB.z);
+      orb.setLife(g * 2.6);
+      orb.setPool(op * arrive * 0.9);
+      for (let i = 0; i < found.length; i++) {
+        const f = found[i];
+        const a = findStart(i);
+        const r = g - a;
+        f.arc.setFade(1 - exit);
+        f.arc.setDraw(seg(r, F_DRAW[0], F_DRAW[1], easeInOut));
+        const bead = r >= F_BEAD[0] && r <= F_BEAD[1] ? easeInOut(seg(r, F_BEAD[0], F_BEAD[1], (x) => x)) : -1;
+        f.arc.setPulse(exit > 0.5 ? -1 : bead);
+        const lit = seg(r, F_LIT[0], F_LIT[1], easeOut);
+        f.setGlow(lit);
+        const h = f.halo.material as THREE.MeshBasicMaterial;
+        h.opacity = lit;
+        f.halo.visible = lit > 0.003;
+      }
+    },
+    labels(g, out) {
+      const exitL = 1 - seg(g, T.exit[0], T.exit[0] + 0.05);
+      if (exitL <= 0 || g < T.orb[0]) return;
+      // narrow scene areas (phones) have no room for six captions in a cluster: each company's
+      // caption gives way as the next but one is found, so at most two show at a time
+      const narrow = stage.camera.aspect < 1.1;
+      let count = 0;
+      for (let i = 0; i < found.length; i++) {
+        const f = found[i];
+        const r = g - findStart(i);
+        const draw = seg(r, F_LABEL[0], F_LABEL[1]);
+        if (r >= F_LIT[1]) count++;
+        if (draw <= 0) continue;
+        const stay = narrow && i + 2 < found.length ? 1 - seg(g, findStart(i + 2) + F_LABEL[0], findStart(i + 2) + F_LABEL[1]) : 1;
+        if (stay <= 0) continue;
+        out.push({
+          id: "found-" + f.name,
+          text: "Nýtt fyrirtæki",
+          anchor: f.top.clone().add(new THREE.Vector3(0, 0.05, 0)),
+          world: f.top.clone().add(new THREE.Vector3(0, lite ? 0.75 : 0.95, 0)),
+          opacity: seg(r, F_LABEL[0] + 0.012, F_LABEL[1] + 0.01) * exitL * stay,
+          draw: draw * exitL * stay,
+          kind: "callout",
+        });
+      }
+      // the counter above the orb: one label per value, so it ticks instead of blending
+      if (count > 0) {
+        const top = orb.group.position.clone().add(new THREE.Vector3(0, orb.radius + 0.04, 0));
+        out.push({
+          id: "count-" + count,
+          text: `Kerfið · ${count} ${count === 1 ? "nýtt fyrirtæki" : "ný fyrirtæki"}`,
+          anchor: top,
+          world: top.clone().add(new THREE.Vector3(0, 0.62, 0)),
+          opacity: exitL,
+          draw: exitL,
+          kind: "callout",
+        });
+      }
     },
   };
 
   const deliverMod: StoryModule = {
     update(g) {
-      const [s0, s1] = BUSINESS_T.stack;
-      const [d0, d1] = BUSINESS_T.send;
-      for (const s of stack) {
-        const a = s0 + s.i * ((s1 - s0 - 0.08) / stackN);
-        const k = seg(g, a, a + 0.08, easeOutQuint);
-        const leaveA = d0 + s.i * 0.02;
-        const lv = seg(g, leaveA, Math.min(d1, leaveA + 0.16), easeInOut);
-        s.b.visible = k > 0.001 && lv < 0.999;
-        if (lv > 0 && s.flies) {
-          bezier(s.from, s.ctrl, s.dest, lv, s.b.position);
-          s.b.scale.setScalar(lerp(0.5, 0.06, lv));
-          s.b.rotation.set(0, lv * 3, Math.sin(lv * Math.PI) * 0.3);
+      const driving = g >= T.drive[0];
+      van.group.visible = driving;
+      vanFade.set(driving ? seg(g, T.drive[0], T.drive[0] + 0.05) : 0);
+      const x = vanX(g);
+      van.group.position.set(x, 0, LANE_Z);
+      van.group.rotation.y = Math.PI; // heading −x (west)
+      van.roll(VAN_FROM_X - x);
+      van.steer(0);
+      van.setDoor(seg(g, T.doors[0], T.doors[1], easeInOut) * (1 - seg(g, T.insert[1], T.insert[1] + 0.03)));
+
+      // copies to the lit companies it passes: up from the roof, over the pavement, to the door
+      for (const d of drops) {
+        const p = seg(g, d.t0, d.t0 + DROP_DUR, (x) => x);
+        const on = p > 0 && p < 1;
+        d.m.visible = on;
+        d.fade.set(on ? seg(p, 0, 0.12) * (1 - seg(p, 0.8, 1)) : 0);
+        if (!on) continue;
+        const from = new THREE.Vector3(d.f.door.x + 0.4, van.height + 0.06, LANE_Z);
+        const ctrl = from.clone().lerp(d.to, 0.5).add(new THREE.Vector3(0, 1.5, 0));
+        bez(from, ctrl, d.to, easeInOut(p), d.m.position);
+        d.m.rotation.set(0, (1 - p) * 1.4, Math.sin(p * Math.PI) * 0.35);
+      }
+
+      // the last copy: out of the open rear doors, over the pavement, half-way into our letterbox
+      const f = seg(g, T.ours[0], T.ours[1], (x) => x);
+      const ins = seg(g, T.insert[0], T.insert[1], easeOut);
+      const show = f > 0;
+      ours.visible = show;
+      oursFade.set(show ? seg(f, 0, 0.12) : 0);
+      if (show) {
+        const start = new THREE.Vector3(VAN_STOP_X + van.length / 2 + 0.34, 0.5, LANE_Z);
+        const front = new THREE.Vector3(slot.x, slot.y, slot.z + 0.2);
+        const up = new THREE.Vector3(start.x, 1.5, start.z);
+        const over = new THREE.Vector3(front.x + 0.42, 1.3, front.z + 0.85);
+        const DROOP = 0.13;
+        if (ins <= 0) {
+          const e = easeInOut(f);
+          bez3(start, up, over, front, e, ours.position);
+          ours.rotation.set(DROOP * e, (1 - e) * 1.1, Math.sin(f * Math.PI) * 0.22);
         } else {
-          s.b.position.set(s.from.x, s.from.y + (1 - k) * 1.2, s.from.z);
-          s.b.scale.setScalar(0.5);
-          s.b.rotation.set(0, (s.i % 2 ? 0.04 : -0.03) + s.i * 0.01, 0);
-          if (lv > 0) s.b.visible = false;
+          ours.position.lerpVectors(front, new THREE.Vector3(slot.x, slot.y, slot.z), ins);
+          ours.rotation.set(DROOP, 0, 0);
         }
       }
-      (stackShadow.material as THREE.MeshBasicMaterial).opacity =
-        0.6 * seg(g, s0, s0 + 0.06) * (1 - seg(g, d0 + 0.1, d1));
-      // the one for the new office
-      const f = seg(g, BUSINESS_T.ours[0], BUSINESS_T.ours[1], easeInOut);
-      const ins = seg(g, BUSINESS_T.insert[0], BUSINESS_T.insert[1], easeOut);
-      flyer.visible = g > BUSINESS_T.ours[0];
-      if (ins <= 0) {
-        bezier(flyStart, flyCtrl, flyFront, f, flyer.position);
-        flyer.rotation.set(0, lerp(1.2, 0, f), Math.sin(f * Math.PI) * 0.25);
-        flyer.scale.setScalar(lerp(0.4, 0.15, easeOut(f)));
-      } else {
-        // it stops half-way through the slot, like post just delivered
-        flyer.position.lerpVectors(flyFront, flyIn, ins);
-        flyer.rotation.set(0, 0, 0);
-        flyer.scale.setScalar(0.15);
-      }
+    },
+    labels(g, out) {
+      const a = T.insert[1];
+      const draw = seg(g, a, a + 0.06);
+      if (draw > 0)
+        out.push({
+          id: "door",
+          text: "Í póstkassann",
+          anchor: new THREE.Vector3(slot.x, slot.y + 0.03, slot.z + 0.01),
+          world: new THREE.Vector3(slot.x, PT + 0.76, slot.z + 0.01),
+          opacity: seg(g, a + 0.02, a + 0.08),
+          draw,
+          kind: "callout",
+        });
     },
   };
 
-  // Camera: each step's move happens early, then the shot holds still (dwell).
-  // phones (lite) frame the lineup and the open booklet a little closer
-  const street: [number, number, number] = lite ? [1.0, 3.4, 11.6] : [1.2, 3.9, 14.0];
-  const streetT: [number, number, number] = lite ? [0, 0.8, 2.1] : [0, 0.85, 1.9];
-  const desk: [number, number, number] = lite ? [0.15, 3.35, 4.7] : [0.2, 3.9, 4.95];
-  const director = makeDirector([
-    { g: 0.0, pos: [2.4, 3.0, 12.9], target: [0, 1.0, 1.1], fov: 30, focus: [0, 0, 1.4, 7] },
-    { g: 0.6, pos: street, target: streetT, fov: 30, focus: [0, 0, 1.6, 7] },
-    { g: 1.0, pos: street, target: streetT, fov: 30, focus: [0, 0, 1.6, 7] },
-    { g: 1.6, pos: desk, target: [-0.06, 0.05, 2.85], fov: 30, focus: [0, 0, 2.8, 3.4] },
-    { g: 2.0, pos: desk, target: [-0.06, 0.05, 2.85], fov: 30, focus: [0, 0, 2.8, 3.4] },
-    { g: 2.6, pos: [4.6, 20.4, 11.2], target: [0.3, 0, -3.3], fov: 30, focus: [0, 0, -2.6, 15] },
-    { g: 3.0, pos: [4.6, 20.4, 11.2], target: [0.3, 0, -3.3], fov: 30, focus: [0, 0, -2.6, 15] },
-    { g: 3.18, pos: [1.2, 3.0, 6.8], target: [-1.5, 0.35, 2.1], fov: 32, focus: [-1.0, 0, 1.8, 5] },
-    {
-      g: 3.34,
-      pos: [1.25, 2.9, 6.7],
-      target: [-1.3, 0.38, 2.0],
-      fov: 32,
-      focus: [-0.9, 0, 1.7, 5],
-    },
-    { g: 3.64, pos: [1.0, 0.58, 2.75], target: [0, 0.34, 0.8], fov: 30, focus: [0, 0, 0.9, 3] },
-    { g: 4.0, pos: [1.0, 0.58, 2.75], target: [0, 0.34, 0.8], fov: 30, focus: [0, 0, 0.9, 3] },
-  ]);
+  /* ================================================================ camera director */
+  const dist = (s: Shot, aspect: number) => {
+    const tv = Math.tan(deg(s.fov / 2));
+    return Math.max(s.h / tv, s.w / (tv * Math.max(0.2, aspect)));
+  };
+  const director = (g: number, out: Pose, focus: { center: THREE.Vector3; half: number }) => {
+    let i = 0;
+    while (i < SHOTS.length - 2 && g > SHOTS[i + 1].g) i++;
+    const a = SHOTS[i];
+    const b = SHOTS[Math.min(i + 1, SHOTS.length - 1)];
+    const u = a === b || b.g === a.g ? 0 : easeInOut(clamp((g - a.g) / (b.g - a.g)));
+    const aspect = stage.camera.aspect || 16 / 9;
+    const t = out.target.set(lerp(a.t[0], b.t[0], u), lerp(a.t[1], b.t[1], u), lerp(a.t[2], b.t[2], u));
+    const yaw = deg(lerp(a.yaw, b.yaw, u));
+    const pitch = deg(lerp(a.pitch, b.pitch, u));
+    const d = Math.exp(lerp(Math.log(dist(a, aspect)), Math.log(dist(b, aspect)), u));
+    out.fov = lerp(a.fov, b.fov, u);
+    out.pos.set(t.x + d * Math.cos(pitch) * Math.sin(yaw), t.y + d * Math.sin(pitch), t.z + d * Math.cos(pitch) * Math.cos(yaw));
+    focus.center.set(t.x, 0, t.z);
+    // the shadow box covers what the (possibly pulled-back) camera sees
+    const pull = Math.max(1, d / dist(b, 16 / 9));
+    focus.half = lerp(a.sun, b.sun, u) * Math.min(2.2, pull);
+  };
 
   tuneOfficeGlass(scene.environment);
-  const story = createStory(
-    stage,
-    4,
-    [streetMod, needsMod, bookMod, marksMod, deliverMod],
-    director,
-  );
-  // canvas textures are ours to free (materials and geometry go with the stage)
+  const story = createStory(stage, 4, [streetMod, needsMod, bookMod, systemMod, deliverMod], director, { designAspect: 0, maxPullback: 1 });
+
+  // canvas text is drawn again with the display face once it has loaded
+  const ready: Promise<void> =
+    typeof document !== "undefined" && document.fonts && document.fonts.load
+      ? Promise.all([document.fonts.load("300 70px Jost"), document.fonts.load("400 24px Jost"), document.fonts.load("400 150px Jost")])
+          .then(() => {
+            drawPages();
+            for (const n of offices) n.sign.redraw();
+          })
+          .catch(() => undefined)
+      : Promise.resolve();
+
   const disposeStage = story.dispose;
   story.dispose = () => {
-    leftTex.dispose();
-    rightTex.dispose();
-    haloTex.dispose();
-    cards.forEach((c) => c.tex.dispose());
+    textures.forEach((t) => t.dispose());
+    for (const f of found) f.arc.dispose();
+    orb.dispose();
+    van.dispose();
+    book.dispose();
     disposeStage();
   };
   return Object.assign(story, { ready });
 }
 
-/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ page drawing (flyer style) */
 
-/** A thin hairline with a rose bead: "found". */
-function pin() {
-  const g = new THREE.Group();
-  const line = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.018, 0.018, 1.5, 8),
-    new THREE.MeshBasicMaterial({ color: "#f6efe4" }),
-  );
-  line.position.y = -0.75;
-  g.add(line);
-  const bead = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32, 24), accent(PAL.rose));
-  (bead.material as THREE.MeshPhysicalMaterial).emissive = new THREE.Color(PAL.rose);
-  (bead.material as THREE.MeshPhysicalMaterial).emissiveIntensity = 0.45;
-  bead.castShadow = true;
-  g.add(bead);
-  g.visible = false;
-  return g;
-}
-
-/* ---------- page drawing (flyer style) ---------- */
-
+const FONT_STACK = '"Jost", "Helvetica Neue", Arial, sans-serif';
 const CREAM = "#f3eee4";
 
-function spaced(
-  g: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  track: number,
-  align: "left" | "center" | "right" = "left",
-) {
+function spaced(g: CanvasRenderingContext2D, text: string, x: number, y: number, track: number, align: "left" | "center" | "right" = "left") {
   const chars = [...text];
   const widths = chars.map((ch) => g.measureText(ch).width);
   const total = widths.reduce((a, b) => a + b, 0) + track * (chars.length - 1);
@@ -634,7 +921,6 @@ function pageGround(g: CanvasRenderingContext2D, S: number, beamFlip = false) {
   beam.addColorStop(0.66, "rgba(255,238,214,0)");
   g.fillStyle = beam;
   g.fillRect(0, 0, S, S);
-  // fine vignette
   const v = g.createRadialGradient(S / 2, S / 2, S * 0.3, S / 2, S / 2, S * 0.75);
   v.addColorStop(0, "rgba(0,0,0,0)");
   v.addColorStop(1, "rgba(20,16,10,0.22)");
@@ -642,15 +928,7 @@ function pageGround(g: CanvasRenderingContext2D, S: number, beamFlip = false) {
   g.fillRect(0, 0, S, S);
 }
 
-function hair(
-  g: CanvasRenderingContext2D,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-  a = 0.55,
-  wdt = 1.6,
-) {
+function hair(g: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, a = 0.55, wdt = 1.6) {
   g.strokeStyle = `rgba(243,238,228,${a})`;
   g.lineWidth = wdt;
   g.beginPath();
@@ -661,7 +939,6 @@ function hair(
 
 function drawLeftPage(g: CanvasRenderingContext2D, S: number) {
   pageGround(g, S);
-  // corner hairlines, like the printed pages
   hair(g, 44, 44, 300, 44);
   hair(g, 44, 44, 44, 230);
   hair(g, S - 44, S - 44, S - 300, S - 44);
@@ -673,12 +950,11 @@ function drawLeftPage(g: CanvasRenderingContext2D, S: number) {
   spaced(g, "2026", S - 76, 98, 4.5, "right");
   g.globalAlpha = 0.8;
   g.font = `400 19px ${FONT_STACK}`;
-  spaced(g, "SVIF · FYRIR NÝ FYRIRTÆKI", S / 2, 372, 6.2, "center");
+  spaced(g, "SVONA VIRKAR BÆKLINGURINN", S / 2, 372, 6.2, "center");
   g.globalAlpha = 1;
   g.font = `300 70px ${FONT_STACK}`;
   spaced(g, "EITT FYRIRTÆKI", S / 2, 470, 6.5, "center");
   spaced(g, "Í HVERJUM FLOKKI", S / 2, 556, 6.5, "center");
-  // ornament: two hairlines and a rose diamond
   hair(g, S / 2 - 210, 628, S / 2 - 26, 628, 0.6);
   hair(g, S / 2 + 26, 628, S / 2 + 210, 628, 0.6);
   g.save();
@@ -688,13 +964,18 @@ function drawLeftPage(g: CanvasRenderingContext2D, S: number) {
   g.fillRect(-8, -8, 16, 16);
   g.restore();
   g.fillStyle = CREAM;
+  g.globalAlpha = 0.78;
+  g.font = `400 22px ${FONT_STACK}`;
+  g.textAlign = "center";
+  g.fillText("Eitt tilboð í hverjum flokki, valið fyrir fyrstu vikur rekstrarins.", S / 2, 700);
+  g.globalAlpha = 1;
   g.font = `400 19px ${FONT_STACK}`;
   spaced(g, "65°N · 19°W", 76, S - 84, 4.5);
   spaced(g, "TILBOÐ", S - 76, S - 108, 4.5, "right");
   spaced(g, "OG AFSLÆTTIR", S - 76, S - 82, 4.5, "right");
 }
 
-function drawRightPage(g: CanvasRenderingContext2D, S: number) {
+function drawRightPage(g: CanvasRenderingContext2D, S: number, tileRect: (i: number) => { x: number; y: number; w: number; h: number }) {
   pageGround(g, S, true);
   hair(g, S - 44, 44, S - 300, 44);
   hair(g, S - 44, 44, S - 44, 230);
@@ -702,11 +983,15 @@ function drawRightPage(g: CanvasRenderingContext2D, S: number) {
   hair(g, 44, S - 44, 44, S - 230);
   g.fillStyle = CREAM;
   g.textBaseline = "alphabetic";
+  g.globalAlpha = 0.8;
+  g.font = `400 19px ${FONT_STACK}`;
+  spaced(g, "8 FLOKKAR · EITT FYRIRTÆKI Í HVERJUM", S / 2, 118, 6.2, "center");
+  g.globalAlpha = 1;
   g.font = `300 64px ${FONT_STACK}`;
-  spaced(g, "FLOKKAR", S / 2, 168, 14, "center");
-  hair(g, S / 2 - 120, 212, S / 2 + 120, 212, 0.55);
-  // the grid slots the cards lie in (seen once a card lifts)
-  for (let i = 0; i < GRID.cols * GRID.rows; i++) {
+  spaced(g, "FLOKKAR", S / 2, 188, 14, "center");
+  hair(g, S / 2 - 120, 222, S / 2 + 120, 222, 0.55);
+  // the grid slots the cards lie in (seen when a card lifts)
+  for (let i = 0; i < 8; i++) {
     const r = tileRect(i);
     g.fillStyle = "rgba(20,16,10,0.16)";
     roundRect(g, r.x, r.y, r.w, r.h, 10);
@@ -723,34 +1008,40 @@ function drawRightPage(g: CanvasRenderingContext2D, S: number) {
   g.globalAlpha = 1;
 }
 
-function drawCard(g: CanvasRenderingContext2D, w: number, h: number, name: string, rose: boolean) {
+/** a category card: plain (before), lit in rose (while it lifts), marked (one rose dot: one company) */
+function drawCard(g: CanvasRenderingContext2D, w: number, h: number, name: string, kind: "plain" | "lit" | "marked") {
   const bg = g.createLinearGradient(0, 0, w, h);
-  if (rose) {
-    bg.addColorStop(0, "#b08c74");
-    bg.addColorStop(1, "#9a7862");
+  if (kind === "lit") {
+    bg.addColorStop(0, "#b99278");
+    bg.addColorStop(1, "#a37e66");
   } else {
     bg.addColorStop(0, "#62594a");
     bg.addColorStop(1, "#554d40");
   }
   g.fillStyle = bg;
   g.fillRect(0, 0, w, h);
-  g.strokeStyle = rose ? "rgba(255,248,238,0.55)" : "rgba(243,238,228,0.35)";
+  g.strokeStyle = kind === "lit" ? "rgba(255,248,238,0.6)" : "rgba(243,238,228,0.35)";
   g.lineWidth = 2;
-  g.strokeRect(14, 14, w - 28, h - 28);
-  g.fillStyle = rose ? "#fbf6ee" : CREAM;
+  g.strokeRect(12, 12, w - 24, h - 24);
+  g.fillStyle = kind === "lit" ? "#fbf6ee" : CREAM;
   g.textBaseline = "middle";
-  g.font = `${rose ? 400 : 300} 62px ${FONT_STACK}`;
-  spaced(g, name.toUpperCase(), w / 2, h / 2 + 3, 7, "center");
+  g.font = `${kind === "lit" ? 400 : 300} ${Math.round(h * 0.3)}px ${FONT_STACK}`;
+  spaced(g, name.toUpperCase(), w / 2, h / 2 + 2, 6, "center");
+  if (kind === "marked") {
+    // the small rose mark: a filled dot and a hairline ring, top right
+    g.fillStyle = "#c39a82";
+    g.beginPath();
+    g.arc(w - 34, 34, 7, 0, Math.PI * 2);
+    g.fill();
+    g.strokeStyle = "rgba(195,154,130,0.7)";
+    g.lineWidth = 1.5;
+    g.beginPath();
+    g.arc(w - 34, 34, 12, 0, Math.PI * 2);
+    g.stroke();
+  }
 }
 
-function roundRect(
-  g: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number,
-) {
+function roundRect(g: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   g.beginPath();
   g.moveTo(x + r, y);
   g.lineTo(x + w - r, y);

@@ -8,6 +8,11 @@ import { DisplayTitle, Eyebrow, FilmButton } from "@/components/SvifBits";
    the stage ends on (story.css .story-foot: the stage colour on desktop, the peach copy panel on
    phones). */
 
+/**
+ * Round 1 title block above the pinned story. Since round 2 each story renders its own fixed heading
+ * inside the stage (StoryStage `heading`), so the home page no longer uses this; /fyrirtaeki still
+ * passes it until that page is rebuilt (the story section accepts and ignores it).
+ */
 export function StoryHeader({ eyebrow }: { eyebrow: string }) {
   return (
     <div className="story-head">
@@ -19,7 +24,10 @@ export function StoryHeader({ eyebrow }: { eyebrow: string }) {
   );
 }
 
-/** The film button under the story: a CTA, so it is simply there (no reveal). */
+/**
+ * The film button under the story: a CTA, so it is simply there (no reveal). On the home page the
+ * dark "Meira um hugmyndina" stage follows it with a straight cut (research 01 §3.9).
+ */
 export function StoryFooter({
   onFilm,
   onWarm,

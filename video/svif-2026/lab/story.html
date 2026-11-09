@@ -1,8 +1,26 @@
 <!doctype html><html><head><meta charset="utf-8"><title>story</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <style>html,body{margin:0;height:100%;background:#d9cfc0;overflow:hidden}canvas{display:block;width:100vw;height:100vh}
 #labels{position:absolute;inset:0;pointer-events:none}
-.cap{position:absolute;transform:translate(-50%,-100%);font:500 10.5px Inter;letter-spacing:.22em;text-transform:uppercase;color:#2a2420;white-space:nowrap;padding-bottom:6px}
-.lead{position:absolute;width:1px;background:rgba(42,36,32,.55);transform-origin:50% 100%}
+.cap{position:absolute;transform:translate(-50%,-100%);font:500 10.5px Inter;letter-spacing:.22em;text-transform:uppercase;color:#2a2420;white-space:nowrap;padding-bottom:6px;text-shadow:0 0 2px #d9cfc0,0 0 6px #d9cfc0}
+.lead{position:absolute;width:1px;background:rgba(42,36,32,.45);transform-origin:50% 100%}
 #g{position:absolute;left:12px;bottom:10px;font:12px Inter;color:#2a2420;opacity:.6}
-</style></head><body><canvas id="c"></canvas><div id="labels"></div><div id="g"></div><script type="module" src="./story.ts"></script></body></html>
+/* ?site: the round-2 stage chrome (StoryStage), static */
+#chrome{position:absolute;left:0;right:0;top:0;display:none;pointer-events:none;text-align:center;color:#2a2420}
+.site #chrome{display:block}
+#wash{position:absolute;left:0;right:0;top:0;pointer-events:none;background:linear-gradient(to bottom,#d9cfc0 0%,rgba(217,207,192,.94) 70%,rgba(217,207,192,0) 100%);display:none}
+.site #wash{display:block}
+.head{width:min(100% - 2*clamp(20px,5vw,72px),1240px);margin:0 auto;padding-top:clamp(76px,10.5svh,104px)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.kick{font:300 clamp(13px,0.7rem + .35vw,16px)/1 Jost;letter-spacing:.2em;text-transform:uppercase}
+.kick em{font:italic 400 1.45em/1 "Instrument Serif";letter-spacing:0;text-transform:none;margin-left:.45em}
+.count{font:500 11px/1 Inter;letter-spacing:.22em;color:rgba(42,36,32,.7)}
+.count b{font-weight:500;color:#2a2420}
+.bar{height:1px;background:rgba(42,36,32,.18);margin-top:14px;position:relative}
+.bar i{position:absolute;inset:0;background:rgba(42,36,32,.7);transform-origin:0 50%}
+.copy{width:min(100% - 2*clamp(20px,5vw,72px),62rem);margin:clamp(22px,3.2svh,40px) auto 0}
+.title{font:300 clamp(1.5rem,0.9rem + 2.15vw,3.05rem)/1.08 Jost;letter-spacing:.075em;text-transform:uppercase;text-wrap:balance;margin:0}
+.title em{font:italic 400 1.16em/1 "Instrument Serif";letter-spacing:0;text-transform:none}
+.body{font:400 clamp(15px,.85rem + .3vw,18px)/1.55 Inter;color:rgba(42,36,32,.74);margin:clamp(10px,1.6svh,18px) auto 0;max-width:40rem;text-wrap:balance}
+@media (max-width:767px){.row{flex-direction:column;gap:10px}.kick{font-size:12px}.title{font-size:clamp(1.3rem,1.05rem + 1.5vw,1.65rem)}.body{font-size:14.5px}}
+</style></head><body><canvas id="c"></canvas><div id="wash"></div><div id="chrome"><div class="head"><div class="row"><div class="kick">Svona virkar það<em>frá sölu að póstlúgu</em></div><div class="count"><b id="n">01</b> / <span id="of">06</span></div></div><div class="bar"><i id="fill"></i></div></div><div class="copy"><h3 class="title" id="title"></h3><p class="body" id="body"></p></div></div><div id="labels"></div><div id="g"></div><script type="module" src="./story.ts"></script></body></html>

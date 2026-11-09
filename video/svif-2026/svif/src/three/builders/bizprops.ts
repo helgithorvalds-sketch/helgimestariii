@@ -3,6 +3,7 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 import { clay, accent, glass } from "../materials";
 import { PAL } from "../palette";
 import { shield } from "./props";
+import { canvasTex, contactShadow } from "../textures";
 
 /**
  * Clay props for "what a new company needs" (business story, step 0).
@@ -235,3 +236,102 @@ export const BIZ_NEEDS = [
   { id: "tolvur", text: "Tölvur", make: laptop },
   { id: "honnun", text: "Hönnun", make: designKit },
 ] as const;
+
+/* ------------------------------------------------------------------ round 2 */
+
+const FONT = '"Jost", "Helvetica Neue", Arial, sans-serif';
+/** a rose that still reads as rose after AgX (research 02 §1) */
+const ROSE_READ = "#b4836a";
+
+export interface NewSign {
+  group: THREE.Group;
+  /** redraw the board once the display face has loaded */
+  redraw(): void;
+  /** local point at the top of the board (for a callout) */
+  top: THREE.Vector3;
+  texture: THREE.CanvasTexture;
+}
+
+/**
+ * A small pavement A-board saying NÝTT (business story, step 01: a new office has opened). Two clay
+ * boards leaning together, hinged at the top, the front one printed. Origin at ground level under
+ * the middle; the front face looks towards +z. ≈ 0.44 tall, 0.34 wide.
+ */
+export function createNewSign(o: { text?: string; scale?: number } = {}): NewSign {
+  const g = new THREE.Group();
+  g.name = "new-sign";
+  const BW = 0.34;
+  const BH = 0.42;
+  const BT = 0.018;
+  const lean = 0.2; // radians each board leans from vertical
+  const tex = canvasTex(512, 640, () => {}, true);
+  const draw = () => {
+    const c = tex.image as HTMLCanvasElement;
+    const x = c.getContext("2d")!;
+    const w = c.width;
+    const h = c.height;
+    x.fillStyle = "#f4efe5";
+    x.fillRect(0, 0, w, h);
+    x.strokeStyle = ROSE_READ;
+    x.lineWidth = 7;
+    x.strokeRect(30, 30, w - 60, h - 60);
+    x.fillStyle = "#9b6e57";
+    x.textBaseline = "middle";
+    x.textAlign = "center";
+    x.font = `400 150px ${FONT}`;
+    // tracked capitals
+    const text = o.text ?? "NÝTT";
+    const chars = [...text];
+    const track = 18;
+    const widths = chars.map((ch) => x.measureText(ch).width);
+    const total = widths.reduce((a, b) => a + b, 0) + track * (chars.length - 1);
+    let cx = w / 2 - total / 2;
+    x.textAlign = "left";
+    chars.forEach((ch, i) => {
+      x.fillText(ch, cx, h / 2 + 10);
+      cx += widths[i] + track;
+    });
+    // a hairline and a small rose diamond under the word, like the booklet's ornament
+    x.strokeStyle = "rgba(155,110,87,0.55)";
+    x.lineWidth = 3;
+    x.beginPath();
+    x.moveTo(w / 2 - 110, h * 0.72);
+    x.lineTo(w / 2 - 22, h * 0.72);
+    x.moveTo(w / 2 + 22, h * 0.72);
+    x.lineTo(w / 2 + 110, h * 0.72);
+    x.stroke();
+    x.save();
+    x.translate(w / 2, h * 0.72);
+    x.rotate(Math.PI / 4);
+    x.fillStyle = ROSE_READ;
+    x.fillRect(-9, -9, 18, 18);
+    x.restore();
+    tex.needsUpdate = true;
+  };
+  draw();
+  const face = new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.62, sheen: 0.2, sheenColor: new THREE.Color("#fff6ea") });
+  const board = clay("#efe7da", { roughness: 0.8 });
+  const hinge = clay(PAL.clayShade, { roughness: 0.84 });
+  // RoundedBoxGeometry keeps BoxGeometry's six groups (+x, -x, +y, -y, +z, -z): the front face prints
+  const front = new THREE.Mesh(new RoundedBoxGeometry(BW, BH, BT, 2, 0.006), [board, board, board, board, face, board]);
+  front.castShadow = front.receiveShadow = true;
+  const back = mesh(new RoundedBoxGeometry(BW, BH, BT, 2, 0.006), board);
+  // each board leans from a foot on the ground to the shared top
+  const foot = (BH * Math.sin(lean)) / 2 + BT / 2;
+  front.position.set(0, (BH / 2) * Math.cos(lean), foot - (BH / 2) * Math.sin(lean) + BT * 0.5);
+  front.rotation.x = -lean;
+  back.position.set(0, (BH / 2) * Math.cos(lean), -(foot - (BH / 2) * Math.sin(lean) + BT * 0.5));
+  back.rotation.x = lean;
+  g.add(front, back);
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, BW + 0.02, 12), hinge);
+  bar.receiveShadow = true;
+  bar.rotation.z = Math.PI / 2;
+  bar.position.y = BH * Math.cos(lean) + 0.004;
+  g.add(bar);
+  const sh = contactShadow(0.5, 0.42, 0.45);
+  sh.position.y = 0.003;
+  g.add(sh);
+  const s = o.scale ?? 1;
+  g.scale.setScalar(s);
+  return { group: g, redraw: draw, top: new THREE.Vector3(0, (BH * Math.cos(lean) + 0.01) * s, 0), texture: tex };
+}

@@ -1,0 +1,287 @@
+/* ======================================================================
+   The stage hero (StageHero.tsx), round 2: a two-halves composition.
+   Text in the left half, the booklet's own canvas in the right half, both centred between the
+   frame's top and bottom label rows. Phones and portrait tablets: the text (centred) above the
+   booklet. Type is sized from the text column's width (container query units), so the H1's longest
+   line ("Á HÖFUÐBORGARSVÆÐINU.", 13.7 em at 0.055 em tracking) always fits.
+
+   Width: the hero follows the site grid up to 1440 px (its text starts on the header logo's line);
+   beyond that its box widens more slowly than the 1240 px container, so each half keeps growing.
+   ====================================================================== */
+
+.stage-hero {
+  /* the hairline frame (FrameLines inset / insetTop) */
+  --hero-fi: clamp(0.8rem, 1.5vw, 1.4rem);
+  --hero-fit: clamp(4.5rem, 4rem + 1.2vw, 5.6rem);
+  /* the hero's side margin: the site grid up to 1440 px, then 100 px + 10 % of the extra width */
+  --hero-side: max(var(--gutter), min((100% - var(--container)) / 2, 100px + (100% - 1440px) * 0.1));
+  /* share of the text column (the H1 needs its measure; the booklet is centred in the rest) */
+  --hero-copy: 0.56;
+  position: relative;
+}
+
+.stage-hero__grid {
+  position: relative;
+  z-index: 2;
+}
+
+/* the copy: tagline, H1, sub, CTAs */
+.stage-hero__text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.stage-hero .stage-hero__tagline {
+  font-size: 1em;
+}
+.stage-hero .stage-hero__tagline .label-caps {
+  font-size: var(--hero-tag-size, clamp(11px, 0.62rem + 0.18vw, 13px));
+  letter-spacing: 0.26em;
+}
+.stage-hero .stage-hero__title {
+  font-size: var(--hero-h1, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: 0.055em;
+  margin-top: var(--hero-gap-1, 1.75rem);
+  text-wrap: balance;
+}
+.stage-hero__sub {
+  margin-top: var(--hero-gap-2, 1.5rem);
+  max-width: 32em;
+  font-size: var(--hero-sub-size, clamp(1rem, 0.78rem + 0.42vw, 1.375rem));
+  line-height: 1.55;
+  color: color-mix(in oklab, var(--cream) 76%, transparent);
+  text-wrap: pretty;
+}
+.stage-hero__actions {
+  margin-top: var(--hero-gap-3, 2.25rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1rem;
+}
+/* larger CTAs than the site's md pills (the routes pass <Pill size="md">) */
+.stage-hero__actions > :is(a, button).rounded-full {
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: var(--hero-cta-h, clamp(3.1rem, 2.6rem + 0.8vw, 3.6rem));
+  padding-inline: clamp(1.6rem, 1.2rem + 0.9vw, 2.25rem);
+  font-size: var(--hero-cta-size, clamp(11.5px, 0.62rem + 0.22vw, 13px));
+  letter-spacing: 0.17em;
+  gap: 0.8rem;
+}
+/* the film button (business hero): ring and label in step with the pills */
+.stage-hero__actions > button:not(.rounded-full) > span.rounded-full {
+  height: var(--hero-cta-h, clamp(3.1rem, 2.6rem + 0.8vw, 3.6rem));
+  width: var(--hero-cta-h, clamp(3.1rem, 2.6rem + 0.8vw, 3.6rem));
+}
+.stage-hero__actions > button:not(.rounded-full) .link-wipe {
+  font-size: var(--hero-cta-size, clamp(11.5px, 0.62rem + 0.22vw, 13px));
+}
+.stage-hero__facts {
+  margin-top: var(--hero-gap-3, 2.25rem);
+}
+
+/* the booklet's canvas (or its still) fills this box; the scene frames the booklet inside it */
+.stage-hero__visual {
+  position: relative;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------- side by side
+   Landscape screens (laptops, desktops, landscape tablets and phones held sideways) and anything
+   wider than a portrait tablet. */
+@media (orientation: landscape), (min-width: 1101px) {
+  .stage-hero {
+    height: 100svh;
+    max-height: 1080px;
+    min-height: 600px;
+  }
+  .stage-hero__grid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* between the top label row and the bottom one */
+    top: calc(var(--hero-fit) + 1.5rem);
+    bottom: calc(var(--hero-fi) + 1.6rem);
+    width: calc(100% - 2 * var(--hero-side));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, calc(var(--hero-copy) * 100%)) minmax(0, 1fr);
+    align-items: center;
+    container-type: size;
+    /* H1: the column's measure, and never so tall that the block leaves its rows */
+    --hero-pad: clamp(0.75rem, 2cqw, 2.5rem);
+    --hero-h1: clamp(1.25rem, min((var(--hero-copy) * 100cqw - var(--hero-pad)) / 13.75, (100cqh - 14rem) / 3.9), 5.2rem);
+    --hero-gap-1: clamp(1rem, 3.4cqh, 2.4rem);
+    --hero-gap-2: clamp(1.05rem, 3.7cqh, 2.5rem);
+    --hero-gap-3: clamp(1.4rem, 5.2cqh, 3.4rem);
+  }
+  .stage-hero__copy {
+    padding-right: var(--hero-pad);
+  }
+  .stage-hero__visual {
+    align-self: stretch;
+  }
+}
+
+/* phones held sideways: everything tighter so the block fits the short stage, clear of both label
+   rows, and the two CTAs stay on one line */
+@media (orientation: landscape) and (max-height: 500px) {
+  .stage-hero {
+    min-height: 100svh;
+  }
+  .stage-hero__grid {
+    top: calc(var(--hero-fit) + 1.15rem);
+    bottom: calc(var(--hero-fi) + 1.15rem);
+    --hero-h1: clamp(1rem, min((var(--hero-copy) * 100cqw - var(--hero-pad)) / 13.75, (100cqh - 7.5rem) / 3.9), 2rem);
+    --hero-gap-1: 0.5rem;
+    --hero-gap-2: 0.5rem;
+    --hero-gap-3: 0.8rem;
+    --hero-sub-size: 13px;
+    --hero-tag-size: 10px;
+    --hero-cta-h: 2.35rem;
+    --hero-cta-size: 10.5px;
+  }
+  .stage-hero__actions {
+    gap: 0.5rem;
+  }
+  .stage-hero__actions > :is(a, button).rounded-full {
+    padding-inline: 1rem;
+    letter-spacing: 0.14em;
+    gap: 0.5rem;
+  }
+}
+/* the smallest of them (SE class, ~320 px tall): smaller still, the CTAs may take two short rows */
+@media (orientation: landscape) and (max-height: 360px) {
+  .stage-hero__grid {
+    top: calc(var(--hero-fit) + 0.95rem);
+    bottom: calc(var(--hero-fi) + 0.9rem);
+    --hero-h1: clamp(0.95rem, min((var(--hero-copy) * 100cqw - var(--hero-pad)) / 13.75, (100cqh - 7rem) / 3.9), 1.8rem);
+    --hero-gap-1: 0.4rem;
+    --hero-gap-2: 0.4rem;
+    --hero-gap-3: 0.6rem;
+    --hero-sub-size: 12px;
+    --hero-cta-h: 2.1rem;
+    --hero-cta-size: 10px;
+  }
+  .stage-hero__actions {
+    gap: 0.4rem;
+  }
+  .stage-hero__actions > :is(a, button).rounded-full {
+    padding-inline: 0.85rem;
+  }
+}
+
+/* ---------------------------------------------------------------- stacked
+   Phones and portrait tablets: the text, centred, then the booklet in the height that is left. */
+@media (orientation: portrait) and (max-width: 1100px) {
+  .stage-hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    /* the copy starts where the frame's side lines start, clear of the label row */
+    padding-top: calc(var(--hero-fit) + 2.4rem);
+    padding-bottom: calc(var(--hero-fi) + 1.6rem);
+  }
+  .stage-hero__grid {
+    flex: 1 1 auto;
+    width: calc(100% - 2 * var(--hero-side));
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    container-type: inline-size;
+    /* a little inside the frame lines: the longest caps line takes ~90 % of the width */
+    --hero-h1: clamp(1.1rem, 100cqw / 15.2, 3rem);
+    --hero-gap-1: clamp(0.9rem, 4.2cqw, 1.6rem);
+    --hero-gap-2: clamp(0.85rem, 3.6cqw, 1.4rem);
+    --hero-gap-3: clamp(1.2rem, 5.2cqw, 2.1rem);
+    --hero-sub-size: clamp(0.98rem, 0.88rem + 0.6cqw, 1.25rem);
+  }
+  .stage-hero__text {
+    align-items: center;
+    text-align: center;
+  }
+  .stage-hero__sub {
+    max-width: 24em;
+  }
+  .stage-hero__actions {
+    justify-content: center;
+  }
+  /* centred tagline: a hairline on both sides */
+  .stage-hero .stage-hero__tagline {
+    justify-content: center;
+  }
+  .stage-hero .stage-hero__tagline::after {
+    content: "";
+    width: 2.5rem;
+    height: 1px;
+    flex-shrink: 0;
+    background: color-mix(in oklab, var(--cream) 55%, transparent);
+  }
+  .stage-hero__visual {
+    flex: 1 1 auto;
+    min-height: clamp(230px, 38svh, 560px);
+    margin-top: clamp(0.75rem, 3cqw, 1.75rem);
+  }
+}
+
+/* phones: the two CTAs side by side where they fit, so the booklet stays on the first screen */
+@media (orientation: portrait) and (max-width: 767px) {
+  .stage-hero__actions {
+    gap: 0.6rem;
+  }
+  .stage-hero__actions > :is(a, button).rounded-full {
+    height: var(--hero-cta-h, 3rem);
+    padding-inline: 1.15rem;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    gap: 0.6rem;
+  }
+}
+
+/* the narrowest phones (≤ 359 px): the two CTAs still share one row */
+@media (orientation: portrait) and (max-width: 359px) {
+  .stage-hero__actions {
+    gap: 0.4rem;
+  }
+  .stage-hero__actions > :is(a, button).rounded-full {
+    padding-inline: 0.8rem;
+    font-size: 10px;
+    letter-spacing: 0.11em;
+    gap: 0.45rem;
+  }
+}
+
+/* short phones upright (SE class): a little tighter so the booklet still gets room */
+@media (orientation: portrait) and (max-width: 767px) and (max-height: 700px) {
+  .stage-hero {
+    padding-top: calc(var(--hero-fit) + 2rem);
+  }
+  .stage-hero__grid {
+    --hero-gap-1: 0.8rem;
+    --hero-gap-2: 0.7rem;
+    --hero-gap-3: 1.1rem;
+    --hero-sub-size: 15px;
+    --hero-cta-h: 2.85rem;
+  }
+  .stage-hero__visual {
+    min-height: 200px;
+  }
+}
+
+/* the resting booklet without a live canvas (reduced motion, no WebGL, no JS) */
+.stage-hero-still {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.stage-hero-still img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

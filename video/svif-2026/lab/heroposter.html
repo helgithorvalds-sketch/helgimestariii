@@ -1,9 +1,12 @@
-<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{width:100vw;height:100vh;display:block}</style></head>
+<!doctype html><html><head><meta charset="utf-8"><title>hero poster</title><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{width:100vw;height:100vh;display:block}</style></head>
 <body><canvas id="c"></canvas><script type="module">
+// The resting hero booklet (end of the intro) on a transparent canvas, framed like the live canvas
+// in a box of the window's size: ?biz (business booklet) &t= (intro time, default: the end)
 import { createHeroScene } from "@three/hero";
 const q = new URLSearchParams(location.search);
-const s = createHeroScene(document.getElementById("c"), { mobile: q.has("m"), cover: q.get("cover") || undefined });
+const biz = q.has("biz") || (q.get("cover") || "").startsWith("biz");
+const s = createHeroScene(document.getElementById("c"), { book: biz ? "biz" : "home", cover: q.get("cover") || undefined, preserve: true, maxWait: 30 });
 s.resize(innerWidth, innerHeight);
-window.__seek = (o) => s.frame({ arrive: 1, open: o, tiltX: 0, tiltY: 0 });
-window.__ready = s.ready.then(() => { window.__seek(+(q.get("open") ?? 0)); return true; });
+window.__seek = (t) => s.frame({ t: q.has("t") ? +q.get("t") : s.duration });
+window.__ready = s.allLoaded.then(() => { window.__seek(0); return true; });
 </script></body></html>

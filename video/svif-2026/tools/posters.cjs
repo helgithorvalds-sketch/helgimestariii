@@ -29,20 +29,21 @@ const args = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swif
     if (errs.length) console.log(name, errs.slice(0, 3));
     await page.close();
   };
-  if (which === 'all' || which === 'home') await shoot('story.html', 1920, 1080, [0.92, 1.92, 2.92, 3.92, 4.97], 'home', { hideG: true });
-  if (which === 'all' || which === 'biz') await shoot('story.html?story=biz', 1920, 1080, [0.92, 1.92, 2.92, 3.97], 'biz', { hideG: true });
+  // round 2: six steps, at HOME_REST (src/three/stories/home.ts); full frame, no labels
+  if (which === 'all' || which === 'home') await shoot('story.html', 1920, 1080, [0.92, 1.92, 2.92, 3.92, 4.92, 5.96], 'home', { hideG: true });
+  // round 2: four steps, at BUSINESS_REST (src/three/stories/business.ts); full frame, no labels
+  if (which === 'all' || which === 'biz') await shoot('story.html?story=biz', 1920, 1080, [0.92, 1.92, 2.92, 3.96], 'biz', { hideG: true });
+  // hero stills (round 2): the resting booklet framed as the live canvas frames it, one per box shape:
+  // the right-hand column (side by side), the box under the copy on portrait tablets (-m) and phones (-p)
   if (which === 'all' || which === 'hero') {
-    await shoot('heroposter.html', 1920, 1080, [0], 'hero-booklet.webp', { alpha: true, single: true });
-    await shoot('heroposter.html?m', 900, 1400, [0], 'hero-booklet-m.webp', { alpha: true, single: true });
+    await shoot('heroposter.html', 1000, 1280, [0], 'hero-booklet.webp', { alpha: true, single: true });
+    await shoot('heroposter.html', 1200, 860, [0], 'hero-booklet-m.webp', { alpha: true, single: true });
+    await shoot('heroposter.html', 1050, 900, [0], 'hero-booklet-p.webp', { alpha: true, single: true });
   }
   if (which === 'all' || which === 'herobiz') {
-    await shoot('heroposter.html?cover=biz-cover.jpg', 1920, 1080, [0], 'hero-booklet-biz.webp', { alpha: true, single: true });
-    await shoot('heroposter.html?m&cover=biz-cover.jpg', 900, 1400, [0], 'hero-booklet-biz-m.webp', { alpha: true, single: true });
-  }
-  // phones (upright): the booklet centred in its own box under the copy (StageHero / hero.ts phone mode)
-  if (which === 'all' || which === 'herophone') {
-    await shoot('heroposter.html?m', 900, 960, [0], 'hero-booklet-p.webp', { alpha: true, single: true });
-    await shoot('heroposter.html?m&cover=biz-cover.jpg', 900, 960, [0], 'hero-booklet-biz-p.webp', { alpha: true, single: true });
+    await shoot('heroposter.html?biz', 1000, 1280, [0], 'hero-booklet-biz.webp', { alpha: true, single: true });
+    await shoot('heroposter.html?biz', 1200, 860, [0], 'hero-booklet-biz-m.webp', { alpha: true, single: true });
+    await shoot('heroposter.html?biz', 1050, 900, [0], 'hero-booklet-biz-p.webp', { alpha: true, single: true });
   }
   await browser.close();
   console.log(execSync(`ls -la ${OUT}`).toString());

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="is"><head><meta charset="utf-8"><title>Nýr rekstur: inner pages</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@400;500&family=Instrument+Serif:ital@1&display=block">
+<style>
+:root{--cream:#f3eee3;--cream2:rgba(243,238,227,.78);--line:rgba(243,238,227,.42);--rose:#b29079;--ink:#2a2420;--peach:#efe7da;--sand:#c1b6a4}
+*{box-sizing:border-box}
+body{margin:0;background:#222;display:flex;flex-wrap:wrap;gap:20px;padding:20px;font-family:Inter,sans-serif}
+.pg{position:relative;width:1024px;height:1024px;overflow:hidden;color:var(--cream);
+  background:
+    linear-gradient(118deg, transparent 34%, rgba(255,240,215,.075) 46%, rgba(255,240,215,.055) 55%, transparent 68%),
+    radial-gradient(110% 95% at 38% 22%, #625a4c 0%, #4f483d 48%, #3f3a31 100%)}
+.pg::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
+/* the flyer's frame: hairlines that stop short of the corners, labels in the corners */
+.fr{position:absolute;background:var(--line)}
+.ft{left:150px;right:150px;top:56px;height:1.5px}
+.fb{left:250px;right:250px;bottom:56px;height:1.5px}
+.fl{left:44px;top:110px;bottom:110px;width:1.5px}
+.frr{right:44px;top:110px;bottom:110px;width:1.5px}
+.lab{position:absolute;font:500 15px/1.35 Inter;letter-spacing:.2em;text-transform:uppercase;color:var(--cream2)}
+.tl{left:44px;top:47px}.tr{right:44px;top:47px;text-align:right}
+.bl{left:44px;bottom:47px}.br{right:44px;bottom:47px;text-align:right}
+.eyebrow{font:500 15px Inter;letter-spacing:.3em;text-transform:uppercase;color:var(--cream2);text-align:center}
+.cap{font-family:Jost;font-weight:300;text-transform:uppercase;letter-spacing:.1em;line-height:1.08;text-align:center;color:var(--cream)}
+.body{font:400 21px/1.6 Inter;color:var(--cream2);text-align:center}
+.roof{display:flex;align-items:center;justify-content:center;gap:22px;color:var(--cream2)}
+.roof i{display:block;width:120px;height:1.5px;background:var(--line)}
+.center{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center}
+.icon{width:210px;height:210px;color:var(--cream)}
+.icon *{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+/* offer card, like the flyer's coupons */
+.card{position:absolute;left:162px;right:162px;bottom:150px;height:250px;border-radius:14px;padding:34px 42px;color:var(--ink);display:flex;flex-direction:column;justify-content:space-between}
+.card.c{background:#efe7da}.card.r{background:#b8957d}.card.s{background:#d6ccbb}
+.card .tag{position:absolute;right:30px;top:28px;font:600 13px Inter;letter-spacing:.18em;border:1.5px solid rgba(42,36,32,.55);border-radius:6px;padding:4px 9px}
+.card .k{font:500 14px Inter;letter-spacing:.24em;text-transform:uppercase;opacity:.72}
+.card .big{display:flex;align-items:baseline;gap:22px}
+.card .big b{font:300 104px/0.9 Jost;letter-spacing:.02em}
+.card .big span{font:500 17px Inter;letter-spacing:.26em;text-transform:uppercase}
+.card .line{font:400 22px/1.35 Inter}
+.card .fine{font:500 12.5px Inter;letter-spacing:.16em;text-transform:uppercase;opacity:.62}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 64px;width:760px;margin-top:46px}
+.grid div{display:flex;justify-content:space-between;border-top:1.5px solid var(--line);padding-top:12px;font:400 20px Inter;color:var(--cream2)}
+.grid div b{font:500 15px Inter;letter-spacing:.22em;text-transform:uppercase;color:var(--cream)}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 34px;margin-top:52px}
+.cats span{font:500 16px Inter;letter-spacing:.24em;text-transform:uppercase;color:var(--cream2);display:flex;align-items:center;gap:12px;justify-content:center}
+.cats span::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--rose)}
+.minis{position:absolute;left:0;right:0;bottom:0;height:470px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.mini{position:relative;padding:30px 34px;color:var(--ink);display:flex;flex-direction:column;justify-content:space-between;border:1.5px dashed rgba(42,36,32,.32)}
+.mini .k{font:500 13px Inter;letter-spacing:.22em;text-transform:uppercase;opacity:.72}
+.mini b{font:300 76px/0.9 Jost}
+.mini b small{font:500 14px Inter;letter-spacing:.24em;margin-left:14px}
+.mini .line{font:400 17px/1.35 Inter}
+.mini .tag{position:absolute;right:22px;top:22px;font:600 11px Inter;letter-spacing:.18em;border:1.4px solid rgba(42,36,32,.5);border-radius:5px;padding:3px 7px}
+</style></head>
+<body>
+<div id="pages"></div>
+<script>
+const ICON = {
+  bokhald: '<svg class="icon" viewBox="0 0 100 100"><rect x="24" y="14" width="52" height="72" rx="5"/><path d="M34 30h32M34 42h32M34 54h18M34 66h12"/><circle cx="64" cy="66" r="7"/><path d="M60 70l8-8"/></svg>',
+  tryggingar: '<svg class="icon" viewBox="0 0 100 100"><path d="M50 12l30 11v22c0 20-13 34-30 42C33 79 20 65 20 45V23z"/><path d="M37 49l9 9 17-19"/></svg>',
+  vefsida: '<svg class="icon" viewBox="0 0 100 100"><rect x="12" y="20" width="76" height="58" rx="5"/><path d="M12 32h76"/><circle cx="20" cy="26" r="1.6"/><circle cx="26" cy="26" r="1.6"/><circle cx="32" cy="26" r="1.6"/><rect x="22" y="42" width="26" height="26" rx="2"/><path d="M56 44h22M56 54h22M56 64h14"/></svg>',
+  banki: '<svg class="icon" viewBox="0 0 100 100"><path d="M14 36L50 16l36 20z"/><path d="M22 42v28M38 42v28M62 42v28M78 42v28"/><path d="M16 76h68M12 84h76"/></svg>',
+  tolvur: '<svg class="icon" viewBox="0 0 100 100"><rect x="22" y="24" width="56" height="38" rx="4"/><path d="M12 72h76l-6 8H18z"/><path d="M44 76h12"/></svg>',
+  honnun: '<svg class="icon" viewBox="0 0 100 100"><path d="M50 14l18 30-18 42-18-42z"/><path d="M50 14v34"/><circle cx="50" cy="52" r="5"/><path d="M36 86h28"/></svg>',
+  logfraedi: '<svg class="icon" viewBox="0 0 100 100"><path d="M50 16v66M32 82h36"/><path d="M22 30h56"/><path d="M22 30l-12 26h24zM78 30l-12 26h24z"/><path d="M10 56c0 7 24 7 24 0M66 56c0 7 24 7 24 0"/></svg>',
+  prentun: '<svg class="icon" viewBox="0 0 100 100"><path d="M30 38V16h40v22"/><rect x="14" y="38" width="72" height="30" rx="5"/><rect x="30" y="58" width="40" height="28" rx="2"/><path d="M38 68h24M38 76h16"/><circle cx="74" cy="48" r="2"/></svg>',
+};
+const CATS = [
+  ["Bókhald", "bokhald", "25%", "afsláttur", "af bókhaldi fyrsta árið", "c"],
+  ["Tryggingar", "tryggingar", "3 mán.", "frítt", "af rekstrartryggingu", "r"],
+  ["Vefsíða", "vefsida", "20%", "afsláttur", "af nýrri vefsíðu og léni", "s"],
+  ["Banki", "banki", "0 kr.", "færslugjöld", "fyrstu tólf mánuðina", "c"],
+  ["Tölvur", "tolvur", "15%", "afsláttur", "af tölvum og skjám", "r"],
+  ["Hönnun", "honnun", "30%", "afsláttur", "af merki og útliti", "s"],
+  ["Lögfræði", "logfraedi", "Frí", "ráðgjöf", "fyrsti fundurinn án endurgjalds", "c"],
+  ["Prentun", "prentun", "20%", "afsláttur", "af nafnspjöldum og fyrstu prentun", "r"],
+];
+const frame = (tl, tr, bl, br) => `<i class="fr ft"></i><i class="fr fb"></i><i class="fr fl"></i><i class="fr frr"></i>
+  <div class="lab tl">${tl}</div><div class="lab tr">${tr}</div><div class="lab bl">${bl}</div><div class="lab br">${br}</div>`;
+const roof = `<div class="roof"><i></i><svg width="40" height="25" viewBox="0 0 32 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L16 4 L29 17"/><path d="M22 10 V5 h3 v8"/></svg><i></i></div>`;
+const pages = [];
+// b01 — inside cover: what is in it
+pages.push(`${frame("svif.is", "2026", "8 flokkar", "tilboð<br>og afslættir")}
+  <div class="center" style="top:150px"><div class="eyebrow">SVIF · Fyrir nýjan rekstur</div>
+  <div class="cap" style="font-size:62px;margin-top:26px">Afslættir fyrir<br>nýjan rekstur</div>
+  <div style="margin-top:34px">${roof}</div>
+  <div class="body" style="margin-top:30px;width:700px">Nýjum rekstri fylgja ótal verkefni. Hér eru fyrirtæki sem bjóða nýjum fyrirtækjum sérkjör, eitt í hverjum flokki.</div>
+  <div class="grid">${CATS.map((c, i) => `<div><b>${c[0]}</b><span>bls. ${i + 2}</span></div>`).join("")}</div></div>`);
+// b02–b09 — one category per page
+CATS.forEach(([name, icon, big, unit, line, tone], i) => {
+  pages.push(`${frame("svif.is", "2026", "nýr rekstur", "sérkjör fyrir<br>ný fyrirtæki")}
+  <div class="center" style="top:128px"><div class="eyebrow">Flokkur ${String(i + 1).padStart(2, "0")} · Sérkjör</div>
+  <div class="cap" style="font-size:86px;margin-top:22px">${name}</div>
+  <div style="margin-top:26px">${roof}</div>
+  <div style="margin-top:34px">${ICON[icon]}</div></div>
+  <div class="card ${tone}"><div class="tag">SVIF</div><div class="k">Fyrir ný fyrirtæki</div>
+  <div class="big"><b>${big}</b><span>${unit}</span></div>
+  <div><div class="line">${line}.</div><div class="fine" style="margin-top:12px">Dæmi um tilboð · Gildir fyrir nýskráð fyrirtæki</div></div></div>`);
+});
+// b10 — one company in each category
+pages.push(`${frame("svif.is", "2026", "nýr rekstur", "fyrir ný<br>fyrirtæki")}
+  <div class="center" style="top:250px"><div class="eyebrow">Svona virkar bæklingurinn</div>
+  <div class="cap" style="font-size:70px;margin-top:28px">Eitt fyrirtæki<br>í hverjum flokki</div>
+  <div style="margin-top:36px">${roof}</div>
+  <div class="body" style="margin-top:30px;width:660px">Eitt tilboð í hverjum flokki, valið fyrir fyrstu vikur rekstrarins.</div>
+  <div class="cats">${CATS.map((c) => `<span>${c[0]}</span>`).join("")}</div></div>`);
+// b11 — the coupons
+pages.push(`${frame("svif.is", "2026", "", "")}
+  <div class="center" style="top:120px"><div class="eyebrow">Sérkjör fyrir ný fyrirtæki</div>
+  <div class="cap" style="font-size:76px;margin-top:22px">Afsláttarmiðar</div>
+  <div class="body" style="margin-top:22px;width:640px">Klipptu miðann út eða nefndu SVIF þegar þú hefur samband.</div></div>
+  <div class="minis">
+   ${[["Bókhald", "25%", "af bókhaldi fyrsta árið", "#efe7da"], ["Vefsíða", "20%", "af nýrri vefsíðu og léni", "#b8957d"], ["Tölvur", "15%", "af tölvum og skjám", "#d6ccbb"], ["Prentun", "20%", "af nafnspjöldum og fyrstu prentun", "#e6ddcd"]]
+     .map(([k, b, l, bg]) => `<div class="mini" style="background:${bg}"><div class="tag">SVIF</div><div class="k">${k}</div><b>${b}<small>AFSLÁTTUR</small></b><div class="line">${l}</div></div>`).join("")}
+  </div>`);
+// b12 — inside of the back cover
+pages.push(`${frame("svif.is", "2026", "velkomin í reksturinn", "fyrir ný<br>fyrirtæki")}
+  <div class="center" style="top:300px"><div class="cap" style="font-size:66px">Til hamingju með<br>nýja reksturinn</div>
+  <div style="margin-top:40px">${roof}</div>
+  <div class="body" style="margin-top:34px;width:640px">Í þessum bæklingi finnur þú fyrirtæki sem hjálpa nýjum rekstri af stað, með sérkjörum fyrir ný fyrirtæki.</div></div>`);
+// b13 — the back cover
+pages.push(`${frame("svif.is", "2026", "", "hannað, prentað<br>og sent af svif")}
+  <div class="center" style="top:360px"><div class="cap" style="font-size:58px;letter-spacing:.16em">Nýr rekstur</div>
+  <div style="margin-top:34px">${roof}</div>
+  <div class="body" style="margin-top:28px;width:560px">Sérkjör frá fyrirtækjum fyrir nýjan rekstur.</div></div>
+  <img src="/svif/logo-cream.png" alt="" style="position:absolute;left:50%;bottom:118px;width:190px;transform:translateX(-50%);opacity:.94">`);
+document.getElementById("pages").innerHTML = pages.map((h, i) => `<div class="pg" id="b${String(i + 1).padStart(2, "0")}">${h}</div>`).join("");
+window.__ready = document.fonts.ready.then(() => Promise.all([...document.images].map((im) => im.decode().catch(() => {})))).then(() => pages.length);
+</script>
+</body></html>

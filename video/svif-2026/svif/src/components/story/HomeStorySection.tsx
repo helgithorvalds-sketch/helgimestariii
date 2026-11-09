@@ -2,27 +2,9 @@ import type { ReactNode } from "react";
 import { StoryStage, type StoryFactory, type StoryStep } from "./StoryStage";
 
 /** End frame of each step, rendered from the same scene (loading poster, reduced motion, no WebGL). */
-const POSTERS = [0, 1, 2, 3, 4].map((i) => `/svif/story/home-${i}.jpg`);
-/** where each step rests on phones (global g) */
-const REST = [0.92, 1.92, 2.92, 3.92, 4.97];
-/**
- * Phones and portrait tablets (canvas over the copy): step 02 closes in on the open booklet (the
- * desktop frames it close up; the narrow canvas otherwise shows the whole house above a small
- * spread), step 03 a little on the coupon fan. Site-only lens (StoryStage); the film is unchanged.
- */
-const STACK_FRAME = [
-  { zoom: 1, drop: 0.07 },
-  { zoom: 1.35, drop: 0 },
-  { zoom: 1.06, drop: 0.06 },
-  { zoom: 1, drop: 0.07 },
-  { zoom: 1, drop: 0.07 },
-];
-/** the house behind the step-01 lineup (ridge ends, chimney top): narrow layouts caption above it */
-const LABEL_CLEAR: [number, number, number][] = [
-  [0, 2.0, 0.94],
-  [0, 2.0, -0.94],
-  [0.5, 1.9, -0.31],
-];
+const POSTERS = [0, 1, 2, 3, 4, 5].map((i) => `/svif/story/home-${i}.jpg`);
+/** where each step rests on phones (global g); keep in sync with HOME_REST in src/three/stories/home.ts */
+const REST = [0.92, 1.92, 2.92, 3.92, 4.92, 5.96];
 
 async function loadHome(): Promise<StoryFactory> {
   const [core, home, tex] = await Promise.all([
@@ -40,32 +22,28 @@ async function loadHome(): Promise<StoryFactory> {
 }
 
 export interface HomeStorySectionProps {
-  /** five steps, in order: Nýtt heimili, Bæklingurinn, Traust fyrirtæki, Kerfið, Dreifing */
+  /** six steps, in order: Vandinn, Bæklingurinn, Sérkjörin, Hönnun, Prentun, Dreifing */
   steps: StoryStep[];
   id?: string;
-  /** rendered above the pinned stage (eyebrow + title) */
+  /** round 1 (a title block above the stage); the heading lives inside the stage now. Unused. */
   header?: ReactNode;
   /** rendered below the pinned stage (e.g. the film button) */
   footer?: ReactNode;
 }
 
-/** The homeowner story: a pinned three.js stage scrubbed by scroll. */
-export function HomeStorySection({
-  steps,
-  id = "svona-virkar",
-  header,
-  footer,
-}: HomeStorySectionProps) {
+/**
+ * The homeowner story: a pinned three.js stage scrubbed by scroll, with its own fixed heading
+ * "Svona virkar það · frá sölu að póstlúgu", the step's title and line centred above the scene.
+ */
+export function HomeStorySection({ steps, id = "svona-virkar", footer }: HomeStorySectionProps) {
   return (
     <StoryStage
       id={id}
       steps={steps}
       posters={POSTERS}
       rest={REST}
-      stackFrame={STACK_FRAME}
-      labelClear={LABEL_CLEAR}
+      heading={{ caps: "Svona virkar það", accent: "frá sölu að póstlúgu" }}
       load={loadHome}
-      header={header}
       footer={footer}
       ariaLabel="Svona virkar það"
     />
