@@ -1115,6 +1115,7 @@ export default function Index() {
                             variant="ghost"
                             size="sm"
                             onClick={async () => {
+                              if (!window.confirm(`Endurvirkja „${c.name}“?`)) return;
                               const updated = { ...c, rejected: false, rejectedAt: undefined };
                               const result = await updateCompany(updated);
                               if (result) {

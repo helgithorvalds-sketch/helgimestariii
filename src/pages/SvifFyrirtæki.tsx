@@ -160,9 +160,14 @@ export default function SvifFyrirtæki() {
   };
 
   const handleToggleOff = async (c: Company) => {
+    const turningOff = !c.rejected;
+    const msg = turningOff
+      ? `Ertu viss um að þú viljir merkja „${c.name}“ sem off?`
+      : `Endurvirkja „${c.name}“?`;
+    if (!window.confirm(msg)) return;
     await persist(
-      { ...c, rejected: !c.rejected, rejectedAt: !c.rejected ? new Date().toISOString() : undefined },
-      !c.rejected ? "Merkt sem off" : "Endurvirkjað"
+      { ...c, rejected: turningOff, rejectedAt: turningOff ? new Date().toISOString() : undefined },
+      turningOff ? "Merkt sem off" : "Endurvirkjað"
     );
   };
 
