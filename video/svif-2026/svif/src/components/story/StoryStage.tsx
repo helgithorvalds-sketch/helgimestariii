@@ -268,9 +268,11 @@ function measureStageArea(
     top = Math.round(clamp(t.bottom - cv.top + gap, 0, h * 0.4));
     bottom = Math.round(clamp(Math.min(c.top, b.top) - cv.top - gap, top + 120, h));
   }
+  // The directors frame their widest compositions (the needs, the coupons) to fill an area of
+  // about 2.55:1; a flatter area leaves room at the sides, so the camera moves in by that much.
   const zoom = matchMedia(PHONE_MQ).matches
     ? 1
-    : clamp(w / Math.max(1, bottom - top) / 2.3, 1, 1.1);
+    : clamp(w / Math.max(1, bottom - top) / 2.55, 1, 1.3);
   stageEl.style.setProperty("--scene-zoom", zoom.toFixed(3));
   stageEl.style.setProperty("--scene-top", `${top}px`);
   stageEl.style.setProperty("--scene-gap", `${Math.round(h - bottom)}px`);
