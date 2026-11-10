@@ -22,6 +22,8 @@ export const Route = createFileRoute("/baeklingur")({
       { property: "og:site_name", content: "Svif" },
       { property: "og:locale", content: "is_IS" },
       { property: "og:image", content: "https://svif.is/svif/og-kafli.jpg" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://svif.is/svif/og-kafli.jpg" },
     ],
     links: [{ rel: "canonical", href: URL }],
   }),

@@ -1,8 +1,9 @@
 import type Lenis from "lenis";
 import { DUR, easeFn } from "@/components/motion/tokens";
+import { pacedWheelDelta, homeStoryPace } from "./scroll-input";
 
 /**
- * One Lenis instance for the whole site (research §5.1): lerp 0.09, wheel only, native touch.
+ * One Lenis instance for the whole site: wheel-only damping with bounded queued travel, native touch.
  * Lenis writes native scroll positions, so sticky, IntersectionObserver and getBoundingClientRect
  * keep working unchanged (the pinned story reads them on scroll events).
  */
@@ -18,7 +19,7 @@ export async function startSmoothScroll() {
   const { default: LenisCtor } = await import("lenis");
   if (lenis) return lenis;
   lenis = new LenisCtor({
-    lerp: 0.09,
+    lerp: 0.065,
     smoothWheel: true,
     syncTouch: false,
     wheelMultiplier: 1,
@@ -27,6 +28,25 @@ export async function startSmoothScroll() {
     anchors: false,
     stopInertiaOnNavigate: true,
     autoResize: true,
+    virtualScroll: (data) => {
+      if (!lenis || !data.event.type.includes("wheel") || data.event.ctrlKey) return true;
+      const homeTrack = document.querySelector<HTMLElement>("[data-story-paced='true'] .story-track");
+      const rect = homeTrack?.getBoundingClientRect();
+      const inHomeStory = rect && rect.height > window.innerHeight && rect.top <= 0 && rect.bottom >= window.innerHeight;
+      let pace = 1;
+      if (inHomeStory && homeTrack) {
+        const steps = Number(getComputedStyle(homeTrack).getPropertyValue("--story-steps")) || 6;
+        pace = homeStoryPace((-rect.top / (rect.height - window.innerHeight)) * steps);
+      }
+      lenis.options.lerp = inHomeStory ? 0.045 : 0.065;
+      data.deltaY = pacedWheelDelta(
+        data.deltaY,
+        lenis.targetScroll - lenis.animatedScroll,
+        window.innerHeight,
+        pace,
+      );
+      return true;
+    },
   });
   if (locks.size) lenis.stop();
   if (import.meta.env.DEV) (window as unknown as { __lenis?: Lenis }).__lenis = lenis;

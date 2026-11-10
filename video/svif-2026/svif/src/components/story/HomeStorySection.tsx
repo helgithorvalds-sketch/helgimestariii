@@ -38,6 +38,7 @@ export interface HomeStorySectionProps {
 export function HomeStorySection({ steps, id = "svona-virkar", footer }: HomeStorySectionProps) {
   return (
     <StoryStage
+      paced
       id={id}
       steps={steps}
       posters={POSTERS}

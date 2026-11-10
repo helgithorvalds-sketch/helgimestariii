@@ -310,6 +310,31 @@
   color: rgba(42, 36, 32, 0.6);
 }
 
+/* the home story (paced): slower copy swaps that match the extra wheel resistance (src/lib/scroll.ts) */
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  .story[data-story-paced="true"] .story-count-n {
+    transition-duration: 1200ms, 700ms;
+  }
+  .story[data-story-paced="true"] .story-step {
+    transition: opacity 650ms cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  .story[data-story-paced="true"] .story-step[data-active="1"] {
+    transition: opacity 1100ms cubic-bezier(0.45, 0, 0.55, 1) 650ms;
+  }
+  .story[data-story-paced="true"] .story-mask-inner {
+    transition: transform 0s linear 700ms;
+  }
+  .story[data-story-paced="true"] .story-step[data-active="1"] .story-mask-inner {
+    transition: transform 1600ms cubic-bezier(0.65, 0, 0.35, 1) 650ms;
+  }
+  .story[data-story-paced="true"] .story-body {
+    transition: opacity 0s linear 700ms;
+  }
+  .story[data-story-paced="true"] .story-step[data-active="1"] .story-body {
+    transition: opacity 1200ms cubic-bezier(0.45, 0, 0.55, 1) 950ms;
+  }
+}
+
 /* touch: the progress fill moves with the step's tween instead of jumping */
 @media (max-width: 767px), (hover: none) and (pointer: coarse) {
   .story-progress-fill {

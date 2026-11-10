@@ -22,7 +22,8 @@ import "./story.css";
  * - The canvas stays full-bleed (the world continues softly behind the titles) but the camera is
  *   framed into the area under the copy: a vertical view offset puts the optical centre in the
  *   middle of that area, at the scale the story fits for that area's aspect (`camera.aspect`).
- * - Desktop: the story's global progress g is scrubbed by scroll, with light damping (λ 10).
+ * - Desktop: scene, copy and progress share the already-smoothed page scroll (no second damping;
+ *   the wheel is paced in src/lib/scroll.ts, and the home story opts into extra resistance).
  * - Touch / narrow: the step comes from scroll, and each step plays as a time-based tween (glide,
  *   ~1.6 s) to its resting pose, retargeting if the step changes mid-flight.
  * - Reduced motion, no WebGL or no JS: no pinning; a stacked list of steps with pre-rendered end
@@ -57,6 +58,8 @@ export interface StoryFactory {
 }
 
 export interface StoryStageProps {
+  /** the home story opts into the shared wheel pacing's extra resistance and slower copy swaps (src/lib/scroll.ts, story.css) */
+  paced?: boolean;
   id?: string;
   steps: StoryStep[];
   /** dynamic import of the story (keeps three.js out of the main bundle) */
@@ -90,7 +93,6 @@ const STACKED_MQ = "(max-width: 767px), (orientation: portrait) and (max-width: 
 
 const glide = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2); // ≈ .65,0,.35,1
 const clamp = (x: number, a: number, b: number) => Math.min(b, Math.max(a, x));
-const damp = (x: number, y: number, l: number, dt: number) => x + (y - x) * (1 - Math.exp(-l * dt));
 
 /** a title's words without the accent markers (screen readers, alt text) */
 export const plainTitle = (t: string) => t.replace(/\*/g, "");
@@ -140,6 +142,7 @@ function frameArea(cam: Stage["camera"], w: number, h: number, top: number, bott
 }
 
 export function StoryStage({
+  paced = false,
   id,
   steps,
   load,
@@ -174,17 +177,17 @@ export function StoryStage({
 
   useEffect(() => {
     if (mode !== "live") return;
-    const track = trackRef.current!;
-    const sticky = stickyRef.current!;
-    const canvas = canvasRef.current!;
-    const labelsEl = labelsRef.current!;
-    const copyEl = copyRef.current!;
+    const track = trackRef.current;
+    const sticky = stickyRef.current;
+    const canvas = canvasRef.current;
+    const labelsEl = labelsRef.current;
+    const copyEl = copyRef.current;
+    if (!track || !sticky || !canvas || !labelsEl || !copyEl) return;
     let disposed = false;
     let stage: Stage | null = null;
     let story: Story | null = null;
     let raf = 0;
     let visible = false;
-    let last = performance.now();
     const touch = window.matchMedia("(max-width: 767px), (hover: none) and (pointer: coarse)").matches;
 
     // progress state
@@ -395,8 +398,6 @@ export function StoryStage({
     const tick = (now: number) => {
       raf = 0;
       if (disposed || !story) return;
-      const dt = Math.min(0.1, (now - last) / 1000);
-      last = now;
       const p = scrollProgress();
       syncStep(now);
       if (touch) {
@@ -408,8 +409,7 @@ export function StoryStage({
         gShown = gTarget;
       } else {
         gTarget = p * N;
-        gShown = damp(gShown, gTarget, 10, dt);
-        if (Math.abs(gShown - gTarget) < 1e-4) gShown = gTarget;
+        gShown = gTarget;
       }
       if (barRef.current) barRef.current.style.transform = `scaleX(${(touch ? (stepIdx + 1) / N : p).toFixed(4)})`;
       const sceneMoving = dirty || tw !== null || Math.abs(gShown - (story as any).__g) > 1e-5;
@@ -426,7 +426,6 @@ export function StoryStage({
 
     const kick = () => {
       if (!raf && visible && story) {
-        last = performance.now();
         raf = requestAnimationFrame(tick);
       }
     };
@@ -627,7 +626,7 @@ export function StoryStage({
   );
 
   return (
-    <section id={id} aria-label={ariaLabel} className="story relative scroll-mt-20" data-story-mode={mode}>
+    <section id={id} aria-label={ariaLabel} className="story relative scroll-mt-20" data-story-mode={mode} data-story-paced={paced}>
       {mode !== "static" && (
         <div ref={trackRef as never} className="story-track" style={{ ["--story-steps" as string]: N }}>
           <div ref={stickyRef} className="story-sticky">

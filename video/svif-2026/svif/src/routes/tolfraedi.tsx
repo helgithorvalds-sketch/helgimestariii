@@ -9,6 +9,10 @@ export const Route = createFileRoute("/tolfraedi")({
     meta: [
       { title: "Tölfræði · SVIF" },
       { name: "description", content: "Innri tölfræði um heimsóknir." },
+      { property: "og:title", content: "Tölfræði · SVIF" },
+      { property: "og:description", content: "Innri tölfræði um heimsóknir á SVIF." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
