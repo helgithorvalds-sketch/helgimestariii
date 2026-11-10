@@ -1,0 +1,12 @@
+@font-face { font-family: 'Raleway'; src: url('Raleway.woff2') format('woff2'); font-weight: 100 900; }
+@font-face { font-family: 'Nunito';  src: url('Nunito.woff2')  format('woff2'); font-weight: 200 1000; }
+:root {
+  --navy: #003E66; --navy2: #00315A; --blue: #0B6DB2; --bright: #1AA7E6; --sky: #9ADBF5; --pale: #DCEFFB;
+  --cream: #F7F1E6; --ink: #0E2A44;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 2000px; height: 2000px; overflow: hidden; }
+body { font-family: 'Raleway', sans-serif; -webkit-font-smoothing: antialiased; }
+.ad { position: relative; width: 2000px; height: 2000px; overflow: hidden; }
+.check { display: inline-block; width: 40px; height: 40px; border-radius: 50%; vertical-align: middle; margin-right: 22px; flex: none; }
+.check svg { width: 40px; height: 40px; display: block; }
