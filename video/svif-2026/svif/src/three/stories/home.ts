@@ -25,9 +25,10 @@ import { seg, easeOut, easeInOut, easeOutQuint, lerp, clamp, rng } from "../anim
  *                     owners now need appears around it, with callouts.
  *   02 Bæklingurinn – those needs fade away; Nýji kaflinn settles into the clear yard, opens and
  *                     turns two pages (ending on "Til hamingju með nýja heimilið!" | the coupons page).
- *   03 Sérkjörin    – four real coupons lift out of the coupons page; each lands, standing, where the
- *                     need it answers stood (Parki → gólfefni, Íspan → gluggar, Ormsson → rafmagn,
- *                     Maus → tryggingar; copy deck 06 §3.2).
+ *   03 Sérkjörin    – four real coupons lift out of the coupons page; each lands, standing, on one of
+ *                     the needs' spots (Parki → gólfefni, Íspan → gluggar, Ormsson → rafmagn, Maus →
+ *                     tryggingar; copy deck 06 §3.2), captioned with its own trade as the booklet
+ *                     lists it (Gólfefni, Gluggar, Raftæki, Eldvarnir).
  *   04 Hönnun       – a page on a cutting mat: guides draw, the layout's blocks settle, the finished
  *                     HTH ad (p05) resolves.
  *   05 Prentun      – a clay press prints copies of Nýji kaflinn onto a neat stack.
@@ -122,12 +123,17 @@ const ARC_DEEP: [number, number, string][] = [
   [1.86, 2.42, "tryggingar"],
   [1.98, 1.22, "husgogn"],
 ];
-/** coupon → the need it answers (copy deck 06 §3.2), in the order they lift out */
+/**
+ * coupon → the need spot it lands on (copy deck 06 §3.2), in the order they lift out. `label` is
+ * the coupon's own trade, as the booklet's contents list it, not the step-01 need's name: Maus is
+ * the fire-safety advertiser (ELDVARNIR, bls. 12–13; the insurer is VÍS) and Ormsson's coupon is
+ * for AEG appliances (ELDHÚS & TÆKI), so neither may be captioned as insurance or electricity.
+ */
 const COUPONS: { file: string; need: string; label: string }[] = [
   { file: "parki", need: "golfefni", label: "Gólfefni" },
-  { file: "maus", need: "tryggingar", label: "Tryggingar" },
+  { file: "maus", need: "tryggingar", label: "Eldvarnir" },
   { file: "ispan", need: "gluggar", label: "Gluggar" },
-  { file: "ormsson", need: "rafmagn", label: "Rafmagn" },
+  { file: "ormsson", need: "rafmagn", label: "Raftæki" },
 ];
 const DESK = new THREE.Vector3(11, 0, 2.0);
 const PRESS = new THREE.Vector3(22, 0, 0.2);

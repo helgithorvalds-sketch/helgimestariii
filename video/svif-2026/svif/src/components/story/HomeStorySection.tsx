@@ -1,9 +1,26 @@
 import type { ReactNode } from "react";
 import { StoryStage, type StoryFactory, type StoryStep } from "./StoryStage";
 
-/** End frame of each step, rendered from the same scene (loading poster, reduced motion, no WebGL). */
+/** End frame of each step, rendered from the same scene, 16:9 (the no-JS list). */
 const POSTERS = [0, 1, 2, 3, 4, 5].map((i) => `/svif/story/home-${i}.jpg`);
-/** where each step rests on phones (global g); keep in sync with HOME_REST in src/three/stories/home.ts */
+/** step 01's opening frame (g = 0), 16:9 */
+const OPEN_POSTER = "/svif/story/home-start.jpg";
+/**
+ * The same frames framed for the stage's scene area (posters.cjs `framed`): the opening frame shown
+ * while the player waits to be started and the 3D loads, and the step stills (reduced motion, no
+ * WebGL). `wide` for landscape areas, `tall` (the phones' deep arrangement) for portrait ones.
+ */
+const framed = (set: "w" | "t") => ({
+  open: `/svif/story/home-${set}-start.jpg`,
+  steps: [0, 1, 2, 3, 4, 5].map((i) => `/svif/story/home-${set}-${i}.jpg`),
+});
+const STILLS = { wide: framed("w"), tall: framed("t") };
+/**
+ * Seconds per step while playing: the homeowner film's step windows (lab/film-specs.ts, 9 · 6 · 6 ·
+ * 5.6 · 5.6 · 9 s), each a little longer for the site's longer title and line (≈ 45 s in all).
+ */
+const DURATIONS = [9.4, 6.8, 6.8, 6.2, 6.2, 9.6];
+/** where each step rests (global g); the posters are rendered here (HOME_REST in src/three/stories/home.ts) */
 const REST = [0.92, 1.92, 2.92, 3.92, 4.92, 5.96];
 
 async function loadHome(): Promise<StoryFactory> {
@@ -27,21 +44,24 @@ export interface HomeStorySectionProps {
   id?: string;
   /** round 1 (a title block above the stage); the heading lives inside the stage now. Unused. */
   header?: ReactNode;
-  /** rendered below the pinned stage (e.g. the film button) */
+  /** rendered below the stage (e.g. the film button) */
   footer?: ReactNode;
 }
 
 /**
- * The homeowner story: a pinned three.js stage scrubbed by scroll, with its own fixed heading
- * "Svona virkar það · frá sölu að póstlúgu", the step's title and line centred above the scene.
+ * The homeowner story as a step-by-step player (round 3): one stage with its own fixed heading
+ * "Svona virkar það · frá sölu að póstlúgu", the step's title and line centred above the scene, and
+ * the transport with one chip per step. Nothing plays until the visitor starts it.
  */
 export function HomeStorySection({ steps, id = "svona-virkar", footer }: HomeStorySectionProps) {
   return (
     <StoryStage
-      paced
       id={id}
       steps={steps}
       posters={POSTERS}
+      openPoster={OPEN_POSTER}
+      stills={STILLS}
+      durations={DURATIONS}
       rest={REST}
       heading={{ caps: "Svona virkar það", accent: "frá sölu að póstlúgu" }}
       load={loadHome}

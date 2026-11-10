@@ -8,17 +8,29 @@ import type { Vignette, VignetteFactory, VignetteKey, VignetteKind, VignetteOver
 export interface ProjectedOverlay {
   type: VignetteOverlay["type"];
   id: string;
-  /** label: the text point · link: the start · figure: unused */
+  /** label / placed figure: the text point · link: the start · free figure: NaN */
   x: number;
   y: number;
-  /** label: the hairline's anchor (if any) · link: the end */
+  /** label / figure: the hairline's anchor (if any) · link: the end */
   ax?: number;
   ay?: number;
   opacity: number;
   draw: number;
   side?: "above" | "below";
+  align?: "left" | "right";
+  quiet?: boolean;
   /** figure entrance 0..1 */
   progress?: number;
+}
+
+/**
+ * Where the vignette's square composition sits on the canvas, in CSS px: its top-left corner and
+ * side. The rest of the canvas shows more of the same world (an off-axis lens shift, not a crop).
+ */
+export interface VignetteFrame {
+  x: number;
+  y: number;
+  s: number;
 }
 
 export interface VignetteRuntime {
@@ -33,6 +45,8 @@ export interface VignetteRuntime {
   draw(t: number): ProjectedOverlay[];
   /** CSS size of the canvas */
   resize(w: number, h: number): void;
+  /** place the square composition on the canvas (null: centred, as large as fits) */
+  setFrame(f: VignetteFrame | null): void;
   /** every vignette, the pedestal, the renderer and the GL context */
   dispose(): void;
 }
@@ -49,6 +63,38 @@ export interface RuntimeOptions {
   preserve?: boolean;
   envIntensity?: number;
   sunIntensity?: number;
+}
+
+/**
+ * Every texture this stage's scene uses that is not the renderer's own (render targets go with it),
+ * including the DFG lookup table three binds to each physical material (module-level in three).
+ */
+function outliving(stage: Stage) {
+  const out = new Set<THREE.Texture>();
+  const add = (v: unknown) => {
+    const t = v as THREE.Texture | null;
+    if (t && t.isTexture && !t.isRenderTargetTexture) out.add(t);
+  };
+  const props = stage.renderer.properties;
+  const seen = new Set<THREE.Material>();
+  stage.scene.traverse((obj) => {
+    const mesh = obj as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    const depth = mesh.customDepthMaterial;
+    for (const m of depth ? [...mats, depth] : mats) {
+      if (!m || seen.has(m)) continue;
+      seen.add(m);
+      for (const v of Object.values(m)) add(v);
+      const uniforms = (m as THREE.ShaderMaterial).uniforms;
+      if (uniforms) for (const u of Object.values(uniforms)) add(u?.value);
+      if (props.has(m)) {
+        const live = (props.get(m) as { uniforms?: Record<string, { value?: unknown }> }).uniforms;
+        if (live) for (const u of Object.values(live)) add(u?.value);
+      }
+    }
+  });
+  return out;
 }
 
 export function createVignetteRuntime(o: RuntimeOptions): VignetteRuntime {
@@ -79,15 +125,21 @@ export function createVignetteRuntime(o: RuntimeOptions): VignetteRuntime {
   const focus = new THREE.Vector3();
   const v = new THREE.Vector3();
   const raw: VignetteOverlay[] = [];
+  const size = { w: 1, h: 1 };
+  let frame: VignetteFrame | null = null;
 
   const applyPose = (vg: Vignette, t: number) => {
     vg.pose(t, pose);
     const cam = stage.camera;
     cam.position.copy(pose.pos);
-    if (cam.fov !== pose.fov) {
-      cam.fov = pose.fov;
-      cam.updateProjectionMatrix();
-    }
+    // the composition is square: aspect 1, then the canvas is a window around that square
+    const f = frame ?? (() => {
+      const s = Math.min(size.w, size.h);
+      return { x: (size.w - s) / 2, y: (size.h - s) / 2, s };
+    })();
+    cam.fov = pose.fov;
+    cam.aspect = 1;
+    cam.setViewOffset(f.s, f.s, -f.x, -f.y, size.w, size.h);
     cam.lookAt(pose.target);
     cam.updateMatrixWorld();
     const d = pose.pos.distanceTo(pose.target);
@@ -120,9 +172,12 @@ export function createVignetteRuntime(o: RuntimeOptions): VignetteRuntime {
         // first frame has no hitch; only its own group is touched, whatever is drawing meanwhile
         vg.update(0);
         try {
-          await stage.renderer.compileAsync(vg.group, stage.camera, stage.scene);
+          // compileAsync waits on KHR_parallel_shader_compile; where the driver lacks it three only
+          // warns and polls, so compile in one go instead (as StoryStage does)
+          if (stage.renderer.extensions.has("KHR_parallel_shader_compile")) await stage.renderer.compileAsync(vg.group, stage.camera, stage.scene);
+          else stage.renderer.compile(vg.group, stage.camera, stage.scene);
         } catch {
-          /* compileAsync is an optimisation */
+          /* precompiling is an optimisation */
         }
         if (disposed) return null;
         built.set(key, vg);
@@ -149,9 +204,8 @@ export function createVignetteRuntime(o: RuntimeOptions): VignetteRuntime {
       stage.render();
       raw.length = 0;
       vg.overlays?.(tt, raw);
-      const el = stage.renderer.domElement;
-      const w = el.clientWidth || el.width;
-      const h = el.clientHeight || el.height;
+      const w = size.w;
+      const h = size.h;
       const cam = stage.camera;
       const px = (p: THREE.Vector3) => {
         v.copy(p).project(cam);
@@ -160,11 +214,37 @@ export function createVignetteRuntime(o: RuntimeOptions): VignetteRuntime {
       const out: ProjectedOverlay[] = [];
       for (const r of raw) {
         if (r.type === "figure") {
-          out.push({ type: "figure", id: r.id, x: 0, y: 0, opacity: 1, draw: 1, progress: r.progress });
+          const at = r.at ? px(r.at) : [NaN, NaN];
+          const a = r.anchor ? px(r.anchor) : undefined;
+          out.push({
+            type: "figure",
+            id: r.id,
+            x: at[0],
+            y: at[1],
+            ax: a?.[0],
+            ay: a?.[1],
+            opacity: 1,
+            draw: r.draw ?? 1,
+            side: r.side,
+            align: r.align,
+            progress: r.progress,
+          });
         } else if (r.type === "label") {
           const [x, y] = px(r.at);
           const a = r.anchor ? px(r.anchor) : undefined;
-          out.push({ type: "label", id: r.id, x, y, ax: a?.[0], ay: a?.[1], opacity: r.opacity, draw: r.draw, side: r.side });
+          out.push({
+            type: "label",
+            id: r.id,
+            x,
+            y,
+            ax: a?.[0],
+            ay: a?.[1],
+            opacity: r.opacity,
+            draw: r.draw,
+            side: r.side,
+            align: r.align,
+            quiet: r.quiet,
+          });
         } else {
           const [x, y] = px(r.from);
           const [ax, ay] = px(r.to);
@@ -174,17 +254,32 @@ export function createVignetteRuntime(o: RuntimeOptions): VignetteRuntime {
       return out;
     },
     resize(w, h) {
+      if (w <= 0 || h <= 0) return;
+      size.w = w;
+      size.h = h;
       stage.resize(w, h);
+    },
+    setFrame(f) {
+      frame = f && f.s > 0 ? { ...f } : null;
     },
     dispose() {
       if (disposed) return;
       disposed = true;
+      // textures that outlive this canvas (page images cached across vignettes and rebuilds, the
+      // engine's contact blob, three's own DFG lookup table) carry a 'dispose' listener of this
+      // renderer that three (r186) never removes: they would keep the dead renderer, its context, the
+      // canvas and through it the whole old page in memory. Collected before the materials go
+      // (the LUT is only reachable through their uniforms), disposed below: that drops the GPU copy
+      // and the listener of every renderer that drew them; a canvas still drawing one simply
+      // uploads it again on its next frame.
+      const shared = outliving(stage);
       for (const vg of built.values()) {
         stage.scene.remove(vg.group);
         vg.dispose();
       }
       built.clear();
       current = null;
+      for (const t of shared) t.dispose();
       // the pedestal, the environment, the renderer and the context itself
       stage.dispose();
     },

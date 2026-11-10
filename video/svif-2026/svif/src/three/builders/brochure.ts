@@ -70,6 +70,8 @@ export interface Booklet {
   loaded: () => number;
   /** `pages` mode: resolves once the first n pages have their images (or failed to load) */
   whenLoaded: (n: number) => Promise<void>;
+  /** `pages` mode: resolves once these pages (indices in reading order) have their images (or failed) */
+  whenPages: (indices: number[]) => Promise<void>;
   pageCount: number;
   /** `pages` mode: drop the inner pages' images (back to placeholders), e.g. once closed for good */
   releaseInner: () => void;
@@ -104,6 +106,12 @@ export interface BookletOptions {
   bend?: number;
   /** with `pages`: thickness of one inner sheet (default 0.0027: 32 pages ≈ the legacy 0.05) */
   sheetThickness?: number;
+  /**
+   * with `pages`: the order the images are requested in. "reading" (default): cover first, then in
+   * reading order. "back": the cover, then the last spread, then backwards towards the front (a
+   * booklet that is shown open at the back and leafed back to its cover).
+   */
+  loadOrder?: "reading" | "back";
 }
 
 /* ------------------------------------------------------------------ sheet geometry */
@@ -424,6 +432,8 @@ export function createBooklet(o: BookletOptions = {}): Booklet {
     while (n < pageList.length && pageOk[n]) n++;
     return n;
   };
+  /** waiters for a set of pages (whenPages) */
+  const setWaiters: { idx: number[]; resolve: () => void }[] = [];
   const settle = () => {
     const n = loadedCount();
     for (let k = waiters.length - 1; k >= 0; k--) {
@@ -432,11 +442,31 @@ export function createBooklet(o: BookletOptions = {}): Booklet {
         waiters.splice(k, 1);
       }
     }
+    for (let k = setWaiters.length - 1; k >= 0; k--) {
+      if (setWaiters[k].idx.every((i) => pageOk[i])) {
+        setWaiters[k].resolve();
+        setWaiters.splice(k, 1);
+      }
+    }
   };
   const loader = pagesMode && typeof window !== "undefined" ? new THREE.TextureLoader() : null;
+  /** request order: reading order, or the cover, the last spread and then backwards */
+  const requestOrder = () => {
+    const L = pageList.length;
+    if (o.loadOrder !== "back" || L < 4) return pageList.map((_, i) => i);
+    const order = [0];
+    for (let i = L - 3; i >= 1; i--) {
+      order.push(i);
+      // the right-hand page of the last spread (the base's top) right after its left-hand page
+      if (i === L - 3) order.push(L - 2);
+    }
+    order.push(L - 1);
+    return order;
+  };
   const startLoading = () => {
     if (!loader) return;
-    pageList.forEach((name, i) => {
+    requestOrder().forEach((i) => {
+      const name = pageList[i];
       loader.load(
         base + name,
         (t) => {
@@ -797,6 +827,11 @@ export function createBooklet(o: BookletOptions = {}): Booklet {
     whenLoaded(n) {
       if (!pagesMode || loadedCount() >= Math.min(n, pageList.length)) return Promise.resolve();
       return new Promise((resolve) => waiters.push({ n: Math.min(n, pageList.length), resolve }));
+    },
+    whenPages(indices) {
+      const idx = indices.filter((i) => i >= 0 && i < pageList.length);
+      if (!pagesMode || idx.every((i) => pageOk[i])) return Promise.resolve();
+      return new Promise((resolve) => setWaiters.push({ idx, resolve }));
     },
     releaseInner() {
       if (!pagesMode) return;

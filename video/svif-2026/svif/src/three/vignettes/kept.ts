@@ -38,6 +38,8 @@ export const createKept: VignetteFactory = (stage, { kind }) => {
   const frPos = biz ? new THREE.Vector3(0.9, 0, -0.3) : new THREE.Vector3(0.95, 0, -0.55);
   let doorZ: number;
   let holderTop: number;
+  /** where the "kept" hairline ends: on top of the holder, above the coupon (never across it) */
+  let keptAnchor: THREE.Vector3;
   /** the coupon's centre on the holder (its back touches the face) */
   let spot: THREE.Vector3;
   let holderReady: Promise<void> = Promise.resolve();
@@ -53,6 +55,7 @@ export const createKept: VignetteFactory = (stage, { kind }) => {
     // the free part of the cork (right of the two notes), a little above the board's middle
     spot = new THREE.Vector3(frPos.x + pb.W / 2 - 0.46, pb.top - 1.08 / 2 + 0.1, 0);
     holderReady = pb.ready;
+    keptAnchor = new THREE.Vector3(spot.x, pb.top + 0.012, doorZ - 0.02);
   } else {
     const fr = fridge({ w: 0.9, h: 1.62, d: 0.7 });
     fr.position.copy(frPos);
@@ -63,6 +66,7 @@ export const createKept: VignetteFactory = (stage, { kind }) => {
     doorZ = frPos.z + (fr.userData.face as number);
     holderTop = 2.0;
     spot = new THREE.Vector3(frPos.x + 0.07, 1.27, doorZ);
+    keptAnchor = new THREE.Vector3(frPos.x, (fr.userData.h as number) + 0.012, frPos.z + 0.05);
   }
 
   /* the ad sheet */
@@ -170,9 +174,12 @@ export const createKept: VignetteFactory = (stage, { kind }) => {
     magFade.set(EASE.breathe(clamp(m / 0.6)));
   };
 
+  // The hairlines end ON the holders, never across printed paper: "thrown" above the basket's back
+  // rim once the ad has landed in it, "kept" on the fridge's top (the pin board's top bar) above
+  // the coupon, once the magnet (pin) holds it.
   const overlays = (t: number, out: VignetteOverlay[]) => {
-    pushLabel(out, "thrown", new THREE.Vector3(binPos.x, BH + 0.56, binPos.z), new THREE.Vector3(binPos.x, BH + 0.2, binPos.z), t, 0.46, 0.6);
-    pushLabel(out, "kept", new THREE.Vector3(cpEnd.x, 1.98, cpEnd.z), new THREE.Vector3(cpEnd.x, cpEnd.y + cpD / 2 + 0.05, cpEnd.z), t, 0.8, 0.94);
+    pushLabel(out, "thrown", new THREE.Vector3(binPos.x, BH + 0.62, binPos.z - 0.1), new THREE.Vector3(binPos.x, BH + 0.3, binPos.z - 0.1), t, 0.56, 0.7);
+    pushLabel(out, "kept", keptAnchor.clone().setY(holderTop + (biz ? 0.3 : 0)), keptAnchor, t, 0.82, 0.96);
   };
   const pose = (t: number, out: VignettePose) => dollyPose(base, t, 0.55, 0.03, out);
 
@@ -183,6 +190,7 @@ export const createKept: VignetteFactory = (stage, { kind }) => {
     duration: 2.6,
     group,
     pose,
+    box: base.box,
     focus: [0, 0.6, -0.1, 3.4],
     update,
     overlays,

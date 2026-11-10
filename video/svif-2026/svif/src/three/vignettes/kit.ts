@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { clamp, invLerp, lerp } from "../anim";
 import { clay } from "../materials";
 import { contactBlobTex } from "../textures";
-import type { VignetteOverlay, VignettePose } from "./types";
+import type { FrameBox, VignetteOverlay, VignettePose } from "./types";
 
 /* ------------------------------------------------------------------ easing (the site's tokens) */
 
@@ -66,8 +66,9 @@ export const DISC_SIDE = "#cbbca6";
 
 /**
  * The museum pedestal every vignette stands on: a low clay disc with soft bevels (top surface at
- * y = 0), its soft contact shadow, and an invisible floor that only takes the sun's shadow (the panel
- * colour shows through, so the canvas edge dissolves into the CSS panel).
+ * y = 0), its soft contact shadow, and an invisible floor round it that only takes the sun's shadow,
+ * fading out a little past the rim (the panel colour shows through, so the canvas edge dissolves into
+ * the CSS panel).
  */
 export function createPedestal() {
   const g = new THREE.Group();
@@ -101,9 +102,26 @@ export function createPedestal() {
     g.add(m);
   }
 
-  const floorGeo = new THREE.PlaneGeometry(40, 40);
+  // the floor takes the sun's shadow only round the pedestal: its own shadow stays, a tall object's
+  // long shadow fades out a little past the rim instead of lying on the panel as a loose wedge
+  const FADE: [number, number] = [R + 0.12, R + 0.5];
+  const floorGeo = new THREE.CircleGeometry(FADE[1] + 0.02, 128);
   floorGeo.rotateX(-Math.PI / 2);
-  const floor = new THREE.Mesh(floorGeo, new THREE.ShadowMaterial({ opacity: 0.16, color: "#3a2c20" }));
+  const floorMat = new THREE.ShadowMaterial({ opacity: 0.16, color: "#3a2c20" });
+  floorMat.onBeforeCompile = (sh) => {
+    sh.uniforms.uFade = { value: new THREE.Vector2(...FADE) };
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying vec2 vFloor;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvFloor = position.xz;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying vec2 vFloor;\nuniform vec2 uFade;")
+      .replace(
+        "gl_FragColor = vec4( color, opacity * ( 1.0 - getShadowMask() ) );",
+        "gl_FragColor = vec4( color, opacity * ( 1.0 - getShadowMask() ) * ( 1.0 - smoothstep( uFade.x, uFade.y, length( vFloor ) ) ) );",
+      );
+  };
+  floorMat.customProgramCacheKey = () => "svif-floor-fade";
+  const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.position.y = -H - 0.001;
   floor.receiveShadow = true;
   g.add(floor);
@@ -303,7 +321,7 @@ export function pushLabel(
   t: number,
   a: number,
   b: number,
-  o: { side?: "above" | "below"; out?: [number, number] } = {},
+  o: { side?: "above" | "below"; align?: "left" | "right"; out?: [number, number]; quiet?: boolean } = {},
 ) {
   const k = invLerp(a, b, t);
   if (k <= 0) return;
@@ -315,7 +333,7 @@ export function pushLabel(
     draw *= q;
     if (q <= 0) return;
   }
-  out.push({ type: "label", id, at, anchor, opacity: op, draw, side: o.side });
+  out.push({ type: "label", id, at, anchor, opacity: op, draw, side: o.side, align: o.align, quiet: o.quiet });
 }
 
 /* ------------------------------------------------------------------ camera */
@@ -348,12 +366,13 @@ export function rimPoints(r = DISC_R, n = 32, y0 = 0, y1 = -DISC_H) {
 /**
  * Frame a set of world points in a square panel: from the given elevation/azimuth and lens, find the
  * distance and target so the points' projected box is centred (with an optional vertical bias) and
- * its larger side spans `fill` of the frame.
+ * its larger side spans `fill` of the frame. `box` is where those points end up (frame NDC): the
+ * vignette hands it on (`Vignette.box`) so the page can fit the content into its scene area.
  */
 export function fitPose(
   points: THREE.Vector3[],
   o: { elev: number; azim: number; fov: number; fill?: number; aspect?: number; biasY?: number },
-): VignettePose {
+): VignettePose & { box: FrameBox } {
   const fill = o.fill ?? 0.84;
   const aspect = o.aspect ?? 1;
   const box = new THREE.Box3().setFromPoints(points);
@@ -394,7 +413,9 @@ export function fitPose(
     const up = new THREE.Vector3().setFromMatrixColumn(_cam.matrixWorld, 1);
     target.addScaledVector(right, cx * halfH * aspect).addScaledVector(up, cy * halfH);
   }
-  return { pos: orbit(target, dist, o.elev, o.azim), target, fov: o.fov };
+  const m = measure();
+  const r = (v: number) => Math.round(v * 1000) / 1000;
+  return { pos: orbit(target, dist, o.elev, o.azim), target, fov: o.fov, box: [r(m.x0), r(m.y0), r(m.x1), r(m.y1)] };
 }
 
 /** a fixed pose with a soft push-in of k (≤ 0.04) over [a, 1] (glide), then hold */
@@ -501,12 +522,26 @@ export function disposeTree(root: THREE.Object3D) {
   });
 }
 
-/** give a subtree its own material instances (engine builders share cached materials) */
+/**
+ * Give a subtree its own material instances (engine builders share cached materials). A cached
+ * material may carry another canvas's environment: the business story tunes the office glass with
+ * its own PMREM render target (tuneOfficeGlass), which does not exist in this WebGL context and would
+ * reflect black. The clones drop any such map and light from this scene's environment (and its
+ * environmentIntensity) like every other vignette material, whichever canvas was built first.
+ */
 export function ownMaterials<T extends THREE.Object3D>(root: T): T {
   const map = new Map<THREE.Material, THREE.Material>();
   const own = (m: THREE.Material) => {
     let c = map.get(m);
-    if (!c) map.set(m, (c = m.clone()));
+    if (!c) {
+      c = m.clone();
+      const s = c as THREE.MeshStandardMaterial;
+      if (s.envMap?.isRenderTargetTexture) {
+        s.envMap = null;
+        s.envMapIntensity = 1;
+      }
+      map.set(m, c);
+    }
     return c;
   };
   root.traverse((obj) => {

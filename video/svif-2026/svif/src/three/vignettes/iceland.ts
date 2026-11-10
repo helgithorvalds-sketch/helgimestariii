@@ -1,19 +1,41 @@
 import * as THREE from "three";
 import { invLerp } from "../anim";
 import { clay } from "../materials";
+import { PAL } from "../palette";
 import { MAT, mesh } from "./builders";
-import { EASE, blobPlane, disposeTree, dollyPose, fader, fitPose, grow, pushLabel, rimPoints, setBlob, settle } from "./kit";
+import {
+  EASE,
+  blobPlane,
+  canvasTexture,
+  disposeTree,
+  dollyPose,
+  fader,
+  fitPose,
+  grow,
+  pushLabel,
+  rimPoints,
+  setBlob,
+  settle,
+} from "./kit";
 import type { VignetteFactory, VignetteOverlay, VignettePose } from "./types";
 
 /**
- * B3 · "Hversu mörgum bæklingum er dreift?" (/fyrirtaeki, spec §4.4 B3, 2.8 s).
+ * Item 2 · "Hversu mörgum bæklingum er dreift?" (both pages, 2.8 s).
  *
  * A clay relief of Iceland lies on the pedestal like a museum model: the coast as a soft bevelled
- * slab, the glaciers as pale caps. Rose map pins rise in the towns, Reykjavík first and then in a
- * wave outward across the country; the big figure (Um 250 / á mánuði) is DOM. The pins are
- * illustrative: no per-town numbers are shown or claimed.
+ * slab, the glaciers as pale caps.
  *
- * Overlay ids: figure "figure", label "country".
+ * Home: where the booklet goes today and where it goes next. The capital area lights up rose (the
+ * land itself takes the colour, a rose ring and pin mark it) and the big figure "350–500 / á
+ * mánuði" hangs off it as a callout in the open sea to the south. Then, quieter, two regions are
+ * marked as coming: a dotted ring of beads and a pale pin at Akureyri (Norðurland) and in the
+ * southern lowlands (Suðurland), each with a soft "Væntanlegt" caption on a dotted hairline.
+ *
+ * Business (/fyrirtaeki): rose map pins rise in the towns all over the country, Reykjavík first and
+ * then in a wave outward; the figure "Um 250 / á mánuði" sits in the open sea to the south. The pins
+ * are illustrative: no per-town numbers are shown or claimed.
+ *
+ * Overlay ids: figure "figure"; home: labels "north", "south" (quiet); business: label "country".
  */
 
 /* ------------------------------------------------------------------ the map projection */
@@ -109,6 +131,7 @@ function inside(outline: THREE.Vector3[], x: number, y: number) {
 export const createIceland: VignetteFactory = (_stage, { kind }) => {
   const group = new THREE.Group();
   group.name = `iceland-${kind}`;
+  const biz = kind === "biz";
 
   /* -------------------------------------------------------------- the relief */
   const land = new THREE.Group();
@@ -130,58 +153,182 @@ export const createIceland: VignetteFactory = (_stage, { kind }) => {
   landBlob.position.set(-0.1, 0.003, 0.05);
   group.add(landBlob);
 
-  /* -------------------------------------------------------------- the pins */
   const stemGeo = new THREE.CylinderGeometry(0.015, 0.015, STEM, 14);
   stemGeo.translate(0, STEM / 2, 0);
   const headGeo = new THREE.SphereGeometry(1, 28, 18);
   const stemMat = MAT.ink();
-  const capital = TOWNS[0];
-  const d0 = (t: { lon: number; lat: number }) => Math.hypot(E(t.lon) - E(capital.lon), N(t.lat) - N(capital.lat));
-  const ordered = [capital, ...TOWNS.slice(1).sort((a, b) => d0(a) - d0(b))];
-  const pins = ordered.map((town, i) => {
-    const x = E(town.lon);
-    const z = -N(town.lat);
-    if (import.meta.env?.DEV && !inside(outline, x, -z)) console.warn(`iceland: ${town.name} is off the coast`);
+
+  /** a map pin: the stem grows out of the relief, the head settles onto it from just above */
+  const pin = (x: number, z: number, r: number, head: THREE.Material, stemScale = 1) => {
     const stem = mesh(stemGeo, stemMat);
     stem.position.set(x, TOP, z);
+    stem.scale.set(stemScale, 1, stemScale);
     group.add(stem);
-    const r = i === 0 ? 0.1 : 0.08;
-    const head = mesh(headGeo, MAT.rose());
-    head.scale.setScalar(r);
+    const h = mesh(headGeo, head);
+    h.scale.setScalar(r);
     const headPivot = new THREE.Group();
-    headPivot.add(head);
-    head.position.y = r;
+    headPivot.add(h);
+    h.position.y = r;
     group.add(headPivot);
     const base = new THREE.Vector3(x, TOP + STEM - r * 0.35, z);
     const f = fader(headPivot);
     const blob = blobPlane(0.34, 0.34, 0.3);
     blob.position.set(x, TOP + 0.003, z);
     group.add(blob);
-    return { stem, headPivot, base, f, blob, a: 0.1 + i * 0.05, town };
-  });
-  const ne = pins.find((p) => p.town.name === "Egilsstaðir")!;
+    const top = new THREE.Vector3(x, TOP + STEM + r * 1.7, z);
+    return {
+      top,
+      set(t: number, a: number) {
+        const g = grow(stem, t, a, a + 0.12);
+        settle(headPivot, f, base, t, a + 0.06, a + 0.2, 0.16);
+        setBlob(blob, Math.max(g, f.value) * 0.9, 0);
+      },
+    };
+  };
+
+  let update: (t: number) => void;
+  let overlays: (t: number, out: VignetteOverlay[]) => void;
+  /** the figure: its near corner in the open sea south of the island (world) */
+  let figureAt: THREE.Vector3;
+
+  if (biz) {
+    /* ------------------------------------------------------------ business: pins all over the country */
+    const capital = TOWNS[0];
+    const d0 = (t: { lon: number; lat: number }) => Math.hypot(E(t.lon) - E(capital.lon), N(t.lat) - N(capital.lat));
+    const ordered = [capital, ...TOWNS.slice(1).sort((a, b) => d0(a) - d0(b))];
+    const pins = ordered.map((town, i) => {
+      const x = E(town.lon);
+      const z = -N(town.lat);
+      if (import.meta.env?.DEV && !inside(outline, x, -z)) console.warn(`iceland: ${town.name} is off the coast`);
+      return { p: pin(x, z, i === 0 ? 0.1 : 0.08, MAT.rose()), a: 0.1 + i * 0.05, town };
+    });
+    const ne = pins.find((p) => p.town.name === "Egilsstaðir")!;
+    figureAt = new THREE.Vector3(-1.3, 0, 1.36);
+    update = (t: number) => {
+      const k = EASE.breathe(invLerp(0, 0.12, t));
+      landFade.set(k);
+      setBlob(landBlob, k, 0);
+      for (const p of pins) p.p.set(t, p.a);
+    };
+    overlays = (t: number, out: VignetteOverlay[]) => {
+      out.push({ type: "figure", id: "figure", progress: EASE.arrive(invLerp(0.1, 0.4, t)), at: figureAt, side: "below" });
+      const top = ne.p.top;
+      pushLabel(out, "country", top.clone().setY(top.y + 0.42), top, t, 0.76, 0.9);
+    };
+  } else {
+    /* ------------------------------------------------------------ home: the capital area, then the regions to come */
+    const cap = { x: E(-21.84), z: -N(64.12) };
+    // the land takes the colour: a rose wash on the relief's top, confined to the coast. The alpha
+    // map reads the green channel: white in the middle, black (opaque black, not transparent) out to
+    // the canvas edge, so the clamped border is exactly zero
+    const R = 0.5;
+    const wash = canvasTexture(256, 256, (c, w, h) => {
+      c.fillStyle = "#000";
+      c.fillRect(0, 0, w, h);
+      const g = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.47);
+      g.addColorStop(0, "#fff");
+      g.addColorStop(0.42, "#f2f2f2");
+      g.addColorStop(0.7, "#8c8c8c");
+      g.addColorStop(0.9, "#1e1e1e");
+      g.addColorStop(1, "#000");
+      c.fillStyle = g;
+      c.fillRect(0, 0, w, h);
+    }, { srgb: false });
+    wash.tex.wrapS = wash.tex.wrapT = THREE.ClampToEdgeWrapping;
+    // the shape's own coordinates are its UVs (east, north): map a 2R window round the capital
+    wash.tex.repeat.set(1 / (2 * R), 1 / (2 * R));
+    wash.tex.offset.set(-(cap.x - R) / (2 * R), -(-cap.z - R) / (2 * R));
+    const washGeo = new THREE.ShapeGeometry(new THREE.Shape(outline.map((p) => new THREE.Vector2(p.x, p.y))), 1);
+    washGeo.rotateX(-Math.PI / 2);
+    const washMat = new THREE.MeshStandardMaterial({
+      color: PAL.rose,
+      roughness: 0.82,
+      alphaMap: wash.tex,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
+    });
+    const washMesh = new THREE.Mesh(washGeo, washMat);
+    washMesh.position.y = TOP + 0.0015;
+    washMesh.receiveShadow = true;
+    washMesh.renderOrder = 1;
+    group.add(washMesh);
+
+    // the capital's pin
+    const capPin = pin(cap.x, cap.z, 0.1, MAT.rose());
+
+    // the regions to come: a dotted ring of small beads and a pale pin, quieter
+    const BEADS = 22;
+    const beadGeo = new THREE.SphereGeometry(0.0145, 12, 8);
+    const beadMat = clay("#c9b19c", { roughness: 0.7, sheen: 0.3 });
+    const region = (lon: number, lat: number, r: number, a: number) => {
+      const x = E(lon);
+      const z = -N(lat);
+      if (import.meta.env?.DEV && !inside(outline, x, -z)) console.warn(`iceland: region at ${lon},${lat} is off the coast`);
+      const beads = Array.from({ length: BEADS }, (_, i) => {
+        const th = (i / BEADS) * Math.PI * 2 + Math.PI / 2;
+        const b = mesh(beadGeo, beadMat, false);
+        const base = new THREE.Vector3(x + Math.cos(th) * r, TOP + 0.008, z + Math.sin(th) * r);
+        if (import.meta.env?.DEV && !inside(outline, base.x, -base.z)) console.warn(`iceland: a bead at ${lon},${lat} is off the coast`);
+        b.position.copy(base);
+        group.add(b);
+        return { b, f: fader(b), base, i };
+      });
+      const p = pin(x, z, 0.062, MAT.cream(), 0.8);
+      return {
+        top: p.top,
+        set(t: number) {
+          // the beads come in round the ring, one after another (a dotted line being drawn)
+          for (const B of beads) {
+            const s = a + (B.i / BEADS) * 0.14;
+            const k = EASE.settle(invLerp(s, s + 0.06, t));
+            B.f.set(k, 0);
+            B.b.position.set(B.base.x, B.base.y + 0.05 * (1 - k), B.base.z);
+          }
+          p.set(t, a + 0.04);
+        },
+      };
+    };
+    // Norðurland round Akureyri; Suðurland in the southern lowlands, inland of the coast
+    const north = region(-18.12, 65.6, 0.2, 0.5);
+    const south = region(-19.85, 64.06, 0.2, 0.6);
+
+    figureAt = new THREE.Vector3(cap.x - 0.42, 0, 1.36);
+    update = (t: number) => {
+      const k = EASE.breathe(invLerp(0, 0.12, t));
+      landFade.set(k);
+      setBlob(landBlob, k, 0);
+      // the capital lights up: the wash, the ring (opening out a little), the pin
+      const w = EASE.breathe(invLerp(0.12, 0.34, t));
+      washMat.opacity = 0.95 * w;
+      washMesh.visible = w > 0.002;
+      capPin.set(t, 0.14);
+      north.set(t);
+      south.set(t);
+    };
+    overlays = (t: number, out: VignetteOverlay[]) => {
+      out.push({
+        type: "figure",
+        id: "figure",
+        progress: EASE.arrive(invLerp(0.26, 0.52, t)),
+        at: figureAt,
+        anchor: capPin.top,
+        side: "below",
+        draw: EASE.glide(invLerp(0.24, 0.44, t)),
+      });
+      // the two captions lean apart (north runs east from its line, south ends at its line and runs
+      // west), so they never touch each other or the other pin, at any panel size
+      pushLabel(out, "north", north.top.clone().setY(north.top.y + 0.36), north.top, t, 0.66, 0.84, { quiet: true, align: "right" });
+      pushLabel(out, "south", south.top.clone().setY(south.top.y + 0.32), south.top, t, 0.74, 0.92, { quiet: true, align: "left" });
+    };
+  }
 
   /* -------------------------------------------------------------- camera */
-  const fitPts = [...rimPoints(), new THREE.Vector3(0, 0.9, -1.0)];
-  const base = fitPose(fitPts, { elev: 52, azim: 0, fov: 24, fill: 0.86, biasY: -0.07 });
-
-  const update = (t: number) => {
-    const k = EASE.breathe(invLerp(0, 0.12, t));
-    landFade.set(k);
-    setBlob(landBlob, k, 0);
-    for (const p of pins) {
-      // the stem grows out of the relief, then the head settles onto it from just above
-      const g = grow(p.stem, t, p.a, p.a + 0.12);
-      settle(p.headPivot, p.f, p.base, t, p.a + 0.06, p.a + 0.2, 0.16);
-      setBlob(p.blob, Math.max(g, p.f.value) * 0.9, 0);
-    }
-  };
-
-  const overlays = (t: number, out: VignetteOverlay[]) => {
-    out.push({ type: "figure", id: "figure", progress: EASE.arrive(invLerp(0.1, 0.4, t)) });
-    const top = ne.base.clone().setY(TOP + STEM + 0.09);
-    pushLabel(out, "country", top.clone().setY(top.y + 0.5), top, t, 0.76, 0.9);
-  };
+  // the disc and the figure's corner of the sea (the island sits north of the disc's middle)
+  const base = fitPose(rimPoints(), { elev: 52, azim: 0, fov: 24, fill: 0.86, biasY: -0.04 });
   const pose = (t: number, out: VignettePose) => dollyPose(base, t, 0.5, 0.03, out);
 
   update(1);
@@ -191,6 +338,7 @@ export const createIceland: VignetteFactory = (_stage, { kind }) => {
     duration: 2.8,
     group,
     pose,
+    box: base.box,
     focus: [0, 0.2, 0, 3.2],
     update,
     overlays,

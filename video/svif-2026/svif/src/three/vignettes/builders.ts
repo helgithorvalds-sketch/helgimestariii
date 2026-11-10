@@ -12,6 +12,16 @@ import { canvasTexture } from "./kit";
   uses as few materials as it can (each material group is a draw call, twice with the shadow pass).
 */
 
+function roundRectPath(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
 export function mesh(geo: THREE.BufferGeometry, mat: THREE.Material | THREE.Material[], shadow = true) {
   const m = new THREE.Mesh(geo, mat);
   m.castShadow = shadow;
@@ -262,71 +272,6 @@ export function bookletStack(cover: THREE.Texture, n: number, s = 0.4, thick = 0
   return inst;
 }
 
-/* ------------------------------------------------------------------ timeline (H2) */
-
-/** a slim clay rail with six round nodes; objects stand behind their node */
-export function timelineRail(len: number, nodes: number[], o: { roseNodes?: number[] } = {}) {
-  const g = new THREE.Group();
-  const rail = mesh(rbox(len, 0.05, 0.11, 0.025, 3), MAT.warm());
-  g.add(rail);
-  const plain: THREE.BufferGeometry[] = [];
-  const rose: THREE.BufferGeometry[] = [];
-  nodes.forEach((x, i) => {
-    const c = new THREE.CylinderGeometry(0.07, 0.075, 0.035, 40);
-    c.translate(x, 0.05 + 0.0175, 0);
-    (o.roseNodes?.includes(i) ? rose : plain).push(c);
-  });
-  // a soft chevron at the right end: time runs left to right
-  const ch = new THREE.Shape();
-  ch.moveTo(0, 0.09);
-  ch.lineTo(0.13, 0);
-  ch.lineTo(0, -0.09);
-  ch.lineTo(0, -0.045);
-  ch.lineTo(0.06, 0);
-  ch.lineTo(0, 0.045);
-  ch.closePath();
-  const chev = new THREE.ExtrudeGeometry(ch, { depth: 0.035, bevelEnabled: true, bevelSize: 0.006, bevelThickness: 0.006, bevelSegments: 2 });
-  chev.rotateX(-Math.PI / 2);
-  chev.translate(len / 2 + 0.02, 0.006, 0);
-  plain.push(chev);
-  g.add(mesh(merge(plain), MAT.shade()));
-  const roseMesh = rose.length ? mesh(merge(rose), MAT.rose()) : null;
-  if (roseMesh) g.add(roseMesh);
-  return { obj: g, rail, roseMesh };
-}
-
-/** a clay house key lying flat with a small rose tag on a ring */
-export function keyTag() {
-  const g = new THREE.Group();
-  const keyParts: THREE.BufferGeometry[] = [];
-  const bow = new THREE.TorusGeometry(0.075, 0.026, 14, 40);
-  bow.rotateX(Math.PI / 2);
-  bow.translate(0, 0.026, 0);
-  keyParts.push(bow);
-  const shank = new THREE.CylinderGeometry(0.022, 0.022, 0.28, 16);
-  shank.rotateZ(Math.PI / 2);
-  shank.translate(0.075 + 0.14, 0.024, 0);
-  keyParts.push(shank);
-  for (const [x, l] of [
-    [0.27, 0.07],
-    [0.32, 0.05],
-  ] as const) {
-    const tooth = new RoundedBoxGeometry(0.03, 0.04, l, 1, 0.008);
-    tooth.translate(x, 0.024, -l / 2 - 0.005);
-    keyParts.push(tooth);
-  }
-  g.add(mesh(merge(keyParts), MAT.shade()));
-  const ring = new THREE.TorusGeometry(0.045, 0.008, 8, 28);
-  ring.rotateX(Math.PI / 2);
-  ring.translate(-0.13, 0.009, 0.0);
-  g.add(mesh(ring, MAT.shade(), false));
-  const tag = mesh(rbox(0.13, 0.016, 0.2, 0.02, 2), MAT.rose());
-  tag.position.set(-0.2, 0, 0.09);
-  tag.rotation.y = 0.5;
-  g.add(tag);
-  return g;
-}
-
 /* ------------------------------------------------------------------ calendar pad (H3) */
 
 const WEEKDAYS = ["M", "Þ", "M", "F", "F", "L", "S"];
@@ -492,60 +437,7 @@ export function magnet(size = 0.16) {
   return mesh(geo, MAT.rose());
 }
 
-/* ------------------------------------------------------------------ phone + laptop (H5) */
-
-/** a phone on a small wedge stand, screen showing an incoming call (rose disc) */
-export function phone() {
-  const g = new THREE.Group();
-  const W = 0.36;
-  const H = 0.7;
-  const T = 0.035;
-  const tilt = THREE.MathUtils.degToRad(18);
-  // stand: a wedge block with a lip
-  const s = new THREE.Shape();
-  s.moveTo(-0.2, 0);
-  s.lineTo(0.16, 0);
-  s.lineTo(0.16, 0.035);
-  s.lineTo(-0.06, 0.2);
-  s.lineTo(-0.2, 0.2);
-  s.closePath();
-  const stand = new THREE.ExtrudeGeometry(s, { depth: 0.3, bevelEnabled: true, bevelSize: 0.01, bevelThickness: 0.01, bevelSegments: 2 });
-  stand.translate(0, 0, -0.15);
-  stand.rotateY(-Math.PI / 2);
-  g.add(mesh(stand, MAT.warm()));
-  const body = new THREE.Group();
-  body.add(mesh(rbox(W, H, T, 0.045, 4), MAT.ink()));
-  const { tex, ready } = canvasTexture(360, 700, (c, w, h) => {
-    c.fillStyle = "#3a332c";
-    c.fillRect(0, 0, w, h);
-    const grd = c.createLinearGradient(0, 0, 0, h);
-    grd.addColorStop(0, "#5a4f44");
-    grd.addColorStop(1, "#2f2a25");
-    c.fillStyle = grd;
-    c.fillRect(0, 0, w, h);
-    c.fillStyle = "rgba(246,245,236,0.85)";
-    c.fillRect(w * 0.3, h * 0.2, w * 0.4, 14);
-    c.fillStyle = "rgba(246,245,236,0.45)";
-    c.fillRect(w * 0.36, h * 0.2 + 30, w * 0.28, 9);
-    c.beginPath();
-    c.arc(w / 2, h * 0.47, w * 0.14, 0, Math.PI * 2);
-    c.fillStyle = "rgba(246,245,236,0.14)";
-    c.fill();
-  });
-  const screen = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.04, H - 0.05), new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.25, clearcoat: 0.6, clearcoatRoughness: 0.2 }));
-  screen.position.set(0, H / 2, T / 2 + 0.0015);
-  body.add(screen);
-  // the call button (rose disc) on the screen
-  const call = mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.008, 32), MAT.rose(), false);
-  call.rotation.x = Math.PI / 2;
-  call.position.set(0, H * 0.16, T / 2 + 0.005);
-  body.add(call);
-  body.rotation.x = -tilt;
-  body.position.set(0, 0.035, 0.07);
-  g.add(body);
-  const callWorld = () => call.getWorldPosition(new THREE.Vector3());
-  return { obj: g, body, call, callWorld, ready, top: () => body.localToWorld(new THREE.Vector3(0, H, T)) };
-}
+/* ------------------------------------------------------------------ laptop with the system (H5 tray) */
 
 /**
  * The SVIF system on a laptop: a list of homes (roof glyph + two text bars per row) on the screen.
@@ -671,89 +563,6 @@ export function listLaptop(o: { rows?: number; glyph?: "roof" | "building"; w?: 
   };
 }
 
-/* ------------------------------------------------------------------ open booklet + invoices (H6) */
-
-/**
- * The booklet lying open: a soft cover slab and two printed pages (a gentle V at the spine).
- * Origin at its base centre; the spine runs along z.
- */
-export function openBooklet(left: THREE.Texture, right: THREE.Texture, s = 0.9) {
-  const g = new THREE.Group();
-  const cover = mesh(rbox(s * 2 + 0.04, 0.014, s + 0.03, 0.006, 2), clay("#e9e0d1", { roughness: 0.6 }));
-  g.add(cover);
-  const pageGeo = new THREE.BoxGeometry(s, 0.006, s);
-  const edge = paper(pageEdgeTexture(), "#ffffff", 0);
-  const mk = (t: THREE.Texture, side: -1 | 1) => {
-    const p = mesh(pageGeo.clone(), [edge, edge, paper(t, "#ffffff", 0.08), edge, edge, edge]);
-    // tilt up 2.5° toward the spine, resting on the cover
-    const tilt = THREE.MathUtils.degToRad(2.5) * side;
-    p.rotation.z = tilt;
-    p.position.set(side * (s / 2 + 0.004), 0.014 + 0.003 + Math.sin(Math.abs(tilt)) * (s / 2), 0);
-    return p;
-  };
-  const L = mk(left, -1);
-  const R = mk(right, 1);
-  g.add(L, R);
-  pageGeo.dispose();
-  // where a loose card can lie on the right page (its surface height at the page centre)
-  const rightTop = (x: number) => 0.014 + 0.006 + Math.sin(THREE.MathUtils.degToRad(2.5)) * (s - Math.abs(x)) ;
-  return { obj: g, left: L, right: R, rightTop, s };
-}
-
-/** a loose ad page with a rose edge band (the pages you buy) */
-export function pageCard(t: THREE.Texture, s = 0.8) {
-  const g = new THREE.Group();
-  const edge = MAT.rose();
-  const geo = new THREE.BoxGeometry(s, 0.008, s);
-  geo.translate(0, 0.004, 0);
-  g.add(mesh(geo, [edge, edge, paper(t, "#ffffff", 0.1), paper(null, "#efe8dc", 0), edge, edge]));
-  return g;
-}
-
-/** an invoice slip: paper with grey lines and a rose total line */
-export function invoiceSlip(o: { w?: number; d?: number; month?: string } = {}) {
-  const w = o.w ?? 0.46;
-  const d = o.d ?? 0.62;
-  const { tex, ready } = canvasTexture(
-    300,
-    Math.round((300 * d) / w),
-    (c, W, H) => {
-      c.fillStyle = "#f8f4ec";
-      c.fillRect(0, 0, W, H);
-      c.strokeStyle = "#9a7a64";
-      c.lineWidth = 4;
-      c.lineCap = "round";
-      c.lineJoin = "round";
-      c.beginPath();
-      c.moveTo(W - 70, 52);
-      c.lineTo(W - 52, 34);
-      c.lineTo(W - 34, 52);
-      c.stroke();
-      c.fillStyle = "rgba(42,36,32,0.18)";
-      for (let i = 0; i < 5; i++) {
-        c.fillRect(24, 124 + i * 34, 150 - (i % 2) * 40, 9);
-        c.fillRect(W - 84, 124 + i * 34, 56, 9);
-      }
-      c.fillStyle = "rgba(42,36,32,0.15)";
-      c.fillRect(24, H - 96, W - 48, 2);
-      c.fillStyle = "#b29079";
-      c.fillRect(24, H - 70, W - 48, 22);
-      if (o.month) {
-        c.fillStyle = "rgba(42,36,32,0.72)";
-        c.font = "300 64px Jost, sans-serif";
-        c.textBaseline = "alphabetic";
-        c.fillText(o.month, 22, 84);
-      }
-    },
-    { fonts: ["300 34px Jost"] },
-  );
-  const geo = new THREE.BoxGeometry(w, 0.007, d);
-  geo.translate(0, 0.0035, 0);
-  const e = paper(null, "#efe9df", 0);
-  const m = mesh(geo, [e, e, paper(tex, "#ffffff", 0.04), e, e, e]);
-  return { obj: m, ready };
-}
-
 /* ------------------------------------------------------------------ presentation tray (H7) */
 
 /**
@@ -860,35 +669,115 @@ export function envelope(o: { w?: number; d?: number } = {}) {
   return g;
 }
 
-/** the booklet standing on a small easel (the 3D mock-up you get) */
-export function easelBooklet(cover: THREE.Texture, s = 0.5) {
+
+/**
+ * The digital copy: a tablet in landscape on a low clay stand, its screen showing the booklet open in
+ * a viewer (two real pages side by side, a thin app bar, page dots), so it reads as a screen and not
+ * as paper. Origin at its base; the screen faces +z, leaning back.
+ */
+export function bookletTablet(left: { tex: THREE.Texture; ready: Promise<void> }, right: { tex: THREE.Texture; ready: Promise<void> }, s = 0.74) {
   const g = new THREE.Group();
-  const lean = THREE.MathUtils.degToRad(16);
-  const ledge = mesh(rbox(s * 0.9, 0.03, 0.08, 0.012, 2), MAT.warm());
-  ledge.position.set(0, 0.05, 0.02);
-  g.add(ledge);
-  const legs: THREE.BufferGeometry[] = [];
-  for (const x of [-s * 0.3, s * 0.3]) {
-    const l = new THREE.CylinderGeometry(0.014, 0.014, 0.12, 10);
-    l.translate(x, 0.05, 0.02);
-    legs.push(l);
-  }
-  const back = new THREE.CylinderGeometry(0.014, 0.014, s * 0.9, 10);
-  back.translate(0, s * 0.45, 0);
-  back.rotateX(-lean - 0.25);
-  back.translate(0, 0.0, -0.02);
-  legs.push(back);
-  g.add(mesh(merge(legs), MAT.shade()));
-  const b = booklet(cover, s, 0.06);
-  // stand it up on the ledge, leaning back
+  const W = s;
+  const H = s * 0.7;
+  const T = 0.03;
+  const tilt = THREE.MathUtils.degToRad(38); // from the floor
+  // where the near (bottom) edge rests on the floor, so the footprint sits centred on the origin
+  const z0 = (H * Math.cos(tilt)) / 2;
+  // the tablet itself: a dark slim slab with a glass screen
+  const dev = new THREE.Group();
+  const body = mesh(rbox(W, T, H, 0.035, 3), MAT.ink());
+  dev.add(body);
+  const bezel = 0.026;
+  const SW = W - bezel * 2;
+  const SH = H - bezel * 2;
+  const pxW = 1024;
+  const pxH = Math.round((pxW * SH) / SW);
+  const c = document.createElement("canvas");
+  c.width = pxW;
+  c.height = pxH;
+  const screenTex = new THREE.CanvasTexture(c);
+  screenTex.colorSpace = THREE.SRGBColorSpace;
+  screenTex.anisotropy = 8;
+  screenTex.userData.vignette = true;
+  const paint = () => {
+    const x = c.getContext("2d")!;
+    x.fillStyle = "#f3eee6";
+    x.fillRect(0, 0, pxW, pxH);
+    // the app bar: a roof mark, a title and a share pill
+    const bar = Math.round(pxH * 0.11);
+    x.fillStyle = "#ebe4d9";
+    x.fillRect(0, 0, pxW, bar);
+    x.strokeStyle = "#9a7a64";
+    x.lineWidth = 5;
+    x.lineCap = "round";
+    x.lineJoin = "round";
+    x.beginPath();
+    x.moveTo(30, bar * 0.66);
+    x.lineTo(50, bar * 0.36);
+    x.lineTo(70, bar * 0.66);
+    x.stroke();
+    x.fillStyle = "rgba(42,36,32,0.55)";
+    x.fillRect(92, bar * 0.42, 170, 12);
+    x.fillStyle = "#b29079";
+    roundRectPath(x, pxW - 150, bar * 0.28, 116, bar * 0.44, bar * 0.22);
+    x.fill();
+    // the spread
+    const pg = Math.min((pxW * 0.88) / 2, (pxH - bar) * 0.76);
+    const sx = (pxW - pg * 2) / 2;
+    const sy = bar + (pxH - bar - pg) * 0.42;
+    x.fillStyle = "rgba(42,36,32,0.16)";
+    x.fillRect(sx + 6, sy + 10, pg * 2, pg);
+    const draw = (img: unknown, dx: number) => {
+      if (img && (img as HTMLImageElement).width) x.drawImage(img as CanvasImageSource, dx, sy, pg, pg);
+      else {
+        x.fillStyle = "#e6dccd";
+        x.fillRect(dx, sy, pg, pg);
+      }
+    };
+    draw(left.tex.image, sx);
+    draw(right.tex.image, sx + pg);
+    // the fold
+    const fold = x.createLinearGradient(sx + pg - 24, 0, sx + pg + 24, 0);
+    fold.addColorStop(0, "rgba(0,0,0,0)");
+    fold.addColorStop(0.5, "rgba(0,0,0,0.22)");
+    fold.addColorStop(1, "rgba(0,0,0,0)");
+    x.fillStyle = fold;
+    x.fillRect(sx + pg - 24, sy, 48, pg);
+    // page dots
+    const dy = sy + pg + (pxH - sy - pg) * 0.5;
+    for (let i = 0; i < 5; i++) {
+      x.fillStyle = i === 1 ? "#b29079" : "rgba(42,36,32,0.22)";
+      x.beginPath();
+      x.arc(pxW / 2 + (i - 2) * 26, dy, i === 1 ? 6.5 : 5, 0, Math.PI * 2);
+      x.fill();
+    }
+    screenTex.needsUpdate = true;
+  };
+  paint();
+  const ready = Promise.all([left.ready, right.ready]).then(() => paint());
+  const screen = new THREE.Mesh(
+    new THREE.PlaneGeometry(SW, SH),
+    new THREE.MeshPhysicalMaterial({ map: screenTex, roughness: 0.32, clearcoat: 0.5, clearcoatRoughness: 0.22 }),
+  );
+  screen.rotation.x = -Math.PI / 2;
+  screen.position.set(0, T + 0.0012, 0);
+  screen.receiveShadow = true;
+  dev.add(screen);
+  // stand it up: the slab lies in the pivot's xz plane with its near edge on the pivot; tipping the
+  // pivot by `tilt` raises the far edge (the screen then faces forward and up, toward the camera)
+  dev.position.set(0, 0, -H / 2);
   const pivot = new THREE.Group();
-  b.rotation.x = Math.PI / 2;
-  b.position.set(0, s / 2, -s * 0.06 * 0.5);
-  pivot.add(b);
-  pivot.rotation.x = -lean;
-  pivot.position.set(0, 0.08, 0.04);
+  pivot.add(dev);
+  pivot.rotation.x = tilt;
+  pivot.position.set(0, 0, z0);
   g.add(pivot);
-  return g;
+  // the stand: a clay block under the slab's back, its top just below the slab
+  const f = 0.74;
+  const bh = f * H * Math.sin(tilt) - 0.004;
+  const block = mesh(rbox(W * 0.46, bh, 0.07, 0.022, 2), MAT.warm());
+  block.position.set(0, 0, z0 - f * H * Math.cos(tilt));
+  g.add(block);
+  return { obj: g, ready, tilt, pivot };
 }
 
 /** two speech bubbles standing on small feet (one rose): the monthly conversation */

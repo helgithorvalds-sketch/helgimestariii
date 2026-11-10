@@ -5,12 +5,13 @@ import { EASE, blobPlane, disposeTree, dollyPose, fader, fitPose, pushLabel, rim
 import type { VignetteFactory, VignetteOverlay, VignettePose } from "./types";
 
 /**
- * H3 · "Hversu mörgum bæklingum er dreift?" (spec §4.3 H3, 2.4 s).
+ * Item 3 · "Hvenær er dreift?" (both pages, 2.4 s).
  *
- * A month on a desk calendar. On the same weekday of each of its four weeks a stack of Nýji kaflinn
- * lands, week 1 → 4: the same delivery every week. The big figure (350–500 / á mánuði) is DOM.
+ * A month on a desk calendar. On the same weekday of each of its four weeks a stack of the booklet
+ * lands, week 1 → 4: the same delivery every week ("Í hverri viku"). Home: Nýji kaflinn; business:
+ * the business booklet, in lower stacks (about 250 a month against 350–500).
  *
- * Overlay ids: figure "figure", label "weekly".
+ * Overlay ids: label "weekly".
  */
 export const createWeeks: VignetteFactory = (stage, { kind }) => {
   const group = new THREE.Group();
@@ -22,7 +23,7 @@ export const createWeeks: VignetteFactory = (stage, { kind }) => {
   const padFade = fader(pad.obj);
   const cover = tex(kind === "biz" ? "/svif/kafli/biz-cover.jpg" : "/svif/kafli/p00.jpg", stage.renderer);
   const stacks = [0, 1, 2, 3].map((r) => {
-    const s = bookletStack(cover.tex, 9, 0.4, 0.075, 11 + r * 7);
+    const s = bookletStack(cover.tex, kind === "biz" ? 6 : 9, 0.4, 0.075, 11 + r * 7);
     const base = pad.cell(DAY, r).add(pad.obj.position);
     s.rotation.y = THREE.MathUtils.degToRad([-3, 2, -1, 3][r]);
     group.add(s);
@@ -33,8 +34,7 @@ export const createWeeks: VignetteFactory = (stage, { kind }) => {
     return { s, base, f, blob };
   });
 
-  const fitPts = [...rimPoints(), new THREE.Vector3(0, 0.6, -1.3)];
-  const base = fitPose(fitPts, { elev: 52, azim: 10, fov: 26, fill: 0.86, biasY: -0.09 });
+  const base = fitPose(rimPoints(), { elev: 52, azim: 10, fov: 26, fill: 0.86, biasY: -0.04 });
 
   const update = (t: number) => {
     padFade.set(EASE.breathe(invLerp(0, 0.1, t)));
@@ -47,7 +47,6 @@ export const createWeeks: VignetteFactory = (stage, { kind }) => {
 
   const front = stacks[3];
   const overlays = (t: number, out: VignetteOverlay[]) => {
-    out.push({ type: "figure", id: "figure", progress: EASE.arrive(invLerp(0.1, 0.4, t)) });
     pushLabel(
       out,
       "weekly",
@@ -68,6 +67,7 @@ export const createWeeks: VignetteFactory = (stage, { kind }) => {
     duration: 2.4,
     group,
     pose,
+    box: base.box,
     focus: [0, 0.2, 0.05, 3.2],
     update,
     overlays,

@@ -140,7 +140,7 @@ function Hero() {
   );
 }
 
-/* ---------- SVONA VIRKAR ÞAÐ (pinned 3D story; it renders its own heading inside the stage) ---------- */
+/* ---------- SVONA VIRKAR ÞAÐ (the 3D story as a step-by-step player; it renders its own heading inside the stage) ---------- */
 
 function HowSection() {
   const film = useRef<FilmHandle>(null);

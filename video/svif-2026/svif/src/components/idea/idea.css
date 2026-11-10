@@ -1,14 +1,16 @@
-/* "Meira um hugmyndina" (IdeaSection): the dark stage with the light vignette panel.
-   Motion tokens: styles.css (--ease-*). Spec: research/06-round2-spec.md §2. */
+/* "Meira um hugmyndina" (IdeaSection): the dark stage with one big light panel. The text sits
+   inside the panel (ink on peach), the 3D scene fills the rest of it, the controls sit on its
+   bottom edge. Motion tokens: styles.css (--ease-*). Spec: research/BIBLE-R3.md §3. */
 
 .idea-section {
-  --idea-radius: 24px;
+  --idea-radius: 26px;
   --idea-panel: #efe7da; /* = PAL.peach, the canvas background and fog */
+  --idea-ink: var(--ink);
   overscroll-behavior-x: contain;
 }
 @media (max-width: 767px) {
   .idea-section {
-    --idea-radius: 18px;
+    --idea-radius: 20px;
   }
 }
 .idea-alias {
@@ -22,116 +24,146 @@
   scroll-margin-top: 80px;
 }
 
-/* ---------------------------------------------------------------- layout */
+/* ---------------------------------------------------------------- the panel (layout) */
 .idea {
   position: relative;
-  margin-top: 56px;
+  margin-top: 48px;
   /* vertical page scroll always wins; horizontal moves are the stepper's swipe */
   touch-action: pan-y;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 26px;
-}
-.idea-visual {
-  position: relative;
-  margin: 0;
-  width: 100%;
-  max-width: 600px;
-  justify-self: center;
-}
-.idea-text {
-  position: relative;
-  min-width: 0;
-}
-@media (min-width: 768px) and (max-width: 1023px) {
-  .idea-visual {
-    max-width: 560px;
-  }
-  .idea-text {
-    width: 100%;
-    max-width: 560px;
-    justify-self: center;
-  }
 }
 @media (min-width: 1024px) {
   .idea {
-    margin-top: 80px;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: clamp(48px, 5.5vw, 96px);
-    align-items: start;
-  }
-  .idea-visual {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-  }
-  .idea-text {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    /* the whole column (its height never changes: the panels share one cell) sits centred
-       against the square panel */
-    justify-content: center;
+    margin-top: 64px;
   }
 }
 
-/* phones held sideways: side by side, the panel no taller than the screen */
-@media (orientation: landscape) and (max-height: 500px) and (min-width: 640px) {
-  .idea {
-    margin-top: 40px;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: 32px;
-    align-items: start;
-  }
-  .idea-visual {
-    grid-column: 2;
-    grid-row: 1;
-    max-width: min(100%, calc(100svh - 48px));
-    justify-self: end;
-  }
-  .idea-text {
-    grid-column: 1;
-    grid-row: 1;
-    max-width: none;
-  }
-  .idea .idea-count {
-    margin-top: 18px;
-  }
-  .idea .idea-title {
-    font-size: clamp(1.25rem, 0.9rem + 1.2vw, 1.7rem);
-  }
-  .idea .idea-answer {
-    margin-top: 14px;
-    font-size: 15px;
-  }
-}
-
-/* ---------------------------------------------------------------- the panel */
-.idea-curtain {
-  aspect-ratio: 1;
-  border-radius: var(--idea-radius);
+/* phones and narrow tablets: text on top, the scene below it, the controls under the scene */
+.idea-frame {
+  --pad: clamp(20px, 5.4vw, 40px);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto clamp(220px, 68vw, 520px) auto;
   background: var(--idea-panel);
-  /* the soft drop under the panel lives on the figure (a clip-path would cut it) */
-}
-.idea-visual::before {
-  content: "";
-  position: absolute;
-  inset: 6% 4% -2%;
   border-radius: var(--idea-radius);
-  box-shadow: 0 60px 120px -60px rgba(0, 0, 0, 0.6);
+  color: var(--idea-ink);
+  isolation: isolate;
+}
+.idea-text {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: calc(var(--pad) * 0.95) var(--pad) 0;
+}
+.idea-scene {
+  grid-area: 2 / 1;
+  margin: 6px calc(var(--pad) * 0.4) 0;
   pointer-events: none;
 }
-.js .idea-visual:not(:has(> [data-reveal][data-in]))::before {
-  opacity: 0;
+.idea-controls {
+  grid-area: 3 / 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 2px calc(var(--pad) * 0.4) calc(var(--pad) * 0.4);
 }
-.idea-visual::before {
+
+/* wide: a video frame across the content width; the text in the left column, the controls under
+   it on the bottom edge, the scene in everything to the right */
+@media (min-width: 900px) {
+  .idea-frame {
+    --pad: clamp(32px, 3.5vw, 56px);
+    --col: clamp(330px, 37%, 470px);
+    grid-template-columns: var(--col) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    aspect-ratio: 16 / 9;
+    min-height: 540px;
+    max-height: 820px;
+  }
+  .idea-text {
+    grid-area: 1 / 1;
+    padding: var(--pad) 8px 0 var(--pad);
+  }
+  .idea-scene {
+    grid-area: 1 / 2 / 3 / 3;
+    margin: calc(var(--pad) * 0.6) calc(var(--pad) * 0.6) calc(var(--pad) * 0.5) 0;
+  }
+  .idea-controls {
+    grid-area: 2 / 1;
+    justify-content: flex-start;
+    padding: 0 0 calc(var(--pad) * 0.62) calc(var(--pad) - 12px);
+  }
+}
+@media (min-width: 900px) and (max-width: 1099px) {
+  .idea-frame {
+    /* a touch wider than 37%, so "Fá keppinautar okkar" keeps to one line */
+    --col: clamp(345px, 39.5%, 470px);
+    aspect-ratio: 4 / 3;
+    max-height: 700px;
+  }
+}
+
+/* phones held sideways: the wide layout, the panel no taller than the screen */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 600px) {
+  .idea-frame {
+    --pad: 22px;
+    --col: 40%;
+    grid-template-columns: var(--col) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    aspect-ratio: auto;
+    min-height: 0;
+    height: calc(100svh - 28px);
+  }
+  .idea-text {
+    grid-area: 1 / 1;
+    padding: var(--pad) 6px 0 var(--pad);
+  }
+  .idea-scene {
+    grid-area: 1 / 2 / 3 / 3;
+    margin: 12px 12px 10px 0;
+  }
+  .idea-controls {
+    grid-area: 2 / 1;
+    justify-content: flex-start;
+    padding: 0 0 8px 10px;
+  }
+  .idea .idea-count {
+    margin-bottom: 10px;
+  }
+  .idea .idea-title {
+    font-size: clamp(1.1rem, 0.8rem + 1.2vw, 1.45rem);
+  }
+  .idea .idea-answer {
+    margin-top: 10px;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+}
+
+/* ---------------------------------------------------------------- the visual layer */
+.idea-visual {
+  /* .curtain > .curtain-media: absolute, the whole panel, the settle scale */
+  margin: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+/* the soft drop under the panel (on the stepper: the panel itself clips for its curtain) */
+.idea::before {
+  content: "";
+  position: absolute;
+  inset: 8% 5% -1%;
+  z-index: -1;
+  border-radius: var(--idea-radius);
+  box-shadow: 0 70px 140px -70px rgba(0, 0, 0, 0.62);
+  pointer-events: none;
   transition: opacity 1200ms var(--ease-breathe);
 }
-.idea-media {
-  /* .curtain-media sets absolute / full size / the settle scale */
-  border-radius: inherit;
+.js .idea:not(:has(> [data-reveal][data-in]))::before {
+  opacity: 0;
 }
 .idea-stage {
   position: absolute;
@@ -150,8 +182,7 @@
   inset: 0;
   opacity: 1;
 }
-.idea-canvas,
-.idea-still {
+.idea-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -159,9 +190,26 @@
   display: block;
   transition: opacity 500ms var(--ease-breathe);
 }
+/* the still: the vignette's square frame with a margin, placed by the engine where the scene goes;
+   its edges dissolve into the panel */
 .idea-still {
-  object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  display: block;
+  max-width: none;
   pointer-events: none;
+  transition: opacity 500ms var(--ease-breathe);
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+    linear-gradient(180deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+    linear-gradient(180deg, transparent, #000 7%, #000 93%, transparent);
+  mask-composite: intersect;
 }
 /* live: the canvas takes over once drawn (the engine sets the opacities) */
 .idea[data-mode="live"] .idea-still {
@@ -188,6 +236,11 @@
   fill: none;
   transition: opacity 200ms var(--ease-leave);
 }
+.idea-lead.is-quiet {
+  stroke: rgba(42, 36, 32, 0.34);
+  stroke-dasharray: 1.5 3.5;
+  stroke-linecap: round;
+}
 .idea-dot {
   fill: rgba(42, 36, 32, 0.62);
 }
@@ -195,6 +248,9 @@
   position: absolute;
   left: 0;
   top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font: 500 10.5px/1.1 var(--font-sans);
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -206,24 +262,53 @@
     0 0 2px var(--idea-panel),
     0 0 6px var(--idea-panel);
 }
+.idea-cap-a {
+  /* the tracking's trailing space would shift the centring */
+  margin-right: -0.2em;
+}
+.idea-cap-b {
+  margin-top: 3px;
+  font: italic 400 15px/1.05 var(--font-serif);
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: rgba(42, 36, 32, 0.7);
+}
+/* a caption that leans to one side of its point: the lines align to the hairline's side */
+.idea-cap.is-run-right {
+  align-items: flex-start;
+}
+.idea-cap.is-run-left {
+  align-items: flex-end;
+}
+.idea-cap.is-quiet {
+  /* softer than the .8 captions (the dotted lead and the rose italic say "coming"), still legible */
+  color: rgba(42, 36, 32, 0.64);
+}
+.idea-cap.is-quiet .idea-cap-b {
+  color: var(--rose-ink, #7d604c);
+}
 @media (max-width: 767px) {
   .idea-cap {
     font-size: 9.5px;
     letter-spacing: 0.16em;
   }
+  .idea-cap-a {
+    margin-right: -0.16em;
+  }
+  .idea-cap-b {
+    font-size: 13.5px;
+  }
 }
 
-/* the one big figure (350–500 / Á MÁNUÐI): fixed in the panel's top-left corner, rises in its mask
-   at its beat (live: hidden until the engine sets --fp) */
-.idea[data-mode="live"] .idea-figure {
-  --fp: 0;
-}
+/* the one big figure (350–500 / Á MÁNUÐI): a callout in the scene; rises in its mask at its beat */
 .idea-figure {
   position: absolute;
-  left: max(16px, 4.5cqw);
-  top: max(14px, 4cqw);
+  left: 0;
+  top: 0;
   color: var(--ink);
   pointer-events: none;
+  white-space: nowrap;
+  will-change: transform, opacity;
 }
 .idea-figure-clip {
   display: block;
@@ -235,7 +320,7 @@
   display: block;
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(34px, 11cqw, 76px);
+  font-size: clamp(34px, 4.6cqw, 58px);
   line-height: 1;
   letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums;
@@ -243,7 +328,7 @@
 }
 .idea-figure i {
   display: block;
-  margin-top: max(6px, 1.4cqw);
+  margin-top: max(6px, 0.8cqw);
   font: 500 10.5px/1 var(--font-sans);
   font-style: normal;
   letter-spacing: 0.22em;
@@ -251,168 +336,27 @@
   color: rgba(42, 36, 32, 0.7);
   opacity: clamp(0, calc(var(--fp, 1) * 1.6 - 0.6), 1);
 }
-
-/* ---------------------------------------------------------------- controls */
-.idea-controls {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-@media (max-width: 1023px) {
-  .idea-controls {
-    justify-content: space-between;
+@media (max-width: 899px) {
+  .idea-figure b {
+    font-size: clamp(30px, 9cqw, 56px);
   }
-}
-.idea-arrow {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--cream) 28%, transparent);
-  color: var(--cream);
-  background: transparent;
-  transition:
-    border-color 200ms var(--ease-settle),
-    background-color 200ms var(--ease-settle),
-    opacity 200ms var(--ease-settle),
-    transform 250ms var(--ease-settle);
-}
-.idea-arrow svg {
-  width: 14px;
-  height: 14px;
-}
-@media (hover: hover) and (pointer: fine) {
-  .idea-arrow:not([aria-disabled]):hover {
-    border-color: color-mix(in srgb, var(--cream) 70%, transparent);
-    background: color-mix(in srgb, var(--cream) 6%, transparent);
-  }
-}
-.idea-arrow:not([aria-disabled]):active {
-  transform: scale(0.96);
-  transition-duration: 120ms;
-}
-.idea-arrow[aria-disabled] {
-  opacity: 0.32;
-  cursor: default;
-}
-.idea-arrow:focus-visible,
-.idea-tick:focus-visible,
-.idea-panel:focus-visible,
-.idea-contact:focus-visible {
-  outline: 2px solid var(--cream);
-  outline-offset: 3px;
-}
-.idea-panel:focus-visible {
-  outline-offset: 8px;
-  border-radius: 4px;
-}
-
-.idea-ticks {
-  --tw: 40px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-inline: 6px;
-}
-/* phones and tablets: the ticks share the space between the arrows (never wider than desktop) */
-@media (max-width: 1023px) {
-  .idea-ticks {
-    flex: 1 1 auto;
-    min-width: 0;
-    max-width: calc(var(--n, 8) * 40px);
-    margin-inline: 4px;
-  }
-  .idea-ticks .idea-tick {
-    flex: 1 1 0;
-    width: auto;
-    min-width: 0;
-  }
-}
-@media (max-width: 359px) {
-  .idea-arrow {
-    width: 40px;
-    height: 40px;
-  }
-  /* keeps every tick ≥ 24 px wide on a 320 px screen (WCAG 2.5.8) */
-  .idea-ticks {
-    margin-inline: 0;
-  }
-}
-.idea-tick {
-  position: relative;
-  width: var(--tw);
-  height: 44px;
-  display: grid;
-  place-items: center;
-  color: color-mix(in srgb, var(--cream) 46%, transparent);
-  font: 500 10.5px/1 var(--font-sans);
-  letter-spacing: 0.12em;
-  font-variant-numeric: tabular-nums;
-  transition: color 200ms var(--ease-settle);
-  border-radius: 6px;
-}
-@media (max-width: 359px) {
-  .idea-tick {
+  .idea-figure i {
     font-size: 9.5px;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.18em;
   }
-}
-.idea-tick-n {
-  translate: 0.06em -3px;
-}
-.idea-tick::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  width: 14px;
-  height: 1px;
-  margin-left: -7px;
-  background: currentColor;
-  opacity: 0.4;
-}
-@media (hover: hover) and (pointer: fine) {
-  .idea-tick:hover {
-    color: color-mix(in srgb, var(--cream) 80%, transparent);
-  }
-}
-.idea-tick[aria-selected="true"] {
-  color: var(--cream);
-}
-/* one tick wide, slid by whole ticks (so it lines up at any width) */
-.idea-indicator {
-  position: absolute;
-  left: 0;
-  bottom: 9.5px;
-  width: calc(100% / var(--n, 8));
-  height: 1.5px;
-  pointer-events: none;
-  transform: translate3d(calc(var(--i, 0) * 100%), 0, 0);
-  transition: transform 320ms var(--ease-settle);
-}
-.idea-indicator::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: 22px;
-  margin-left: -11px;
-  height: 100%;
-  background: var(--cream);
 }
 
-/* ---------------------------------------------------------------- the counter "01 / 08" */
+/* ---------------------------------------------------------------- the text (inside the panel) */
 .idea-count {
-  margin-top: 30px;
+  margin: 0 0 18px;
   font: 500 11px/1 var(--font-sans);
   letter-spacing: 0.22em;
-  color: color-mix(in srgb, var(--cream) 55%, transparent);
+  color: rgba(42, 36, 32, 0.5);
   font-variant-numeric: tabular-nums;
 }
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   .idea-count {
-    margin-top: clamp(36px, 4.5vh, 56px);
+    margin-bottom: clamp(20px, 2.4vw, 34px);
   }
 }
 .idea-count-clip {
@@ -422,7 +366,7 @@
   vertical-align: bottom;
   padding: 0.2em 0;
   margin: -0.2em 0;
-  color: var(--cream);
+  color: var(--ink);
 }
 .idea-digit {
   display: inline-block;
@@ -465,14 +409,18 @@
   }
 }
 
-/* ---------------------------------------------------------------- the panels (one grid cell) */
+/* the panels share one grid cell: the block's height never changes between items */
 .idea-panels {
   display: grid;
-  margin-top: 18px;
 }
 .idea-panel {
   grid-area: 1 / 1;
   min-width: 0;
+}
+/* a native jump to #spurning-N (the router on a hash change) lands the whole panel in view, as the
+   section's own deep-link scroll does (--deep: set by IdeaSection from the layout) */
+html.js .idea-panel {
+  scroll-margin-top: var(--deep, 80px);
 }
 .idea-panel-still,
 .idea-panel-n {
@@ -480,11 +428,18 @@
 }
 .idea-title {
   margin: 0;
-  color: var(--cream);
-  font-size: clamp(1.6rem, 1.05rem + 1.75vw, 2.7rem);
+  color: var(--ink);
+  font-size: clamp(1.32rem, 1.02rem + 1.5vw, 1.7rem);
   line-height: 1.14;
   letter-spacing: 0.06em;
   text-wrap: balance;
+}
+@media (min-width: 900px) {
+  .idea-title {
+    /* holds at 33px once the panel stops growing (1240 px, from about 1440 up), so the longest caps
+       lines ("Fá keppinautar okkar") keep to one line in the text column: no one-word line */
+    font-size: clamp(1.55rem, 0.78rem + 1.36vw, 33px);
+  }
 }
 .idea-line {
   display: block;
@@ -506,18 +461,28 @@
   line-height: 1.02;
 }
 .idea-answer {
-  margin-top: 22px;
-  max-width: 34rem;
-  font-size: 16px;
-  line-height: 1.62;
-  color: color-mix(in srgb, var(--cream) 80%, transparent);
+  margin: 14px 0 0;
+  max-width: 31rem;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(42, 36, 32, 0.74);
   text-wrap: pretty;
 }
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   .idea-answer {
-    margin-top: 26px;
-    font-size: 17.5px;
+    margin-top: clamp(16px, 1.7vw, 24px);
+    font-size: clamp(15px, 0.62rem + 0.5vw, 17px);
+    line-height: 1.6;
   }
+}
+.idea-panel:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+/* a deep link (#spurning-N) makes the browser focus its panel on load: no ring for that */
+.idea-panel:target:focus-visible {
+  outline: none;
 }
 
 /* states (JS only: without JS every item is shown, see below) */
@@ -555,9 +520,9 @@
   animation: idea-answer 700ms var(--ease-settle) both;
   animation-delay: calc(var(--base, 320ms) + 200ms);
 }
-/* the first entrance has no outgoing text to wait for */
+/* the first entrance follows the panel's curtain (it opens bottom → top; the text is at the top) */
 .idea:not([data-swapped]) .idea-panel {
-  --base: 60ms;
+  --base: 760ms;
 }
 .idea-panel[data-fast] .idea-line > span,
 .idea-panel[data-fast] .idea-answer {
@@ -579,6 +544,138 @@
 html.js:not(.rv) .idea-panel[data-state="pre"] .idea-line > span,
 html.js:not(.rv) .idea-panel[data-state="pre"] .idea-answer {
   animation: reveal-failsafe 400ms var(--ease-breathe) 3.5s forwards;
+}
+
+/* ---------------------------------------------------------------- controls (the panel's bottom edge) */
+.idea-arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid rgba(42, 36, 32, 0.2);
+  color: var(--ink);
+  background: transparent;
+  transition:
+    border-color 200ms var(--ease-settle),
+    background-color 200ms var(--ease-settle),
+    opacity 200ms var(--ease-settle),
+    transform 250ms var(--ease-settle);
+}
+.idea-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .idea-arrow:not([aria-disabled]):hover {
+    border-color: rgba(42, 36, 32, 0.55);
+    background: rgba(42, 36, 32, 0.04);
+  }
+}
+.idea-arrow:not([aria-disabled]):active {
+  transform: scale(0.96);
+  transition-duration: 120ms;
+}
+.idea-arrow[aria-disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+.idea-arrow:focus-visible,
+.idea-tick:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.idea-contact:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 3px;
+}
+
+.idea-ticks {
+  --tw: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-inline: 6px;
+}
+/* phones: the ticks share the space between the arrows (never wider than on desktop) */
+@media (max-width: 899px) {
+  .idea-ticks {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: calc(var(--n, 6) * 44px);
+    margin-inline: 4px;
+  }
+  .idea-ticks .idea-tick {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
+}
+@media (max-width: 359px) {
+  .idea-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  .idea-ticks {
+    margin-inline: 0;
+  }
+}
+.idea-tick {
+  position: relative;
+  width: var(--tw);
+  height: 44px;
+  display: grid;
+  place-items: center;
+  /* 4.9:1 on the panel (WCAG AA for an operable control); the selected tab is full ink + its bar */
+  color: rgba(42, 36, 32, 0.68);
+  font: 500 10.5px/1 var(--font-sans);
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  transition: color 200ms var(--ease-settle);
+  border-radius: 6px;
+}
+.idea-tick-n {
+  translate: 0.06em -3px;
+}
+.idea-tick::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  width: 14px;
+  height: 1px;
+  margin-left: -7px;
+  background: currentColor;
+  opacity: 0.4;
+}
+@media (hover: hover) and (pointer: fine) {
+  .idea-tick:hover {
+    color: rgba(42, 36, 32, 0.8);
+  }
+}
+.idea-tick[aria-selected="true"] {
+  color: var(--ink);
+}
+/* one tick wide, slid by whole ticks (so it lines up at any width) */
+.idea-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 9.5px;
+  width: calc(100% / var(--n, 6));
+  height: 1.5px;
+  pointer-events: none;
+  transform: translate3d(calc(var(--i, 0) * 100%), 0, 0);
+  transition: transform 320ms var(--ease-settle);
+}
+.idea-indicator::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 22px;
+  margin-left: -11px;
+  height: 100%;
+  background: var(--ink);
 }
 
 /* reduced motion: opacity cross-fades (400 ms) only */
@@ -623,7 +720,7 @@ html.js:not(.rv) .idea-panel[data-state="pre"] .idea-answer {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-top: 40px;
+  margin-top: 36px;
   color: color-mix(in srgb, var(--cream) 62%, transparent);
   transition: color 200ms var(--ease-settle);
 }
@@ -634,18 +731,25 @@ html.js:not(.rv) .idea-panel[data-state="pre"] .idea-answer {
 }
 @media (min-width: 1024px) {
   .idea-contact {
-    margin-top: 56px;
+    margin-top: 48px;
   }
 }
 
-/* ---------------------------------------------------------------- no JS: a stacked list */
+/* ---------------------------------------------------------------- no JS: a stacked list in the panel */
 html:not(.js) .idea-visual,
+html:not(.js) .idea-scene,
 html:not(.js) .idea-controls,
 html:not(.js) .idea-count {
   display: none;
 }
-html:not(.js) .idea {
+html:not(.js) .idea-frame {
   display: block;
+  aspect-ratio: auto;
+  max-height: none;
+  padding: var(--pad);
+}
+html:not(.js) .idea-text {
+  padding: 0;
 }
 html:not(.js) .idea-panels {
   display: grid;
@@ -668,7 +772,6 @@ html:not(.js) .idea-panel-still {
   height: auto;
   aspect-ratio: 1;
   border-radius: 18px;
-  background: var(--idea-panel);
   margin-bottom: 22px;
 }
 html:not(.js) .idea-panel-n {
@@ -676,7 +779,7 @@ html:not(.js) .idea-panel-n {
   margin-bottom: 14px;
   font: 500 11px/1 var(--font-sans);
   letter-spacing: 0.22em;
-  color: color-mix(in srgb, var(--cream) 62%, transparent);
+  color: rgba(42, 36, 32, 0.55);
 }
 html:not(.js) .idea-title {
   font-size: clamp(1.35rem, 1rem + 1vw, 1.9rem);

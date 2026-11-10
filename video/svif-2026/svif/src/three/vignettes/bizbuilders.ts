@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { clay, paper } from "../materials";
+import { clay } from "../materials";
 import { PAL } from "../palette";
-import { MAT, merge, mesh, printedCoupon, rbox } from "./builders";
+import { MAT, merge, mesh, printedCoupon } from "./builders";
 import { canvasTexture } from "./kit";
 
 /*
@@ -117,86 +117,6 @@ export function bizCoupon(o: BizCouponOptions, w = 0.56) {
   );
   const card = printedCoupon(tex, w, W / H);
   return { obj: card, ready, size: card.userData.size as [number, number, number] };
-}
-
-/* ------------------------------------------------------------------ the registration (B2) */
-
-/**
- * A company registration certificate lying flat: printed paper (a heading, two rows of fields, the
- * kennitala boxes 6 + 4) with a raised rose seal and two short ribbon tails at its lower right.
- * Origin at its base centre; long side along x.
- */
-export function certificate(o: { w?: number; d?: number } = {}) {
-  const w = o.w ?? 0.62;
-  const d = o.d ?? 0.44;
-  const PX = 760;
-  const PY = Math.round((PX * d) / w);
-  const { tex, ready } = canvasTexture(PX, PY, (c, W, H) => {
-    c.fillStyle = "#f7f2e8";
-    c.fillRect(0, 0, W, H);
-    c.strokeStyle = "rgba(154,122,100,0.55)";
-    c.lineWidth = 3;
-    c.strokeRect(22, 22, W - 44, H - 44);
-    c.strokeStyle = "rgba(154,122,100,0.3)";
-    c.lineWidth = 1.5;
-    c.strokeRect(32, 32, W - 64, H - 64);
-    // the roof mark and the heading bar
-    c.strokeStyle = "#9a7a64";
-    c.lineWidth = 6;
-    c.lineCap = "round";
-    c.lineJoin = "round";
-    c.beginPath();
-    c.moveTo(W / 2 - 26, 86);
-    c.lineTo(W / 2, 62);
-    c.lineTo(W / 2 + 26, 86);
-    c.stroke();
-    c.fillStyle = "rgba(42,36,32,0.62)";
-    c.fillRect(W / 2 - 150, 110, 300, 18);
-    c.fillStyle = "rgba(42,36,32,0.22)";
-    c.fillRect(W / 2 - 96, 142, 192, 9);
-    // fields
-    c.fillStyle = "rgba(42,36,32,0.16)";
-    for (let i = 0; i < 2; i++) {
-      c.fillRect(70, 196 + i * 44, 120, 10);
-      c.fillRect(214, 196 + i * 44, 250 - i * 60, 10);
-    }
-    // the kennitala: 6 + 4 boxes
-    c.strokeStyle = "rgba(42,36,32,0.38)";
-    c.lineWidth = 2;
-    const bx = 70;
-    const by = 300;
-    const s = 30;
-    for (let i = 0; i < 10; i++) {
-      const x = bx + i * (s + 6) + (i >= 6 ? 26 : 0);
-      c.strokeRect(x, by, s, s);
-    }
-    c.fillStyle = "rgba(42,36,32,0.38)";
-    c.fillRect(bx + 6 * (s + 6) + 2, by + s / 2 - 1.5, 18, 3);
-  });
-  const g = new THREE.Group();
-  const geo = new THREE.BoxGeometry(w, 0.008, d);
-  geo.translate(0, 0.004, 0);
-  const e = paper(null, "#efe9df", 0);
-  g.add(mesh(geo, [e, e, paper(tex, "#ffffff", 0.05), e, e, e]));
-  // the seal: a raised rose disc with a pressed ring, two ribbon tails under it
-  const sx = w / 2 - 0.12;
-  const sz = d / 2 - 0.11;
-  const tails: THREE.BufferGeometry[] = [];
-  for (const k of [-1, 1]) {
-    const t = new RoundedBoxGeometry(0.05, 0.006, 0.13, 1, 0.003);
-    t.rotateY(k * 0.38);
-    t.translate(sx + k * 0.026, 0.008 + 0.003, sz + 0.07);
-    tails.push(t);
-  }
-  g.add(mesh(merge(tails), MAT.roseDeep(), false));
-  const sealGeo = new THREE.CylinderGeometry(0.066, 0.068, 0.016, 40);
-  sealGeo.translate(sx, 0.008 + 0.008, sz);
-  const ring = new THREE.TorusGeometry(0.046, 0.005, 8, 40);
-  ring.rotateX(Math.PI / 2);
-  ring.translate(sx, 0.008 + 0.016, sz);
-  g.add(mesh(merge([sealGeo, ring]), MAT.rose()));
-  g.userData.size = [w, 0.024, d];
-  return { obj: g, ready };
 }
 
 /* ------------------------------------------------------------------ the pin board (B4) */
@@ -316,7 +236,3 @@ export function pushPin(size = 1) {
   return g;
 }
 
-/** a flat-lying office key card (for the tray's laptop slot, if needed) */
-export function smallCard(w = 0.3, d = 0.19) {
-  return mesh(rbox(w, 0.012, d, 0.012, 2), MAT.rose());
-}

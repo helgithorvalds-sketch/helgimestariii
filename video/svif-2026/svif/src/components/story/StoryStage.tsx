@@ -1,35 +1,44 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
-import { flushSync } from "react-dom";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import type { Stage } from "@/three/core";
-import type { Story } from "@/three/story";
+import type { ProjectedLabel, Story } from "@/three/story";
 import { supportsWebGL } from "@/lib/webgl";
 import { bindShort } from "@/components/SvifBits";
-import { GLIDE_EVENT } from "@/lib/scroll";
 import "./story.css";
 
 /**
- * Pinned 3D scrollytelling stage, round 2 (BIBLE-R2 §3): everything is centred and symmetric.
+ * "Svona virkar það" as a step-by-step player (round 3, BIBLE-R3 §2): one stage about a screen tall,
+ * played like a chaptered film. Nothing is scroll-linked any more.
  *
  *   ┌───────────────────────────────────────────────┐
  *   │ SVONA VIRKAR ÞAÐ frá sölu að póstlúgu  01 / 06 │  fixed heading + step counter
- *   │ ───────────────────────────────────────────── │  progress hairline
+ *   │ ───────────────────────────────────────────── │
  *   │        THE STEP'S TITLE, *one accent*         │  large, centred (mask rise)
- *   │              one short line                   │  (fade)
- *   │                                               │
- *   │               [ the 3D scene ]                │  centred in the area under the copy
+ *   │              one short line                   │
+ *   │               [ the 3D scene ]                │  centred in the area between copy and bar
+ *   │ (▶ SPILA  6 skref · 45 sek.)  ━━ 01 ━━ 02 ━━… │  transport + chapter chips (progress fill)
  *   └───────────────────────────────────────────────┘
  *
- * - The canvas stays full-bleed (the world continues softly behind the titles) but the camera is
- *   framed into the area under the copy: a vertical view offset puts the optical centre in the
- *   middle of that area, at the scale the story fits for that area's aspect (`camera.aspect`).
- * - Desktop: scene, copy and progress share the already-smoothed page scroll (no second damping;
- *   the wheel is paced in src/lib/scroll.ts, and the home story opts into extra resistance).
- * - Touch / narrow: the step comes from scroll, and each step plays as a time-based tween (glide,
- *   ~1.6 s) to its resting pose, retargeting if the step changes mid-flight.
- * - Reduced motion, no WebGL or no JS: no pinning; a stacked list of steps with pre-rendered end
- *   frames under a plain heading. Both layouts are server-rendered and CSS picks one (story.css), so
- *   the page height is the same before and after hydration and nothing is hidden without JS.
- * - Renders only while visible and while something is changing.
+ * - The scene is the same pure function of g as before; the player drives g by time: step i spans
+ *   `durations[i]` seconds and g runs linearly through [i, i + 1] (the films' step windows), so each
+ *   step's own motion plays in its first ~60 % and then holds while its title is read. The next step
+ *   follows on its own; at the end it rests on the last frame with "Spila aftur".
+ * - Nothing plays until the visitor starts it: the stage shows step 01's opening frame (g = 0) and a
+ *   start control with the running time. Chips jump to a step (a short dip to the stage colour, then
+ *   that step plays from its start); ‹ › step back and forth; ←/→/space work while the player has
+ *   focus. The clock only runs while the stage is in view and the tab is visible, so it pauses when
+ *   scrolled away and carries on when back.
+ * - Desktop: the canvas is full-bleed; the camera is framed into the area between the copy and the
+ *   bar (a vertical view offset). Phones: heading, the canvas, then the title and line, then the bar.
+ * - Reduced motion or no WebGL: the same stage with the pre-rendered step stills; the chips and ‹ ›
+ *   switch between them (opacity only), nothing plays by itself. No JS: a stacked list of the steps
+ *   with their stills under a plain heading (both layouts are server-rendered; CSS picks one).
+ * - The stills on the stage (the opening frame while the 3D loads, the step frames in reduced motion)
+ *   are rendered for the scene area itself (`stills`, posters.cjs): a wide set for landscape areas and
+ *   a tall one (the phones' deep arrangement) for portrait ones, picked by the measured area, so a
+ *   still matches the live frame instead of being a cropped 16:9 film frame.
+ * - Screen readers: every step's copy stays in the tree; a polite live line names the step a visitor
+ *   moves to (chips, ‹ ›, arrow keys, "Spila aftur"), never the film's own advances (APG carousel).
+ * - Renders only while something changes (playing, a dip, a resize, captions settling).
  */
 
 export interface StoryStep {
@@ -58,15 +67,27 @@ export interface StoryFactory {
 }
 
 export interface StoryStageProps {
-  /** the home story opts into the shared wheel pacing's extra resistance and slower copy swaps (src/lib/scroll.ts, story.css) */
+  /** round 2 (wheel pacing over the pinned home story, src/lib/scroll.ts). Accepted; no effect now. */
   paced?: boolean;
   id?: string;
   steps: StoryStep[];
   /** dynamic import of the story (keeps three.js out of the main bundle) */
   load: () => Promise<StoryFactory>;
-  /** one pre-rendered end frame per step (loading poster, reduced motion, no-WebGL) */
+  /** one pre-rendered end frame per step, 16:9 (the no-JS list; the stage's stills without `stills`) */
   posters: string[];
-  /** where each step rests (global g); defaults to i + 0.62 */
+  /** step 01's opening frame (g = 0): the poster while the player waits to be started (16:9) */
+  openPoster?: string;
+  /**
+   * The same frames rendered for the stage's scene area with the story's own director (posters.cjs),
+   * so they match the live frames by construction: `wide` for landscape areas (5:1, the desktop
+   * arrangement), `tall` for portrait ones (phones and portrait tablets, the deep arrangement). The
+   * stage picks one by the area it measures and covers the area with it. `open` is step 01's
+   * opening frame (g = 0), `steps` each step's rest frame.
+   */
+  stills?: Record<StillSet, { open: string; steps: string[] }>;
+  /** seconds per step while playing (the films' step windows); default 6 s each */
+  durations?: number[];
+  /** where each step rests (the posters are rendered there). Accepted; the player plays whole steps. */
   rest?: number[];
   /** the stage's fixed heading: capitals + one serif-italic accent */
   heading?: { caps: string; accent: string };
@@ -79,20 +100,89 @@ export interface StoryStageProps {
   header?: ReactNode;
   /** round 1 (stacked-layout framing); accepted, unused */
   stackFrame?: { zoom: number; drop: number }[];
-  /** rendered below the pinned stage (e.g. the film button) */
+  /** rendered below the stage (e.g. the film button) */
   footer?: ReactNode;
   ariaLabel?: string;
+}
+
+type PlayState = "idle" | "playing" | "paused" | "ended";
+/** which set of framed stills fits the scene area (see `stills`) */
+export type StillSet = "wide" | "tall";
+
+interface Controller {
+  /** idle → play, play ↔ pause, ended → play again from step 01 (returns the step it plays from, if it moved) */
+  toggle: () => number | undefined;
+  /** to step k's start (a short dip), and play; returns the step it went to */
+  jump: (k: number) => number;
+  /** one step back or forward; returns the step it went to */
+  step: (d: number) => number;
 }
 
 /** callout captions: row pitch, box height above the caption's anchor point, side padding */
 const CAP_ROW = 22;
 const CAP_H = 20;
 const CAP_PAD = 8;
-/** the stacked (phone / portrait tablet) layout in story.css (keep the query in sync) */
+/**
+ * A caption whose anchor nears the canvas's side edge fades with it: fully there while the anchor is
+ * EDGE_IN px inside, gone once it is EDGE_OUT px outside (no faint caption is ever left at an edge).
+ */
+const EDGE_IN = 8;
+const EDGE_OUT = 16;
+/** narrow layouts for the captions (two rows at most; `labelClear`) */
 const STACKED_MQ = "(max-width: 767px), (orientation: portrait) and (max-width: 1100px)";
+/**
+ * The phone layout in story.css (heading, canvas, copy, bar in a column); keep in sync. Phones held
+ * sideways use the overlay layout, like desktops: a column does not fit in their height.
+ */
+const PHONE_MQ = "(max-width: 767px) and (orientation: portrait)";
+/** scene areas narrower than this (width / height) take the tall stills */
+const TALL_BELOW = 2;
+/** the dip on a jump: to the stage colour, then back (story.css .story-dip) */
+const DIP_IN_MS = 200;
 
-const glide = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2); // ≈ .65,0,.35,1
 const clamp = (x: number, a: number, b: number) => Math.min(b, Math.max(a, x));
+
+interface Area {
+  /** rows [top, bottom] of the canvas box the scene owns (CSS px), and the box's size */
+  top: number;
+  bottom: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * The scene's area in the stage: on desktops the rows between the copy and the bar (a small gap to
+ * each), on phones the whole canvas band. Published as --scene-top / --scene-gap (the posters and the
+ * washes follow it) and --scene-copy (the copy's bottom edge, where the top wash turns transparent).
+ * Both modes measure it, so a still sits exactly where the live scene would.
+ */
+function measureStageArea(stageEl: HTMLElement, box: HTMLElement, copyEl: HTMLElement, barEl: HTMLElement): Area {
+  const cv = box.getBoundingClientRect();
+  const h = cv.height || stageEl.clientHeight;
+  const w = cv.width || stageEl.clientWidth;
+  let top = 0;
+  let bottom = Math.round(h);
+  let copy = 0;
+  if (!matchMedia(PHONE_MQ).matches) {
+    const c = copyEl.getBoundingClientRect();
+    const b = barEl.getBoundingClientRect();
+    const gap = clamp(h * 0.022, 10, 28);
+    copy = Math.round(c.bottom - cv.top);
+    top = Math.round(clamp(c.bottom - cv.top + gap, 0, h * 0.62));
+    bottom = Math.round(clamp(b.top - cv.top - gap, top + 120, h));
+  }
+  stageEl.style.setProperty("--scene-top", `${top}px`);
+  stageEl.style.setProperty("--scene-gap", `${Math.round(h - bottom)}px`);
+  stageEl.style.setProperty("--scene-copy", `${copy}px`);
+  return { top, bottom, w, h };
+}
+
+const stillSetFor = (a: Area): StillSet => (a.w / Math.max(1, a.bottom - a.top) < TALL_BELOW ? "tall" : "wide");
+/** m:ss */
+const clock = (s: number) => {
+  const t = Math.max(0, Math.floor(s + 1e-6));
+  return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
+};
 
 /** a title's words without the accent markers (screen readers, alt text) */
 export const plainTitle = (t: string) => t.replace(/\*/g, "");
@@ -141,12 +231,44 @@ function frameArea(cam: Stage["camera"], w: number, h: number, top: number, bott
   cam.updateProjectionMatrix();
 }
 
+/* ------------------------------------------------------------------ glyphs */
+
+const PlayGlyph = () => (
+  <svg viewBox="0 0 10 12" className="story-glyph story-glyph--play" aria-hidden="true">
+    <path d="M0 0l10 6-10 6z" fill="currentColor" />
+  </svg>
+);
+const PauseGlyph = () => (
+  <svg viewBox="0 0 10 12" className="story-glyph" aria-hidden="true">
+    <path d="M1 0h2.6v12H1zM6.4 0H9v12H6.4z" fill="currentColor" />
+  </svg>
+);
+const AgainGlyph = () => (
+  <svg viewBox="0 0 14 14" className="story-glyph story-glyph--again" aria-hidden="true" fill="none">
+    <path d="M2.6 7a4.4 4.4 0 1 0 1.3-3.1" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    <path d="M3.4 1.2v3h3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const ArrowGlyph = ({ dir }: { dir: -1 | 1 }) => (
+  <svg viewBox="0 0 8 12" className="story-glyph" aria-hidden="true" fill="none">
+    <path
+      d={dir < 0 ? "M6.2 1L1.6 6l4.6 5" : "M1.8 1l4.6 5-4.6 5"}
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export function StoryStage({
-  paced = false,
   id,
   steps,
   load,
   posters,
+  openPoster,
+  stills,
+  durations,
   rest,
   heading = { caps: "Svona virkar það", accent: "frá sölu að póstlúgu" },
   labelClear,
@@ -154,108 +276,229 @@ export function StoryStage({
   ariaLabel,
 }: StoryStageProps) {
   const N = steps.length;
-  const trackRef = useRef<HTMLElement | null>(null);
-  const stickyRef = useRef<HTMLDivElement | null>(null);
+  const durs = steps.map((_, i) => Math.max(1, durations?.[i] ?? 6));
+  const total = durs.reduce((a, b) => a + b, 0);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const labelsRef = useRef<HTMLDivElement | null>(null);
-  const barRef = useRef<HTMLDivElement | null>(null);
   const copyRef = useRef<HTMLDivElement | null>(null);
-  const [mode, setMode] = useState<"pending" | "live" | "static">("pending");
+  const barRef = useRef<HTMLDivElement | null>(null);
+  const dipRef = useRef<HTMLDivElement | null>(null);
+  const timeRef = useRef<HTMLSpanElement | null>(null);
+  const mainRef = useRef<HTMLButtonElement | null>(null);
+  const fillRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const ctl = useRef<Controller | null>(null);
+  // pending (server HTML, first paint) → live (3D) or stills (reduced motion / no WebGL)
+  const [mode, setMode] = useState<"pending" | "live" | "stills">("pending");
   const [ready, setReady] = useState(false);
-  // −1 until the copy first comes into view, so step 01 plays the same swap-in as the others
-  const [active, setActive] = useState(-1);
-  const restAt = (i: number) => (rest && rest[i] != null ? rest[i] : i + 0.62);
+  const [play, setPlay] = useState<PlayState>("idle");
+  const [cur, setCur] = useState(0);
+  // the step on screen, for an effect that starts later (a switch between live and stills keeps it)
+  const curRef = useRef(0);
+  curRef.current = cur;
+  // the framed stills that fit the measured scene area (null until it is measured: no download yet)
+  const [stillSet, setStillSet] = useState<StillSet | null>(null);
+  // the polite line for screen readers (a step the visitor moved to)
+  const [said, setSaid] = useState("");
+  // the first step's copy plays in when the copy first comes into view (like every other reveal)
+  const [revealed, setRevealed] = useState(false);
+  const active = revealed ? cur : -1;
+  const live = mode !== "stills";
 
-  // decide the mode once on the client
+  /** name the step a visitor moved to (a repeat of the same step is still read: the text changes) */
+  const announce = (k: number | undefined) => {
+    if (k === undefined || !steps[k]) return;
+    const s = steps[k];
+    const line = `Skref ${k + 1} af ${N}: ${s.chapter}. ${plainTitle(s.title)}`;
+    setSaid((prev) => (prev === line ? `${line}\u00a0` : line));
+  };
+
+  // decide the mode once on the client (and follow a change of the motion setting)
   useEffect(() => {
     const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const decide = () => setMode(rm.matches || !supportsWebGL() ? "static" : "live");
+    const decide = () => setMode(rm.matches || !supportsWebGL() ? "stills" : "live");
     decide();
     rm.addEventListener?.("change", decide);
     return () => rm.removeEventListener?.("change", decide);
   }, []);
 
+  // stills: the area is measured as in live mode, so the step stills sit (and are picked) exactly
+  // where the scene would be
+  useEffect(() => {
+    if (mode !== "stills") return;
+    const stageEl = stageRef.current;
+    const wrap = wrapRef.current;
+    const copyEl = copyRef.current;
+    const barEl = barRef.current;
+    if (!stageEl || !wrap || !copyEl || !barEl) return;
+    let off = false;
+    const run = () => {
+      if (!off) setStillSet(stillSetFor(measureStageArea(stageEl, wrap, copyEl, barEl)));
+    };
+    const ro = new ResizeObserver(run);
+    ro.observe(stageEl);
+    ro.observe(copyEl);
+    ro.observe(barEl);
+    run();
+    void (document as Document & { fonts?: FontFaceSet }).fonts?.ready.then(run);
+    return () => {
+      off = true;
+      ro.disconnect();
+    };
+  }, [mode]);
+
+  // the chapter names show only where every one of them fits whole (never "BÆKLINGURI…"): measured
+  // with the names laid out, in the same task as the change, so nothing flickers
+  useEffect(() => {
+    const stageEl = stageRef.current;
+    const barEl = barRef.current;
+    if (!stageEl || !barEl) return;
+    let w = -1;
+    const check = (force?: boolean) => {
+      const bw = barEl.clientWidth;
+      if (!force && bw === w) return;
+      w = bw;
+      stageEl.dataset.chipNames = "on";
+      let cut = false;
+      barEl.querySelectorAll<HTMLElement>(".story-chip-name").forEach((n) => {
+        if (n.offsetParent !== null && n.scrollWidth > n.clientWidth) cut = true;
+      });
+      stageEl.dataset.chipNames = cut ? "off" : "on";
+    };
+    const ro = new ResizeObserver(() => check());
+    ro.observe(barEl);
+    check(true);
+    let off = false;
+    void (document as Document & { fonts?: FontFaceSet }).fonts?.ready.then(() => {
+      if (!off) check(true);
+    });
+    return () => {
+      off = true;
+      ro.disconnect();
+    };
+  }, []);
+
+  // the copy's first reveal
+  useEffect(() => {
+    const el = copyRef.current;
+    if (!el || mode === "pending") return;
+    const io = new IntersectionObserver(
+      (es) => {
+        if (!es.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        setRevealed(true);
+      },
+      { rootMargin: "0px 0px -14% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [mode]);
+
+  // stills: the chips and arrows switch the step; nothing plays by itself
+  useEffect(() => {
+    if (mode !== "stills") return;
+    setPlay("idle");
+    const go = (k: number) => {
+      const t = clamp(k, 0, N - 1);
+      curRef.current = t;
+      setCur(t);
+      return t;
+    };
+    ctl.current = {
+      toggle: () => undefined,
+      jump: go,
+      step: (d) => go(curRef.current + d),
+    };
+    return () => {
+      ctl.current = null;
+    };
+  }, [mode, N]);
+
+  // live: the 3D player
   useEffect(() => {
     if (mode !== "live") return;
-    const track = trackRef.current;
-    const sticky = stickyRef.current;
+    const stageEl = stageRef.current;
+    const wrap = wrapRef.current;
     const canvas = canvasRef.current;
     const labelsEl = labelsRef.current;
     const copyEl = copyRef.current;
-    if (!track || !sticky || !canvas || !labelsEl || !copyEl) return;
+    const barEl = barRef.current;
+    const dipEl = dipRef.current;
+    if (!stageEl || !wrap || !canvas || !labelsEl || !copyEl || !barEl || !dipEl) return;
     let disposed = false;
     let stage: Stage | null = null;
     let story: Story | null = null;
     let raf = 0;
-    let visible = false;
     const touch = window.matchMedia("(max-width: 767px), (hover: none) and (pointer: coarse)").matches;
 
-    // progress state
-    let gShown = 0;
-    let gTarget = 0;
-    let stepIdx = 0;
-    // touch tween
-    let tw: { from: number; to: number; t0: number; dur: number } | null = null;
+    /* ---------- player state (the source of truth; React mirrors it for the controls) ---------- */
+    // it starts where the stage is: step 01's opening frame, or (back from the stills, when reduced
+    // motion is turned off) paused on the step the visitor was reading, at the frame its still shows
+    let idx = clamp(curRef.current, 0, N - 1);
+    let state: PlayState = idx > 0 ? "paused" : "idle";
+    /** seconds into step idx */
+    let tau = idx > 0 ? clamp((rest?.[idx] ?? idx + 1) - idx, 0, 1) * durs[idx] : 0;
+    if (idx > 0) setPlay("paused");
+    let lastNow = 0;
+    /** the story is built and its first frame drawn */
+    let shown = false;
+    let dipping = false;
+    let dipTarget = 0;
+    let dipTimer = 0;
+    let gShown = -1;
     let dirty = true;
-    // the copy has been seen (its first step has played in)
-    let revealed = false;
+    /** on screen at all (render) / enough of it to play (clock) */
+    let visible = false;
+    let playable = false;
+
+    const setState = (s: PlayState) => {
+      state = s;
+      setPlay(s);
+    };
+    const setIdx = (i: number) => {
+      idx = i;
+      setCur(i);
+    };
+    const gNow = () => idx + clamp(tau / durs[idx], 0, 1);
+    const running = () => state === "playing" && !dipping && shown && playable && !document.hidden;
+
+    /* ---------- layout ---------- */
     let lastW = 0;
     let lastH = 0;
     let lastTop = -1;
-    // the scene area (CSS px from the stage's top): under the tallest step's copy
+    let lastBottom = -1;
+    // the scene area (CSS px from the canvas's top)
     let sceneTop = 0;
     let sceneBottom = 0;
     let narrow = false;
 
-    const labelNodes = new Map<string, { lead: HTMLDivElement; cap: HTMLDivElement }>();
-    /** caption widths (measured once per layout) */
-    const widths = new Map<string, number>();
-    /** the offset each caption is drawn at (eases to its placement: a neighbour appearing never makes it jump) */
-    const shownOff = new Map<string, { dx: number; dy: number }>();
-    let labelsSettling = false;
-
-    const scrollProgress = () => {
-      const r = track.getBoundingClientRect();
-      const D = Math.max(1, r.height - window.innerHeight);
-      return clamp(-r.top / D, 0, 1);
-    };
-
-    const stepFromProgress = (p: number) => {
-      const raw = p * N;
-      // hysteresis of 0.02 steps at each boundary
-      let i = stepIdx;
-      if (raw > i + 1 + 0.02) i = Math.floor(raw - 0.02);
-      else if (raw < i - 0.02) i = Math.floor(raw + 0.02);
-      return clamp(i, 0, N - 1);
-    };
-
-    /** the scene owns the stage under the copy block (all steps share one grid cell: the tallest) */
     const measureArea = () => {
-      const s = sticky.getBoundingClientRect();
-      const c = copyEl.getBoundingClientRect();
-      const h = s.height || window.innerHeight;
-      const gap = Math.max(10, Math.min(28, h * 0.022));
-      sceneTop = Math.round(clamp(c.bottom - s.top + gap, 0, h * 0.62));
-      sceneBottom = Math.round(h - Math.max(8, h * 0.018));
-      sticky.style.setProperty("--scene-top", `${sceneTop}px`);
-      sticky.style.setProperty("--scene-gap", `${Math.round(h - sceneBottom)}px`);
+      const a = measureStageArea(stageEl, wrap, copyEl, barEl);
+      sceneTop = a.top;
+      sceneBottom = a.bottom;
+      setStillSet(stillSetFor(a));
     };
 
     // the canvas's size or the copy's height changed on purpose: never skip that
     let forceSize = false;
     const size = () => {
-      if (!stage) return;
-      const w = canvas.clientWidth || sticky.clientWidth;
-      const h = canvas.clientHeight || sticky.clientHeight;
+      if (!stage) {
+        measureArea();
+        return;
+      }
+      const w = canvas.clientWidth || stageEl.clientWidth;
+      const h = canvas.clientHeight || stageEl.clientHeight;
       measureArea();
-      if (w === lastW && h === lastH && sceneTop === lastTop) return;
-      // touch: ignore small height-only changes (mobile URL bar) to avoid re-layout jitter; the stage
-      // is 100svh, so this is only a safety net. Desktop always follows the window exactly.
-      if (touch && !forceSize && w === lastW && Math.abs(h - lastH) < 120 && lastH && sceneTop === lastTop) return;
+      if (w === lastW && h === lastH && sceneTop === lastTop && sceneBottom === lastBottom) return;
+      // touch: ignore small height-only changes (mobile URL bar) to avoid re-layout jitter
+      if (touch && !forceSize && w === lastW && Math.abs(h - lastH) < 120 && lastH && sceneTop === lastTop)
+        return;
       forceSize = false;
       lastW = w;
       lastH = h;
       lastTop = sceneTop;
+      lastBottom = sceneBottom;
       stage.resize(w, h);
       narrow = matchMedia(STACKED_MQ).matches;
       frameArea(stage.camera, w, h, sceneTop, sceneBottom);
@@ -263,6 +506,86 @@ export function StoryStage({
       widths.clear();
       shownOff.clear();
       dirty = true;
+    };
+
+    /* ---------- callout captions (DOM over the canvas) ---------- */
+    const labelNodes = new Map<string, { lead: HTMLDivElement; cap: HTMLDivElement }>();
+    /** caption widths (measured once per layout) */
+    const widths = new Map<string, number>();
+    /** the offset each caption is drawn at (eases to its placement: a neighbour appearing never makes it jump) */
+    const shownOff = new Map<string, { dx: number; dy: number }>();
+    /** how far each caption is shown (eases: one that has to give way fades out, and back) */
+    const shownA = new Map<string, number>();
+    let labelsSettling = false;
+    /** dev only: the last placement (the frame checks read it through __player) */
+    let lastPlacement: unknown = null;
+
+    type Box = { x0: number; x1: number; y0: number; y1: number };
+    /** a caption to place: its label, its place in the story's list, how far it shows, its width */
+    type Cand = { l: ProjectedLabel; order: number; edge: number; vis: number; w: number };
+
+    /**
+     * Greedy placement, left to right: a caption may slide sideways (≤ a third of its width, so its
+     * hairline still meets it) or rise one row; it must clear the captions placed so far, their
+     * hairlines, and its own hairline must clear them. At most two rows on narrow layouts. Returns
+     * each caption's spot and its text box.
+     */
+    const place = (cands: Cand[], W: number, minY: number, ceil: number) => {
+      const spots = new Map<string, { x: number; y: number; box: Box }>();
+      const boxes: Box[] = [];
+      const leads: { x: number; y0: number; y1: number }[] = [];
+      const rows = narrow ? 2 : 3;
+      const anchors = cands.filter((q) => q.l.draw > 0.001).map((q) => [q.l.id, q.l.ax] as const);
+      for (const { l, vis, w } of cands) {
+        const base = Math.max(minY, Math.min(Math.max(l.y, minY), ceil));
+        let best = { x: l.x, y: base, cost: Infinity };
+        search: for (let row = 0; row < rows; row++) {
+          for (const k of [0, -1 / 8, 1 / 8, -1 / 4, 1 / 4, -1 / 3, 1 / 3]) {
+            const cx = l.x + k * w;
+            const cy = base - row * CAP_ROW;
+            const b = { x0: cx - w / 2 - CAP_PAD, x1: cx + w / 2 + CAP_PAD, y0: cy - CAP_H, y1: cy - 4 };
+            const ly0 = Math.min(cy, l.ay);
+            const ly1 = Math.max(cy, l.ay);
+            let cost = 0;
+            if (cy < minY) cost += 2000;
+            for (const q of boxes) {
+              const ox = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0);
+              const oy = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
+              if (ox > 0 && oy > 0) cost += 1000 + ox * oy;
+              if (l.ax > q.x0 + 2 && l.ax < q.x1 - 2 && ly1 > q.y0 && ly0 < q.y1) cost += 1000;
+            }
+            for (const ld of leads)
+              if (ld.x > b.x0 + 2 && ld.x < b.x1 - 2 && ld.y1 > b.y0 && ld.y0 < b.y1) cost += 1000;
+            for (const [lid, ax] of anchors) if (lid !== l.id && ax > b.x0 + 2 && ax < b.x1 - 2) cost += 300;
+            if (cx - w / 2 < 4 || cx + w / 2 > W - 4) cost += 400;
+            if (cost === 0) {
+              best = { x: cx, y: cy, cost };
+              break search;
+            }
+            cost += row * 50 + Math.abs(k) * 30;
+            if (cost < best.cost) best = { x: cx, y: cy, cost };
+          }
+        }
+        let { x } = best;
+        const { y } = best;
+        // never past the canvas edge (phones): slide the caption inside, keeping its anchor under
+        // the text where the edge allows, so the hairline still meets it
+        const half = w / 2;
+        const lo = half + CAP_PAD;
+        const hi = W - half - CAP_PAD;
+        if (lo < hi) {
+          x = clamp(x, lo, hi);
+          if (l.ax < x - half + 6) x = clamp(l.ax + half - 6, lo, hi);
+          else if (l.ax > x + half - 6) x = clamp(l.ax - half + 6, lo, hi);
+        }
+        spots.set(l.id, { x, y, box: { x0: x - half, x1: x + half, y0: y - CAP_H + 4, y1: y - 6 } });
+        // one that is mostly faded out (leaving at the edge) no longer pushes the others around
+        if (vis > 0.35) {
+          boxes.push({ x0: x - half - CAP_PAD, x1: x + half + CAP_PAD, y0: y - CAP_H, y1: y - 4 });
+          leads.push({ x: l.ax, y0: Math.min(y, l.ay), y1: Math.max(y, l.ay) });
+        }
+      }
+      return spots;
     };
 
     const drawLabels = () => {
@@ -278,15 +601,8 @@ export function StoryStage({
         for (const [x, y, z] of labelClear) ceil = Math.min(ceil, projectY(stage.camera, x, y, z, H));
         ceil -= 10;
       }
-      // Greedy placement, left to right: a caption may slide sideways (≤ a third of its width, so its
-      // hairline still meets it) or rise one row; it must clear the captions placed so far, their
-      // hairlines, and its own hairline must clear them. At most two rows on narrow layouts.
-      const boxes: { x0: number; x1: number; y0: number; y1: number }[] = [];
-      const leads: { x: number; y0: number; y1: number }[] = [];
-      const rows = narrow ? 2 : 3;
-      const sorted = [...story.labels].sort((a, b) => a.ax - b.ax);
-      const anchors = sorted.filter((q) => q.draw > 0.001).map((q) => [q.id, q.ax] as const);
-      for (const l of sorted) {
+      const cands: Cand[] = [];
+      story.labels.forEach((l, order) => {
         seen.add(l.id);
         let n = labelNodes.get(l.id);
         if (!n) {
@@ -304,133 +620,224 @@ export function StoryStage({
           w = n.cap.offsetWidth || l.text.length * 9;
           widths.set(l.id, w);
         }
-        let x = l.x;
-        let y = Math.max(l.y, minY);
-        if (l.opacity > 0.01) {
-          const base = Math.max(minY, Math.min(y, ceil));
-          let best = { x, y: base, cost: Infinity };
-          search: for (let row = 0; row < rows; row++) {
-            for (const k of [0, -1 / 8, 1 / 8, -1 / 4, 1 / 4, -1 / 3, 1 / 3]) {
-              const cx = l.x + k * w;
-              const cy = base - row * CAP_ROW;
-              const b = { x0: cx - w / 2 - CAP_PAD, x1: cx + w / 2 + CAP_PAD, y0: cy - CAP_H, y1: cy - 4 };
-              const ly0 = Math.min(cy, l.ay);
-              const ly1 = Math.max(cy, l.ay);
-              let cost = 0;
-              if (cy < minY) cost += 2000;
-              for (const q of boxes) {
-                const ox = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0);
-                const oy = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
-                if (ox > 0 && oy > 0) cost += 1000 + ox * oy;
-                if (l.ax > q.x0 + 2 && l.ax < q.x1 - 2 && ly1 > q.y0 && ly0 < q.y1) cost += 1000;
-              }
-              for (const ld of leads)
-                if (ld.x > b.x0 + 2 && ld.x < b.x1 - 2 && ld.y1 > b.y0 && ld.y0 < b.y1) cost += 1000;
-              for (const [lid, ax] of anchors) if (lid !== l.id && ax > b.x0 + 2 && ax < b.x1 - 2) cost += 300;
-              if (cx - w / 2 < 4 || cx + w / 2 > W - 4) cost += 400;
-              if (cost === 0) {
-                best = { x: cx, y: cy, cost };
-                break search;
-              }
-              cost += row * 50 + Math.abs(k) * 30;
-              if (cost < best.cost) best = { x: cx, y: cy, cost };
+        // a caption leaves with what it points at: as its anchor goes past the canvas's side (a
+        // camera pan carries it away) the caption and its hairline fade out, instead of sliding
+        // along the edge and piling up there
+        const edge = clamp((Math.min(l.ax, W - l.ax) + EDGE_OUT) / (EDGE_IN + EDGE_OUT), 0, 1);
+        cands.push({ l, order, edge, vis: l.opacity * edge, w });
+      });
+      cands.sort((a, b) => a.l.ax - b.l.ax);
+      const shown = cands.filter((c) => c.vis > 0.01);
+      // Captions never overlap. Where two cannot both be placed clear of each other, the older one
+      // (earlier in the story's list: the newest is the one the scene is about) gives way and fades
+      // out, and the rest are placed again without it, until none overlap.
+      const yields = new Set<string>();
+      let spots = place(shown, W, minY, ceil);
+      for (let pass = 0; pass < shown.length; pass++) {
+        const on = shown.filter((c) => !yields.has(c.l.id) && c.vis >= 0.05);
+        let loser: Cand | null = null;
+        for (let i = 0; i < on.length; i++) {
+          for (let j = i + 1; j < on.length; j++) {
+            const p = spots.get(on[i].l.id)!.box;
+            const q = spots.get(on[j].l.id)!.box;
+            const ox = Math.min(p.x1, q.x1) - Math.max(p.x0, q.x0);
+            const oy = Math.min(p.y1, q.y1) - Math.max(p.y0, q.y0);
+            if (ox <= 1 || oy <= 1) continue;
+            const older = on[i].order < on[j].order ? on[i] : on[j];
+            if (!loser || older.order < loser.order) loser = older;
+          }
+        }
+        if (!loser) break;
+        yields.add(loser.l.id);
+        spots = place(shown.filter((c) => !yields.has(c.l.id)), W, minY, ceil);
+      }
+      if (import.meta.env.DEV)
+        lastPlacement = {
+          g: gShown,
+          yields: [...yields],
+          spots: [...spots].map(([k, v]) => `${k}@${v.box.x0.toFixed(0)}-${v.box.x1.toFixed(0)},${v.box.y0.toFixed(0)}-${v.box.y1.toFixed(0)}`),
+          cands: shown.map((c) => `${c.l.id}#${c.order} ax${c.l.ax.toFixed(0)} vis${c.vis.toFixed(2)}`),
+        };
+      for (const { l, edge } of cands) {
+        const n = labelNodes.get(l.id)!;
+        const target = yields.has(l.id) ? 0 : 1;
+        let a = shownA.get(l.id);
+        if (a === undefined || l.opacity < 0.05) a = target;
+        else {
+          a += (target - a) * 0.25;
+          if (Math.abs(target - a) > 0.01) labelsSettling = true;
+          else a = target;
+        }
+        shownA.set(l.id, a);
+        // the caption and its hairline leave together (at the edge, or giving way)
+        const keep = edge * a;
+        const spot = spots.get(l.id);
+        // a caption giving way keeps its last spot while it fades
+        if (spot || !shownOff.has(l.id)) {
+          const x0 = spot ? spot.x : l.x;
+          const y0 = spot ? spot.y : Math.max(l.y, minY);
+          const tdx = x0 - l.x;
+          const tdy = y0 - l.y;
+          let o = shownOff.get(l.id);
+          if (!o || l.opacity < 0.05) o = { dx: tdx, dy: tdy };
+          else {
+            o.dx += (tdx - o.dx) * 0.22;
+            o.dy += (tdy - o.dy) * 0.22;
+            if (Math.abs(tdx - o.dx) > 0.3 || Math.abs(tdy - o.dy) > 0.3) labelsSettling = true;
+            else {
+              o.dx = tdx;
+              o.dy = tdy;
             }
           }
-          x = best.x;
-          y = best.y;
-          // never past the canvas edge (phones): slide the caption inside, keeping its anchor under
-          // the text where the edge allows, so the hairline still meets it
-          const half = w / 2;
-          const lo = half + CAP_PAD;
-          const hi = W - half - CAP_PAD;
-          if (lo < hi) {
-            x = clamp(x, lo, hi);
-            if (l.ax < x - half + 6) x = clamp(l.ax + half - 6, lo, hi);
-            else if (l.ax > x + half - 6) x = clamp(l.ax - half + 6, lo, hi);
-          }
-          boxes.push({ x0: x - w / 2 - CAP_PAD, x1: x + w / 2 + CAP_PAD, y0: y - CAP_H, y1: y - 4 });
-          leads.push({ x: l.ax, y0: Math.min(y, l.ay), y1: Math.max(y, l.ay) });
+          shownOff.set(l.id, o);
         }
-        const tdx = x - l.x;
-        const tdy = y - l.y;
-        let o = shownOff.get(l.id);
-        if (!o || l.opacity < 0.05) o = { dx: tdx, dy: tdy };
-        else {
-          o.dx += (tdx - o.dx) * 0.22;
-          o.dy += (tdy - o.dy) * 0.22;
-          if (Math.abs(tdx - o.dx) > 0.3 || Math.abs(tdy - o.dy) > 0.3) labelsSettling = true;
-          else {
-            o.dx = tdx;
-            o.dy = tdy;
-          }
-        }
-        shownOff.set(l.id, o);
-        x = l.x + o.dx;
-        y = l.y + o.dy;
+        const o = shownOff.get(l.id)!;
+        const x = l.x + o.dx;
+        const y = l.y + o.dy;
         const top = Math.min(y, l.ay);
         const h = Math.abs(l.ay - y);
         n.lead.style.transform = `translate3d(${l.ax.toFixed(1)}px, ${top.toFixed(1)}px, 0) scaleY(${clamp(l.draw, 0, 1).toFixed(3)})`;
         n.lead.style.height = `${h.toFixed(1)}px`;
-        n.lead.style.opacity = l.draw > 0.001 ? "1" : "0";
+        n.lead.style.opacity = l.draw > 0.001 ? keep.toFixed(3) : "0";
         n.cap.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -100%)`;
-        n.cap.style.opacity = l.opacity.toFixed(3);
+        n.cap.style.opacity = (l.opacity * keep).toFixed(3);
       }
       for (const [k, n] of labelNodes) {
         if (!seen.has(k)) {
           n.lead.style.opacity = "0";
           n.cap.style.opacity = "0";
+          shownA.delete(k);
         }
       }
     };
 
-    // the step whose copy is shown follows the scroll even before the 3D has loaded
-    const syncStep = (now: number) => {
-      const i = stepFromProgress(scrollProgress());
-      if (i === stepIdx) return;
-      stepIdx = i;
-      if (revealed) setActive(i);
-      if (touch && story) {
-        const to = restAt(i);
-        tw = { from: gShown, to, t0: now, dur: clamp(Math.abs(to - gShown) * 1500, 900, 2400) };
+    /* ---------- the chips' progress and the running time ---------- */
+    const paintProgress = () => {
+      const at = dipping ? dipTarget : idx;
+      const p = state === "idle" ? 0 : dipping ? 0 : state === "ended" ? 1 : clamp(tau / durs[idx], 0, 1);
+      for (let i = 0; i < N; i++) {
+        const el = fillRefs.current[i];
+        if (!el) continue;
+        const f = state === "ended" ? 1 : i < at ? 1 : i > at ? 0 : p;
+        el.style.transform = `scaleX(${f.toFixed(4)})`;
+      }
+      const tEl = timeRef.current;
+      if (tEl) {
+        let el = 0;
+        for (let i = 0; i < at; i++) el += durs[i];
+        el += dipping ? 0 : state === "ended" ? durs[N - 1] : tau;
+        const txt = `${clock(el)} / ${clock(total)}`;
+        if (tEl.textContent !== txt) tEl.textContent = txt;
       }
     };
 
+    /* ---------- the loop: renders only while something changes ---------- */
     const tick = (now: number) => {
       raf = 0;
-      if (disposed || !story) return;
-      const p = scrollProgress();
-      syncStep(now);
-      if (touch) {
-        if (tw) {
-          const k = clamp((now - tw.t0) / tw.dur, 0, 1);
-          gTarget = tw.from + (tw.to - tw.from) * glide(k);
-          if (k >= 1) tw = null;
-        } else gTarget = restAt(stepIdx);
-        gShown = gTarget;
-      } else {
-        gTarget = p * N;
-        gShown = gTarget;
+      if (disposed) return;
+      if (running()) {
+        const dt = lastNow ? Math.min(0.1, Math.max(0, (now - lastNow) / 1000)) : 0;
+        lastNow = now;
+        tau += dt;
+        while (tau >= durs[idx]) {
+          if (idx < N - 1) {
+            tau -= durs[idx];
+            setIdx(idx + 1);
+          } else {
+            tau = durs[idx];
+            setState("ended");
+            break;
+          }
+        }
+      } else lastNow = 0;
+      if (story && shown) {
+        const g = gNow();
+        if (dirty || Math.abs(g - gShown) > 1e-6) {
+          story.frame(g);
+          gShown = g;
+          drawLabels();
+          dirty = false;
+        } else if (labelsSettling) drawLabels();
       }
-      if (barRef.current) barRef.current.style.transform = `scaleX(${(touch ? (stepIdx + 1) / N : p).toFixed(4)})`;
-      const sceneMoving = dirty || tw !== null || Math.abs(gShown - (story as any).__g) > 1e-5;
-      const moving = sceneMoving || labelsSettling;
-      if (sceneMoving) {
-        story.frame(gShown);
-        (story as any).__g = gShown;
-        drawLabels();
-        dirty = false;
-      } else if (labelsSettling) drawLabels();
-      // render on demand: keep ticking only while something is still travelling
-      if (visible && (moving || tw !== null || Math.abs(gShown - gTarget) > 1e-4)) raf = requestAnimationFrame(tick);
+      paintProgress();
+      if (visible && (running() || labelsSettling || dirty)) raf = requestAnimationFrame(tick);
     };
-
     const kick = () => {
-      if (!raf && visible && story) {
-        raf = requestAnimationFrame(tick);
-      }
+      if (!raf && !disposed && visible) raf = requestAnimationFrame(tick);
     };
 
-    // start loading a little before the stage scrolls into view
+    /* ---------- controls ---------- */
+    const dipTo = (k: number) => {
+      dipTarget = k;
+      if (dipping) return; // the dip already under way picks up the latest target
+      dipping = true;
+      dipEl.dataset.on = "1";
+      dipTimer = window.setTimeout(() => {
+        dipTimer = 0;
+        if (disposed) return;
+        idx = dipTarget;
+        tau = 0;
+        lastNow = 0;
+        dirty = true;
+        dipping = false;
+        dipEl.dataset.on = "0";
+        kick();
+      }, DIP_IN_MS + 30);
+    };
+    const jump = (k: number) => {
+      const t = clamp(k, 0, N - 1);
+      setCur(t);
+      if (state !== "playing") setState("playing");
+      if (!shown) {
+        // not drawn yet: the poster of that step shows until the scene is ready, then it plays
+        idx = t;
+        tau = 0;
+        paintProgress();
+        return t;
+      }
+      dipTo(t);
+      paintProgress();
+      kick();
+      return t;
+    };
+    ctl.current = {
+      toggle: () => {
+        if (state === "playing") {
+          setState("paused");
+          paintProgress();
+          return undefined;
+        }
+        // "Spila aftur": from step 01 again
+        if (state === "ended") return jump(0);
+        setState("playing");
+        kick();
+        return undefined;
+      },
+      jump,
+      step: (d) => jump((dipping ? dipTarget : idx) + d),
+    };
+    // dev only (stripped from production builds): seek the player clock for frame checks under
+    // software GL, where real-time playback runs at about one frame a second
+    if (import.meta.env.DEV) {
+      (stageEl as HTMLElement & { __player?: unknown }).__player = {
+        seek(t: number, s?: PlayState) {
+          let left = clamp(t, 0, total);
+          let i = 0;
+          while (i < N - 1 && left >= durs[i]) left -= durs[i++];
+          idx = i;
+          tau = Math.min(left, durs[i]);
+          setCur(i);
+          if (s) setState(s);
+          dirty = true;
+          lastNow = 0;
+          kick();
+        },
+        get: () => ({ state, idx, tau, g: gNow(), shown, playable }),
+        placement: () => lastPlacement,
+      };
+    }
+
+    /* ---------- loading: a little before the stage scrolls into view ---------- */
     const preIO = new IntersectionObserver(
       (es) => {
         if (!es.some((e) => e.isIntersecting) || stage) return;
@@ -453,8 +860,7 @@ export function StoryStage({
             await Promise.all([f.texturesReady(), (story as Story & { ready?: Promise<void> }).ready]);
             if (disposed) return;
             // compile every program the story will need before its first frame, in parallel where
-            // the GPU driver can (KHR_parallel_shader_compile): the page keeps scrolling and the
-            // copy keeps animating instead of stalling on the first render
+            // the GPU driver can (KHR_parallel_shader_compile)
             try {
               if (stage.renderer.extensions.has("KHR_parallel_shader_compile"))
                 await stage.renderer.compileAsync(stage.scene, stage.camera);
@@ -462,15 +868,14 @@ export function StoryStage({
               /* compiled on first use instead */
             }
             if (disposed) return;
-            const p = scrollProgress();
-            stepIdx = clamp(Math.floor(p * N), 0, N - 1);
-            if (revealed) setActive(stepIdx);
-            gShown = touch ? restAt(stepIdx) : p * N;
             size();
+            gShown = gNow();
             story.frame(gShown);
-            (story as any).__g = gShown;
             drawLabels();
-            // second frame: shader programs are compiled now; mark ready after paint
+            dirty = false;
+            shown = true;
+            lastNow = 0;
+            // second frame: shader programs are compiled now; the poster fades out after paint
             requestAnimationFrame(() => {
               if (!disposed) setReady(true);
             });
@@ -480,75 +885,39 @@ export function StoryStage({
             // a story that failed to build must still release its WebGL context
             if (!story) stage?.dispose();
             stage = null;
-            if (!disposed) setMode("static");
+            if (!disposed) setMode("stills");
           });
       },
       { rootMargin: "150% 0px 150% 0px" },
     );
-    preIO.observe(track);
+    preIO.observe(stageEl);
 
-    // the first step's copy plays in when the copy itself comes into view (like every other reveal)
-    const copyIO = new IntersectionObserver(
-      (es) => {
-        if (!es.some((e) => e.isIntersecting) || revealed) return;
-        revealed = true;
-        copyIO.disconnect();
-        stepIdx = stepFromProgress(scrollProgress());
-        setActive(stepIdx);
-      },
-      { rootMargin: "0px 0px -14% 0px" },
-    );
-    copyIO.observe(copyEl);
-
+    // on screen (render) and in view enough to play: below a quarter it pauses, from 40 % it plays on
     const visIO = new IntersectionObserver(
       (es) => {
-        visible = es.some((e) => e.isIntersecting);
+        for (const e of es) {
+          visible = e.isIntersecting;
+          const r = e.intersectionRatio;
+          playable = visible && r >= (playable ? 0.25 : 0.4);
+        }
         if (visible) {
-          dirty = true;
+          dirty = dirty || !shown;
           kick();
         }
       },
-      { rootMargin: "10% 0px 10% 0px" },
+      { threshold: [0, 0.1, 0.25, 0.4, 0.55, 0.7, 0.85, 1] },
     );
-    visIO.observe(sticky);
+    visIO.observe(stageEl);
 
-    const onScroll = () => {
-      syncStep(performance.now());
-      kick();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    // An anchor trip's instant pre-jump (inside its dissolve, scroll.ts): show the new position's
-    // step at once (copy and scene) instead of scrubbing or tweening there on screen.
-    const onGlide = (e: Event) => {
-      if ((e as CustomEvent).detail !== "jump") return;
-      const p = scrollProgress();
-      stepIdx = clamp(Math.floor(p * N), 0, N - 1);
-      tw = null;
-      if (revealed) flushSync(() => setActive(stepIdx));
-      if (!story) return;
-      gShown = gTarget = touch ? restAt(stepIdx) : p * N;
-      const bar = barRef.current;
-      if (bar) {
-        // no tween on the progress line either: it is simply at the new step
-        bar.style.transition = "none";
-        bar.style.transform = `scaleX(${(touch ? (stepIdx + 1) / N : p).toFixed(4)})`;
-        void bar.offsetWidth;
-        bar.style.transition = "";
-      }
-      story.frame(gShown);
-      (story as any).__g = gShown;
-      drawLabels();
-      dirty = false;
-    };
-    window.addEventListener(GLIDE_EVENT, onGlide);
     const ro = new ResizeObserver(() => {
       forceSize = true;
       size();
       kick();
     });
-    ro.observe(sticky);
+    ro.observe(stageEl);
     ro.observe(canvas);
     ro.observe(copyEl);
+    ro.observe(barEl);
     // web fonts change the copy's height (and so the scene area)
     void (document as Document & { fonts?: FontFaceSet }).fonts?.ready.then(() => {
       if (disposed) return;
@@ -558,35 +927,100 @@ export function StoryStage({
     });
     measureArea();
     const onVis = () => {
+      lastNow = 0;
       if (document.hidden && raf) {
         cancelAnimationFrame(raf);
         raf = 0;
       } else kick();
     };
     document.addEventListener("visibilitychange", onVis);
+    const onLost = (e: Event) => {
+      e.preventDefault();
+      setMode("stills");
+    };
+    canvas.addEventListener("webglcontextlost", onLost);
 
     return () => {
       disposed = true;
+      ctl.current = null;
       if (raf) cancelAnimationFrame(raf);
+      if (dipTimer) clearTimeout(dipTimer);
       preIO.disconnect();
       visIO.disconnect();
-      copyIO.disconnect();
       ro.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener(GLIDE_EVENT, onGlide);
       document.removeEventListener("visibilitychange", onVis);
+      canvas.removeEventListener("webglcontextlost", onLost);
       labelNodes.forEach((n) => {
         n.lead.remove();
         n.cap.remove();
       });
+      dipEl.dataset.on = "0";
+      fillRefs.current.forEach((el) => el && (el.style.transform = ""));
       if (story) story.dispose();
       else stage?.dispose();
+      // the step stays where it is: after a lost WebGL context the stills take over on the same
+      // step (they set the state to idle themselves); on unmount nothing is left to update
+      setReady(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  const total = String(N).padStart(2, "0");
-  const shown = Math.max(0, active);
+  /** keyboard, while the player has focus: ←/→ step, space plays or pauses */
+  const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.altKey || e.ctrlKey || e.metaKey || !ctl.current) return;
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      announce(ctl.current.step(e.key === "ArrowRight" ? 1 : -1));
+    } else if ((e.key === " " || e.key === "Spacebar") && live) {
+      // a focused button takes its own space press (a chip jumps, the play button toggles)
+      if ((e.target as HTMLElement).closest("button")) return;
+      e.preventDefault();
+      announce(ctl.current.toggle());
+    }
+  };
+
+  const total2 = String(N).padStart(2, "0");
+  const startMeta = `${N} skref · ${Math.round(total)} sek.`;
+  const mainLabel =
+    play === "playing" ? "Gera hlé" : play === "ended" ? "Spila aftur" : play === "paused" ? "Halda áfram" : "Spila";
+  const pill = live && (play === "idle" || play === "ended");
+  // the stills on the stage: framed for the measured area (none until it is measured), or the 16:9 set
+  const framed = stills ? (stillSet ? stills[stillSet] : null) : { open: openPoster, steps: posters };
+  const openSrc = framed?.open;
+  const showOpen = live && !ready && play === "idle" && cur === 0 && !!openSrc;
+  /**
+   * Whether still i is on screen. Live, the stills are only the loading poster, so only the one in
+   * view is fetched (a src, once set, stays: the poster dissolves into the scene); stills mode
+   * keeps them all, the neighbours first.
+   */
+  const stillOn = (i: number) => (mode === "stills" && i === cur) || (live && !ready && !showOpen && i === cur);
+  const fetched = useRef(new Set<string>());
+  const stillSrc = (i: number) => {
+    const src = framed?.steps[i];
+    if (!src) return undefined;
+    if (mode === "stills" || stillOn(i)) fetched.current.add(src);
+    return fetched.current.has(src) ? src : undefined;
+  };
+  const prevDisabled = cur === 0;
+  const nextDisabled = cur === N - 1;
+
+  // When the transport folds into the "Spila aftur" pill, ‹ › go away: a keyboard user on one of
+  // them stays in the player, on the pill (otherwise focus would fall back to the page).
+  const refocusMain = useRef(false);
+  const prevPill = useRef(pill);
+  if (pill !== prevPill.current) {
+    if (pill && typeof document !== "undefined") {
+      const a = document.activeElement;
+      refocusMain.current = !!a && a !== mainRef.current && !!barRef.current?.querySelector(".story-transport")?.contains(a);
+    }
+    prevPill.current = pill;
+  }
+  useLayoutEffect(() => {
+    if (!refocusMain.current) return;
+    refocusMain.current = false;
+    mainRef.current?.focus({ preventScroll: true });
+  }, [pill]);
+
   const staticList = (
     <div className="story-static">
       <h2 className="story-static-head">
@@ -607,7 +1041,7 @@ export function StoryStage({
             />
             <div>
               <p className="story-step-n">
-                {s.n} <span>/ {total}</span>
+                {s.n} <span>/ {total2}</span>
                 <i className="story-step-rule" />
                 {s.chapter}
               </p>
@@ -626,88 +1060,194 @@ export function StoryStage({
   );
 
   return (
-    <section id={id} aria-label={ariaLabel} className="story relative scroll-mt-20" data-story-mode={mode} data-story-paced={paced}>
-      {mode !== "static" && (
-        <div ref={trackRef as never} className="story-track" style={{ ["--story-steps" as string]: N }}>
-          <div ref={stickyRef} className="story-sticky">
-            <div className="story-canvas-wrap">
-              <canvas ref={canvasRef} className="story-canvas" aria-hidden="true" />
-              {posters.map((src, i) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt=""
-                  aria-hidden="true"
-                  className="story-poster"
-                  data-show={!ready && i === shown ? "1" : "0"}
-                  loading={i === 0 ? "eager" : "lazy"}
-                />
-              ))}
-              <div ref={labelsRef} className="story-labels" aria-hidden="true" data-ready={ready ? "1" : "0"} />
-              <div className="story-vignette" aria-hidden="true" />
+    <section id={id} aria-label={ariaLabel} className="story relative scroll-mt-20" data-story-mode={mode}>
+      <div
+        ref={stageRef}
+        className="story-stage"
+        data-play={play}
+        role="group"
+        aria-roledescription="spilari"
+        aria-label={`${ariaLabel ?? heading.caps}, ${N} skref`}
+        tabIndex={0}
+        onKeyDown={onKey}
+      >
+        <div ref={wrapRef} className="story-canvas-wrap">
+          {live && <canvas ref={canvasRef} className="story-canvas" aria-hidden="true" />}
+          {openSrc && (
+            <img
+              src={openSrc}
+              alt=""
+              aria-hidden="true"
+              className="story-poster"
+              data-show={showOpen ? "1" : "0"}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          {steps.map((s, i) => (
+            <img
+              key={s.n}
+              src={stillSrc(i)}
+              alt=""
+              aria-hidden="true"
+              className="story-poster"
+              data-show={stillOn(i) ? "1" : "0"}
+              loading={mode === "stills" && Math.abs(i - cur) <= 1 ? "eager" : "lazy"}
+              decoding="async"
+            />
+          ))}
+          <div ref={labelsRef} className="story-labels" aria-hidden="true" data-ready={ready ? "1" : "0"} />
+          <div className="story-vignette" aria-hidden="true" />
+          <div ref={dipRef} className="story-dip" aria-hidden="true" data-on="0" />
+          {/* before the first play the whole scene starts it, like a film's poster */}
+          {pill && play === "idle" && (
+            <div className="story-hit" aria-hidden="true" onClick={() => ctl.current?.toggle()} />
+          )}
+        </div>
+        <div className="story-wash" aria-hidden="true" />
+        <div className="story-wash-b" aria-hidden="true" />
+
+        <div className="story-chrome">
+          <div className="story-top">
+            <div className="story-top-row">
+              <h2 className="story-kicker">
+                <span className="story-kicker-caps">{bindShort(heading.caps)}</span>{" "}
+                <em className="story-kicker-accent">{bindShort(heading.accent)}</em>
+              </h2>
+              <p className="story-count" aria-hidden="true">
+                <span className="story-count-mask">
+                  {steps.map((s, i) => (
+                    <span key={s.n} className="story-count-n" data-pos={i < cur ? "-1" : i > cur ? "1" : "0"}>
+                      {s.n}
+                    </span>
+                  ))}
+                </span>
+                <span className="story-count-of">/ {total2}</span>
+                <span className="story-count-mask story-count-chapter">
+                  {steps.map((s, i) => (
+                    <span key={s.n} className="story-count-n" data-pos={i < cur ? "-1" : i > cur ? "1" : "0"}>
+                      {s.chapter}
+                    </span>
+                  ))}
+                </span>
+              </p>
             </div>
-            <div className="story-wash" aria-hidden="true" />
+            <div className="story-rule" aria-hidden="true" />
+          </div>
 
-            <div className="story-chrome">
-              <div className="story-top">
-                <div className="story-top-row">
-                  <h2 className="story-kicker">
-                    <span className="story-kicker-caps">{bindShort(heading.caps)}</span>{" "}
-                    <em className="story-kicker-accent">{bindShort(heading.accent)}</em>
-                  </h2>
-                  <p className="story-count" aria-hidden="true">
-                    <span className="story-count-mask">
-                      {steps.map((s, i) => (
-                        <span key={s.n} className="story-count-n" data-pos={i < shown ? "-1" : i > shown ? "1" : "0"}>
-                          {s.n}
-                        </span>
-                      ))}
-                    </span>
-                    <span className="story-count-of">/ {total}</span>
-                    <span className="story-count-mask story-count-chapter">
-                      {steps.map((s, i) => (
-                        <span key={s.n} className="story-count-n" data-pos={i < shown ? "-1" : i > shown ? "1" : "0"}>
-                          {s.chapter}
-                        </span>
-                      ))}
-                    </span>
+          <div ref={copyRef} className="story-copy">
+            {/* every step stays in the accessibility tree (in reading order); opacity hides the others */}
+            <div className="story-copy-stack">
+              {steps.map((s, i) => (
+                <article key={s.n} className="story-step" data-active={i === active ? "1" : "0"}>
+                  <p className="sr-only">
+                    {s.n} / {total2}, {s.chapter}
                   </p>
-                </div>
-                <div className="story-progress" aria-hidden="true">
-                  <div ref={barRef} className="story-progress-fill" />
-                  {steps.map((s, i) => (
-                    <span key={s.n} className="story-tick" style={{ left: `${(i / N) * 100}%` }} />
-                  ))}
-                </div>
-              </div>
-
-              <div ref={copyRef} className="story-copy">
-                {/* every step stays in the accessibility tree (in reading order); opacity hides the others */}
-                <div className="story-copy-stack">
-                  {steps.map((s, i) => (
-                    <article key={s.n} className="story-step" data-active={i === active ? "1" : "0"}>
-                      <p className="sr-only">
-                        {s.n} / {total}, {s.chapter}
-                      </p>
-                      <h3 className="story-title">
-                        <span className="story-mask">
-                          <span className="story-mask-inner">
-                            <RichTitle text={s.title} />
-                          </span>
-                        </span>
-                      </h3>
-                      <p className="story-body">
-                        {bindShort(s.body)}
-                        {s.note && <small className="story-note">{s.note}</small>}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </div>
+                  <h3 className="story-title">
+                    <span className="story-mask">
+                      <span className="story-mask-inner">
+                        <RichTitle text={s.title} />
+                      </span>
+                    </span>
+                  </h3>
+                  <p className="story-body">
+                    {bindShort(s.body)}
+                    {s.note && <small className="story-note">{s.note}</small>}
+                  </p>
+                </article>
+              ))}
             </div>
           </div>
         </div>
-      )}
+
+        <div ref={barRef} className="story-bar">
+          <div className="story-transport">
+            {/* ‹ and › are the same buttons in both modes (focus survives a switch to the stills) */}
+            {(!live || !pill) && (
+              <button
+                key="prev"
+                type="button"
+                className="story-btn press"
+                aria-label="Fyrra skref"
+                aria-disabled={prevDisabled || undefined}
+                onClick={() => {
+                  if (!prevDisabled) announce(ctl.current?.step(-1));
+                }}
+              >
+                <ArrowGlyph dir={-1} />
+              </button>
+            )}
+            {live && (
+              <button
+                key="main"
+                ref={mainRef}
+                type="button"
+                className={pill ? "story-start press" : "story-btn story-btn--main press"}
+                aria-label={pill ? `${mainLabel}, ${startMeta}` : mainLabel}
+                onClick={() => announce(ctl.current?.toggle())}
+              >
+                <span className="story-start-icon">
+                  {play === "playing" ? <PauseGlyph /> : play === "ended" ? <AgainGlyph /> : <PlayGlyph />}
+                </span>
+                {pill && (
+                  <>
+                    <span className="story-start-label">{play === "ended" ? "Spila aftur" : "Spila"}</span>
+                    {play === "idle" && <span className="story-start-meta">{startMeta}</span>}
+                  </>
+                )}
+              </button>
+            )}
+            {(!live || !pill) && (
+              <button
+                key="next"
+                type="button"
+                className="story-btn press"
+                aria-label="Næsta skref"
+                aria-disabled={nextDisabled || undefined}
+                onClick={() => {
+                  if (!nextDisabled) announce(ctl.current?.step(1));
+                }}
+              >
+                <ArrowGlyph dir={1} />
+              </button>
+            )}
+            {live && !pill && (
+              <span ref={timeRef} className="story-time" aria-hidden="true">
+                {`${clock(0)} / ${clock(total)}`}
+              </span>
+            )}
+          </div>
+          <div className="story-chips" role="group" aria-label="Skref">
+            {steps.map((s, i) => (
+              <button
+                key={s.n}
+                type="button"
+                className="story-chip"
+                data-at={i < cur ? "past" : i > cur ? "next" : "now"}
+                aria-current={i === cur && (play !== "idle" || !live) ? "step" : undefined}
+                aria-label={`${s.n} ${s.chapter}, skref ${i + 1} af ${N}`}
+                onClick={() => announce(ctl.current?.jump(i))}
+              >
+                <span className="story-chip-track" aria-hidden="true">
+                  <span
+                    ref={(el) => {
+                      fillRefs.current[i] = el;
+                    }}
+                    className="story-chip-fill"
+                  />
+                </span>
+                <span className="story-chip-label" aria-hidden="true">
+                  <span className="story-chip-n">{s.n}</span>
+                  <span className="story-chip-name">{s.chapter}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {said}
+        </p>
+      </div>
       {staticList}
       {footer}
     </section>

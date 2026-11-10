@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type RefObject } from "react";
 import type { VignetteKind } from "@/three/vignettes/types";
 import type { IdeaItem } from "./copy";
 import { StageEngine } from "./stage-engine";
@@ -12,10 +12,15 @@ export interface VignetteStageHandle {
   settle(): void;
 }
 
+/** the overlay words of an item: its labels plus its figure as "value|unit" */
+const wordsOf = (it: IdeaItem) =>
+  it.figure ? { ...it.labels, figure: `${it.figure.value}|${it.figure.unit}` } : it.labels;
+
 /**
- * The light rounded panel with the shared vignette canvas (or the pre-rendered stills), the DOM
- * overlays and the figure. Purely visual: aria-hidden inside a role="img" figure owned by the
- * section. See stage-engine.ts for the choreography.
+ * The visual layer of the light panel: the shared vignette canvas (or the pre-rendered stills) and
+ * the DOM overlays, covering the whole panel. The engine fits each vignette into the panel's free
+ * scene area (`sceneRef`, beside or below the text). Purely visual: aria-hidden inside a role="img"
+ * figure owned by the section. See stage-engine.ts for the choreography.
  */
 export const VignetteStage = forwardRef<
   VignetteStageHandle,
@@ -27,13 +32,15 @@ export const VignetteStage = forwardRef<
     beat: number;
     mode: StageMode;
     onLiveFailed: () => void;
+    /** the free scene area of the panel (and what moves it: the text block) */
+    sceneRef: RefObject<HTMLElement | null>;
+    textRef: RefObject<HTMLElement | null>;
   }
->(function VignetteStage({ kind, items, active, beat, mode, onLiveFailed }, ref) {
+>(function VignetteStage({ kind, items, active, beat, mode, onLiveFailed, sceneRef, textRef }, ref) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
   const ovRef = useRef<HTMLDivElement | null>(null);
   const stillRef = useRef<HTMLImageElement | null>(null);
-  const figRef = useRef<HTMLDivElement | null>(null);
   const engine = useRef<StageEngine | null>(null);
   const failed = useRef(onLiveFailed);
   failed.current = onLiveFailed;
@@ -49,11 +56,11 @@ export const VignetteStage = forwardRef<
     const wrap = wrapRef.current!;
     const eng = new StageEngine({
       kind,
-      items: items.map((it) => ({ key: it.vignette, labels: it.labels, still: it.still })),
+      items: items.map((it) => ({ key: it.vignette, labels: wordsOf(it), still: it.still })),
       inner: innerRef.current!,
       ov: ovRef.current!,
       still: () => stillRef.current,
-      figure: () => figRef.current,
+      scene: () => sceneRef.current,
       onShown: (i) => setShown(i),
       onLiveFailed: () => failed.current(),
     });
@@ -61,10 +68,15 @@ export const VignetteStage = forwardRef<
     const r = wrap.getBoundingClientRect();
     eng.resize(r.width, r.height);
     const ro = new ResizeObserver((entries) => {
-      const b = entries[0].contentRect;
-      eng.resize(b.width, b.height);
+      for (const e of entries) {
+        if (e.target === wrap) eng.resize(e.contentRect.width, e.contentRect.height);
+        else eng.relayout();
+      }
     });
     ro.observe(wrap);
+    // the scene area changes size with the breakpoints, and moves when the text above it does
+    if (sceneRef.current) ro.observe(sceneRef.current);
+    if (textRef.current) ro.observe(textRef.current);
     // near: build the runtime one viewport ahead; far: release the GL context
     const nearIo = new IntersectionObserver((es) => eng.setNear(es[0].isIntersecting), {
       rootMargin: "120% 0px 120% 0px",
@@ -72,7 +84,12 @@ export const VignetteStage = forwardRef<
     nearIo.observe(wrap);
     const viewIo = new IntersectionObserver((es) => eng.setInView(es[0].isIntersecting), { threshold: 0 });
     viewIo.observe(wrap);
+    // web fonts change the text block (and the captions' widths) once they arrive
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    let alive = true;
+    fonts?.ready.then(() => alive && eng.relayout());
     return () => {
+      alive = false;
       ro.disconnect();
       nearIo.disconnect();
       viewIo.disconnect();
@@ -99,28 +116,25 @@ export const VignetteStage = forwardRef<
   return (
     <div ref={wrapRef} className="idea-stage">
       <div ref={innerRef} className="idea-stage-inner">
+        {/* low priority: far below the fold, and in live mode only the end frame after a release.
+            (Not loading="lazy": the engine awaits decode() and reads currentSrc for the -m size,
+            which a deferred image has neither of. With low priority React does not hoist a
+            preload for it into the head either.) */}
         <img
           ref={stillRef}
           className="idea-still"
           src={it.still}
-          srcSet={`${it.stillSmall} 720w, ${it.still} 1200w`}
-          sizes="(min-width: 1024px) 600px, 92vw"
-          width={1200}
-          height={1200}
+          srcSet={`${it.stillSmall} 960w, ${it.still} 1600w`}
+          sizes="(min-width: 900px) min(70vw, 1040px), 118vw"
+          width={1600}
+          height={1600}
           alt=""
           aria-hidden="true"
           decoding="async"
+          fetchPriority="low"
           draggable={false}
         />
         <div ref={ovRef} className="idea-ov" aria-hidden="true" />
-        {it.figure && (
-          <div ref={figRef} className="idea-figure" aria-hidden="true">
-            <span className="idea-figure-clip">
-              <b>{it.figure.value}</b>
-            </span>
-            <i>{it.figure.unit}</i>
-          </div>
-        )}
       </div>
     </div>
   );

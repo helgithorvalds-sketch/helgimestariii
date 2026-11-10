@@ -2,43 +2,51 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Keyb
 import { Reveal, Sequence } from "@/components/motion/Reveal";
 import { DisplayTitle, HeroTagline, bindShort } from "@/components/SvifBits";
 import { supportsWebGL } from "@/lib/webgl";
-import { scrollToTarget } from "@/lib/scroll";
+import { HEADER_OFFSET, scrollToTarget } from "@/lib/scroll";
 import type { VignetteKind } from "@/three/vignettes/types";
 import { IDEA_HOME, type IdeaCopy } from "./copy";
 import { VignetteStage, type StageMode, type VignetteStageHandle } from "./VignetteStage";
 import "./idea.css";
 
 /**
- * "Meira um hugmyndina" (BIBLE-R2 §5, spec §2): reasons and common questions, one at a time.
+ * "Meira um hugmyndina" (BIBLE-R2 §5, round 3: BIBLE-R3 §3): reasons and common questions, one at
+ * a time, in one big light panel like a video frame across the content width. The text sits INSIDE
+ * the panel (number, question, short answer in its calm top-left area) and the 3D vignette fills
+ * the rest: the engine fits each scene into the free area (`.idea-scene`), right of the text on
+ * wide screens, below it on phones. The controls (‹ 01–06 ›) sit on the panel's bottom edge.
  *
  * APG tabbed carousel: a tablist of numbered ticks between previous/next buttons picks the item;
  * its 3D vignette plays once (1.5–3 s) and holds. ←/→ on the tabs (wrapping, Home/End), ←/→
  * anywhere in the stepper and, while it is in view with nothing focused, on the page; touch swipe
  * (horizontal only, vertical scroll always wins); a two-finger trackpad swipe. Nothing advances on
- * its own. Desktop: 50/50, text left, the light panel right. Phones: panel, controls, text.
- * No JS: every item stacked with its still.
+ * its own. No JS: every item stacked with its still.
  */
 
 const SOFTWARE_GL = /swiftshader|llvmpipe|softpipe|software|basic render/i;
 
+/** one probe per page load (the section mounts again on every route change) */
+let software: boolean | null = null;
 function softwareRenderer() {
+  if (software !== null) return software;
   try {
     const c = document.createElement("canvas");
     const gl = (c.getContext("webgl2") || c.getContext("webgl")) as WebGLRenderingContext | null;
-    if (!gl) return true;
+    if (!gl) return (software = true);
     const ext = gl.getExtension("WEBGL_debug_renderer_info");
     const name = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : "";
     gl.getExtension("WEBGL_lose_context")?.loseContext();
-    return SOFTWARE_GL.test(name);
+    return (software = SOFTWARE_GL.test(name));
   } catch {
-    return true;
+    return (software = true);
   }
 }
 
 function chooseMode(reduced: boolean): Exclude<StageMode, "pending"> {
-  const force = new URLSearchParams(window.location.search).get("idea");
+  const q = new URLSearchParams(window.location.search);
+  const force = q.get("idea");
   if (force === "stills") return "stills";
-  if (force === "live") return supportsWebGL() ? "live" : "stills";
+  // ?idea=live, or ?gl=live (every 3D section live, even on a software renderer: QA)
+  if (force === "live" || q.get("gl") === "live") return supportsWebGL() ? "live" : "stills";
   if (reduced || !supportsWebGL()) return "stills";
   const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
   if (mem <= 2) return "stills";
@@ -47,6 +55,17 @@ function chooseMode(reduced: boolean): Exclude<StageMode, "pending"> {
 }
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * Where a deep-linked panel's top lands (px from the viewport top): under the header when the panel
+ * fits below it; with its bottom on the viewport's bottom edge when it is only a little taller (its
+ * top keeps all the room there is: phones held sideways, short laptops); under the header again when
+ * it is taller than the screen (the text first, the controls follow on scroll).
+ */
+function landing(h: number) {
+  const vh = window.innerHeight;
+  return h <= vh - HEADER_OFFSET ? HEADER_OFFSET : h <= vh ? vh - h : HEADER_OFFSET;
+}
 
 type Via = "tab" | "arrow" | "swipe" | "key" | "wheel" | "link";
 
@@ -74,6 +93,8 @@ export function IdeaSection({
   const sectionRef = useRef<HTMLElement | null>(null);
   const stepperRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<VignetteStageHandle | null>(null);
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+  const textRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   /* ---------------------------------------------------------------- selection */
@@ -110,7 +131,7 @@ export function IdeaSection({
   /* ---------------------------------------------------------------- first view + deep links */
   useEffect(() => {
     const el = stepperRef.current;
-    const panel = el?.querySelector<HTMLElement>(".idea-visual");
+    const panel = el?.querySelector<HTMLElement>(".idea-frame");
     if (!el || !panel) return;
     // the text enters with the stepper; item 01's beat plays once, when half of its panel is in view
     // (the panel, not the whole stepper: on a short landscape phone the stepper never fits)
@@ -131,18 +152,87 @@ export function IdeaSection({
     return () => io.disconnect();
   }, []);
 
+  // A deep link (#spurning-N) selects its item and brings the whole panel into view, text and visual
+  // together. The URL is never rewritten; only the scroll moves (focus stays put). Three routes lead
+  // here: a fresh load, an in-page hash change (the router then jumps to the tabpanel natively, so
+  // the tabpanels' scroll margin, --deep, puts the panel exactly where showPanel does) and a same-page
+  // link (the site's anchor glide would aim at the tabpanel's text: this one aims at the panel).
+  const showPanel = useCallback((glide = false) => {
+    const frame = sectionRef.current?.querySelector<HTMLElement>(".idea-frame");
+    if (!frame) return;
+    const r = frame.getBoundingClientRect();
+    scrollToTarget(Math.max(0, window.scrollY + r.top - landing(r.height)), { immediate: !glide, focus: false });
+  }, []);
+  const hashItem = useCallback(
+    (hash: string) => {
+      const m = /^#spurning-(\d+)$/.exec(hash);
+      const i = m ? Number(m[1]) - 1 : -1;
+      return i >= 0 && i < N ? i : -1;
+    },
+    [N],
+  );
+
+  // on load
   useEffect(() => {
-    const m = /^#spurning-(\d+)$/.exec(window.location.hash);
-    if (!m) return;
-    const i = Number(m[1]) - 1;
-    if (i < 0 || i >= N) return;
+    const i = hashItem(window.location.hash);
+    if (i < 0) return;
     activeRef.current = i;
     setActive(i);
-    // the URL is never rewritten; only the scroll moves (and focus stays where it is)
-    requestAnimationFrame(() => {
-      if (sectionRef.current) scrollToTarget(sectionRef.current, { immediate: true, focus: false });
-    });
-  }, [N]);
+    requestAnimationFrame(() => showPanel());
+  }, [hashItem, showPanel]);
+
+  // an in-page hash change (an edited URL, back/forward between hashes)
+  useEffect(() => {
+    const onHash = () => {
+      const i = hashItem(window.location.hash);
+      if (i < 0) return;
+      select(i, "link");
+      requestAnimationFrame(() => showPanel());
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, [hashItem, select, showPanel]);
+
+  // a same-page link to #spurning-N: runs before the site's anchor glide (capture on window) and
+  // takes the click over, so the glide lands on the panel with its item selected
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!a || (a.target && a.target !== "_self")) return;
+      const url = new URL(a.getAttribute("href") ?? "", window.location.href);
+      if (url.origin !== window.location.origin || url.pathname !== window.location.pathname) return;
+      const i = hashItem(url.hash);
+      if (i < 0) return;
+      e.preventDefault();
+      if (e.detail > 0) a.blur();
+      select(i, "link");
+      showPanel(true);
+    };
+    window.addEventListener("click", onClick, true);
+    return () => window.removeEventListener("click", onClick, true);
+  }, [hashItem, select, showPanel]);
+
+  // the tabpanels' scroll margin (--deep): a native jump to #spurning-N lands the panel like showPanel
+  useEffect(() => {
+    const stepper = stepperRef.current;
+    const frame = stepper?.querySelector<HTMLElement>(".idea-frame");
+    const panel = frame?.querySelector<HTMLElement>(".idea-panel");
+    if (!stepper || !frame || !panel) return;
+    const set = () => {
+      let off = 0;
+      for (let el: HTMLElement | null = panel; el && el !== frame; el = el.offsetParent as HTMLElement | null) off += el.offsetTop;
+      stepper.style.setProperty("--deep", `${Math.round(landing(frame.offsetHeight) + off)}px`);
+    };
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(frame);
+    window.addEventListener("resize", set);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", set);
+    };
+  }, []);
 
   /* ---------------------------------------------------------------- keyboard */
   const onTabKey = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
@@ -326,23 +416,94 @@ export function IdeaSection({
           data-swapped={swap.n > 0 ? "" : undefined}
           onKeyDown={onStepperKey}
         >
-          <figure className="idea-visual" role="img" aria-label={it.alt}>
-            <Reveal kind="curtain" className="curtain idea-curtain" style={{ "--round": "var(--idea-radius)" } as CSSProperties}>
-              <div className="curtain-media idea-media">
-                <VignetteStage
-                  ref={stageRef}
-                  kind={kind}
-                  items={items}
-                  active={active}
-                  beat={beat}
-                  mode={mode}
-                  onLiveFailed={onLiveFailed}
-                />
-              </div>
-            </Reveal>
-          </figure>
+          <Reveal kind="curtain" className="curtain idea-frame" style={{ "--round": "var(--idea-radius)" } as CSSProperties}>
+            {/* the text, inside the panel's calm top-left area */}
+            <div ref={textRef} className="idea-text">
+              <p className="idea-count" aria-hidden="true">
+                <span className="idea-count-clip">
+                  {swap.prev >= 0 && !swap.fast && (
+                    <span key={`o${swap.n}`} className="idea-digit idea-digit-out" data-dir={swap.dir}>
+                      {pad2(swap.prev + 1)}
+                    </span>
+                  )}
+                  <span key={`i${swap.n}`} className="idea-digit" data-in={swap.n > 0 && !swap.fast ? swap.dir : undefined}>
+                    {pad2(active + 1)}
+                  </span>
+                </span>
+                <span className="idea-count-of"> / {pad2(N)}</span>
+              </p>
 
-          <div className="idea-text">
+              <div className="idea-panels">
+                {items.map((item, i) => {
+                  // rapid taps: the outgoing text goes at once, so two answers are never on screen together
+                  const state =
+                    i === active ? (entered ? "in" : "pre") : i === swap.prev && !swap.fast ? "out" : "off";
+                  return (
+                    <div
+                      key={item.id}
+                      role="tabpanel"
+                      id={item.id}
+                      aria-labelledby={`${item.id}-tab`}
+                      tabIndex={i === active ? 0 : -1}
+                      className="idea-panel"
+                      data-state={state}
+                      data-fast={i === active && swap.fast ? "" : undefined}
+                    >
+                      {/* no JS: each item shows its own still, number and text (a stacked list); with JS
+                          these images never load (the curtain would otherwise wait for all of them) */}
+                      <noscript>
+                        <img
+                          className="idea-panel-still"
+                          src={item.stillSmall}
+                          alt=""
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          width={960}
+                          height={960}
+                        />
+                      </noscript>
+                      <p className="idea-panel-n" aria-hidden="true">
+                        {pad2(i + 1)} / {pad2(N)}
+                      </p>
+                      <h3 key={i === active ? `t${swap.n}` : "t"} className="idea-title display-caps">
+                        <span className="idea-line">
+                          <span>{bindShort(item.caps)} </span>
+                        </span>
+                        <span className="idea-line idea-accent display-accent">
+                          <span>{bindShort(item.accent)}</span>
+                        </span>
+                        {item.capsAfter && (
+                          <span className="idea-line">
+                            <span> {bindShort(item.capsAfter)}</span>
+                          </span>
+                        )}
+                      </h3>
+                      <p key={i === active ? `a${swap.n}` : "a"} className="idea-answer">
+                        {item.answer.join(" ")}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* the scene: canvas or stills across the whole panel, fitted into .idea-scene */}
+            <figure className="idea-visual curtain-media" role="img" aria-label={it.alt}>
+              <VignetteStage
+                ref={stageRef}
+                kind={kind}
+                items={items}
+                active={active}
+                beat={beat}
+                mode={mode}
+                onLiveFailed={onLiveFailed}
+                sceneRef={sceneRef}
+                textRef={textRef}
+              />
+            </figure>
+            <div ref={sceneRef} className="idea-scene" aria-hidden="true" />
+
             <div className="idea-controls">
               <ArrowButton dir={-1} label={copy.prev} disabled={active === 0} onClick={() => step(-1, "arrow")} />
               <div
@@ -377,72 +538,7 @@ export function IdeaSection({
               </div>
               <ArrowButton dir={1} label={copy.next} disabled={active === N - 1} onClick={() => step(1, "arrow")} />
             </div>
-
-            <p className="idea-count" aria-hidden="true">
-              <span className="idea-count-clip">
-                {swap.prev >= 0 && !swap.fast && (
-                  <span key={`o${swap.n}`} className="idea-digit idea-digit-out" data-dir={swap.dir}>
-                    {pad2(swap.prev + 1)}
-                  </span>
-                )}
-                <span key={`i${swap.n}`} className="idea-digit" data-in={swap.n > 0 && !swap.fast ? swap.dir : undefined}>
-                  {pad2(active + 1)}
-                </span>
-              </span>
-              <span className="idea-count-of"> / {pad2(N)}</span>
-            </p>
-
-            <div className="idea-panels">
-              {items.map((item, i) => {
-                // rapid taps: the outgoing text goes at once, so two answers are never on screen together
-                const state =
-                  i === active ? (entered ? "in" : "pre") : i === swap.prev && !swap.fast ? "out" : "off";
-                return (
-                  <div
-                    key={item.id}
-                    role="tabpanel"
-                    id={item.id}
-                    aria-labelledby={`${item.id}-tab`}
-                    tabIndex={i === active ? 0 : -1}
-                    className="idea-panel"
-                    data-state={state}
-                    data-fast={i === active && swap.fast ? "" : undefined}
-                  >
-                    {/* no JS: each item shows its own still, number and text (a stacked list) */}
-                    <img
-                      className="idea-panel-still"
-                      src={item.stillSmall}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      decoding="async"
-                      width={720}
-                      height={720}
-                    />
-                    <p className="idea-panel-n" aria-hidden="true">
-                      {pad2(i + 1)} / {pad2(N)}
-                    </p>
-                    <h3 key={i === active ? `t${swap.n}` : "t"} className="idea-title display-caps">
-                      <span className="idea-line">
-                        <span>{bindShort(item.caps)} </span>
-                      </span>
-                      <span className="idea-line idea-accent display-accent">
-                        <span>{bindShort(item.accent)}</span>
-                      </span>
-                      {item.capsAfter && (
-                        <span className="idea-line">
-                          <span> {bindShort(item.capsAfter)}</span>
-                        </span>
-                      )}
-                    </h3>
-                    <p key={i === active ? `a${swap.n}` : "a"} className="idea-answer">
-                      {item.answer.join(" ")}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          </Reveal>
 
           <p className="sr-only" aria-live="polite" aria-atomic="true">
             {announce}

@@ -133,8 +133,10 @@ export function createStage(o: StageOptions): Stage {
         else mat?.dispose();
       });
       renderer.dispose();
-      // release the GL context itself (not just its resources): browsers cap live contexts (Chrome: 16)
-      renderer.forceContextLoss();
+      // release the GL context itself (not just its resources): browsers cap live contexts (Chrome: 16).
+      // A context that is already lost has nothing to release, and asking it for WEBGL_lose_context
+      // only gets null back (three then warns "extension not supported")
+      if (!renderer.getContext().isContextLost()) renderer.forceContextLoss();
     },
   };
 }

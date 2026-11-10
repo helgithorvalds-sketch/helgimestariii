@@ -194,7 +194,9 @@ function Categories() {
           </Reveal>
         </div>
         <div className="lg:col-span-7 lg:pt-2">
-          <ContentsList rows={categories} title="Flokkar í bæklingnum" columns={2} dense />
+          {/* "í boði", not "í bæklingnum": an edition prints only the categories that are booked
+              (the booklet in the hero and the story shows 8), so this is the list to choose from */}
+          <ContentsList rows={categories} title="Flokkar í boði" columns={2} dense />
         </div>
       </div>
     </section>

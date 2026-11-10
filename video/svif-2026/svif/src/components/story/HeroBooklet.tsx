@@ -8,8 +8,9 @@ import "../stage-hero.css";
  * the right half of the hero, or the space under the copy on phones). The section paints the dark
  * stage and the sunbeam; this draws the booklet and its soft shadow, framed to the box.
  *
- * Motion: one intro on load (three/hero.ts, ≈ 5 s): the booklet arrives, the cover opens, it riffles
- * through every page, closes and rests closed, cover up. The intro's clock only runs while the hero
+ * Motion: one intro on load (three/hero.ts, ≈ 4.7 s; Nýr rekstur ≈ 4.3 s): the booklet arrives open at
+ * the back (the last spread), the pages turn back one after another from the last to the first, the
+ * front cover closes last and it rests closed, cover up. The intro's clock only runs while the hero
  * is on screen and the tab is visible, so nobody misses it. It plays once per page load (coming back
  * through the site's own links shows the resting booklet). Afterwards only a damped pointer tilt
  * (≤ 2.5°, fine pointers) moves it. Nothing is scroll-linked.

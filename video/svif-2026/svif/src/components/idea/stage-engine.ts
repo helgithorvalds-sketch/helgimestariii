@@ -1,19 +1,26 @@
-import type { VignetteRuntime } from "@/three/vignettes";
+import type { VignetteFrame, VignetteRuntime } from "@/three/vignettes";
 import type { VignetteKey, VignetteKind } from "@/three/vignettes/types";
-import { OverlayLayer, scaleStill, type OverlayPoint } from "./overlay";
-import { IDEA_STILL_OVERLAYS } from "./stills";
+import { DEFAULT_BOX, alignFor, fitFrame } from "./frame";
+import { OverlayLayer, scaleStill, type Bounds, type OverlayPoint } from "./overlay";
+import { IDEA_STILLS, STILL_OVERSCAN } from "./stills";
 
 /**
- * Drives the one shared vignette canvas (spec §2.5): creates the WebGL runtime lazily (three.js is
- * imported only when the section nears the viewport) and releases it when the section is far
- * away; plays the active vignette's beat (t 0 → 1 over its duration, then holds, rendering
- * nothing); dips the layer between items (out 320 ms leave, in 380 ms breathe); keeps the DOM
- * overlays on the projected points; pauses off screen (a beat interrupted that way shows its end
- * frame on return). In "stills" mode the same choreography runs on the pre-rendered end frames.
+ * Drives the one shared vignette canvas (spec §2.5, round 3 layout): creates the WebGL runtime
+ * lazily (three.js is imported only when the section nears the viewport) and releases it when the
+ * section is far away; plays the active vignette's beat (t 0 → 1 over its duration, then holds,
+ * rendering nothing); dips the layer between items (out 320 ms leave, in 380 ms breathe); keeps the
+ * DOM overlays on the projected points; pauses off screen (a beat interrupted that way shows its
+ * end frame on return). In "stills" mode the same choreography runs on the pre-rendered end frames.
+ *
+ * Framing: the canvas covers the whole panel (the text sits on it). Each vignette is composed for a
+ * square; its content box (`Vignette.box`, baked into the stills data too) is fitted into the
+ * page's scene area (`scene()`: the free part of the panel beside or below the text), and the
+ * runtime / the still image put the square exactly there. Overlays stay inside that area.
  */
 
 export interface EngineItem {
   key: VignetteKey;
+  /** overlay words by id (a figure: "value|unit") */
   labels: Record<string, string>;
   /** the still React shows for this item (its `src`) */
   still: string;
@@ -25,8 +32,9 @@ export interface EngineOptions {
   inner: HTMLElement;
   ov: HTMLElement;
   still: () => HTMLImageElement | null;
-  figure: () => HTMLElement | null;
-  /** the item whose still and figure React should show (called inside the dip) */
+  /** the panel's free scene area (layout only; offset box relative to the panel) */
+  scene: () => HTMLElement | null;
+  /** the item whose still React should show (called inside the dip) */
   onShown: (i: number) => void;
   /** live failed (no context, lost context): switch to stills */
   onLiveFailed: () => void;
@@ -43,6 +51,8 @@ export class StageEngine {
   private rt: VignetteRuntime | null = null;
   private creating: Promise<void> | null = null;
   private canvas: HTMLCanvasElement | null = null;
+  /** the canvas's context-loss handler (removed with the canvas: it holds this engine) */
+  private onLost: ((e: Event) => void) | null = null;
   private layer: OverlayLayer;
   private shown = -1;
   private token = 0;
@@ -58,6 +68,9 @@ export class StageEngine {
   private farTimer = 0;
   private disposed = false;
   private size = { w: 0, h: 0 };
+  /** the scene area (panel px) and the square frame of the item shown */
+  private area: Bounds = { x0: 0, y0: 0, x1: 0, y1: 0 };
+  private frameNow: VignetteFrame = { x: 0, y: 0, s: 0 };
   private drawn = false;
 
   private reduced = false;
@@ -112,6 +125,14 @@ export class StageEngine {
     this.size = { w, h };
     this.rt?.resize(w, h);
     this.layer.remeasure();
+    this.layout();
+    this.refresh();
+  }
+
+  /** the scene area moved or changed size (the text above it on phones, fonts, breakpoints) */
+  relayout() {
+    this.layer.remeasure();
+    this.layout();
     this.refresh();
   }
 
@@ -156,6 +177,7 @@ export class StageEngine {
       this.shown = i;
       this.layer.clear();
       this.o.onShown(i);
+      this.layout();
     }
     if (play) {
       this.played.delete(i);
@@ -174,6 +196,7 @@ export class StageEngine {
       }
       this.rt.use(item.key);
       this.duration = vg.duration;
+      this.layout();
       this.t = this.played.has(i) ? 1 : 0;
       this.frame(this.t);
       this.showCanvas(true);
@@ -235,16 +258,44 @@ export class StageEngine {
     if (!this.rt || this.mode !== "live" || this.shown < 0) return;
     const list = this.rt.draw(t) as OverlayPoint[];
     this.drawn = true;
-    this.layer.update(list, this.o.items[this.shown].labels, this.size.w, this.size.h);
-    this.setFigure(this.layer.figure);
+    this.layer.update(list, this.o.items[this.shown].labels, this.area);
   }
 
   private drawStill() {
     const item = this.o.items[this.shown];
     if (!item) return;
-    const data = IDEA_STILL_OVERLAYS[`${this.o.kind}-${item.key}`] ?? [];
-    this.layer.update(scaleStill(data, this.size.w, this.size.h), item.labels, this.size.w, this.size.h);
-    this.setFigure(1);
+    const data = IDEA_STILLS[`${this.o.kind}-${item.key}`]?.over ?? [];
+    this.layer.update(scaleStill(data, this.frameNow), item.labels, this.area);
+  }
+
+  /**
+   * Measure the scene area and fit the shown item's content into it: the runtime's frame and the
+   * still's box. Layout offsets (not client rects): the curtain's settle scale must not leak in.
+   */
+  private layout() {
+    const sc = this.o.scene();
+    const { w, h } = this.size;
+    if (!sc || w <= 0 || h <= 0) return;
+    // the scene box relative to the canvas layer, both measured down from the page (layout only)
+    const a = offsetIn(sc);
+    const b = offsetIn(this.o.inner);
+    const r = { x: a.x - b.x, y: a.y - b.y, w: sc.offsetWidth, h: sc.offsetHeight };
+    if (r.w <= 0 || r.h <= 0) return;
+    this.area = { x0: r.x, y0: r.y, x1: r.x + r.w, y1: r.y + r.h };
+    const item = this.o.items[this.shown];
+    const live = this.mode === "live" && this.rt?.current?.key === item?.key ? this.rt.current : null;
+    const box = live?.box ?? (item ? IDEA_STILLS[`${this.o.kind}-${item.key}`]?.box : undefined) ?? DEFAULT_BOX;
+    this.frameNow = fitFrame(box, r, alignFor(w, h));
+    this.rt?.setFrame(this.frameNow);
+    const img = this.o.still();
+    if (img) {
+      const f = this.frameNow;
+      const side = f.s * STILL_OVERSCAN;
+      const off = (side - f.s) / 2;
+      img.style.left = `${(f.x - off).toFixed(1)}px`;
+      img.style.top = `${(f.y - off).toFixed(1)}px`;
+      img.style.width = img.style.height = `${side.toFixed(1)}px`;
+    }
   }
 
   /** redraw whatever is shown (resize, mode change) */
@@ -253,12 +304,6 @@ export class StageEngine {
     if (this.mode === "live" && this.rt && this.drawn) {
       if (!this.playing) this.frame(this.t);
     } else if (this.mode === "stills") this.drawStill();
-  }
-
-  private setFigure(p: number) {
-    const el = this.o.figure();
-    if (!el) return;
-    el.style.setProperty("--fp", p < 0 ? "0" : p.toFixed(3));
   }
 
   private dip(opacity: number, ms: number, ease: string) {
@@ -323,14 +368,17 @@ export class StageEngine {
           maxDpr: 2,
           shadowSize: phone ? 1024 : 2048,
         });
-        canvas.addEventListener("webglcontextlost", (e) => {
+        const onLost = (e: Event) => {
           e.preventDefault();
           if (this.rt === rt) this.o.onLiveFailed();
-        });
+        };
+        canvas.addEventListener("webglcontextlost", onLost);
+        this.onLost = onLost;
         this.canvas = canvas;
         this.rt = rt;
         this.drawn = false;
         if (this.size.w > 0) rt.resize(this.size.w, this.size.h);
+        rt.setFrame(this.frameNow.s > 0 ? this.frameNow : null);
         if (this.shown >= 0) {
           const i = this.shown;
           const item = this.o.items[i];
@@ -343,6 +391,7 @@ export class StageEngine {
           }
           rt.use(item.key);
           this.duration = vg.duration;
+          this.layout();
           this.frame(this.played.has(i) ? 1 : 0);
           this.showCanvas(true);
           if (this.pendingPlay && this.inView) this.startClock();
@@ -382,6 +431,8 @@ export class StageEngine {
       this.rt = null;
     }
     if (this.canvas) {
+      if (this.onLost) this.canvas.removeEventListener("webglcontextlost", this.onLost);
+      this.onLost = null;
       this.canvas.remove();
       this.canvas = null;
     }
@@ -390,4 +441,17 @@ export class StageEngine {
     const s = this.o.still();
     if (s) s.style.opacity = this.mode === "stills" || this.played.has(this.shown) ? "1" : "0";
   }
+}
+
+/** an element's layout offset in the page (offsetLeft/Top summed up the offsetParent chain: no transforms) */
+function offsetIn(el: HTMLElement) {
+  let x = 0;
+  let y = 0;
+  let cur: HTMLElement | null = el;
+  while (cur) {
+    x += cur.offsetLeft;
+    y += cur.offsetTop;
+    cur = cur.offsetParent as HTMLElement | null;
+  }
+  return { x, y };
 }

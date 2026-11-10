@@ -2,6 +2,7 @@
 // the stacks it rests on or below the table. Writes window.__result.
 import * as THREE from "three";
 import { createBooklet, type Booklet } from "@three/builders/brochure";
+import { heroTimeline, HERO_INTRO, HERO_EASE } from "@three/hero";
 
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("c") as HTMLCanvasElement });
 const PAGES = Array.from({ length: 32 }, (_, i) => `riffle/p${String(i).padStart(2, "0")}.webp`);
@@ -71,6 +72,29 @@ const N = 400;
 for (const turn of [0.12, 0.2, 0.3, 0.5]) for (let i = 0; i <= N; i++) { full.riffle(i / N, { from: 1, turn }); check(`riffle t${turn} p${(i / N).toFixed(3)}`, full); }
 for (const fan of [0, 0.08, 0.14, 0.3]) for (let i = 0; i <= N; i++) { full.close(i / N, { fan }); check(`close f${fan} p${(i / N).toFixed(3)}`, full); }
 for (let i = 0; i <= N; i++) { full.setPages([Math.PI * i / N]); check(`cover p${(i / N).toFixed(3)}`, full); }
+// round 3: the hero's back-to-front intro (every sheet turned, then the last sheet back first with
+// its free edge trailing, ~0.1 s apart, the cover last), for both booklets, through hero.ts's own timeline
+{
+  const turnBack = (b: Booklet, label: string) => {
+    const n = b.sheets;
+    const T = heroTimeline(n - 1);
+    const a = new Array<number>(n).fill(Math.PI);
+    const inOut = (x: number) => { const t = Math.max(0, Math.min(1, x)); return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+    for (let i = 0; i <= N; i++) {
+      const t = (i / N) * T.end;
+      for (let k = 1; k < n; k++) {
+        const u = n - 1 > 1 ? (k - 1) / (n - 2) : 0;
+        const s0 = T.last - (u + 0.05 * Math.sin(2 * Math.PI * u)) * (T.last - T.first);
+        a[k] = Math.PI * (1 - inOut((t - s0) / HERO_INTRO.turn));
+      }
+      a[0] = Math.PI * (1 - HERO_EASE.glide(Math.max(0, Math.min(1, (t - T.cover[0]) / (T.cover[1] - T.cover[0])))));
+      b.setPages(a, -1);
+      check(`${label} p${(i / N).toFixed(3)}`, b);
+    }
+  };
+  turnBack(createBooklet({ renderer, pages: PAGES }), "back-home");
+  turnBack(createBooklet({ renderer, pages: PAGES.slice(0, 14) }), "back-biz");
+}
 // random ordered states with random bends
 let seed = 7;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);

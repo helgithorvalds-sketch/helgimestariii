@@ -1,16 +1,21 @@
 <!doctype html><html><head><meta charset="utf-8"><title>vignette</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
+:root{--ink:#2a2420;--cream:#f6f5ec;--rose-ink:#7d604c;--font-sans:Inter,sans-serif;--font-display:Jost,sans-serif;--font-serif:"Instrument Serif",Georgia,serif;--ease-leave:cubic-bezier(.5,0,.75,0)}
 html,body{margin:0;height:100%;background:#4a4438;overflow:hidden}
-#panel{position:absolute;left:0;top:0;background:#efe7da;overflow:hidden}
-#panel.round{border-radius:24px}
-canvas{display:block;width:100%;height:100%}
+#panel{position:absolute;left:0;top:0;background:#efe7da;overflow:hidden;container-type:inline-size}
+#panel.round{border-radius:26px}
+canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 #ov{position:absolute;inset:0;pointer-events:none}
-#ov svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.cap{position:absolute;left:0;top:0;font:500 10.5px/1 Inter;letter-spacing:.2em;text-transform:uppercase;color:rgba(42,36,32,.78);white-space:nowrap}
-.fig{position:absolute;left:7%;top:6.5%;color:#2a2420}
-.fig b{display:block;font:300 clamp(40px,10.5%,80px)/1 Jost;letter-spacing:.02em}
-.fig i{display:block;font:500 10.5px/1 Inter;letter-spacing:.22em;font-style:normal;margin-top:10px;color:rgba(42,36,32,.7)}
+#scene{position:absolute;outline:1px dashed rgba(42,36,32,.25);pointer-events:none;display:none}
+#panel.debug #scene{display:block}
+#text{position:absolute;color:var(--ink);display:none}
+#text .n{font:500 11px/1 Inter;letter-spacing:.22em;color:rgba(42,36,32,.5);margin:0 0 22px}
+#text h3{margin:0;font:300 var(--tsize,32px)/1.14 Jost;letter-spacing:.06em;text-transform:uppercase}
+#text h3 i{display:block;font:italic 400 1.24em/1.02 "Instrument Serif";letter-spacing:0;text-transform:none}
+#text p.a{margin:20px 0 0;font:400 var(--asize,16px)/1.6 Inter;color:rgba(42,36,32,.74)}
+#ctrl{position:absolute;display:none;font:500 10.5px/1 Inter;letter-spacing:.12em;color:rgba(42,36,32,.5);align-items:center;gap:22px}
+#ctrl b{display:inline-grid;place-items:center;width:42px;height:42px;border:1px solid rgba(42,36,32,.2);border-radius:50%;font-weight:400;color:var(--ink)}
 #info{position:absolute;right:8px;bottom:6px;font:11px Inter;color:#f6f5ec;opacity:.6}
-</style></head><body><div id="panel"><canvas id="c"></canvas><div id="ov"><svg id="lines"></svg></div></div><div id="info"></div>
+</style></head><body><div id="panel"><canvas id="c"></canvas><div id="scene"></div><div id="ov" class="idea-section"></div><div id="text"></div><div id="ctrl"></div></div><div id="info"></div>
 <script type="module" src="./vignette.ts"></script></body></html>

@@ -77,11 +77,14 @@ export function Header({
   // scroll position → scrolled / hidden (one passive listener, rAF-throttled). A glide the site
   // starts (anchor links) keeps the header in place through the landing, so the HEADER_OFFSET band
   // is the bar and not the end of the previous section; hiding resumes on the reader's own scroll.
+  // A page that opens on a #hash is such a landing too: each route mounts its own Header, and on a
+  // router link from another page (/#meira from /baeklingur) the router jumps to the target only
+  // after this mounts, a jump that would otherwise read as reading down. Same for a cold load.
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let lastY = window.scrollY;
     let raf = 0;
-    let held = false;
+    let held = !!window.location.hash;
     const update = () => {
       raf = 0;
       const y = window.scrollY;

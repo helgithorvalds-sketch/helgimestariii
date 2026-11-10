@@ -9,13 +9,16 @@ import { clamp, damp, lerp } from "./anim";
  * sunbeam). Since round 2 the canvas is the hero's own right-hand column and the booklet is framed
  * into it automatically (closed: ≈ 74 % of the box height, ≤ 90 % of its width).
  *
- * The intro (time-based, plays once, ≈ 5 s; site easing tokens):
- *   0.00–1.10  arrive   the closed booklet settles from slightly above (arrive); the canvas fades in
- *   0.80–1.70  open     the cover swings over (glide) while the view eases back to fit the spread
- *   1.45–3.45  riffle   every inner sheet turns, ~0.1 s apart, each over 0.5 s (free edges lag)
- *   3.60–4.70  close    the left half (cover + turned sheets) comes back over in one motion, the top
- *                       sheets leading by a small fan (glide)
- *   3.60–4.95  settle   the view eases into the resting pose: closed, front cover up
+ * The intro (round 3: from the back to the front; time-based, plays once, ≈ 5 s; site easing tokens):
+ * Times for Nýji kaflinn (14 inner sheets); `heroTimeline(inner)` derives them per booklet:
+ *   0.00–1.15  arrive   the booklet arrives already open at the back (every sheet turned, the last
+ *                       spread showing) and settles from slightly above (arrive); the canvas fades in
+ *   1.20–3.12  leaf     the inner sheets turn back one after another, the last sheet first, 0.1 s
+ *                       apart, each over 0.62 s with its free edge trailing (bend −1). Nýr rekstur
+ *                       (5 sheets) spaces them 0.16 s and holds the open back 0.2 s longer
+ *   2.72–3.87  cover    the front cover closes last (glide)
+ *   2.77–4.62  settle   the view eases from the open spread into the resting pose: closed, front up
+ *   4.72       end      (Nýr rekstur: 4.26)
  * The end state is final. `frame({ t })` is a pure function of t, so the same call renders film
  * frames. The legacy `frame({ arrive, open })` (film.ts) still works.
  */
@@ -83,20 +86,43 @@ export const BIZ_BOOK = {
 /* ------------------------------------------------------------------ timeline */
 
 export const HERO_INTRO = {
-  arrive: [0, 1.1] as const,
-  open: [0.8, 1.7] as const,
-  /** start times of the inner sheets are spread over this window */
-  riffle: [1.45, 2.95] as const,
+  /** the open booklet (the last spread) settles from slightly above */
+  arrive: [0, 1.15] as const,
+  /** the last inner sheet starts turning back here (it goes first) */
+  firstStart: 1.2,
+  /** time between two sheets' starts: 0.1 s, widened (≤ 0.16 s) when there are few sheets */
+  spacing: [0.1, 0.16] as const,
+  /** the starts of all inner sheets fit into this span at the narrowest spacing */
+  span: 1.3,
+  /** a booklet with fewer sheets holds the open back this share of the time it saves a moment longer */
+  holdShare: 0.3,
   /** each inner sheet's own turn */
-  turn: 0.5,
-  close: [3.6, 4.7] as const,
-  /** the view: closed → open framing, and back */
-  view: [
-    [0.7, 1.65],
-    [3.6, 4.95],
-  ] as const,
-  end: 5.0,
+  turn: 0.62,
+  /** the front cover closes last: seconds after the first inner sheet (next to it) started back */
+  cover: [0.22, 1.37] as const,
+  /** the view, open spread → closed, resting, front cover up: seconds after that same start */
+  view: [0.27, 2.12] as const,
+  /** the intro ends this long after the view has settled */
+  tail: 0.1,
 };
+
+/** the intro's timeline for a booklet with `inner` turnable sheets after the cover (seconds) */
+export function heroTimeline(inner: number) {
+  const I = HERO_INTRO;
+  const m = Math.max(1, inner);
+  const spacing = m > 1 ? clamp(I.span / (m - 1), I.spacing[0], I.spacing[1]) : 0;
+  const first = I.firstStart + I.holdShare * Math.max(0, I.span - (m - 1) * spacing);
+  const last = first + (m - 1) * spacing;
+  return {
+    spacing,
+    /** start of the last sheet (first to go) and of sheet 1 (next to the cover, last to go) */
+    first,
+    last,
+    cover: [last + I.cover[0], last + I.cover[1]] as const,
+    view: [last + I.view[0], last + I.view[1]] as const,
+    end: last + I.view[1] + I.tail,
+  };
+}
 
 /* ------------------------------------------------------------------ poses */
 
@@ -105,8 +131,8 @@ type Rect = [number, number, number, number];
 const REST = new THREE.Euler(1.2, -0.36, 0.08);
 const READ = new THREE.Euler(0.8, -0.18, 0.04);
 const CAM = new THREE.Vector3(0, 1.5, 11.5);
-/** the arriving (closed) booklet's size between the reading (0) and the resting (1) size */
-const ARRIVE_SCALE = 0.4;
+/** the open booklet arrives this much smaller than its reading size and grows to it as it settles */
+const ARRIVE_SHRINK = 0.035;
 /** the film's layout: the booklet in the right part of a full-frame canvas */
 const FILM_RECT: Rect = [0.5, 0.1, 0.95, 0.9];
 
@@ -253,6 +279,8 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
     base: o.base ?? "/svif/kafli/",
     pages,
     placeholders: src.placeholders,
+    // the intro shows the last spread first and leafs back to the cover: load in that order
+    loadOrder: "back",
     onTexture: () => {
       dirty = true;
       o.onUpdate?.();
@@ -285,7 +313,6 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
   let legacy = false;
   let fitRest: Fit = { s: 1, p: new THREE.Vector3() };
   let fitRead: Fit = { s: 1, p: new THREE.Vector3() };
-  let fitArrive: Fit = { s: 1, p: new THREE.Vector3() };
   const refit = () => {
     const r = rect ?? (legacy ? FILM_RECT : ([0, 0, 1, 1] as Rect));
     // keep a strip under the booklet for its shadow
@@ -294,40 +321,33 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
     fitRead = fitInto(camera, qRead, ENV_OPEN, rr, [0.94, 0.9]);
     // never bigger while open than at rest (the rest pose is the climax)
     if (fitRead.s > fitRest.s) fitRead.s = fitRest.s;
-    // it arrives closed at the reading scale, centred; it grows only as it closes
-    fitArrive = fitInto(camera, qRead, ENV_CLOSED, rr, [1, 1], lerp(fitRead.s, fitRest.s, ARRIVE_SCALE));
   };
 
   /* ---------- sheet angles for intro time t ---------- */
   const n = book.sheets;
-  const angles = new Array<number>(n).fill(0);
-  const bends = new Array<number>(n).fill(1);
+  const angles = new Array<number>(n).fill(Math.PI);
+  const bends = new Array<number>(n).fill(-1);
   const PI = Math.PI;
+  // the inner sheets turn back from the last to the first: sheet k (1 = next to the cover, m = the
+  // last) starts at T.last − (k − 1)·spacing, so the last sheet goes first and sheet 1 last
+  const m = n - 1;
+  const T = heroTimeline(m);
+  const startOf = (k: number) => {
+    const u = m > 1 ? (k - 1) / (m - 1) : 0;
+    // a touch quicker through the middle of the booklet, like a thumb
+    const w = u + 0.05 * Math.sin(2 * PI * u);
+    return T.last - w * (T.last - T.first);
+  };
   const introAngles = (t: number) => {
-    const I = HERO_INTRO;
-    angles[0] = PI * HERO_EASE.glide(seg(t, I.open[0], I.open[1]));
-    bends[0] = 1;
-    const m = n - 1;
     for (let k = 1; k < n; k++) {
-      const u = m > 1 ? (k - 1) / (m - 1) : 0;
-      // a touch quicker through the middle of the booklet, like a thumb
-      const w = u + 0.06 * Math.sin(2 * PI * u);
-      const s0 = I.riffle[0] + (I.riffle[1] - I.riffle[0]) * w;
-      angles[k] = PI * inOut(seg(t, s0, s0 + I.turn));
-      bends[k] = 1;
+      const s0 = startOf(k);
+      angles[k] = PI * (1 - inOut(seg(t, s0, s0 + HERO_INTRO.turn)));
+      // turning back: the free edge trails (towards the stack it leaves)
+      bends[k] = -1;
     }
-    const c = seg(t, I.close[0], I.close[1]);
-    if (c > 0) {
-      const fan = 0.16;
-      for (let k = 0; k < n; k++) {
-        const lead = m > 0 ? (m - k) / m : 0;
-        const a = PI * (1 - HERO_EASE.glide(clamp((c - fan * lead) / (1 - fan))));
-        if (a < angles[k]) {
-          angles[k] = a;
-          bends[k] = -1;
-        }
-      }
-    }
+    // the front cover closes last
+    angles[0] = PI * (1 - HERO_EASE.glide(seg(t, T.cover[0], T.cover[1])));
+    bends[0] = -1;
     book.setPages(angles, bends);
   };
 
@@ -341,14 +361,14 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
   let tty = 0;
   let last = performance.now();
   /**
-   * The view: v ∈ [0, 1] arrive (closed, reading scale, centred) → read (the open spread),
-   * r ∈ [0, 1] read → rest (closed, full size, resting orientation). `open` widens the floor shadow.
+   * The view: r ∈ [0, 1] read (the open spread) → rest (closed, full size, resting orientation);
+   * `grow` scales the arriving booklet up to its reading size; `open` widens the floor shadow.
    */
   const fitA = { s: 0, p: new THREE.Vector3() };
-  const place = (v: number, r: number, open: number, lift: number, fade: number) => {
+  const place = (r: number, open: number, lift: number, fade: number, grow = 1) => {
     q.copy(qRead).slerp(qRest, r);
-    fitA.s = lerp(lerp(fitArrive.s, fitRead.s, v), fitRest.s, r);
-    fitA.p.lerpVectors(fitArrive.p, fitRead.p, v).lerp(fitRest.p, r);
+    fitA.s = lerp(fitRead.s, fitRest.s, r) * grow;
+    fitA.p.lerpVectors(fitRead.p, fitRest.p, r);
     eTilt.set(ty * 0.044, tx * 0.044, 0);
     qTilt.setFromEuler(eTilt);
     g.quaternion.copy(qTilt).multiply(q);
@@ -363,22 +383,24 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
     (blob.material as THREE.MeshBasicMaterial).opacity = 0.62 * fade * (1 - 0.35 * clamp(lift / 0.45));
   };
 
-  // start once the cover and the first pages are in, but never wait more than maxWait for the pages
-  // (a page that is late shows its colour for the instant it is seen); the cover is always awaited
+  // start once the pages are in, but never wait more than maxWait for them (a page that is late shows
+  // its colour for the instant it is seen); the cover and the last spread (the first thing seen) are
+  // always awaited
+  const L = book.pageCount;
   const ready = (async () => {
-    const minPages = Math.min(o.minPages ?? book.pageCount, book.pageCount);
+    const minPages = Math.min(o.minPages ?? L, L);
     await Promise.race([
       book.whenLoaded(minPages),
       new Promise<void>((r) => setTimeout(r, (o.maxWait ?? 2.5) * 1000)),
     ]);
-    await book.whenLoaded(1);
+    await book.whenPages([0, L - 3, L - 2]);
   })();
 
   return {
     ready,
     coverReady: book.whenLoaded(1),
     allLoaded: book.whenLoaded(book.pageCount),
-    duration: HERO_INTRO.end,
+    duration: T.end,
     resize(w, h, ro) {
       if (ro?.rect) rect = ro.rect;
       stage.resize(w, h);
@@ -401,12 +423,11 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
         const t = st.t;
         const I = HERO_INTRO;
         const a = HERO_EASE.arrive(seg(t, I.arrive[0], I.arrive[1]));
-        const v = HERO_EASE.glide(seg(t, I.view[0][0], I.view[0][1]));
-        const r = HERO_EASE.glide(seg(t, I.view[1][0], I.view[1][1]));
+        const r = HERO_EASE.glide(seg(t, T.view[0], T.view[1]));
         introAngles(t);
-        // the cover is open (the spread's footprint) from the opening to the close
-        const open = v * (1 - HERO_EASE.glide(seg(t, I.close[0], I.close[1])));
-        place(v, r, open, (1 - a) * 0.42, a);
+        // the spread's footprint until the cover closes
+        const open = 1 - HERO_EASE.glide(seg(t, T.cover[0], T.cover[1]));
+        place(r, open, (1 - a) * 0.42, a, 1 - ARRIVE_SHRINK * (1 - a));
       } else {
         // legacy (film.ts): the settle, and the cover lifting with `open`
         if (!legacy) {
@@ -415,7 +436,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
         }
         const a = clamp(st.arrive);
         book.setPages([clamp(st.open) * PI * 0.62]);
-        place(1, 1, 0, (1 - a) * 0.42, a);
+        place(1, 0, (1 - a) * 0.42, a);
       }
       stage.render();
       dirty = false;

@@ -1,9 +1,23 @@
 import type { ReactNode } from "react";
 import { StoryStage, type StoryFactory, type StoryStep } from "./StoryStage";
 
-/** End frame of each step, rendered from the same scene (loading poster, reduced motion, no WebGL). */
+/** End frame of each step, rendered from the same scene, 16:9 (the no-JS list). */
 const POSTERS = [0, 1, 2, 3].map((i) => `/svif/story/biz-${i}.jpg`);
-/** where each step rests on phones (global g); keep in sync with BUSINESS_REST in src/three/stories/business.ts */
+/** step 01's opening frame (g = 0), 16:9 */
+const OPEN_POSTER = "/svif/story/biz-start.jpg";
+/**
+ * The same frames framed for the stage's scene area (posters.cjs `framed`): the opening frame shown
+ * while the player waits to be started and the 3D loads, and the step stills (reduced motion, no
+ * WebGL). `wide` for landscape areas, `tall` (the phones' deep arrangement) for portrait ones.
+ */
+const framed = (set: "w" | "t") => ({
+  open: `/svif/story/biz-${set}-start.jpg`,
+  steps: [0, 1, 2, 3].map((i) => `/svif/story/biz-${set}-${i}.jpg`),
+});
+const STILLS = { wide: framed("w"), tall: framed("t") };
+/** seconds per step while playing: the company film's step windows (lab/film-specs.ts), ≈ 31 s */
+const DURATIONS = [9, 9, 6.4, 7];
+/** where each step rests (global g); the posters are rendered here (BUSINESS_REST in src/three/stories/business.ts) */
 const REST = [0.92, 1.92, 2.92, 3.96];
 
 async function loadBusiness(): Promise<StoryFactory> {
@@ -31,12 +45,11 @@ export interface BusinessStorySectionProps {
 }
 
 /**
- * The new-business story for /fyrirtaeki: a pinned three.js stage scrubbed by scroll, with its own
- * fixed heading "Svona virkar það · frá stofnun að póstkassa", the step's title and line centred
- * above the scene (same layout as the home story). Posters biz-0..3.jpg are rendered at REST by
- * posters.cjs (no baked labels; the captions are DOM). On phones the needs' callouts sit at their
- * own heights per row (business.ts), so no `labelClear` ceiling is passed here (it would stack
- * six captions on two rows at the roofline).
+ * The new-business story for /fyrirtaeki as a step-by-step player (round 3), with its own fixed
+ * heading "Svona virkar það · frá stofnun að póstkassa" (same stage as the home story). Posters
+ * biz-0..3.jpg (16:9) and the framed biz-w-* / biz-t-* sets are rendered at REST, the -start frames
+ * at g = 0, by posters.cjs (no baked labels; the captions are DOM). On phones the needs' callouts
+ * sit at their own heights per row (business.ts), so no `labelClear` ceiling is passed here.
  */
 export function BusinessStorySection({ steps, id = "svona-virkar", footer }: BusinessStorySectionProps) {
   return (
@@ -44,6 +57,9 @@ export function BusinessStorySection({ steps, id = "svona-virkar", footer }: Bus
       id={id}
       steps={steps}
       posters={POSTERS}
+      openPoster={OPEN_POSTER}
+      stills={STILLS}
+      durations={DURATIONS}
       rest={REST}
       heading={{ caps: "Svona virkar það", accent: "frá stofnun að póstkassa" }}
       load={loadBusiness}

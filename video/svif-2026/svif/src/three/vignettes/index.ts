@@ -1,17 +1,21 @@
 /**
- * The vignette engine for "Meira um hugmyndina" (spec §4). Import it lazily:
- *   const { createVignetteRuntime, VIGNETTES } = await import("@/three/vignettes");
+ * The vignette engine for "Meira um hugmyndina" (spec §4, round 3). Import it lazily:
+ *   const { createVignetteRuntime, factoriesFor } = await import("@/three/vignettes");
  *
- * Business variants: every factory gets `{ kind }`; to give /fyrirtaeki its own scene for a key,
- * either branch on `kind` inside the module or register a separate factory in `BIZ_VIGNETTES`
- * (it wins over the home factory when kind === "biz"). `iceland` is business-only.
+ * Six items per page, the same keys on both pages (src/components/idea/copy.ts says which item uses
+ * which key): crowd · iceland · weeks · kept · tray · typecase. Every factory gets `{ kind }`; a
+ * module branches on it (iceland: the capital area and the regions to come on the home page, pins
+ * all over the country on /fyrirtaeki), or a business-only factory in `BIZ_VIGNETTES` wins over the
+ * home one when kind === "biz".
+ *
+ * Round 3 part 2 rebuilds item 1 ("Af hverju virkar þetta?", crowd.ts) and item 6 ("Fá keppinautar
+ * … líka pláss?", typecase.ts) as new 3D scenes: replace those modules (same factory signature,
+ * same Vignette contract incl. `box` from fitPose and the overlay ids the copy lists), or register
+ * new keys here and point the copy's `vignette` at them.
  */
-import { createAddress } from "./address";
 import { createCrowd } from "./crowd";
 import { createIceland } from "./iceland";
 import { createKept } from "./kept";
-import { createMonths } from "./months";
-import { createTimeline } from "./timeline";
 import { createTray } from "./tray";
 import { createTypecase } from "./typecase";
 import { createWeeks } from "./weeks";
@@ -19,19 +23,15 @@ import type { VignetteFactory, VignetteKey, VignetteKind } from "./types";
 
 export const VIGNETTES: Partial<Record<VignetteKey, VignetteFactory>> = {
   crowd: createCrowd,
-  timeline: createTimeline,
+  iceland: createIceland,
   weeks: createWeeks,
   kept: createKept,
-  address: createAddress,
-  months: createMonths,
   tray: createTray,
   typecase: createTypecase,
 };
 
-/** business-only factories or overrides (the other business scenes branch on `kind` in their modules) */
-export const BIZ_VIGNETTES: Partial<Record<VignetteKey, VignetteFactory>> = {
-  iceland: createIceland,
-};
+/** business-only factories or overrides (none at present: the scenes branch on `kind` in their modules) */
+export const BIZ_VIGNETTES: Partial<Record<VignetteKey, VignetteFactory>> = {};
 
 /** the factories a runtime of this kind should use */
 export function factoriesFor(kind: VignetteKind): Partial<Record<VignetteKey, VignetteFactory>> {
@@ -39,5 +39,5 @@ export function factoriesFor(kind: VignetteKind): Partial<Record<VignetteKey, Vi
 }
 
 export { createVignetteRuntime } from "./runtime";
-export type { ProjectedOverlay, VignetteRuntime } from "./runtime";
+export type { ProjectedOverlay, VignetteFrame, VignetteRuntime } from "./runtime";
 export type * from "./types";

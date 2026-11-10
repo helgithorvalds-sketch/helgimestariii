@@ -792,12 +792,13 @@ export function createBusinessStory(stage: Stage, o: BusinessStoryOptions = {}):
           kind: "callout",
         });
       }
-      // the counter above the orb: one label per value, so it ticks instead of blending
+      // the counter above the orb: one label per value, so it ticks instead of blending.
+      // "SVIF-kerfið": a name as the first part of a compound takes a hyphen in Icelandic
       if (count > 0) {
         const top = orb.group.position.clone().add(new THREE.Vector3(0, orb.radius + 0.04, 0));
         out.push({
           id: "count-" + count,
-          text: `SVIF kerfið · ${count} ${count === 1 ? "nýtt fyrirtæki" : "ný fyrirtæki"}`,
+          text: `SVIF-kerfið · ${count} ${count === 1 ? "nýtt fyrirtæki" : "ný fyrirtæki"}`,
           anchor: top,
           world: top.clone().add(new THREE.Vector3(0, 0.62, 0)),
           opacity: exitL,

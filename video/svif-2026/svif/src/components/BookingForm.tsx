@@ -18,6 +18,7 @@ export function BookingForm({
 }: {
   brochure?: string;
 } = {}) {
+  /** the business page speaks to the company (þið: "hringið"), the home page to one person (þú) */
   const isBiz = brochure === "Fyrirtækjabæklingur";
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [tried, setTried] = useState(false);
@@ -250,7 +251,9 @@ export function BookingForm({
           role="alert"
           className="mt-6 text-[14px] text-[color:var(--cream)]/90 outline-none"
         >
-          Það tókst ekki að senda. Reyndu aftur eða hringdu í 853 5147.
+          {isBiz
+            ? "Það tókst ekki að senda. Reynið aftur eða hringið í 853 5147."
+            : "Það tókst ekki að senda. Reyndu aftur eða hringdu í 853 5147."}
         </p>
       )}
 
@@ -259,7 +262,7 @@ export function BookingForm({
           href="tel:8535147"
           className="label-caps inline-flex min-h-[44px] items-center justify-center text-center text-[length:max(10.5px,0.62rem)] text-[color:var(--cream)]/72 sm:justify-start sm:text-left"
         >
-          Eða hringdu í{" "}
+          {isBiz ? "Eða hringið í" : "Eða hringdu í"}{" "}
           <span className="link-wipe ml-1.5 text-[color:var(--cream)]/90">853 5147</span>
         </a>
         <Pill
