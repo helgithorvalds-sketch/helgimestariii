@@ -1259,3 +1259,15 @@ html:not(.js) .story-static {
     height: 38px;
   }
 }
+
+/* ---------------------------------------------------------------- round 3f (not phones)
+   The step's text is back above the scene, right under the chapters (compact, as in 3e). */
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  .story-chrome {
+    bottom: auto;
+  }
+  .story-copy {
+    position: static;
+    margin: clamp(8px, 1.4svh, 16px) auto 0;
+  }
+}

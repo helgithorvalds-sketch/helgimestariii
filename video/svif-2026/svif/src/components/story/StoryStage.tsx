@@ -259,20 +259,19 @@ function measureStageArea(
   let bottom = Math.round(h);
   let copy = 0;
   if (!matchMedia(PHONE_MQ).matches) {
-    // heading + chapters on top, the scene, then the step's text and the transport under it
-    const t = (stageEl.querySelector<HTMLElement>(".story-top") ?? copyEl).getBoundingClientRect();
+    // heading, chapters and the step's text on top; the scene below them, down to the transport
     const c = copyEl.getBoundingClientRect();
     const b = barEl.getBoundingClientRect();
     const gap = clamp(h * 0.018, 8, 22);
-    copy = Math.round(t.bottom - cv.top);
-    top = Math.round(clamp(t.bottom - cv.top + gap, 0, h * 0.4));
-    bottom = Math.round(clamp(Math.min(c.top, b.top) - cv.top - gap, top + 120, h));
+    copy = Math.round(c.bottom - cv.top);
+    top = Math.round(clamp(c.bottom - cv.top + gap, 0, h * 0.5));
+    bottom = Math.round(clamp(b.top - cv.top - gap, top + 120, h));
   }
   // The directors frame their widest compositions (the needs, the coupons) to fill an area of
-  // about 2.55:1; a flatter area leaves room at the sides, so the camera moves in by that much.
+  // about 2.65:1; a flatter area leaves room at the sides, so the camera moves in by that much.
   const zoom = matchMedia(PHONE_MQ).matches
     ? 1
-    : clamp(w / Math.max(1, bottom - top) / 2.55, 1, 1.3);
+    : clamp(w / Math.max(1, bottom - top) / 2.65, 1, 1.3);
   stageEl.style.setProperty("--scene-zoom", zoom.toFixed(3));
   stageEl.style.setProperty("--scene-top", `${top}px`);
   stageEl.style.setProperty("--scene-gap", `${Math.round(h - bottom)}px`);
