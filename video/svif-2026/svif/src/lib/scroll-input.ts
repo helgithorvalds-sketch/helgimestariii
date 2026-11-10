@@ -1,7 +1,7 @@
 /** Bound queued wheel travel, not each event: repeated input cannot build a fast-forward backlog. */
 export function pacedWheelDelta(delta: number, pending: number, viewportHeight: number, pace = 1) {
   if (!Number.isFinite(delta) || !Number.isFinite(pending)) return 0;
-  const lead = Math.min(160, Math.max(90, viewportHeight * 0.15)) * pace;
+  const lead = Math.min(260, Math.max(150, viewportHeight * 0.25)) * pace;
   // Reversing direction cancels the old momentum before moving the other way.
   const base = delta * pending < 0 ? 0 : pending;
   const target = Math.min(lead, Math.max(-lead, base + delta * 0.75 * pace));

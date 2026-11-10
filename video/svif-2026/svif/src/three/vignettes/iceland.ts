@@ -35,7 +35,7 @@ import type { VignetteFactory, VignetteOverlay, VignettePose } from "./types";
  * then in a wave outward; the figure "Um 250 / á mánuði" sits in the open sea to the south. The pins
  * are illustrative: no per-town numbers are shown or claimed.
  *
- * Overlay ids: figure "figure"; home: labels "north", "south" (quiet); business: label "country".
+ * Overlay ids: figure "figure"; home: no labels (the capital lit, a few towns pinned); business: label "country".
  */
 
 /* ------------------------------------------------------------------ the map projection */
@@ -127,6 +127,9 @@ function inside(outline: THREE.Vector3[], x: number, y: number) {
   }
   return hit;
 }
+
+/** home: the towns that get a pin besides the capital area */
+const HOME_TOWNS = ["Akureyri", "Selfoss", "Egilsstaðir", "Ísafjörður", "Reykjanesbær"];
 
 export const createIceland: VignetteFactory = (_stage, { kind }) => {
   const group = new THREE.Group();
@@ -260,41 +263,11 @@ export const createIceland: VignetteFactory = (_stage, { kind }) => {
     // the capital's pin
     const capPin = pin(cap.x, cap.z, 0.1, MAT.rose());
 
-    // the regions to come: a dotted ring of small beads and a pale pin, quieter
-    const BEADS = 22;
-    const beadGeo = new THREE.SphereGeometry(0.0145, 12, 8);
-    const beadMat = clay("#c9b19c", { roughness: 0.7, sheen: 0.3 });
-    const region = (lon: number, lat: number, r: number, a: number) => {
-      const x = E(lon);
-      const z = -N(lat);
-      if (import.meta.env?.DEV && !inside(outline, x, -z)) console.warn(`iceland: region at ${lon},${lat} is off the coast`);
-      const beads = Array.from({ length: BEADS }, (_, i) => {
-        const th = (i / BEADS) * Math.PI * 2 + Math.PI / 2;
-        const b = mesh(beadGeo, beadMat, false);
-        const base = new THREE.Vector3(x + Math.cos(th) * r, TOP + 0.008, z + Math.sin(th) * r);
-        if (import.meta.env?.DEV && !inside(outline, base.x, -base.z)) console.warn(`iceland: a bead at ${lon},${lat} is off the coast`);
-        b.position.copy(base);
-        group.add(b);
-        return { b, f: fader(b), base, i };
-      });
-      const p = pin(x, z, 0.062, MAT.cream(), 0.8);
-      return {
-        top: p.top,
-        set(t: number) {
-          // the beads come in round the ring, one after another (a dotted line being drawn)
-          for (const B of beads) {
-            const s = a + (B.i / BEADS) * 0.14;
-            const k = EASE.settle(invLerp(s, s + 0.06, t));
-            B.f.set(k, 0);
-            B.b.position.set(B.base.x, B.base.y + 0.05 * (1 - k), B.base.z);
-          }
-          p.set(t, a + 0.04);
-        },
-      };
-    };
-    // Norðurland round Akureyri; Suðurland in the southern lowlands, inland of the coast
-    const north = region(-18.12, 65.6, 0.2, 0.5);
-    const south = region(-19.85, 64.06, 0.2, 0.6);
+    // a few more towns round the country: smaller rose pins that follow the capital's
+    const others = HOME_TOWNS.map((name, i) => {
+      const town = TOWNS.find((t) => t.name === name)!;
+      return { p: pin(E(town.lon), -N(town.lat), 0.07, MAT.rose(), 0.9), a: 0.36 + i * 0.07 };
+    });
 
     figureAt = new THREE.Vector3(cap.x - 0.42, 0, 1.36);
     update = (t: number) => {
@@ -306,8 +279,7 @@ export const createIceland: VignetteFactory = (_stage, { kind }) => {
       washMat.opacity = 0.95 * w;
       washMesh.visible = w > 0.002;
       capPin.set(t, 0.14);
-      north.set(t);
-      south.set(t);
+      for (const o of others) o.p.set(t, o.a);
     };
     overlays = (t: number, out: VignetteOverlay[]) => {
       out.push({
@@ -319,10 +291,6 @@ export const createIceland: VignetteFactory = (_stage, { kind }) => {
         side: "below",
         draw: EASE.glide(invLerp(0.24, 0.44, t)),
       });
-      // the two captions lean apart (north runs east from its line, south ends at its line and runs
-      // west), so they never touch each other or the other pin, at any panel size
-      pushLabel(out, "north", north.top.clone().setY(north.top.y + 0.36), north.top, t, 0.66, 0.84, { quiet: true, align: "right" });
-      pushLabel(out, "south", south.top.clone().setY(south.top.y + 0.32), south.top, t, 0.74, 0.92, { quiet: true, align: "left" });
     };
   }
 

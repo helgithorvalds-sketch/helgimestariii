@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { invLerp } from "../anim";
 import { booklet, bookletTablet, envelope, listLaptop, pageStack, penAndRuler, speechBubbles, tray } from "./builders";
 import { EASE, blobPlane, disposeTree, dollyPose, fader, fitPose, pushLabel, rimPoints, settle, tex } from "./kit";
+import { deepen } from "./trades";
 import type { VignetteFactory, VignetteOverlay, VignettePose } from "./types";
 
 /**
@@ -12,8 +13,8 @@ import type { VignetteFactory, VignetteOverlay, VignettePose } from "./types";
  * (printing and distribution), an envelope with a printed copy on it (sent to you), a laptop with
  * the system, and two speech bubbles (the monthly meeting).
  *
- * Overlay ids: "design", "digital", "printed", "talk" (the four corners; the page stack and the
- * laptop speak for themselves and the answer lists all six).
+ * Overlay ids: "design", "print", "printed" (back row), "digital", "system", "talk" (front row):
+ * one caption per thing, the middle ones a row further out so neighbours never touch.
  */
 export const createTray: VignetteFactory = (stage, { kind }) => {
   const group = new THREE.Group();
@@ -54,6 +55,8 @@ export const createTray: VignetteFactory = (stage, { kind }) => {
     { obj: speechBubbles(), c: 2, r: 1, yaw: -0.2 },
   ];
   const placed = items.map((it) => {
+    // each thing in its own rose clay, so what is included stands out from the pale tray
+    deepen(it.obj, "#b98570", 0.6);
     const pivot = new THREE.Group();
     pivot.add(it.obj);
     it.obj.rotation.y = it.yaw;
@@ -82,6 +85,10 @@ export const createTray: VignetteFactory = (stage, { kind }) => {
     pushLabel(out, "design", new THREE.Vector3(b0.x, 0.95, b0.z - 0.62), new THREE.Vector3(b0.x, y + 0.04, b0.z - 0.42), t, 0.24, 0.38);
     const f0 = s(0, 1);
     pushLabel(out, "digital", new THREE.Vector3(f0.x, 0, f0.z + 0.78), new THREE.Vector3(f0.x, y, f0.z + 0.44), t, 0.36, 0.5, { side: "below" });
+    const b1 = s(1, 0);
+    pushLabel(out, "print", new THREE.Vector3(b1.x, 1.3, b1.z - 0.78), new THREE.Vector3(b1.x, y + 0.04, b1.z - 0.42), t, 0.46, 0.6);
+    const f1 = s(1, 1);
+    pushLabel(out, "system", new THREE.Vector3(f1.x, 0, f1.z + 1.06), new THREE.Vector3(f1.x, y, f1.z + 0.44), t, 0.68, 0.82, { side: "below" });
     const b2 = s(2, 0);
     pushLabel(out, "printed", new THREE.Vector3(b2.x, 0.95, b2.z - 0.62), new THREE.Vector3(b2.x, y + 0.04, b2.z - 0.42), t, 0.58, 0.72);
     const f2 = s(2, 1);

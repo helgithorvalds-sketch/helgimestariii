@@ -1160,6 +1160,21 @@ export function StoryStage({
           </div>
         </div>
 
+        {/* the big start control, centred above the chapters (desktop; phones enlarge the bar's own pill) */}
+        {live && play === "idle" && (
+          <button
+            type="button"
+            className="story-bigstart press"
+            aria-label={`${mainLabel}, ${startMeta}`}
+            onClick={() => announce(ctl.current?.toggle())}
+          >
+            <span className="story-bigstart-icon">
+              <PlayGlyph />
+            </span>
+            <span className="story-bigstart-label">Spila</span>
+            <span className="story-bigstart-meta">{startMeta}</span>
+          </button>
+        )}
         <div ref={barRef} className="story-bar">
           <div className="story-transport">
             {/* ‹ and › are the same buttons in both modes (focus survives a switch to the stills) */}

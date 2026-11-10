@@ -19,7 +19,7 @@ export async function startSmoothScroll() {
   const { default: LenisCtor } = await import("lenis");
   if (lenis) return lenis;
   lenis = new LenisCtor({
-    lerp: 0.065,
+    lerp: 0.1,
     smoothWheel: true,
     syncTouch: false,
     wheelMultiplier: 1,
@@ -38,7 +38,7 @@ export async function startSmoothScroll() {
         const steps = Number(getComputedStyle(homeTrack).getPropertyValue("--story-steps")) || 6;
         pace = homeStoryPace((-rect.top / (rect.height - window.innerHeight)) * steps);
       }
-      lenis.options.lerp = inHomeStory ? 0.045 : 0.065;
+      lenis.options.lerp = inHomeStory ? 0.07 : 0.1;
       data.deltaY = pacedWheelDelta(
         data.deltaY,
         lenis.targetScroll - lenis.animatedScroll,

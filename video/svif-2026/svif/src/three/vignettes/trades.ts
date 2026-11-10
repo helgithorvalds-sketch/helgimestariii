@@ -133,3 +133,29 @@ export function roseDetails(root: THREE.Object3D) {
     for (const e of list) e.m.color.copy(from).lerp(e.to, v);
   };
 }
+
+/**
+ * Give an object its own, deeper clay so it stands out from the pale page or tray it sits on:
+ * every untextured material under `root` is cloned and warmed toward `to` by `k`.
+ */
+export function deepen(root: THREE.Object3D, to = "#b98f78", k = 0.55) {
+  const target = new THREE.Color(to);
+  const map = new Map<THREE.Material, THREE.Material>();
+  root.traverse((o) => {
+    const m = o as THREE.Mesh;
+    if (!m.isMesh) return;
+    const own = (x: THREE.Material) => {
+      const s0 = x as THREE.MeshStandardMaterial;
+      if (!s0.color || s0.map) return x;
+      let c = map.get(x);
+      if (!c) {
+        c = x.clone();
+        (c as THREE.MeshStandardMaterial).color.lerp(target, k);
+        map.set(x, c);
+      }
+      return c;
+    };
+    m.material = Array.isArray(m.material) ? m.material.map(own) : own(m.material);
+  });
+  return root;
+}

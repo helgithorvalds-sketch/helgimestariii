@@ -784,3 +784,32 @@ html:not(.js) .idea-panel-n {
 html:not(.js) .idea-title {
   font-size: clamp(1.35rem, 1rem + 1vw, 1.9rem);
 }
+
+/* the bulleted list in an answer ("what is included"): rose dots, one thing per line */
+.idea-answer > p {
+  margin: 0;
+}
+.idea-list {
+  list-style: none;
+  margin: 0 0 0.7em;
+  padding: 0;
+}
+.idea-list li {
+  position: relative;
+  padding-left: 1.15em;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.idea-list li + li {
+  margin-top: 0.18em;
+}
+.idea-list li::before {
+  content: "";
+  position: absolute;
+  left: 0.1em;
+  top: 0.62em;
+  width: 0.42em;
+  height: 0.42em;
+  border-radius: 50%;
+  background: var(--rose, #c98f7c);
+}

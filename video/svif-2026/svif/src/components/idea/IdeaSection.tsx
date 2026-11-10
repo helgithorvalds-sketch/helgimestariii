@@ -479,9 +479,16 @@ export function IdeaSection({
                           </span>
                         )}
                       </h3>
-                      <p key={i === active ? `a${swap.n}` : "a"} className="idea-answer">
-                        {item.answer.join(" ")}
-                      </p>
+                      <div key={i === active ? `a${swap.n}` : "a"} className="idea-answer">
+                        {item.list && (
+                          <ul className="idea-list">
+                            {item.list.map((li) => (
+                              <li key={li}>{li}</li>
+                            ))}
+                          </ul>
+                        )}
+                        <p>{item.answer.join(" ")}</p>
+                      </div>
                     </div>
                   );
                 })}

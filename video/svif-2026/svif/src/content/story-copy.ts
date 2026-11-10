@@ -14,15 +14,15 @@ export const HOME_STEPS: StoryStep[] = [
   {
     n: "01",
     chapter: "Vandinn",
-    title: "Um 80% nýrra húseigenda *ráðast í framkvæmdir* eftir húsakaup",
-    body: "Nýju heimili fylgja ótal verkefni og erfitt er að vita hverjum á að treysta.",
+    title: "Um 80% nýrra húseigenda *ráðast í framkvæmdir* á fyrstu þremur mánuðunum",
+    body: "Það þarf að mála, leggja gólfefni, skipta um glugga og velja tryggingar, rafmagn og net.",
     note: "Heimild: HIRI, Bandaríkin 2025",
   },
   {
     n: "02",
     chapter: "Bæklingurinn",
     title: "*Þess vegna* bjuggum við til SVIF",
-    body: "Nýji kaflinn er bæklingur sem kemur inn um lúguna hjá nýjum húseigendum.",
+    body: "Nýji kaflinn er bæklingur með traustum fyrirtækjum og afslætti fyrir hvert verkefni sem bíður nýrra húseigenda.",
   },
   {
     n: "03",
@@ -33,19 +33,19 @@ export const HOME_STEPS: StoryStep[] = [
   {
     n: "04",
     chapter: "Hönnun",
-    title: "Við *hönnum* auglýsinguna þína",
-    body: "Þú sendir merki og tilboð og færð próförk til samþykktar fyrir prentun.",
+    title: "Fyrir fyrirtækin í bæklingnum *sjáum við um allt*",
+    body: "Fyrst hönnum við auglýsinguna þína. Þú sendir merki og tilboð og færð próförk til samþykktar.",
   },
   {
     n: "05",
     chapter: "Prentun",
-    title: "Við *prentum* bæklinginn",
+    title: "Síðan *prentum* við bæklinginn",
     body: "350–500 eintök á mánuði, eitt fyrir hvert nýtt heimili.",
   },
   {
     n: "06",
     chapter: "Dreifing",
-    title: "Og *sendum* vikulega til allra nýrra húseigenda á höfuðborgarsvæðinu",
+    title: "Og *sendum* hann vikulega til allra nýrra húseigenda á höfuðborgarsvæðinu",
     body: "Þannig fær fólk afsláttinn þinn þegar það þarf á þjónustunni þinni að halda.",
   },
 ];
@@ -58,14 +58,14 @@ export const BIZ_STEPS: StoryStep[] = [
   {
     n: "01",
     chapter: "Ný fyrirtæki",
-    title: "Hundruð *nýrra fyrirtækja* í hverjum mánuði",
-    body: "Öll þurfa þau sömu þjónustu og flest er valið á fyrstu vikunum.",
+    title: "Hundruð fyrirtækja eru *stofnuð í hverjum mánuði*",
+    body: "Þau þurfa öll bókhald, tryggingar, banka, vefsíðu, rafmagn og þrif, og vita sjaldnast hvert á að leita.",
   },
   {
     n: "02",
     chapter: "Bæklingurinn",
-    title: "Sérkjör frá þeim *sem nýr rekstur þarf*",
-    body: "Eitt fyrirtæki í hverjum flokki. Auglýsingin ykkar stendur ein.",
+    title: "*Þess vegna* bjuggum við til fyrirtækjabæklinginn",
+    body: "Traust fyrirtæki með sérkjör fyrir hvert verkefni sem bíður nýrra fyrirtækja. Eitt í hverjum flokki.",
   },
   {
     n: "03",

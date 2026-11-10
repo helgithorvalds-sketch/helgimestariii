@@ -20,6 +20,8 @@ export interface IdeaItem {
   title: string;
   /** 1–3 short sentences, rendered as one paragraph */
   answer: string[];
+  /** a bulleted list shown above the answer (what is included) */
+  list?: string[];
   /** words for the vignette's overlay ids */
   labels: Record<string, string>;
   /** one big figure, a callout in the scene (overlay id "figure") */
@@ -74,8 +76,8 @@ export const IDEA_HOME: IdeaCopy = {
       accent: "virkar þetta?",
       title: "Af hverju virkar þetta?",
       answer: [
-        "Mörg fyrirtæki í sömu grein keppast um nýja húseigendur.",
-        "Nýji kaflinn kemur tilboðinu þínu inn um lúguna á réttum tíma og eykur líkurnar á að hringt sé í þig.",
+        "Nýir húseigendur þurfa málara, gólfefni, tryggingar og margt fleira, og mörg fyrirtæki keppast um þá.",
+        "Í Nýja kaflanum er þitt fyrirtæki það eina í sínum flokki. Tilboðið þitt kemur inn um lúguna einmitt þegar fólk er að velja, svo það hringir í þig en ekki keppinautinn.",
       ],
       labels: { many: "Margir málarar", booklet: "Nýji kaflinn", yours: "Tilboðið þitt" },
       alt: "Nýtt hús og sex málarabílar í kringum það, hver með stóra málningarrúllu á þakinu. Nýji kaflinn rennur inn um lúguna. Bíll málarans sem er með tilboð í bæklingnum verður rósrauður og færir sig nær húsinu, hinir bakka frá og dofna.",
@@ -87,13 +89,10 @@ export const IDEA_HOME: IdeaCopy = {
       caps: "Hversu mörgum bæklingum",
       accent: "er dreift?",
       title: "Hversu mörgum bæklingum er dreift?",
-      answer: [
-        "350–500 á mánuði, til nýrra húseigenda.",
-        "Við byrjum á höfuðborgarsvæðinu og bætum fleiri landshlutum við.",
-      ],
-      labels: { north: "Norðurland|Væntanlegt", south: "Suðurland|Væntanlegt" },
+      answer: ["350–500 á mánuði, til nýrra húseigenda."],
+      labels: {},
       figure: { value: "350–500", unit: "Á mánuði" },
-      alt: "Upphleypt Íslandskort. Höfuðborgarsvæðið lýsist rósrautt, merkt 350–500 á mánuði. Norðurland og Suðurland eru merkt væntanleg.",
+      alt: "Upphleypt Íslandskort með rósrauðum prjónum í nokkrum bæjum, merkt 350–500 á mánuði.",
       vignette: "iceland",
       ...still("home", 2),
     },
@@ -130,14 +129,21 @@ export const IDEA_HOME: IdeaCopy = {
       caps: "Hvað er innifalið",
       accent: "í verðinu?",
       title: "Hvað er innifalið í verðinu?",
-      answer: [
-        "Hönnun, rafrænt eintak af bæklingnum, prentað eintak sent til þín, prentun og dreifing, aðgangur að kerfinu og mánaðarlegur fundur um árangurinn.",
-        "Greitt er mánaðarlega.",
+      answer: ["Greitt er mánaðarlega."],
+      list: [
+        "Hönnun",
+        "Rafrænt eintak af bæklingnum",
+        "Prentað eintak sent til þín",
+        "Prentun og dreifing",
+        "Aðgangur að kerfinu",
+        "Mánaðarlegur fundur um árangurinn",
       ],
       labels: {
         design: "Hönnun",
-        digital: "Rafrænt eintak",
+        print: "Prentun og dreifing",
         printed: "Prentað eintak",
+        digital: "Rafrænt eintak",
+        system: "Aðgangur að kerfinu",
         talk: "Mánaðarlegur fundur",
       },
       alt: "Bakki með sex hólfum: penni og reglustika, prentaðar síður, prentað eintak af bæklingnum í umslagi, spjaldtölva með bæklingnum á skjánum, fartölva með kerfinu og tvær talblöðrur.",
@@ -149,7 +155,7 @@ export const IDEA_HOME: IdeaCopy = {
       caps: "Fá keppinautar mínir",
       accent: "líka pláss?",
       title: "Fá keppinautar mínir líka pláss?",
-      answer: ["Nei.", "Aðeins eitt fyrirtæki í hverjum flokki, svo auglýsingin þín stendur ein."],
+      answer: ["Nei.", "Aðeins eitt fyrirtæki er í hverjum flokki, svo enginn keppinautur þinn er í bæklingnum."],
       labels: { one: "Eitt í hverjum flokki", yourcat: "Flokkurinn þinn" },
       alt: "Nýji kaflinn liggur opinn. Á opnunni eru sex flokkar og einn hlutur í hverjum: gluggi, lampi, málningardós, hægindastóll, gólfflísar og skjöldur. Önnur málningardós rennur að flokknum Málning, en hann er þegar tekinn. Dósin sem fyrir er verður rósrauð og hin hörfar og hverfur.",
       vignette: "typecase",
@@ -172,8 +178,8 @@ export const IDEA_BIZ: IdeaCopy = {
       accent: "virkar þetta?",
       title: "Af hverju virkar þetta?",
       answer: [
-        "Mörg fyrirtæki keppast um viðskipti nýrra fyrirtækja.",
-        "Bæklingurinn kemur sérkjörum ykkar í hendur eigendanna á réttum tíma og eykur líkurnar á að leitað sé til ykkar.",
+        "Ný fyrirtæki þurfa bókhald, tryggingar, banka og margt fleira, og mörg fyrirtæki keppast um þau.",
+        "Í bæklingnum eruð þið eina fyrirtækið í ykkar flokki. Sérkjörin ykkar berast eigendunum einmitt þegar þeir eru að velja, svo þeir leita til ykkar en ekki keppinautarins.",
       ],
       labels: { many: "Margar bókhaldsstofur", booklet: "Bæklingurinn", yours: "Sérkjörin ykkar" },
       alt: "Ný skrifstofubygging með skilti sem á stendur NÝTT og fimm bókhaldsstofur í kring, hver með stóra reiknivél á þakinu. Bæklingurinn rennur inn um lúguna á nýju skrifstofunni. Stofan sem er með sérkjör í bæklingnum verður rósrauð og færist nær, hinar hörfa og dofna.",
@@ -225,14 +231,21 @@ export const IDEA_BIZ: IdeaCopy = {
       caps: "Hvað er innifalið",
       accent: "í verðinu?",
       title: "Hvað er innifalið í verðinu?",
-      answer: [
-        "Hönnun, rafrænt eintak af bæklingnum, prentað eintak sent til ykkar, prentun og dreifing, aðgangur að kerfinu og mánaðarlegur fundur um árangurinn.",
-        "Greitt er mánaðarlega.",
+      answer: ["Greitt er mánaðarlega."],
+      list: [
+        "Hönnun",
+        "Rafrænt eintak af bæklingnum",
+        "Prentað eintak sent til ykkar",
+        "Prentun og dreifing",
+        "Aðgangur að kerfinu",
+        "Mánaðarlegur fundur um árangurinn",
       ],
       labels: {
         design: "Hönnun",
-        digital: "Rafrænt eintak",
+        print: "Prentun og dreifing",
         printed: "Prentað eintak",
+        digital: "Rafrænt eintak",
+        system: "Aðgangur að kerfinu",
         talk: "Mánaðarlegur fundur",
       },
       alt: "Bakki með sex hólfum: penni og reglustika, prentaðar síður, prentað eintak af bæklingnum í umslagi, spjaldtölva með bæklingnum á skjánum, fartölva með kerfinu og tvær talblöðrur.",
@@ -244,7 +257,7 @@ export const IDEA_BIZ: IdeaCopy = {
       caps: "Fá keppinautar okkar",
       accent: "líka pláss?",
       title: "Fá keppinautar okkar líka pláss?",
-      answer: ["Nei.", "Aðeins eitt fyrirtæki í hverjum flokki, svo auglýsingin ykkar stendur ein."],
+      answer: ["Nei.", "Aðeins eitt fyrirtæki er í hverjum flokki, svo enginn keppinautur ykkar er í bæklingnum."],
       labels: { one: "Eitt í hverjum flokki", yourcat: "Flokkurinn ykkar" },
       alt: "Bæklingurinn liggur opinn. Á opnunni eru sex flokkar og einn hlutur í hverjum: skjár, skjöldur, möppur, greiðslukort, fartölva og litaprufur með penna. Aðrar möppur renna að flokknum Bókhald, en hann er þegar tekinn. Möppurnar sem fyrir eru verða rósrauðar og hinar hörfa og hverfa.",
       vignette: "typecase",

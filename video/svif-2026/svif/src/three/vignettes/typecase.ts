@@ -6,7 +6,7 @@ import { PAL } from "../palette";
 import { mesh } from "./builders";
 import { DISC_COLOR, EASE, blobPlane, disposeTree, dollyPose, fader, fitPose, pushLabel, rimPoints, setBlob, tinter } from "./kit";
 import { openBooklet } from "./spread";
-import { BIZ_CATS, HOME_CATS, YOURS, depthPrepass, roseDetails, tradeProp } from "./trades";
+import { BIZ_CATS, HOME_CATS, YOURS, depthPrepass, roseDetails, tradeProp, deepen } from "./trades";
 import { rosePool } from "./vans";
 import type { VignetteFactory, VignetteOverlay, VignettePose } from "./types";
 
@@ -72,6 +72,8 @@ export const createTypecase: VignetteFactory = (_stage, { kind }) => {
       prop.children[0].position.y = 0.035;
       prop.add(foot);
     }
+    // a deeper, warmer clay than the page, so the objects read at a glance
+    deepen(prop, "#b08a72", 0.62);
     return prop;
   };
   const items = names.map((_, i) => {

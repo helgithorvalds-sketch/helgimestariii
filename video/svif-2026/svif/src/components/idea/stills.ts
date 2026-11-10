@@ -154,6 +154,27 @@ export const IDEA_STILLS: Record<string, { box: FrameBox; over: OverlayPoint[] }
       },
       {
         "type": "label",
+        "id": "print",
+        "x": 54.05,
+        "y": 13.51,
+        "opacity": 1,
+        "draw": 1,
+        "ax": 52.73,
+        "ay": 32.48
+      },
+      {
+        "type": "label",
+        "id": "system",
+        "x": 44.4,
+        "y": 71.11,
+        "opacity": 1,
+        "draw": 1,
+        "ax": 46.64,
+        "ay": 59.23,
+        "side": "below"
+      },
+      {
+        "type": "label",
         "id": "printed",
         "x": 72.61,
         "y": 22.7,
@@ -298,30 +319,6 @@ export const IDEA_STILLS: Record<string, { box: FrameBox; over: OverlayPoint[] }
         "ay": 49.62,
         "side": "below",
         "progress": 1
-      },
-      {
-        "type": "label",
-        "id": "north",
-        "x": 52.99,
-        "y": 28.98,
-        "opacity": 1,
-        "draw": 1,
-        "ax": 52.92,
-        "ay": 33.58,
-        "align": "right",
-        "quiet": true
-      },
-      {
-        "type": "label",
-        "id": "south",
-        "x": 41.74,
-        "y": 47.17,
-        "opacity": 1,
-        "draw": 1,
-        "ax": 41.92,
-        "ay": 51.13,
-        "align": "left",
-        "quiet": true
       }
     ]
   },
@@ -382,6 +379,27 @@ export const IDEA_STILLS: Record<string, { box: FrameBox; over: OverlayPoint[] }
         "draw": 1,
         "ax": 26.81,
         "ay": 56.41,
+        "side": "below"
+      },
+      {
+        "type": "label",
+        "id": "print",
+        "x": 54.05,
+        "y": 13.51,
+        "opacity": 1,
+        "draw": 1,
+        "ax": 52.73,
+        "ay": 32.48
+      },
+      {
+        "type": "label",
+        "id": "system",
+        "x": 44.4,
+        "y": 71.11,
+        "opacity": 1,
+        "draw": 1,
+        "ax": 46.64,
+        "ay": 59.23,
         "side": "below"
       },
       {

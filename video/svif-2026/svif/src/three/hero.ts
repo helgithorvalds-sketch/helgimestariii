@@ -400,7 +400,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
     ready,
     coverReady: book.whenLoaded(1),
     allLoaded: book.whenLoaded(book.pageCount),
-    duration: T.end,
+    duration: biz ? HERO_INTRO.arrive[1] + HERO_INTRO.tail : T.end,
     resize(w, h, ro) {
       if (ro?.rect) rect = ro.rect;
       stage.resize(w, h);
@@ -423,11 +423,19 @@ export function createHeroScene(canvas: HTMLCanvasElement, o: HeroOptions = {}):
         const t = st.t;
         const I = HERO_INTRO;
         const a = HERO_EASE.arrive(seg(t, I.arrive[0], I.arrive[1]));
-        const r = HERO_EASE.glide(seg(t, T.view[0], T.view[1]));
-        introAngles(t);
-        // the spread's footprint until the cover closes
-        const open = 1 - HERO_EASE.glide(seg(t, T.cover[0], T.cover[1]));
-        place(r, open, (1 - a) * 0.42, a, 1 - ARRIVE_SHRINK * (1 - a));
+        if (biz) {
+          // the business booklet's inner pages are not designed yet: no flip-through, it arrives
+          // closed, front cover up, and settles
+          for (let k = 0; k < n; k++) angles[k] = bends[k] = 0;
+          book.setPages(angles, bends);
+          place(1, 0, (1 - a) * 0.42, a, 1 - ARRIVE_SHRINK * (1 - a));
+        } else {
+          const r = HERO_EASE.glide(seg(t, T.view[0], T.view[1]));
+          introAngles(t);
+          // the spread's footprint until the cover closes
+          const open = 1 - HERO_EASE.glide(seg(t, T.cover[0], T.cover[1]));
+          place(r, open, (1 - a) * 0.42, a, 1 - ARRIVE_SHRINK * (1 - a));
+        }
       } else {
         // legacy (film.ts): the settle, and the cover lifting with `open`
         if (!legacy) {
