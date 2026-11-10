@@ -6,11 +6,11 @@
 
 - Fyrirsögn: „Húsfélög og verkkaupar eins og Reykjavíkurborg treysta okkur.“ (Garðabær tekinn út, húsfélög bætt við.)
 - Ný lína: „Við sjáum um smíði, múrvinnu og allt sem viðkemur viðhaldi og nýbyggingum.“
-- Smátt letur: „Við sjáum líka um málun, pípulagnir, rafvirkjun og gluggaskipti þegar verkið kallar á það.“
+- Þriðja lína, sama stærð og undirtextinn: „Við sjáum líka um málun, pípulagnir, rafvirkjun og gluggaskipti þegar verkið kallar á það.“
 
 ## Þjónusta sem aðrir eiga í SVIF-bæklingnum
 
-Þessi þjónusta er aðeins nefnd í smáa letrinu, því annað fyrirtæki á flokkinn:
+Þessi þjónusta er aðeins nefnd í þriðju línunni, því annað fyrirtæki á flokkinn:
 
 | Þjónusta | Flokkurinn er hjá |
 | --- | --- |
