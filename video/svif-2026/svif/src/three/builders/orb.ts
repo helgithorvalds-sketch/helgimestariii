@@ -62,6 +62,8 @@ export interface OrbTuning {
   cloud?: number;
   /** false: no glass shell on desktop either (the pearl is the surface) */
   glass?: boolean;
+  /** strength of the soft bloom around the orb (0 = none, 1 = designed) */
+  halo?: number;
 }
 
 const lin = (hex: string) => new THREE.Color(hex).convertSRGBToLinear();
@@ -202,6 +204,28 @@ export function createOrb(o: OrbOptions = {}): Orb {
     group.add(shell);
   }
 
+  // a soft bloom just outside the glass (a light seen through a faint haze): a ring of warm cream
+  // that peaks at the shell's edge and is gone by 1.7 R, with no wash over the pearl itself. Drawn
+  // without depth so it reads over the district behind, under the lines and the glass.
+  const haloK = t.halo ?? 1;
+  const haloTex = canvasTex(256, 256, (c, w, h) => {
+    const r = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    r.addColorStop(0, "rgba(255,240,226,0)");
+    r.addColorStop(0.5, "rgba(255,240,226,0)");
+    r.addColorStop(0.6, "rgba(255,236,220,0.34)");
+    r.addColorStop(0.74, "rgba(236,196,172,0.14)");
+    r.addColorStop(0.9, "rgba(226,180,156,0.03)");
+    r.addColorStop(1, "rgba(226,180,156,0)");
+    c.fillStyle = r;
+    c.fillRect(0, 0, w, h);
+  });
+  const haloMat = new THREE.SpriteMaterial({ map: haloTex, transparent: true, depthWrite: false, depthTest: false, opacity: 0, toneMapped: false });
+  const halo = new THREE.Sprite(haloMat);
+  halo.scale.setScalar(R * 3.4);
+  halo.renderOrder = 3;
+  halo.visible = haloK > 0.001;
+  group.add(halo);
+
   // the pool of light on the ground (the story positions it)
   const poolTex = canvasTex(256, 256, (c, w, h) => {
     const r = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
@@ -234,6 +258,9 @@ export function createOrb(o: OrbOptions = {}): Orb {
       const k = 1 - Math.pow(1 - v, 3);
       core.scale.setScalar(Math.max(0.001, k));
       core.visible = k > 0.02;
+      // the bloom follows the light inside
+      haloMat.opacity = haloK * k;
+      halo.visible = haloMat.opacity > 0.003;
     },
     setLife(t) {
       coreMat.uniforms.uTime.value = t;
@@ -256,6 +283,8 @@ export function createOrb(o: OrbOptions = {}): Orb {
       poolGeo.dispose();
       poolMat.dispose();
       poolTex.dispose();
+      haloMat.dispose();
+      haloTex.dispose();
     },
   };
   return api;

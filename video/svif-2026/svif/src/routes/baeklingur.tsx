@@ -31,10 +31,9 @@ export const Route = createFileRoute("/baeklingur")({
 /* Links point at the front page's sections, so they use /# anchors. */
 const headerLinks = [
   { name: "Svona virkar það", href: "/#svona-virkar" },
-  { name: "Af hverju SVIF", href: "/#af-hverju" },
+  { name: "Spurt og svarað", href: "/#meira" },
   { name: "Bæklingurinn", href: "/baeklingur" },
   { name: "Ný fyrirtæki", href: "/fyrirtaeki" },
-  { name: "Spurningar", href: "/#spurningar" },
 ];
 
 function BaeklingurPage() {

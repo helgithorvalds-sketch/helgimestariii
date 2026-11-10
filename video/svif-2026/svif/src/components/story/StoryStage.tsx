@@ -335,6 +335,16 @@ export function StoryStage({
           }
           x = best.x;
           y = best.y;
+          // never past the canvas edge (phones): slide the caption inside, keeping its anchor under
+          // the text where the edge allows, so the hairline still meets it
+          const half = w / 2;
+          const lo = half + CAP_PAD;
+          const hi = W - half - CAP_PAD;
+          if (lo < hi) {
+            x = clamp(x, lo, hi);
+            if (l.ax < x - half + 6) x = clamp(l.ax + half - 6, lo, hi);
+            else if (l.ax > x + half - 6) x = clamp(l.ax - half + 6, lo, hi);
+          }
           boxes.push({ x0: x - w / 2 - CAP_PAD, x1: x + w / 2 + CAP_PAD, y0: y - CAP_H, y1: y - 4 });
           leads.push({ x: l.ax, y0: Math.min(y, l.ay), y1: Math.max(y, l.ay) });
         }

@@ -18,6 +18,8 @@
   width: 1px;
   height: 1px;
   pointer-events: none;
+  /* a native jump (no JS) lands under the header like the section itself (scroll-mt-20) */
+  scroll-margin-top: 80px;
 }
 
 /* ---------------------------------------------------------------- layout */

@@ -132,8 +132,39 @@ function schedule(root: Root) {
   });
 }
 
+/*
+  Safety net for the observer. After an instant jump (a deep link such as #spurning-6, the pre-jump
+  of a long anchor trip) Chromium has been seen to deliver no notification for roots that landed
+  on screen, so they would stay hidden until the next intersection change. On each scroll frame
+  the pending roots' rects are checked with the observer's own rule (bottom margin −14 %); a root
+  that is on screen plays, one already above the viewport snaps to its end state. Reads only.
+*/
+let scrollCheck = 0;
+function checkPending() {
+  scrollCheck = 0;
+  if (!pending.size || !io) return;
+  const limit = window.innerHeight * 0.86;
+  for (const root of [...pending]) {
+    const r = root.getBoundingClientRect();
+    if (r.width === 0 && r.height === 0) continue;
+    if (r.bottom < 0) {
+      pending.delete(root);
+      io.unobserve(root);
+      void play(root, true);
+    } else if (r.top < limit && r.bottom > 0) {
+      pending.delete(root);
+      io.unobserve(root);
+      schedule(root);
+    }
+  }
+}
+function onScroll() {
+  if (!scrollCheck) scrollCheck = requestAnimationFrame(checkPending);
+}
+
 function ensureObserver() {
   if (io) return io;
+  window.addEventListener("scroll", onScroll, { passive: true });
   io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {

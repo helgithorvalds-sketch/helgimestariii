@@ -7,10 +7,9 @@ const LOGO_CREAM = "/svif/logo-cream.png";
 
 const defaultNavLinks = [
   { name: "Svona virkar það", href: "#svona-virkar" },
-  { name: "Af hverju SVIF", href: "#af-hverju" },
+  { name: "Spurt og svarað", href: "#meira" },
   { name: "Bæklingurinn", href: "/baeklingur" },
   { name: "Ný fyrirtæki", href: "/fyrirtaeki" },
-  { name: "Spurningar", href: "#spurningar" },
 ];
 
 /* "/path" and "/path#hash" are router links (client-side, with the view transition; the router

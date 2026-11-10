@@ -38,6 +38,10 @@
   object-fit: cover;
   opacity: 0;
   pointer-events: none;
+  /* its top edge dissolves into the stage (the wash above ends just inside the scene area), so the
+     poster never shows as a cut-out while the 3D loads */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 56px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 56px);
   transition: opacity 600ms cubic-bezier(0.45, 0, 0.55, 1);
 }
 .story-poster[data-show="1"] {
