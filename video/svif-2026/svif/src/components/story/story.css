@@ -1072,3 +1072,100 @@ html:not(.js) .story-static {
     display: none;
   }
 }
+
+/* shorter wording on phones (StoryStep.titleShort / bodyShort) */
+.story-phone {
+  display: none;
+}
+@media (max-width: 767px) and (orientation: portrait) {
+  .story-wide {
+    display: none;
+  }
+  .story-phone {
+    display: inline;
+  }
+}
+
+/* ---------------------------------------------------------------- round 3c layout
+   Chapters at the top (they are flat: a row of hairlines under the heading), the step's text under
+   them, the scene below with all the room that frees, and the play controls centred at the bottom. */
+.story-top .story-rule {
+  display: none;
+}
+.story-top .story-chips {
+  margin-top: 12px;
+  pointer-events: auto;
+  text-align: left;
+  color: var(--ink);
+}
+.story-poster {
+  transform: scale(var(--scene-zoom, 1));
+}
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  .story-top {
+    padding-top: clamp(16px, 2.6svh, 30px);
+  }
+  .story-top .story-chip {
+    padding: 12px 0 6px;
+    gap: 9px;
+  }
+  .story-copy {
+    margin-top: clamp(10px, 1.8svh, 22px);
+  }
+  /* the text steps back so the animation leads */
+  .story-title {
+    font-size: clamp(1.3rem, 0.86rem + 1.05vw, 2.05rem);
+  }
+  .story-body {
+    margin-top: clamp(6px, 1svh, 12px);
+    font-size: clamp(14px, 0.8rem + 0.2vw, 16px);
+  }
+  .story-needs {
+    margin-top: clamp(8px, 1.2svh, 12px);
+  }
+  .story-need-icon {
+    width: clamp(26px, 1.3rem + 0.5vw, 32px);
+    height: clamp(26px, 1.3rem + 0.5vw, 32px);
+  }
+  .story-need-label {
+    font-size: 11px;
+  }
+  .story-note {
+    margin-top: 6px;
+  }
+  /* the transport alone, centred on the stage's bottom edge */
+  .story-bar {
+    justify-content: center;
+    bottom: clamp(10px, 2svh, 22px);
+  }
+  .story-transport {
+    position: relative;
+    width: auto;
+    justify-content: center;
+    min-height: 62px;
+  }
+  .story-time {
+    position: absolute;
+    left: 100%;
+    margin-left: 16px;
+  }
+  .story-stage[data-play="idle"] .story-bigstart {
+    bottom: clamp(10px, 2svh, 22px);
+    height: 62px;
+    gap: 14px;
+    padding: 0 32px 0 9px;
+    font-size: 14px;
+  }
+  .story-bigstart-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (max-width: 767px) and (orientation: portrait) {
+  .story-top .story-chips {
+    margin-top: 10px;
+  }
+  .story-top .story-chip {
+    padding: 8px 0 2px;
+  }
+}

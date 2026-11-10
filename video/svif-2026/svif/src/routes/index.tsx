@@ -115,10 +115,10 @@ function Hero() {
   return (
     <StageHero
       tagline="SVIF · Nýji kaflinn"
-      caps="Við tengjum ykkur við"
+      caps="Við tengjum ykkar fyrirtæki við"
       accent="alla nýja húseigendur"
       capsAfter="á höfuðborgarsvæðinu."
-      sub="Í hverri viku fá nýir húseigendur Nýja kaflann heim."
+      sub={null}
       actions={
         <>
           <Pill href="#samband" variant="solid" size="md">

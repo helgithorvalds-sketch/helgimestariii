@@ -52,6 +52,14 @@ export function StageHero({
       data-header="dark"
       className="stage-hero stage-bg isolate overflow-hidden text-[color:var(--cream)]"
     >
+      {/* the loading screen: covers the page until the hero's 3D is ready (HeroBooklet adds
+          html.hero-ready), so the booklet's intro is seen whole; it lifts by itself after 6 s */}
+      <div aria-hidden className="site-loader">
+        <img src="/svif/logo-cream.png" alt="" className="site-loader__logo" />
+        <span className="site-loader__bar">
+          <i />
+        </span>
+      </div>
       <div aria-hidden className="stage-beam pointer-events-none absolute inset-0" />
       <div
         aria-hidden

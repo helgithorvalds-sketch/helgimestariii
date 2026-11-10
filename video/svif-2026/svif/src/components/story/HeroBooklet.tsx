@@ -61,7 +61,10 @@ export function HeroBooklet({
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setMode(reduce || !supportsWebGL() ? "static" : "live");
+    const still = reduce || !supportsWebGL();
+    // the still needs no loading: lift the loading screen at once
+    if (still) document.documentElement.classList.add("hero-ready");
+    setMode(still ? "static" : "live");
   }, []);
 
   useEffect(() => {
@@ -70,7 +73,8 @@ export function HeroBooklet({
     const canvas = canvasRef.current!;
     const section = (wrap.closest("section") as HTMLElement | null) ?? wrap;
     // test hooks (never set in production): a wall clock without frame clamping, or a fixed time
-    const clock = ((window as unknown as { __SVIF_HERO_CLOCK?: Clock }).__SVIF_HERO_CLOCK ?? {}) as Clock;
+    const clock = ((window as unknown as { __SVIF_HERO_CLOCK?: Clock }).__SVIF_HERO_CLOCK ??
+      {}) as Clock;
     const mobile = window.matchMedia("(max-width: 767px), (pointer: coarse)").matches;
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     let disposed = false;
@@ -125,13 +129,20 @@ export function HeroBooklet({
           const c = cover ?? (which === "biz" ? "biz-cover.jpg" : undefined);
           const sharp = !mobile && window.devicePixelRatio > 1.25 && c && hiRes[c] ? hiRes[c] : c;
           // a page that arrives late is drawn at the next frame (the intro loop), or right away later
-          scene = createHeroScene(canvas, { book: which, cover: sharp, mobile, onUpdate: () => kick() });
+          scene = createHeroScene(canvas, {
+            book: which,
+            cover: sharp,
+            mobile,
+            onUpdate: () => kick(),
+          });
           fit();
           // already played in this page's lifetime: the resting booklet, faded in (cover only)
           if (replay && clock.t === undefined) elapsed = scene.duration;
           await (replay ? scene.coverReady : scene.ready);
           if (disposed) return;
           scene.frame({ t: elapsed });
+          // everything is loaded: lift the loading screen, then the intro plays
+          document.documentElement.classList.add("hero-ready");
           requestAnimationFrame(() => {
             if (disposed) return;
             started = true;
@@ -141,10 +152,16 @@ export function HeroBooklet({
             kick();
           });
         })
-        .catch(() => setMode("static"));
+        .catch(() => {
+          document.documentElement.classList.add("hero-ready");
+          setMode("static");
+        });
     const idle =
-      (window as unknown as { requestIdleCallback?: (f: () => void, o?: { timeout: number }) => number })
-        .requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 60));
+      (
+        window as unknown as {
+          requestIdleCallback?: (f: () => void, o?: { timeout: number }) => number;
+        }
+      ).requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 60));
     idle(() => void start(), { timeout: 600 });
 
     const io = new IntersectionObserver((es) => {

@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from "react";
 import { Reveal, Sequence } from "@/components/motion/Reveal";
 import { DisplayTitle, HeroTagline, bindShort } from "@/components/SvifBits";
 import { supportsWebGL } from "@/lib/webgl";
@@ -161,7 +168,10 @@ export function IdeaSection({
     const frame = sectionRef.current?.querySelector<HTMLElement>(".idea-frame");
     if (!frame) return;
     const r = frame.getBoundingClientRect();
-    scrollToTarget(Math.max(0, window.scrollY + r.top - landing(r.height)), { immediate: !glide, focus: false });
+    scrollToTarget(Math.max(0, window.scrollY + r.top - landing(r.height)), {
+      immediate: !glide,
+      focus: false,
+    });
   }, []);
   const hashItem = useCallback(
     (hash: string) => {
@@ -197,11 +207,13 @@ export function IdeaSection({
   // takes the click over, so the glide lands on the panel with its item selected
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+        return;
       const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
       if (!a || (a.target && a.target !== "_self")) return;
       const url = new URL(a.getAttribute("href") ?? "", window.location.href);
-      if (url.origin !== window.location.origin || url.pathname !== window.location.pathname) return;
+      if (url.origin !== window.location.origin || url.pathname !== window.location.pathname)
+        return;
       const i = hashItem(url.hash);
       if (i < 0) return;
       e.preventDefault();
@@ -221,7 +233,12 @@ export function IdeaSection({
     if (!stepper || !frame || !panel) return;
     const set = () => {
       let off = 0;
-      for (let el: HTMLElement | null = panel; el && el !== frame; el = el.offsetParent as HTMLElement | null) off += el.offsetTop;
+      for (
+        let el: HTMLElement | null = panel;
+        el && el !== frame;
+        el = el.offsetParent as HTMLElement | null
+      )
+        off += el.offsetTop;
       stepper.style.setProperty("--deep", `${Math.round(landing(frame.offsetHeight) + off)}px`);
     };
     set();
@@ -269,7 +286,8 @@ export function IdeaSection({
     io.observe(el);
     let last = 0;
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (!visible || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (!visible || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey)
+        return;
       if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
       if (document.activeElement && document.activeElement !== document.body) return;
       // nothing modal open (the film, the mobile menu)
@@ -393,13 +411,22 @@ export function IdeaSection({
       <span id="af-hverju" className="idea-alias" aria-hidden="true" />
       <span id="spurningar" className="idea-alias" aria-hidden="true" />
       <div aria-hidden className="stage-beam pointer-events-none absolute inset-0" />
-      <div aria-hidden className="grain pointer-events-none absolute inset-0 opacity-80 mix-blend-overlay" />
+      <div
+        aria-hidden
+        className="grain pointer-events-none absolute inset-0 opacity-80 mix-blend-overlay"
+      />
 
       <div className="site-container relative">
         <Sequence className="max-w-[46rem]">
           <HeroTagline tone="cream">{copy.eyebrow}</HeroTagline>
           <div id={`${id}-title`}>
-            <DisplayTitle tone="cream" caps={copy.caps} accent={copy.accent} size="lg" className="mt-6" />
+            <DisplayTitle
+              tone="cream"
+              caps={copy.caps}
+              accent={copy.accent}
+              size="lg"
+              className="mt-6"
+            />
           </div>
           <Reveal kind="block" role="body">
             <p className="mt-6 max-w-[34rem] text-[15.5px] leading-relaxed text-[color:var(--cream)]/72 md:text-[17px]">
@@ -416,17 +443,29 @@ export function IdeaSection({
           data-swapped={swap.n > 0 ? "" : undefined}
           onKeyDown={onStepperKey}
         >
-          <Reveal kind="curtain" className="curtain idea-frame" style={{ "--round": "var(--idea-radius)" } as CSSProperties}>
+          <Reveal
+            kind="curtain"
+            className="curtain idea-frame"
+            style={{ "--round": "var(--idea-radius)" } as CSSProperties}
+          >
             {/* the text, inside the panel's calm top-left area */}
             <div ref={textRef} className="idea-text">
               <p className="idea-count" aria-hidden="true">
                 <span className="idea-count-clip">
                   {swap.prev >= 0 && !swap.fast && (
-                    <span key={`o${swap.n}`} className="idea-digit idea-digit-out" data-dir={swap.dir}>
+                    <span
+                      key={`o${swap.n}`}
+                      className="idea-digit idea-digit-out"
+                      data-dir={swap.dir}
+                    >
                       {pad2(swap.prev + 1)}
                     </span>
                   )}
-                  <span key={`i${swap.n}`} className="idea-digit" data-in={swap.n > 0 && !swap.fast ? swap.dir : undefined}>
+                  <span
+                    key={`i${swap.n}`}
+                    className="idea-digit"
+                    data-in={swap.n > 0 && !swap.fast ? swap.dir : undefined}
+                  >
                     {pad2(active + 1)}
                   </span>
                 </span>
@@ -437,7 +476,13 @@ export function IdeaSection({
                 {items.map((item, i) => {
                   // rapid taps: the outgoing text goes at once, so two answers are never on screen together
                   const state =
-                    i === active ? (entered ? "in" : "pre") : i === swap.prev && !swap.fast ? "out" : "off";
+                    i === active
+                      ? entered
+                        ? "in"
+                        : "pre"
+                      : i === swap.prev && !swap.fast
+                        ? "out"
+                        : "off";
                   return (
                     <div
                       key={item.id}
@@ -466,7 +511,10 @@ export function IdeaSection({
                       <p className="idea-panel-n" aria-hidden="true">
                         {pad2(i + 1)} / {pad2(N)}
                       </p>
-                      <h3 key={i === active ? `t${swap.n}` : "t"} className="idea-title display-caps">
+                      <h3
+                        key={i === active ? `t${swap.n}` : "t"}
+                        className="idea-title display-caps"
+                      >
                         <span className="idea-line">
                           <span>{bindShort(item.caps)} </span>
                         </span>
@@ -487,7 +535,14 @@ export function IdeaSection({
                             ))}
                           </ul>
                         )}
-                        <p>{item.answer.join(" ")}</p>
+                        {item.answerShort ? (
+                          <>
+                            <p className="idea-wide">{item.answer.join(" ")}</p>
+                            <p className="idea-phone">{item.answerShort.join(" ")}</p>
+                          </>
+                        ) : (
+                          <p>{item.answer.join(" ")}</p>
+                        )}
                       </div>
                     </div>
                   );
@@ -512,7 +567,12 @@ export function IdeaSection({
             <div ref={sceneRef} className="idea-scene" aria-hidden="true" />
 
             <div className="idea-controls">
-              <ArrowButton dir={-1} label={copy.prev} disabled={active === 0} onClick={() => step(-1, "arrow")} />
+              <ArrowButton
+                dir={-1}
+                label={copy.prev}
+                disabled={active === 0}
+                onClick={() => step(-1, "arrow")}
+              />
               <div
                 role="tablist"
                 aria-label={copy.tablist}
@@ -543,7 +603,12 @@ export function IdeaSection({
                 ))}
                 <span aria-hidden="true" className="idea-indicator" />
               </div>
-              <ArrowButton dir={1} label={copy.next} disabled={active === N - 1} onClick={() => step(1, "arrow")} />
+              <ArrowButton
+                dir={1}
+                label={copy.next}
+                disabled={active === N - 1}
+                onClick={() => step(1, "arrow")}
+              />
             </div>
           </Reveal>
 
@@ -581,7 +646,15 @@ function ArrowButton({
         if (!disabled) onClick();
       }}
     >
-      <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        viewBox="0 0 16 16"
+        aria-hidden="true"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         {dir < 0 ? <path d="M10 3.5 5.5 8l4.5 4.5" /> : <path d="M6 3.5 10.5 8 6 12.5" />}
       </svg>
     </button>

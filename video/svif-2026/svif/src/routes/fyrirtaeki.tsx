@@ -3,11 +3,10 @@ import { BIZ_STEPS } from "@/content/story-copy";
 import { useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
 import { VideoLightbox, type FilmHandle } from "@/components/VideoLightbox";
-import { FILM_FYRIRTAEKI, filmMeta } from "@/lib/films";
+import { FILM_FYRIRTAEKI } from "@/lib/films";
 import { Sequence, Reveal } from "@/components/motion/Reveal";
-import { Eyebrow, DisplayTitle, Pill, PillArrow, FilmButton } from "@/components/SvifBits";
+import { Eyebrow, DisplayTitle, Pill, PillArrow } from "@/components/SvifBits";
 import { StageHero } from "@/components/StageHero";
-import { StoryFooter } from "@/components/StoryChrome";
 import { ContentsList, type ContentsRow } from "@/components/ContentsList";
 import { BookingSection } from "@/components/BookingSection";
 import { BusinessStorySection } from "@/components/story/BusinessStorySection";
@@ -76,8 +75,6 @@ const categories: ContentsRow[] = [
 
 function FyrirtaekiPage() {
   const film = useRef<FilmHandle>(null);
-  const openFilm = () => film.current?.open();
-  const warmFilm = () => film.current?.warm();
 
   // old links to /fyrirtaeki#myndband (and /myndband) still open the film (muted: no gesture).
   // Reduced motion or Save-Data: the dialog opens on the poster and waits for Spila.
@@ -91,12 +88,9 @@ function FyrirtaekiPage() {
   return (
     <main className="overflow-x-clip bg-background text-foreground">
       <Header links={headerLinks} cta={{ name: "Bóka pláss", href: "#samband" }} logoHref="/" />
-      <Hero onFilm={openFilm} onWarm={warmFilm} />
+      <Hero />
       <BusinessStorySection
         steps={BIZ_STEPS}
-        footer={
-          <StoryFooter onFilm={openFilm} onWarm={warmFilm} meta={filmMeta(FILM_FYRIRTAEKI)} />
-        }
       />
       {/* reasons and common questions, one at a time, with the business vignettes */}
       <IdeaSection copy={IDEA_BIZ} kind="biz" />
@@ -109,7 +103,7 @@ function FyrirtaekiPage() {
 }
 
 /* ---------- HERO (dark stage, the business booklet) ---------- */
-function Hero({ onFilm, onWarm }: { onFilm: () => void; onWarm: () => void }) {
+function Hero() {
   return (
     <StageHero
       tagline="SVIF · Fyrir ný fyrirtæki"
@@ -126,15 +120,6 @@ function Hero({ onFilm, onWarm }: { onFilm: () => void; onWarm: () => void }) {
             Bóka pláss
             <PillArrow />
           </Pill>
-          <FilmButton
-            id="myndband"
-            tone="cream"
-            onClick={onFilm}
-            onWarm={onWarm}
-            labelShort="Myndband"
-            meta={filmMeta(FILM_FYRIRTAEKI)}
-            className="sm:ml-4"
-          />
         </>
       }
       corners={{

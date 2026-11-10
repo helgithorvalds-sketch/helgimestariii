@@ -20,6 +20,8 @@ export interface IdeaItem {
   title: string;
   /** 1–3 short sentences, rendered as one paragraph */
   answer: string[];
+  /** shorter wording for phones (≤ 767 px wide); the full answer everywhere else */
+  answerShort?: string[];
   /** a bulleted list shown above the answer (what is included) */
   list?: string[];
   /** words for the vignette's overlay ids */
@@ -79,6 +81,10 @@ export const IDEA_HOME: IdeaCopy = {
         "Nýir húseigendur þurfa málara, gólfefni, tryggingar og margt fleira, og mörg fyrirtæki keppast um þá.",
         "Í Nýja kaflanum er þitt fyrirtæki það eina í sínum flokki. Tilboðið þitt kemur inn um lúguna einmitt þegar fólk er að velja, svo það hringir í þig en ekki keppinautinn.",
       ],
+      answerShort: [
+        "Mörg fyrirtæki keppast um nýja húseigendur.",
+        "Í Nýja kaflanum ert þú eina fyrirtækið í þínum flokki og tilboðið berst þegar fólk er að velja.",
+      ],
       labels: { many: "Margir málarar", booklet: "Nýji kaflinn", yours: "Tilboðið þitt" },
       alt: "Nýtt hús og sex málarabílar í kringum það, hver með stóra málningarrúllu á þakinu. Nýji kaflinn rennur inn um lúguna. Bíll málarans sem er með tilboð í bæklingnum verður rósrauður og færir sig nær húsinu, hinir bakka frá og dofna.",
       vignette: "crowd",
@@ -105,6 +111,7 @@ export const IDEA_HOME: IdeaCopy = {
         "Í hverri viku.",
         "Nýir húseigendur fá Nýja kaflann á fyrstu vikunum eftir kaupin, á meðan þeir eru að koma sér fyrir.",
       ],
+      answerShort: ["Í hverri viku, á fyrstu vikunum eftir kaupin."],
       labels: { weekly: "Í hverri viku" },
       alt: "Dagatal mánaðarins. Á sama vikudegi í hverri viku lendir stafli af Nýja kaflanum, fjórar vikur í röð.",
       vignette: "weeks",
@@ -119,6 +126,7 @@ export const IDEA_HOME: IdeaCopy = {
         "Nei, en við mælum eindregið með því.",
         "Auglýsingu er hent, en afsláttur er geymdur þar til þörfin vaknar.",
       ],
+      answerShort: ["Nei, en við mælum með því.", "Afsláttur er geymdur, auglýsingu er hent."],
       labels: { thrown: "Auglýsingu hent", kept: "Afsláttur geymdur" },
       alt: "Venjuleg auglýsing endar í ruslafötu en afsláttarmiði úr bæklingnum er festur á ísskáp með rósrauðum segli.",
       vignette: "kept",
@@ -155,7 +163,11 @@ export const IDEA_HOME: IdeaCopy = {
       caps: "Fá keppinautar mínir",
       accent: "líka pláss?",
       title: "Fá keppinautar mínir líka pláss?",
-      answer: ["Nei.", "Aðeins eitt fyrirtæki er í hverjum flokki, svo enginn keppinautur þinn er í bæklingnum."],
+      answer: [
+        "Nei.",
+        "Aðeins eitt fyrirtæki er í hverjum flokki, svo enginn keppinautur þinn er í bæklingnum.",
+      ],
+      answerShort: ["Nei.", "Aðeins eitt fyrirtæki er í hverjum flokki."],
       labels: { one: "Eitt í hverjum flokki", yourcat: "Flokkurinn þinn" },
       alt: "Nýji kaflinn liggur opinn. Á opnunni eru sex flokkar og einn hlutur í hverjum: gluggi, lampi, málningardós, hægindastóll, gólfflísar og skjöldur. Önnur málningardós rennur að flokknum Málning, en hann er þegar tekinn. Dósin sem fyrir er verður rósrauð og hin hörfar og hverfur.",
       vignette: "typecase",
@@ -180,6 +192,10 @@ export const IDEA_BIZ: IdeaCopy = {
       answer: [
         "Ný fyrirtæki þurfa bókhald, tryggingar, banka og margt fleira, og mörg fyrirtæki keppast um þau.",
         "Í bæklingnum eruð þið eina fyrirtækið í ykkar flokki. Sérkjörin ykkar berast eigendunum einmitt þegar þeir eru að velja, svo þeir leita til ykkar en ekki keppinautarins.",
+      ],
+      answerShort: [
+        "Mörg fyrirtæki keppast um ný fyrirtæki.",
+        "Í bæklingnum eruð þið ein í ykkar flokki og sérkjörin berast þegar eigendurnir eru að velja.",
       ],
       labels: { many: "Margar bókhaldsstofur", booklet: "Bæklingurinn", yours: "Sérkjörin ykkar" },
       alt: "Ný skrifstofubygging með skilti sem á stendur NÝTT og fimm bókhaldsstofur í kring, hver með stóra reiknivél á þakinu. Bæklingurinn rennur inn um lúguna á nýju skrifstofunni. Stofan sem er með sérkjör í bæklingnum verður rósrauð og færist nær, hinar hörfa og dofna.",
@@ -207,6 +223,7 @@ export const IDEA_BIZ: IdeaCopy = {
         "Í hverri viku.",
         "Ný fyrirtæki fá bæklinginn á fyrstu vikum rekstrarins, á meðan verið er að velja bókhald, banka og tryggingar.",
       ],
+      answerShort: ["Í hverri viku, á fyrstu vikum rekstrarins."],
       labels: { weekly: "Í hverri viku" },
       alt: "Dagatal mánaðarins. Á sama vikudegi í hverri viku lendir stafli af bæklingnum, fjórar vikur í röð.",
       vignette: "weeks",
@@ -221,6 +238,7 @@ export const IDEA_BIZ: IdeaCopy = {
         "Nei, en við mælum eindregið með því.",
         "Auglýsingu er hent, en sérkjör eru geymd þar til þörfin vaknar.",
       ],
+      answerShort: ["Nei, en við mælum með því.", "Sérkjör eru geymd, auglýsingu er hent."],
       labels: { thrown: "Auglýsingu hent", kept: "Sérkjör geymd" },
       alt: "Venjuleg auglýsing endar í ruslafötu en afsláttarmiði er festur á korktöflu.",
       vignette: "kept",
@@ -257,7 +275,11 @@ export const IDEA_BIZ: IdeaCopy = {
       caps: "Fá keppinautar okkar",
       accent: "líka pláss?",
       title: "Fá keppinautar okkar líka pláss?",
-      answer: ["Nei.", "Aðeins eitt fyrirtæki er í hverjum flokki, svo enginn keppinautur ykkar er í bæklingnum."],
+      answer: [
+        "Nei.",
+        "Aðeins eitt fyrirtæki er í hverjum flokki, svo enginn keppinautur ykkar er í bæklingnum.",
+      ],
+      answerShort: ["Nei.", "Aðeins eitt fyrirtæki er í hverjum flokki."],
       labels: { one: "Eitt í hverjum flokki", yourcat: "Flokkurinn ykkar" },
       alt: "Bæklingurinn liggur opinn. Á opnunni eru sex flokkar og einn hlutur í hverjum: skjár, skjöldur, möppur, greiðslukort, fartölva og litaprufur með penna. Aðrar möppur renna að flokknum Bókhald, en hann er þegar tekinn. Möppurnar sem fyrir eru verða rósrauðar og hinar hörfa og hverfa.",
       vignette: "typecase",

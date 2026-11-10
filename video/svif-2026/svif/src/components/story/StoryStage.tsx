@@ -55,6 +55,9 @@ export interface StoryStep {
   /** the title; `*…*` marks the one serif-italic accent phrase */
   title: string;
   body: string;
+  /** shorter wording for phones (portrait, ≤ 767 px); the full text everywhere else */
+  titleShort?: string;
+  bodyShort?: string;
   /** optional source line under the body, e.g. "Heimild: …" */
   note?: string;
   /** optional row of named things under the body, each with a small line icon (step 01's needs) */
@@ -102,6 +105,29 @@ const NeedGlyph = ({ icon }: { icon: NeedIcon }) => (
     ))}
   </svg>
 );
+/** the step's title and line: the full wording, and the shorter one on phones when the copy has it */
+const StepTitle = ({ s }: { s: StoryStep }) =>
+  s.titleShort ? (
+    <>
+      <span className="story-wide">
+        <RichTitle text={s.title} />
+      </span>
+      <span className="story-phone">
+        <RichTitle text={s.titleShort} />
+      </span>
+    </>
+  ) : (
+    <RichTitle text={s.title} />
+  );
+const StepBody = ({ s }: { s: StoryStep }) =>
+  s.bodyShort ? (
+    <>
+      <span className="story-wide">{bindShort(s.body)}</span>
+      <span className="story-phone">{bindShort(s.bodyShort)}</span>
+    </>
+  ) : (
+    <>{bindShort(s.body)}</>
+  );
 const Needs = ({ items }: { items: NonNullable<StoryStep["needs"]> }) => (
   <span className="story-needs">
     {items.map((n) => (
@@ -210,6 +236,8 @@ interface Area {
   bottom: number;
   w: number;
   h: number;
+  /** camera zoom for this area: wide, flat areas move closer so the scene fills them */
+  zoom: number;
 }
 
 /**
@@ -238,10 +266,14 @@ function measureStageArea(
     top = Math.round(clamp(c.bottom - cv.top + gap, 0, h * 0.62));
     bottom = Math.round(clamp(b.top - cv.top - gap, top + 120, h));
   }
+  const zoom = matchMedia(PHONE_MQ).matches
+    ? 1
+    : clamp(w / Math.max(1, bottom - top) / 2.3, 1, 1.14);
+  stageEl.style.setProperty("--scene-zoom", zoom.toFixed(3));
   stageEl.style.setProperty("--scene-top", `${top}px`);
   stageEl.style.setProperty("--scene-gap", `${Math.round(h - bottom)}px`);
   stageEl.style.setProperty("--scene-copy", `${copy}px`);
-  return { top, bottom, w, h };
+  return { top, bottom, w, h, zoom };
 }
 
 const stillSetFor = (a: Area): StillSet =>
@@ -290,11 +322,18 @@ function projectY(cam: Stage["camera"], x: number, y: number, z: number, h: numb
  * src/three/story.ts, inlined so this file needs no runtime three import): afterwards
  * `camera.aspect` is the area's aspect and the optical centre sits in its middle, same scale.
  */
-function frameArea(cam: Stage["camera"], w: number, h: number, top: number, bottom: number) {
+function frameArea(
+  cam: Stage["camera"],
+  w: number,
+  h: number,
+  top: number,
+  bottom: number,
+  zoom = 1,
+) {
   const sH = Math.max(1, bottom - top);
   const c = (top + bottom) / 2;
   cam.aspect = w / sH;
-  cam.zoom = 1;
+  cam.zoom = zoom;
   cam.setViewOffset(w, sH, 0, sH / 2 - c, w, h);
   cam.updateProjectionMatrix();
 }
@@ -368,6 +407,7 @@ export function StoryStage({
   const labelsRef = useRef<HTMLDivElement | null>(null);
   const copyRef = useRef<HTMLDivElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
+  const chipsRef = useRef<HTMLDivElement | null>(null);
   const dipRef = useRef<HTMLDivElement | null>(null);
   const timeRef = useRef<HTMLSpanElement | null>(null);
   const mainRef = useRef<HTMLButtonElement | null>(null);
@@ -436,7 +476,7 @@ export function StoryStage({
   // with the names laid out, in the same task as the change, so nothing flickers
   useEffect(() => {
     const stageEl = stageRef.current;
-    const barEl = barRef.current;
+    const barEl = chipsRef.current;
     if (!stageEl || !barEl) return;
     let w = -1;
     const check = (force?: boolean) => {
@@ -557,12 +597,14 @@ export function StoryStage({
     // the scene area (CSS px from the canvas's top)
     let sceneTop = 0;
     let sceneBottom = 0;
+    let sceneZoom = 1;
     let narrow = false;
 
     const measureArea = () => {
       const a = measureStageArea(stageEl, wrap, copyEl, barEl);
       sceneTop = a.top;
       sceneBottom = a.bottom;
+      sceneZoom = a.zoom;
       setStillSet(stillSetFor(a));
     };
 
@@ -594,7 +636,7 @@ export function StoryStage({
       lastBottom = sceneBottom;
       stage.resize(w, h);
       narrow = matchMedia(STACKED_MQ).matches;
-      frameArea(stage.camera, w, h, sceneTop, sceneBottom);
+      frameArea(stage.camera, w, h, sceneTop, sceneBottom, sceneZoom);
       // captions are measured again (fonts and the caption size follow the layout)
       widths.clear();
       shownOff.clear();
@@ -1178,10 +1220,10 @@ export function StoryStage({
                 {s.chapter}
               </p>
               <h3 className="story-title">
-                <RichTitle text={s.title} />
+                <StepTitle s={s} />
               </h3>
               <p className="story-body">
-                {bindShort(s.body)}
+                <StepBody s={s} />
                 {s.needs && <Needs items={s.needs} />}
                 {s.note && <small className="story-note">{s.note}</small>}
               </p>
@@ -1284,6 +1326,32 @@ export function StoryStage({
               </p>
             </div>
             <div className="story-rule" aria-hidden="true" />
+            <div ref={chipsRef} className="story-chips" role="group" aria-label="Skref">
+              {steps.map((s, i) => (
+                <button
+                  key={s.n}
+                  type="button"
+                  className="story-chip"
+                  data-at={i < cur ? "past" : i > cur ? "next" : "now"}
+                  aria-current={i === cur && (play !== "idle" || !live) ? "step" : undefined}
+                  aria-label={`${s.n} ${s.chapter}, skref ${i + 1} af ${N}`}
+                  onClick={() => announce(ctl.current?.jump(i))}
+                >
+                  <span className="story-chip-track" aria-hidden="true">
+                    <span
+                      ref={(el) => {
+                        fillRefs.current[i] = el;
+                      }}
+                      className="story-chip-fill"
+                    />
+                  </span>
+                  <span className="story-chip-label" aria-hidden="true">
+                    <span className="story-chip-n">{s.n}</span>
+                    <span className="story-chip-name">{s.chapter}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div ref={copyRef} className="story-copy">
@@ -1297,12 +1365,12 @@ export function StoryStage({
                   <h3 className="story-title">
                     <span className="story-mask">
                       <span className="story-mask-inner">
-                        <RichTitle text={s.title} />
+                        <StepTitle s={s} />
                       </span>
                     </span>
                   </h3>
                   <p className="story-body">
-                    {bindShort(s.body)}
+                    <StepBody s={s} />
                     {s.needs && <Needs items={s.needs} />}
                     {s.note && <small className="story-note">{s.note}</small>}
                   </p>
@@ -1391,32 +1459,6 @@ export function StoryStage({
                 {`${clock(0)} / ${clock(total)}`}
               </span>
             )}
-          </div>
-          <div className="story-chips" role="group" aria-label="Skref">
-            {steps.map((s, i) => (
-              <button
-                key={s.n}
-                type="button"
-                className="story-chip"
-                data-at={i < cur ? "past" : i > cur ? "next" : "now"}
-                aria-current={i === cur && (play !== "idle" || !live) ? "step" : undefined}
-                aria-label={`${s.n} ${s.chapter}, skref ${i + 1} af ${N}`}
-                onClick={() => announce(ctl.current?.jump(i))}
-              >
-                <span className="story-chip-track" aria-hidden="true">
-                  <span
-                    ref={(el) => {
-                      fillRefs.current[i] = el;
-                    }}
-                    className="story-chip-fill"
-                  />
-                </span>
-                <span className="story-chip-label" aria-hidden="true">
-                  <span className="story-chip-n">{s.n}</span>
-                  <span className="story-chip-name">{s.chapter}</span>
-                </span>
-              </button>
-            ))}
           </div>
         </div>
         <p className="sr-only" aria-live="polite" aria-atomic="true">

@@ -867,3 +867,72 @@ html.scroll-locked body {
 .fade-in {
   animation: fade-in 600ms var(--ease-breathe) both;
 }
+
+/* ---------- loading screen (StageHero): JS only; lifted by html.hero-ready or after 6 s ---------- */
+.site-loader {
+  display: none;
+}
+.js .site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  background: #2a2420;
+  opacity: 1;
+  animation: site-loader-out 600ms cubic-bezier(0.45, 0, 0.55, 1) 6s forwards;
+}
+.site-loader__logo {
+  width: clamp(92px, 9vw, 132px);
+  height: auto;
+  animation: site-loader-breathe 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.site-loader__bar {
+  position: relative;
+  width: clamp(120px, 12vw, 168px);
+  height: 1px;
+  overflow: hidden;
+  background: rgba(246, 245, 236, 0.18);
+}
+.site-loader__bar i {
+  position: absolute;
+  inset: 0;
+  background: #b29079;
+  transform: translateX(-100%);
+  animation: site-loader-run 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+html.hero-ready .site-loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  animation: none;
+  transition:
+    opacity 600ms cubic-bezier(0.45, 0, 0.55, 1),
+    visibility 0s linear 600ms;
+}
+@keyframes site-loader-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes site-loader-run {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes site-loader-breathe {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}

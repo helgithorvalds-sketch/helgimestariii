@@ -31,30 +31,36 @@ export const HOME_STEPS: StoryStep[] = [
     chapter: "Bæklingurinn",
     title: "*Þess vegna* bjuggum við til SVIF",
     body: "Nýji kaflinn er bæklingur þar sem nýir húseigendur finna fyrirtækin sem geta hjálpað þeim.",
+    bodyShort: "Bæklingur með fyrirtækjum sem hjálpa nýjum húseigendum.",
   },
   {
     n: "03",
     chapter: "Sérkjörin",
     title: "Traust fyrirtæki með afslátt *fyrir hvert verkefni*",
     body: "Nýir húseigendur fá sérkjör hjá fyrirtækjunum sem þeir þurfa á að halda.",
+    bodyShort: "Sérkjör hjá fyrirtækjunum sem fólk þarf á að halda.",
   },
   {
     n: "04",
     chapter: "Hönnun",
     title: "Fyrir fyrirtækin í bæklingnum *sjáum við um allt*",
     body: "Fyrst hönnum við auglýsinguna þína. Þú sendir merki og tilboð og færð próförk til samþykktar.",
+    bodyShort: "Fyrst hönnum við auglýsinguna þína.",
   },
   {
     n: "05",
     chapter: "Prentun",
     title: "Síðan *prentum* við bæklinginn",
     body: "350–500 eintök á mánuði, eitt fyrir hvert nýtt heimili.",
+    bodyShort: "350–500 eintök á mánuði.",
   },
   {
     n: "06",
     chapter: "Dreifing",
     title: "Og *sendum* hann vikulega til allra nýrra húseigenda á höfuðborgarsvæðinu",
+    titleShort: "Og *sendum* hann vikulega til nýrra húseigenda",
     body: "Þannig fær fólk afsláttinn þinn þegar það þarf á þjónustunni þinni að halda.",
+    bodyShort: "Fólk fær afsláttinn þinn þegar þörfin vaknar.",
   },
 ];
 
@@ -68,6 +74,7 @@ export const BIZ_STEPS: StoryStep[] = [
     chapter: "Ný fyrirtæki",
     title: "Hundruð fyrirtækja eru *stofnuð í hverjum mánuði*",
     body: "Þau þurfa öll það sama og vita sjaldnast hvert á að leita:",
+    bodyShort: "Þau þurfa öll það sama:",
     needs: [
       { icon: "ledger", label: "Bókhald" },
       { icon: "shield", label: "Tryggingar" },
@@ -82,17 +89,21 @@ export const BIZ_STEPS: StoryStep[] = [
     chapter: "Bæklingurinn",
     title: "*Þess vegna* bjuggum við til fyrirtækjabæklinginn",
     body: "Bækling þar sem ný fyrirtæki finna þá sem geta hjálpað þeim, með sérkjörum. Eitt fyrirtæki í hverjum flokki.",
+    bodyShort: "Sérkjör frá traustum fyrirtækjum. Eitt í hverjum flokki.",
   },
   {
     n: "03",
     chapter: "Kerfið",
     title: "Kerfið finnur *nýskráð fyrirtæki*",
     body: "Við fylgjumst með nýskráningum og vitum hvert bæklingurinn á að fara.",
+    bodyShort: "Við vitum hvert bæklingurinn á að fara.",
   },
   {
     n: "04",
     chapter: "Dreifing",
     title: "Við *sendum* bæklinginn til nýrra fyrirtækja um allt land",
+    titleShort: "Við *sendum* bæklinginn um allt land",
     body: "Um 250 eintök á mánuði, á fyrstu vikum rekstrarins.",
+    bodyShort: "Um 250 eintök á mánuði.",
   },
 ];

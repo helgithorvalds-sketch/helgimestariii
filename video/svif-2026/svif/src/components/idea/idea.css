@@ -813,3 +813,16 @@ html:not(.js) .idea-title {
   border-radius: 50%;
   background: var(--rose, #c98f7c);
 }
+
+/* shorter answers on phones (IdeaItem.answerShort) */
+.idea-phone {
+  display: none;
+}
+@media (max-width: 767px) {
+  .idea-wide {
+    display: none;
+  }
+  .idea-phone {
+    display: block;
+  }
+}
