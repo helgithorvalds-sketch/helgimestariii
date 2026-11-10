@@ -1,4 +1,12 @@
-import { Fragment, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import {
+  Fragment,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import type { Stage } from "@/three/core";
 import type { ProjectedLabel, Story } from "@/three/story";
 import { supportsWebGL } from "@/lib/webgl";
@@ -49,7 +57,61 @@ export interface StoryStep {
   body: string;
   /** optional source line under the body, e.g. "Heimild: …" */
   note?: string;
+  /** optional row of named things under the body, each with a small line icon (step 01's needs) */
+  needs?: { icon: NeedIcon; label: string }[];
 }
+
+export type NeedIcon =
+  "paint" | "floor" | "window" | "power" | "shield" | "net" | "ledger" | "bank" | "web" | "clean";
+
+/** 24×24 line icons for the needs row (stroke = currentColor) */
+const NEED_PATHS: Record<NeedIcon, string[]> = {
+  paint: ["M4 4.5h13v5H4z", "M17 7h3v5.5h-8.5V15", "M10 15h3v5.5h-3z"],
+  floor: [
+    "M3.5 5h17v14h-17z",
+    "M3.5 9.7h17M3.5 14.3h17",
+    "M9 5v4.7M15 9.7v4.6M8 14.3V19M14 14.3V19",
+  ],
+  window: ["M5 3.5h14v17H5z", "M12 3.5v17M5 12h14"],
+  power: ["M13 2.5 5.5 13.5H11l-1 8 7.5-11H12z"],
+  shield: ["M12 3 5 5.6v5.6c0 4.4 2.9 8 7 9.8 4.1-1.8 7-5.4 7-9.8V5.6z", "m9 12 2.2 2.2L15.2 10"],
+  net: [
+    "M3 9.5a13 13 0 0 1 18 0",
+    "M6.2 13a8.4 8.4 0 0 1 11.6 0",
+    "M9.3 16.4a4 4 0 0 1 5.4 0",
+    "M12 19.6h.01",
+  ],
+  ledger: ["M6 3.5h12v17H6z", "M9 7.5h6M9 11.5h6M9 15.5h3.5", "M6 3.5v17"],
+  bank: ["M3.5 9.5 12 4l8.5 5.5z", "M5.5 9.5V18M10 9.5V18M14 9.5V18M18.5 9.5V18", "M3.5 20h17"],
+  web: ["M3.5 5h17v14h-17z", "M3.5 9h17", "M6 7h.01M8.3 7h.01", "M7 12.5h6M7 15.5h9"],
+  clean: ["M12 3v4", "M9 7h6l1.5 5h-9z", "M7.5 12 6 20.5h12L16.5 12", "M10 15.5v5M14 15.5v5"],
+};
+const NeedGlyph = ({ icon }: { icon: NeedIcon }) => (
+  <svg
+    viewBox="0 0 24 24"
+    className="story-need-icon"
+    aria-hidden="true"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.4"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {NEED_PATHS[icon].map((d) => (
+      <path key={d} d={d} />
+    ))}
+  </svg>
+);
+const Needs = ({ items }: { items: NonNullable<StoryStep["needs"]> }) => (
+  <span className="story-needs">
+    {items.map((n) => (
+      <span key={n.label} className="story-need">
+        <NeedGlyph icon={n.icon} />
+        <span className="story-need-label">{n.label}</span>
+      </span>
+    ))}
+  </span>
+);
 
 export interface StoryFactory {
   createStage: (o: {
@@ -156,7 +218,12 @@ interface Area {
  * washes follow it) and --scene-copy (the copy's bottom edge, where the top wash turns transparent).
  * Both modes measure it, so a still sits exactly where the live scene would.
  */
-function measureStageArea(stageEl: HTMLElement, box: HTMLElement, copyEl: HTMLElement, barEl: HTMLElement): Area {
+function measureStageArea(
+  stageEl: HTMLElement,
+  box: HTMLElement,
+  copyEl: HTMLElement,
+  barEl: HTMLElement,
+): Area {
   const cv = box.getBoundingClientRect();
   const h = cv.height || stageEl.clientHeight;
   const w = cv.width || stageEl.clientWidth;
@@ -177,7 +244,8 @@ function measureStageArea(stageEl: HTMLElement, box: HTMLElement, copyEl: HTMLEl
   return { top, bottom, w, h };
 }
 
-const stillSetFor = (a: Area): StillSet => (a.w / Math.max(1, a.bottom - a.top) < TALL_BELOW ? "tall" : "wide");
+const stillSetFor = (a: Area): StillSet =>
+  a.w / Math.max(1, a.bottom - a.top) < TALL_BELOW ? "tall" : "wide";
 /** m:ss */
 const clock = (s: number) => {
   const t = Math.max(0, Math.floor(s + 1e-6));
@@ -244,9 +312,25 @@ const PauseGlyph = () => (
   </svg>
 );
 const AgainGlyph = () => (
-  <svg viewBox="0 0 14 14" className="story-glyph story-glyph--again" aria-hidden="true" fill="none">
-    <path d="M2.6 7a4.4 4.4 0 1 0 1.3-3.1" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-    <path d="M3.4 1.2v3h3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+  <svg
+    viewBox="0 0 14 14"
+    className="story-glyph story-glyph--again"
+    aria-hidden="true"
+    fill="none"
+  >
+    <path
+      d="M2.6 7a4.4 4.4 0 1 0 1.3-3.1"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+    />
+    <path
+      d="M3.4 1.2v3h3"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 const ArrowGlyph = ({ dir }: { dir: -1 | 1 }) => (
@@ -430,7 +514,9 @@ export function StoryStage({
     let stage: Stage | null = null;
     let story: Story | null = null;
     let raf = 0;
-    const touch = window.matchMedia("(max-width: 767px), (hover: none) and (pointer: coarse)").matches;
+    const touch = window.matchMedia(
+      "(max-width: 767px), (hover: none) and (pointer: coarse)",
+    ).matches;
 
     /* ---------- player state (the source of truth; React mirrors it for the controls) ---------- */
     // it starts where the stage is: step 01's opening frame, or (back from the stills, when reduced
@@ -492,7 +578,14 @@ export function StoryStage({
       measureArea();
       if (w === lastW && h === lastH && sceneTop === lastTop && sceneBottom === lastBottom) return;
       // touch: ignore small height-only changes (mobile URL bar) to avoid re-layout jitter
-      if (touch && !forceSize && w === lastW && Math.abs(h - lastH) < 120 && lastH && sceneTop === lastTop)
+      if (
+        touch &&
+        !forceSize &&
+        w === lastW &&
+        Math.abs(h - lastH) < 120 &&
+        lastH &&
+        sceneTop === lastTop
+      )
         return;
       forceSize = false;
       lastW = w;
@@ -543,7 +636,12 @@ export function StoryStage({
           for (const k of [0, -1 / 8, 1 / 8, -1 / 4, 1 / 4, -1 / 3, 1 / 3]) {
             const cx = l.x + k * w;
             const cy = base - row * CAP_ROW;
-            const b = { x0: cx - w / 2 - CAP_PAD, x1: cx + w / 2 + CAP_PAD, y0: cy - CAP_H, y1: cy - 4 };
+            const b = {
+              x0: cx - w / 2 - CAP_PAD,
+              x1: cx + w / 2 + CAP_PAD,
+              y0: cy - CAP_H,
+              y1: cy - 4,
+            };
             const ly0 = Math.min(cy, l.ay);
             const ly1 = Math.max(cy, l.ay);
             let cost = 0;
@@ -556,7 +654,8 @@ export function StoryStage({
             }
             for (const ld of leads)
               if (ld.x > b.x0 + 2 && ld.x < b.x1 - 2 && ld.y1 > b.y0 && ld.y0 < b.y1) cost += 1000;
-            for (const [lid, ax] of anchors) if (lid !== l.id && ax > b.x0 + 2 && ax < b.x1 - 2) cost += 300;
+            for (const [lid, ax] of anchors)
+              if (lid !== l.id && ax > b.x0 + 2 && ax < b.x1 - 2) cost += 300;
             if (cx - w / 2 < 4 || cx + w / 2 > W - 4) cost += 400;
             if (cost === 0) {
               best = { x: cx, y: cy, cost };
@@ -578,7 +677,11 @@ export function StoryStage({
           if (l.ax < x - half + 6) x = clamp(l.ax + half - 6, lo, hi);
           else if (l.ax > x + half - 6) x = clamp(l.ax - half + 6, lo, hi);
         }
-        spots.set(l.id, { x, y, box: { x0: x - half, x1: x + half, y0: y - CAP_H + 4, y1: y - 6 } });
+        spots.set(l.id, {
+          x,
+          y,
+          box: { x0: x - half, x1: x + half, y0: y - CAP_H + 4, y1: y - 6 },
+        });
         // one that is mostly faded out (leaving at the edge) no longer pushes the others around
         if (vis > 0.35) {
           boxes.push({ x0: x - half - CAP_PAD, x1: x + half + CAP_PAD, y0: y - CAP_H, y1: y - 4 });
@@ -598,7 +701,8 @@ export function StoryStage({
       const minY = sceneTop + CAP_H + 6;
       let ceil = Infinity;
       if (narrow && labelClear?.length) {
-        for (const [x, y, z] of labelClear) ceil = Math.min(ceil, projectY(stage.camera, x, y, z, H));
+        for (const [x, y, z] of labelClear)
+          ceil = Math.min(ceil, projectY(stage.camera, x, y, z, H));
         ceil -= 10;
       }
       const cands: Cand[] = [];
@@ -649,14 +753,24 @@ export function StoryStage({
         }
         if (!loser) break;
         yields.add(loser.l.id);
-        spots = place(shown.filter((c) => !yields.has(c.l.id)), W, minY, ceil);
+        spots = place(
+          shown.filter((c) => !yields.has(c.l.id)),
+          W,
+          minY,
+          ceil,
+        );
       }
       if (import.meta.env.DEV)
         lastPlacement = {
           g: gShown,
           yields: [...yields],
-          spots: [...spots].map(([k, v]) => `${k}@${v.box.x0.toFixed(0)}-${v.box.x1.toFixed(0)},${v.box.y0.toFixed(0)}-${v.box.y1.toFixed(0)}`),
-          cands: shown.map((c) => `${c.l.id}#${c.order} ax${c.l.ax.toFixed(0)} vis${c.vis.toFixed(2)}`),
+          spots: [...spots].map(
+            ([k, v]) =>
+              `${k}@${v.box.x0.toFixed(0)}-${v.box.x1.toFixed(0)},${v.box.y0.toFixed(0)}-${v.box.y1.toFixed(0)}`,
+          ),
+          cands: shown.map(
+            (c) => `${c.l.id}#${c.order} ax${c.l.ax.toFixed(0)} vis${c.vis.toFixed(2)}`,
+          ),
         };
       for (const { l, edge } of cands) {
         const n = labelNodes.get(l.id)!;
@@ -714,7 +828,8 @@ export function StoryStage({
     /* ---------- the chips' progress and the running time ---------- */
     const paintProgress = () => {
       const at = dipping ? dipTarget : idx;
-      const p = state === "idle" ? 0 : dipping ? 0 : state === "ended" ? 1 : clamp(tau / durs[idx], 0, 1);
+      const p =
+        state === "idle" ? 0 : dipping ? 0 : state === "ended" ? 1 : clamp(tau / durs[idx], 0, 1);
       for (let i = 0; i < N; i++) {
         const el = fillRefs.current[i];
         if (!el) continue;
@@ -857,7 +972,10 @@ export function StoryStage({
             size();
             story = f.createStory(stage, { lite: touch });
             // canvas textures drawn with the display face (a story may expose `ready`)
-            await Promise.all([f.texturesReady(), (story as Story & { ready?: Promise<void> }).ready]);
+            await Promise.all([
+              f.texturesReady(),
+              (story as Story & { ready?: Promise<void> }).ready,
+            ]);
             if (disposed) return;
             // compile every program the story will need before its first frame, in parallel where
             // the GPU driver can (KHR_parallel_shader_compile)
@@ -982,10 +1100,20 @@ export function StoryStage({
   const total2 = String(N).padStart(2, "0");
   const startMeta = `${N} skref · ${Math.round(total)} sek.`;
   const mainLabel =
-    play === "playing" ? "Gera hlé" : play === "ended" ? "Spila aftur" : play === "paused" ? "Halda áfram" : "Spila";
+    play === "playing"
+      ? "Gera hlé"
+      : play === "ended"
+        ? "Spila aftur"
+        : play === "paused"
+          ? "Halda áfram"
+          : "Spila";
   const pill = live && (play === "idle" || play === "ended");
   // the stills on the stage: framed for the measured area (none until it is measured), or the 16:9 set
-  const framed = stills ? (stillSet ? stills[stillSet] : null) : { open: openPoster, steps: posters };
+  const framed = stills
+    ? stillSet
+      ? stills[stillSet]
+      : null
+    : { open: openPoster, steps: posters };
   const openSrc = framed?.open;
   const showOpen = live && !ready && play === "idle" && cur === 0 && !!openSrc;
   /**
@@ -993,7 +1121,8 @@ export function StoryStage({
    * view is fetched (a src, once set, stays: the poster dissolves into the scene); stills mode
    * keeps them all, the neighbours first.
    */
-  const stillOn = (i: number) => (mode === "stills" && i === cur) || (live && !ready && !showOpen && i === cur);
+  const stillOn = (i: number) =>
+    (mode === "stills" && i === cur) || (live && !ready && !showOpen && i === cur);
   const fetched = useRef(new Set<string>());
   const stillSrc = (i: number) => {
     const src = framed?.steps[i];
@@ -1011,7 +1140,10 @@ export function StoryStage({
   if (pill !== prevPill.current) {
     if (pill && typeof document !== "undefined") {
       const a = document.activeElement;
-      refocusMain.current = !!a && a !== mainRef.current && !!barRef.current?.querySelector(".story-transport")?.contains(a);
+      refocusMain.current =
+        !!a &&
+        a !== mainRef.current &&
+        !!barRef.current?.querySelector(".story-transport")?.contains(a);
     }
     prevPill.current = pill;
   }
@@ -1050,6 +1182,7 @@ export function StoryStage({
               </h3>
               <p className="story-body">
                 {bindShort(s.body)}
+                {s.needs && <Needs items={s.needs} />}
                 {s.note && <small className="story-note">{s.note}</small>}
               </p>
             </div>
@@ -1060,7 +1193,12 @@ export function StoryStage({
   );
 
   return (
-    <section id={id} aria-label={ariaLabel} className="story relative scroll-mt-20" data-story-mode={mode}>
+    <section
+      id={id}
+      aria-label={ariaLabel}
+      className="story relative scroll-mt-20"
+      data-story-mode={mode}
+    >
       <div
         ref={stageRef}
         className="story-stage"
@@ -1096,7 +1234,12 @@ export function StoryStage({
               decoding="async"
             />
           ))}
-          <div ref={labelsRef} className="story-labels" aria-hidden="true" data-ready={ready ? "1" : "0"} />
+          <div
+            ref={labelsRef}
+            className="story-labels"
+            aria-hidden="true"
+            data-ready={ready ? "1" : "0"}
+          />
           <div className="story-vignette" aria-hidden="true" />
           <div ref={dipRef} className="story-dip" aria-hidden="true" data-on="0" />
           {/* before the first play the whole scene starts it, like a film's poster */}
@@ -1117,7 +1260,11 @@ export function StoryStage({
               <p className="story-count" aria-hidden="true">
                 <span className="story-count-mask">
                   {steps.map((s, i) => (
-                    <span key={s.n} className="story-count-n" data-pos={i < cur ? "-1" : i > cur ? "1" : "0"}>
+                    <span
+                      key={s.n}
+                      className="story-count-n"
+                      data-pos={i < cur ? "-1" : i > cur ? "1" : "0"}
+                    >
                       {s.n}
                     </span>
                   ))}
@@ -1125,7 +1272,11 @@ export function StoryStage({
                 <span className="story-count-of">/ {total2}</span>
                 <span className="story-count-mask story-count-chapter">
                   {steps.map((s, i) => (
-                    <span key={s.n} className="story-count-n" data-pos={i < cur ? "-1" : i > cur ? "1" : "0"}>
+                    <span
+                      key={s.n}
+                      className="story-count-n"
+                      data-pos={i < cur ? "-1" : i > cur ? "1" : "0"}
+                    >
                       {s.chapter}
                     </span>
                   ))}
@@ -1152,6 +1303,7 @@ export function StoryStage({
                   </h3>
                   <p className="story-body">
                     {bindShort(s.body)}
+                    {s.needs && <Needs items={s.needs} />}
                     {s.note && <small className="story-note">{s.note}</small>}
                   </p>
                 </article>
@@ -1202,11 +1354,19 @@ export function StoryStage({
                 onClick={() => announce(ctl.current?.toggle())}
               >
                 <span className="story-start-icon">
-                  {play === "playing" ? <PauseGlyph /> : play === "ended" ? <AgainGlyph /> : <PlayGlyph />}
+                  {play === "playing" ? (
+                    <PauseGlyph />
+                  ) : play === "ended" ? (
+                    <AgainGlyph />
+                  ) : (
+                    <PlayGlyph />
+                  )}
                 </span>
                 {pill && (
                   <>
-                    <span className="story-start-label">{play === "ended" ? "Spila aftur" : "Spila"}</span>
+                    <span className="story-start-label">
+                      {play === "ended" ? "Spila aftur" : "Spila"}
+                    </span>
                     {play === "idle" && <span className="story-start-meta">{startMeta}</span>}
                   </>
                 )}

@@ -1019,3 +1019,56 @@ html:not(.js) .story-static {
     min-height: 72px;
   }
 }
+
+/* ---------------------------------------------------------------- the needs row (step 01)
+   The things a new home (or company) needs, named one by one with a small line icon each. */
+.story-needs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px clamp(16px, 2.2vw, 34px);
+  margin-top: clamp(10px, 1.6svh, 16px);
+}
+.story-need {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+}
+.story-need-icon {
+  width: clamp(32px, 1.7rem + 0.6vw, 40px);
+  height: clamp(32px, 1.7rem + 0.6vw, 40px);
+  color: #8a6650;
+}
+.story-need-label {
+  font: 500 12px/1 var(--font-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (max-width: 767px) and (orientation: portrait) {
+  .story-needs {
+    gap: 8px 0;
+    margin-top: 8px;
+    justify-content: space-between;
+  }
+  .story-need {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 5px;
+  }
+  .story-need-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .story-need-label {
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .story-needs {
+    display: none;
+  }
+}
