@@ -1055,18 +1055,46 @@ export function StoryStage({
     );
     preIO.observe(stageEl);
 
+    // Autostart: the visitor stops on the player (most of it in view, no scrolling for a moment)
+    // and the film starts by itself, once. Any control used first cancels it (the state is no
+    // longer idle); pausing afterwards is respected.
+    let ratio = 0;
+    let autoDone = false;
+    let autoTimer = 0;
+    const armAuto = () => {
+      if (autoTimer) window.clearTimeout(autoTimer);
+      autoTimer = 0;
+      if (autoDone || state !== "idle" || ratio < 0.6 || document.hidden) return;
+      autoTimer = window.setTimeout(() => {
+        autoTimer = 0;
+        if (disposed || autoDone || state !== "idle" || ratio < 0.6 || document.hidden) return;
+        // not loaded yet: look again shortly
+        if (!shown) {
+          armAuto();
+          return;
+        }
+        autoDone = true;
+        setState("playing");
+        kick();
+      }, 700);
+    };
+    const onScrollAuto = () => armAuto();
+    window.addEventListener("scroll", onScrollAuto, { passive: true });
+
     // on screen (render) and in view enough to play: below a quarter it pauses, from 40 % it plays on
     const visIO = new IntersectionObserver(
       (es) => {
         for (const e of es) {
           visible = e.isIntersecting;
           const r = e.intersectionRatio;
+          ratio = r;
           playable = visible && r >= (playable ? 0.25 : 0.4);
         }
         if (visible) {
           dirty = dirty || !shown;
           kick();
         }
+        armAuto();
       },
       { threshold: [0, 0.1, 0.25, 0.4, 0.55, 0.7, 0.85, 1] },
     );
@@ -1108,6 +1136,8 @@ export function StoryStage({
       ctl.current = null;
       if (raf) cancelAnimationFrame(raf);
       if (dipTimer) clearTimeout(dipTimer);
+      if (autoTimer) window.clearTimeout(autoTimer);
+      window.removeEventListener("scroll", onScrollAuto);
       preIO.disconnect();
       visIO.disconnect();
       ro.disconnect();

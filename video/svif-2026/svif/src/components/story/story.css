@@ -1271,3 +1271,48 @@ html:not(.js) .story-static {
     margin: clamp(8px, 1.4svh, 16px) auto 0;
   }
 }
+
+/* ---------------------------------------------------------------- round 3g: legibility (not phones)
+   The text reads at a glance: a firmer, larger title in full ink on one line, a larger and darker
+   line under it, clearer chapter names; a little air between the chapters and the title so the
+   eye lands on it, and the scene starts right below. */
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  .story-copy {
+    width: min(100% - 2 * var(--gutter), 100rem);
+    margin-top: clamp(12px, 2svh, 24px);
+  }
+  .story-title {
+    font-weight: 400;
+    font-size: clamp(1.3rem, 0.55rem + 1.35vw, 2.3rem);
+    letter-spacing: 0.06em;
+    color: #241f1b;
+  }
+  .story-body {
+    margin-top: clamp(7px, 1svh, 12px);
+    font-size: clamp(16px, 0.85rem + 0.35vw, 19px);
+    line-height: 1.45;
+    color: rgba(36, 31, 27, 0.92);
+  }
+  .story-need-icon {
+    width: 26px;
+    height: 26px;
+    color: #7d5a45;
+  }
+  .story-need-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #241f1b;
+  }
+  .story-note {
+    font-size: 10.5px;
+    color: rgba(36, 31, 27, 0.66);
+  }
+  .story-chip-label {
+    font-size: 11.5px;
+    color: rgba(36, 31, 27, 0.66);
+  }
+  .story-kicker {
+    color: rgba(36, 31, 27, 0.72);
+  }
+}
