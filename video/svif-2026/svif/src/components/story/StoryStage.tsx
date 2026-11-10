@@ -259,16 +259,18 @@ function measureStageArea(
   let bottom = Math.round(h);
   let copy = 0;
   if (!matchMedia(PHONE_MQ).matches) {
+    // heading + chapters on top, the scene, then the step's text and the transport under it
+    const t = (stageEl.querySelector<HTMLElement>(".story-top") ?? copyEl).getBoundingClientRect();
     const c = copyEl.getBoundingClientRect();
     const b = barEl.getBoundingClientRect();
-    const gap = clamp(h * 0.022, 10, 28);
-    copy = Math.round(c.bottom - cv.top);
-    top = Math.round(clamp(c.bottom - cv.top + gap, 0, h * 0.62));
-    bottom = Math.round(clamp(b.top - cv.top - gap, top + 120, h));
+    const gap = clamp(h * 0.018, 8, 22);
+    copy = Math.round(t.bottom - cv.top);
+    top = Math.round(clamp(t.bottom - cv.top + gap, 0, h * 0.4));
+    bottom = Math.round(clamp(Math.min(c.top, b.top) - cv.top - gap, top + 120, h));
   }
   const zoom = matchMedia(PHONE_MQ).matches
     ? 1
-    : clamp(w / Math.max(1, bottom - top) / 2.3, 1, 1.14);
+    : clamp(w / Math.max(1, bottom - top) / 2.3, 1, 1.1);
   stageEl.style.setProperty("--scene-zoom", zoom.toFixed(3));
   stageEl.style.setProperty("--scene-top", `${top}px`);
   stageEl.style.setProperty("--scene-gap", `${Math.round(h - bottom)}px`);

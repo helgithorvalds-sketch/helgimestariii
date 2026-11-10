@@ -1169,3 +1169,25 @@ html:not(.js) .story-static {
     padding: 8px 0 2px;
   }
 }
+
+/* ---------------------------------------------------------------- round 3d layout (not phones)
+   Like the phone layout: chapters on top, the scene, then the step's text right under it and the
+   transport centred at the very bottom. The text may be larger again down here. */
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  .story-chrome {
+    bottom: 0;
+  }
+  .story-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: calc(clamp(10px, 2svh, 22px) + 62px + clamp(6px, 1.2svh, 14px));
+  }
+  .story-title {
+    font-size: clamp(1.4rem, 0.86rem + 1.3vw, 2.4rem);
+  }
+  .story-body {
+    font-size: clamp(15px, 0.82rem + 0.3vw, 17px);
+  }
+}
