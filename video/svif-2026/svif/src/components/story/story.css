@@ -1316,3 +1316,213 @@ html:not(.js) .story-static {
     color: rgba(36, 31, 27, 0.72);
   }
 }
+
+/* ---------------------------------------------------------------- round 4: a framed player (not phones)
+   Testers did not read the full-bleed stage as a film. Now it is plainly a video: one rounded frame
+   on the page colour, the step's title inside its top, a round play button in its middle before it
+   starts, and under it one control row: play / ‹ › / time, then the chapters as the progress bar.
+   Everything keeps to a 1400 px column, the text to a narrower one. */
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  .story-stage {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: clamp(16px, 2vw, 30px);
+    padding: 0 max(var(--gutter), calc((100% - 1400px) / 2)) clamp(10px, 1.8svh, 20px);
+    background: var(--background);
+  }
+  .story-chrome,
+  .story-top {
+    display: contents;
+  }
+  .story-top-row {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: clamp(14px, 2.4svh, 26px) 0 clamp(10px, 1.6svh, 16px);
+  }
+  .story-kicker {
+    font-size: clamp(14px, 0.75rem + 0.4vw, 18px);
+    color: rgba(36, 31, 27, 0.82);
+  }
+  /* the frame */
+  .story-canvas-wrap {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    position: relative;
+    inset: auto;
+    min-height: 0;
+    border-radius: 22px;
+    overflow: hidden;
+    background: var(--stage);
+    box-shadow:
+      0 0 0 1px rgba(42, 36, 32, 0.1),
+      0 34px 70px -38px rgba(42, 36, 32, 0.55);
+  }
+  /* the stage colour behind the text, thinning into the scene (was .story-wash) */
+  .story-canvas-wrap::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: calc(var(--scene-top, 30%) + 22px);
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--stage) 0,
+      rgba(217, 207, 192, 0.96) var(--scene-copy, calc(100% - 80px)),
+      rgba(217, 207, 192, 0.5) calc(100% - 22px),
+      rgba(217, 207, 192, 0) 100%
+    );
+  }
+  .story-wash,
+  .story-wash-b {
+    display: none;
+  }
+  /* the step's text, inside the frame's top (18 px down: COPY_OFF in StoryStage.tsx) */
+  .story-copy {
+    position: absolute;
+    z-index: 2;
+    top: calc(var(--frame-top, 70px) + 18px);
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: min(100% - 2 * var(--gutter) - 48px, 54rem);
+    margin: 0 auto;
+    pointer-events: none;
+  }
+  .story-title {
+    font-size: clamp(1.4rem, 0.8rem + 1.2vw, 2.15rem);
+    line-height: 1.12;
+  }
+  .story-body {
+    font-size: clamp(16px, 0.86rem + 0.3vw, 18px);
+  }
+  .story-needs {
+    display: flex;
+    justify-content: center;
+    margin: clamp(6px, 1svh, 10px) 0 0;
+  }
+  /* the control row under the frame */
+  .story-bar {
+    grid-column: 1;
+    grid-row: 3;
+    position: static;
+    width: auto;
+    margin: clamp(8px, 1.4svh, 14px) 0 0;
+    justify-content: flex-start;
+  }
+  .story-transport {
+    position: static;
+    width: auto;
+    min-height: 50px;
+    justify-content: flex-start;
+  }
+  .story-time {
+    position: static;
+    margin-left: 12px;
+    font-size: 11.5px;
+    color: rgba(36, 31, 27, 0.72);
+  }
+  .story-stage[data-play="idle"] .story-transport .story-start {
+    visibility: visible;
+    height: 46px;
+  }
+  .story-top .story-chips {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: center;
+    margin: clamp(8px, 1.4svh, 14px) 0 0;
+  }
+  .story-top .story-chip {
+    padding: 10px 0 6px;
+    gap: 9px;
+  }
+  .story-chip-track {
+    height: 3px;
+    border-radius: 2px;
+  }
+  .story-chip-label {
+    font-size: 12px;
+    color: rgba(36, 31, 27, 0.7);
+  }
+  /* before it starts: the round play button of every video, in the middle of the frame */
+  .story-stage[data-play="idle"] .story-bigstart {
+    top: calc(var(--frame-top, 70px) + var(--frame-h, 420px) * 0.58 - 46px);
+    bottom: auto;
+    width: 92px;
+    height: 92px;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(36, 31, 27, 0.86);
+    color: var(--cream);
+    box-shadow:
+      0 0 0 10px rgba(36, 31, 27, 0.14),
+      0 22px 44px -16px rgba(36, 31, 27, 0.6);
+    animation: story-play-pulse 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .story-stage[data-play="idle"] .story-bigstart:hover {
+    background: rgba(36, 31, 27, 0.96);
+    box-shadow:
+      0 0 0 14px rgba(36, 31, 27, 0.16),
+      0 22px 44px -16px rgba(36, 31, 27, 0.6);
+  }
+  .story-bigstart-icon {
+    width: auto;
+    height: auto;
+    background: none;
+    color: inherit;
+  }
+  .story-bigstart-icon .story-glyph {
+    width: 24px;
+    height: 29px;
+    margin-left: 6px;
+  }
+  .story-bigstart-label,
+  .story-bigstart-meta {
+    display: none;
+  }
+}
+@keyframes story-play-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 8px rgba(36, 31, 27, 0.16),
+      0 22px 44px -16px rgba(36, 31, 27, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 0 18px rgba(36, 31, 27, 0.06),
+      0 22px 44px -16px rgba(36, 31, 27, 0.6);
+  }
+}
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  /* the play / pause button reads as the player's main control: a filled disc */
+  .story-btn--main {
+    width: 50px;
+    height: 50px;
+    border-color: transparent;
+    background: #241f1b;
+    color: var(--cream);
+  }
+  .story-btn--main:hover {
+    background: #3a322c;
+    border-color: transparent;
+  }
+  .story-btn--main .story-glyph {
+    width: 11px;
+    height: 13px;
+  }
+  .story-chip-label {
+    font-size: clamp(11.5px, 0.6rem + 0.2vw, 13px);
+  }
+}
+@media not ((max-width: 767px) and (orientation: portrait)) {
+  /* tighter tracking, so the chapter names fit beside the transport on laptops too */
+  .story-chip-label {
+    letter-spacing: 0.1em;
+  }
+}

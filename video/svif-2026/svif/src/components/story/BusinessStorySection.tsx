@@ -16,7 +16,9 @@ const framed = (set: "w" | "t") => ({
 });
 const STILLS = { wide: framed("w"), tall: framed("t") };
 /** seconds per step while playing: the company film's step windows (lab/film-specs.ts), ≈ 31 s */
-const DURATIONS = [9, 9, 6.4, 7];
+const DURATIONS = [6.2, 8.1, 5.0, 5.2];
+/** the share of each step's g in which its scene moves; the player holds only briefly after it */
+const MOVE_END = [0.7, 0.96, 0.74, 0.72];
 /** where each step rests (global g); the posters are rendered here (BUSINESS_REST in src/three/stories/business.ts) */
 const REST = [0.92, 1.92, 2.92, 3.96];
 
@@ -51,7 +53,11 @@ export interface BusinessStorySectionProps {
  * at g = 0, by posters.cjs (no baked labels; the captions are DOM). On phones the needs' callouts
  * sit at their own heights per row (business.ts), so no `labelClear` ceiling is passed here.
  */
-export function BusinessStorySection({ steps, id = "svona-virkar", footer }: BusinessStorySectionProps) {
+export function BusinessStorySection({
+  steps,
+  id = "svona-virkar",
+  footer,
+}: BusinessStorySectionProps) {
   return (
     <StoryStage
       id={id}
@@ -60,6 +66,7 @@ export function BusinessStorySection({ steps, id = "svona-virkar", footer }: Bus
       openPoster={OPEN_POSTER}
       stills={STILLS}
       durations={DURATIONS}
+      moveEnd={MOVE_END}
       rest={REST}
       heading={{ caps: "Svona virkar það", accent: "frá stofnun að póstkassa" }}
       load={loadBusiness}

@@ -175,6 +175,8 @@ export interface StoryStageProps {
   stills?: Record<StillSet, { open: string; steps: string[] }>;
   /** seconds per step while playing (the films' step windows); default 6 s each */
   durations?: number[];
+  /** per step: the share of its g in which the scene moves (0–1); the rest is the short hold */
+  moveEnd?: number[];
   /** where each step rests (the posters are rendered there). Accepted; the player plays whole steps. */
   rest?: number[];
   /** the stage's fixed heading: capitals + one serif-italic accent */
@@ -223,6 +225,8 @@ const STACKED_MQ = "(max-width: 767px), (orientation: portrait) and (max-width: 
  * sideways use the overlay layout, like desktops: a column does not fit in their height.
  */
 const PHONE_MQ = "(max-width: 767px) and (orientation: portrait)";
+/** not phones: the step's text starts this far below the frame's top edge (story.css) */
+const COPY_OFF = 18;
 /** scene areas narrower than this (width / height) take the tall stills */
 const TALL_BELOW = 2;
 /** the dip on a jump: to the stage colour, then back (story.css .story-dip) */
@@ -259,14 +263,19 @@ function measureStageArea(
   let bottom = Math.round(h);
   let copy = 0;
   if (!matchMedia(PHONE_MQ).matches) {
-    // heading, chapters and the step's text on top; the scene below them, down to the transport
+    // the framed player: the step's text lies over the frame's top (COPY_OFF px down, see
+    // story.css), the scene owns the rest of the frame. The copy is out of flow, so its place
+    // follows from the frame's, not from where it happens to be while this runs.
     const c = copyEl.getBoundingClientRect();
-    const b = barEl.getBoundingClientRect();
-    const gap = clamp(h * 0.018, 8, 22);
-    copy = Math.round(c.bottom - cv.top);
-    top = Math.round(clamp(c.bottom - cv.top + gap, 0, h * 0.5));
-    bottom = Math.round(clamp(b.top - cv.top - gap, top + 120, h));
+    const gap = clamp(h * 0.02, 8, 20);
+    copy = Math.round(COPY_OFF + c.height);
+    top = Math.round(clamp(copy + gap, 0, h * 0.5));
+    bottom = Math.round(h);
   }
+  // where the frame sits in the stage (the centre play button and the text are placed from it)
+  const st = stageEl.getBoundingClientRect();
+  stageEl.style.setProperty("--frame-top", `${Math.round(cv.top - st.top)}px`);
+  stageEl.style.setProperty("--frame-h", `${Math.round(h)}px`);
   // The directors frame their widest compositions (the needs, the coupons) to fill an area of
   // about 2.65:1; a flatter area leaves room at the sides, so the camera moves in by that much.
   const zoom = matchMedia(PHONE_MQ).matches
@@ -279,6 +288,8 @@ function measureStageArea(
   return { top, bottom, w, h, zoom };
 }
 
+/** seconds a step rests on its last frame before the next one starts */
+const HOLD_S = 1.2;
 const stillSetFor = (a: Area): StillSet =>
   a.w / Math.max(1, a.bottom - a.top) < TALL_BELOW ? "tall" : "wide";
 /** m:ss */
@@ -395,6 +406,7 @@ export function StoryStage({
   openPoster,
   stills,
   durations,
+  moveEnd,
   rest,
   heading = { caps: "Svona virkar það", accent: "frá sölu að póstlúgu" },
   labelClear,
@@ -589,7 +601,19 @@ export function StoryStage({
       idx = i;
       setCur(i);
     };
-    const gNow = () => idx + clamp(tau / durs[idx], 0, 1);
+    // A step's scene moves in the first part of its g (moveEnd, per step) and then rests. The
+    // player spends the step's time on that part and runs the rest of g during a short hold
+    // (HOLD_S), so the film never stands still for long.
+    const gNow = () => {
+      const d = durs[idx];
+      const m = clamp(moveEnd?.[idx] ?? 1, 0.2, 1);
+      const moveT = Math.max(0.5, d - HOLD_S);
+      const f =
+        m >= 1 || tau <= moveT
+          ? (tau / (m >= 1 ? d : moveT)) * m
+          : m + ((tau - moveT) / Math.max(0.01, d - moveT)) * (1 - m);
+      return idx + clamp(f, 0, 1);
+    };
     const running = () => state === "playing" && !dipping && shown && playable && !document.hidden;
 
     /* ---------- layout ---------- */

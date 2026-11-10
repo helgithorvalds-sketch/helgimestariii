@@ -19,7 +19,9 @@ const STILLS = { wide: framed("w"), tall: framed("t") };
  * Seconds per step while playing: the homeowner film's step windows (lab/film-specs.ts, 9 · 6 · 6 ·
  * 5.6 · 5.6 · 9 s), each a little longer for the site's longer title and line (≈ 45 s in all).
  */
-const DURATIONS = [9.4, 6.8, 6.8, 6.2, 6.2, 9.6];
+const DURATIONS = [6.3, 5.1, 4.9, 4.5, 4.6, 6.7];
+/** the share of each step's g in which its scene moves; the player holds only briefly after it */
+const MOVE_END = [0.68, 0.72, 0.68, 0.66, 0.68, 0.72];
 /** where each step rests (global g); the posters are rendered here (HOME_REST in src/three/stories/home.ts) */
 const REST = [0.92, 1.92, 2.92, 3.92, 4.92, 5.96];
 
@@ -62,6 +64,7 @@ export function HomeStorySection({ steps, id = "svona-virkar", footer }: HomeSto
       openPoster={OPEN_POSTER}
       stills={STILLS}
       durations={DURATIONS}
+      moveEnd={MOVE_END}
       rest={REST}
       heading={{ caps: "Svona virkar það", accent: "frá sölu að póstlúgu" }}
       load={loadHome}
