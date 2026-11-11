@@ -27,8 +27,8 @@
 | 31 | Kærar þakkir – öll 23 fyrirtækin í stafrófsröð |
 | 32 | Bakkápa („Til hamingju“) |
 
-Nýjustu auglýsingar (11. nóv.): Hringiðan, Fagafl og MS Lagnir í `auglysingar/` → `adprep.py` (ferningur → 2361 px með
-speglaðri blæðingu). MS Lagnir sendu A4 í hæðina; `a4_to_square.py` setur hana í fullri hæð og framlengir liti ystu dálka út í kant.
+Nýjustu auglýsingar (11. nóv.): Hringiðan (Gjafabréf), Fagafl og MS Lagnir, 2000 px ferningar í `auglysingar/` → `adprep.py`
+(→ 2361 px með speglaðri blæðingu). `a4_to_square.py` er til vara ef auglýsing berst í A4 (full hæð, litir framlengdir út í kant).
 
 Tveggja síðna auglýsingar byrja á sléttri síðu (vinstri). Miðasíðan er oddatölusíða (hægri) með auða bakhlið,
 ekki á kápublaðinu. MJ Lausnir er farið út; hvíti ramminn er farinn af öllum auglýsingum (`unframe.py`).
