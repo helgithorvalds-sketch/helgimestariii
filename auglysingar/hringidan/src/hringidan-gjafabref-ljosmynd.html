@@ -1,26 +1,17 @@
-<!doctype html><html lang="is"><head><meta charset="utf-8"><title>Hringiðan – Gjafabréf</title>
+<!doctype html><html lang="is"><head><meta charset="utf-8"><title>Hringiðan – Gjafabréf (ljósmynd)</title>
 <link rel="stylesheet" href="base.css">
 <style>
   @font-face { font-family: 'GreatVibes'; src: url('GreatVibes.woff2') format('woff2'); }
   .ad { background: #003C64; color: #fff; }
-  .frame  { position: absolute; inset: 56px; border: 2px solid rgba(154,219,245,.42); border-radius: 48px; pointer-events: none; }
-  .frame2 { position: absolute; inset: 70px; border: 1px solid rgba(154,219,245,.22); border-radius: 38px; pointer-events: none; }
-  .logo { position: absolute; left: 50%; top: 80px; width: 290px; transform: translateX(-50%); }
-  .title { position: absolute; left: 0; right: 0; top: 150px; text-align: center; font-family: 'GreatVibes', cursive; font-size: 222px; line-height: 1; color: #fff; }
-  .eyebrow { position: absolute; left: 110px; right: 110px; top: 456px; display: flex; align-items: center; justify-content: center; gap: 34px;
-             font-size: 27px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--sky); }
-  .eyebrow::before, .eyebrow::after { content: ""; width: 150px; height: 1px; background: rgba(154,219,245,.5); }
-  .photo { position: absolute; left: 110px; top: 514px; width: 1780px; height: 720px; border-radius: 56px; overflow: hidden;
-           box-shadow: 0 30px 80px rgba(0,10,30,.45), inset 0 0 0 2px rgba(255,255,255,.10); }
-  .photo img { width: 1780px; height: 720px; object-fit: cover; object-position: 50% 62%; display: block; }
-  .seal { position: absolute; left: 1548px; top: 1074px; width: 340px; height: 340px; filter: drop-shadow(0 22px 40px rgba(0,10,30,.45)); }
-  .seal svg { width: 340px; height: 340px; display: block; }
-  .seal .t { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-  .seal .big { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 148px; line-height: .9; margin-top: -4px; }
-  .seal .mid { font-size: 38px; font-weight: 700; line-height: 1; margin-top: 8px; }
-  .seal .small { font-size: 24px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; margin-top: 10px; }
-  .body { position: absolute; left: 110px; right: 110px; top: 1296px; }
-  .headline { font-size: 96px; line-height: 1.06; font-weight: 300; letter-spacing: -0.01em; }
+  .head { position: absolute; left: 0; top: 0; width: 2000px; height: 270px; background: #003C64; }
+  .logo { position: absolute; left: 110px; top: 96px; width: 340px; }
+  .gift { position: absolute; right: 110px; top: 34px; font-family: 'GreatVibes', cursive; font-size: 168px; line-height: 1; color: #fff; }
+  .photo { position: absolute; left: 0; top: 270px; width: 2000px; height: 1010px; overflow: hidden; }
+  .photo img { width: 2000px; height: 1010px; display: block; object-fit: cover; object-position: 50% 72%; }
+  .panel { position: absolute; left: 0; right: 0; top: 1200px; bottom: 0; border-radius: 120px 120px 0 0; padding: 90px 110px 0;
+           background: linear-gradient(165deg, #0A5A94 0%, #003E66 55%, #00305A 100%); box-shadow: 0 -30px 80px rgba(0,20,40,.35); }
+  .eyebrow { font-size: 30px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--sky); }
+  .headline { margin-top: 24px; font-size: 98px; line-height: 1.06; font-weight: 300; letter-spacing: -0.01em; }
   .headline b { font-weight: 700; }
   .row { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 40px; }
   .col { width: 1080px; }
@@ -36,16 +27,20 @@
   .cta .txt b { font-weight: 700; }
   .cta .txt .url { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 28px; margin: 6px 0 6px; color: var(--blue); }
   .cta .txt .tel { font-size: 25px; font-weight: 700; }
-  .fine { position: absolute; left: 110px; right: 110px; bottom: 100px; font-size: 21px; line-height: 1.4; color: rgba(255,255,255,.58); }
+  .fine { position: absolute; left: 110px; right: 110px; bottom: 56px; font-size: 21px; line-height: 1.4; color: rgba(255,255,255,.58); }
+  .seal { position: absolute; left: 1548px; top: 1050px; width: 340px; height: 340px; filter: drop-shadow(0 22px 40px rgba(0,10,30,.45)); }
+  .seal svg { width: 340px; height: 340px; display: block; }
+  .seal .t { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .seal .big { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 148px; line-height: .9; margin-top: -4px; }
+  .seal .mid { font-size: 38px; font-weight: 700; line-height: 1; margin-top: 8px; }
+  .seal .small { font-size: 24px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; margin-top: 10px; }
 </style></head><body><div class="ad">
-  <div class="frame"></div><div class="frame2"></div>
+  <div class="head"></div>
   <img class="logo" src="logo_white.png" alt="Hringiðan">
-  <div class="title">Gjafabréf</div>
-  <div class="eyebrow">Til hamingju með nýja heimilið</div>
+  <div class="gift">Gjafabréf</div>
   <div class="photo"><img src="photo_c.jpg" alt=""></div>
-  <div class="seal"><svg viewBox="0 0 340 340"><path d="M328.0,170.0 Q357.2,194.6 322.6,210.9 Q344.4,242.3 306.8,249.0 Q319.8,284.9 281.7,281.7 Q284.9,319.8 249.0,306.8 Q242.3,344.4 210.9,322.6 Q194.6,357.2 170.0,328.0 Q145.4,357.2 129.1,322.6 Q97.7,344.4 91.0,306.8 Q55.1,319.8 58.3,281.7 Q20.2,284.9 33.2,249.0 Q-4.4,242.3 17.4,210.9 Q-17.2,194.6 12.0,170.0 Q-17.2,145.4 17.4,129.1 Q-4.4,97.7 33.2,91.0 Q20.2,55.1 58.3,58.3 Q55.1,20.2 91.0,33.2 Q97.7,-4.4 129.1,17.4 Q145.4,-17.2 170.0,12.0 Q194.6,-17.2 210.9,17.4 Q242.3,-4.4 249.0,33.2 Q284.9,20.2 281.7,58.3 Q319.8,55.1 306.8,91.0 Q344.4,97.7 322.6,129.1 Q357.2,145.4 328.0,170.0 Z" fill="#1AA7E6"/><circle cx="170" cy="170" r="134" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-dasharray="6 7"/></svg>
-    <div class="t"><div class="big">3</div><div class="mid">mánuðir</div><div class="small">frítt</div></div></div>
-  <div class="body">
+  <div class="panel">
+    <div class="eyebrow">Til hamingju með nýja heimilið</div>
     <div class="headline">Komdu þér vel fyrir.<br><b>Við sjáum um internetið.</b></div>
     <div class="row">
       <div class="col">
@@ -57,6 +52,8 @@
         <div class="txt"><b>Til að nýta gjafabréfið:</b><br>skannaðu kóðann eða farðu&nbsp;á<div class="url">hringidan.is/pontun</div><div class="tel">Sími 525 2400</div></div>
       </div>
     </div>
+    <p class="fine">Gjafabréfið gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. des. 2026, ein gjöf á hvert heimili. *Miðað við 1 Gíg ljósleiðara á 11.990 kr./mán. (+ aðgangsgjald Mílu eða Ljósleiðarans, um 4.000 kr./mán.) og ótakmarkaðan farsíma í 3 mánuði. Ótakmarkaður farsími kostar 6.990 kr./mán. einn og sér en 3.490 kr./mán. með internettengingu frá Hringiðunni. Verð skv. verðskrá Hringiðunnar, nóv. 2026.</p>
   </div>
-  <p class="fine">Gjafabréfið gildir fyrir nýja viðskiptavini sem skrá sig fyrir 31. des. 2026, ein gjöf á hvert heimili. *Miðað við 1 Gíg ljósleiðara á 11.990 kr./mán. (+ aðgangsgjald Mílu eða Ljósleiðarans, um 4.000 kr./mán.) og ótakmarkaðan farsíma í 3 mánuði. Ótakmarkaður farsími kostar 6.990 kr./mán. einn og sér en 3.490 kr./mán. með internettengingu frá Hringiðunni. Verð skv. verðskrá Hringiðunnar, nóv. 2026.</p>
+  <div class="seal"><svg viewBox="0 0 340 340"><path d="M328.0,170.0 Q357.2,194.6 322.6,210.9 Q344.4,242.3 306.8,249.0 Q319.8,284.9 281.7,281.7 Q284.9,319.8 249.0,306.8 Q242.3,344.4 210.9,322.6 Q194.6,357.2 170.0,328.0 Q145.4,357.2 129.1,322.6 Q97.7,344.4 91.0,306.8 Q55.1,319.8 58.3,281.7 Q20.2,284.9 33.2,249.0 Q-4.4,242.3 17.4,210.9 Q-17.2,194.6 12.0,170.0 Q-17.2,145.4 17.4,129.1 Q-4.4,97.7 33.2,91.0 Q20.2,55.1 58.3,58.3 Q55.1,20.2 91.0,33.2 Q97.7,-4.4 129.1,17.4 Q145.4,-17.2 170.0,12.0 Q194.6,-17.2 210.9,17.4 Q242.3,-4.4 249.0,33.2 Q284.9,20.2 281.7,58.3 Q319.8,55.1 306.8,91.0 Q344.4,97.7 322.6,129.1 Q357.2,145.4 328.0,170.0 Z" fill="#1AA7E6"/><circle cx="170" cy="170" r="134" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-dasharray="6 7"/></svg>
+    <div class="t"><div class="big">3</div><div class="mid">mánuðir</div><div class="small">frítt</div></div></div>
 </div></body></html>

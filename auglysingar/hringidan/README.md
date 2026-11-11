@@ -1,8 +1,8 @@
 # Hringiðan – Gjafabréf („Komdu þér vel fyrir“)
 
-Endurhönnun á innflutningsgjöf Hringiðunnar sem **gjafabréf**: navy-blár grunnur, „Gjafabréf“ í skrautskrift,
-ávalur rammi, fjölskyldumynd í kósý stemningu þar sem mamman er í tölvunni og pabbinn horfir á hana,
-krakkarnir með spjaldtölvu fyrir framan sófann, og innsigli „3 mánuðir frítt“. Innblástur: uppsetning Sýn-póstsins
+Endurhönnun á innflutningsgjöf Hringiðunnar sem **gjafabréf**: navy-blátt band efst með lógóinu vinstra megin og
+„Gjafabréf“ í skrautskrift hægra megin, fjölskyldumynd út í kant í kósý stemningu þar sem mamman er í tölvunni og
+pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ávalur blár textaflötur og innsigli „3 mánuðir frítt“. Innblástur: uppsetning Sýn-póstsins
 (eitt ríkjandi litaþema, stór ávöl form, stuttur og vinalegur texti). Lógó, litir, QR-kóði og tilboð Hringiðunnar halda sér.
 
 ## Skrár
@@ -11,7 +11,7 @@ krakkarnir með spjaldtölvu fyrir framan sófann, og innsigli „3 mánuðir fr
 |---|---|
 | `hringidan-gjafabref-ljosmynd.png` / `.jpg` | **Aðalútgáfa** – ljósmynd. 2000×2000. |
 | `hringidan-gjafabref-2d.png` / `.jpg` | Sama gjafabréfs-rammi með flatri 2D teikningu. 2000×2000. |
-| `eldri/` | Fyrsta umferð (kósý útgáfur án gjafabréfs-ramma), til viðmiðunar. |
+| `eldri/` | Fyrri umferðir til viðmiðunar: `hringidan-kosy-*` (fyrsta umferð) og `hringidan-gjafabref-rammi-*` (útgáfa með skrautramma og mynd í spjaldi). |
 | `src/` | Breytanlegar HTML/CSS skrár, leturgerðir (Raleway, Nunito, Great Vibes), lógó með gegnsæi, QR-kóði og myndir. |
 
 ## Texti
