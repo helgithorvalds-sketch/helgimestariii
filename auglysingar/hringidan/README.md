@@ -13,7 +13,7 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
 | `hringidan-gjafabref-2d.png` / `.jpg` | Sama gjafabréfs-rammi með flatri 2D teikningu. 2000×2000. |
 | `hringidan-gjafakort.png` / `.jpg` | Gjafakort (25.000 kr.) í 1:1 eftir fyrirmynd með bláum borða og slaufu yfir íslenskt landslag, með alvöru Hringiðan-lógóinu. Gjafabréfsnúmer `HG-123456` er sýnishorn. |
 | `eldri/` | Fyrri umferðir til viðmiðunar: `hringidan-kosy-*` (fyrsta umferð) og `hringidan-gjafabref-rammi-*` (útgáfa með skrautramma og mynd í spjaldi). |
-| `src/` | Breytanlegar HTML/CSS skrár, leturgerðir (Raleway, Nunito, Great Vibes), lógó með gegnsæi, QR-kóði og myndir. |
+| `src/` | Breytanlegar HTML/CSS skrár, leturgerðir (Raleway, Nunito, Montserrat, Great Vibes, Dancing Script), opinbera hvíta lógóið af hringidan.is (`logo_white_official.png`), QR-kóðar og myndir. |
 
 ## Texti
 
