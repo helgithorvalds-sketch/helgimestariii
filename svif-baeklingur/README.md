@@ -1,4 +1,4 @@
-# SVIF bæklingur – útgáfa 6. nóv. 2026
+# SVIF bæklingur – útgáfa 11. nóv. 2026
 
 32 síður, heftaður, 194 x 194 mm, 3 mm blæði (200 x 200 mm skjöl með TrimBox/BleedBox), 300 dpi.
 
@@ -26,6 +26,9 @@
 | 30 | Auð síða (bakhlið miðanna) |
 | 31 | Kærar þakkir – öll 23 fyrirtækin í stafrófsröð |
 | 32 | Bakkápa („Til hamingju“) |
+
+Nýjustu auglýsingar (11. nóv.): Hringiðan, Fagafl og MS Lagnir í `auglysingar/` → `adprep.py` (ferningur → 2361 px með
+speglaðri blæðingu). MS Lagnir sendu A4 í hæðina; `a4_to_square.py` setur hana í fullri hæð og framlengir liti ystu dálka út í kant.
 
 Tveggja síðna auglýsingar byrja á sléttri síðu (vinstri). Miðasíðan er oddatölusíða (hægri) með auða bakhlið,
 ekki á kápublaðinu. MJ Lausnir er farið út; hvíti ramminn er farinn af öllum auglýsingum (`unframe.py`).
