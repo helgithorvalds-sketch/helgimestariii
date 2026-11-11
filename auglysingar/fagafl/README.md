@@ -6,7 +6,7 @@
 ## Útgáfa 3
 
 - Fyrirsögn: „Gerðu heimilið að þínu“ og „Nýsmíði og almennt viðhald“.
-- Fjórir þjónustuliðir í sömu stærð og undirtextinn, svo þeir séu sýnilegir án þess að vera áberandi.
+- Fjórir þjónustuliðir í gráu, venjulegu letri (24 px), svo þeir séu vel læsilegir án þess að vera áberandi.
 - Ein mynd (einbýlishúsið), að ósk Fagafls.
 - Símanúmerið er skrifað „694 8159“ eins og í textanum frá þeim.
 
