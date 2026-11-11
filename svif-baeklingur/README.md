@@ -18,9 +18,9 @@
 | 16–17 | Sticker · KORA |
 | 18–19 | Litamálun · Múrbúðin |
 | 20–21 | Fagafl · RÓM Verk |
-| 22–23 | HK Lagnir · MS Lagnir |
+| 22–23 | HK Lagnir · Lásar.is |
 | 24–25 | Steindi („Sláum í gegn“) · Heit gólf |
-| 26–27 | Lásar.is · VÍS |
+| 26–27 | MS Lagnir · VÍS |
 | 28 | Af hverju SVIF |
 | 29 | Afsláttarmiðar (rifnir úr) – hægri síða |
 | 30 | Auð síða (bakhlið miðanna) |

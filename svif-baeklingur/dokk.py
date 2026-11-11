@@ -75,8 +75,8 @@ KAFLAR = [
     ('Þjónusta & filmur', [('sticker.is', '16'), ('KORA', '17')]),
     ('Eldvarnir', [('Maus', '12–13')]),
     ('Múr, málun & smíði', [('Litamálun', '18'), ('Múrbúðin', '19'), ('Fagafl', '20'), ('Steindi', '24')]),
-    ('Bað & lagnir', [('HK Lagnir', '22'), ('MS Lagnir', '23')]),
-    ('Lásar & tryggingar', [('Lásar.is', '26'), ('VÍS', '27')]),
+    ('Bað & lagnir', [('HK Lagnir', '22'), ('MS Lagnir', '26')]),
+    ('Lásar & tryggingar', [('Lásar.is', '23'), ('VÍS', '27')]),
 ]
 def yfirlit():
     cols = ''
