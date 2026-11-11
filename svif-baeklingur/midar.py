@@ -58,7 +58,7 @@ COUPONS = [
     ),
 ]
 
-VALID = 'Gildir til 31.12.2026'
+VALID = 'Gildir til 31.12.2027'
 
 CSS = '''
 @page{size:200mm 200mm;margin:0}
@@ -170,7 +170,7 @@ def page_front():
             f'Afsláttarmiðar<br><span style="color:{gold}">fyrir nýja húseigendur</span></div></div>'
             f'<div style="position:absolute;left:110mm;width:{181.5 - 110}mm;top:{B + 8.2}mm;font-family:Jost;font-size:8pt;line-height:1.45;color:{cocoa};text-align:right">'
             f'Rífðu miðann úr eftir rifgötuninni og framvísaðu honum, eða nefndu SVIF þegar þú hefur samband. '
-            f'Hver miði gildir einu sinni. Tilboðin gilda til 31. des. 2026.</div>')
+            f'Hver miði gildir einu sinni. Tilboðin gilda til 31. des. 2027.</div>')
     body = ''.join(coupon(c, k) for k, c in enumerate(COUPONS))
     return body, head, perf_svg(B + TRIM - SPINE_PERF)
 

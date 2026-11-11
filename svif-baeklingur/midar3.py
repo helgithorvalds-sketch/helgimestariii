@@ -12,7 +12,7 @@ D = os.path.dirname(os.path.abspath(__file__))
 W, H = m2.W, m2.H
 PANEL = '#ECE5D8'
 SAND = '#D8CCB6'
-VALID = 'Gildir til 31.12.2026'
+VALID = 'Gildir til 31.12.2027'
 
 C = {
     'parki': dict(logo='dokkmerki/parki.png', logo_h=7.2, photo='myndir/parki_photo.jpg', pos='30% 50%', big='25%', small='Afsláttur',

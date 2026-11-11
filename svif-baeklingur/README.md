@@ -75,5 +75,5 @@ og 3D flettibókin í https://claude.ai/artifact/RTQihiKvmPMbYpubq86Qqh.
 ## Á eftir að staðfesta
 
 * Ormsson: 20% er tillaga, ekki staðfest.
-* Gildistími 31.12.2026 á öllum miðum er tillaga.
+* Gildistími 31.12.2027 á öllum miðum (ákveðið 11. nóv.; á eftir að staðfesta við fyrirtækin).
 * Staðsetning rifgötunar á eftir að fá samþykki Litlaprent.

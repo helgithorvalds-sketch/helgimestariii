@@ -18,7 +18,7 @@ X0 = B + SPINE            # 13: vinstri brún miða (rifgötun við kjöl)
 X1 = X0 + W               # 105: rifgötun milli dálka
 Y0 = B + 94.0             # 97: efri brún miða
 Y1 = Y0 + H               # 147: milli raða
-VALID = 'Gildir til 31.12.2026'
+VALID = 'Gildir til 31.12.2027'
 
 LINEN = ('background:#DFD2C1;background-image:'
          'repeating-linear-gradient(90deg,rgba(74,52,42,.06) 0,rgba(74,52,42,.06) .489mm,transparent .489mm,transparent 2.2mm),'
@@ -153,7 +153,7 @@ def midar():
             f'<div style="font-family:Inter;font-weight:300;font-size:11pt;line-height:1.3;color:#D8CCB6;margin-top:1.6mm">fyrir nýja húseigendur</div></div>'
             f'<div style="position:absolute;left:{X1 + 6}mm;width:{197 - 7 - X1 - 6}mm;top:{B + 33.5}mm;font-family:Inter;font-weight:300;font-size:8pt;line-height:1.55;color:rgba(255,255,255,.85)">'
             'Rífðu miðann úr eftir rifgötuninni og framvísaðu honum, eða nefndu SVIF þegar þú hefur samband. '
-            'Hver miði gildir einu sinni. Tilboðin gilda til 31. des. 2026.</div>')
+            'Hver miði gildir einu sinni. Tilboðin gilda til 31. des. 2027.</div>')
     tiles = (tile(X0, Y0, X0, 0, 0, '#ffffff', parki, 'parki') +
              tile(X1, Y0, 0, B, 0, '#ffffff', ispan, 'ispan') +
              tile(X0, Y1, X0, 0, B, '#ffffff', ormsson, 'ormsson') +
