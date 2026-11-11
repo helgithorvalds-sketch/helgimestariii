@@ -1,7 +1,7 @@
 # Hringiðan – Gjafabréf („Komdu þér vel fyrir“)
 
 Endurhönnun á innflutningsgjöf Hringiðunnar sem **gjafabréf**: dökkblátt band efst (sami navy-litur og á gjafakortinu,
-`#05254C`) með lógóinu og „Internetþjónusta“ vinstra megin og „Gjafabréf“ í skrautskrift hægra megin, fjölskyldumynd út í kant í kósý stemningu þar sem mamman er í tölvunni og
+`#05254C`) með opinbera lógóinu (Hringiðan Internetþjónusta) vinstra megin og „Gjafabréf“ í skrautskrift hægra megin, fjölskyldumynd út í kant í kósý stemningu þar sem mamman er í tölvunni og
 pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ávalur blár textaflötur og innsigli „3 mánuðir frítt“. Innblástur: uppsetning Sýn-póstsins
 (eitt ríkjandi litaþema, stór ávöl form, stuttur og vinalegur texti). Lógó, litir, QR-kóði og tilboð Hringiðunnar halda sér.
 
@@ -13,14 +13,14 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
 | `hringidan-gjafabref-2d.png` / `.jpg` | Sama gjafabréfs-rammi með flatri 2D teikningu. 2000×2000. |
 | `hringidan-gjafakort.png` / `.jpg` | Gjafakort (25.000 kr.) í 1:1 eftir fyrirmynd með bláum borða og slaufu yfir íslenskt landslag, með alvöru Hringiðan-lógóinu. Gjafabréfsnúmer `HG-123456` er sýnishorn. |
 | `eldri/` | Fyrri umferðir til viðmiðunar: `hringidan-kosy-*` (fyrsta umferð) og `hringidan-gjafabref-rammi-*` (útgáfa með skrautramma og mynd í spjaldi). |
-| `src/` | Breytanlegar HTML/CSS skrár, leturgerðir (Raleway, Nunito, Montserrat, Great Vibes, Dancing Script), opinbera hvíta lógóið af hringidan.is (`logo_white_official.png`), QR-kóðar og myndir. |
+| `src/` | Breytanlegar HTML/CSS skrár, leturgerðir (Raleway, Nunito, Montserrat, Great Vibes, Dancing Script), opinbera lógóið úr vektor-PDF frá Hringiðunni (`Hringidan_logo.pdf` → `logo_lockup_white.png` / `logo_lockup_color.png`, með „Internetþjónusta“ sem hluta af merkinu), QR-kóðar og myndir. |
 
 ## Texti
 
 - Titill: *Gjafabréf* (Great Vibes skrautskrift)
 - Yfirlína: *Til hamingju með nýja heimilið*
 - Fyrirsögn: *Komdu þér vel fyrir. **Við sjáum um internetið.***
-- Meginmál: *Þrír mánuðir af neti og farsíma – frítt. Innflutningsgjöf frá Hringiðunni sem sparar þér allt að 60 þúsund krónur.**
+- Meginmál: *Þrír mánuðir af neti og farsíma – frítt. Innflutningsgjöf frá Hringiðunni sem sparar þér allt að 50 þúsund krónur.**
 - Lágstemmd lína: *Engin stofngjöld · Persónuleg þjónusta síðan 1995*
 - Innsigli: *3 mánuðir frítt*
 - QR-spjald: *Til að nýta gjafabréfið: skannaðu kóðann eða farðu á hringidan.is · Sími 525 2400*
@@ -35,8 +35,8 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
   Hringdu 3.990 kr., Sýn skráir Mílu á 5.390 kr. – „um 4.000 kr.“ er því hæfilegt.
 - Athugið: pöntunarsíða Hringiðunnar (hringidan.is/pontun-internet) segir að verðið *innihaldi* aðgangsgjald.
   Það stangast á við orðalagið „+ aðgangsgjald“ og ætti að staðfesta við Hringiðuna.
-- „Allt að 60 þúsund“: 1 Gíg (11.990) + farsími á fullu verði (6.990) × 3 = 56.940 kr.; með 2,5 Gíg = 59.940 kr.
-  Ef farsíminn er reiknaður á 3.490 kr. verður sparnaðurinn 46.440 kr. nema aðgangsgjaldið sé líka gefið.
+- „Allt að 50 þúsund“: 1 Gíg (11.990) + farsími með interneti (3.490) × 3 = 46.440 kr., sem passar við „allt að 50 þúsund“.
+  Með farsíma á fullu verði (6.990) yrði það 56.940 kr.
 
 QR-kóðinn á gjafabréfs-auglýsingunum (`src/qr_is.png`) vísar á `https://hringidan.is/`; á gjafakortinu (`src/qr.png`) á `https://hringidan.is/pontun/`. Hvort tveggja staðfest með afkóðun úr endanlegu myndunum.
 
