@@ -1,7 +1,7 @@
 # Hringiðan – Gjafabréf („Komdu þér vel fyrir“)
 
-Endurhönnun á innflutningsgjöf Hringiðunnar sem **gjafabréf**: navy-blátt band efst með lógóinu vinstra megin og
-„Gjafabréf“ í skrautskrift hægra megin, fjölskyldumynd út í kant í kósý stemningu þar sem mamman er í tölvunni og
+Endurhönnun á innflutningsgjöf Hringiðunnar sem **gjafabréf**: dökkblátt band efst (sami navy-litur og á gjafakortinu,
+`#05254C`) með lógóinu og „Internetþjónusta“ vinstra megin og „Gjafabréf“ í skrautskrift hægra megin, fjölskyldumynd út í kant í kósý stemningu þar sem mamman er í tölvunni og
 pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ávalur blár textaflötur og innsigli „3 mánuðir frítt“. Innblástur: uppsetning Sýn-póstsins
 (eitt ríkjandi litaþema, stór ávöl form, stuttur og vinalegur texti). Lógó, litir, QR-kóði og tilboð Hringiðunnar halda sér.
 
@@ -23,7 +23,7 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
 - Meginmál: *Þrír mánuðir af neti og farsíma – frítt. Innflutningsgjöf frá Hringiðunni sem sparar þér allt að 60 þúsund krónur.**
 - Lágstemmd lína: *Engin stofngjöld · Persónuleg þjónusta síðan 1995*
 - Innsigli: *3 mánuðir frítt*
-- QR-spjald: *Til að nýta gjafabréfið: skannaðu kóðann eða farðu á hringidan.is/pontun · Sími 525 2400*
+- QR-spjald: *Til að nýta gjafabréfið: skannaðu kóðann eða farðu á hringidan.is · Sími 525 2400*
 - Smáletur: 1 Gíg ljósleiðari 11.990 kr./mán. (+ aðgangsgjald Mílu eða Ljósleiðarans, um 4.000 kr./mán.),
   ótakmarkaður farsími 6.990 kr./mán. einn og sér en 3.490 kr./mán. með internettengingu.
 
@@ -38,7 +38,7 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
 - „Allt að 60 þúsund“: 1 Gíg (11.990) + farsími á fullu verði (6.990) × 3 = 56.940 kr.; með 2,5 Gíg = 59.940 kr.
   Ef farsíminn er reiknaður á 3.490 kr. verður sparnaðurinn 46.440 kr. nema aðgangsgjaldið sé líka gefið.
 
-QR-kóðinn vísar á `https://hringidan.is/pontun/` (staðfest með afkóðun úr endanlegu myndunum).
+QR-kóðinn á gjafabréfs-auglýsingunum (`src/qr_is.png`) vísar á `https://hringidan.is/`; á gjafakortinu (`src/qr.png`) á `https://hringidan.is/pontun/`. Hvort tveggja staðfest með afkóðun úr endanlegu myndunum.
 
 ## Gjafakortið (1:1)
 
