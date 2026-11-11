@@ -3,6 +3,7 @@
 Tilbúnar auglýsingar (1080×1080, PNG í 2× upplausn, JPG og PDF).
 
 ## MS Lagnir
+- `ms-lagnir/MS_Lagnir_ferningur` – Ferningur (1:1) í stíl upprunalegu auglýsingarinnar (svart/appelsínugult), með látlausu tilboði fyrir nýja húseigendur.
 - `ms-lagnir/MS_Lagnir_nyir_huseigendur` – Skoðun og verðtilboð á 0 krónur, fyrir nýja húseigendur.
 
 ## Fagafl
