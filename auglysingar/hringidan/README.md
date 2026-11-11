@@ -11,6 +11,7 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
 |---|---|
 | `hringidan-gjafabref-ljosmynd.png` / `.jpg` | **Aðalútgáfa** – ljósmynd. 2000×2000. |
 | `hringidan-gjafabref-2d.png` / `.jpg` | Sama gjafabréfs-rammi með flatri 2D teikningu. 2000×2000. |
+| `hringidan-gjafakort.png` / `.jpg` | Gjafakort (25.000 kr.) í 1:1 eftir fyrirmynd með bláum borða og slaufu yfir íslenskt landslag, með alvöru Hringiðan-lógóinu. Gjafabréfsnúmer `HG-123456` er sýnishorn. |
 | `eldri/` | Fyrri umferðir til viðmiðunar: `hringidan-kosy-*` (fyrsta umferð) og `hringidan-gjafabref-rammi-*` (útgáfa með skrautramma og mynd í spjaldi). |
 | `src/` | Breytanlegar HTML/CSS skrár, leturgerðir (Raleway, Nunito, Great Vibes), lógó með gegnsæi, QR-kóði og myndir. |
 
@@ -39,6 +40,14 @@ pabbinn horfir á hana, krakkarnir með spjaldtölvu fyrir framan sófann, ával
 
 QR-kóðinn vísar á `https://hringidan.is/pontun/` (staðfest með afkóðun úr endanlegu myndunum).
 
+## Gjafakortið (1:1)
+
+Bakgrunnurinn (`src/giftbg.jpg`: landslag, borði, slaufa og hvít rönd) var búinn til með gervigreind án texta
+og uppskalaður í 4K; allur texti, lógó, tákn og QR-kóði eru lagðir ofan á í HTML (`src/hringidan-gjafakort.html`).
+Textinn fylgir fyrirmyndinni: „Tengir þig við meira“, „Góð tenging er góð gjöf“, „Að verðmæti: 25.000 kr.“,
+„Gildir sem greiðsla fyrir vörur og þjónustu hjá Hringiðunni.“, þjónustutákn, gjafabréfsnúmer, gildistími,
+„Alltaf nær þér“ og QR. Tvær stafsetningarvillur úr gervigreindarmyndinni voru lagaðar („Íslenskir innviðir“).
+
 ## Að breyta og endurrenndera
 
 Textinn er í `src/hringidan-gjafabref-ljosmynd.html` og `src/hringidan-gjafabref-2d.html`.
@@ -48,6 +57,7 @@ Textinn er í `src/hringidan-gjafabref-ljosmynd.html` og `src/hringidan-gjafabre
 cd auglysingar/hringidan/src
 node render.cjs hringidan-gjafabref-ljosmynd.html ../hringidan-gjafabref-ljosmynd.png
 node render.cjs hringidan-gjafabref-2d.html ../hringidan-gjafabref-2d.png
+node render.cjs hringidan-gjafakort.html ../hringidan-gjafakort.png
 ```
 
 Myndirnar (`src/photo_c.jpg`, `src/illu.png`) voru búnar til með gervigreind (Higgsfield) og uppskalaðar í 4K;
