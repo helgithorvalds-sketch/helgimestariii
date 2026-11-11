@@ -9,7 +9,7 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const out = path.resolve(here, '..');
-const name = process.argv[2] || 'Fagafl_lokautgafa_2';
+const name = process.argv[2] || 'Fagafl_lokautgafa_3';
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1080 }, deviceScaleFactor: 2 });

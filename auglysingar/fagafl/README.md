@@ -1,25 +1,27 @@
 # Fagafl auglýsing
 
-`Fagafl_lokautgafa_2` (PNG 2160×2160, JPG, PDF) er útgáfan eftir athugasemdir Sigurðar 6. nóv. 2026.
+`Fagafl_lokautgafa_3` (PNG 2160×2160, JPG, PDF) er nýjasta útgáfan, með orðalaginu sem Sigurður sendi 10. nóv. 2026.
+`Fagafl_lokautgafa_2` er eldri útgáfan („27 ára reynsla“, þrjár myndir).
 
-## Hvað breyttist
+## Útgáfa 3
 
-- Fyrirsögn: „Húsfélög og verkkaupar eins og Reykjavíkurborg treysta okkur.“ (Garðabær tekinn út, húsfélög bætt við.)
-- Ný lína: „Við sjáum um smíði, múrvinnu og allt sem viðkemur viðhaldi og nýbyggingum.“
-- Þriðja lína, sama stærð og undirtextinn: „Við sjáum líka um málun, pípulagnir, rafvirkjun og gluggaskipti þegar verkið kallar á það.“
+- Fyrirsögn: „Gerðu heimilið að þínu“ og „Nýsmíði og almennt viðhald“.
+- Fjórir þjónustuliðir í sömu stærð og undirtextinn, svo þeir séu sýnilegir án þess að vera áberandi.
+- Ein mynd (einbýlishúsið), að ósk Fagafls.
+- Símanúmerið er skrifað „694 8159“ eins og í textanum frá þeim.
 
 ## Þjónusta sem aðrir eiga í SVIF-bæklingnum
 
-Þessi þjónusta er aðeins nefnd í þriðju línunni, því annað fyrirtæki á flokkinn:
+Fagafl bað sérstaklega um þessa liði, svo þeir eru með, en ekki dregnir fram:
 
 | Þjónusta | Flokkurinn er hjá |
 | --- | --- |
-| Málun | Litamálun |
-| Pípulagnir | HK Lagnir, MS Lagnir |
-| Rafvirkjun | RÓM Verk |
 | Gluggaskipti | Gluggavinir, TME Gluggar |
+| Málun | Litamálun |
 
-Flotun (Heit gólf) og múrbrot og steinsögun (Steindi) eru ekki nefnd.
+## Myndin
+
+`src/assets/mynd-einbyli.jpg` er stækkuð úr 262×185 px mynd sem var klippt úr gamalli auglýsingu. Hún verður skarpari ef Fagafl sendir upprunalegu myndina.
 
 ## Endurgera
 

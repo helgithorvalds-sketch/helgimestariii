@@ -5,6 +5,7 @@
 <title>Fagafl auglýsing</title>
 <style>
 /* 1080×1080 auglýsing. Öll mál eru í px og miðast við 1080 px striga; render.mjs flytur út í 2× upplausn. */
+/* Orðalag frá Fagafli 10. nóv. 2026. Táknin tvö eru úr Lucide (ISC-leyfi). */
 @font-face{font-family:"Barlow";font-weight:400;src:url(fonts/Barlow-400.woff2) format("woff2")}
 @font-face{font-family:"Barlow";font-weight:600;src:url(fonts/Barlow-600.woff2) format("woff2")}
 @font-face{font-family:"Barlow";font-weight:700;src:url(fonts/Barlow-700.woff2) format("woff2")}
@@ -17,22 +18,20 @@ html,body{width:1080px;height:1080px;background:var(--dokkt)}
 .fjall{left:400px;top:112px;width:760px;height:414px;background:rgba(255,255,255,.06);clip-path:polygon(0 100%,35.72% 21.33%,47.15% 42.31%,64.29% .34%,100% 100%)}
 .logo{left:64px;top:50px;width:128px;height:80px}
 .vefur{right:64px;top:76px;font-weight:600;font-size:24px;line-height:1.2}
-.tala{left:64px;top:91px;font-family:"Barlow Condensed";font-weight:800;font-size:330px;line-height:1.2;letter-spacing:-8px;color:var(--blatt)}
-.yfir{left:358px;top:184px;font-weight:600;font-size:22px;line-height:1.2;letter-spacing:3px;text-transform:uppercase;color:var(--dauft);white-space:nowrap}
-.ara{left:358px;top:203px;font-family:"Barlow Condensed";font-weight:800;font-size:110px;line-height:94px;padding-top:19px;text-transform:uppercase;white-space:nowrap}
-.fyrirsogn{left:64px;top:449px;font-family:"Barlow Condensed";font-weight:800;font-size:64px;line-height:65px;text-transform:uppercase;white-space:nowrap}
-.fyrirsogn mark{display:inline-block;margin-left:-14px;padding:0 14px;background:var(--blatt);color:var(--dokkt)}
-.texti{left:64px;top:657px;width:800px;font-size:20px;line-height:29px;color:var(--dauft)}
-.texti strong{display:block;font-weight:600;color:var(--hvitt)}
-.texti small{display:block;font-size:inherit}
-.myndir{left:64px;top:762px;width:952px;height:200px;display:flex;gap:16px}
-.mynd{position:relative;flex:283 1 0;height:200px;border-radius:18px;overflow:hidden;background:#2A2B3D}
-.mynd:first-child{flex:354 1 0}
-.mynd img{display:block;width:100%;height:100%;object-fit:cover}
-.mynd:first-child img{object-position:50% 45%}
-.mynd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:91px;background:linear-gradient(180deg,rgba(31,31,47,0),rgba(31,31,47,.85))}
-.mynd span{position:absolute;z-index:1;left:16px;bottom:14px;display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;line-height:18px;letter-spacing:1.8px;text-transform:uppercase;white-space:nowrap}
-.mynd span::before{content:"";width:20px;height:4px;border-radius:2px;background:var(--blatt)}
+.fyrirsogn{left:64px;top:166px;font-family:"Barlow Condensed";font-weight:800;font-size:132px;line-height:118px;text-transform:uppercase;white-space:nowrap}
+.fyrirsogn mark{display:inline-block;margin-left:-14px;padding:0 18px 0 14px;background:var(--blatt);color:var(--dokkt)}
+.undir{left:64px;top:420px;font-family:"Barlow Condensed";font-weight:800;font-size:54px;line-height:1.1;text-transform:uppercase;color:var(--blatt);white-space:nowrap}
+.texti{left:64px;top:486px;font-size:22px;line-height:30px;color:var(--dauft);white-space:nowrap}
+.thjonusta{left:64px;top:590px;width:520px;list-style:none;font-size:20px;line-height:26px;color:var(--dauft)}
+.thjonusta li{position:relative;padding-left:30px;margin-bottom:15px}
+.thjonusta li::before{content:"";position:absolute;left:0;top:11px;width:18px;height:4px;border-radius:2px;background:var(--blatt)}
+.mynd{left:616px;top:548px;width:400px;height:236px;border-radius:18px;overflow:hidden;background:#2A2B3D}
+.mynd img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%}
+.traust{left:64px;top:814px;font-family:"Barlow Condensed";font-weight:800;font-size:40px;line-height:44px;text-transform:uppercase;white-space:nowrap}
+.traust b{font-weight:800;color:var(--blatt)}
+.gildi{left:64px;top:918px;display:flex;gap:36px;font-weight:600;font-size:20px;line-height:28px;white-space:nowrap}
+.gildi span{display:flex;align-items:center;gap:10px}
+.gildi svg{width:26px;height:26px;fill:none;stroke:var(--blatt);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .botn{left:0;top:988px;width:1080px;height:92px;background:var(--blatt);color:var(--dokkt);display:flex;align-items:center;padding:0 64px}
 .botn .tilbod{font-family:"Barlow Condensed";font-weight:800;font-size:38px;line-height:1.2;text-transform:uppercase;margin-right:auto;white-space:nowrap}
 .botn .simi{display:flex;align-items:center;gap:10px;font-family:"Barlow Condensed";font-weight:800;font-size:44px;line-height:1.2;white-space:nowrap}
@@ -46,19 +45,24 @@ html,body{width:1080px;height:1080px;background:var(--dokkt)}
   <div class="fjall"></div>
   <img class="logo" src="assets/fagafl-logo.png" alt="Fagafl">
   <div class="vefur">fagafl.is</div>
-  <div class="tala">27</div>
-  <div class="yfir">Nýsmíði og viðhald fasteigna</div>
-  <div class="ara">Ára<br>reynsla</div>
-  <div class="fyrirsogn">Húsfélög og verkkaupar eins og<br><mark>Reykjavíkurborg</mark><br>treysta okkur.</div>
-  <p class="texti"><strong>Við sjáum um smíði, múrvinnu og allt sem viðkemur viðhaldi og nýbyggingum.</strong>Fagleg og persónuleg þjónusta – frá klæðningum til þakviðgerða.<small>Við sjáum líka um málun, pípulagnir, rafvirkjun og gluggaskipti þegar verkið kallar á það.</small></p>
-  <div class="myndir">
-    <div class="mynd"><img src="assets/mynd-vidhald.jpg" alt=""><span>Viðhald</span></div>
-    <div class="mynd"><img src="assets/mynd-thak.jpg" alt=""><span>Þakviðgerðir</span></div>
-    <div class="mynd"><img src="assets/mynd-smidi.jpg" alt=""><span>Smíðaþjónusta</span></div>
+  <div class="fyrirsogn">Gerðu heimilið<br><mark>að þínu</mark></div>
+  <div class="undir">Nýsmíði og almennt viðhald</div>
+  <p class="texti">Viðhald og endurbætur fasteigna – innan- sem utanhúss.</p>
+  <ul class="thjonusta">
+    <li>Þakviðgerðir og gluggaskipti</li>
+    <li>Múrviðgerðir og málun</li>
+    <li>Endurbætur fasteigna og almenn smíðavinna</li>
+    <li>Mat á viðhaldsþörf</li>
+  </ul>
+  <div class="mynd"><img src="assets/mynd-einbyli.jpg" alt=""></div>
+  <div class="traust">Einstaklingar, húsfélög, fyrirtæki og sveitarfélög<br>hafa treyst okkur í <b>27 ár.</b></div>
+  <div class="gildi">
+    <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>Fagleg vinnubrögð</span>
+    <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Persónuleg þjónusta</span>
   </div>
   <div class="botn">
     <div class="tilbod">Fáðu tilboð í verkið</div>
-    <div class="simi"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></i>694-8159</div>
+    <div class="simi"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></i>694 8159</div>
     <div class="netfang">fagafl@fagafl.is</div>
   </div>
 </div>
