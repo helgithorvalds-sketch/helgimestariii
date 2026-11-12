@@ -181,12 +181,17 @@ export default function Leads() {
   };
 
   const handleToggleOff = async (c: Company) => {
+    const turningOff = !c.rejected;
+    const msg = turningOff
+      ? `Ertu viss um að þú viljir merkja „${c.name}“ sem off?`
+      : `Endurvirkja „${c.name}“?`;
+    if (!window.confirm(msg)) return;
     const updated: Company = {
       ...c,
-      rejected: !c.rejected,
-      rejectedAt: !c.rejected ? new Date().toISOString() : undefined,
+      rejected: turningOff,
+      rejectedAt: turningOff ? new Date().toISOString() : undefined,
     };
-    await persist(updated, !c.rejected ? "Merkt sem off" : "Endurvirkjað");
+    await persist(updated, turningOff ? "Merkt sem off" : "Endurvirkjað");
   };
 
   const handleUpdate = async (updated: Company) => {

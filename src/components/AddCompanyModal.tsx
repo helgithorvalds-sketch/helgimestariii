@@ -20,9 +20,11 @@ interface AddCompanyModalProps {
   onAdd: (company: Omit<Company, "id" | "createdAt">) => void;
   existingNames: string[];
   existingCompanyIds?: string[];
+  /** Ef gefið: geiri og flokkur valin úr lista í stað frjáls texta. */
+  sectors?: { geiri: string; undirgeiri: string }[];
 }
 
-export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingCompanyIds = [] }: AddCompanyModalProps) {
+export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingCompanyIds = [], sectors }: AddCompanyModalProps) {
   const [name, setName] = useState("");
   const [stage, setStage] = useState<CompanyStage>("email_sent");
   const [previewSub, setPreviewSub] = useState<PreviewSubStatus | undefined>();
@@ -43,6 +45,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
   const [companyId, setCompanyId] = useState("");
   const [address, setAddress] = useState("");
   const [industry, setIndustry] = useState("");
+  const [category, setCategory] = useState("");
   const [kennitalaWarning, setKennitalaWarning] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
   const [emailConfidence, setEmailConfidence] = useState<"sure" | "unsure">("unsure");
@@ -126,6 +129,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
       companyId: companyId.trim(),
       address: address.trim() || undefined,
       industry: industry.trim() || undefined,
+      category: category.trim() || undefined,
       stage,
       previewSubStatus: stage === "preview" ? previewSub : undefined,
       finishedSubStatus: stage === "finished" ? finishedSub : undefined,
@@ -158,7 +162,7 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
     setWebsiteUrl(""); setFinnaUrl(""); setEmail(""); setCompanyId("");
     setContacts([{ id: "new-c-0", name: "", phone: "" }]);
     setOwnerUnknown(false); setPaidAmount("");
-    setAddress(""); setIndustry(""); setKennitalaWarning("");
+    setAddress(""); setIndustry(""); setCategory(""); setKennitalaWarning("");
   };
 
   // Filter out "registered" from stage options in the form
@@ -234,11 +238,37 @@ export function AddCompanyModal({ open, onClose, onAdd, existingNames, existingC
           {/* Geiri */}
           <div className="space-y-1.5">
             <Label>Geiri</Label>
-            <Input
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-              placeholder="Veitingar, verslun, þjónusta..."
-            />
+            {sectors ? (
+              <div className="grid gap-2 sm:grid-cols-2">
+                <select
+                  className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                  value={industry}
+                  onChange={(e) => { setIndustry(e.target.value); setCategory(""); }}
+                >
+                  <option value="">Veldu geira…</option>
+                  {[...new Set(sectors.map((s) => s.geiri))].map((g) => (
+                    <option key={g} value={g}>{g}</option>
+                  ))}
+                </select>
+                <select
+                  className="h-10 rounded-md border border-input bg-background px-3 text-sm disabled:opacity-50"
+                  value={category}
+                  disabled={!industry}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option value="">Veldu flokk…</option>
+                  {sectors.filter((s) => s.geiri === industry).map((s) => (
+                    <option key={s.undirgeiri} value={s.undirgeiri}>{s.undirgeiri}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <Input
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                placeholder="Veitingar, verslun, þjónusta..."
+              />
+            )}
           </div>
 
           {/* Finna URL */}
