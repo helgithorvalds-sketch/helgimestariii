@@ -6,7 +6,7 @@
 
 | Bls. | Efni |
 |---|---|
-| 1 | Forsíða („Nýji kaflinn“) |
+| 1 | Forsíða („Nýi kaflinn“ – stafsetning leiðrétt 12. nóv.; upprunaskrár í `forsida/`, af greininni claude/kind-dirac-lm09hh) |
 | 2 | Yfirlit – kaflar, fyrirtæki og blaðsíðutöl (23 fyrirtæki) |
 | 3 | Afsláttarmiðar (kynning, gamli hringurinn, vísar á bls. 29) |
 | 4–5 | Parki · Gardínur |
