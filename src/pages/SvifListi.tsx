@@ -22,7 +22,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   SVOR, FLOKKAR, VERD, TIER_LABEL, GEIRA_ROD, SVIF_FYRIRTAEKI_SOURCE,
-  Flokkur, FlokkurTier, normName, svarToCompany, flokkurFor, matchesSvar, enrichWithSvar, svarFor, tierFor, verdFor,
+  Flokkur, FlokkurTier, normName, svarToCompany, flokkurFor, matchesSvar, enrichWithSvar, svarFor, tierFor, verdFor, missingFollowUps,
 } from "@/data/svifFyrirtaekiSvor";
 
 /** Svarstaðan er geymd í símtalaútkomunni: já = interested, spyr = call_again, nei = rejected. */
@@ -159,7 +159,7 @@ export default function SvifListi() {
     for (const s of SVOR) {
       const c = svifFyrirtæki.find((x) => matchesSvar(x, s));
       if (!c) missing.push(s);
-      else if (!c.category || !flokkurFor(c.category) || !c.pitch || !c.estimatedPrice) enrich.push({ c, s });
+      else if (!c.category || !flokkurFor(c.category) || !c.pitch || !c.estimatedPrice || missingFollowUps(c, s)) enrich.push({ c, s });
     }
     return { missingSvor: missing, enrichable: enrich };
   }, [svifFyrirtæki]);
@@ -537,7 +537,7 @@ export default function SvifListi() {
 
   const renderQuote = (c: Company) =>
     c.pitch ? (
-      <div className="rounded-md border-l-4 border-indigo-400 bg-indigo-50/60 dark:bg-indigo-950/30 text-sm p-2">
+      <div className="rounded-md border-l-4 border-indigo-400 bg-indigo-50/60 dark:bg-indigo-950/30 text-sm p-2 whitespace-pre-wrap">
         <span className="text-xs font-semibold text-indigo-700 dark:text-indigo-300 flex items-center gap-1 mb-0.5"><MessageSquareQuote className="w-3 h-3" />Svarið</span>
         {c.pitch}
       </div>

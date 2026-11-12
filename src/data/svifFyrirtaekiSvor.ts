@@ -31,6 +31,8 @@ export interface SvifSvar {
   source: "tölvupóstur" | "sími";
   /** Dagsetning svars, d.m.yyyy. Tómt þegar hún er óþekkt. */
   date: string;
+  /** Seinni svör í sama þræði, í tímaröð. Bætast aftan við „Svarið“ á kortinu. */
+  fylgt?: { date: string; quote: string }[];
   /** Hvað fyrirtækið gerir nákvæmlega, ein lína. */
   thjonusta: string;
   geiri: string;
@@ -142,10 +144,10 @@ export const SVOR: SvifSvar[] = [
   { name: "Bókhald.is", web: "bokhald.is", person: "Sæþór Orri Guðjónsson", title: "framkvæmdastjóri og eigandi", phoneNote: "ekkert númer á vef", email: "bokhald@bokhald.is", status: "ja", quote: "Skemmtilegt concept. Mátt senda mér meira um innihaldið og kostnaðinn.", source: "tölvupóstur", date: "2.11.2026", thjonusta: "Bókhaldsstofa: bókhald, VSK, laun, ársreikningar og stofnun fyrirtækja", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldsstofa og launavinnsla" },
   { name: "Payday", web: "payday.is", person: "Björn Hr. Björnsson", title: "forstjóri og stofnandi", phone: "551 5121", phoneNote: "aðalnúmer, opið 10–16", email: "bjorn@payday.is", status: "ja", quote: "Áhugavert, til í að heyra meira varðandi verð.", source: "tölvupóstur", date: "30.10.2026", thjonusta: "Reikningar, laun og bókhald í appi fyrir einyrkja og lítil fyrirtæki (Visma)", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
   { name: "Lögmenn Granda", web: "granda.is", person: "Marteinn Jónasson", title: "lögmaður og eigandi", phone: "626 9922", email: "marteinn@granda.is", status: "ja", quote: "Sendu mér hvað þetta kostar og eins væri gaman að sjá hvernig þetta mun líta út.", source: "tölvupóstur", date: "30.10.2026", thjonusta: "Ný lögmannsstofa með 2 lögmenn: fasteignir, leiga, erfðir, félagaréttur", geiri: "Lögfræði", undirgeiri: "Lögfræðiþjónusta" },
-  { name: "Vanda Legal", web: "vandalegal.is", person: "Dagný Fjóla Jóhannsdóttir", title: "lögmaður", phone: "865 6364", email: "dagny@vandalegal.is", status: "ja", quote: "Áhugasöm að heyra um verð og að fá að sjá svona bækling. Bendir á að SVIF ætti að skrá vörumerkið sitt.", source: "tölvupóstur", date: "2.11.2026", thjonusta: "Skráning vörumerkja og hönnunar, hugverkaréttur", geiri: "Lögfræði", undirgeiri: "Vörumerki og hugverk" },
+  { name: "Vanda Legal", web: "vandalegal.is", person: "Dagný Fjóla Jóhannsdóttir", title: "lögmaður", phone: "865 6364", email: "dagny@vandalegal.is", status: "ja", quote: "Áhugasöm að heyra um verð og að fá að sjá svona bækling. Bendir á að SVIF ætti að skrá vörumerkið sitt.", source: "tölvupóstur", date: "2.11.2026", fylgt: [{ date: "10.11.2026", quote: "Ég hef áhuga á að auglýsa. Hvert var verðið, sagðirðu 30.000 kr. á mánuði og binding í 3 mánuði?" }], thjonusta: "Skráning vörumerkja og hönnunar, hugverkaréttur", geiri: "Lögfræði", undirgeiri: "Vörumerki og hugverk" },
   { name: "Blek hönnunarstofa", web: "blekhonnun.is", person: "Dagný Reykjalín", title: "grafískur hönnuður og eigandi, Akureyri", phone: "615 1655", email: "dagny@blekhonnun.is", status: "ja", quote: "Mjög sniðugt. Hvað kostar auglýsingin (3 mánaða samningur) og geturðu sent sýnishorn? Bendir á að ný fyrirtæki borgi oft seint.", source: "tölvupóstur", date: "2.11.2026", thjonusta: "Hönnunarstofa á Akureyri: lógó, prentefni, auglýsingar og vefir", geiri: "Ímynd og markaðsmál", undirgeiri: "Lógó og grafísk hönnun", einnig: ["Vefsíðugerð"] },
   { name: "Creditinfo", web: "creditinfo.is", person: "Mist Edvardsdóttir", title: "forstöðumaður markaðs- og kynningarmála", phone: "550 9600", phoneNote: "aðalnúmer samstæðu", email: "mist.edvardsdottir@creditinfo.com", status: "ja", quote: "Skemmtilegt concept. Áttu dæmi um bækling sem þú hefur sent til fyrirtækja?", source: "tölvupóstur", date: "3.11.2026", thjonusta: "Lánshæfismat, vanskilaskrá og upplýsingar um fyrirtæki", geiri: "Fjármál og rekstur", undirgeiri: "Lánshæfi og fyrirtækjaupplýsingar" },
-  { name: "Hringiðan", web: "hringidan.is", person: "Guðmundur Kr. Unnsteinsson", title: "framkvæmdastjóri", phone: "525 2400", phoneNote: "aðalnúmer", email: "gudmundur@hringidan.is", status: "ja", quote: "Áttu svona bækling til að senda mér í PDF til að sjá hvernig þetta lítur út?", source: "tölvupóstur", date: "2.11.2026", thjonusta: "Ljósleiðari, 5G, farsími, heimasími, hýsing og lén, frá 1995", geiri: "Vefur og tækni", undirgeiri: "Net, sími og lén" },
+  { name: "Hringiðan", web: "hringidan.is", person: "Guðmundur Kr. Unnsteinsson", title: "framkvæmdastjóri", phone: "525 2400", phoneNote: "aðalnúmer", email: "gudmundur@hringidan.is", status: "ja", quote: "Áttu svona bækling til að senda mér í PDF til að sjá hvernig þetta lítur út?", source: "tölvupóstur", date: "2.11.2026", fylgt: [{ date: "11.11.2026", quote: "Samþykkti 50.000 kr. með vsk. fyrir auglýsingu í húseigendabæklingnum (hönnun með hvíta lógóinu). Spyr um dreifingartíma og upplag. Gjafabréf og afsláttarkóði í vinnslu." }], thjonusta: "Ljósleiðari, 5G, farsími, heimasími, hýsing og lén, frá 1995", geiri: "Vefur og tækni", undirgeiri: "Net, sími og lén" },
   { name: "Afkoma vátryggingamiðlun", web: "afkoma.is", person: "Benisa Hoti", title: "þjónustufulltrúi", phone: "774 0867", alt: { name: "Sæmundur St. Magnússon, framkvæmdastjóri", phone: "621 9300" }, email: "benisa@afkoma.is", status: "ja", quote: "Þetta lítur mjög vel út, ætla að bera þetta undir framkvæmdastjórann og verð í bandi.", source: "tölvupóstur", date: "30.10.2026", thjonusta: "Vátryggingamiðlun: ber saman tryggingar og lífeyri frá öllum félögum", geiri: "Fjármál og rekstur", undirgeiri: "Tryggingar" },
   { name: "Prentmet Oddi", web: "prentmetoddi.is", person: "Guðmundur Ragnar Guðmundsson", title: "framkvæmdastjóri", phone: "856 0600", alt: { name: "Skiptiborð", phone: "5 600 601" }, email: "grg@prentmetoddi.is", status: "ja", quote: "Við erum áhugasöm að kynna okkar þjónustu í svona bækling ef bæklingurinn er prentaður hjá okkur.", source: "tölvupóstur", date: "29.10.2026", thjonusta: "Stærsta prentsmiðja landsins: prentun, umbúðir og límmiðar", geiri: "Ímynd og markaðsmál", undirgeiri: "Prentun", warn: "Skilyrði um prentun. Rekst á Litlaprent." },
   { name: "Valit ráðgjöf", web: "valit.is", person: "Sverrir", phone: "860 0408", email: "sverrir@valit.is", status: "ja", quote: "Áhugi í síma.", source: "sími", date: "", thjonusta: "Tölvurekstur í áskrift, Microsoft 365, afritun og netöryggi", geiri: "Vefur og tækni", undirgeiri: "Tölvurekstur og netöryggi" },
@@ -155,9 +157,9 @@ export const SVOR: SvifSvar[] = [
   { name: "Motus", aliases: ["Motus.", "Motus ehf."], web: "motus.is", person: "Eva Dögg Guðmundsdóttir", title: "markaðs- og samskiptastjóri", phone: "825 6174", email: "evadogg@motus.is", status: "ja", quote: "Áhugi í síma. Laufey, forstöðumaður innheimtumála, hafnaði í tölvupósti 30.10.", source: "sími", date: "", thjonusta: "Kröfustofnun og innheimta", geiri: "Fjármál og rekstur", undirgeiri: "Innheimta", warn: "Tvö ólík svör frá Motus. Staðfesta við Evu Dögg." },
   { name: "ECIT Ísland", aliases: ["Ecit", "ECIT", "Virtus", "ECIT Virtus"], web: "ecit.com/is", person: "Þorkell Guðjónsson", title: "framkvæmdastjóri viðskiptaþróunar og sölu", phone: "824 3201", alt: { name: "Skiptiborð", phone: "419 7100" }, email: "thorkell.gudjons@ecit.is", status: "ja", quote: "Leist mjög vel á hugmyndina. Heyra í honum þegar nær dregur og senda tölvupóst.", source: "sími", date: "", thjonusta: "Bókhald, launavinnsla og úthýst fjármáladeild, yfir 100 starfsmenn", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldsstofa og launavinnsla" },
   { name: "A4", web: "a4.is", person: "Dagbjört Margrét Pálsdóttir", phone: "661 5138", email: "info@a4.is", status: "ja", quote: "Áhugi í síma. Vantar netfangið hennar, senda myndbandið.", source: "sími", date: "", thjonusta: "Skrifstofuvörur, ritföng og skrifstofuhúsgögn", geiri: "Fólk og skrifstofa", undirgeiri: "Skrifstofuvörur og húsgögn" },
-  { name: "Konto", web: "konto.is", person: "Ari Kaprasíus Kristjánsson", title: "þjónustustjóri", phoneNote: "ekkert númer á vef, bara form", email: "info@konto.is", status: "ja", quote: "Hljómar spennandi og gæti hentað okkur vel. Spyr um verð, sýnishorn, hvernig viðtakendur eru valdir og hvort listinn sé borinn saman við bannskrá Þjóðskrár.", source: "tölvupóstur", date: "4.11.2026", thjonusta: "Rafrænir reikningar í appi, ókeypis grunnáskrift", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
-  { name: "Regla", web: "regla.is", person: "Margrét", phone: "520 1200", email: "regla@regla.is", status: "ja", quote: "Þetta er áhugavert. Endilega leyfðu mér að heyra verðin sem þið eruð með í gangi.", source: "tölvupóstur", date: "4.11.2026", thjonusta: "Skýjabókhald með kassakerfi, birgðum, launum og netverslun, 3.000+ fyrirtæki", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
-  { name: "Netbókhald.is", web: "netbokhald.is", person: "Elvar Níelsson", title: "framkvæmdastjóri", phone: "533 2090", email: "netbokhald@netbokhald.is", status: "ja", quote: "Ég er jákvæður. Spyr um verð, hvort kennitölulistinn sé frá Creditinfo, og vill geta rakið hvaðan nýir viðskiptavinir koma.", source: "tölvupóstur", date: "3.11.2026", thjonusta: "Vefbókhald með sölu-, fjárhags- og launakerfi, 5.900 kr. á mánuði", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
+  { name: "Konto", web: "konto.is", person: "Ari Kaprasíus Kristjánsson", title: "þjónustustjóri", phoneNote: "ekkert númer á vef, bara form", email: "info@konto.is", status: "ja", quote: "Hljómar spennandi og gæti hentað okkur vel. Spyr um verð, sýnishorn, hvernig viðtakendur eru valdir og hvort listinn sé borinn saman við bannskrá Þjóðskrár.", source: "tölvupóstur", date: "4.11.2026", fylgt: [{ date: "11.11.2026", quote: "Ari biður um símanúmer eða að bóka fjarfund. Þú sendir númerið þitt og póst á stjani@konto.is 12.11." }], thjonusta: "Rafrænir reikningar í appi, ókeypis grunnáskrift", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
+  { name: "Regla", web: "regla.is", person: "Margrét", phone: "520 1200", email: "regla@regla.is", status: "ja", quote: "Þetta er áhugavert. Endilega leyfðu mér að heyra verðin sem þið eruð með í gangi.", source: "tölvupóstur", date: "4.11.2026", fylgt: [{ date: "9.11.2026", quote: "Búin að fara yfir þetta innanhúss, líst skakalega vel á þetta og erum til í 3ja mánaða bindingu til að byrja með. Hver væru næstu skref?" }], thjonusta: "Skýjabókhald með kassakerfi, birgðum, launum og netverslun, 3.000+ fyrirtæki", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
+  { name: "Netbókhald.is", web: "netbokhald.is", person: "Elvar Níelsson", title: "framkvæmdastjóri", phone: "533 2090", email: "netbokhald@netbokhald.is", status: "ja", quote: "Ég er jákvæður. Spyr um verð, hvort kennitölulistinn sé frá Creditinfo, og vill geta rakið hvaðan nýir viðskiptavinir koma.", source: "tölvupóstur", date: "3.11.2026", fylgt: [{ date: "10.11.2026", quote: "Takk fyrir símtalið og bæklinginn. Mig langar að slá til og vera með í þessu ferðalagi. Hver eru næstu skref?" }], thjonusta: "Vefbókhald með sölu-, fjárhags- og launakerfi, 5.900 kr. á mánuði", geiri: "Fjármál og rekstur", undirgeiri: "Bókhaldskerfi og reikningagerð" },
   { name: "Datatech / Vefapp", web: "vefapp.is", person: "Andri Steinn Jóhannsson", title: "stofnandi og eigandi", phone: "571 9300", phoneNote: "aðalnúmer", email: "vefapp@datatech.is", status: "ja", quote: "Sniðugt, var með nákvæmlega þessa hugmynd. En hvað kostar að vera með?", source: "tölvupóstur", date: "4.11.2026", thjonusta: "Sérsmíðaðar vefsíður, vefverslanir og bókunarkerfi; gagnabjörgun og afritun", geiri: "Vefur og tækni", undirgeiri: "Vefsíðugerð", einnig: ["Tölvurekstur og netöryggi"] },
   { name: "Gonora", web: "gonora.is", person: "Sara Kristín", phoneNote: "ekkert númer á vef", email: "hallo@gonora.is", status: "ja", quote: "Við höfum áhuga á að skoða þetta nánar. Er þetta einungis prentaður bæklingur eða fer þetta líka stafrænt? Hvernig er verðskráin?", source: "tölvupóstur", date: "4.11.2026", thjonusta: "Heimasíða í áskrift, 8.900 kr. á mánuði, tilbúin á 48 klst.", geiri: "Vefur og tækni", undirgeiri: "Vefsíðugerð" },
   { name: "Vefsíðuhönnun (Vefhýsing ehf.)", web: "vefsiduhonnun.is", person: "Ekkert nafn", title: "Reyðarfirði", phone: "588 1228", email: "info@vefsiduhonnun.is", status: "ja", quote: "Mátt senda okkur nánari upplýsingar.", source: "tölvupóstur", date: "4.11.2026", thjonusta: "WordPress- og Shopify-vefir frá 169.990 kr., Reyðarfirði", geiri: "Vefur og tækni", undirgeiri: "Vefsíðugerð" },
@@ -220,6 +222,16 @@ export function svarFor(c: Pick<Company, "name">): SvifSvar | undefined {
   return SVOR.find((s) => matchesSvar(c, s));
 }
 
+/** Svarið og seinni svör sem einn texti, eins og hann er geymdur í „pitch“. */
+export function fullQuote(s: SvifSvar): string {
+  return [s.quote, ...(s.fylgt || []).map((f) => `[${f.date}] ${f.quote}`)].join("\n\n");
+}
+
+/** Vantar seinni svör úr svaralistanum á fyrirtækið? */
+export function missingFollowUps(c: Pick<Company, "pitch">, s: SvifSvar): boolean {
+  return (s.fylgt || []).some((f) => !(c.pitch || "").includes(f.quote));
+}
+
 export function flokkurFor(undirgeiri?: string): Flokkur | undefined {
   if (!undirgeiri) return undefined;
   const key = normName(undirgeiri);
@@ -254,7 +266,7 @@ export function svarToCompany(s: SvifSvar): Omit<Company, "id" | "createdAt"> {
     category: s.undirgeiri,
     leadSource: SVIF_FYRIRTAEKI_SOURCE,
     stage: "svif_fyrirtæki",
-    pitch: s.quote,
+    pitch: fullQuote(s),
     rejected: s.status === "nei",
     rejectedAt: s.status === "nei" ? new Date().toISOString() : undefined,
     lastCallOutcome: OUTCOME_BY_STATUS[s.status],
@@ -286,6 +298,11 @@ export function enrichWithSvar(c: Company, s: SvifSvar): Company {
   );
   const notesHasSvar = /(^|\n)Svar /.test(c.notes || "");
   const keepCategory = !!flokkurFor(c.category);
+  // Seinni svör sem vantar bætast aftan við það sem þegar er skráð.
+  const newFollowUps = (s.fylgt || []).filter((f) => !(c.pitch || "").includes(f.quote));
+  const pitch = [c.pitch || seed.pitch, ...newFollowUps.map((f) => `[${f.date}] ${f.quote}`)]
+    .filter(Boolean)
+    .join("\n\n");
   return {
     ...c,
     owner: c.owner?.trim() ? c.owner : seed.owner,
@@ -294,7 +311,7 @@ export function enrichWithSvar(c: Company, s: SvifSvar): Company {
     email: c.email || seed.email,
     industry: keepCategory ? c.industry || seed.industry : seed.industry,
     category: keepCategory ? c.category : seed.category,
-    pitch: c.pitch || seed.pitch,
+    pitch,
     estimatedPrice: keepCategory && c.estimatedPrice ? c.estimatedPrice : seed.estimatedPrice,
     lastCallOutcome: c.lastCallOutcome || seed.lastCallOutcome,
     rejected: c.rejected || seed.rejected,
