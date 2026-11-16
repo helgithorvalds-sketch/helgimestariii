@@ -7,9 +7,9 @@ pdf = lambda n: os.path.join(D, 'out', n + '.pdf')
 ny = lambda n: os.path.join(D, 'out', 'ads', n + '.jpg')
 PAGES = [  # (heiti, uppruni) – 32 síður
     ('Forsíða', ny('kapa_fram')), ('Yfirlit', os.path.join(D,'out','d_yfirlit.jpg')), ('Afsláttarmiðar (kynning)', os.path.join(D,'out','afslaettir_dark.jpg')),
-    ('Parki', img(5)), ('Gardínur', ad(20)), ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Straumlind', img(4)), ('Hringiðan', ny('hringidan')),
-    ('Ísorka', img(13)), ('Íspan', img(6)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('TME Gluggar', ny('tme')),
-    ('Sticker', img(7)), ('KORA', ad(8)), ('Litamálun', ny('litamalun')), ('Múrbúðin', img(19)), ('Fagafl', ny('fagafl')), ('RÓM Verk', img(23)),
+    ('Parki', ny('parki')), ('Gardínur', ad(20)), ('HTH', img(9)), ('Ormsson AEG', img(10)), ('Straumlind', img(4)), ('Hringiðan', ny('hringidan')),
+    ('Ísorka', ny('isorka')), ('Íspan', img(6)), ('Maus', ad(11)), ('Maus', ad(12)), ('Gluggavinir', img(17)), ('TME Gluggar', ny('tme')),
+    ('Sticker', ny('sticker')), ('KORA', ad(8)), ('Litamálun', ny('litamalun')), ('Múrbúðin', ny('murbudin')), ('Fagafl', ny('fagafl')), ('RÓM Verk', img(23)),
     ('HK Lagnir', ad(15)), ('Lásar.is', img(16)), ('Steindi', ad(21)), ('Heit gólf', ad(24)), ('MS Lagnir', ny('mslagnir')), ('VÍS', ad(25)),
     ('Af hverju SVIF', os.path.join(D,'out','umsvif_dark.jpg')), ('Afsláttarmiðar', os.path.join(D,'out','midar_thema_framhlid.jpg')),
     ('Auð síða (bakhlið miðanna)', os.path.join(D,'out','d_aud.jpg')), ('Kærar þakkir', os.path.join(D,'out','d_thakkir.jpg')), ('Bakkápa', ny('kapa_bak')),
