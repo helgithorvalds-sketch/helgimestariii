@@ -1,6 +1,6 @@
 # SVIF bæklingur – útgáfa 11. nóv. 2026
 
-32 síður, heftaður, 194 x 194 mm, 3 mm blæði (200 x 200 mm skjöl með TrimBox/BleedBox), 300 dpi.
+32 síður, heftaður, **21 × 21 cm**: 210 × 210 mm að skurði, 216 × 216 mm með 3 mm blæðingu, 300 dpi (`build210.py` + `assemble210.py` → `SVIF_baeklingur_prent_21x21.pdf`). Eldri 194 mm útgáfan: `assemble_all.py`.
 
 ## Uppsetning
 
@@ -46,7 +46,8 @@ Allar SVIF-síður eru rastaðar í 300 dpi (`raster794.py` / `render.js` + 3,12
   sívalningsvörpunin reiknuð í numpy (`ring_np.py`, sama rúmfræði og `ring6.py`) – Chrome 3D gaf óskýran/tröppóttan texta.
 * Bls. 29: Parki, Íspan, Ormsson og Maus í litum hvers fyrirtækis (`midasida_thema.py`, `ring_theme.py`),
   92 x 50 mm hver, 2 x 2 neðst á síðunni, þétt saman og út í kant.
-* Rifgötun í heilum línum: lóðréttar 10 mm og 102 mm frá kili, láréttar 94 mm og 144 mm frá efri brún.
+* 21 × 21 cm: miðar 100 × 54 mm; rifgötun í heilum línum: lóðréttar 10 mm og 110 mm frá kili, láréttar 102 mm og 156 mm frá efri brún.
+  (194 mm útgáfan: 92 × 50 mm, 10/102 mm frá kili, 94/144 mm frá efri brún.)
 * Stakar miðamyndir fyrir tölvupósta: https://svif.is/baeklingur/midar/svif_afslattarmidi_{parki,ispan,ormsson,maus}.jpg
 
 ## Á vefnum
