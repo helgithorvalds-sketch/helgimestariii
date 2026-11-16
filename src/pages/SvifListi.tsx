@@ -891,30 +891,6 @@ export default function SvifListi() {
           </div>
         ) : (
           <>
-            <section className="rounded-2xl border-2 border-border bg-card p-4 space-y-3">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <p className="font-bold text-sm">Sía eftir flokkum <span className="font-normal text-muted-foreground">· talan sýnir eftirspurn (fjölda fyrirtækja)</span></p>
-                {valdirFlokkar.length > 0 && (
-                  <Button variant="ghost" size="sm" onClick={() => setValdirFlokkar([])}>Hreinsa val ({valdirFlokkar.length})</Button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {flokkaEftirspurn.map((f) => {
-                  const valid = valdirFlokkar.some((v) => v.toLowerCase() === f.nafn.toLowerCase());
-                  return (
-                    <button
-                      key={f.nafn}
-                      onClick={() => setValdirFlokkar((prev) => valid ? prev.filter((v) => v.toLowerCase() !== f.nafn.toLowerCase()) : [...prev, f.nafn])}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border-2 transition-colors ${valid ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:border-primary"}`}
-                    >
-                      {f.nafn}
-                      <span className={`px-1.5 rounded-full text-[10px] font-bold ${valid ? "bg-primary-foreground/20" : f.fjoldi >= 3 ? "bg-destructive/15 text-destructive" : f.fjoldi === 2 ? "bg-amber-500/15 text-amber-700" : "bg-muted text-muted-foreground"}`}>{f.fjoldi}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
             {/* Flokkar og verð: hvað hver flokkur er, hverjir keppa um hann og hvað það gefur í verði */}
             <section className="rounded-2xl border-2 border-border bg-card p-4 space-y-4">
               <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -1122,6 +1098,30 @@ export default function SvifListi() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">{specialOffers.map(renderCard)}</div>
               )}
+            </section>
+
+            <section className="rounded-2xl border-2 border-border bg-card p-4 space-y-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <p className="font-bold text-sm">Sía eftir flokkum <span className="font-normal text-muted-foreground">· talan sýnir eftirspurn (fjölda fyrirtækja)</span></p>
+                {valdirFlokkar.length > 0 && (
+                  <Button variant="ghost" size="sm" onClick={() => setValdirFlokkar([])}>Hreinsa val ({valdirFlokkar.length})</Button>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {flokkaEftirspurn.map((f) => {
+                  const valid = valdirFlokkar.some((v) => v.toLowerCase() === f.nafn.toLowerCase());
+                  return (
+                    <button
+                      key={f.nafn}
+                      onClick={() => setValdirFlokkar((prev) => valid ? prev.filter((v) => v.toLowerCase() !== f.nafn.toLowerCase()) : [...prev, f.nafn])}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border-2 transition-colors ${valid ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:border-primary"}`}
+                    >
+                      {f.nafn}
+                      <span className={`px-1.5 rounded-full text-[10px] font-bold ${valid ? "bg-primary-foreground/20" : f.fjoldi >= 3 ? "bg-destructive/15 text-destructive" : f.fjoldi === 2 ? "bg-amber-500/15 text-amber-700" : "bg-muted text-muted-foreground"}`}>{f.fjoldi}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </section>
 
             <CallSchedule
