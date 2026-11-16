@@ -45,7 +45,7 @@ Allar SVIF-síður eru rastaðar í 300 dpi (`raster794.py` / `render.js` + 3,12
 * Bls. 3: hringurinn með beige-hvítum miðum. Miðarnir eru rendraðir í 8x (`coupshot.js` úr `midar3_stakir.html`) og
   sívalningsvörpunin reiknuð í numpy (`ring_np.py`, sama rúmfræði og `ring6.py`) – Chrome 3D gaf óskýran/tröppóttan texta.
 * Bls. 29: Parki, Íspan, Ormsson og Maus í litum hvers fyrirtækis (`midasida_thema.py`, `ring_theme.py`),
-  92 x 50 mm hver, 2 x 2 neðst á síðunni, þétt saman og út í kant.
+  100 × 54 mm hver (21 × 21 cm útgáfan), 2 x 2 neðst á síðunni, þétt saman og út í kant.
 * 21 × 21 cm: miðar 100 × 54 mm; rifgötun í heilum línum: lóðréttar 10 mm og 110 mm frá kili, láréttar 102 mm og 156 mm frá efri brún.
   (194 mm útgáfan: 92 × 50 mm, 10/102 mm frá kili, 94/144 mm frá efri brún.)
 * Stakar miðamyndir fyrir tölvupósta: https://svif.is/baeklingur/midar/svif_afslattarmidi_{parki,ispan,ormsson,maus}.jpg
