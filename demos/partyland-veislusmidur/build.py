@@ -142,12 +142,15 @@ def main():
     ranks = fetch_ranks(args.cache)
 
     tag_index, tag_list, rows = {}, [], []
-    skipped = {"unavailable": 0, "no_image": 0, "costume": 0}
+    skipped = {"no_image": 0, "costume": 0}
+    sold_out = 0
     for p in products:
         variant = next((v for v in p["variants"] if v.get("available")), None)
-        if not variant:
-            skipped["unavailable"] += 1
-            continue
+        available = variant is not None
+        if not available:
+            # Kept so the builder can say "X is sold out, here is something similar".
+            variant = p["variants"][0]
+            sold_out += 1
         if not p.get("images"):
             skipped["no_image"] += 1
             continue
@@ -170,7 +173,7 @@ def main():
         compare = round(float(compare)) if compare and float(compare) > price else 0
         rows.append([
             p["handle"], title, price, compare, variant["id"], img, tag_ids,
-            pack_size(title, body), round(ranks.get(p["handle"], 1.0), 3),
+            pack_size(title, body), round(ranks.get(p["handle"], 1.0), 3), 1 if available else 0,
         ])
 
     catalog = {
@@ -191,7 +194,7 @@ def main():
     with open(INDEX, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"Kept {len(rows)} products ({len(tag_list)} tags); skipped {skipped}")
+    print(f"Kept {len(rows)} products ({sold_out} sold out, {len(tag_list)} tags); skipped {skipped}")
     print(f"index.html is {os.path.getsize(INDEX) / 1e6:.2f} MB")
 
 

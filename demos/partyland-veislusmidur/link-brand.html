@@ -1,0 +1,45 @@
+<!--HEAD-->
+<title>Veislusmiðurinn</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@600;700;800;900&family=Source+Sans+3:wght@400;600;700;800&display=swap">
+<!--CSS-->
+/* Neutral look for the shareable link: confetti hero, plum ink, raspberry and teal. One light theme on purpose: product photos sit on white. */
+:root{
+  --ink:#241b35; --muted:#675d78; --bg:#f7f5fa; --card:#ffffff; --line:#e6e1ee;
+  --accent:#e4405f; --accent-dark:#c22e4b; --accent-soft:#fde9ed;
+  --brand:#1d8a85; --brand-dark:#166f6b; --brand-soft:#e0f2f1;
+  --theme-soft:#ece6f6; --theme-ink:#5a3d8f;
+  --sun-soft:#fbf1d6; --sun-ink:#8a6200; --green:#22804f; --green-soft:#e2f3e9; --gray-soft:#efecf4;
+  --on-dark:#ffffff; --scene-wall:#fdfbff; --scene-floor:#efeaf5;
+  --display:"Gabarito","Source Sans 3",system-ui,sans-serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.hero{background-color:#2b2040;
+  background-image:radial-gradient(#e4405f 3px,transparent 4px),radial-gradient(#f2b632 3px,transparent 4px),radial-gradient(#1d8a85 2.5px,transparent 3.5px),radial-gradient(#ffffff55 2px,transparent 3px);
+  background-size:52px 52px,68px 68px,40px 40px,30px 30px;background-position:0 0,22px 34px,12px 20px,6px 9px}
+.brand{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:-.3px;color:var(--ink)}
+.brand span{color:var(--accent)}
+.source{margin-left:auto}
+@media (max-width:640px){.source{margin-left:0;width:100%}}
+<!--TOP-->
+<div class="topbar"><div class="wrap">
+  <span class="brand">Veislu<span>smiðurinn</span></span>
+  <span class="demo-badge">Demo</span>
+  <span class="source">Vörur og verð frá <a href="https://partyland.is" target="_blank" rel="noopener">partyland.is</a></span>
+</div></div>
+
+<section class="hero"><div class="wrap"><div class="hero-card">
+  <span class="eyebrow">Veislusmiður · hugmyndademó</span>
+  <h1>Settu saman veisluna á einni mínútu</h1>
+  <p class="lead">Segðu hvert tilefnið er og körfan fyllist af öllu sem þarf. Þú getur svo breytt magni, skipt út vörum og fjarlægt það sem þú vilt ekki.</p>
+  <form class="ai-box" id="aiForm" autocomplete="off">
+    <input id="aiInput" type="text" placeholder="Lýstu veislunni, t.d. „Frozen afmæli fyrir 6 ára, 20 krakkar“" aria-label="Lýstu veislunni">
+    <button class="btn pink" type="submit">Töfra fram ✨</button>
+  </form>
+  <div class="examples" id="examples"><span>Prófaðu:</span></div>
+  <p class="ai-msg" id="aiMsg" hidden></p>
+  <p class="ai-note">Eða veldu skref fyrir skref hér fyrir neðan.</p>
+  <p class="disclaimer">Hugmyndademó sem notar opinbert vöruúrval partyland.is. Ekki á vegum Partyland. Hnappurinn „Setja allt í körfuna“ opnar venjulega körfu á partyland.is og ekkert er greitt nema þú klárir kaupin þar.</p>
+</div></div></section>
