@@ -66,7 +66,7 @@ function tilCompany(f: HerferdFyrirtaeki): Omit<Company, "id" | "createdAt"> {
     checklist: [],
     notes: [
       `Myndbandaherferð: svaraði ${STADA_LABEL[f.stada].toLowerCase()}${f.svor?.[0] ? ` ${f.svor[0].dags}` : ""}.`,
-      `Hugmyndin sem við nefndum: ${f.idea}`,
+      `Hugmynd að myndbandi (úr rannsókninni, ekki í póstinum): ${f.idea}`,
     ].join("\n"),
     personalityDescription: "",
     previewSent: false,

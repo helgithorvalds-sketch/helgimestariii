@@ -47,9 +47,9 @@ export interface HerferdFyrirtaeki {
   email_source?: string;
   phone?: string;
   phone_note?: string;
-  /** Setningin um fyrirtækið sem fór í póstinn. */
+  /** Hvað rannsóknin sá hjá fyrirtækinu (ekki í póstinum, sem er eins fyrir alla). */
   hook: string;
-  /** Hugmyndin að 10 sek. myndbandi sem fór í póstinn. */
+  /** Hugmynd að 10 sek. myndbandi fyrir símtalið (ekki í póstinum). */
   idea: string;
   /** Af hverju fyrirtækið var valið (rökin úr rannsókninni). */
   why: string;
