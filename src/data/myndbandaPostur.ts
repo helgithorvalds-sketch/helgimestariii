@@ -15,7 +15,7 @@ export interface PostInntak {
   person?: string;
   /** "personal" þegar netfangið er beint á viðkomandi, annars "generic". */
   email_type?: "personal" | "generic";
-  /** Heldur áfram setningunni „Við höfum verið að skoða {name} og …“ */
+  /** Heldur áfram setningunni „Við höfum verið að skoða vefinn ykkar og …“ */
   hook: string;
   /** Heldur áfram setningunni „Okkur datt t.d. í hug …“ */
   idea: string;
@@ -31,7 +31,8 @@ const setning = (s: string) => {
 const lagstafur = (s: string) => s.trim().replace(/^\p{Lu}(?!\p{Lu})/u, (c) => c.toLowerCase());
 
 export function efnislina(c: Pick<PostInntak, "name">) {
-  return `Frítt 10 sekúndna myndband fyrir ${c.name}`;
+  // Nafnið stendur í nefnifalli svo það þurfi aldrei að fallbeygja það („fyrir Freyju“).
+  return `${c.name}: frítt 10 sekúndna myndband`;
 }
 
 export function postur(c: PostInntak) {
@@ -43,7 +44,7 @@ export function postur(c: PostInntak) {
     "",
     "Helgi Már heiti ég og stend á bak við Norðurvefur.",
     "",
-    `Við höfum verið að skoða ${c.name} og ${setning(lagstafur(c.hook))} Við teljum að þið gætuð hentað mjög vel fyrir nýtt markaðsverkefni sem við erum að fara af stað með: stutt 2D og 3D myndbönd fyrir samfélagsmiðla.`,
+    `Við höfum verið að skoða vefinn ykkar og ${setning(lagstafur(c.hook))} Við teljum að þið gætuð hentað mjög vel fyrir nýtt markaðsverkefni sem við erum að fara af stað með: stutt 2D og 3D myndbönd fyrir samfélagsmiðla.`,
     "",
     "Myndböndin geta kynnt þjónustuna, sýnt hvað gerir ykkur betri en aðra, sett fram vandamál og lausnina eða sagt frá tilboði. Við getum líka gert vörurnar ykkar að þrívíddarlíkani sem lifnar við í myndbandinu. Svona myndbönd styrkja traust og ímynd, enda sést strax að í þau hefur verið lögð mikil vinna.",
     "",
