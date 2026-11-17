@@ -240,7 +240,7 @@ export default function Myndbond() {
                 Myndbönd
               </h1>
               <p className="text-sm text-muted-foreground mt-0.5">
-                {HERFERD.heiti} · {sendir.length} fyrirtæki · frá {HERFERD.fra}
+                {HERFERD.heiti} · {allir.length} fyrirtæki, {sendir.length} send · frá {HERFERD.fra}
                 {HERFERD.yfirfarid && <> · pósthólf yfirfarið {synaTima(HERFERD.yfirfarid)}</>}
               </p>
             </div>
