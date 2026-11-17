@@ -37,6 +37,13 @@ const SECTIONS: SectionDef[] = [
     ring: "border-emerald-300 bg-emerald-50/40 dark:bg-emerald-950/20 dark:border-emerald-800",
   },
   {
+    source: "myndbond",
+    title: "Myndbönd: vildu frítt myndband",
+    emoji: "🎬",
+    accent: "bg-violet-600 text-white",
+    ring: "border-violet-300 bg-violet-50/40 dark:bg-violet-950/20 dark:border-violet-800",
+  },
+  {
     source: "restaurant",
     title: "Veitingastaðir",
     emoji: "🟠",

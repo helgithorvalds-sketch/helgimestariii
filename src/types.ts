@@ -9,7 +9,7 @@ export type CompanyStage =
   | "svif_fyrirtæki";
 
 
-export type LeadSource = "facebook" | "new_company" | "restaurant" | "svif" | "svif_akureyri" | "fyrirtaekjabok" | "svif_fyrirtæki";
+export type LeadSource = "facebook" | "new_company" | "restaurant" | "svif" | "svif_akureyri" | "fyrirtaekjabok" | "svif_fyrirtæki" | "myndbond";
 
 export type PreviewSubStatus = 
   | "wanted_preview"
