@@ -36,6 +36,10 @@ export interface HerferdSvar {
 
 export interface HerferdFyrirtaeki {
   name: string;
+  /** Nafnið í eignarfalli, eins og það stendur í póstinum („starfsemi GKS Innréttinga“). */
+  ef?: string;
+  /** Nafnið í þolfalli, eins og það stendur í póstinum („fyrir GKS Innréttingar“). */
+  thf?: string;
   web: string;
   sector: string;
   /** Hvað fyrirtækið gerir. */
