@@ -18,6 +18,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gluggi úr ykkar línu snýst og opnast í sneiðmynd svo maður sér einangrunarlögin halda kuldanum úti á meðan rokið lemur utan á húsið.",
    "why": "Small owner-run importer/installer with a technical product and a FB page with little video; 3D window cutaway is a natural fit.",
    "score": 8,
+   "ef": "Gluggavina",
+   "thf": "Gluggavini",
    "stada": "osent"
   },
   {
@@ -36,6 +38,8 @@
    "idea": "stutt þrívíddarmyndband þar sem venjulegar svalir í vetrarveðri lokast með glerinu ykkar á nokkrum sekúndum og breytast í hlýja setustofu með kaffibolla á borðinu.",
    "why": "Very visual before/after product, owner-size company, website pushes 'aukið verðmæti eignarinnar' story that animation can tell in seconds.",
    "score": 8,
+   "ef": "Glugga og garðhúsa",
+   "thf": "Glugga og garðhús",
    "stada": "osent"
   },
   {
@@ -54,6 +58,8 @@
    "idea": "stutt hreyfimyndband þar sem SMART fataskápur raðar sér sjálfur saman á gólfinu á þremur sekúndum á meðan dagatal flettir þremur dögum fram.",
    "why": "Has a named sales & marketing manager, runs time-limited offers right now, and the 'easy to order, 3-day delivery' product begs for a quick animation.",
    "score": 8,
+   "ef": "GKS Innréttinga",
+   "thf": "GKS Innréttingar",
    "stada": "osent"
   },
   {
@@ -72,6 +78,8 @@
    "idea": "stutt þrívíddarmyndband þar sem vatnsglas hellist niður á Pergo parket, droparnir perla ofan á og hundur rennur yfir gólfið án þess að skilja eftir rispu.",
    "why": "Owner-managed (father & son), competitive flooring market, product with a clear technical advantage; CEO email and mobile published.",
    "score": 8,
+   "ef": "Egils Árnasonar",
+   "thf": "Egil Árnason",
    "stada": "osent"
   },
   {
@@ -90,6 +98,8 @@
    "idea": "stutt þrívíddarmyndband í sneiðmynd þar sem við fylgjum vatninu frá sumarbústaðnum í gegnum Borgarplast rotþróna og sjáum hreinsunina gerast hólf fyrir hólf.",
    "why": "Has a named sales & marketing person, product with a hidden mechanism that 3D explains perfectly, active on FB/Instagram but little explanatory video.",
    "score": 8,
+   "ef": "Borgarplasts",
+   "thf": "Borgarplast",
    "stada": "osent"
   },
   {
@@ -108,6 +118,8 @@
    "idea": "stutt þrívíddarmyndband þar sem Trefja pottur lendir á palli í hríðarbyl, lokið rennur af, gufan stígur upp og textinn sýnir útsöluverðið.",
    "why": "Icelandic manufacturer with a very 3D-friendly product and an active sale to announce; active on FB/Instagram.",
    "score": 8,
+   "ef": "Trefja",
+   "thf": "Trefjar",
    "stada": "osent"
   },
   {
@@ -126,6 +138,8 @@
    "idea": "stutt hreyfimyndband í þremur skotum þar sem málband mælir gluggann, efnisprufur fletta og loks rennur ný gardína fyrir og stofan verður notaleg.",
    "why": "Has a marketing role (currently on leave) so they value marketing; Akureyri store; clear 3-step service that animates well.",
    "score": 8,
+   "ef": "Álnabæjar",
+   "thf": "Álnabæ",
    "stada": "osent"
   },
   {
@@ -144,6 +158,8 @@
    "idea": "stutt þrívíddarmyndband þar sem Ambrogio slátturóbóti rúllar út úr hleðslustöðinni, slær grasið í fullkomnum röndum og fer aftur heim á meðan eigandinn situr með kaffi á pallinum.",
    "why": "Owner-led, already uses YouTube/Instagram, and the robot mower is a perfect 3D object; seasonal services give recurring reasons to post.",
    "score": 8,
+   "ef": "Garðlistar",
+   "thf": "Garðlist",
    "stada": "osent"
   },
   {
@@ -162,6 +178,8 @@
    "idea": "stutt hreyfimyndband þar sem sími sýnir þrjá smelli, stærð, Gull og bóka, og svo þrífur íbúðin sig nánast sjálf á meðan klukkan snýst og heimilisfólkið kemur heim í hreint.",
    "why": "Founder-led consumer service with a productised offer (three tiers, instant price), active on FB/Instagram, highly competitive market.",
    "score": 8,
+   "ef": "Heimilisþrifa",
+   "thf": "Heimilisþrif",
    "stada": "osent"
   },
   {
@@ -180,6 +198,8 @@
    "idea": "stutt þrívíddarmyndband þar sem tóm lóð fær sökkul, einingarnar svífa inn af flutningabíl og eftir tíu sekúndur stendur fullbúið Emerald hús með ljós í gluggum.",
    "why": "Owner-run importer with a long, complex buying process that animation simplifies; they already write explainer articles.",
    "score": 8,
+   "ef": "Emerald Einingahúsa",
+   "thf": "Emerald Einingahús",
    "stada": "osent"
   },
   {
@@ -198,6 +218,8 @@
    "idea": "stutt hreyfimyndband í tveimur hlutum þar sem illa lagt þak lekur í rigningu en Nýtt Þak lagt eftir kúnstarinnar reglum stendur þurrt og textinn segir frítt tilboð.",
    "why": "Family-owned, consumer-facing contractor with a clear 'why us' slogan; small team likely to welcome free content.",
    "score": 8,
+   "ef": "Nýs Þaks",
+   "thf": "Nýtt Þak",
    "stada": "osent"
   },
   {
@@ -216,6 +238,8 @@
    "idea": "stutt hreyfimyndband þar sem notandi slær inn stærð þaksins í símanum, þakið á húsinu skiptir um lit og efni á skjánum og tilboðið birtist áður en kaffið kólnar.",
    "why": "Young owner-led company that already innovates digitally (calculator); a short demo video of the calculator is an easy yes.",
    "score": 8,
+   "ef": "ÞakCo",
+   "thf": "ÞakCo",
    "stada": "osent"
   },
   {
@@ -234,6 +258,8 @@
    "idea": "stutt þrívíddarmyndband þar sem smáhýsið Kara Spa er híft af bíl á lóð við vatn, opnast eins og dúkkuhús og sýnir fullbúið innra rýmið með verðinu á fermetra.",
    "why": "Two-person owner-run company, product is literally a 3D object with named models and prices; very little video on their Wix site.",
    "score": 8,
+   "ef": "Úrvalshúsa",
+   "thf": "Úrvalshús",
    "stada": "osent"
   },
   {
@@ -252,6 +278,8 @@
    "idea": "stutt hreyfimyndband þar sem símaskjár sýnir 3D Studio, fingur velur parket og stofan á skjánum skiptir um gólf á augabragði.",
    "why": "Owner/MD email and mobile published; they already think visually (3D Studio) but need a short promo to drive people to it.",
    "score": 8,
+   "ef": "Parkets & Gólfs",
+   "thf": "Parket & Gólf",
    "stada": "osent"
   },
   {
@@ -270,6 +298,8 @@
    "idea": "stutt þrívíddarmyndband þar sem sólargeislar skella á stofuglugga, filman ykkar endurkastar hitanum og hitamælirinn inni í stofunni fellur á meðan sófinn hættir að upplitast.",
    "why": "Owner couple who do the work themselves; an 'invisible' product whose benefit only animation can show; new Framer site suggests they are building their marketing.",
    "score": 8,
+   "ef": "Glerfilma",
+   "thf": "Glerfilmur",
    "stada": "osent"
   },
   {
@@ -288,6 +318,8 @@
    "idea": "stutt teiknimyndband þar sem manneskja sest í sófann heima með símann, opnar fyrsta tímann hjá Mín líðan og grátt ský yfir höfðinu á henni minnkar með hverjum tíma þar til sólin brýst fram.",
    "why": "Founder-led online therapy service with the founder's own email published; 'how does online therapy actually work' is a natural explainer and lowers the trust barrier.",
    "score": 8,
+   "ef": "Mín líðan",
+   "thf": "Mín líðan",
    "stada": "osent"
   },
   {
@@ -306,6 +338,8 @@
    "idea": "stutt teiknað myndband þar sem klukkan á náttborðinu sýnir 03:12 og manneskja byltir sér, svo líða nokkrar vikur með Betri svefn í símanum og loks vaknar hún úthvíld þegar klukkan hringir klukkan sjö.",
    "why": "Founder Erla Björnsdóttir (well-known sleep expert and author) publishes her own email; a digital treatment with a clear before/after is ideal for a short explainer.",
    "score": 8,
+   "ef": "Betri svefns",
+   "thf": "Betri svefn",
    "stada": "osent"
   },
   {
@@ -324,6 +358,8 @@
    "idea": "stutt þrívíddarmyndband sem sýnir þversnið af húðinni þar sem laserinn örvar kollagenið og yfirborðið sléttist og fær ljóma á tíu sekúndum.",
    "why": "Has a dedicated marketing manager with her own published email; crowded aesthetics market and invisible, tech-based treatments that animation explains well.",
    "score": 8,
+   "ef": "Húðfegrunar",
+   "thf": "Húðfegrun",
    "stada": "osent"
   },
   {
@@ -342,6 +378,8 @@
    "idea": "stutt tvívíddarmyndband þar sem lánaskjöl, reikningar og kvittanir í óreiðu sogast inn í Aurbjörgu í símanum og út kemur ein skýr mynd með þeirri upphæð sem fjölskyldan getur sparað á mánuði.",
    "why": "Lítið íslenskt fjártæknifyrirtæki með markaðsstjóra sem hefur birt eigið netfang, vöru sem er auðveldara að sýna en lýsa og virka Facebook- og Instagram-síðu en ekkert myndefni á vefnum.",
    "score": 8,
+   "ef": "Aurbjargar",
+   "thf": "Aurbjörgu",
    "stada": "osent"
   },
   {
@@ -360,6 +398,8 @@
    "idea": "þrívíddarmyndband sem þysjar inn í dekk á svelli, þar sem örsmáar loftbólur og skurðir í gúmmíinu grípa ísinn og bíllinn stöðvast örugglega rétt við gangbrautina.",
    "why": "Rótgróið fyrirtæki frá Akureyri, heimabæ Norðurvefs, með tæknilega vöru sem nýtur sín í þrívídd, virka Facebook- og YouTube-síðu og ekkert myndefni á vefnum; aðeins almennt netfang fannst.",
    "score": 8,
+   "ef": "Dekkjahallarinnar",
+   "thf": "Dekkjahöllina",
    "stada": "osent"
   },
   {
@@ -378,6 +418,8 @@
    "idea": "tvívíddarmyndband þar sem íbúi í fjölbýli leggur bílnum, stingur í samband og gengur beint inn, á meðan stöðin þekkir bílinn, hleðslan fer af stað og kostnaðurinn skráist á rétta íbúð.",
    "why": "Lítið fyrirtæki með tækni sem þarf beinlínis að sýna og harða samkeppni á hleðslumarkaði; eini fyrirvarinn er að engir samfélagsmiðlar fundust á vefnum.",
    "score": 8,
+   "ef": "Hladdu",
+   "thf": "Hladdu",
    "stada": "osent"
   },
   {
@@ -396,6 +438,8 @@
    "idea": "þrívíddarmyndband þar sem nýtt hjól úr forpöntuninni setur sig saman hluta fyrir hluta, snýst einn hring og hjólar út í vorið.",
    "why": "Rótgróin sérverslun á samkeppnismarkaði með vöru sem nýtur sín í þrívídd, virka samfélagsmiðla og ekkert myndband á vefnum.",
    "score": 8,
+   "ef": "Arnarins",
+   "thf": "Örninn",
    "stada": "osent"
   },
   {
@@ -414,6 +458,8 @@
    "idea": "teiknað myndband þar sem starfsmannahópur situr leiður yfir hlaðborði, einn grípur litboltabyssu og á augabragði er allur hópurinn kominn út í Gufunes að kasta öxum og skjóta litboltum.",
    "why": "Sjónræn afþreying á íslenskum markaði með virka samfélagsmiðla, árstíðabundnar herferðir og ekkert myndband á vefnum; tilboðið hittir beint inn í jólavertíðina.",
    "score": 8,
+   "ef": "Skemmtigarðsins",
+   "thf": "Skemmtigarðinn",
    "stada": "osent"
   },
   {
@@ -432,6 +478,8 @@
    "idea": "þrívíddarmyndband þar sem sólarsellur raða sér á þak sumarbústaðar, sólin hleður rafhlöðuna yfir daginn og ljósin loga áfram í bústaðnum eftir að dimmir.",
    "why": "Lítið fyrirtæki með sjónræna vöru sem margir efast um að virki á Íslandi, svo myndband gerir mikið gagn; virkt á Facebook með lítið myndefni fyrir.",
    "score": 8,
+   "ef": "Sólspors",
+   "thf": "Sólspor",
    "stada": "osent"
   },
   {
@@ -450,6 +498,8 @@
    "idea": "þrívíddarmyndband þar sem veggurinn á einbýlishúsi verður gegnsær og sýnir hvernig loft í vatn varmadælan dregur varma úr köldu útiloftinu og sendir hann í gólfhitann á meðan rafmagnsmælirinn hægir á sér.",
    "why": "Lítið sérhæft fyrirtæki með vöru sem hentar fullkomlega í þrívíddarútskýringu, virkt á Facebook, Instagram og LinkedIn en án myndbanda; eini gallinn er að aðeins almennt netfang fannst.",
    "score": 8,
+   "ef": "Verklagna",
+   "thf": "Verklagnir",
    "stada": "osent"
   },
   {
@@ -468,6 +518,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gluggi frá ykkur stendur í miðju íslensku haustveðri, rigningin skellur á honum á ská og myndavélin fer inn fyrir þar sem stofan er hlý og sólbekkurinn alveg þurr.",
    "why": "Lítið, sérhæft fyrirtæki með áþreifanlega vöru sem nýtur sín í þrívídd, Facebook- og Instagram-síðu en ekkert myndefni á vefnum, og harða samkeppni í gluggum þar sem sérstaðan skiptir máli.",
    "score": 8,
+   "ef": "Gluggagerðarinnar",
+   "thf": "Gluggagerðina",
    "stada": "osent"
   },
   {
@@ -486,6 +538,8 @@
    "idea": "stutt þrívíddarmyndband þar sem Idex gluggi er settur saman úr einstökum hlutum í loftinu og smellur svo í vegg á nýbyggingu.",
    "why": "Small, owner-managed supplier with an old-fashioned web presence and almost no visual content; MD's own address is published.",
    "score": 7,
+   "ef": "Idex",
+   "thf": "Idex",
    "stada": "osent"
   },
   {
@@ -504,6 +558,8 @@
    "idea": "stutt þrívíddarmyndband þar sem tómt eldhús fyllist af AXIS innréttingu eining fyrir einingu og endar á merkinu ykkar með orðunum íslensk framleiðsla.",
    "why": "Mid-size Icelandic manufacturer competing with imported kitchens (IKEA, HTH); 'made in Iceland' is a strong story they under-use; MD email published.",
    "score": 7,
+   "ef": "AXIS húsgagna",
+   "thf": "AXIS húsgögn",
    "stada": "osent"
   },
   {
@@ -522,6 +578,8 @@
    "idea": "stutt hreyfimyndband þar sem eldhúsinnrétting eldist um tíu ár á nokkrum sekúndum, krakkar stækka og jólin koma og fara, en skáparnir standa óhaggaðir.",
    "why": "Small owner-run kitchen company with a clear selling point (10-year warranty) and Instagram/Facebook presence but little video.",
    "score": 7,
+   "ef": "Fríforms",
+   "thf": "Fríform",
    "stada": "osent"
   },
   {
@@ -540,6 +598,8 @@
    "idea": "stutt þrívíddarmyndband þar sem steinblokk er skorin, slípuð og lögð á eldhúsinnréttingu í einni samfelldri hreyfingu á tíu sekúndum.",
    "why": "Small owner-run stone shop with a clear process and visual product; MD's email published.",
    "score": 7,
+   "ef": "Steinprýði",
+   "thf": "Steinprýði",
    "stada": "osent"
   },
   {
@@ -558,6 +618,8 @@
    "idea": "stutt þrívíddarmyndband þar sem sófi skiptir um áklæði, lit og lengd á nokkrum sekúndum þangað til hann passar fullkomlega í stofuna.",
    "why": "Small, family-type furniture maker with a custom-build angle and Instagram presence but little video.",
    "score": 7,
+   "ef": "Patta húsgagna",
+   "thf": "Patta húsgögn",
    "stada": "osent"
   },
   {
@@ -576,6 +638,8 @@
    "idea": "stutt hreyfimyndband þar sem einn og sami glugginn skiptir á milli rúllugardínu, strimla og plíseraðrar gardínu og birtan í herberginu breytist með.",
    "why": "Family business with a product that is hard to visualise from swatches; little video today.",
    "score": 7,
+   "ef": "Z-brauta & gluggatjalda",
+   "thf": "Z-brautir & gluggatjöld",
    "stada": "osent"
   },
   {
@@ -594,6 +658,8 @@
    "idea": "stutt hreyfimyndband þar sem gamla Teppalandsskiltið snýst og verður að Gólfefnabúðinni á meðan gólfið í stofunni skiptir úr teppi í gegnheilt parket.",
    "why": "Rebranded store that needs awareness; small team; Instagram/Facebook but little video; generic email only.",
    "score": 7,
+   "ef": "Gólfefnabúðarinnar",
+   "thf": "Gólfefnabúðina",
    "stada": "osent"
   },
   {
@@ -612,6 +678,8 @@
    "idea": "stutt þrívíddarmyndband þar sem saunahús rís á palli í snjókomu, hurðin opnast, gufa streymir út og saltvatnspotturinn við hliðina lýsist upp í myrkrinu.",
    "why": "Small retailer with very 3D-friendly products and an active sale; has YouTube channel but little content.",
    "score": 7,
+   "ef": "Heitra potta",
+   "thf": "Heita potta",
    "stada": "osent"
   },
   {
@@ -630,6 +698,8 @@
    "idea": "stutt hreyfimyndband þar sem verðmiði í byggingavöruverslun minnkar og minnkar þangað til Múrbúðarverðið smellur á og Raider borvél snýst í forgrunni.",
    "why": "Has a named web & marketing manager, runs frequent promotions, price-driven competitive market.",
    "score": 7,
+   "ef": "Múrbúðarinnar",
+   "thf": "Múrbúðina",
    "stada": "osent"
   },
   {
@@ -648,6 +718,8 @@
    "idea": "stutt þrívíddarmyndband þar sem teikning af eldhúsi á skjá breytist í alvöru TAK innréttingu sem raðar sér upp í nýrri íbúð.",
    "why": "Akureyri company (local to Norðurvefur), makes a visual product in-house; limited social video; generic email.",
    "score": 7,
+   "ef": "SS Byggis",
+   "thf": "SS Byggi",
    "stada": "osent"
   },
   {
@@ -666,6 +738,8 @@
    "idea": "stutt þrívíddarmyndband þar sem K16 einingahús byggist upp á lóð frá grunni að lyklum, og endar á því að ljósin kvikna og einhver leggst upp í rúm í sýningarhúsinu.",
    "why": "Small builder with a named project manager and his mobile published; complex product and a unique offer (overnight show-house stay).",
    "score": 7,
+   "ef": "K16-Einingahúsa",
+   "thf": "K16-Einingahús",
    "stada": "osent"
   },
   {
@@ -684,6 +758,8 @@
    "idea": "stutt hreyfimyndband þar sem gamalt hús fær nýtt þak, nýja glugga og nýja klæðningu í þremur hröðum skrefum og stimpillinn 10 ára ábyrgð lendir í lokin.",
    "why": "Small growing contractor with strong proof points and consumer focus; would benefit from a punchy explainer; generic email.",
    "score": 7,
+   "ef": "Byggingar og Viðhalds",
+   "thf": "Byggingu og Viðhald",
    "stada": "osent"
   },
   {
@@ -702,6 +778,8 @@
    "idea": "stutt hreyfimyndband þar sem smiður kemur, skannar þakið og á skjánum birtast tveir valkostir, viðgerð eða nýtt þak, með skýru verði við hvorn.",
    "why": "Owner-named one-person brand in a crowded trade; owner's own address is the site email.",
    "score": 7,
+   "ef": "Ragga Smiðs",
+   "thf": "Ragga Smið",
    "stada": "osent"
   },
   {
@@ -720,6 +798,8 @@
    "idea": "stutt þrívíddarmyndband þar sem tvær dýnur eru skornar í sneiðmynd hlið við hlið og maður sér hvernig ykkar dýna lagar sig að líkamanum en hin ekki.",
    "why": "Has an Akureyri store (local), 'compare us' positioning that suits a why-us animation; generic email.",
    "score": 7,
+   "ef": "Svefns og heilsu",
+   "thf": "Svefn og heilsu",
    "stada": "osent"
   },
   {
@@ -738,6 +818,8 @@
    "idea": "stutt hreyfimyndband þar sem þreytt hús fær nýja glugga, lagað þak og nýja klæðningu hvert á eftir öðru á meðan einn smiður merkir við á listanum.",
    "why": "Owner-run trade firm with owner's email/mobile on the site; crowded market where standing out matters.",
    "score": 7,
+   "ef": "Húsasmíði",
+   "thf": "Húsasmíði",
    "stada": "osent"
   },
   {
@@ -756,6 +838,8 @@
    "idea": "stutt þrívíddarmyndband þar sem bjálkar og CLT einingar raða sér upp á íslenskri lóð frá fyrstu teikningu að afhentum lykli á tíu sekúndum.",
    "why": "Small importer with a long track record and a big-ticket product that is far easier to sell when shown in 3D.",
    "score": 7,
+   "ef": "Bjálkahúsa",
+   "thf": "Bjálkahús",
    "stada": "osent"
   },
   {
@@ -774,6 +858,8 @@
    "idea": "stutt hreyfimyndband þar sem rigningarvatn fossar af þakkanti án rennu, svo smellur ný renna á sinn stað og vatnið rennur snyrtilega niður á meðan nýr pallur byggist fyrir neðan.",
    "why": "Young owner-run firm actively marketing on Facebook; several services that animate well; generic email.",
    "score": 7,
+   "ef": "Þakrennuverks",
+   "thf": "Þakrennuverk",
    "stada": "osent"
   },
   {
@@ -792,6 +878,8 @@
    "idea": "stutt þrívíddarmyndband þar sem lítið heyrnartæki svífur inn að eyranu og smellur á sinn stað, og óskýr kliður í fjölskylduboði breytist í skýr samtöl og hlátur.",
    "why": "Co-founder/MD's own email on site; competitive market (Heyrn, Heyrnarstöðin, chains) and tiny high-tech products that look great in 3D.",
    "score": 7,
+   "ef": "Heyrnartækni",
+   "thf": "Heyrnartækni",
    "stada": "osent"
   },
   {
@@ -810,6 +898,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gleraugu móðast upp, leysigeisli mótar hornhimnuna á nokkrum sekúndum og manneskjan leggur gleraugun ofan í skúffu fyrir fullt og allt.",
    "why": "High-ticket elective procedure (570–795 þús. kr.) in a two-player market against Sjónlag; MD's own email published; they already have a videos section, so they value video.",
    "score": 7,
+   "ef": "Augljóss",
+   "thf": "Augljós",
    "stada": "osent"
   },
   {
@@ -828,6 +918,8 @@
    "idea": "stutt teiknað myndband þar sem hurðin í Dalshrauni opnast og þrír ólíkir viðskiptavinir, ungur strákur, kona og eldri maður, finna hver sinn tíma og enda saman á skjá sem segir 10.590 kr. á mánuði og engin binding.",
    "why": "Family-run local gym with the MD's own email published; a clear offer (no binding, 10.590/month) to announce against World Class and Sporthúsið.",
    "score": 7,
+   "ef": "Hress heilsuræktar",
+   "thf": "Hress heilsurækt",
    "stada": "osent"
   },
   {
@@ -846,6 +938,8 @@
    "idea": "stutt þrívíddarmyndband þar sem Batterí dós skýst upp úr ísköldu vatni, lóð og ketilbjalla úr Hreysti línunni raðast upp í kringum hana og verðmiðinn birtist í lokin.",
    "why": "Has a named marketing manager and owner; own-brand products and a new drink are textbook 3D-model material in competitive sports retail.",
    "score": 7,
+   "ef": "Hreysti",
+   "thf": "Hreysti",
    "stada": "osent"
   },
   {
@@ -864,6 +958,8 @@
    "idea": "stutt teiknað myndband þar sem hlaupari þýtur í gegnum HYROX stöðvar, sleðann, róðurinn og vegginn, og endar í markinu undir UltraForm merkinu.",
    "why": "Small owner-run family business (Sigurjón Ernir and Símona) that is very active on social media and podcasting; competing with big chains so standing out matters.",
    "score": 7,
+   "ef": "UltraForm",
+   "thf": "UltraForm",
    "stada": "osent"
   },
   {
@@ -882,6 +978,8 @@
    "idea": "stutt þrívíddarmyndband þar sem sérsmíðað tæki rennur inn í eyrað, tónlist og símtal streyma beint úr símanum og svo skiptir það sjálfkrafa yfir í samtal við matarborðið.",
    "why": "Owner-run (forstjóri Ellisif and co-owner Gísli R. Stefánsson); already use video testimonials and radio, so they see value in media; small high-tech products ideal for 3D.",
    "score": 7,
+   "ef": "Heyrnar",
+   "thf": "Heyrn",
    "stada": "osent"
   },
   {
@@ -900,6 +998,8 @@
    "idea": "stutt teiknað myndband sem byrjar í rólegri heilsulind með gufu og kertaljósi og færist svo yfir í nákvæma andlitsmeðferð þar sem húðin fær ljóma, með Abaco Derma merkinu í lokin.",
    "why": "Akureyri neighbour of Norðurvefur (local angle); new owners since 2024 and a rebrand to Abaco Derma, so likely want fresh content.",
    "score": 7,
+   "ef": "Abaco Derma",
+   "thf": "Abaco Derma",
    "stada": "osent"
   },
   {
@@ -918,6 +1018,8 @@
    "idea": "stutt þrívíddarmyndband þar sem fóðurpoki rennur inn á skjáinn, hundur og köttur hlaupa að honum og Íslandskort kviknar á öllum stöðunum þar sem verslanirnar ykkar eru.",
    "why": "Growing multi-store pet chain with the CEO's direct email published; competitive market against Dýrabær, Petmark and supermarkets; pets and products animate well.",
    "score": 7,
+   "ef": "Gæludýr.is",
+   "thf": "Gæludýr.is",
    "stada": "osent"
   },
   {
@@ -936,6 +1038,8 @@
    "idea": "stutt teiknimyndband þar sem starfsmaður á kaffistofu skilur fyrst ekkert í spjallinu, orðin raða sér svo smám saman upp í setningar og í lokin er hann sjálfur farinn að taka þátt.",
    "why": "Owner-run school with the CEO's direct email; competes with Mímir and others for employer contracts, and the workplace-course offer is a process worth explaining.",
    "score": 7,
+   "ef": "Retor fræðslu",
+   "thf": "Retor fræðslu",
    "stada": "osent"
   },
   {
@@ -954,6 +1058,8 @@
    "idea": "stutt teiknimyndband þar sem unglingur í sófanum strýkur í gegnum ökuskólann í símanum, skref fyrir skref, og heldur í lokin á glænýju ökuskírteini með lyklana í hinni hendinni.",
    "why": "Tiny founder-run online school with personal emails published; it competes head-on with Netökuskólinn and Ökuland, so a short explainer for parents is an easy yes.",
    "score": 7,
+   "ef": "Ökuskóla 17.is",
+   "thf": "Ökuskóla 17.is",
    "stada": "osent"
   },
   {
@@ -972,6 +1078,8 @@
    "idea": "stutt þrívíddarmyndband þar sem fólksbíll breytist fyrst í vörubíl og svo í rútu á meðan framvindustika í fjarnáminu fyllist á fartölvuskjá við hliðina.",
    "why": "Mid-size school with the CEO's direct email; meirapróf training is competitive (Ekill, Ökuskólinn í Mjódd and others) and vehicles look great in 3D.",
    "score": 7,
+   "ef": "Ökulands",
+   "thf": "Ökuland",
    "stada": "osent"
   },
   {
@@ -990,6 +1098,8 @@
    "idea": "stutt þrívíddarmyndband þar sem konfektmoli snýst hægt, súkkulaðið rennur yfir hann og hann lendir að lokum í öskju merktri Mosfellsbakaríi.",
    "why": "Owner-managed bakery with the CEO's direct email and mobile; chocolate and pastry are ideal 3D objects and seasonal launches (Easter, Christmas) give a reason to post.",
    "score": 7,
+   "ef": "Mosfellsbakarís",
+   "thf": "Mosfellsbakarí",
    "stada": "osent"
   },
   {
@@ -1008,6 +1118,8 @@
    "idea": "stutt þrívíddarmyndband þar sem vöndur er valinn í símanum, blómin raða sér saman og pakkast inn og vöndurinn birtist svo við útidyrnar hjá þeim sem á að fá hann.",
    "why": "Owner explicitly handles marketing and social media himself; the order-and-deliver process is easy to show and Valentine's/Mother's Day give natural offers.",
    "score": 7,
+   "ef": "Reykjavíkurblóma",
+   "thf": "Reykjavíkurblóm",
    "stada": "osent"
   },
   {
@@ -1026,6 +1138,8 @@
    "idea": "stutt teiknimyndband þar sem síminn bókar borð með einum smelli og myndavélin fer svo inn í eldhúsið þar sem sama pöntunin birtist samstundis í kassakerfinu.",
    "why": "App-based product with two audiences (diners and restaurant owners) that is much clearer shown than told; mid-size Icelandic tech firm that sells to restaurants via sales meetings.",
    "score": 7,
+   "ef": "Dineout",
+   "thf": "Dineout",
    "stada": "osent"
   },
   {
@@ -1044,6 +1158,8 @@
    "idea": "stutt teiknimyndband þar sem silfurskotta og mús laumast inn í eldhús á veitingastað en rekast á forvarnastöðvarnar ykkar og húsið verður hreint og öruggt á nokkrum sekúndum.",
    "why": "Process-heavy service that people do not understand until they need it; small regional firm with little video content and a B2B prevention contract to sell.",
    "score": 7,
+   "ef": "Meindýravarna Suðurlands",
+   "thf": "Meindýravarnir Suðurlands",
    "stada": "osent"
   },
   {
@@ -1062,6 +1178,8 @@
    "idea": "þrívíddarmyndband þar sem mjólk rennur úr fernu frá Örnu í glas, laktósinn klofnar á leiðinni og glasið endar í höndum einhvers sem hefur ekki getað drukkið mjólk í mörg ár.",
    "why": "Vestfirskt matvælafyrirtæki af hóflegri stærð með einfaldan en lítt þekktan kost og umbúðir sem henta vel í þrívídd; virkt á Instagram og Facebook en ekkert myndefni á vefnum.",
    "score": 7,
+   "ef": "Örnu",
+   "thf": "Örnu",
    "stada": "osent"
   },
   {
@@ -1080,6 +1198,8 @@
    "idea": "tvívíddarmyndband þar sem jakkaföt hanga á hurðarhúni, pöntun er gerð í appinu, fötin svífa til ykkar í Mjódd og koma aftur hrein og pressuð á herðatré áður en kaffið kólnar.",
    "why": "Lítið fjölskyldufyrirtæki með nýja stafræna þjónustu sem þarf að kynna og Facebook-síðu en lítið myndefni; eigendurnir lesa líklega póstinn sjálfir.",
    "score": 7,
+   "ef": "Efnalaugarinnar Bjargar",
+   "thf": "Efnalaugina Björgu",
    "stada": "osent"
   },
   {
@@ -1098,6 +1218,8 @@
    "idea": "stutt þrívíddarmyndband sem fylgir einni ör frá því hún er dregin upp í bogann, hægt í gegnum salinn og beint í miðju skotskífunnar á meðan vinahópurinn fagnar í bakgrunni.",
    "why": "Lítið afþreyingarfyrirtæki sem lifir á því að ná athygli hópa og einstaklinga; virkt á Facebook en ekkert myndefni sást á vefnum.",
    "score": 7,
+   "ef": "Bogfimisetursins",
+   "thf": "Bogfimisetrið",
    "stada": "osent"
   },
   {
@@ -1116,6 +1238,8 @@
    "idea": "tvívíddarmyndband þar sem hleðslustöð fyrirtækis stendur auð yfir nóttina, kviknar í e1-appinu og nágranni rennir rafbílnum sínum í stæðið á meðan krónurnar skila sér til eigandans.",
    "why": "Lítið sprotafyrirtæki með app sem þarf að útskýra fyrir mörgum ólíkum hópum og framkvæmdastjóra með birt netfang; Facebook-síða til staðar en vefurinn virðist lítið uppfærður.",
    "score": 7,
+   "ef": "e1",
+   "thf": "e1",
    "stada": "osent"
   },
   {
@@ -1134,6 +1258,8 @@
    "idea": "tvívíddarmyndband þar sem verðandi vörubílstjóri lærir í sófanum heima á kvöldin, klárar netnámið og keyrir svo af stað á stórum bíl með nýja skírteinið í vasanum.",
    "why": "Akureyrarfyrirtæki eins og við, með námsferli sem auðvelt er að sýna og samkeppni við aðra ökuskóla; pósturinn fer þó á almenna netfangið.",
    "score": 7,
+   "ef": "Ekils ökuskóla",
+   "thf": "Ekil ökuskóla",
    "stada": "osent"
   },
   {
@@ -1152,6 +1278,8 @@
    "idea": "þrívíddarmyndband þar sem Rís-stykki svífur í loftinu, súkkulaðið leggst utan um stökkt hrísið og stykkið lendir loks í hendinni á einhverjum í bíósalnum.",
    "why": "Ástsælt íslenskt neytendamerki á Instagram með vöru sem nýtur sín frábærlega í þrívídd; netfangið er fyrst á starfsmannasíðunni en hlutverk viðtakandans sést ekki í gögnunum og ekkert almennt netfang fannst.",
    "score": 7,
+   "ef": "Freyju",
+   "thf": "Freyju",
    "stada": "osent"
   },
   {
@@ -1170,6 +1298,8 @@
    "idea": "þrívíddarmyndband þar sem gegnsær líkami birtist á skjá, mæligildin lýsast upp eitt af öðru og verða smám saman græn eftir því sem vikurnar í þjálfun líða.",
    "why": "Lítil heilsumiðstöð á Facebook og Instagram sem heldur úti hlaðvarpi og er því þegar að búa til efni, og þjónustan er ferli sem gaman er að sýna.",
    "score": 7,
+   "ef": "Greenfit",
+   "thf": "Greenfit",
    "stada": "osent"
   },
   {
@@ -1188,6 +1318,8 @@
    "idea": "tvívíddarmyndband þar sem bílakjallari í fjölbýli fyllist af hleðslustöðvum, einni af annarri, línurnar raðast snyrtilega inn í nýja töflu og hver íbúð fær sinn eigin mæli.",
    "why": "Lítið fyrirtæki þar sem eigandinn er sjálfur með netfang og farsíma á vefnum, með Facebook-síðu og skýrt ferli, í mikilli samkeppni um hleðslustöðvaverkefni.",
    "score": 7,
+   "ef": "HM Raflagna",
+   "thf": "HM Raflagnir",
    "stada": "osent"
   },
   {
@@ -1206,6 +1338,8 @@
    "idea": "þrívíddarmyndband þar sem íslenskt raðhús í snjónum snýst í hring á skjánum og breytist í hvítt hús með sundlaug í spænskri sól, með orðunum „Gimli selur bæði“ í lokin.",
    "why": "Eigandinn er með eigið netfang og farsíma á vefnum, markaðurinn er mjög samkeppnisharður og Spánareignirnar eru sérstaða sem auðvelt er að sýna.",
    "score": 7,
+   "ef": "Gimli fasteignasölu",
+   "thf": "Gimli fasteignasölu",
    "stada": "osent"
   },
   {
@@ -1224,6 +1358,8 @@
    "idea": "þrívíddarmyndband þar sem keilukúla rennur eftir brautinni, nær fellu og keilurnar breytast í gjafabréf sem svífa beint ofan í jólapakka.",
    "why": "Fjölskylduafþreying sem selst á stemningu og gjafabréfum, virk á Facebook og Instagram og með jólavertíðina fram undan; netfangið er almennt en fyrirtækið ekki stórt.",
    "score": 7,
+   "ef": "Keiluhallarinnar",
+   "thf": "Keiluhöllina",
    "stada": "osent"
   },
   {
@@ -1242,6 +1378,8 @@
    "idea": "þrívíddarmyndband þar sem Ísland klofnar eftir flekaskilunum, kvika rís upp undir Heklu og gýs, og svo opnast dyrnar að sýningunni ykkar.",
    "why": "Sýningin snýst um náttúruöfl sem erfitt er að mynda, svo þrívídd passar fullkomlega, og framkvæmdastjórinn er með eigið netfang á vefnum.",
    "score": 7,
+   "ef": "LAVA Centre",
+   "thf": "LAVA Centre",
    "stada": "osent"
   },
   {
@@ -1260,6 +1398,8 @@
    "idea": "teiknað myndband þar sem þungur peningapoki merktur tryggingafé breytist í lítið skírteini í símanum og lyklarnir að nýju íbúðinni detta í lófann.",
    "why": "Þjónusta sem er ný fyrir mörgum og skilst betur með myndum, á lifandi leigumarkaði; tengsl við Arion banka gætu þó hægt á ákvörðun.",
    "score": 7,
+   "ef": "Leiguskjóls",
+   "thf": "Leiguskjól",
    "stada": "osent"
   },
   {
@@ -1278,6 +1418,8 @@
    "idea": "stutt teiknað myndband þar sem króna rúllar inn í símann, breytist í bitcoin með einni snertingu og lendir örugglega í rafmyntaveskinu.",
    "why": "Lítið íslenskt fjártæknifyrirtæki með vöru sem þarf að einfalda og framkvæmdastjóra með eigið netfang; auglýsingar um rafmyntir eru þó viðkvæmar.",
    "score": 7,
+   "ef": "Myntkaupa",
+   "thf": "Myntkaup",
    "stada": "osent"
   },
   {
@@ -1296,6 +1438,8 @@
    "idea": "stutt teiknað myndband þar sem plastkort í troðnu veski breytist í rafrænt kort í símanum, er borið upp að skanna við innganginn og hurðin opnast með grænu ljósi.",
    "why": "Tæknilausn sem verður mun auðskildari þegar hún er sýnd, lítið fyrirtæki og ekkert myndband á vefnum, en vefurinn er á ensku og engir samfélagsmiðlar fundust.",
    "score": 7,
+   "ef": "Smart Solutions",
+   "thf": "Smart Solutions",
    "stada": "osent"
   },
   {
@@ -1314,6 +1458,8 @@
    "idea": "tvívíddarmyndband þar sem tilboð frá þremur tryggingafélögum raðast upp hlið við hlið, Tryggja dregur það hagstæðasta fram og mánaðarlega upphæðin á reikningnum lækkar.",
    "why": "Lítil vátryggingamiðlun með þjónustu sem fáir skilja til fulls og skýra sögu um af hverju að nota hana, virk á Facebook, LinkedIn og YouTube; aðeins almennt netfang fannst.",
    "score": 7,
+   "ef": "Tryggja",
+   "thf": "Tryggja",
    "stada": "osent"
   },
   {
@@ -1332,6 +1478,8 @@
    "idea": "tvívíddarmyndband þar sem Veiðikortið rennur upp úr jólapakka, Íslandskort breiðist út og vötnin kvikna eitt af öðru um allt land áður en fluga lendir á spegilsléttum vatnsfleti.",
    "why": "Lítið fyrirtæki með einfalda og sjónræna vöru, virkt á Facebook og Instagram og með jólagjafavertíðina fram undan; aðeins almennt netfang fannst.",
    "score": 7,
+   "ef": "Veiðikortsins",
+   "thf": "Veiðikortið",
    "stada": "osent"
   },
   {
@@ -1350,6 +1498,8 @@
    "idea": "þrívíddarmyndband þar sem dráttarbeisli frá ykkur festist undir jeppa, kerra rennur að og tengist, ljósin kvikna og bíllinn leggur af stað út á þjóðveginn.",
    "why": "Íslenskt framleiðslu- og sölufyrirtæki af hentugri stærð með vörur sem eru eins og sniðnar fyrir þrívídd og lítið myndefni; virkni á Facebook virðist þó lítil og aðeins sölunetfang fannst.",
    "score": 7,
+   "ef": "Víkurvagna",
+   "thf": "Víkurvagna",
    "stada": "osent"
   },
   {
@@ -1368,6 +1518,8 @@
    "idea": "stutt teiknað myndband þar sem innkaupakarfa rennur fram hjá hillunum ykkar, frá meltingu og vítamínum yfir í útlit, mat og heimili, og ein vara úr hverjum flokki hoppar ofan í hana á leiðinni.",
    "why": "Lítil sérverslun með virkan Instagram-reikning, fjölda vörumerkja og ekkert myndband á vefnum, sem eru einmitt aðstæður þar sem ókeypis myndband kemur sér vel; netfangið er þó almennt.",
    "score": 7,
+   "ef": "Mamma veit best",
+   "thf": "Mamma veit best",
    "stada": "osent"
   },
   {
@@ -1386,6 +1538,8 @@
    "idea": "stutt teiknimyndband þar sem einhver pantar föstudagskaffið fyrir vinnustaðinn í símanum, gengur brosandi fram hjá langri röð og tekur við poka fullum af súrdeigsbrauði og bakkelsi við afgreiðsluborðið.",
    "why": "Vaxandi fjölskyldufyrirtæki á Facebook og Instagram með nýja netpöntun sem þarf að kynna og ekkert myndbandsefni á vefnum, en netfangið er almennt.",
    "score": 7,
+   "ef": "Brikk",
+   "thf": "Brikk",
    "stada": "osent"
   },
   {
@@ -1404,6 +1558,8 @@
    "idea": "stutt þrívíddarmyndband þar sem klassískur hönnunarstóll úr Epal setur sig saman í loftinu og snýst í hring áður en hann lendir í íslenskri stofu.",
    "why": "Has a dedicated social media manager who reads her inbox; free content is easy to say yes to, though Epal already produces a lot of polished imagery.",
    "score": 6,
+   "ef": "Epal",
+   "thf": "Epal",
    "stada": "osent"
   },
   {
@@ -1422,6 +1578,8 @@
    "idea": "stutt hreyfimyndband þar sem pensill strýkur kalkmálningu yfir sléttan vegg og hann breytist í mjúka, lifandi steináferð í dagsbirtu.",
    "why": "Named marketing & design manager, active Instagram with some reels, niche paint products that benefit from visual explanation.",
    "score": 6,
+   "ef": "Sérefnis",
+   "thf": "Sérefni",
    "stada": "osent"
   },
   {
@@ -1440,6 +1598,8 @@
    "idea": "stutt þrívíddarmyndband þar sem heitur pottur er settur beint á Dekton borðplötu og hnífur rennur yfir hana án þess að sjái á.",
    "why": "Small specialist with a durable-material advantage that is easy to demonstrate; generic email only.",
    "score": 6,
+   "ef": "Reinar",
+   "thf": "Rein",
    "stada": "osent"
   },
   {
@@ -1458,6 +1618,8 @@
    "idea": "stutt hreyfimyndband þar sem tóm stofa fyllist smám saman, gluggatjöld renna fyrir, sófi og rúm birtast og 10% afsláttarmiðinn lendir neðst í horninu.",
    "why": "Mid-size home store with an Akureyri branch (local to Norðurvefur) and an ongoing offer; generic email.",
    "score": 6,
+   "ef": "Vogue fyrir heimilið",
+   "thf": "Vogue fyrir heimilið",
    "stada": "osent"
   },
   {
@@ -1476,6 +1638,8 @@
    "idea": "stutt hreyfimyndband þar sem lítill sprotti úr Mörk vex á tíu sekúndum í gróskumikið tré í íslenskum garði á meðan árin líða.",
    "why": "Owner-run family business; owner's email published; garden market is seasonal and visual, but owners may be less social-media driven.",
    "score": 6,
+   "ef": "Gróðrarstöðvarinnar Merkur",
+   "thf": "Gróðrarstöðina Mörk",
    "stada": "osent"
   },
   {
@@ -1494,6 +1658,8 @@
    "idea": "stutt hreyfimyndband þar sem sama stofan er sýnd fyrst í flatri loftljósabirtu og svo breytist hún með ljósunum frá Rafkaup í hlýja kvöldstemningu.",
    "why": "Specialist store, MD's email published, lighting is very visual; Facebook only and little video.",
    "score": 6,
+   "ef": "Rafkaupa",
+   "thf": "Rafkaup",
    "stada": "osent"
   },
   {
@@ -1512,6 +1678,8 @@
    "idea": "stutt þrívíddarmyndband þar sem stillanlegt rúm lyftir höfði og fótum á meðan línurit sýnir hvernig hryggurinn nær að slaka á.",
    "why": "Product with a visible mechanism and current offers, very competitive bed market; generic email only.",
    "score": 6,
+   "ef": "Betra Baks",
+   "thf": "Betra Bak",
    "stada": "osent"
   },
   {
@@ -1530,6 +1698,8 @@
    "idea": "stutt þrívíddarmyndband þar sem rafmagnsborð lyftist úr sitjandi í standandi stöðu á meðan stóllinn rennur til hliðar og klukkan sýnir hvað dagurinn verður léttari.",
    "why": "Small B2B furniture firm with a mechanism product (sit-stand desks); little social content.",
    "score": 6,
+   "ef": "Hirzlunnar",
+   "thf": "Hirzluna",
    "stada": "osent"
   },
   {
@@ -1548,6 +1718,8 @@
    "idea": "stutt þrívíddarmyndband þar sem klassískur íslenskur stóll úr ykkar línu er settur saman hluta fyrir hluta og stendur að lokum í kennslustofu.",
    "why": "Long-established Icelandic manufacturer with Instagram/YouTube presence but little animated content; generic email.",
    "score": 6,
+   "ef": "Á. Guðmundssonar",
+   "thf": "Á. Guðmundsson",
    "stada": "osent"
   },
   {
@@ -1566,6 +1738,8 @@
    "idea": "stutt hreyfimyndband þar sem baðherbergisveggur flísaleggur sig sjálfur, flís eftir flís, og endar á boðinu um að bóka ráðgjöf hjá Flísabúðinni.",
    "why": "Small 9-person team, competitive tile market, little video; staff emails listed but no titles, so generic used.",
    "score": 6,
+   "ef": "Flísabúðarinnar",
+   "thf": "Flísabúðina",
    "stada": "osent"
   },
   {
@@ -1584,6 +1758,8 @@
    "idea": "stutt þrívíddarmyndband þar sem viðarbolur breytist í parketfjalir sem leggjast sjálfar á stofugólf og ljúka sér með sólargeisla yfir gólfið.",
    "why": "Specialist flooring store in a crowded market with little visual content; generic email only.",
    "score": 6,
+   "ef": "Harðviðarvals",
+   "thf": "Harðviðarval",
    "stada": "osent"
   },
   {
@@ -1602,6 +1778,8 @@
    "idea": "stutt hreyfimyndband þar sem fjölbýlishús fær yfirhalningu frá þaki niður í pall á meðan stjórn húsfélagsins hakar við verkþætti á einum lista.",
    "why": "Small contractor focused on housing associations; clear service story; generic email.",
    "score": 6,
+   "ef": "Húsvætta",
+   "thf": "Húsvættir",
    "stada": "osent"
   },
   {
@@ -1620,10 +1798,12 @@
    "idea": "stutt þrívíddarmyndband þar sem þak er tekið í sundur lag fyrir lag og byggt upp aftur með lektum, pappa og nýju járni á tíu sekúndum.",
    "why": "Small trade firm with a mainly Facebook presence and no video; generic email.",
    "score": 6,
+   "ef": "A3 Smiða",
+   "thf": "A3 Smiði",
    "stada": "osent"
   },
   {
-   "name": "Gluggaþvottur ehf",
+   "name": "Gluggaþvottur",
    "web": "gluggatvottur.is",
    "sector": "Hús og heimili",
    "what": "Small family window-cleaning company with almost 30 years' history; quotes for homes and businesses.",
@@ -1638,6 +1818,8 @@
    "idea": "stutt hreyfimyndband þar sem skítugur gluggi á fjölbýlishúsi verður skínandi í einni strokunni og útsýnið birtist allt í einu skýrt fyrir innan.",
    "why": "Tiny family firm with a simple, visual before/after service; no video today.",
    "score": 6,
+   "ef": "Gluggaþvottar",
+   "thf": "Gluggaþvott",
    "stada": "osent"
   },
   {
@@ -1656,6 +1838,8 @@
    "idea": "stutt hreyfimyndband þar sem moldarflag við nýtt hús breytist í hellulagða lóð með grjóthleðslu og leiktækjum á tíu sekúndum.",
    "why": "Small landscaping firm with a visual before/after product; generic email; modest social presence.",
    "score": 6,
+   "ef": "Grjótgarða",
+   "thf": "Grjótgarða",
    "stada": "osent"
   },
   {
@@ -1674,6 +1858,8 @@
    "idea": "stutt þrívíddarmyndband þar sem sauna kviknar í myrkri, ilmdropi fellur á heita steinana og gufustrókurinn myndar merkið sauna.is.",
    "why": "Small niche retailer with Instagram presence and a trendy category (sauna); generic email.",
    "score": 6,
+   "ef": "Sauna.is",
+   "thf": "Sauna.is",
    "stada": "osent"
   },
   {
@@ -1692,6 +1878,8 @@
    "idea": "stutt hreyfimyndband þar sem gráleitur stigagangur fær hreinsun í einni umferð og teppið fær upprunalega litinn aftur á meðan fyrir og eftir rennur yfir skjáinn.",
    "why": "Small service firm with a strong before/after; generic email; limited social activity likely.",
    "score": 6,
+   "ef": "BG Teppahreinsunar",
+   "thf": "BG Teppahreinsun",
    "stada": "osent"
   },
   {
@@ -1710,6 +1898,8 @@
    "idea": "stutt hreyfimyndband þar sem dimm stofa lýsist upp lampa fyrir lampa eftir lýsingarhönnun Lumex og verður hlý og falleg á tíu sekúndum.",
    "why": "Named web & marketing person; visual, premium category; already posts product photos but little motion.",
    "score": 6,
+   "ef": "Lumex",
+   "thf": "Lumex",
    "stada": "osent"
   },
   {
@@ -1728,6 +1918,8 @@
    "idea": "stutt hreyfimyndband þar sem stofa frá 1976 með reyrstólum breytist áratug fyrir áratug í nútímalega Línustofu árið 2026.",
    "why": "Long-running independent furniture store; good heritage story; generic email.",
    "score": 6,
+   "ef": "Línunnar",
+   "thf": "Línuna",
    "stada": "osent"
   },
   {
@@ -1746,6 +1938,8 @@
    "idea": "stutt hreyfimyndband þar sem eldhúsáhöld úr Kokku vakna til lífsins á borðinu, pannan snýr pönnuköku og þeytarinn dansar í takt.",
    "why": "Independent kitchen shop with a playful brand; generic email.",
    "score": 6,
+   "ef": "Kokku",
+   "thf": "Kokku",
    "stada": "osent"
   },
   {
@@ -1764,6 +1958,8 @@
    "idea": "stutt hreyfimyndband þar sem þrjú gólf, harðparket, vínylparket og teppaflísar, eru sett í sama próf með vatni, stólum og hundaklóm og hvert fær sína einkunn.",
    "why": "Specialist flooring store in a crowded market; generic email; modest social footprint.",
    "score": 6,
+   "ef": "Gólfefnavals",
+   "thf": "Gólfefnaval",
    "stada": "osent"
   },
   {
@@ -1782,6 +1978,8 @@
    "idea": "stutt teiknað myndband þar sem óöruggur byrjandi gengur inn um dyrnar, þjálfari lagar tæknina hans og eftir nokkrar sekúndur fagnar hann með hópnum eftir æfingu.",
    "why": "Owner-run box with the owner's direct email and mobile published; competitive gym market where the 'it's for everyone, not just athletes' message needs showing.",
    "score": 6,
+   "ef": "CrossFit Reykjavík",
+   "thf": "CrossFit Reykjavík",
    "stada": "osent"
   },
   {
@@ -1800,6 +1998,8 @@
    "idea": "stutt teiknað myndband þar sem lyfjapoki rennur yfir afgreiðsluborðið, verðmiðinn lækkar og lyfjafræðingurinn brosir og spyr hvort hún geti aðstoðað með eitthvað fleira.",
    "why": "Independent, owner-run pharmacy with the owner's own email published, competing against Lyfja and Lyf og heilsa; 'independent and personal' is a clear differentiation story.",
    "score": 6,
+   "ef": "Reykjavíkur Apóteks",
+   "thf": "Reykjavíkur Apótek",
    "stada": "osent"
   },
   {
@@ -1818,6 +2018,8 @@
    "idea": "stutt þrívíddarmyndband þar sem linsupakki birtist við útidyrnar í hverjum mánuði á meðan dagatalið flettist áfram og sjónin helst skýr.",
    "why": "Owner-run optician in a crowded market; a subscription service to explain and sunglasses/sport glasses that look great in 3D.",
    "score": 6,
+   "ef": "Optical Studio",
+   "thf": "Optical Studio",
    "stada": "osent"
   },
   {
@@ -1836,6 +2038,8 @@
    "idea": "stutt þrívíddarmyndband þar sem vönduð umgjörð snýst hægt í ljósinu, glerin renna á sinn stað og myndin endar á búðarglugganum á Hverfisgötu 52.",
    "why": "Small husband-and-wife shop where the owners read the inbox; designer frames are a perfect 3D-model object.",
    "score": 6,
+   "ef": "Sjáðu",
+   "thf": "Sjáðu",
    "stada": "osent"
   },
   {
@@ -1854,6 +2058,8 @@
    "idea": "stutt teiknað myndband sem sýnir þversnið af húðinni þar sem fín nál fer ofan í hársekkinn, örlítill straumur kviknar og hárið hættir að vaxa aftur.",
    "why": "Two owner-beauticians running a neighbourhood salon in a very competitive market; the electrolysis mechanism is perfect for a simple animation.",
    "score": 6,
+   "ef": "Snyrtistofunnar Jónu",
+   "thf": "Snyrtistofuna Jónu",
    "stada": "osent"
   },
   {
@@ -1872,6 +2078,8 @@
    "idea": "stutt teiknað myndband þar sem golfari með stífan bak sveiflar kylfunni, fer á pilatesdýnuna í YogaLíf og næsta sveifla verður mjúk og kúlan flýgur beint inn á flötina.",
    "why": "Small owner-run studio where the general inbox goes to the owner; niche courses to promote and a physio angle that sets it apart from other studios.",
    "score": 6,
+   "ef": "YogaLífs",
+   "thf": "YogaLíf",
    "stada": "osent"
   },
   {
@@ -1890,6 +2098,8 @@
    "idea": "stutt þrívíddarmyndband þar sem húðin er skoðuð í nærmynd, meðferðin vinnur í dýpri lögum hennar og yfirborðið verður slétt og jafnt áður en merkið birtist.",
    "why": "Has a dedicated marketing manager and an active skin-treatment business in a crowded aesthetics market; only a department address is published.",
    "score": 6,
+   "ef": "Húðlæknastöðvarinnar",
+   "thf": "Húðlæknastöðina",
    "stada": "osent"
   },
   {
@@ -1908,6 +2118,8 @@
    "idea": "stutt teiknimyndband þar sem starfsmaður opnar örnámskeið í símanum í kaffipásunni og færnistikur fyrir allan vinnustaðinn hækka á skjá stjórnandans á meðan.",
    "why": "Digital product sold to HR managers; explaining a subscription platform visually fits perfectly, and they already produce a lot of video-based learning so they value it.",
    "score": 6,
+   "ef": "Akademias",
+   "thf": "Akademias",
    "stada": "osent"
   },
   {
@@ -1926,6 +2138,8 @@
    "idea": "stutt teiknimyndband þar sem manneskja velur námsleið á skjá og skrifborðið hennar umbreytist skref fyrir skref í nýja vinnustöðina sem námið leiðir hana að.",
    "why": "Private school with the CEO's direct email; each new term needs enrolment marketing and it competes with universities' continuing education and online courses.",
    "score": 6,
+   "ef": "NTV skólans",
+   "thf": "NTV skólann",
    "stada": "osent"
   },
   {
@@ -1944,6 +2158,8 @@
    "idea": "stutt teiknimyndband þar sem nestispoki frá ykkur fyllist af samloku, salati og pizzusneið og fylgir ferðalangi frá Grindavík alla leið að hliðinu á flugvellinum.",
    "why": "Owner-led business with a personal email; several services (airport, catering, packed lunches for volcano hikers) need explaining and Grindavík businesses are keen for visibility.",
    "score": 6,
+   "ef": "Hjá Höllu",
+   "thf": "Hjá Höllu",
    "stada": "osent"
   },
   {
@@ -1962,6 +2178,8 @@
    "idea": "stutt teiknimyndband þar sem fjórir bílar keyra inn hlið við hlið, hver með sínu þjónustustigi, og kassarnir fljúga sjálfir úr gömlu íbúðinni inn í þá nýju.",
    "why": "The tiered service model is exactly the kind of thing that is easier to show than to read; small moving firm in a competitive market with no video content.",
    "score": 6,
+   "ef": "Flutningaþjónustunnar",
+   "thf": "Flutningaþjónustuna",
    "stada": "osent"
   },
   {
@@ -1980,6 +2198,8 @@
    "idea": "stutt þrívíddarmyndband þar sem yfirfullur bílskúr tæmist, dekk, skíði og jólaskraut fljúga inn í geymslueiningu sem stækkar og minnkar eftir þörfum.",
    "why": "Concept product (flexible self storage) that is visual and seasonal (tyres, Christmas decorations); mid-size, competitive market with few video ads.",
    "score": 6,
+   "ef": "Geymslna",
+   "thf": "Geymslur",
    "stada": "osent"
   },
   {
@@ -1998,6 +2218,8 @@
    "idea": "stutt þrívíddarmyndband þar sem ein af kökunum ykkar byggist upp lag fyrir lag á skjánum, botn, krem og skraut, og snýst svo í lokin undir merkinu.",
    "why": "Young owner-run bakery that lives on Instagram; pastries are perfect 3D objects and a free clip costs them nothing.",
    "score": 6,
+   "ef": "Gulla Arnars bakarís",
+   "thf": "Gulla Arnar bakarí",
    "stada": "osent"
   },
   {
@@ -2016,6 +2238,8 @@
    "idea": "stutt þrívíddarmyndband þar sem veisluterta frá ykkur raðast saman hæð fyrir hæð og kerti kvikna á toppnum um leið og pöntunarhnappurinn birtist.",
    "why": "Small owner-run cake business selling custom cakes online; cakes are ideal 3D subjects and order-ahead offers are easy to announce.",
    "score": 6,
+   "ef": "17 sortir",
+   "thf": "17 sortir",
    "stada": "osent"
   },
   {
@@ -2034,6 +2258,8 @@
    "idea": "stutt þrívíddarmyndband þar sem súrdeigsbrauð lyftist í ofninum, skorpan brestur og brauðið rúllar svo eftir veginum frá Hveragerði yfir á Selfoss.",
    "why": "Owner-run regional bakery with two shops on Route 1; bread and pastries animate beautifully and they compete with chain bakeries and supermarkets.",
    "score": 6,
+   "ef": "Almars bakara",
+   "thf": "Almar bakara",
    "stada": "osent"
   },
   {
@@ -2052,6 +2278,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gufa stígur upp úr jörðinni, rennur inn í bruggtankinn og breytist í kaldan bjór við hliðina á nýbakaðri pizzu.",
    "why": "Unique 'why us' story (geothermal brewing) that is hard to convey in text; young owner-run business active on social media.",
    "score": 6,
+   "ef": "Ölverk Pizza & Brewery",
+   "thf": "Ölverk Pizza & Brewery",
    "stada": "osent"
   },
   {
@@ -2070,6 +2298,8 @@
    "idea": "stutt teiknimyndband þar sem veislubakkar fyllast af snittum og réttum frá ykkur á meðan smellt er í vefversluninni og veislan er tilbúin á borðinu þegar gestirnir mæta.",
    "why": "Owner-couple business on Suðurnes; online party ordering is a process worth showing and confirmation/Christmas seasons give natural offers.",
    "score": 6,
+   "ef": "Soho veisluþjónustu",
+   "thf": "Soho veisluþjónustu",
    "stada": "osent"
   },
   {
@@ -2088,6 +2318,8 @@
    "idea": "þrívíddarmyndband þar sem veggur í íbúð verður gegnsær, myglan sem leyndist á bak við gifsið lýsist upp og er svo fjarlægð lag fyrir lag þar til veggurinn er hreinn og nýr.",
    "why": "Lítið verktakafyrirtæki með þjónustu sem fólk skilur illa og óttast, og eigandinn svarar líklega sjálfur; óljóst hve virk Facebook-síðan er.",
    "score": 6,
+   "ef": "Bjarnarins Verktaka",
+   "thf": "Björninn Verktaka",
    "stada": "osent"
   },
   {
@@ -2106,6 +2338,8 @@
    "idea": "þrívíddarmyndband þar sem píla flýgur hægt yfir salinn, hittir spjaldið og stigin teiknast sjálfkrafa á skjáinn á meðan diskóljósin í karaókíherberginu kvikna í bakgrunni.",
    "why": "Afþreyingarstaður sem lifir á hópbókunum og er virkur á Facebook og Instagram; aðeins hópanetfang fannst og ekkert símanúmer.",
    "score": 6,
+   "ef": "Bullseye",
+   "thf": "Bullseye",
    "stada": "osent"
   },
   {
@@ -2124,6 +2358,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin sígur niður um þrönga opnun, kyndill lýsir upp fornar ristur í berginu og skuggar manna með haka sjást grafa hellinn á meðan aldirnar líða hjá.",
    "why": "Lítið fyrirtæki með einstaka sögu, vef bæði á íslensku og ensku og virka Facebook- og Instagram-síðu; á þó eitthvað af myndefni fyrir.",
    "score": 6,
+   "ef": "Caves of Hella",
+   "thf": "Caves of Hella",
    "stada": "osent"
   },
   {
@@ -2142,6 +2378,8 @@
    "idea": "tvívíddarmyndband þar sem rafmagnið slær út í íbúð um miðja nótt, síminn hringir hjá Fagorku og ljósin kvikna aftur áður en kertið nær að brenna niður.",
    "why": "Lítill rafverktaki á Instagram í harðri samkeppni þar sem allir lýsa sér eins; eigandinn er ekki nefndur á vefnum svo pósturinn fer á almenna netfangið.",
    "score": 6,
+   "ef": "Fagorku",
+   "thf": "Fagorku",
    "stada": "osent"
   },
   {
@@ -2160,6 +2398,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin flýgur yfir Hamranesið, inn um gluggann á einni íbúðinni og í gegnum fullbúna stofu, og verðið og stærðin birtast í lokin.",
    "why": "Nýbyggingarverkefni með margar óseldar íbúðir þar sem sjónræn kynning hjálpar beint við sölu; framkvæmdastjórinn er nefndur en eigið netfang hans sást ekki.",
    "score": 6,
+   "ef": "Borgar fasteignasölu",
+   "thf": "Borg fasteignasölu",
    "stada": "osent"
   },
   {
@@ -2178,6 +2418,8 @@
    "idea": "stutt tvívíddarmyndband þar sem víkingur ber risastórt jólahlaðborð inn í timburskálann, kertin kvikna eitt af öðru og hjálmarnir við borðið fá jólasveinahúfur.",
    "why": "Sérkennilegt og myndrænt fyrirtæki með árstíðabundið tilboð sem þarf að kynna einmitt núna; bókunarnetfangið nær þó ekki endilega til eigandans.",
    "score": 6,
+   "ef": "Fjörukrárinnar",
+   "thf": "Fjörukrána",
    "stada": "osent"
   },
   {
@@ -2196,6 +2438,8 @@
    "idea": "tvívíddarmyndband þar sem sending er skráð í símanum á nokkrum sekúndum, gámurinn opnast, brettin renna inn í vöruhúsið og bíllinn leggur af stað með vöruna heim að dyrum.",
    "why": "Lítið fjölskyldufyrirtæki þar sem framkvæmdastjórinn er eigandi með eigið netfang og ný sjálfsafgreiðsla á vefnum til að kynna, en markhópurinn er þröngur hópur fyrirtækja.",
    "score": 6,
+   "ef": "Fraktlausna",
+   "thf": "Fraktlausnir",
    "stada": "osent"
   },
   {
@@ -2214,6 +2458,8 @@
    "idea": "þrívíddarmyndband þar sem slitin skíði og reiðhjól fara inn á verkstæðið hjá ykkur, koma út eins og ný og leggja beint af stað upp á fjall með eigandanum.",
    "why": "Lítil sérverslun á Facebook og Instagram í samkeppni við stærri útivistarkeðjur, með þjónustu sem fáir vita um; pósturinn fer þó á almennt verslunarnetfang.",
    "score": 6,
+   "ef": "GG Sport",
+   "thf": "GG Sport",
    "stada": "osent"
   },
   {
@@ -2232,6 +2478,8 @@
    "idea": "þrívíddarmyndband þar sem hráefnin fljúga eitt af öðru ofan í skál, klukkan í horninu nær varla að tifa og bíllinn bíður í stæði beint fyrir utan.",
    "why": "Veitingastaður á Facebook og Instagram með myndrænan mat, skýra kosti og fyrirtækja- og veisluþjónustu sem þarf að kynna.",
    "score": 6,
+   "ef": "Ginger",
+   "thf": "Ginger",
    "stada": "osent"
   },
   {
@@ -2250,6 +2498,8 @@
    "idea": "þrívíddarmyndband þar sem saunatunna raðast saman fjöl fyrir fjöl á pallinum við sumarbústað, ofninn kviknar, gufan liðast út um gluggann og snjórinn fellur hægt fyrir utan.",
    "why": "Lítið fyrirtæki með vöru sem er fullkomin í þrívídd og vaxandi áhuga á saunum, en vefurinn er gamaldags og lítil merki um virkni á samfélagsmiðlum.",
    "score": 6,
+   "ef": "Godda",
+   "thf": "Godda",
    "stada": "osent"
   },
   {
@@ -2268,6 +2518,8 @@
    "idea": "þrívíddarmyndband þar sem nýja D3-glasið frá Gula miðanum opnast í dimmum skammdegismorgni og sólargeisli fyllir eldhúsið smám saman.",
    "why": "Virk á Facebook, Instagram og TikTok með stöðugan straum af vörum til að kynna, en þau eiga þegar eitthvað myndefni og almenna netfangið fer líklega um nokkrar hendur.",
    "score": 6,
+   "ef": "Heilsu",
+   "thf": "Heilsu",
    "stada": "osent"
   },
   {
@@ -2286,6 +2538,8 @@
    "idea": "þrívíddarmyndband þar sem kliðurinn í fjölskylduboði er fyrst dempaður og óskýr, örsmátt heyrnartæki rennur á sinn stað bak við eyrað og samtölin og hláturinn verða skýr á ný.",
    "why": "Sérhæft fyrirtæki með ókeypis tilboð sem auðvelt er að auglýsa og vöru sem nýtur sín í þrívídd, en engir samfélagsmiðlar fundust á vefnum.",
    "score": 6,
+   "ef": "Heyrnarstöðvarinnar",
+   "thf": "Heyrnarstöðina",
    "stada": "osent"
   },
   {
@@ -2304,6 +2558,8 @@
    "idea": "þrívíddarmyndband þar sem miðbær Akureyrar birtist ofan frá í smækkaðri mynd og húsin sjö lýsast upp eitt af öðru, áður en myndavélin fer inn um dyrnar á einu þeirra.",
    "why": "Fjölskyldurekið hótel í heimabæ okkar á Facebook og Instagram, með sérstaka hugmynd sem nýtur sín í þrívídd; almenna netfangið fer líklega í móttökuna.",
    "score": 6,
+   "ef": "Hotel Akureyrar",
+   "thf": "Hotel Akureyri",
    "stada": "osent"
   },
   {
@@ -2322,6 +2578,8 @@
    "idea": "stutt myndband þar sem svarta kirkjan og hótelið birtast í vetrarmyrkrinu, ljósin kvikna í gluggunum og nöfn listamannanna á næstu helgum renna yfir skjáinn.",
    "why": "Þau eru að kynna viðburði einmitt núna og tala til Íslendinga á íslensku; þekkt hótel sem gæti þó þegar haft ljósmyndara og efnisframleiðendur á sínum snærum.",
    "score": 6,
+   "ef": "Hótel Búða",
+   "thf": "Hótel Búðir",
    "stada": "osent"
   },
   {
@@ -2340,6 +2598,8 @@
    "idea": "stutt teiknað myndband þar sem gjafabréf er tekið upp úr jólapakka, breytist í notalegt hótelherbergi í Hveragerði og endar á því hvar hægt er að kaupa það.",
    "why": "Hótel sem selur mikið til Íslendinga, er virkt á samfélagsmiðlum og á jólagjafatímabil fram undan; netfangið er þó bókunarnetfang sem ratar ekki endilega til markaðsfólks.",
    "score": 6,
+   "ef": "Hótel Arkar",
+   "thf": "Hótel Örk",
    "stada": "osent"
   },
   {
@@ -2358,6 +2618,8 @@
    "idea": "þrívíddarmyndband þar sem hvolfþak stjörnuskoðunarstöðvarinnar opnast, sjónaukinn snýst upp í himininn og norðurljósin dansa yfir hótelinu.",
    "why": "Nafngreindur markaðsstjóri með eigið netfang og mjög myndræn sérstaða; á móti kemur að hótelið er vel þekkt og gæti þegar unnið með fagfólki í myndefni.",
    "score": 6,
+   "ef": "Hótel Rangár",
+   "thf": "Hótel Rangá",
    "stada": "osent"
   },
   {
@@ -2376,6 +2638,8 @@
    "idea": "teiknað myndband þar sem jólaborðið fyllist af réttum, ljósin speglast í Ölfusá fyrir utan gluggann og dagsetningarnar birtast í lokin.",
    "why": "Tímabært tilboð að kynna og þau tala greinilega til Íslendinga; hótelið er þó af stærri gerðinni og gæti haft markaðsefni á sínum vegum.",
    "score": 6,
+   "ef": "Hótel Selfoss",
+   "thf": "Hótel Selfoss",
    "stada": "osent"
   },
   {
@@ -2394,6 +2658,8 @@
    "idea": "stutt myndband þar sem steikin fer af býlinu á grillið og þaðan á diskinn, og myndavélin endar á gufunni sem stígur upp af laugunum um kvöldið.",
    "why": "Lítið sveitahótel með skýra sérstöðu sem selur gjafakort til Íslendinga; virðist lítið virkt á samfélagsmiðlum, sem getur bæði verið tækifæri og merki um lítinn áhuga.",
    "score": 6,
+   "ef": "Hraunsnefs sveitahótels",
+   "thf": "Hraunsnef sveitahótel",
    "stada": "osent"
   },
   {
@@ -2412,6 +2678,8 @@
    "idea": "teiknað myndband þar sem vísir fer einn hring á skífu á meðan net, farsími og heimasími raða sér saman í einn pakka og verðið birtist þegar mínútan er liðin.",
    "why": "Áskorandi í harðri samkeppni við stóru fjarskiptafélögin, með skýr skilaboð sem henta stuttu myndbandi; almennt netfang og enginn nafngreindur tengiliður.",
    "score": 6,
+   "ef": "Hringdu",
+   "thf": "Hringdu",
    "stada": "osent"
   },
   {
@@ -2430,6 +2698,8 @@
    "idea": "teiknað myndband þar sem skilti fyrir utan hús breytist úr „Til sölu“ í „Selt“ á meðan skrefin þar á milli, verðmat, myndataka, sýning og undirskrift, renna hjá.",
    "why": "Fasteignasala á samkeppnismarkaði þar sem samfélagsmiðlar skipta máli; netfangið tilheyrir fasteignasala sem hefur sótt námskeið í markaðssetningu á samfélagsmiðlum, en ekki er staðfest að hún sé eigandinn.",
    "score": 6,
+   "ef": "Húsaskjóls",
+   "thf": "Húsaskjól",
    "stada": "osent"
   },
   {
@@ -2448,6 +2718,8 @@
    "idea": "þrívíddarmyndband þar sem kæliklefi raðast saman úr einingum, fyllist af vörum og hitamælirinn fellur niður fyrir frostmark.",
    "why": "Fyrirtækið er með markaðsstjóra með eigið netfang og tæknivörur sem njóta sín í þrívídd; hins vegar fundust engir samfélagsmiðlar og salan er að mestu til fyrirtækja.",
    "score": 6,
+   "ef": "Kælitækni",
+   "thf": "Kælitækni",
    "stada": "osent"
   },
   {
@@ -2466,6 +2738,8 @@
    "idea": "rólegt teiknað myndband þar sem flækja af hugsunum í höfði teiknaðrar persónu greiðist smám saman í sundur í beinan þráð og í lokin kemur fram hvernig hægt er að bóka tíma.",
    "why": "Þjónusta sem fólk á erfitt með að sjá fyrir sér fyrir fram og þau miðla þegar fræðsluefni á samfélagsmiðlum; heilbrigðisstofa gæti þó farið varlega í auglýsingaefni.",
    "score": 6,
+   "ef": "Kvíðameðferðarstöðvarinnar",
+   "thf": "Kvíðameðferðarstöðina",
    "stada": "osent"
   },
   {
@@ -2484,6 +2758,8 @@
    "idea": "stutt þrívíddarmyndband þar sem flaskan ykkar snýst, verður gegnsæ og sýnir teið gerjast og loftbólurnar myndast áður en drykkurinn hellist í glas með klaka.",
    "why": "Lítill íslenskur framleiðandi með vöru sem nýtur sín í þrívídd og ekkert myndband á vefnum; vefurinn er þó á ensku og virðist lítið uppfærður.",
    "score": 6,
+   "ef": "Kombucha Iceland",
+   "thf": "Kombucha Iceland",
    "stada": "osent"
   },
   {
@@ -2502,6 +2778,8 @@
    "idea": "hlýlegt teiknað myndband þar sem bíll ekur tíu mínútur inn Eyjafjörðinn frá Akureyri og lömbin taka á móti gestunum á hlaðinu.",
    "why": "Lítið fjölskyldufyrirtæki í nágrenni okkar á Akureyri með virka samfélagsmiðla; veitingastaðurinn er þó lokaður yfir veturinn og umsvifin lítil.",
    "score": 6,
+   "ef": "Lamb Inn",
+   "thf": "Lamb Inn",
    "stada": "osent"
   },
   {
@@ -2520,6 +2798,8 @@
    "idea": "teiknað myndband þar sem stressaður byrjandi stígur á bak, íslenski hesturinn tekur rólega við honum og eftir tíu sekúndur er hann kominn brosandi á tölt um Mosfellsdalinn.",
    "why": "Lítið fjölskyldufyrirtæki með virka samfélagsmiðla og ekkert myndband á vefnum; efnið yrði þó á ensku.",
    "score": 6,
+   "ef": "Laxness",
+   "thf": "Laxnes",
    "stada": "osent"
   },
   {
@@ -2538,6 +2818,8 @@
    "idea": "stutt þrívíddarmyndband þar sem skítugur bíll ekur inn í snertilausa stöð, kemur gljáandi út hinum megin og áskriftarverðið birtist á framrúðunni.",
    "why": "Neytendaþjónusta með skýrt verð og tilboð sem hentar í stutt myndband og ekkert myndband á vefnum; nokkuð stór keðja með almennt netfang.",
    "score": 6,
+   "ef": "Löðurs",
+   "thf": "Löður",
    "stada": "osent"
   },
   {
@@ -2556,6 +2838,8 @@
    "idea": "stutt teiknað myndband þar sem bíll rennir upp að lúgunni, lyfjapokinn kemur út um gluggann og bíllinn er farinn áður en lagið í útvarpinu klárast.",
    "why": "Meðalstór keðja með skýra sérstöðu sem hentar vel í myndband og virka samfélagsmiðla; lyfjaauglýsingum eru þó settar skorður.",
    "score": 6,
+   "ef": "Lyfjavals",
+   "thf": "Lyfjaval",
    "stada": "osent"
   },
   {
@@ -2574,6 +2858,8 @@
    "idea": "einfalt teiknað myndband þar sem borð fullt af lyfjaglösum breytist í snyrtilega rúllu af merktum skammtapokum, einum fyrir hvern tíma dagsins.",
    "why": "Apótek sem keppir á verði og býður þjónustu sem þarf að útskýra, með mikla virkni á vefnum; netfangið er almennt.",
    "score": 6,
+   "ef": "Lyfjavers",
+   "thf": "Lyfjaver",
    "stada": "osent"
   },
   {
@@ -2592,6 +2878,8 @@
    "idea": "þrívíddarmyndband þar sem fartölva, sími og heyrnartól svífa inn hvert úr sinni áttinni og raða sér upp í merki Macland.",
    "why": "Sérverslun á samkeppnismarkaði með virka samfélagsmiðla og ekkert myndband á vefnum; Apple setur þó reglur um notkun vörumynda.",
    "score": 6,
+   "ef": "Maclands",
+   "thf": "Macland",
    "stada": "osent"
   },
   {
@@ -2610,6 +2898,8 @@
    "idea": "stutt teiknað myndband þar sem talað mál breytist í hreinan texta á skjánum og svo í þýðingu, allt á nokkrum sekúndum í Málstað.",
    "why": "Lítið íslenskt tæknifyrirtæki með nýja vöru sem þarf að kynna fyrir almenningi og lítið af myndböndum; netfangið er almennt.",
    "score": 6,
+   "ef": "Miðeindar",
+   "thf": "Miðeind",
    "stada": "osent"
   },
   {
@@ -2628,6 +2918,8 @@
    "idea": "einfalt teiknað myndband þar sem bíll rennur inn á skjáinn, verðmiðinn klofnar í snyrtilegar mánaðargreiðslur og dagatalið flettist áfram þar til allt er greitt.",
    "why": "Fjártæknifyrirtæki með nýja þjónustu að kynna og virka samfélagsmiðla en ekkert myndband á vefnum; netfangið er þó þjónustuver og óvíst hver ákveður.",
    "score": 6,
+   "ef": "Pei",
+   "thf": "Pei",
    "stada": "osent"
   },
   {
@@ -2646,6 +2938,8 @@
    "idea": "stutt teiknað myndband þar sem stirður skrifstofumaður stendur upp frá tölvunni, fer í gegnum nokkrar einfaldar hreyfingar og losnar smám saman úr stífleikanum þar til hann hreyfir sig frjálst.",
    "why": "Lítil stöð á samkeppnismarkaði með virka samfélagsmiðla og ekkert myndband á vefnum; óvíst hver svarar almenna netfanginu.",
    "score": 6,
+   "ef": "Primal",
+   "thf": "Primal",
    "stada": "osent"
   },
   {
@@ -2664,6 +2958,8 @@
    "idea": "einfalt teiknað myndband þar sem tveir reikningar birtast hlið við hlið, annar með prósentuþóknun sem hækkar með söluverðinu og hinn með föstu verði Procura, svo munurinn blasir strax við.",
    "why": "Skýr samanburður við aðrar fasteignasölur sem er kjörinn í myndband og lítið fyrirtæki, en engir samfélagsmiðlar fundust á vefnum.",
    "score": 6,
+   "ef": "Procura",
+   "thf": "Procura",
    "stada": "osent"
   },
   {
@@ -2682,6 +2978,8 @@
    "idea": "þrívíddarmyndband þar sem notaður plastbrúsi fer inn í endurvinnsluna, er tættur og bræddur og kemur út hinum megin sem glænýtt bretti.",
    "why": "Hringrásin er sjónræn en flókin í texta, fyrirtækið er virkt á samfélagsmiðlum og meðalstórt, en viðskiptavinirnir eru fyrirtæki og sveitarfélög.",
    "score": 6,
+   "ef": "Pure North",
+   "thf": "Pure North",
    "stada": "osent"
   },
   {
@@ -2700,6 +2998,8 @@
    "idea": "stutt þrívíddarmyndband þar sem íslenskar jurtir vaxa upp úr mosanum, fléttast saman og verða að krukku af kremi frá ykkur sem opnast í lokin.",
    "why": "Lítið húðvörumerki frá Akureyri með vefverslun og Instagram en ekkert myndband á vefnum; vefurinn er þó mjög rýr og lítil merki um nýlega virkni.",
    "score": 6,
+   "ef": "Purity Herbs",
+   "thf": "Purity Herbs",
    "stada": "osent"
   },
   {
@@ -2718,6 +3018,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin svífur inn um svalirnar á stúdíóíbúð, framhjá eldhúsinu og rúminu, og endar á skilaboðum um að besta verðið fáist með því að bóka beint.",
    "why": "Lítið fyrirtæki hér í bænum með virka samfélagsmiðla og hag af beinum bókunum fram hjá bókunarsíðum; ekkert myndband á vefnum.",
    "score": 6,
+   "ef": "Sæluhúsa",
+   "thf": "Sæluhús",
    "stada": "osent"
   },
   {
@@ -2736,6 +3038,8 @@
    "idea": "teiknað myndband þar sem pizza rennur út úr ofninum, önnur skýst fram fyrir aftan hana með stórum 1000 kr. verðmiða og þykkur hristingur hellist í glas við hliðina.",
    "why": "Lítill staður með skýrt tilboð að kynna og virka samfélagsmiðla en ekkert myndband á vefnum; netpöntun var lokuð þegar vefurinn var skoðaður.",
    "score": 6,
+   "ef": "Shake & Pizza",
+   "thf": "Shake & Pizza",
    "stada": "osent"
   },
   {
@@ -2754,6 +3058,8 @@
    "idea": "þrívíddarmyndband þar sem augað birtist í nærmynd, leysigeislinn mótar hornhimnuna á örskotsstundu og óskýrt umhverfið verður skyndilega skarpt.",
    "why": "Aðgerð sem fólk hikar við og skilur betur þegar hún er sýnd, í samkeppni við aðrar augnlæknastöðvar og með lítið myndefni, en heilbrigðisþjónusta fer oft varlega í auglýsingum.",
    "score": 6,
+   "ef": "Sjónlags",
+   "thf": "Sjónlag",
    "stada": "osent"
   },
   {
@@ -2772,6 +3078,8 @@
    "idea": "stutt teiknað myndband þar sem bókstafir og tölur stökkva út úr skjánum, raða sér í þraut dagsins og barn við eldhúsborðið leysir hana með bros á vör.",
    "why": "Lítið íslenskt fyrirtæki með nýja vöru sem þarf að kynna fyrir foreldrum og kennurum, en engir samfélagsmiðlar fundust á vefnum.",
    "score": 6,
+   "ef": "Skólavefsins",
+   "thf": "Skólavefinn",
    "stada": "osent"
   },
   {
@@ -2790,6 +3098,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin sekkur niður í gegnum yfirborð fjarðarins og strýtan rís upp úr myrkrinu með heitt vatn streymandi upp úr toppnum.",
    "why": "Lítið fyrirtæki rétt hjá okkur á Akureyri með stórbrotið myndefni sem erfitt er að fanga á myndavél, en efnið er að mestu á ensku og vefurinn sýnir litla nýlega virkni.",
    "score": 6,
+   "ef": "Strýtunnar",
+   "thf": "Strýtuna",
    "stada": "osent"
   },
   {
@@ -2808,6 +3118,8 @@
    "idea": "tvívíddarmyndband þar sem sýni er tekið í eldhúsi á veitingastað, ferðast í gegnum rannsóknarstofuna ykkar og kemur til baka sem grænt hak í innra eftirlitinu.",
    "why": "Lítið íslenskt sérfræðifyrirtæki með starfsmann í markaðsmálum og virka Facebook-síðu en ekkert myndefni; þjónustan beinist þó að fyrirtækjum og er frekar þurr, svo áhuginn ræðst af því hvort Bjarki sjái notagildið.",
    "score": 6,
+   "ef": "Sýnis",
+   "thf": "Sýni",
    "stada": "osent"
   },
   {
@@ -2826,6 +3138,8 @@
    "idea": "stutt tvívíddarmyndband þar sem bunki af pappír, möppum og ljósritum leysist upp í eitt snyrtilegt ferli á símaskjá sem endar á undirskrift með rafrænum skilríkjum.",
    "why": "Tæknifyrirtæki af meðalstærð með beint netfang forstjóra og virka YouTube- og Facebook-síðu; þau eiga þegar einhver myndbönd og sala til fyrirtækja tekur tíma, en varan er óáþreifanleg og hentar mjög vel í stutta útskýringu.",
    "score": 6,
+   "ef": "Taktikal",
+   "thf": "Taktikal",
    "stada": "osent"
   },
   {
@@ -2844,6 +3158,8 @@
    "idea": "tvívíddarmyndband þar sem ljósþráður liðast eftir götu í norðlenskum bæ, beygir inn í hús og kveikir á sjónvarpinu og fartölvunni á meðan hraðamælirinn rýkur upp.",
    "why": "Lítið Akureyrarfyrirtæki eins og Norðurvefur, virkt í fréttum og á Facebook en án myndefnis; nágrannatengslin gætu hjálpað, en þjónustusvæðið er afmarkað og óvíst hve mikið þau auglýsa.",
    "score": 6,
+   "ef": "Tengis",
+   "thf": "Tengi",
    "stada": "osent"
   },
   {
@@ -2862,6 +3178,8 @@
    "idea": "þrívíddarmyndband þar sem glóandi hraun rennur undir storknuðu yfirborði, rásin tæmist og eftir stendur Víðgelmir, og í lokin kvikna ljósin hjá gönguhópnum ykkar inni í hellinum.",
    "why": "Virkt ferðaþjónustufyrirtæki á Instagram og YouTube með viðfangsefni sem hentar þrívídd mjög vel; þau eru þó þegar með einhver myndbönd og helsti markhópurinn er erlendir ferðamenn.",
    "score": 6,
+   "ef": "The Cave Víðgelmir",
+   "thf": "The Cave Víðgelmir",
    "stada": "osent"
   },
   {
@@ -2880,6 +3198,8 @@
    "idea": "þrívíddarmyndband þar sem ofurjeppi ekur upp á jökul, myndavélin steypir sér niður í bláan íshelli og kemur upp úr tæru vatni við hlið snorklara, allt í einni samfelldri hreyfingu.",
    "why": "Virkt ferðaþjónustufyrirtæki af meðalstærð á Instagram og Facebook í mjög harðri samkeppni og án myndbanda á vefnum; ferðaþjónustufyrirtæki eiga þó oft nóg af eigin myndefni.",
    "score": 6,
+   "ef": "Troll Expeditions",
+   "thf": "Troll Expeditions",
    "stada": "osent"
   },
   {
@@ -2898,6 +3218,8 @@
    "idea": "tvívíddarmyndband þar sem einhver pantar lyfin í símanum á leið úr vinnu, klukka telur niður 15 mínútur og pokinn bíður tilbúinn á borðinu þegar hann gengur inn.",
    "why": "Lítið apótek í samkeppni við stórar keðjur, með einfaldan og sýnilegan ávinning og Facebook-síðu en ekkert myndefni; reglur um lyfjaauglýsingar gætu þó gert þau varkár.",
    "score": 6,
+   "ef": "Urðarapóteks",
+   "thf": "Urðarapótek",
    "stada": "osent"
   },
   {
@@ -2916,6 +3238,8 @@
    "idea": "tvívíddarmyndband þar sem bær birtist ofan frá, skynjarar í snjallgámum, götuljósum og sundlaug senda frá sér litla púlsa og allt safnast saman á einu mælaborði hjá starfsmanni bæjarins.",
    "why": "Lítið tæknifyrirtæki með markaðsstjóra með beint netfang og virka fréttasíðu, og lausnirnar þurfa útskýringu; viðskiptavinirnir eru þó mest sveitarfélög og söluferlið hægt.",
    "score": 6,
+   "ef": "Vista",
+   "thf": "Vista",
    "stada": "osent"
   },
   {
@@ -2934,6 +3258,8 @@
    "idea": "þrívíddarmyndband þar sem brennslusalerni í sumarbústað án frárennslis verður gegnsætt og sýnir á nokkrum sekúndum hvernig úrgangurinn verður að lítilli öskuhrúgu, án lagna og án lyktar.",
    "why": "Lítið heildsölufyrirtæki með beint netfang og farsíma framkvæmdastjóra og vörur sem eru ólíkar öllu öðru; markhópurinn er þó fagmenn og lítil virkni sést á samfélagsmiðlum.",
    "score": 6,
+   "ef": "Vörukaupa",
+   "thf": "Vörukaup",
    "stada": "osent"
   },
   {
@@ -2952,6 +3278,8 @@
    "idea": "tvívíddarmyndband með mjúkum línum þar sem manneskja kemur inn úr vetrarmyrkrinu, úlpan breytist í jógadýnu og hún rennur í gegnum nokkrar stöður á meðan birtan í salnum hlýnar.",
    "why": "Lítil jógastöð í harðri samkeppni, virk á Instagram og Facebook og án myndbanda á vefnum, með vetrardagskrá að kynna; aðeins almennt netfang fannst, en það er líklega lesið af eigendunum.",
    "score": 6,
+   "ef": "Yoga Shala",
+   "thf": "Yoga Shala",
    "stada": "osent"
   },
   {
@@ -2970,6 +3298,8 @@
    "idea": "stutt teiknimyndband þar sem heil íbúð pakkar sér sjálf í kassa, kassarnir og sófinn renna út í bílinn ykkar og raða sér svo upp á nýja heimilinu á meðan fjölskyldan sest niður með kaffibolla.",
    "why": "Lítið og nýlegt fyrirtæki með skýra sérstöðu og eiganda sem les líklega póstinn sjálfur; engir samfélagsmiðlar tengdir síðunni, svo myndbandið nýttist helst á vefnum eða á nýrri Facebook-síðu.",
    "score": 6,
+   "ef": "Búslóð.is",
+   "thf": "Búslóð.is",
    "stada": "osent"
   },
   {
@@ -2988,6 +3318,8 @@
    "idea": "stutt teiknuð bókastikla þar sem kápan á bókinni um Lólu opnast, persónurnar stíga út af síðunum og fyrsta vísbendingin í morðgátunni svífur fram áður en titillinn birtist.",
    "why": "Stór bókaútgáfa með virka miðla, þar á meðal YouTube, og jólabókaflóðið fram undan þegar hver titill þarf kynningu; almennt netfang og þau gætu þegar verið með eigin hönnuði.",
    "score": 6,
+   "ef": "Forlagsins",
+   "thf": "Forlagið",
    "stada": "osent"
   },
   {
@@ -3006,6 +3338,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gjafakort Glerártorgs flýgur inn um aðalinnganginn, sveiflast á milli búðanna og breytist á leiðinni í peysu, bók, leikfang og kvöldverð áður en það lendir í jólapakka.",
    "why": "Heimamenn á Akureyri eins og við, með nafngreindan markaðsfulltrúa, virka Facebook- og Instagram-síðu og jólavertíð í gangi; netfangið er á léni Eikar (eigandans) og stærra fasteignafélag gæti átt síðasta orðið.",
    "score": 6,
+   "ef": "Glerártorgs",
+   "thf": "Glerártorg",
    "stada": "osent"
   },
   {
@@ -3024,6 +3358,8 @@
    "idea": "stutt teiknað myndband þar sem sími birtist, þumall pikkar í Greifa-appið og á meðan klukkan telur niður tuttugu mínútur rennur heitur réttur úr eldhúsinu beint í hendurnar á svöngum vinahópi.",
    "why": "Rótgróinn og vinsæll staður í heimabæ okkar með app, heimsendingu og árstíðabundna veisluseðla til að kynna, auk virkra Facebook- og Instagram-síðna; almennt netfang og staðurinn er nokkuð stór.",
    "score": 6,
+   "ef": "Greifans",
+   "thf": "Greifann",
    "stada": "osent"
   },
   {
@@ -3042,6 +3378,8 @@
    "idea": "stutt þrívíddarmyndband þar sem autt eldhús fyllist tæki fyrir tæki, ofninn, helluborðið, uppþvottavélin og kæliskápurinn svífa hvert á sinn stað, og myndin endar á versluninni í Nóatúni 4.",
    "why": "Markaðsstjóri með beint netfang, vörur sem eru eins og skapaðar fyrir þrívídd og ekkert myndband á vefnum; á móti kemur að framleiðendurnir leggja líklega til mikið kynningarefni og fyrirtækið er rótgróið og nokkuð stórt.",
    "score": 6,
+   "ef": "Smith & Norland",
+   "thf": "Smith & Norland",
    "stada": "osent"
   },
   {
@@ -3060,6 +3398,8 @@
    "idea": "stutt teiknað myndband þar sem manneskja á hækjum er að kafna í eyðublöðum, þið takið bunkann af henni og á meðan hún jafnar sig í sófanum skila bæturnar sér inn á reikninginn hennar.",
    "why": "Þjónusta með ferli sem fólk þekkir ekki, hörð samkeppni um slysamál og Facebook-síða í notkun en ekkert myndband á vefnum; lögmannsstofur eru þó oft varkárar í markaðsmálum.",
    "score": 6,
+   "ef": "Tryggingaréttar",
+   "thf": "Tryggingarétt",
    "stada": "osent"
   },
   {
@@ -3078,6 +3418,8 @@
    "idea": "stutt teiknað myndband þar sem snjór fellur yfir Akureyri, myndavélin svífur upp að gluggunum á Strikinu og inn að hlöðnu jólahlaðborði þar sem heill vinnustaður lyftir glösum.",
    "why": "Rótgróinn veitingastaður í sama bæ og Norðurvefur, með virka samfélagsmiðla og jólavertíðina í fullum gangi, svo myndband nýtist strax; netfangið er þó almennt.",
    "score": 6,
+   "ef": "Striksins",
+   "thf": "Strikið",
    "stada": "osent"
   },
   {
@@ -3096,6 +3438,8 @@
    "idea": "stutt teiknimyndband þar sem gamla bakaríið frá 1834 breytist kynslóð fram af kynslóð í núverandi búð á Klapparstíg, á meðan kransakaka hleðst upp hring fyrir hring í forgrunni.",
    "why": "Fjölskyldufyrirtæki með einstaka sögu, á Facebook og Instagram og með lítið sem ekkert myndbandsefni, en netfangið er almennt svo óvíst er hver les það.",
    "score": 6,
+   "ef": "Bernhöftsbakarís",
+   "thf": "Bernhöftsbakarí",
    "stada": "osent"
   },
   {
@@ -3114,6 +3458,8 @@
    "idea": "stutt teiknimyndband þar sem bílstjóri bókar tíma í símanum, keyrir inn á verkstæðið á sumardekkjum og rennur út nokkrum sekúndum síðar á vetrardekkjum um leið og fyrstu snjókornin falla.",
    "why": "Lítið fyrirtæki á mjög samkeppnishörðum markaði sem er á Facebook og hefur ekkert myndbandsefni á vefnum, og dekkjavertíðin stendur yfir núna.",
    "score": 6,
+   "ef": "Betri dekkja",
+   "thf": "Betri dekk",
    "stada": "osent"
   },
   {
@@ -3132,6 +3478,8 @@
    "idea": "þrívíddarmyndband þar sem snjóflóðabakpoki opnast á fjallstoppi og ýlirinn, skóflan og stöngin svífa út og raða sér upp með stuttri skýringu á hverjum hlut áður en skíðamaðurinn rennir sér af stað.",
    "why": "Sérverslun á Facebook og Instagram með tæknilegan búnað sem nýtur sín í þrívídd og ekkert myndbandsefni, en netfangið er almennt og vefurinn virðist lítið uppfærður.",
    "score": 6,
+   "ef": "Everest",
+   "thf": "Everest",
    "stada": "osent"
   },
   {
@@ -3150,6 +3498,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gjafakort opnast eins og bók, snævi þakin grenitré vaxa upp úr því og myndavélin rennur niður að rjúkandi lóninu, tilvalið fyrir jólagjafatímann.",
    "why": "Fyrirtæki á Akureyri eins og við, með nafngreindan tengilið í sölu- og markaðsmálum og gjafakort að kynna fyrir jólin, en þau eru með eigin grafískan hönnuð og eitthvert myndbandsefni nú þegar.",
    "score": 6,
+   "ef": "Forest Lagoon",
+   "thf": "Forest Lagoon",
    "stada": "osent"
   },
   {
@@ -3168,6 +3518,8 @@
    "idea": "þrívíddarmyndband þar sem jólapakki dettur inn á skjáinn, borðinn rennur af, lokið lyftist og upp úr kassanum svífa nokkrar vörur úr versluninni áður en textinn „Finndu gjöfina á hrim.is“ birtist.",
    "why": "Gjafavöruverslun í harðri jólasamkeppni með fallegar vörur sem njóta sín í þrívídd og jólavertíðin rétt að byrja, en netfangið er almennt og engir samfélagsmiðlar fundust á vefnum.",
    "score": 6,
+   "ef": "Hríms",
+   "thf": "Hrím",
    "stada": "osent"
   },
   {
@@ -3186,6 +3538,8 @@
    "idea": "þrívíddarmyndband þar sem nautasteik fellur á heita pönnu, snarkar og snýst, og síðan raðast meðlæti, sósa og eftirréttur í kringum hana þar til borðið er orðið að fullbúinni jólaveislu.",
    "why": "Sérhæfð verslun með vefverslun, Facebook og Instagram og vörur sem njóta sín vel á skjá, á góðum tíma fyrir jólin, en netfangið er almennt sölunetfang.",
    "score": 6,
+   "ef": "Kjötbúðarinnar",
+   "thf": "Kjötbúðina",
    "stada": "osent"
   },
   {
@@ -3204,6 +3558,8 @@
    "idea": "þrívíddarmyndband þar sem umgjörð úr vintage-horninu svífur inn, ljóslínur teikna sjónglerin nákvæmlega inn í hana og glerin smella á sinn stað áður en nafnið Sjónlínan birtist.",
    "why": "Sjálfstæð gleraugnaverslun með sérstöðu eins og 3D greiningu og vintage-horn og á Facebook, en netfangið er almennt og lítið sést af nýlegu efni á vefnum.",
    "score": 6,
+   "ef": "Sjónlínunnar",
+   "thf": "Sjónlínuna",
    "stada": "osent"
   },
   {
@@ -3222,6 +3578,8 @@
    "idea": "stutt hreyfimyndband þar sem yfirborð í eldhúsi lýsist upp af bakteríum sem hverfa svo ein af annarri þegar ein umferð af Tandur efni er strokin yfir.",
    "why": "Named marketing manager and an existing YouTube channel, but mainly B2B and already somewhat content-active, so moderate likelihood.",
    "score": 5,
+   "ef": "Tandurs",
+   "thf": "Tandur",
    "stada": "osent"
   },
   {
@@ -3240,6 +3598,8 @@
    "idea": "stutt hreyfimyndband þar sem einn gluggi í Garðheimum fer í gegnum árstíðirnar á tíu sekúndum, frá vorlaukum og sláttuvél yfir í haustlauf og jólaljós.",
    "why": "Has a marketing staffer, seasonal campaigns all year; but a fairly big store that may already use an agency.",
    "score": 5,
+   "ef": "Garðheima",
+   "thf": "Garðheima",
    "stada": "osent"
   },
   {
@@ -3258,6 +3618,8 @@
    "idea": "stutt hreyfimyndband þar sem skrifstofuhæð er sýnd ofan frá og skynjarar kveikja aðeins á ræstingu þar sem þörfin er, á meðan kostnaðarmælir lækkar.",
    "why": "Owner-managed mid-size firm with a 'smart cleaning' story and a Akureyri branch; B2B but competitive market.",
    "score": 5,
+   "ef": "Hreint",
+   "thf": "Hreint",
    "stada": "osent"
   },
   {
@@ -3276,6 +3638,8 @@
    "idea": "stutt hreyfimyndband þar sem gólf í eldhúsi skiptir á milli flísa, parkets og vínylparkets í takt við tónlist og endar á merki Álfaborgar.",
    "why": "Mid-size store with YouTube embeds and Instagram, competitive flooring market; generic email only.",
    "score": 5,
+   "ef": "Álfaborgar",
+   "thf": "Álfaborg",
    "stada": "osent"
   },
   {
@@ -3294,6 +3658,8 @@
    "idea": "stutt þrívíddarmyndband þar sem parketfjalir smella saman ein af annarri yfir allt gólfið og innihurð í stíl rennur á sinn stað í lokin.",
    "why": "Active on Instagram with some reels already; competitive flooring market; generic email.",
    "score": 5,
+   "ef": "Parka",
+   "thf": "Parka",
    "stada": "osent"
   },
   {
@@ -3312,6 +3678,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gamalt baðherbergi breytist á tíu sekúndum í nýtt með sturtukerfi, blöndunartækjum og innréttingu frá Tengi.",
    "why": "Mid-size, has an Akureyri branch (local), visual product range; generic email only and probably some agency use.",
    "score": 5,
+   "ef": "Tengis",
+   "thf": "Tengi",
    "stada": "osent"
   },
   {
@@ -3330,6 +3698,8 @@
    "idea": "stutt þrívíddarmyndband þar sem uppþvottavél opnast í sneiðmynd og sýnir hvernig vatnið og hitinn vinna á meðan glösin koma glansandi út.",
    "why": "Specialist premium retailer; product internals are ideal for 3D; generic email and likely supplier-provided brand video, so moderate.",
    "score": 5,
+   "ef": "Eirvíkur",
+   "thf": "Eirvík",
    "stada": "osent"
   },
   {
@@ -3348,6 +3718,8 @@
    "idea": "stutt hreyfimyndband þar sem jólaserían frá ykkur kviknar pera fyrir peru í kringum glugga og tilboðsverðið birtist í síðustu perunni.",
    "why": "Established retail store with active offers and FB/Instagram; generic email; content needs are seasonal.",
    "score": 5,
+   "ef": "Byggt og búið",
+   "thf": "Byggt og búið",
    "stada": "osent"
   },
   {
@@ -3366,6 +3738,8 @@
    "idea": "stutt þrívíddarmyndband þar sem límtrésbitar og klæðning raðast saman úr loftinu og mynda heila skemmu á tíu sekúndum.",
    "why": "Icelandic manufacturer with a great 3D story, but larger and B2B-oriented with generic sales email; moderate likelihood.",
    "score": 5,
+   "ef": "Límtrés Vírnets",
+   "thf": "Límtré Vírnet",
    "stada": "osent"
   },
   {
@@ -3384,6 +3758,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gólf í tómri íbúð fyllist af parketi frá Birgisson í einni sveiflu og hurðirnar smella í karmana á eftir.",
    "why": "Mid-size flooring store, competitive market; generic email; nothing specific known about their social activity.",
    "score": 5,
+   "ef": "Birgissonar",
+   "thf": "Birgisson",
    "stada": "osent"
   },
   {
@@ -3402,6 +3778,8 @@
    "idea": "stutt þrívíddarmyndband þar sem rúm úr Dorma setur sig saman lag fyrir lag, botn, dýna og yfirdýna, og tilboðsverðið birtist á koddanum.",
    "why": "Competitive bed market and frequent offers, but part of a retail group and generic email only.",
    "score": 5,
+   "ef": "Dorma",
+   "thf": "Dorma",
    "stada": "osent"
   },
   {
@@ -3420,6 +3798,8 @@
    "idea": "stutt þrívíddarmyndband þar sem myndavélin rennur hægt yfir sauma, við og áklæði á einum sófa úr Módern áður en hann birtist í heild í bjartri stofu.",
    "why": "Premium store where product detail is the selling point; generic email; may already work with photographers.",
    "score": 5,
+   "ef": "Módern",
+   "thf": "Módern",
    "stada": "osent"
   },
   {
@@ -3438,10 +3818,12 @@
    "idea": "stutt hreyfimyndband þar sem hvítur veggur í nýrri íbúð fær Kalkliti áferð í einni penslastroku og vefverslunin birtist í símanum í horninu.",
    "why": "Content-active paint company with fresh news to announce (webshop), but larger and likely agency-supported; generic email.",
    "score": 5,
+   "ef": "Slippfélagsins",
+   "thf": "Slippfélagið",
    "stada": "osent"
   },
   {
-   "name": "Málning hf",
+   "name": "Málning",
    "web": "malning.is",
    "sector": "Hús og heimili",
    "what": "Icelandic paint manufacturer since 1953 (Dalvegur, Kópavogur): exterior/interior paint, Steinvari, Kjörvari wood stain, Swan-labelled paints.",
@@ -3456,6 +3838,8 @@
    "idea": "stutt þrívíddarmyndband þar sem rigning og frost lemja á tvo veggi, annan málaðan með Steinvara, sem stendur óhaggaður á meðan hinn flagnar.",
    "why": "Icelandic manufacturer with weather-proof story; has YouTube; mid-size with generic email.",
    "score": 5,
+   "ef": "Málningar",
+   "thf": "Málningu",
    "stada": "osent"
   },
   {
@@ -3474,6 +3858,8 @@
    "idea": "stutt þrívíddarmyndband þar sem tennur í brosi lýsast og raðast fallega upp á nokkrum sekúndum og brosið breikkar í lokin.",
    "why": "Owner-dentist runs the practice and reads the inbox; cosmetic dentistry is visual, though dentists are usually less active on social media.",
    "score": 5,
+   "ef": "Brossins tannlæknastofu",
+   "thf": "Brosið tannlæknastofu",
    "stada": "osent"
   },
   {
@@ -3492,6 +3878,8 @@
    "idea": "stutt teiknað myndband sem fer frá jazzballett í Suðurveri árið 1967 yfir í líkamsræktartíma dagsins í dag og endar á orðunum Leggur línurnar.",
    "why": "Owner's own address is published; a heritage women-only gym that needs to stay relevant against chains, though an older brand may be less social-media driven.",
    "score": 5,
+   "ef": "Líkamsræktar JSB",
+   "thf": "Líkamsrækt JSB",
    "stada": "osent"
   },
   {
@@ -3510,6 +3898,8 @@
    "idea": "stutt teiknað myndband sem fylgir einni blóðprufu frá sýnatöku í Ármúla, í gegnum tækin á rannsóknarstofunni og þar til niðurstaðan birtist í símanum.",
    "why": "Mid-size private lab with a process people are unsure about; less social-media driven, so a moderate chance.",
    "score": 5,
+   "ef": "Sameindar",
+   "thf": "Sameind",
    "stada": "osent"
   },
   {
@@ -3528,6 +3918,8 @@
    "idea": "stutt tvívíddarmyndband þar sem vefsíða ferðast úr fartölvu inn í íslenskt gagnaver knúið vatnsafli og hengilás lokast utan um gögnin á leiðinni.",
    "why": "Lítið íslenskt fyrirtæki með sterka sögu um persónuvernd og græna orku sem erfitt er að sýna, og Facebook-síðu en ekkert myndefni; selur þó líka mikið til útlanda.",
    "score": 5,
+   "ef": "1984",
+   "thf": "1984",
    "stada": "osent"
   },
   {
@@ -3546,6 +3938,8 @@
    "idea": "tíu sekúndna þrívíddarmyndband þar sem fjórhjól þýtur eftir hraunslóð, myndavélin lyftir sér upp og sýnir nýrunnið hraunið og Reykjanesið fyrir neðan áður en merkið ykkar birtist.",
    "why": "Lítið staðbundið fyrirtæki í Grindavík sem þarf að ná athygli eftir eldgosin og er virkt á Facebook og Instagram; á þó líklega nóg af raunverulegu myndefni úr ferðunum.",
    "score": 5,
+   "ef": "4x4 Adventures Iceland",
+   "thf": "4x4 Adventures Iceland",
    "stada": "osent"
   },
   {
@@ -3564,6 +3958,8 @@
    "idea": "tvívíddarmyndband þar sem óreiðukennd töflureiknisskjöl sogast inn í tölvuskjá og koma út hinum megin sem hreint mælaborð, og Roger, gervigreindargreinandinn ykkar, bendir á þá einu tölu sem skiptir máli.",
    "why": "Íslenskt hugbúnaðarfyrirtæki sem selur sjónræna vöru og er virkt á Facebook og Instagram; á þó þegar nokkur myndbönd og vefurinn er á ensku.",
    "score": 5,
+   "ef": "Advise",
+   "thf": "Advise",
    "stada": "osent"
   },
   {
@@ -3582,6 +3978,8 @@
    "idea": "rólegt tvívíddarmyndband þar sem manneskja gengur inn í þoku með spurningarmerki yfir höfðinu, og smám saman léttir þokunni í samtali á skjánum þar til stígur birtist sem liggur að markmiðinu.",
    "why": "Einyrki sem les sjálf póstinn og selur þjónustu sem erfitt er að lýsa; hefur þó lítið markaðsfé og aðeins Facebook-síðu, svo áhuginn ræðst af því hvort hún sjái not fyrir myndband.",
    "score": 5,
+   "ef": "ALMA markþjálfa",
+   "thf": "ALMA markþjálfa",
    "stada": "osent"
   },
   {
@@ -3600,6 +3998,8 @@
    "idea": "þrívíddarmyndband þar sem húsveggur flysjast í sundur lag fyrir lag, festingar, einangrun og álklæðning raðast aftur saman og slagveður skellur á veggnum án þess að komast inn.",
    "why": "Meðalstórt fyrirtæki með áþreifanlega vöru sem lítur vel út í þrívídd og framkvæmdastjóra með birt netfang; selur þó mest til fagfólks, engir samfélagsmiðlar fundust og nokkur myndbönd eru þegar á vefnum.",
    "score": 5,
+   "ef": "Áltaks",
+   "thf": "Áltak",
    "stada": "osent"
   },
   {
@@ -3618,6 +4018,8 @@
    "idea": "þrívíddarmyndband þar sem venjulegur jeppi lyftist upp, stærri dekk, fjöðrun og ljóskastarar smella á sinn stað og hann ekur svo beint upp snævi þakta jökulbrekku.",
    "why": "Þekkt vörumerki með vöru sem er sniðin fyrir þrívídd og virka Facebook- og Instagram-síðu; fyrirtækið er þó nokkuð stórt og alþjóðlegt og aðeins almennt netfang fannst.",
    "score": 5,
+   "ef": "Arctic Trucks",
+   "thf": "Arctic Trucks",
    "stada": "osent"
   },
   {
@@ -3636,6 +4038,8 @@
    "idea": "stutt þrívíddarmyndband þar sem tómt fundarborð fyllist á nokkrum sekúndum af bökkum með snittum, kökum og kaffi rétt áður en fundargestirnir ganga inn.",
    "why": "Rótgróið bakarí með girnilega vöru og virka Facebook- og Instagram-síðu; eina netfangið er pantanadeildin, svo boðið þarf að berast áfram til eigenda.",
    "score": 5,
+   "ef": "Bakarameistarans",
+   "thf": "Bakarameistarann",
    "stada": "osent"
   },
   {
@@ -3654,6 +4058,8 @@
    "idea": "tvívíddarmyndband þar sem bílakjallari í fjölbýlishúsi fyllist af rafbílum, hleðslustöðvar spretta upp við hvert stæði og hver íbúð fær sinn eigin mæli og reikning.",
    "why": "Lítið sérhæft fyrirtæki með vöru sem þarf að útskýra fyrir húsfélögum; vefurinn virðist þó lítið uppfærður og óvíst er um framtíð EVBox-stöðvanna sem það selur.",
    "score": 5,
+   "ef": "Bílahleðslunnar",
+   "thf": "Bílahleðsluna",
    "stada": "osent"
   },
   {
@@ -3672,6 +4078,8 @@
    "idea": "tvívíddarmyndband þar sem stjórnendur á bát róa hver í sína áttina, áttaviti merktur sýn, drifkrafti og heilbrigði birtist á þilfarinu og allt teymið fer að róa í takt.",
    "why": "Lítið ráðgjafarfyrirtæki þar sem eigandinn virðist svara sjálfur og selur hugmyndafræði sem erfitt er að lýsa; engir samfélagsmiðlar fundust þó og nafn hans kemur ekki fram á vefnum.",
    "score": 5,
+   "ef": "Bravó",
+   "thf": "Bravó",
    "stada": "osent"
   },
   {
@@ -3690,6 +4098,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin flýgur yfir Ásvelli, svífur inn um svalahurð og rennur í gegnum bjarta stofu og eldhús í einni af nýju íbúðunum.",
    "why": "Rótgróinn byggingaraðili með íbúðir í sölu sem henta mjög vel í þrívídd og eigendur með birt netföng; fyrirtækið er þó stórt og á þegar nokkur myndbönd á vefnum.",
    "score": 5,
+   "ef": "BYGG",
+   "thf": "BYGG",
    "stada": "osent"
   },
   {
@@ -3708,6 +4118,8 @@
    "idea": "tvívíddarmyndband þar sem starfsmaður er að drukkna í pappírum og tölvupósti, lítill aðstoðarmaður birtist á skjánum og raðar öllu á sinn stað á meðan kaffibollinn hans er enn heitur.",
    "why": "Lítið íslenskt tæknifyrirtæki sem selur óáþreifanlega þjónustu og birtir reglulega efni; selur þó til fyrirtækja og samfélagsmiðlavirknin virðist hófleg.",
    "score": 5,
+   "ef": "DataLab",
+   "thf": "DataLab",
    "stada": "osent"
   },
   {
@@ -3726,6 +4138,8 @@
    "idea": "þrívíddarmyndband þar sem iðnaðarmaður rennur til á þakbrún, tíminn frýs, fallvarnarbúnaðurinn grípur hann og hann klifrar rólega aftur upp á þakið.",
    "why": "Rótgróið fyrirtæki með áþreifanlega vöru og virka Facebook- og Instagram-síðu en ekkert myndefni á vefnum; selur þó mest til fyrirtækja og aðeins almennt netfang varð fyrir valinu.",
    "score": 5,
+   "ef": "Dynjanda",
+   "thf": "Dynjanda",
    "stada": "osent"
   },
   {
@@ -3744,6 +4158,8 @@
    "idea": "stutt þrívíddarmyndband þar sem myndavélin svífur yfir hraunið við Mývatn, gufan stígur upp og nýja byggingin og lónið birtast smám saman úr móðunni.",
    "why": "Nýopnuð aðstaða á Norðurlandi sem þarf að kynna, en staðurinn á þegar talsvert myndefni og almenna netfangið fer líklega fyrst í bókanir.",
    "score": 5,
+   "ef": "Earth Lagoon Mývatn",
+   "thf": "Earth Lagoon Mývatn",
    "stada": "osent"
   },
   {
@@ -3762,6 +4178,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin fer undir bátinn úti á Faxaflóa og hnúfubakur syndir rólega fram hjá, áður en hann kemur upp við hliðina á gestunum á þilfarinu.",
    "why": "Markaðsnetfangið er beinlínis ætlað fyrir tillögur af þessu tagi og fyrirtækið er fjölskyldurekið, en þau eiga örugglega mikið af raunverulegu myndefni og selja mest til erlendra ferðamanna.",
    "score": 5,
+   "ef": "Eldingar",
+   "thf": "Eldingu",
    "stada": "osent"
   },
   {
@@ -3780,6 +4198,8 @@
    "idea": "þrívíddarmyndband þar sem stálbiti sígur ofan í zinkbaðið, kemur glansandi upp og stendur svo af sér tuttugu íslenska vetur á fáeinum sekúndum án þess að ryðga.",
    "why": "Rótgróið Akureyrarfyrirtæki með Facebook, Instagram og YouTube en lítið myndefni, og zinkhúðunin lítur vel út í þrívídd; enginn stjórnandi er nefndur í gögnunum.",
    "score": 5,
+   "ef": "Ferro Zink",
+   "thf": "Ferro Zink",
    "stada": "osent"
   },
   {
@@ -3798,6 +4218,8 @@
    "idea": "þrívíddarmyndband þar sem pottur með rúgbrauðsdeigi er grafinn í gufandi sandinn við vatnið, tíminn spólast áfram og nýbakað brauð er tekið upp á meðan gestir slaka á í lauginni í bakgrunni.",
    "why": "Mjög myndræn sérstaða og endurbætur sem ljúka í byrjun desember gefa tilefni til kynningar, en vefurinn er mest á ensku og ekkert símanúmer fannst.",
    "score": 5,
+   "ef": "Laugarvatn Fontana",
+   "thf": "Laugarvatn Fontana",
    "stada": "osent"
   },
   {
@@ -3816,6 +4238,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin fylgir heita sjónum upp úr borholunni djúpt í jörðinni og upp í laugina á bjargbrúninni, þar sem hvalur blæs úti á flóanum.",
    "why": "Myndrænn staður á Norðurlandi, virkur á Facebook og Instagram, en á líklega þegar mikið af fallegu myndefni og selur mest til ferðamanna.",
    "score": 5,
+   "ef": "GeoSea",
+   "thf": "GeoSea",
    "stada": "osent"
   },
   {
@@ -3834,6 +4258,8 @@
    "idea": "tvívíddarmyndband þar sem afgreiðsluborð á litlu hóteli er þakið miðum, möppum og símum sem fljúga svo öll inn í einn skjá, og hótelstjórinn fær sér loksins kaffibolla í ró.",
    "why": "Hugbúnaður sem hentar vel í útskýringarmyndband og fyrirtækið er á Facebook, Instagram og LinkedIn, en markaðurinn er að mestu erlendur og vefurinn á ensku.",
    "score": 5,
+   "ef": "Godo",
+   "thf": "Godo",
    "stada": "osent"
   },
   {
@@ -3852,6 +4278,8 @@
    "idea": "þrívíddarmyndband þar sem sjókort af Íslandsmiðum hitnar dag frá degi á blettunum þar sem fiskurinn safnast saman og togarinn breytir um stefnu beint þangað.",
    "why": "Ungt fyrirtæki með vöru sem nánast verður að sýna til að skilja og rekstrarstjóri með eigið netfang, en markaðurinn er alþjóðlegur og salan fer mest fram á LinkedIn og í beinum samskiptum.",
    "score": 5,
+   "ef": "GreenFish",
+   "thf": "GreenFish",
    "stada": "osent"
   },
   {
@@ -3870,6 +4298,8 @@
    "idea": "þrívíddarmyndband þar sem grænmetið hoppar ferskt og niðurskorið ofan í bakkann, bakkinn rennur beint inn í ofninn og kemur út gullinbrúnn og tilbúinn á borðið.",
    "why": "Íslenskt neytendamerki með vöru og umbúðir sem líta vel út í þrívídd, en engir samfélagsmiðlar fundust og vefurinn virðist lítið uppfærður.",
    "score": 5,
+   "ef": "Hollt og gott",
+   "thf": "Hollt og gott",
    "stada": "osent"
   },
   {
@@ -3888,6 +4318,8 @@
    "idea": "tvívíddarmyndband þar sem verðmiðinn á spinninghjóli hrynur um 60% í takt við niðurtalningu og jólapappír vefst utan um hjólið í lokin.",
    "why": "Selur tilboð sem henta stuttum myndböndum vel og er á Facebook og Instagram, en hvert tilboð lifir stutt og óvíst er að þau vilji leggja efni í einstaka kynningu; ekkert símanúmer fannst.",
    "score": 5,
+   "ef": "Hópkaupa",
+   "thf": "Hópkaup",
    "stada": "osent"
   },
   {
@@ -3906,6 +4338,8 @@
    "idea": "stutt teiknað myndband sem segir sögu Önnu á nokkrum sekúndum og endar inni í hlýlegu herbergi eða einni af nýju íbúðunum.",
    "why": "Lítið fjölskyldufyrirtæki með Instagram-reikning og persónulega sögu sem hentar vel í myndband; á móti kemur að vefurinn er á ensku og gestirnir flestir erlendir.",
    "score": 5,
+   "ef": "Hótel Önnu",
+   "thf": "Hótel Önnu",
    "stada": "osent"
   },
   {
@@ -3924,6 +4358,8 @@
    "idea": "teiknað kort þar sem leiðin frá Keflavíkurflugvelli dregst upp á nokkrum sekúndum og hótelið í Borgarnesi birtist sem eðlilegur áningarstaður á leiðinni vestur og norður.",
    "why": "Rótgróið hótel með frekar gamaldags vef og nánast ekkert myndefni, svo stutt myndband væri áberandi viðbót; óljóst hver les almenna netfangið.",
    "score": 5,
+   "ef": "Hótel Borgarness",
+   "thf": "Hótel Borgarnes",
    "stada": "osent"
   },
   {
@@ -3942,6 +4378,8 @@
    "idea": "teiknað myndband þar sem ferjan leggst að bryggju, stutt gönguleið liggur upp í gamla þorpið og hópurinn sest saman til borðs í pakkhúsinu.",
    "why": "Einstakur staður með virka samfélagsmiðla og hópgistingu sem gott er að sýna myndrænt; sumarrekstur svo svarið gæti dregist yfir veturinn.",
    "score": 5,
+   "ef": "Hótel Flateyjar",
+   "thf": "Hótel Flatey",
    "stada": "osent"
   },
   {
@@ -3960,6 +4398,8 @@
    "idea": "þrívíddarmyndband þar sem kaka snýst á diski, skreytingin raðar sér upp af sjálfu sér og í lokin kemur fram hvernig á að panta.",
    "why": "Virk á Facebook og Instagram með nýtt efni á vefnum í ár, og kökurnar gefa tilefni til að ná til heimafólks allt árið; hótelið er þó af meðalstærð og gæti átt sitt eigið efni.",
    "score": 5,
+   "ef": "Hótel Hafnar",
+   "thf": "Hótel Höfn",
    "stada": "osent"
   },
   {
@@ -3978,6 +4418,8 @@
    "idea": "þrívíddarkort þar sem Demantshringurinn teiknast upp, Dettifoss, Ásbyrgi og Húsavík kvikna hvert af öðru og hótelið við Mývatn birtist sem miðpunktur ferðarinnar.",
    "why": "Meðalstórt hótel sem markaðssetur sig á íslensku og er á Facebook og Instagram en með lítið af myndböndum, og stutt er til Akureyrar; stærsti markhópurinn er þó líklega erlendur.",
    "score": 5,
+   "ef": "Hótel Laxár",
+   "thf": "Hótel Laxá",
    "stada": "osent"
   },
   {
@@ -3996,6 +4438,8 @@
    "idea": "myndband þar sem marokkóskur leirpottur er settur á borðið, lokinu er lyft og upp úr gufunni birtist snævi þakinn Siglufjörður.",
    "why": "Lítið og persónulegt hótel með sterka sérstöðu og Instagram-reikning; þau eru þó þegar með eitthvað af myndböndum á vefnum.",
    "score": 5,
+   "ef": "Hótel Sigluness",
+   "thf": "Hótel Siglunes",
    "stada": "osent"
   },
   {
@@ -4014,6 +4458,8 @@
    "idea": "teiknað myndband þar sem farþegi ýtir á einn takka í appinu, lítill leigubíll leggur af stað á kortinu og er kominn upp að dyrum áður en tíu sekúndurnar eru liðnar.",
    "why": "Samkeppnin á leigubílamarkaði hefur harðnað og appið er auðvelt að sýna; samvinnufélag af þessari stærð gæti þó verið svifaseint í ákvörðunum.",
    "score": 5,
+   "ef": "Hreyfils",
+   "thf": "Hreyfil",
    "stada": "osent"
   },
   {
@@ -4032,6 +4478,8 @@
    "idea": "teiknað myndband þar sem sama salnum er breytt á nokkrum sekúndum úr leiksviði í tónleikasal og svo í brúðkaupsveislu, svo fólk sjái hvað hann rúmar.",
    "why": "Salarleiga er tekjulind sem nýtur góðs af myndrænni kynningu og dagskráin er virk; óljóst er hver rekur húsið og hvort þar sé einhver sem sinnir markaðsmálum.",
    "score": 5,
+   "ef": "Iðnó",
+   "thf": "Iðnó",
    "stada": "osent"
   },
   {
@@ -4050,6 +4498,8 @@
    "idea": "teiknað myndband þar sem lítið fyrirtæki velur sér kubba eins og laun, birgðir og kassakerfi og smellir þeim saman í bókhaldskerfi sem passar nákvæmlega.",
    "why": "Margþætt vara sem er auðveldara að sýna en telja upp, og þau eru með Facebook og YouTube; lítil virkni sést þó á vefnum og netfangið er almennt.",
    "score": 5,
+   "ef": "Stólpa",
+   "thf": "Stólpa",
    "stada": "osent"
   },
   {
@@ -4068,6 +4518,8 @@
    "idea": "þrívíddarmyndband þar sem pakki af lambagúllasi opnast, kjötið rennur ofan í pott og kvöldmaturinn er kominn á borðið á tíu sekúndum.",
    "why": "Norðlenskt fyrirtæki eins og við, með neytendavörur í umbúðum sem henta vel í þrívídd og nafngreindan stjórnanda; fyrirtækið er þó orðið nokkuð stórt og lítið sést af því á samfélagsmiðlum.",
    "score": 5,
+   "ef": "Kjarnafæðis",
+   "thf": "Kjarnafæði",
    "stada": "osent"
   },
   {
@@ -4086,6 +4538,8 @@
    "idea": "að sýna í stuttu teiknuðu myndbandi hvernig sjóðandi vatnið úr hvernum kólnar á leiðinni og endar sem notalegt bað í laugunum ykkar.",
    "why": "Ferðaþjónusta sem lifir á myndrænu efni og með virka samfélagsmiðla, en þau eru þegar með nokkur myndbönd á vefnum.",
    "score": 5,
+   "ef": "Krauma",
+   "thf": "Krauma",
    "stada": "osent"
   },
   {
@@ -4104,6 +4558,8 @@
    "idea": "litríkt teiknað myndband þar sem KuKu-bíll keyrir hringinn á tíu sekúndum, frá snjóbyl yfir í miðnætursól, á meðan hitarinn heldur fólkinu hlýju.",
    "why": "Lítið og líflegt vörumerki á mjög samkeppnisharðum markaði, en netfangið er bókunarnetfang og efnið yrði á ensku.",
    "score": 5,
+   "ef": "KuKu Campers",
+   "thf": "KuKu Campers",
    "stada": "osent"
   },
   {
@@ -4122,6 +4578,8 @@
    "idea": "tíu sekúndna teiknimynd þar sem ferðamaður lendir, innritar sig í símanum og ekur af stað á bílnum frá ykkur án þess að bíða í röð.",
    "why": "Lítil bílaleiga á troðfullum markaði sem þarf að skera sig úr og er ekki með myndbönd, en netfangið er almennt og efnið yrði á ensku.",
    "score": 5,
+   "ef": "Lagoon Car Rental",
+   "thf": "Lagoon Car Rental",
    "stada": "osent"
   },
   {
@@ -4140,6 +4598,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin svífur niður með fossinum, inn í hellinn og út á neðri hæð lónsins með Hvítá í baksýn.",
    "why": "Nýr staður sem þarf að vekja athygli hratt, en á bak við hann eru líklega fjárfestar með eigið markaðsfólk.",
    "score": 5,
+   "ef": "Laugarás Lagoon",
+   "thf": "Laugarás Lagoon",
    "stada": "osent"
   },
   {
@@ -4158,6 +4618,8 @@
    "idea": "að sýna troðfulla biðstofu og pappírsbunka hverfa á meðan dagatal læknisins raðast snyrtilega upp í Leviosa.",
    "why": "Lítið íslenskt heilbrigðistæknifyrirtæki með hugbúnað sem þarf að útskýra, en vefurinn er á ensku og netfangið almennt.",
    "score": 5,
+   "ef": "Leviosa",
+   "thf": "Leviosa",
    "stada": "osent"
   },
   {
@@ -4176,6 +4638,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin fer frá jökulsporðinum inn í bláan íshelli og út aftur þar sem merkið ykkar og ártalið 1991 birtast.",
    "why": "Rótgróið ferðafyrirtæki þar sem myndefni ræður miklu um bókanir, en efnið yrði á ensku og óvíst hver les almenna netfangið.",
    "score": 5,
+   "ef": "Local Guide",
+   "thf": "Local Guide",
    "stada": "osent"
   },
   {
@@ -4194,6 +4658,8 @@
    "idea": "teiknað myndband þar sem langur reikningur með smáa letrinu rúllar út og er klipptur niður þar til bara eitt verð stendur eftir við hlið bílsins.",
    "why": "Lítil íslensk bílaleiga sem keppir við stóra aðila og þarf að skera sig úr; efnið yrði á ensku og netfangið er almennt.",
    "score": 5,
+   "ef": "Lotus Car Rental",
+   "thf": "Lotus Car Rental",
    "stada": "osent"
   },
   {
@@ -4212,6 +4678,8 @@
    "idea": "þrívíddarmyndband þar sem færibandið ykkar raðast saman einingu fyrir einingu, beygir fyrir horn og flytur fiskinn mjúklega eftir vinnslulínunni.",
    "why": "Sérhæft iðnfyrirtæki með vöru sem lítur vel út í þrívídd og YouTube-rás, en sala til fiskvinnslu er langt og persónulegt ferli.",
    "score": 5,
+   "ef": "Martaks",
+   "thf": "Martak",
    "stada": "osent"
   },
   {
@@ -4230,6 +4698,8 @@
    "idea": "þrívíddarmyndband þar sem ofurjeppi ekur yfir jökulá, upp á hálendið og endar við upplýstan hellismunna þar sem kvöldverðurinn bíður.",
    "why": "Rótgróið ferðafyrirtæki á landsbyggðinni með fjölbreytt framboð og virka samfélagsmiðla; efnið yrði á ensku og samkeppnin mikil.",
    "score": 5,
+   "ef": "Midgard Adventure",
+   "thf": "Midgard Adventure",
    "stada": "osent"
   },
   {
@@ -4248,6 +4718,8 @@
    "idea": "þrívíddarmyndband þar sem nýtt fjölbýlishús rís upp úr grunninum, ljósin kvikna í gluggunum og myndavélin svífur inn í bjarta íbúð.",
    "why": "Fasteignasala á samkeppnismarkaði með virka samfélagsmiðla og nýbyggingar sem henta vel í þrívídd; netfangið er almennt.",
    "score": 5,
+   "ef": "Miklaborgar",
+   "thf": "Miklaborg",
    "stada": "osent"
   },
   {
@@ -4266,6 +4738,8 @@
    "idea": "teiknað myndband þar sem hikandi byrjandi stendur fyrir utan Mjölni, gengur inn og er tíu sekúndum síðar orðinn hluti af hópnum á dýnunni.",
    "why": "Þekkt merki með mjög virka samfélagsmiðla og skýrt tilboð, en þau búa líklega til mikið efni sjálf.",
    "score": 5,
+   "ef": "Mjölnis",
+   "thf": "Mjölni",
    "stada": "osent"
   },
   {
@@ -4284,6 +4758,8 @@
    "idea": "þrívíddarmyndband þar sem rúta ekur yfir svartan sandinn að Öskju og myndavélin lyftist upp svo askjan og Víti blasa við að ofan.",
    "why": "Tengist rótgrónu rútufyrirtæki á Akureyri, nálægt okkur, en ferðirnar eru árstíðabundnar og vefurinn lítið uppfærður.",
    "score": 5,
+   "ef": "Mývatn Tours",
+   "thf": "Mývatn Tours",
    "stada": "osent"
   },
   {
@@ -4302,6 +4778,8 @@
    "idea": "þrívíddarmyndband sem fer undir yfirborðið og sýnir hvernig vindurnar og stjórnkerfið vinna saman við að draga trollið um borð.",
    "why": "Búnaður sem lítur vel út í þrívídd og forstjóri með eigið netfang, en markaðurinn er alþjóðlegur og söluferlið langt.",
    "score": 5,
+   "ef": "Naust Marine",
+   "thf": "Naust Marine",
    "stada": "osent"
   },
   {
@@ -4320,6 +4798,8 @@
    "idea": "stutt teiknað myndband þar sem sumarið í Nauthólsvík breytist í snjókomu og jólaljós á meðan langborðið fyllist af jólamat.",
    "why": "Vinsæll staður með árstíðabundin tilboð sem henta vel í stutt myndband; veitingastaðir búa þó oft sjálfir til efni á samfélagsmiðla.",
    "score": 5,
+   "ef": "Nauthóls",
+   "thf": "Nauthól",
    "stada": "osent"
   },
   {
@@ -4338,6 +4818,8 @@
    "idea": "teiknað myndband þar sem jólapakkarnir hrannast upp í desember á meðan dagatalið flettist áfram og reikningurinn birtist ekki fyrr en 1. febrúar.",
    "why": "Fjártæknifyrirtæki með tímabundið tilboð einmitt núna og vöru sem þarf að útskýra; líklega með eigið markaðsfólk og netfangið er almennt.",
    "score": 5,
+   "ef": "Netgíró",
+   "thf": "Netgíró",
    "stada": "osent"
   },
   {
@@ -4356,6 +4838,8 @@
    "idea": "þrívíddarmyndband þar sem rafknúinn bátur rennur hljóðlaust yfir Eyjafjörð og hnúfubakur kemur upp rétt hjá án þess að styggjast.",
    "why": "Rótgróið fyrirtæki hér fyrir norðan með nýja, umhverfisvæna sérstöðu, en þau eru þegar með YouTube og eitthvað af myndböndum.",
    "score": 5,
+   "ef": "North Sailing",
+   "thf": "North Sailing",
    "stada": "osent"
   },
   {
@@ -4374,6 +4858,8 @@
    "idea": "stutt þrívíddarmyndband þar sem rafbíll rennur inn í innkeyrslu um kvöld, hleðslustöðin kviknar og rafhlaðan fyllist á meðan heimilisfólkið sefur.",
    "why": "Rótgróið fyrirtæki á Akureyri eins og við, með fjölbreytta þjónustu og ekkert myndband á vefnum; óvíst hver les almenna netfangið.",
    "score": 5,
+   "ef": "Rafeyrar",
+   "thf": "Rafeyri",
    "stada": "osent"
   },
   {
@@ -4392,6 +4878,8 @@
    "idea": "þrívíddarmyndband þar sem húsbíll leggur af stað frá flugvellinum um nótt, ekur hringveginn undir norðurljósum og opnast svo í lokin svo sjá má rúmið og eldhúsið inni í honum.",
    "why": "Framkvæmdastjórinn er með eigið netfang á vefnum og varan er mjög sjónræn, en markaðsefnið er á ensku fyrir erlenda ferðamenn og þau nota þegar myndbönd.",
    "score": 5,
+   "ef": "Rent.is",
+   "thf": "Rent.is",
    "stada": "osent"
   },
   {
@@ -4410,6 +4898,8 @@
    "idea": "teiknað myndband þar sem lyfjapoki leggur af stað frá afgreiðsluborðinu ykkar, ferðast eftir korti um hverfið og lendir á eldhúsborði hjá eldri manni sem þarf ekki að fara út í slabbið.",
    "why": "Lítið apótek í samkeppni við stórar keðjur með skýrt verðforskot að segja frá, en engir samfélagsmiðlar fundust á vefnum.",
    "score": 5,
+   "ef": "Rima Apóteks",
+   "thf": "Rima Apótek",
    "stada": "osent"
   },
   {
@@ -4428,6 +4918,8 @@
    "idea": "þrívíddarmyndband þar sem ein persónan á safninu deplar augunum, stígur út úr sýningunni og bendir áhorfandanum á að koma inn.",
    "why": "Persónurnar eru fullkomnar í þrívídd og safnið er virkt á TikTok og Instagram, en höfðar fyrst og fremst til erlendra ferðamanna.",
    "score": 5,
+   "ef": "Saga Museum",
+   "thf": "Saga Museum",
    "stada": "osent"
   },
   {
@@ -4446,6 +4938,8 @@
    "idea": "stutt teiknað myndband þar sem lína dregst á korti frá Akureyri og hver áfangastaðurinn af öðrum sprettur upp á leiðinni, foss, hvalur á Skjálfanda og hellir við Mývatn.",
    "why": "Ferðaþjónustufyrirtæki hér á Akureyri með virka samfélagsmiðla og YouTube rás en ekkert myndband á vefnum; vefurinn virðist þó lítið uppfærður.",
    "score": 5,
+   "ef": "Saga Travel",
+   "thf": "Saga Travel",
    "stada": "osent"
   },
   {
@@ -4464,6 +4958,8 @@
    "idea": "þrívíddarmyndband þar sem tómur vinnslusalur fyllist hlut fyrir hlut af vörum frá ykkur, vélum, umbúðum og vinnufatnaði, þar til fyrsti fiskurinn er kominn í fullbúinn kassa.",
    "why": "Framkvæmdastjórinn er með eigið netfang og farsíma á vefnum og fyrirtækið er virkt á samfélagsmiðlum, en salan er til fyrirtækja og vöruúrvalið vítt.",
    "score": 5,
+   "ef": "Samhentra",
+   "thf": "Samhenta",
    "stada": "osent"
   },
   {
@@ -4482,6 +4978,8 @@
    "idea": "stutt teiknað myndband þar sem burrito er vafið varlega inn í teppi eins og ungabarn, ruggað í örmum starfsmanns og rétt yfir borðið til svangs viðskiptavinar.",
    "why": "Vörumerki með skýra og gamansama rödd sem passar vel við teikningu, en keðja í stærri kantinum og netfangið er almennt skrifstofunetfang.",
    "score": 5,
+   "ef": "Serrano",
+   "thf": "Serrano",
    "stada": "osent"
   },
   {
@@ -4500,6 +4998,8 @@
    "idea": "teiknað myndband þar sem ljósleiðaraþráður liggur frá Ísafirði inn í stofu, kviknar og öll tæki heimilisins tengjast í einu á meðan verðið birtist á skjánum.",
    "why": "Lítið svæðisbundið fyrirtæki í samkeppni við stóru fjarskiptafélögin með einfalt tilboð að kynna, en engir samfélagsmiðlar fundust á vefnum.",
    "score": 5,
+   "ef": "Snerpu",
+   "thf": "Snerpu",
    "stada": "osent"
   },
   {
@@ -4518,6 +5018,8 @@
    "idea": "stutt þrívíddarmyndband þar sem Biostrength tækið lagar sig að notandanum, skjárinn sýnir rétta þyngd og hreyfingu og æfingin hefst án þess að nokkur þurfi að stilla neitt.",
    "why": "Stöð í harðri samkeppni með nýjan tækjabúnað að kynna og Facebook síðu, en netfangið er móttakan og stöðin í stærri kantinum.",
    "score": 5,
+   "ef": "Sporthússins",
+   "thf": "Sporthúsið",
    "stada": "osent"
   },
   {
@@ -4536,6 +5038,8 @@
    "idea": "teiknað myndband þar sem kaffihúsaeigandi tekur við greiðslu í posa, í vefverslun og með greiðsluhlekk í síma, og allar greiðslurnar renna saman á einn skjá á þjónustuvefnum.",
    "why": "Ungt greiðslumiðlunarfyrirtæki í harðri samkeppni sem þarf að útskýra þjónustuna á einfaldan hátt, en fjármálafyrirtæki eru varkár og ákvarðanir fara um fleiri hendur.",
    "score": 5,
+   "ef": "Straums",
+   "thf": "Straum",
    "stada": "osent"
   },
   {
@@ -4554,6 +5058,8 @@
    "idea": "þrívíddarmyndband þar sem heill túnfiskur syndir inn á skjáinn og breytist í fallega raðaðan sushibakka á borði í Þingholtsstræti.",
    "why": "Veitingastaður með virkt Instagram og árstíðabundna matseðla sem henta vel í stutt myndbönd, en hluti af hópi systurstaða og óvíst hver les almenna netfangið.",
    "score": 5,
+   "ef": "Sushi Social",
+   "thf": "Sushi Social",
    "stada": "osent"
   },
   {
@@ -4572,10 +5078,12 @@
    "idea": "þrívíddarmyndband þar sem jólakaffipokinn opnast, baunirnar þyrlast upp eins og snjókoma og lenda sem rjúkandi bolli á borði við aðventuljós.",
    "why": "Þekkt íslenskt vörumerki með virka Instagram- og Facebook-síðu og jólavertíð í gangi; þetta er þó keðja sem hefur líklega eigið markaðsfólk og aðeins almennt netfang fannst.",
    "score": 5,
+   "ef": "Te & Kaffi",
+   "thf": "Te & Kaffi",
    "stada": "osent"
   },
   {
-   "name": "Þór hf.",
+   "name": "Þór",
    "web": "thor.is",
    "sector": "Iðnaður og B2B",
    "what": "Verkfæri, garðvörur, sláttutraktorar, dráttarvélar og vinnuvélar frá Makita, Kubota, Deutz Fahr og fleirum, fyrir fagfólk, bændur og almenning í Reykjavík, á Akureyri og Selfossi.",
@@ -4590,6 +5098,8 @@
    "idea": "þrívíddarmyndband þar sem sama rafhlaðan smellur í Makita-borvél, færist svo yfir í sláttuvél og loks í laufblásara og sýnir þannig hvernig eitt rafhlöðukerfi gengur í öll tækin.",
    "why": "Rótgróið fyrirtæki af meðalstærð með Facebook-síðu en nánast ekkert myndefni og vörur sem henta vel í þrívídd; aðeins almennt netfang fannst og markaðsefnið kemur sennilega að hluta frá framleiðendum.",
    "score": 5,
+   "ef": "Þórs",
+   "thf": "Þór",
    "stada": "osent"
   },
   {
@@ -4608,6 +5118,8 @@
    "idea": "tvívíddarmyndband þar sem starfsmaður stimplar sig inn í símanum á verkstað, tímarnir raðast sjálfir á rétt verk og launakeyrslan í lok mánaðar er tilbúin með einum smelli.",
    "why": "Íslenskt hugbúnaðarfyrirtæki í harðri samkeppni sem notar þegar myndbönd á vefnum og skilur því gildið; fyrirtækið tilheyrir þó Trackwell og aðeins almennt netfang fannst.",
    "score": 5,
+   "ef": "Tímon",
+   "thf": "Tímon",
    "stada": "osent"
   },
   {
@@ -4626,6 +5138,8 @@
    "idea": "tvívíddarmyndband þar sem tölva frýs á skrifstofu í Eyjum, Tölvun tengist henni í fjaraðstoð og bendillinn lagar vandann á meðan starfsmaðurinn sækir sér kaffibolla.",
    "why": "Lítið fyrirtæki með beint netfang eiganda og virka Facebook-síðu; markaðurinn er þó lítill og staðbundinn, svo þörfin fyrir myndband er ekki augljós.",
    "score": 5,
+   "ef": "Tölvunar",
+   "thf": "Tölvun",
    "stada": "osent"
   },
   {
@@ -4644,6 +5158,8 @@
    "idea": "þrívíddarmyndband þar sem fartölva opnast, leikjamús og heyrnartól svífa út úr skjánum og lenda í innkaupakörfunni í nýju vefversluninni ykkar.",
    "why": "Meðalstór verslun í harðri samkeppni sem er að kynna nýja vefverslun og vörur sem henta vel í þrívídd; engir samfélagsmiðlar fundust á vefnum og aðeins sölunetfang.",
    "score": 5,
+   "ef": "Tölvutek",
+   "thf": "Tölvutek",
    "stada": "osent"
   },
   {
@@ -4662,6 +5178,8 @@
    "idea": "tvívíddarmyndband þar sem sumardekkin skrá sig inn á dekkjahótelið ykkar með litla ferðatösku, sofa vært í rekkanum yfir veturinn og rúlla út úthvíld í vor.",
    "why": "Rótgróið fyrirtæki með skemmtilega þjónustu til að sýna og ekkert myndefni, en engir samfélagsmiðlar fundust og aðeins deildarnetföng, svo óljóst er hver les póstinn.",
    "score": 5,
+   "ef": "Vöku",
+   "thf": "Vöku",
    "stada": "osent"
   },
   {
@@ -4680,6 +5198,8 @@
    "idea": "þrívíddarmyndband þar sem gúmmíbátur með fjölskyldu líður niður lygna á, beygir svo inn í gljúfur Austari-Jökulsár og hendist í gegnum hvítfyssandi flúðir í miðnætursól.",
    "why": "Lítið norðlenskt fyrirtæki með sjónræna vöru og Facebook-síðu en engin myndbönd á vefnum; vefurinn er þó á ensku og aðalmarkhópurinn erlendir ferðamenn.",
    "score": 5,
+   "ef": "Viking Rafting",
+   "thf": "Viking Rafting",
    "stada": "osent"
   },
   {
@@ -4698,6 +5218,8 @@
    "idea": "tvívíddarmyndband þar sem sama Wrangler-gallabuxnaparið fer frá iðnaðarmanni yfir á skrifstofumann og svo á skáld á kaffihúsi, á meðan ártalið í búðarglugganum telur frá stofnárinu til dagsins í dag.",
    "why": "Persónuleg fjölskylduverslun með sterka sögu og Facebook-síðu en ekkert myndefni; hún gæti þó verið íhaldssöm í markaðsmálum og ekki leitað eftir nýjum leiðum.",
    "score": 5,
+   "ef": "Vinnufatabúðarinnar",
+   "thf": "Vinnufatabúðina",
    "stada": "osent"
   },
   {
@@ -4716,6 +5238,8 @@
    "idea": "tvívíddarmyndband þar sem fyrirtæki og umsækjendur birtast sem púsl á sitt hvorum enda skjásins og raðast saman þar til síðasta púslið smellur fullkomlega á sinn stað.",
    "why": "Lítil ráðningarstofa í harðri samkeppni, virk á Instagram, LinkedIn og Facebook en án myndbanda; þjónustan er óáþreifanleg og aðeins almennt netfang fannst.",
    "score": 5,
+   "ef": "Vinnvinn",
+   "thf": "Vinnvinn",
    "stada": "osent"
   },
   {
@@ -4734,6 +5258,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin svífur yfir Urriðavatn að vetrarlagi, gufa stígur upp af fljótandi laugunum og norðurljósin kvikna yfir gestunum í heitu vatninu.",
    "why": "Ferðaþjónustufyrirtæki á Austurlandi með Instagram og Facebook og aðeins eitt myndband á vefnum; þetta er þó rótgróinn staður sem á líklega mikið myndefni og vefurinn er mest á ensku.",
    "score": 5,
+   "ef": "Vök Baths",
+   "thf": "Vök Baths",
    "stada": "osent"
   },
   {
@@ -4752,6 +5278,8 @@
    "idea": "þrívíddarmyndband þar sem sætaröð í Hörpu lyftist upp í gegnum gosmökk, flýgur yfir glóandi hraunrás og lendir mjúklega aftur í salnum.",
    "why": "Upplifunarsýning í samkeppni um athygli ferðamanna í miðbænum, virk á samfélagsmiðlum; þau eru þó þegar með nokkur myndbönd og aðalmarkhópurinn talar ekki íslensku.",
    "score": 5,
+   "ef": "Volcano Express",
+   "thf": "Volcano Express",
    "stada": "osent"
   },
   {
@@ -4770,6 +5298,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin flýgur frá Ísafirði norður yfir Ísafjarðardjúp, ferjan ykkar siglir á undan og leggur að í vík á Hornströndum þar sem göngufólk stígur í land.",
    "why": "Rótgróið ferðaþjónustufyrirtæki á Vestfjörðum, virkt á Instagram og Facebook; þau eru þó þegar með nokkur myndbönd á vefnum og markhópurinn er að mestu erlendur.",
    "score": 5,
+   "ef": "West Tours",
+   "thf": "West Tours",
    "stada": "osent"
   },
   {
@@ -4788,6 +5318,8 @@
    "idea": "þrívíddarmyndband þar sem steypireyður syndir upp úr djúpinu, í gegnum vegginn og inn í sýningarsalinn ykkar, þar sem hún stöðvast sem líkan í fullri stærð við hliðina á litlu barni.",
    "why": "Safn með ótrúlega sjónrænt viðfangsefni og virka samfélagsmiðla en engin myndbönd á vefnum; hefur þó notað auglýsingastofu áður og aðeins almennt netfang fannst.",
    "score": 5,
+   "ef": "Whales of Iceland",
+   "thf": "Whales of Iceland",
    "stada": "osent"
   },
   {
@@ -4806,6 +5338,8 @@
    "idea": "stutt þrívíddarmyndband þar sem hundur, köttur og hestur koma inn til ykkar, hvert dýr fer til þess sérfræðings sem það þarf og svo skokka þau öll hress út aftur.",
    "why": "Sérhæfður dýraspítali með Facebook og Instagram í samkeppni við margar stofur, og sérþjónustan er gott efni í myndband; almennt netfang sem starfsfólk í móttöku les líklega fyrst.",
    "score": 5,
+   "ef": "Dýraspítalans í Víðidal",
+   "thf": "Dýraspítalann í Víðidal",
    "stada": "osent"
   },
   {
@@ -4824,6 +5358,8 @@
    "idea": "stutt teiknað myndband þar sem innkaupakerra rennur eftir göngunum hjá ykkur, fyllist af grænmeti og heilsuvörum og endar við kassann þar sem merki heilsudaganna og fyrsta sætið hjá Maskínu birtast.",
    "why": "Rótgróin verslun í samkeppni við stórar keðjur, með Facebook og Instagram og reglulega tilboðsdaga til að kynna; nokkuð stór vinnustaður og almennt netfang, en ekki hluti af stórri samsteypu.",
    "score": 5,
+   "ef": "Fjarðarkaupa",
+   "thf": "Fjarðarkaup",
    "stada": "osent"
   },
   {
@@ -4842,6 +5378,8 @@
    "idea": "stutt þrívíddarmyndband þar sem brauðpoki frá ykkur stendur á eldhúsborði, opnast og sneiðarnar fljúga út og raða sér í samloku, ristað brauð og nesti í skólatösku á tíu sekúndum.",
    "why": "Þekkt matvörumerki með umbúðir sem henta vel í þrívídd og virkar Facebook-, Instagram- og LinkedIn-síður; meðalstórt fyrirtæki með almennt netfang, svo það gæti tekið tíma að ná til rétta aðilans.",
    "score": 5,
+   "ef": "Gæðabaksturs",
+   "thf": "Gæðabakstur",
    "stada": "osent"
   },
   {
@@ -4860,6 +5398,8 @@
    "idea": "stutt þrívíddarmyndband sem fylgir hraunmola inn í ofninn, sýnir hitamælinn þjóta yfir þúsund gráður og endar á glóandi hraunstraumi sem rennur fram hjá áhorfendum í salnum.",
    "why": "Afar sjónræn vara og fjölskylduupplifun sem Íslendingar kaupa líka sem gjafabréf, en fyrirtækið er þegar með myndbönd á vefnum og öflugt markaðsstarf, svo við þyrftum að bjóða eitthvað sem það á ekki fyrir.",
    "score": 5,
+   "ef": "Lava Show",
+   "thf": "Lava Show",
    "stada": "osent"
   },
   {
@@ -4878,6 +5418,8 @@
    "idea": "stutt teiknað myndband þar sem gamall kaffivagn ekur niður að höfninni árið 1935, breytist smám saman í veitingastaðinn eins og hann er í dag og endar á rjúkandi fiskrétti við gluggann með útsýni yfir bátana.",
    "why": "Rótgróinn staður með skemmtilega sögu og virka Facebook- og Instagram-síðu en ekkert myndband á vefnum; vefurinn er hins vegar nær allur á ensku svo áherslan virðist vera á ferðamenn.",
    "score": 5,
+   "ef": "Kaffivagnsins",
+   "thf": "Kaffivagninn",
    "stada": "osent"
   },
   {
@@ -4896,6 +5438,8 @@
    "idea": "stutt þrívíddarmyndband þar sem við göngum niður tröppurnar af Aðalstræti, hurðin opnast inn í hlýjan kjallarann, eldurinn blossar upp á grillinu og kokteill er hristur í takt við tónlistina.",
    "why": "Virkur staður í miðbænum með samfélagsmiðla og jólaseðil í kynningu, og stemningin hentar myndbandi vel; netfangið er þó almennt og eitthvað myndefni er þegar á vefnum.",
    "score": 5,
+   "ef": "Matarkjallarans",
+   "thf": "Matarkjallarann",
    "stada": "osent"
   },
   {
@@ -4914,6 +5458,8 @@
    "idea": "stutt teiknað myndband þar sem myndavélin líður fram hjá iðandi brönsborðum á Snaps, leynihurð opnast í horninu og við stígum niður í hlýjan kjallara, upplýstan af kertaljósum, þar sem langborð bíður eftir næsta hópi.",
    "why": "Vinsæll staður á Facebook og Instagram, og netfangið virðist fara til þeirra sem sjá um Leynikjallarann, sem er einmitt það sem myndbandið myndi kynna; óvíst er þó hve oft það netfang er lesið.",
    "score": 5,
+   "ef": "Snaps Bistro",
+   "thf": "Snaps Bistro",
    "stada": "osent"
   },
   {
@@ -4932,6 +5478,8 @@
    "idea": "þrívíddarmyndband þar sem umgjörð úr 007-línunni svífur inn á skjáinn, snýst einn hring svo smáatriðin sjást og sest að lokum á andlit með textanum „Bókaðu sjónmælingu í Kringlunni“.",
    "why": "Lítil sérverslun í samkeppni við stórar keðjur, á Instagram og með vörur sem líta vel út í þrívídd, en vefurinn virðist lítið uppfærður og óvíst hve virk þau eru á miðlunum.",
    "score": 5,
+   "ef": "Augans",
+   "thf": "Augað",
    "stada": "osent"
   },
   {
@@ -4950,6 +5498,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin svífur yfir Pollinn í ljósaskiptunum, inn um gluggann á einu herberginu og endar í heita pottinum með norðurljósin yfir Vaðlaheiði.",
    "why": "Nýtt hótel á Akureyri sem þarf að kynna sig og nálægðin við okkur hjálpar, en markhópurinn er að mestu erlendur, þau eiga þegar kynningarmyndband og engir samfélagsmiðlar fundust.",
    "score": 5,
+   "ef": "Bryggjan Boutique Hotel",
+   "thf": "Bryggjan Boutique Hotel",
    "stada": "osent"
   },
   {
@@ -4968,6 +5518,8 @@
    "idea": "teiknimyndband þar sem kokkur stígur upp úr öldunum við Stokkseyri með humar í fanginu, gengur beint inn í eldhúsið og nokkrum sekúndum síðar rýkur úr skál af humarsúpu á borðinu.",
    "why": "Þekktur staður með gamansama sögu sem hentar vel í teiknimynd og er á Facebook og Instagram, en vefurinn hefur lítið verið uppfærður síðustu ár og netfangið er almennt.",
    "score": 5,
+   "ef": "Fjöruborðsins",
+   "thf": "Fjöruborðið",
    "stada": "osent"
   },
   {
@@ -4986,6 +5538,8 @@
    "idea": "stutt teiknimyndband þar sem hvalur stekkur upp úr Skjálfanda fyrir neðan bæinn, skvettir yfir skjáinn og þegar vatnið lekur niður stendur eftir afsláttarkóðinn HUSAVIKHOMETOWN.",
    "why": "Fjölskyldurekið hótel fyrir norðan með virka miðla og tilboð í gangi sem auðvelt er að gera myndband um, en vefurinn er á ensku, gestirnir mest erlendir og eitthvert myndbandsefni er þegar til.",
    "score": 5,
+   "ef": "Hótel Húsavíkur",
+   "thf": "Hótel Húsavík",
    "stada": "osent"
   },
   {
@@ -5004,6 +5558,8 @@
    "idea": "stutt teiknimyndband þar sem tómt veisluborð fyllist á tíu sekúndum af brauðtertu, flatkökum og fermingartertu, hver rétturinn á eftir öðrum, og endar á orðunum „Við sjáum um veisluna“.",
    "why": "Fjölskyldubakarí með þrjár verslanir og veisluþjónustu sem selst á útlitinu, á Facebook en án myndbandsefnis, þó vefurinn virðist lítið uppfærður og netfangið sé almennt.",
    "score": 5,
+   "ef": "Lindabakarís",
+   "thf": "Lindabakarí",
    "stada": "osent"
   },
   {
@@ -5022,6 +5578,8 @@
    "idea": "þrívíddarmyndband þar sem flaska af grískri drykkjarjógúrt rennur inn á morgunverðarborð, tappinn skrúfast af og silkimjúk jógúrtin hellist í glas á meðan morgunsólin skín inn um gluggann.",
    "why": "Vörumerki með umbúðir sem verða flottar í þrívídd og vörur sem þarf að kynna fyrir neytendum, en Mjólka er hluti af stærri samstæðu, engir samfélagsmiðlar fundust og netfangið er almennt.",
    "score": 5,
+   "ef": "Mjólku",
+   "thf": "Mjólku",
    "stada": "osent"
   },
   {
@@ -5040,6 +5598,8 @@
    "idea": "stutt teiknimyndband þar sem tómur salur fyllist smám saman af dúkuðum borðum, ljósum og gestum og endar á því að allir skála fyrir brúðhjónunum undir orðunum „Þar sem fólk kemur saman“.",
    "why": "Rótgróið fjölskyldufyrirtæki sem er virkt á Facebook og Instagram og selur upplifun sem nýtur sín í myndbandi, en netfangið er almennt og fyrirtækið í stærri kantinum.",
    "score": 5,
+   "ef": "Múlakaffis",
+   "thf": "Múlakaffi",
    "stada": "osent"
   },
   {
@@ -5058,6 +5618,8 @@
    "idea": "stutt þrívíddarmyndband þar sem afmælisterta snýst á kökudiski, leikfang hoppar upp á hana, kertin kvikna og afmælisbarnið blæs á þau rétt áður en slóðin til að panta birtist.",
    "why": "Bakarí sem er þegar að prófa sig áfram með myndbönd og selur vöru sem höfðar beint til foreldra, en vefurinn virðist ekki nýlega uppfærður og netfangið er almennt.",
    "score": 5,
+   "ef": "Okkar bakarís",
+   "thf": "Okkar bakarí",
    "stada": "osent"
   },
   {
@@ -5076,6 +5638,8 @@
    "idea": "þrívíddarmyndband þar sem dós af ORA grænum baunum rúllar inn á jólaborðið, lokið flettist upp og baunirnar skoppa ein af annarri á diskinn við hliðina á hamborgarhryggnum.",
    "why": "Þekkt íslenskt vörumerki með umbúðir sem verða skemmtilegar í þrívídd og jólin fram undan, en fyrirtækið er í stærri kantinum, lítið á samfélagsmiðlum og netfangið er almennt.",
    "score": 5,
+   "ef": "ORA",
+   "thf": "ORA",
    "stada": "osent"
   },
   {
@@ -5094,6 +5658,8 @@
    "idea": "teiknimyndband þar sem ljósaskiltið á Sjallanum kviknar í vetrarmyrkrinu, dyrnar opnast, ljósin og tónlistin streyma út á Geislagötu og dagsetning næsta balls birtist á skjánum.",
    "why": "Þekkt nafn í heimabæ okkar með stöðugan straum viðburða sem þarf að auglýsa og Vamos er á Facebook og Instagram, en netfangið er sameiginlegt fyrir allan rekstur Vamos.",
    "score": 5,
+   "ef": "Sjallans",
+   "thf": "Sjallann",
    "stada": "osent"
   },
   {
@@ -5112,6 +5678,8 @@
    "idea": "teiknimyndband þar sem gamla húsið við Ölfusá birtist í snjókomu, ljós kvikna í gluggunum, myndavélin rennur inn að dúkuðu borði og jólaréttirnir raðast á það einn af öðrum.",
    "why": "Sögufrægur staður sem er virkur á Facebook og Instagram, með nýuppfærðan vef og jólamatseðil að kynna núna, en netfangið er almennt.",
    "score": 5,
+   "ef": "Tryggvaskála",
+   "thf": "Tryggvaskála",
    "stada": "osent"
   },
   {
@@ -5130,6 +5698,8 @@
    "idea": "tvívíddarmyndband þar sem bunki af eyðublöðum á borði mannauðsstjóra breytist í kubba sem raða sér í flæði, og nýr starfsmaður gengur inn á fyrsta degi með allt tilbúið.",
    "why": "Íslenskt hugbúnaðarfyrirtæki með vöru sem er auðveldara að sýna en lýsa og virka samfélagsmiðla; vefurinn er þó á ensku og sjónum beint að útlöndum, svo íslenskt myndband er varla forgangsmál.",
    "score": 4,
+   "ef": "50skills",
+   "thf": "50skills",
    "stada": "osent"
   },
   {
@@ -5148,6 +5718,8 @@
    "idea": "stutt þrívíddarmyndband þar sem sími liggur á fótboltavelli, æfingatafla, skilaboð frá þjálfaranum og greiðsla æfingagjalda spretta upp úr skjánum og krakkarnir hlaupa af stað.",
    "why": "Íslenskt sprotafyrirtæki með app sem nýtur sín vel á skjá; vefurinn er hins vegar á ensku og beinist mest að breskum félögum, og lítið var hægt að lesa af honum.",
    "score": 4,
+   "ef": "Abler",
+   "thf": "Abler",
    "stada": "osent"
   },
   {
@@ -5166,6 +5738,8 @@
    "idea": "stutt tvívíddarmyndband þar sem hæfni manneskju birtist sem litlir kubbar í kringum hana og störf sem smellpassa við kubbana fljúga sjálf að henni úr öllum áttum.",
    "why": "Þekkt íslenskt app með nýja þjónustu sem þarf að kynna; virðist þó stærra fyrirtæki með eigið markaðsfólk og aðeins almennt netfang fannst (símanúmerið á vefnum tilheyrði auglýsanda).",
    "score": 4,
+   "ef": "Alfreðs",
+   "thf": "Alfreð",
    "stada": "osent"
   },
   {
@@ -5184,6 +5758,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin fylgir þyrlunni frá Dalvík upp á tind á Tröllaskaga, skíðamaður stígur út og sporin hans teiknast alla leið niður hlíðina að sjónum.",
    "why": "Rótgróið fyrirtæki á Dalvík, stutt frá Akureyri, og virkt á samfélagsmiðlum; selur þó nær eingöngu til útlendinga og á líklega mikið af eigin drónamyndefni. Sama fyrirtæki og bergmenn.com.",
    "score": 4,
+   "ef": "Arctic Heli Skiing",
+   "thf": "Arctic Heli Skiing",
    "stada": "osent"
   },
   {
@@ -5202,6 +5778,8 @@
    "idea": "þrívíddarmyndband þar sem skýjaður næturhiminn yfir Reykjavík dregst til hliðar eins og leiktjald og norðurljósin dansa beint inn um dyrnar á safninu.",
    "why": "Lítið afþreyingarfyrirtæki með mjög sjónrænt viðfangsefni og tilboð í gangi; markhópurinn er þó erlendir ferðamenn, vefurinn á ensku og aðeins Facebook fannst.",
    "score": 4,
+   "ef": "Aurora Reykjavík",
+   "thf": "Aurora Reykjavík",
    "stada": "osent"
   },
   {
@@ -5220,6 +5798,8 @@
    "idea": "tvívíddarmyndband þar sem starfsmaður í eldhúsi heyrir pöntun á íslensku, talblaðran með óskiljanlegum táknum breytist smám saman í skýr orð og hann svarar á íslensku.",
    "why": "Íslenskt sprotafyrirtæki með vöru sem hentar vel til útskýringar; á þó þegar mikið af myndböndum á vefnum og selur til fyrirtækja, svo þörfin er minni.",
    "score": 4,
+   "ef": "Bara tala",
+   "thf": "Bara tala",
    "stada": "osent"
   },
   {
@@ -5238,6 +5818,8 @@
    "idea": "þrívíddarmyndband þar sem Rexton ekur í gegnum skafrenning á hálendisvegi, myndin klofnar og hinum megin rennur Cayenne Electric hljóðlaust eftir blautri götu í borginni.",
    "why": "Rótgróið umboð með bíla sem líta vel út í þrívídd og Facebook-síðu, en meðalstórt fyrirtæki sem vinnur líklega með auglýsingastofu og aðeins almennt netfang fannst.",
    "score": 4,
+   "ef": "Bílabúðar Benna",
+   "thf": "Bílabúð Benna",
    "stada": "osent"
   },
   {
@@ -5256,6 +5838,8 @@
    "idea": "þrívíddarmyndband þar sem rafbíll ekur úr innkeyrslunni heima, stoppar við hraðhleðslustöð Bílorku á leiðinni og rennur svo í hlað við sumarbústað þar sem önnur hleðslustöð bíður.",
    "why": "Sérhæfð þjónusta sem auðvelt er að sýna á korti og Facebook-síða í notkun, en Bílorka virðist tengd Brimborg og ákvörðunin gæti legið hjá stærri markaðsdeild.",
    "score": 4,
+   "ef": "Bílorku",
+   "thf": "Bílorku",
    "stada": "osent"
   },
   {
@@ -5274,6 +5858,8 @@
    "idea": "tvívíddarmyndband þar sem dagatalsblöð fjúka frá 1984 til dagsins í dag yfir sama verkstæðinu á meðan bílarnir sem koma inn breytast úr gömlum Golf í nýjan rafmagnaðan Volkswagen.",
    "why": "Lítið eigendarekið verkstæði þar sem eigandinn les líklega póstinn sjálfur; viðskiptin byggja þó á föstum viðskiptavinum og óvíst að samfélagsmiðlar skipti miklu.",
    "score": 4,
+   "ef": "Bílson",
+   "thf": "Bílson",
    "stada": "osent"
   },
   {
@@ -5292,6 +5878,8 @@
    "idea": "þrívíddarmyndband þar sem loftið í skrifstofurými verður gegnsætt, stokkarnir ykkar teiknast upp og ferskt loft sést streyma inn í hvert herbergi á meðan þungt loft hverfur út.",
    "why": "Rótgróin blikksmiðja með vöru sem nýtur sín í þrívídd og Facebook- og Instagram-síðu, en selur mest til verktaka og fagfólks og er nokkuð stór.",
    "score": 4,
+   "ef": "Blikkáss",
+   "thf": "Blikkás",
    "stada": "osent"
   },
   {
@@ -5310,6 +5898,8 @@
    "idea": "tvívíddarmyndband þar sem kort af Vestfjörðum teiknast upp, bátur siglir frá Ísafirði yfir á Hornstrandir og leiðin breytist í kajak, gönguleið og skíðaspor á meðan árstíðirnar líða hjá.",
    "why": "Lítið fyrirtæki á Ísafirði sem er virkt á Facebook og Instagram; selur þó mest til erlendra ferðamanna og á líklega gott eigið myndefni úr náttúrunni.",
    "score": 4,
+   "ef": "Borea Adventures",
+   "thf": "Borea Adventures",
    "stada": "osent"
   },
   {
@@ -5328,6 +5918,8 @@
    "idea": "þrívíddarmyndband þar sem húsbílarnir raða sér upp hlið við hlið og hver þeirra opnast að innan, frá litlu Iðunni fyrir tvo upp í fjórhjóladrifinn Þór, svo fólk sér strax hvaða bíll hentar því.",
    "why": "Fjölskyldufyrirtæki sem er virkt á samfélagsmiðlum í harðri samkeppni; selur þó eingöngu til erlendra ferðamanna og vefurinn er á ensku.",
    "score": 4,
+   "ef": "Camper Iceland",
+   "thf": "Camper Iceland",
    "stada": "osent"
   },
   {
@@ -5346,6 +5938,8 @@
    "idea": "tvívíddarmyndband þar sem tryggingafélögin birtast sem hlauparar á braut, fyrirtækið ræsir útboðið og sá sem býður best kemur fyrstur í mark með lægsta iðgjaldið.",
    "why": "Lítið ráðgjafarfyrirtæki með framkvæmdastjóra sem hefur birt netfang og þjónustu sem fáir skilja; selur þó til fyrirtækja með löngu söluferli og lítil samfélagsmiðlavirkni sást.",
    "score": 4,
+   "ef": "Consello",
+   "thf": "Consello",
    "stada": "osent"
   },
   {
@@ -5364,6 +5958,8 @@
    "idea": "tvívíddarmyndband þar sem eitt skjal fer frá skrifborði, í gegnum yfirlestur og rafræna undirritun og inn í stjórnarvefgáttina á tíu sekúndum, án þess að prentari komi nokkurn tíma við sögu.",
    "why": "Hugbúnaður sem er auðveldara að sýna en lýsa, en hann er rekinn af Wise lausnum, sem er stærra fyrirtæki, og netfangið fer á sameiginlegt pósthólf.",
    "score": 4,
+   "ef": "CoreData",
+   "thf": "CoreData",
    "stada": "osent"
   },
   {
@@ -5382,6 +5978,8 @@
    "idea": "þrívíddarmyndband þar sem sætin í húsbílnum leggjast saman í rúm á tveimur sekúndum, ljósin slokkna og norðurljósin birtast í útsýnisþakinu fyrir ofan koddann.",
    "why": "Virkt á Facebook og Instagram í harðri samkeppni þar sem búnaður bílanna skiptir máli; selur þó til útlendinga, vefurinn er á ensku og nokkur myndbönd eru þegar til.",
    "score": 4,
+   "ef": "Cozy Campers",
+   "thf": "Cozy Campers",
    "stada": "osent"
   },
   {
@@ -5400,6 +5998,8 @@
    "idea": "þrívíddarmyndband þar sem hlífin á C-2011 flökunarvélinni verður gegnsæ og þorskur rennur hægt í gegn svo áhorfandinn sér hnífana skila tveimur hreinum flökum út hinum megin.",
    "why": "Íslenskur vélaframleiðandi með vöru sem er sérlega vel fallin til þrívíddar; selur hins vegar til fárra stórra kaupenda með löngu söluferli og engir samfélagsmiðlar fundust.",
    "score": 4,
+   "ef": "Curio",
+   "thf": "Curio",
    "stada": "osent"
   },
   {
@@ -5418,6 +6018,8 @@
    "idea": "tvívíddarmyndband þar sem gestur á veitingastað skannar QR-kóða, pöntunin fer í eldhúsið og greiðslan bókast sjálfkrafa í bókhaldið áður en maturinn kemur á borðið.",
    "why": "Íslenskt hugbúnaðarfyrirtæki með virka samfélagsmiðla og margar vörur sem hægt er að sýna, en nokkuð stórt og aðeins almennt netfang fannst.",
    "score": 4,
+   "ef": "dk hugbúnaðar",
+   "thf": "dk hugbúnað",
    "stada": "osent"
   },
   {
@@ -5436,6 +6038,8 @@
    "idea": "þrívíddarmyndband þar sem flottroll opnast undir yfirborðinu og myndavélin fylgir möskvunum aftur í pokann, svo sést hvernig hönnunin heldur lögun sinni í drættinum.",
    "why": "Framkvæmdastjórinn er með eigið netfang og varan er mjög myndræn, en þetta er B2B með fáa, stóra kaupendur og litla virkni á samfélagsmiðlum.",
    "score": 4,
+   "ef": "Egersund Íslands",
+   "thf": "Egersund Ísland",
    "stada": "osent"
   },
   {
@@ -5454,6 +6058,8 @@
    "idea": "stutt þrívíddarmyndband þar sem gamall sími rennur upp úr skúffu, breytist í inneign á skjánum og nýr iPhone tekur við í sömu hreyfingu.",
    "why": "Uppítakan er raunveruleg þjónusta sem þarf að útskýra, en Apple setur söluaðilum strangar reglur um markaðsefni og fyrirtækið er í stærri kantinum.",
    "score": 4,
+   "ef": "Eplis",
+   "thf": "Epli",
    "stada": "osent"
   },
   {
@@ -5472,6 +6078,8 @@
    "idea": "tvívíddarmyndband þar sem hrúga af dreifðum töflum og skýrslum dregst saman í eitt skýrt mælaborð og ein lína lýsist upp sem svarið sem stjórnandinn var að leita að.",
    "why": "Meðeigandi með eigið netfang og óáþreifanleg þjónusta sem græðir á myndrænni útskýringu, en ráðgjafarstofur selja mest í gegnum tengsl og langt söluferli.",
    "score": 4,
+   "ef": "Expectus",
+   "thf": "Expectus",
    "stada": "osent"
   },
   {
@@ -5490,6 +6098,8 @@
    "idea": "tvívíddarmyndband þar sem kort af Íslandi fyllist af rútum á vinsælustu stöðunum, en ein lítil gönguleið lýsist upp inni á hálendinu þar sem aðeins fáeinir göngumenn eru á ferð.",
    "why": "Rótgróið ferðafyrirtæki með skýra sérstöðu, en viðskiptavinirnir eru nær eingöngu erlendir og vefurinn bara á ensku, svo myndbandið yrði á ensku.",
    "score": 4,
+   "ef": "Fjallabaks",
+   "thf": "Fjallabak",
    "stada": "osent"
   },
   {
@@ -5508,6 +6118,8 @@
    "idea": "tvívíddarmyndband þar sem óvarin fjartenging opnar leið inn í frystiklefa og hitamælirinn fer að hækka, en svo lokast leiðin með öruggri tengingu og frostið helst stöðugt.",
    "why": "Akureyrarfyrirtæki með brýnt og nýtt umræðuefni sem erfitt er að lýsa í orðum, en þetta er B2B iðnaður með langt söluferli og engir samfélagsmiðlar fundust.",
    "score": 4,
+   "ef": "Frosts",
+   "thf": "Frost",
    "stada": "osent"
   },
   {
@@ -5526,6 +6138,8 @@
    "idea": "tvívíddarmyndband þar sem yfirfull skjalageymsla á skrifstofu tæmist kassa fyrir kassa út í sendibíl, eftir stendur bjart og autt herbergi og kassarnir raðast snyrtilega í hillur hjá ykkur.",
    "why": "Lítið þjónustufyrirtæki með ferli sem auðvelt er að sýna, en engin sjáanleg virkni á samfélagsmiðlum og engar nýlegar fréttir á vefnum.",
    "score": 4,
+   "ef": "Gagnavörslunnar",
+   "thf": "Gagnavörsluna",
    "stada": "osent"
   },
   {
@@ -5544,6 +6158,8 @@
    "idea": "tvívíddarmyndband þar sem lyfseðill fer úr símanum í gegnum Appótekið og pakkinn birtist á dyramottunni heima, á meðan verðmiðinn við hliðina lækkar.",
    "why": "Sjálfstætt apótek í samkeppni við keðjur, með þjónustu sem þarf að kynna, en engin virkni sást á samfélagsmiðlum og reglur um lyfjaauglýsingar þrengja svigrúmið.",
    "score": 4,
+   "ef": "Garðs Apóteks",
+   "thf": "Garðs Apótek",
    "stada": "osent"
   },
   {
@@ -5562,6 +6178,8 @@
    "idea": "þrívíddarmyndband þar sem kort af Mývatnssveit lifnar við og ferðirnar ykkar þjóta eftir því hver á eftir annarri, vélsleði, jeppi og loks hellisopið í Lofthelli.",
    "why": "Lítið fjölskyldufyrirtæki á Norðurlandi með margar ólíkar ferðir, en vefurinn virðist lítið uppfærður og viðskiptavinirnir eru nær allir erlendir.",
    "score": 4,
+   "ef": "Geo Travel",
+   "thf": "Geo Travel",
    "stada": "osent"
   },
   {
@@ -5580,6 +6198,8 @@
    "idea": "þrívíddarmyndband þar sem bíll frá ykkur leggur af stað frá Keflavík, malbikið breytist í hálendisslóða og skiltið fyrir F-veginn þýtur fram hjá.",
    "why": "Virk í efnismarkaðssetningu í harðri samkeppni, en viðskiptavinirnir eru erlendir og netfangið er sameiginlegt fyrir bæði Go Car Rental og Go Campers og fer líklega í þjónustuverið.",
    "score": 4,
+   "ef": "Go Car Rental",
+   "thf": "Go Car Rental",
    "stada": "osent"
   },
   {
@@ -5598,6 +6218,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin fer inn í íshelli og jarðlögin í ísnum lýsast upp eitt af öðru með stuttum skýringum, eins og leiðsögumaðurinn sé að segja frá.",
    "why": "Íslenskur framkvæmdastjóri og meðeigandi með eigið netfang, en markaðsstjórinn er enskumælandi, viðskiptavinirnir erlendir og þau eiga líklega nóg af myndefni.",
    "score": 4,
+   "ef": "Hidden Iceland",
+   "thf": "Hidden Iceland",
    "stada": "osent"
   },
   {
@@ -5616,6 +6238,8 @@
    "idea": "myndband þar sem myndavélin líður yfir hraunið, inn um glugga á einu herbergjanna og endar á skilaboðunum um að það borgi sig að bóka beint.",
    "why": "Leggja áherslu á beinar bókanir og eiga lítið myndefni; hótelið er þó hluti af Fjord Hotels, engir samfélagsmiðlar fundust og ákvörðunin gæti legið hjá keðjunni.",
    "score": 4,
+   "ef": "Hótel Bifrastar",
+   "thf": "Hótel Bifröst",
    "stada": "osent"
   },
   {
@@ -5634,6 +6258,8 @@
    "idea": "þrívíddarkort af Húsafelli þar sem afþreyingin lýsist upp hver á fætur annarri, böðin, hellarnir og golfvöllurinn, svo fólk sjái á augabragði hvað allt er stutt frá hótelinu.",
    "why": "Fjölbreytt upplifun sem erfitt er að sýna í einni ljósmynd; á móti kemur að staðurinn er nokkuð stór, með YouTube-rás og myndbönd á vefnum fyrir.",
    "score": 4,
+   "ef": "Hótel Húsafells",
+   "thf": "Hótel Húsafell",
    "stada": "osent"
   },
   {
@@ -5652,6 +6278,8 @@
    "idea": "tvívíddarmyndband þar sem Ísafjörður birtist ofan frá og gististaðirnir kvikna einn af öðrum, svo gesturinn sjái strax hver þeirra hentar honum.",
    "why": "Margir gististaðir sem gaman væri að útskýra í einu lagi; engir samfélagsmiðlar fundust og netfangið er í móttökunni, svo pósturinn gæti lent hjá vaktfólki.",
    "score": 4,
+   "ef": "Hótel Ísafjarðar",
+   "thf": "Hótel Ísafjörð",
    "stada": "osent"
   },
   {
@@ -5670,6 +6298,8 @@
    "idea": "þrívíddarmyndband þar sem kría flýgur meðfram suðurströndinni, beygir inn yfir Vík og lendir á þaki hótelsins.",
    "why": "Ungt hótel með virka samfélagsmiðla og nafn sem býður upp á skemmtilega myndræna hugmynd; vefurinn er þó eingöngu á ensku og gestir að mestu erlendir.",
    "score": 4,
+   "ef": "Hótel Kríu",
+   "thf": "Hótel Kríu",
    "stada": "osent"
   },
   {
@@ -5688,6 +6318,8 @@
    "idea": "stutt teiknað myndband þar sem gígur gýs, hraunið kólnar og verður að mosagróinni breiðu og í lokin rýkur upp úr diski á borði á veitingastaðnum.",
    "why": "Fjölskyldufyrirtæki sem vill fá beinar bókanir og á lítið af myndböndum; vefurinn er á ensku og óvíst hversu fljótt þau svara pósti á íslensku.",
    "score": 4,
+   "ef": "Hótel Laka",
+   "thf": "Hótel Laka",
    "stada": "osent"
   },
   {
@@ -5706,6 +6338,8 @@
    "idea": "einfalt teiknað myndband þar sem bíll ekur norður þjóðveginn, ferðamælirinn sýnir að leiðin er hálfnuð og bíllinn beygir inn að hótelinu í mat og hvíld.",
    "why": "Hótel á þjóðleið sem höfðar bæði til Íslendinga á ferð milli landshluta og erlendra gesta; engir samfélagsmiðlar fundust svo óljóst er hvar myndbandið myndi birtast.",
    "score": 4,
+   "ef": "Hótel Laugarbakka",
+   "thf": "Hótel Laugarbakka",
    "stada": "osent"
   },
   {
@@ -5724,6 +6358,8 @@
    "idea": "teiknað myndband sem byrjar á Herjólfi á leið inn í höfnina og fer svo hratt á milli herbergjanna, villanna og íbúðanna svo gestir sjái hvaða kostur hentar þeim.",
    "why": "Fjölbreytt gisting sem nýtur góðs af því að vera sýnd í samhengi; vefurinn er hins vegar á ensku og þegar eru nokkur myndbönd á honum.",
    "score": 4,
+   "ef": "Hótel Vestmannaeyja",
+   "thf": "Hótel Vestmannaeyjar",
    "stada": "osent"
   },
   {
@@ -5742,6 +6378,8 @@
    "idea": "teiknað myndband þar sem skjalabunkar, tölvupóstar og minnismiðar fljúga úr öllum áttum og raða sér í eina snyrtilega möppu á skjánum.",
    "why": "Hugbúnaður sem er erfitt að lýsa með orðum og hentar vel í útskýringarmyndband; söluferlið er hins vegar langt og viðskiptavinirnir að miklu leyti opinberir aðilar.",
    "score": 4,
+   "ef": "Hugvits",
+   "thf": "Hugvit",
    "stada": "osent"
   },
   {
@@ -5760,6 +6398,8 @@
    "idea": "þrívíddarmyndband þar sem ísjaki brotnar frá jöklinum, flýtur hægt út lónið og bátur með farþegum siglir upp að honum.",
    "why": "Mjög myndrænt viðfangsefni og virkir samfélagsmiðlar; þau eru þó þegar með myndbönd á vefnum og selja nánast eingöngu erlendum ferðamönnum.",
    "score": 4,
+   "ef": "Jökulsárlóns",
+   "thf": "Jökulsárlón",
    "stada": "osent"
   },
   {
@@ -5778,6 +6418,8 @@
    "idea": "þrívíddarmyndband þar sem húsbíll opnast eins og dúkkuhús og sýnir rúmið, eldhúsið og geymsluplássið áður en hann ekur af stað út á hringveginn.",
    "why": "Hörð samkeppni á húsbílamarkaði og vara sem hentar vel í þrívídd; vefurinn er hins vegar á ensku og markhópurinn erlendur.",
    "score": 4,
+   "ef": "Iceland Campers",
+   "thf": "Iceland Campers",
    "stada": "osent"
   },
   {
@@ -5796,6 +6438,8 @@
    "idea": "teiknað Íslandskort þar sem brottfararstaðirnir þrír kvikna og leiðir dagsferðanna teygja sig út frá þeim eins og geislar.",
    "why": "Ferðaþjónustufyrirtæki með starfsemi á Akureyri, sem gæti skapað tengingu við okkur; gestirnir eru þó flestir erlendir og ekki er ljóst hver les almenna netfangið.",
    "score": 4,
+   "ef": "Iceland Horizon",
+   "thf": "Iceland Horizon",
    "stada": "osent"
   },
   {
@@ -5814,6 +6458,8 @@
    "idea": "þrívíddarmyndband þar sem jeppinn ykkar ekur yfir óbrúaða á, eftir malarvegi og í gegnum snjóskafl á meðan tryggingarnar sem fylgja birtast ein af annarri.",
    "why": "Bílaleigumarkaðurinn er yfirfullur og bílar njóta sín í þrívídd; vefurinn er þó fyrst og fremst á ensku og markhópurinn erlendur.",
    "score": 4,
+   "ef": "Icerental 4x4",
+   "thf": "Icerental 4x4",
    "stada": "osent"
   },
   {
@@ -5832,6 +6478,8 @@
    "idea": "teiknað myndband sem fylgir einni plastflösku úr tunnunni, í gegnum flokkunarstöðina og alla leið þangað til hún verður að nýjum hlut.",
    "why": "Fræðsluefnið þeirra hentar mjög vel í stutt útskýringarmyndband; fyrirtækið er þó stórt, stór hluti viðskiptanna fer í gegnum útboð og netfangið er almennt.",
    "score": 4,
+   "ef": "Íslenska gámafélagsins",
+   "thf": "Íslenska gámafélagið",
    "stada": "osent"
   },
   {
@@ -5850,6 +6498,8 @@
    "idea": "teiknað myndband þar sem nokkrir vinir leggja hver sitt í sameiginlegan hópabauk í appinu og baukurinn fyllist þar til ferðalagið þeirra er í höfn.",
    "why": "App sem auðvelt er að sýna og skemmtilegt vörumerki á virkum samfélagsmiðlum; á móti kemur að þau framleiða líklega mikið efni sjálf og fjármálafyrirtæki fara oft í gegnum mörg samþykktarstig.",
    "score": 4,
+   "ef": "indó",
+   "thf": "indó",
    "stada": "osent"
   },
   {
@@ -5868,6 +6518,8 @@
    "idea": "þrívíddarmyndband þar sem troll rennur niður í hafið, opnast og sýnir neðansjávar hvernig það liggur á meðan skipið dregur, nokkuð sem fæstir fá nokkurn tíma að sjá.",
    "why": "Vörur sem hverfa sjónum um leið og þær fara í sjóinn og njóta góðs af þrívíddarsýn; salan er þó til fyrirtækja með löngu söluferli og netfangið almennt.",
    "score": 4,
+   "ef": "Ísfells",
+   "thf": "Ísfell",
    "stada": "osent"
   },
   {
@@ -5886,6 +6538,8 @@
    "idea": "teiknað myndband þar sem leit að einu fyrirtæki í Keldunni opnar á augabragði ársreikninga, eigendur og hlutabréfaverð sem raða sér upp á skjánum.",
    "why": "Áskriftarþjónusta sem þarf að sýna fólki hvað hún gerir og er á Facebook; Keldan tilheyrir Kóða, sem gæti tekið ákvörðunina, og markhópurinn er þröngur.",
    "score": 4,
+   "ef": "Keldunnar",
+   "thf": "Kelduna",
    "stada": "osent"
   },
   {
@@ -5904,6 +6558,8 @@
    "idea": "þrívíddarmyndband þar sem varmadæla tekur sig í sundur í loftinu og sýnir hvernig hún sækir varma úr útiloftinu og skilar honum inn í hús.",
    "why": "Rótgróið fyrirtæki með tæknivörur sem njóta sín í þrívídd og greinilega vaxandi áherslu á varmadælur; engir samfélagsmiðlar fundust og salan er að mestu til fagmanna.",
    "score": 4,
+   "ef": "KGG",
+   "thf": "KGG",
    "stada": "osent"
   },
   {
@@ -5922,6 +6578,8 @@
    "idea": "þrívíddarmyndband þar sem sumardekkin rúlla sjálf af bílnum og upp í hillu í dekkjahótelinu á meðan vetrardekkin taka sér stöðu, og tímabókunin birtist í lokin.",
    "why": "Dekkjaþjónusta fyrir almenning á annatíma og vélar sem sóma sér vel í þrívídd; fyrirtækið er þó stórt með mörgum deildum og eina leiðin inn er almennt netfang.",
    "score": 4,
+   "ef": "Kletts",
+   "thf": "Klett",
    "stada": "osent"
   },
   {
@@ -5940,6 +6598,8 @@
    "idea": "þrívíddarmyndband þar sem gröfa, lyftari og dráttarvél keyra hvert á eftir öðru inn í mynd og stilla sér upp undir merki Kraftvéla.",
    "why": "Meðalstórt fyrirtæki með tæki sem henta vel í þrívídd, en salan er til verktaka og bænda með löngu ferli og lítil virkni á samfélagsmiðlum.",
    "score": 4,
+   "ef": "Kraftvéla",
+   "thf": "Kraftvélar",
    "stada": "osent"
   },
   {
@@ -5958,6 +6618,8 @@
    "idea": "stutt myndband þar sem merki Landmark og Heimilis renna saman í nýja merkið og hurð opnast inn í bjart heimili undir slagorðinu Við leiðum þig heim.",
    "why": "Nýsameinuð fasteignasala sem þarf að kynna nýtt nafn, en netfangið er hjá einum fasteignasala en ekki stjórnanda og óvíst hver ákveður.",
    "score": 4,
+   "ef": "Alda",
+   "thf": "Aldir",
    "stada": "osent"
   },
   {
@@ -5976,6 +6638,8 @@
    "idea": "teiknað myndband sem sýnir flugvél lenda um miðnætti, ferðamann sækja lykilinn sjálfan á örfáum sekúndum og aka beint út í norðurljósin.",
    "why": "Virk bílaleiga á samkeppnismarkaði, en nokkuð stór, notar þegar myndbönd og efnið yrði á ensku.",
    "score": 4,
+   "ef": "Lava Car Rental",
+   "thf": "Lava Car Rental",
    "stada": "osent"
   },
   {
@@ -5994,6 +6658,8 @@
    "idea": "myndband þar sem myndavélin steypir sér úr lofti niður yfir landlíkanið ykkar og lendir á einu húsi með eignamörkin teiknuð í kring.",
    "why": "Fyrirtæki með mjög myndrænt efni og ekkert myndband á vefnum, en viðskiptavinirnir eru aðallega fagfólk og opinberir aðilar.",
    "score": 4,
+   "ef": "Loftmynda",
+   "thf": "Loftmyndir",
    "stada": "osent"
   },
   {
@@ -6012,6 +6678,8 @@
    "idea": "litríkt teiknað myndband þar sem barn ýtir á nótu í appinu og hún lifnar við sem lítil persóna sem syngur og dansar yfir skjáinn.",
    "why": "Íslenskt app sem byggir á myndrænni upplifun, en markaðurinn er að mestu erlendur, netfangið er þjónustunetfang og vefurinn virðist lítið uppfærður.",
    "score": 4,
+   "ef": "Mussila",
+   "thf": "Mussila",
    "stada": "osent"
   },
   {
@@ -6030,6 +6698,8 @@
    "idea": "teiknað myndband þar sem pirraður starfsmaður starir á frosinn skjá, einhver segir OK og allt er komið í gang á tíu sekúndum.",
    "why": "Léttur tónn sem hentar teiknimyndum vel, en fyrirtækið er stórt, selur til fyrirtækja og er líklega með eigin markaðsdeild.",
    "score": 4,
+   "ef": "OK",
+   "thf": "OK",
    "stada": "osent"
   },
   {
@@ -6048,6 +6718,8 @@
    "idea": "þrívíddarmyndband þar sem konfektmoli snýst hægt, opnast í sneið svo fyllingin sést og kassinn lokast utan um hann rétt fyrir jól.",
    "why": "Sterkt vörumerki sem nýtur sín í þrívídd og markaðsstjóri með eigið netfang, en stórt fyrirtæki sem vinnur líklega með auglýsingastofu.",
    "score": 4,
+   "ef": "Nóa Síríusar",
+   "thf": "Nóa Síríus",
    "stada": "osent"
   },
   {
@@ -6066,6 +6738,8 @@
    "idea": "teiknað myndband þar sem leiðin lýsist upp á Íslandskorti á meðan bíllinn frá ykkur ekur frá Reykjanesbæ að fyrsta tjaldsvæðinu.",
    "why": "Lítil bílaleiga á troðnum markaði og ekkert myndband á vefnum, en efnið yrði á ensku og óvíst hver les almenna netfangið.",
    "score": 4,
+   "ef": "Nordic Car Rental",
+   "thf": "Nordic Car Rental",
    "stada": "osent"
   },
   {
@@ -6084,6 +6758,8 @@
    "idea": "þrívíddarmyndband þar sem þyrlan tekst á loft, flýgur yfir glóandi hraun og lendir svo sem gjafabréf í opnum jólapakka.",
    "why": "Ferðaþjónusta sem þrífst á myndefni og selur gjafabréf, en þau eru þegar með mikið af myndböndum og vön að vinna með kvikmyndafólki.",
    "score": 4,
+   "ef": "Norðurflugs",
+   "thf": "Norðurflug",
    "stada": "osent"
   },
   {
@@ -6102,6 +6778,8 @@
    "idea": "teiknað myndband þar sem hrúga af lausum skjölum og tölvupóstum flýgur upp og raðar sér snyrtilega í möppur í OneRecords.",
    "why": "Íslenskt hugbúnaðarfyrirtæki með lausn sem erfitt er að útskýra og engin myndbönd, en salan er að mestu til stofnana og tekur tíma.",
    "score": 4,
+   "ef": "OneSystems",
+   "thf": "OneSystems",
    "stada": "osent"
   },
   {
@@ -6120,6 +6798,8 @@
    "idea": "stutt teiknað myndband þar sem hópur ríður eftir fjörunni við Eyjafjörð og lítill álfur gægist fram undan steini og fylgist forvitinn með.",
    "why": "Lítið fjölskyldufyrirtæki nálægt Akureyri þar sem eigendur lesa líklega póstinn sjálfir, en vefurinn er á ensku og lítil merki um nýlega virkni.",
    "score": 4,
+   "ef": "Pólarhesta",
+   "thf": "Pólarhesta",
    "stada": "osent"
   },
   {
@@ -6138,6 +6818,8 @@
    "idea": "þrívíddarmyndband þar sem rækjuskel molnar niður í fíngert hvítt duft sem fellur svo ofan í krukku af ChitoCare kremi.",
    "why": "Varan nýtur sín vel í þrívídd og Vigfús er tengiliður fyrirtækisins á sýningum, en markaðurinn er að mestu erlendur og söluferlið langt.",
    "score": 4,
+   "ef": "Primex",
+   "thf": "Primex",
    "stada": "osent"
   },
   {
@@ -6156,6 +6838,8 @@
    "idea": "stutt teiknað myndband þar sem viti lýsir yfir haf af skjölum og töflum og dregur fram rétta svarið á augabragði, án þess að gögnin fari nokkurn tíma út fyrir veggi fyrirtækisins.",
    "why": "Ný vara sem erfitt er að lýsa í orðum og virkir samfélagsmiðlar, en meðalstórt fyrirtæki sem selur til fyrirtækja, með almennt netfang.",
    "score": 4,
+   "ef": "APRÓ",
+   "thf": "APRÓ",
    "stada": "osent"
   },
   {
@@ -6174,6 +6858,8 @@
    "idea": "þrívíddarmyndband þar sem tóm stofa fyllist smám saman af tækjum úr ykkar úrvali, sjónvarpi, hátölurum og snjallperum, og tilboðsverðið birtist í lokin.",
    "why": "Verslun í harðri samkeppni sem þarf stöðugt að kynna tilboð, en þau nota þegar myndbönd og netfangið er sölunetfang.",
    "score": 4,
+   "ef": "Raflands",
+   "thf": "Rafland",
    "stada": "osent"
   },
   {
@@ -6192,6 +6878,8 @@
    "idea": "einfalt teiknað myndband þar sem húseigandi fyllir út formið í símanum, fasteignasali bankar upp á skömmu síðar og verðmatið birtist á skjánum.",
    "why": "Fasteignasala í samkeppni sem lifir á því að ná í seljendur, en stórt alþjóðlegt vörumerki með almennt skrifstofunetfang.",
    "score": 4,
+   "ef": "RE/MAX",
+   "thf": "RE/MAX",
    "stada": "osent"
   },
   {
@@ -6210,6 +6898,8 @@
    "idea": "stutt teiknað myndband þar sem drullugir vetrarskór þramma inn um dyrnar, stíga á mottuna frá ykkur og sporin hætta þar, svo gólfið fyrir innan helst skínandi hreint.",
    "why": "Rótgróið fyrirtæki með virka samfélagsmiðla og árstíðabundin tilboð sem henta vel í stutt myndbönd, en meðalstórt og selur að mestu til fyrirtækja.",
    "score": 4,
+   "ef": "Rekstrarvara",
+   "thf": "Rekstrarvörur",
    "stada": "osent"
   },
   {
@@ -6228,6 +6918,8 @@
    "idea": "stutt teiknað myndband þar sem fjórhjól þýtur út úr miðbænum, borgin hverfur í baksýnisspeglinum og eftir örfáar sekúndur er það komið upp í fjalladal og aurinn slettist á skjáinn.",
    "why": "Mjög sjónræn afþreying og virkir samfélagsmiðlar, en efnið er að mestu á ensku fyrir erlenda ferðamenn.",
    "score": 4,
+   "ef": "Safari Quads",
+   "thf": "Safari Quads",
    "stada": "osent"
   },
   {
@@ -6246,6 +6938,8 @@
    "idea": "stutt teiknað myndband sem byrjar í svarthvítu árið 1891 þar sem fólk lærir að synda í lauginni, og svo fylla litirnir og gufan myndina smám saman þar til við erum komin í laugina eins og hún er í dag.",
    "why": "Sterk saga og mjög myndrænn staður, en vefurinn virðist lítið uppfærður og markhópurinn er að mestu erlendir ferðamenn.",
    "score": 4,
+   "ef": "Secret Lagoon",
+   "thf": "Secret Lagoon",
    "stada": "osent"
   },
   {
@@ -6264,6 +6958,8 @@
    "idea": "stutt teiknað myndband þar sem gestur vaknar á hótelinu, stígur beint á hestbak í hlaðinu og ríður af stað með Eyjafjallajökul í baksýn.",
    "why": "Fjölskyldufyrirtæki í myndrænu umhverfi og virkt á samfélagsmiðlum, en markhópurinn er að mestu erlendir ferðamenn og vefurinn á ensku.",
    "score": 4,
+   "ef": "Skálakots",
+   "thf": "Skálakot",
    "stada": "osent"
   },
   {
@@ -6282,6 +6978,8 @@
    "idea": "teiknað myndband sem fylgir hráefninu frá bænum sjálfum inn í eldhúsið og alla leið á disk gestsins í hlöðunni.",
    "why": "Lítið fjölskyldufyrirtæki þar sem eigendur lesa líklega póstinn sjálfir, en vefurinn er á ensku og virðist lítið uppfærður.",
    "score": 4,
+   "ef": "Hótel Fljótshlíðar",
+   "thf": "Hótel Fljótshlíð",
    "stada": "osent"
   },
   {
@@ -6300,6 +6998,8 @@
    "idea": "stutt teiknað myndband þar sem stafli af óreiðukenndum gögnum sogast inn í lítið tæki og kemur út hinum megin sem skýrt línurit þar sem salan fer upp á við.",
    "why": "Gervigreind er erfitt að skýra í texta og lítið fyrirtæki gæti tekið vel í þetta, en vefurinn sýnir litla nýlega virkni og eini samfélagsmiðillinn er LinkedIn.",
    "score": 4,
+   "ef": "Snjallgagna",
+   "thf": "Snjallgögn",
    "stada": "osent"
   },
   {
@@ -6318,6 +7018,8 @@
    "idea": "þrívíddarmyndband þar sem bátur siglir yfir dimmt hafið, sónarinn sendir hljóðbylgjur niður og torfa af fiski birtist skýrt á skjánum í brúnni.",
    "why": "Tæknivörur sem njóta sín vel í þrívídd og rótgróið fyrirtæki, en markhópurinn er þröngur hópur útgerða og lítil virkni á samfélagsmiðlum.",
    "score": 4,
+   "ef": "Sónars",
+   "thf": "Sónar",
    "stada": "osent"
   },
   {
@@ -6336,6 +7038,8 @@
    "idea": "stutt þrívíddarmyndband þar sem dróni flýgur yfir framkvæmdasvæði, myndirnar falla niður eins og spil og raða sér í lifandi kort þar sem mælingarnar birtast jafnóðum.",
    "why": "Íslenskt tæknifyrirtæki með sjónræna vöru og nánast ekkert myndefni, en vefurinn er bara á ensku og þýsku og áherslan virðist vera á erlendan markað, svo óvíst er hvort íslenskt myndband nýtist þeim.",
    "score": 4,
+   "ef": "Svarma",
+   "thf": "Svarma",
    "stada": "osent"
   },
   {
@@ -6354,6 +7058,8 @@
    "idea": "tvívíddarmyndband þar sem gestur kemur að tjaldsvæði um miðja nótt, greiðir í kíóskinum, hliðið opnast og sami kóðinn opnar svo sturtuna og þvottavélina.",
    "why": "Lítið íslenskt tæknifyrirtæki með lausnir sem auðvelt er að sýna, en engir samfélagsmiðlar fundust og viðskiptavinirnir eru að stórum hluta sveitarfélög, svo söluferlið er hægt.",
    "score": 4,
+   "ef": "Tæknivits",
+   "thf": "Tæknivit",
    "stada": "osent"
   },
   {
@@ -6372,6 +7078,8 @@
    "idea": "stutt tvívíddarmyndband þar sem einhver talar í hljóðnema, hljóðbylgjurnar breytast í íslenska stafi sem raða sér í texta neðst á sjónvarpsskjá og nafnið ykkar birtist í lokin.",
    "why": "Lítið íslenskt tæknifyrirtæki með einstaka vöru sem auðvelt er að sýna og eigin YouTube-rás; vefurinn sýnir þó engin merki um nýlega virkni, svo óvíst er hve mikið er í gangi hjá þeim.",
    "score": 4,
+   "ef": "Tiro",
+   "thf": "Tiro",
    "stada": "osent"
   },
   {
@@ -6390,6 +7098,8 @@
    "idea": "tvívíddarmyndband þar sem plakat fyrir litla tónleika lifnar við, viðburðurinn er skráður á Tix í nokkrum smellum, miðarnir fljúga í síma fólks og salurinn fyllist.",
    "why": "Tix er umsvifamikið og birtir mikið efni, svo þau vita hvað myndefni gerir, en fyrirtækið er stórt á íslenskan mælikvarða og aðeins almennt netfang fannst.",
    "score": 4,
+   "ef": "Tix",
+   "thf": "Tix",
    "stada": "osent"
   },
   {
@@ -6408,6 +7118,8 @@
    "idea": "tvívíddarmyndband þar sem gestur spyr í móttökunni um norðurljósaferð, starfsmaðurinn bókar hana á spjaldtölvu á nokkrum sekúndum og þóknunin skilar sér beint í kassann hjá hótelinu.",
    "why": "Íslenskt hugbúnaðarfyrirtæki með einfalda sölusögu og nokkur myndbönd á vefnum fyrir; vefurinn er þó eingöngu á ensku og varan seld til fyrirtækja, svo óvíst er hve mikið þau myndu nota íslenskt efni.",
    "score": 4,
+   "ef": "TourDesk",
+   "thf": "TourDesk",
    "stada": "osent"
   },
   {
@@ -6426,6 +7138,8 @@
    "idea": "tvívíddarmyndband þar sem ein atvinnuauglýsing birtist, flettingateljarinn snýst upp í þúsundir og umsóknir streyma inn í pósthólf ráðningaraðilans.",
    "why": "Lítill og persónulegur vefur rekinn af fáum aðilum sem ætti að kunna að meta skapandi efni og er virkur á Facebook; tekjurnar eru þó líklega litlar og óvíst hve mikið þau auglýsa.",
    "score": 4,
+   "ef": "Tvinna",
+   "thf": "Tvinna",
    "stada": "osent"
   },
   {
@@ -6444,6 +7158,8 @@
    "idea": "þrívíddarmyndband þar sem utanvegaskór og flíspeysa lifna við í hillunni, skórnir hlaupa út um dyrnar í Smáralind og enda á snævi þöktum fjallstoppi.",
    "why": "Þekkt verslun með virka samfélagsmiðla og árstíðabundin tilboð sem þarf að kynna; þetta er þó stærra fyrirtæki sem fær mikið efni frá vörumerkjunum og aðeins almennt netfang fannst.",
    "score": 4,
+   "ef": "Útilífs",
+   "thf": "Útilíf",
    "stada": "osent"
   },
   {
@@ -6462,6 +7178,8 @@
    "idea": "þrívíddarmyndband þar sem Jungheinrich-lyftari rennur hljóðlega milli hárra rekka, lyftir bretti upp í efstu hillu og snýr sér á punktinum á meðan gamall dísellyftari situr fastur í horninu.",
    "why": "Rótgróið fyrirtæki með beint netfang forstjóra og vörur sem eru glæsilegar í þrívídd, en vefurinn er gamall, nánast engin virkni sést á samfélagsmiðlum og sala til fyrirtækja tekur tíma.",
    "score": 4,
+   "ef": "Vélaborgar",
+   "thf": "Vélaborg",
    "stada": "osent"
   },
   {
@@ -6480,6 +7198,8 @@
    "idea": "þrívíddarmyndband þar sem þyrla flýgur yfir snævi þakinn Tröllaskaga, lendir á tindi, skíðamaður stekkur út og myndavélin fylgir slóðinni hans alla leið niður að sjávarmáli.",
    "why": "Norðlenskt fyrirtæki í sérhæfðri ferðaþjónustu með Instagram, YouTube og myndbönd á vefnum; þau eiga líklega nóg af eigin myndefni, vefurinn er bara á ensku og markhópurinn erlendur.",
    "score": 4,
+   "ef": "Viking Heliskiing",
+   "thf": "Viking Heliskiing",
    "stada": "osent"
   },
   {
@@ -6498,6 +7218,8 @@
    "idea": "tvívíddarmyndband þar sem göngumaður gengur eftir stíg, síminn titrar við stóran stein og lítil huldukona stígur út úr skjánum og byrjar að segja söguna af staðnum.",
    "why": "Lítið fyrirtæki með app sem hentar fullkomlega í hreyfimynd og beint netfang Einars, en vefurinn virðist lítið uppfærður og óvíst er hvort mikil starfsemi sé í gangi núna.",
    "score": 4,
+   "ef": "Wapp",
+   "thf": "Wapp",
    "stada": "osent"
   },
   {
@@ -6516,6 +7238,8 @@
    "idea": "tvívíddarmyndband þar sem augnskanninn kveður með blikki, lófi leggst á nýja skannann, hliðið opnast og viðkomandi er kominn á hlaupabrettið áður en tíu sekúndurnar eru liðnar.",
    "why": "Er einmitt núna að innleiða breytingu sem þarf að útskýra fyrir öllum viðskiptavinum og er virkt á Instagram og Facebook; á móti kemur að þetta er stórt fyrirtæki og aðeins almennt netfang fannst.",
    "score": 4,
+   "ef": "World Class",
+   "thf": "World Class",
    "stada": "osent"
   },
   {
@@ -6534,6 +7258,8 @@
    "idea": "stutt þrívíddarmyndband þar sem Palfinger-krani á bryggjunni lyftir farmi um borð í skip, myndavélin fer hringinn í kringum hann og lyftigeta og útslag birtast við hverja hreyfingu.",
    "why": "Framkvæmdastjórinn er með eigið netfang og farsíma á síðunni og búnaðurinn hentar vel í þrívídd; hins vegar B2B-sala með löngu ákvörðunarferli og lítil virkni á samfélagsmiðlum.",
    "score": 4,
+   "ef": "Atlas",
+   "thf": "Atlas",
    "stada": "osent"
   },
   {
@@ -6552,6 +7278,8 @@
    "idea": "stutt teiknað myndband þar sem bíll dýralæknisins ekur um sveitir Suðurlands og stoppar á kúabúi, í hesthúsi og loks við heimili þar sem köttur bíður í glugganum, og á hverjum stað sést í svipan hvað þið gerið fyrir dýrið.",
    "why": "Lítið, rótgróið fyrirtæki á landsbyggðinni með Facebook-síðu en lítið myndefni; gæti hentað vel, en dýralæknar hafa oft lítinn tíma og markaðsstarf er líklega ekki í forgangi.",
    "score": 4,
+   "ef": "Dýralæknaþjónustu Suðurlands",
+   "thf": "Dýralæknaþjónustu Suðurlands",
    "stada": "osent"
   },
   {
@@ -6570,6 +7298,8 @@
    "idea": "stutt þrívíddarmyndband þar sem afmæliskakan ykkar byggist upp lag fyrir lag á diskinum, kertin kvikna eitt af öðru og vinahópurinn skálar yfir henni.",
    "why": "Vinsæll staður í miðbænum með virka Facebook- og Instagram-síðu og árstíðabundin tilboð sem þarf að kynna; á móti kemur að veitingastaðir nota helst eigin matarmyndir og netfangið er almennt.",
    "score": 4,
+   "ef": "Apotek",
+   "thf": "Apotek",
    "stada": "osent"
   },
   {
@@ -6588,6 +7318,8 @@
    "idea": "stutt þrívíddarmyndband þar sem heimskort snýst, ljósar línur frá ólíkum heimshornum dragast saman á Íslandi og enda sem einn réttur úr fimm rétta sælkeraveislunni á borði hjá ykkur við Grófartorg.",
    "why": "Rótgróinn veitingastaður með Facebook og Instagram sem kynnir árstíðabundna seðla og gjafabréf; almennt netfang og veitingastaðir eru oft með eigin ljósmyndara, svo líkurnar eru í meðallagi.",
    "score": 4,
+   "ef": "Fiskfélagsins",
+   "thf": "Fiskfélagið",
    "stada": "osent"
   },
   {
@@ -6606,6 +7338,8 @@
    "idea": "stutt þrívíddarmyndband þar sem myndavélin svífur frá omakase-borðinu, upp í gegnum loftið og staðnæmist við vínglas á barnum Uppi, svo fólk sér strax að kvöldið getur haldið áfram á efri hæðinni.",
    "why": "Þekktur staður með Instagram og Facebook og viðbót (Uppi) sem þarf að kynna; á móti kemur almennt netfang og eigendur sem eru vanir að vinna með eigið myndefni.",
    "score": 4,
+   "ef": "Fiskmarkaðarins",
+   "thf": "Fiskmarkaðinn",
    "stada": "osent"
   },
   {
@@ -6624,6 +7358,8 @@
    "idea": "stutt þrívíddarmyndband þar sem stuðlaberg rís upp úr jörðinni og myndar salinn ykkar, glóðin kviknar í kolagrillinu og steik frá íslenskum bónda lendir á borðinu í reykjarmekki.",
    "why": "Þekkt steikhús með sterka sjónræna sérstöðu og virka miðla, sem gerir þrívídd spennandi; eru þegar með myndband á vefnum og almennt netfang, svo þau eru kannski ekki að leita.",
    "score": 4,
+   "ef": "Grillmarkaðarins",
+   "thf": "Grillmarkaðinn",
    "stada": "osent"
   },
   {
@@ -6642,6 +7378,8 @@
    "idea": "stutt teiknað myndband þar sem búðargluggarnir í Firði lýsast upp einn af öðrum í jólaskrauti, klukka snýst fram til kl. 18 á sunnudegi og fjölskylda gengur út með fulla poka.",
    "why": "Verslunarmiðstöð með marga leigjendur og Facebook-síðu sem þarf stöðugt að kynna opnunartíma og viðburði; óljóst hver tekur ákvarðanir og ekkert beint símanúmer fannst.",
    "score": 4,
+   "ef": "Fjarðar",
+   "thf": "Fjörð",
    "stada": "osent"
   },
   {
@@ -6660,6 +7398,8 @@
    "idea": "stutt teiknað myndband þar sem dagurinn þýtur hjá á hraðspólun, frá fundi í salnum yfir í golfhring og loks í heita pottinn undir norðurljósum með Hafnarfjall í baksýn.",
    "why": "Hótel á landsbyggðinni með Facebook og Instagram sem leitar líka til íslenskra fyrirtækja; vefurinn er að mestu á ensku og flestir gestir erlendir, svo íslenskt myndband nýtist helst á fyrirtækjamarkaðnum.",
    "score": 4,
+   "ef": "Hótel Hamars",
+   "thf": "Hótel Hamar",
    "stada": "osent"
   },
   {
@@ -6678,6 +7418,8 @@
    "idea": "stutt teiknað myndband þar sem einn rjúkandi diskur á borðinu margfaldast hratt í heilt veisluborð fyrir vinnustaðinn og endar á símanúmerinu ykkar.",
    "why": "Lítill veitingastaður á samkeppnismarkaði með veisluþjónustu sem mætti kynna betur, en engir samfélagsmiðlar fundust á vefnum og netfangið er almennt.",
    "score": 4,
+   "ef": "Mandi",
+   "thf": "Mandi",
    "stada": "osent"
   },
   {
@@ -6696,6 +7438,8 @@
    "idea": "stutt þrívíddarmyndband þar sem ACO kremtúpa snýst rólega á skjánum, lokið skrúfast af og mjúkt kremið dreifist yfir þurra húð sem verður slétt og frískleg á örfáum sekúndum.",
    "why": "Sölu- og markaðsstjórinn er nafngreind með beint netfang og ný vörulína kallar á kynningarefni, en Alvogen er hluti af stórri alþjóðlegri samstæðu og markaðssetning lyfja er þung í vöfum.",
    "score": 4,
+   "ef": "Alvogen",
+   "thf": "Alvogen",
    "stada": "osent"
   },
   {
@@ -6714,6 +7458,8 @@
    "idea": "stutt teiknimyndband þar sem ljós kviknar í glugganum á smáhýsi á snævi þöktu túni, norðurljósin birtast yfir Heklu og ferfættur gestgjafi röltir upp að dyrunum.",
    "why": "Lítið, persónulegt gistiheimili með frábærar umsagnir og farsíma á vefnum, en gestirnir eru nær allir erlendir svo myndbandið yrði á ensku og óvíst hve virk þau eru á miðlum.",
    "score": 4,
+   "ef": "Farmer's Guest House",
+   "thf": "Farmer's Guest House",
    "stada": "osent"
   },
   {
@@ -6732,6 +7478,8 @@
    "idea": "þrívíddarmyndband þar sem myndavélin svífur yfir bújörð, landamerkin teiknast upp, tún, útihús og íbúðarhús lýsast upp eitt af öðru og merki Fasteignamiðstöðvarinnar birtist í lokin.",
    "why": "Fasteignasalinn sem ber nafn stofunnar á vefnum er með eigið netfang og jarðasalan er skemmtilegt myndefni, en fyrirtækið virðist hefðbundið og engir samfélagsmiðlar fundust.",
    "score": 4,
+   "ef": "Fasteignamiðstöðvarinnar",
+   "thf": "Fasteignamiðstöðina",
    "stada": "osent"
   },
   {
@@ -6750,6 +7498,8 @@
    "idea": "þrívíddarmyndband þar sem bátur vaggar í Húsavíkurhöfn í rökkrinu, myndavélin færir sig inn um gluggann þar sem koparlukt kviknar og rjúkandi réttur er lagður á borðið.",
    "why": "Rótgróinn veitingastaður á Facebook og Instagram með sterkan karakter sem nýtur sín í myndbandi, en reksturinn er árstíðabundinn og netfangið almennt.",
    "score": 4,
+   "ef": "Gamla Bauks",
+   "thf": "Gamla Bauk",
    "stada": "osent"
   },
   {
@@ -6768,6 +7518,8 @@
    "idea": "þrívíddarmyndband þar sem sími svífur inn, tilboð er virkjað með einni snertingu, kort fer í posa og krónurnar fljúga aftur inn í Meniga-appið.",
    "why": "Appið er gott myndefni og endurgreiðslutilboðin þarf að útskýra, en Meniga er stórt fyrirtæki með alþjóðlega starfsemi og eigið markaðsfólk og netfangið er almennt.",
    "score": 4,
+   "ef": "Meniga",
+   "thf": "Meniga",
    "stada": "osent"
   },
   {
@@ -6786,6 +7538,8 @@
    "idea": "teiknimyndband þar sem lína dregst frá Akureyri yfir hafið til Færeyja og Grænlands, á hverjum viðkomustað sprettur upp lítið atriði eins og lundi, ísjaki eða foss og allt endar á merki Nonna Travel.",
    "why": "Rótgróin ferðaskrifstofa í heimabæ okkar á Akureyri með virka Facebook-síðu og nafngreindan markaðstengilið, en hann les mögulega ekki íslensku (caroline@ er hinn kosturinn) og markhópurinn er að mestu erlendur.",
    "score": 4,
+   "ef": "Nonni Travel",
+   "thf": "Nonni Travel",
    "stada": "osent"
   },
   {
@@ -6804,6 +7558,8 @@
    "idea": "þrívíddarmyndband þar sem rjúkandi skál birtist úti í kuldanum, núðlur, kjöt og grænmeti falla ofan í hana eitt af öðru og dularfull kryddkrukka hristist yfir að lokum, með stöðunum þremur neðst á skjánum.",
    "why": "Lítið fjölskyldufyrirtæki með einfalda og myndræna vöru og á Facebook, en netfangið er hotmail-netfang eins útibúsins og óvíst hve oft það er lesið.",
    "score": 4,
+   "ef": "Noodle Station",
+   "thf": "Noodle Station",
    "stada": "osent"
   },
   {
@@ -6822,6 +7578,8 @@
    "idea": "teiknimyndband þar sem dagatal flettist hratt í gegnum sjö vetrardaga og á hverri síðu lifnar við nýtt atriði, íshellir, notaleg sveitagisting og loks norðurljós yfir jökli.",
    "why": "Virkt fyrirtæki á Facebook, Instagram og LinkedIn sem birtir reglulega nýtt efni og selur upplifanir sem njóta sín í myndbandi, en viðskiptavinirnir eru erlendir og myndbandið yrði á ensku.",
    "score": 4,
+   "ef": "Traveo",
+   "thf": "Traveo",
    "stada": "osent"
   }
  ],
