@@ -40,6 +40,8 @@ export interface HerferdFyrirtaeki {
   ef?: string;
   /** Nafnið í þolfalli, eins og það stendur í póstinum („fyrir GKS Innréttingar“). */
   thf?: string;
+  /** Hvað fyrirtækið selur, ræður orðalaginu í póstinum: vörur, þjónusta, hvort tveggja eða lausnir. */
+  tegund?: "vorur" | "thjonusta" | "baedi" | "lausnir";
   web: string;
   sector: string;
   /** Hvað fyrirtækið gerir. */

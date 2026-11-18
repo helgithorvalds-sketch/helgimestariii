@@ -20,6 +20,7 @@
    "score": 8,
    "ef": "Gluggavina",
    "thf": "Gluggavini",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -40,6 +41,7 @@
    "score": 8,
    "ef": "Glugga og garðhúsa",
    "thf": "Glugga og garðhús",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -60,6 +62,7 @@
    "score": 8,
    "ef": "GKS Innréttinga",
    "thf": "GKS Innréttingar",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -80,6 +83,7 @@
    "score": 8,
    "ef": "Egils Árnasonar",
    "thf": "Egil Árnason",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -100,6 +104,7 @@
    "score": 8,
    "ef": "Borgarplasts",
    "thf": "Borgarplast",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -120,6 +125,7 @@
    "score": 8,
    "ef": "Trefja",
    "thf": "Trefjar",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -140,6 +146,7 @@
    "score": 8,
    "ef": "Álnabæjar",
    "thf": "Álnabæ",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -160,6 +167,7 @@
    "score": 8,
    "ef": "Garðlistar",
    "thf": "Garðlist",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -180,6 +188,7 @@
    "score": 8,
    "ef": "Heimilisþrifa",
    "thf": "Heimilisþrif",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -200,6 +209,7 @@
    "score": 8,
    "ef": "Emerald Einingahúsa",
    "thf": "Emerald Einingahús",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -220,6 +230,7 @@
    "score": 8,
    "ef": "Nýs Þaks",
    "thf": "Nýtt Þak",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -240,6 +251,7 @@
    "score": 8,
    "ef": "ÞakCo",
    "thf": "ÞakCo",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -260,6 +272,7 @@
    "score": 8,
    "ef": "Úrvalshúsa",
    "thf": "Úrvalshús",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -280,6 +293,7 @@
    "score": 8,
    "ef": "Parkets & Gólfs",
    "thf": "Parket & Gólf",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -300,6 +314,7 @@
    "score": 8,
    "ef": "Glerfilma",
    "thf": "Glerfilmur",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -320,6 +335,7 @@
    "score": 8,
    "ef": "Mín líðan",
    "thf": "Mín líðan",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -340,6 +356,7 @@
    "score": 8,
    "ef": "Betri svefns",
    "thf": "Betri svefn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -360,6 +377,7 @@
    "score": 8,
    "ef": "Húðfegrunar",
    "thf": "Húðfegrun",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -380,6 +398,7 @@
    "score": 8,
    "ef": "Aurbjargar",
    "thf": "Aurbjörgu",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -400,6 +419,7 @@
    "score": 8,
    "ef": "Dekkjahallarinnar",
    "thf": "Dekkjahöllina",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -420,6 +440,7 @@
    "score": 8,
    "ef": "Hladdu",
    "thf": "Hladdu",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -440,6 +461,7 @@
    "score": 8,
    "ef": "Arnarins",
    "thf": "Örninn",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -460,6 +482,7 @@
    "score": 8,
    "ef": "Skemmtigarðsins",
    "thf": "Skemmtigarðinn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -480,6 +503,7 @@
    "score": 8,
    "ef": "Sólspors",
    "thf": "Sólspor",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -500,6 +524,7 @@
    "score": 8,
    "ef": "Verklagna",
    "thf": "Verklagnir",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -520,6 +545,7 @@
    "score": 8,
    "ef": "Gluggagerðarinnar",
    "thf": "Gluggagerðina",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -540,6 +566,7 @@
    "score": 7,
    "ef": "Idex",
    "thf": "Idex",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -560,6 +587,7 @@
    "score": 7,
    "ef": "AXIS húsgagna",
    "thf": "AXIS húsgögn",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -580,6 +608,7 @@
    "score": 7,
    "ef": "Fríforms",
    "thf": "Fríform",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -600,6 +629,7 @@
    "score": 7,
    "ef": "Steinprýði",
    "thf": "Steinprýði",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -620,6 +650,7 @@
    "score": 7,
    "ef": "Patta húsgagna",
    "thf": "Patta húsgögn",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -640,6 +671,7 @@
    "score": 7,
    "ef": "Z-brauta & gluggatjalda",
    "thf": "Z-brautir & gluggatjöld",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -660,6 +692,7 @@
    "score": 7,
    "ef": "Gólfefnabúðarinnar",
    "thf": "Gólfefnabúðina",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -680,6 +713,7 @@
    "score": 7,
    "ef": "Heitra potta",
    "thf": "Heita potta",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -700,6 +734,7 @@
    "score": 7,
    "ef": "Múrbúðarinnar",
    "thf": "Múrbúðina",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -720,6 +755,7 @@
    "score": 7,
    "ef": "SS Byggis",
    "thf": "SS Byggi",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -740,6 +776,7 @@
    "score": 7,
    "ef": "K16-Einingahúsa",
    "thf": "K16-Einingahús",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -760,6 +797,7 @@
    "score": 7,
    "ef": "Byggingar og Viðhalds",
    "thf": "Byggingu og Viðhald",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -780,6 +818,7 @@
    "score": 7,
    "ef": "Ragga Smiðs",
    "thf": "Ragga Smið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -800,6 +839,7 @@
    "score": 7,
    "ef": "Svefns og heilsu",
    "thf": "Svefn og heilsu",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -820,6 +860,7 @@
    "score": 7,
    "ef": "Húsasmíði",
    "thf": "Húsasmíði",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -840,6 +881,7 @@
    "score": 7,
    "ef": "Bjálkahúsa",
    "thf": "Bjálkahús",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -860,6 +902,7 @@
    "score": 7,
    "ef": "Þakrennuverks",
    "thf": "Þakrennuverk",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -880,6 +923,7 @@
    "score": 7,
    "ef": "Heyrnartækni",
    "thf": "Heyrnartækni",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -900,6 +944,7 @@
    "score": 7,
    "ef": "Augljóss",
    "thf": "Augljós",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -920,6 +965,7 @@
    "score": 7,
    "ef": "Hress heilsuræktar",
    "thf": "Hress heilsurækt",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -940,6 +986,7 @@
    "score": 7,
    "ef": "Hreysti",
    "thf": "Hreysti",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -960,6 +1007,7 @@
    "score": 7,
    "ef": "UltraForm",
    "thf": "UltraForm",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -980,6 +1028,7 @@
    "score": 7,
    "ef": "Heyrnar",
    "thf": "Heyrn",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -1000,6 +1049,7 @@
    "score": 7,
    "ef": "Abaco Derma",
    "thf": "Abaco Derma",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1020,6 +1070,7 @@
    "score": 7,
    "ef": "Gæludýr.is",
    "thf": "Gæludýr.is",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1040,6 +1091,7 @@
    "score": 7,
    "ef": "Retor fræðslu",
    "thf": "Retor fræðslu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1060,6 +1112,7 @@
    "score": 7,
    "ef": "Ökuskóla 17.is",
    "thf": "Ökuskóla 17.is",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1080,6 +1133,7 @@
    "score": 7,
    "ef": "Ökulands",
    "thf": "Ökuland",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1100,6 +1154,7 @@
    "score": 7,
    "ef": "Mosfellsbakarís",
    "thf": "Mosfellsbakarí",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1120,6 +1175,7 @@
    "score": 7,
    "ef": "Reykjavíkurblóma",
    "thf": "Reykjavíkurblóm",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1140,6 +1196,7 @@
    "score": 7,
    "ef": "Dineout",
    "thf": "Dineout",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -1160,6 +1217,7 @@
    "score": 7,
    "ef": "Meindýravarna Suðurlands",
    "thf": "Meindýravarnir Suðurlands",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1180,6 +1238,7 @@
    "score": 7,
    "ef": "Örnu",
    "thf": "Örnu",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1200,6 +1259,7 @@
    "score": 7,
    "ef": "Efnalaugarinnar Bjargar",
    "thf": "Efnalaugina Björgu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1220,6 +1280,7 @@
    "score": 7,
    "ef": "Bogfimisetursins",
    "thf": "Bogfimisetrið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1240,6 +1301,7 @@
    "score": 7,
    "ef": "e1",
    "thf": "e1",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -1260,6 +1322,7 @@
    "score": 7,
    "ef": "Ekils ökuskóla",
    "thf": "Ekil ökuskóla",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1280,6 +1343,7 @@
    "score": 7,
    "ef": "Freyju",
    "thf": "Freyju",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1300,6 +1364,7 @@
    "score": 7,
    "ef": "Greenfit",
    "thf": "Greenfit",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1320,6 +1385,7 @@
    "score": 7,
    "ef": "HM Raflagna",
    "thf": "HM Raflagnir",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1340,6 +1406,7 @@
    "score": 7,
    "ef": "Gimli fasteignasölu",
    "thf": "Gimli fasteignasölu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1360,6 +1427,7 @@
    "score": 7,
    "ef": "Keiluhallarinnar",
    "thf": "Keiluhöllina",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1380,6 +1448,7 @@
    "score": 7,
    "ef": "LAVA Centre",
    "thf": "LAVA Centre",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1400,6 +1469,7 @@
    "score": 7,
    "ef": "Leiguskjóls",
    "thf": "Leiguskjól",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1420,6 +1490,7 @@
    "score": 7,
    "ef": "Myntkaupa",
    "thf": "Myntkaup",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1440,6 +1511,7 @@
    "score": 7,
    "ef": "Smart Solutions",
    "thf": "Smart Solutions",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -1460,6 +1532,7 @@
    "score": 7,
    "ef": "Tryggja",
    "thf": "Tryggja",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1480,6 +1553,7 @@
    "score": 7,
    "ef": "Veiðikortsins",
    "thf": "Veiðikortið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1500,6 +1574,7 @@
    "score": 7,
    "ef": "Víkurvagna",
    "thf": "Víkurvagna",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1520,6 +1595,7 @@
    "score": 7,
    "ef": "Mamma veit best",
    "thf": "Mamma veit best",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1540,6 +1616,7 @@
    "score": 7,
    "ef": "Brikk",
    "thf": "Brikk",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1560,6 +1637,7 @@
    "score": 6,
    "ef": "Epal",
    "thf": "Epal",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1580,6 +1658,7 @@
    "score": 6,
    "ef": "Sérefnis",
    "thf": "Sérefni",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1600,6 +1679,7 @@
    "score": 6,
    "ef": "Reinar",
    "thf": "Rein",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1620,6 +1700,7 @@
    "score": 6,
    "ef": "Vogue fyrir heimilið",
    "thf": "Vogue fyrir heimilið",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1640,6 +1721,7 @@
    "score": 6,
    "ef": "Gróðrarstöðvarinnar Merkur",
    "thf": "Gróðrarstöðina Mörk",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1660,6 +1742,7 @@
    "score": 6,
    "ef": "Rafkaupa",
    "thf": "Rafkaup",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1680,6 +1763,7 @@
    "score": 6,
    "ef": "Betra Baks",
    "thf": "Betra Bak",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1700,6 +1784,7 @@
    "score": 6,
    "ef": "Hirzlunnar",
    "thf": "Hirzluna",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1720,6 +1805,7 @@
    "score": 6,
    "ef": "Á. Guðmundssonar",
    "thf": "Á. Guðmundsson",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1740,6 +1826,7 @@
    "score": 6,
    "ef": "Flísabúðarinnar",
    "thf": "Flísabúðina",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1760,6 +1847,7 @@
    "score": 6,
    "ef": "Harðviðarvals",
    "thf": "Harðviðarval",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1780,6 +1868,7 @@
    "score": 6,
    "ef": "Húsvætta",
    "thf": "Húsvættir",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1800,6 +1889,7 @@
    "score": 6,
    "ef": "A3 Smiða",
    "thf": "A3 Smiði",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1820,6 +1910,7 @@
    "score": 6,
    "ef": "Gluggaþvottar",
    "thf": "Gluggaþvott",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1840,6 +1931,7 @@
    "score": 6,
    "ef": "Grjótgarða",
    "thf": "Grjótgarða",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -1860,6 +1952,7 @@
    "score": 6,
    "ef": "Sauna.is",
    "thf": "Sauna.is",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1880,6 +1973,7 @@
    "score": 6,
    "ef": "BG Teppahreinsunar",
    "thf": "BG Teppahreinsun",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -1900,6 +1994,7 @@
    "score": 6,
    "ef": "Lumex",
    "thf": "Lumex",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1920,6 +2015,7 @@
    "score": 6,
    "ef": "Línunnar",
    "thf": "Línuna",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1940,6 +2036,7 @@
    "score": 6,
    "ef": "Kokku",
    "thf": "Kokku",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1960,6 +2057,7 @@
    "score": 6,
    "ef": "Gólfefnavals",
    "thf": "Gólfefnaval",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -1980,6 +2078,7 @@
    "score": 6,
    "ef": "CrossFit Reykjavík",
    "thf": "CrossFit Reykjavík",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2000,6 +2099,7 @@
    "score": 6,
    "ef": "Reykjavíkur Apóteks",
    "thf": "Reykjavíkur Apótek",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2020,6 +2120,7 @@
    "score": 6,
    "ef": "Optical Studio",
    "thf": "Optical Studio",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2040,6 +2141,7 @@
    "score": 6,
    "ef": "Sjáðu",
    "thf": "Sjáðu",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2060,6 +2162,7 @@
    "score": 6,
    "ef": "Snyrtistofunnar Jónu",
    "thf": "Snyrtistofuna Jónu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2080,6 +2183,7 @@
    "score": 6,
    "ef": "YogaLífs",
    "thf": "YogaLíf",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2100,6 +2204,7 @@
    "score": 6,
    "ef": "Húðlæknastöðvarinnar",
    "thf": "Húðlæknastöðina",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2120,6 +2225,7 @@
    "score": 6,
    "ef": "Akademias",
    "thf": "Akademias",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2140,6 +2246,7 @@
    "score": 6,
    "ef": "NTV skólans",
    "thf": "NTV skólann",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2160,6 +2267,7 @@
    "score": 6,
    "ef": "Hjá Höllu",
    "thf": "Hjá Höllu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2180,6 +2288,7 @@
    "score": 6,
    "ef": "Flutningaþjónustunnar",
    "thf": "Flutningaþjónustuna",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2200,6 +2309,7 @@
    "score": 6,
    "ef": "Geymslna",
    "thf": "Geymslur",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2220,6 +2330,7 @@
    "score": 6,
    "ef": "Gulla Arnars bakarís",
    "thf": "Gulla Arnar bakarí",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2240,6 +2351,7 @@
    "score": 6,
    "ef": "17 sortir",
    "thf": "17 sortir",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2260,6 +2372,7 @@
    "score": 6,
    "ef": "Almars bakara",
    "thf": "Almar bakara",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2280,6 +2393,7 @@
    "score": 6,
    "ef": "Ölverk Pizza & Brewery",
    "thf": "Ölverk Pizza & Brewery",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2300,6 +2414,7 @@
    "score": 6,
    "ef": "Soho veisluþjónustu",
    "thf": "Soho veisluþjónustu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2320,6 +2435,7 @@
    "score": 6,
    "ef": "Bjarnarins Verktaka",
    "thf": "Björninn Verktaka",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2340,6 +2456,7 @@
    "score": 6,
    "ef": "Bullseye",
    "thf": "Bullseye",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2360,6 +2477,7 @@
    "score": 6,
    "ef": "Caves of Hella",
    "thf": "Caves of Hella",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2380,6 +2498,7 @@
    "score": 6,
    "ef": "Fagorku",
    "thf": "Fagorku",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2400,6 +2519,7 @@
    "score": 6,
    "ef": "Borgar fasteignasölu",
    "thf": "Borg fasteignasölu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2420,6 +2540,7 @@
    "score": 6,
    "ef": "Fjörukrárinnar",
    "thf": "Fjörukrána",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2440,6 +2561,7 @@
    "score": 6,
    "ef": "Fraktlausna",
    "thf": "Fraktlausnir",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2460,6 +2582,7 @@
    "score": 6,
    "ef": "GG Sport",
    "thf": "GG Sport",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2480,6 +2603,7 @@
    "score": 6,
    "ef": "Ginger",
    "thf": "Ginger",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2500,6 +2624,7 @@
    "score": 6,
    "ef": "Godda",
    "thf": "Godda",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2520,6 +2645,7 @@
    "score": 6,
    "ef": "Heilsu",
    "thf": "Heilsu",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2540,6 +2666,7 @@
    "score": 6,
    "ef": "Heyrnarstöðvarinnar",
    "thf": "Heyrnarstöðina",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2560,6 +2687,7 @@
    "score": 6,
    "ef": "Hotel Akureyrar",
    "thf": "Hotel Akureyri",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2580,6 +2708,7 @@
    "score": 6,
    "ef": "Hótel Búða",
    "thf": "Hótel Búðir",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2600,6 +2729,7 @@
    "score": 6,
    "ef": "Hótel Arkar",
    "thf": "Hótel Örk",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2620,6 +2750,7 @@
    "score": 6,
    "ef": "Hótel Rangár",
    "thf": "Hótel Rangá",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2640,6 +2771,7 @@
    "score": 6,
    "ef": "Hótel Selfoss",
    "thf": "Hótel Selfoss",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2660,6 +2792,7 @@
    "score": 6,
    "ef": "Hraunsnefs sveitahótels",
    "thf": "Hraunsnef sveitahótel",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2680,6 +2813,7 @@
    "score": 6,
    "ef": "Hringdu",
    "thf": "Hringdu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2700,6 +2834,7 @@
    "score": 6,
    "ef": "Húsaskjóls",
    "thf": "Húsaskjól",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2720,6 +2855,7 @@
    "score": 6,
    "ef": "Kælitækni",
    "thf": "Kælitækni",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2740,6 +2876,7 @@
    "score": 6,
    "ef": "Kvíðameðferðarstöðvarinnar",
    "thf": "Kvíðameðferðarstöðina",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2760,6 +2897,7 @@
    "score": 6,
    "ef": "Kombucha Iceland",
    "thf": "Kombucha Iceland",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2780,6 +2918,7 @@
    "score": 6,
    "ef": "Lamb Inn",
    "thf": "Lamb Inn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2800,6 +2939,7 @@
    "score": 6,
    "ef": "Laxness",
    "thf": "Laxnes",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2820,6 +2960,7 @@
    "score": 6,
    "ef": "Löðurs",
    "thf": "Löður",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2840,6 +2981,7 @@
    "score": 6,
    "ef": "Lyfjavals",
    "thf": "Lyfjaval",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2860,6 +3002,7 @@
    "score": 6,
    "ef": "Lyfjavers",
    "thf": "Lyfjaver",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -2880,6 +3023,7 @@
    "score": 6,
    "ef": "Maclands",
    "thf": "Macland",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -2900,6 +3044,7 @@
    "score": 6,
    "ef": "Miðeindar",
    "thf": "Miðeind",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -2920,6 +3065,7 @@
    "score": 6,
    "ef": "Pei",
    "thf": "Pei",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -2940,6 +3086,7 @@
    "score": 6,
    "ef": "Primal",
    "thf": "Primal",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2960,6 +3107,7 @@
    "score": 6,
    "ef": "Procura",
    "thf": "Procura",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -2980,6 +3128,7 @@
    "score": 6,
    "ef": "Pure North",
    "thf": "Pure North",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3000,6 +3149,7 @@
    "score": 6,
    "ef": "Purity Herbs",
    "thf": "Purity Herbs",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3020,6 +3170,7 @@
    "score": 6,
    "ef": "Sæluhúsa",
    "thf": "Sæluhús",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3040,6 +3191,7 @@
    "score": 6,
    "ef": "Shake & Pizza",
    "thf": "Shake & Pizza",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3060,6 +3212,7 @@
    "score": 6,
    "ef": "Sjónlags",
    "thf": "Sjónlag",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3080,6 +3233,7 @@
    "score": 6,
    "ef": "Skólavefsins",
    "thf": "Skólavefinn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3100,6 +3254,7 @@
    "score": 6,
    "ef": "Strýtunnar",
    "thf": "Strýtuna",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3120,6 +3275,7 @@
    "score": 6,
    "ef": "Sýnis",
    "thf": "Sýni",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3140,6 +3296,7 @@
    "score": 6,
    "ef": "Taktikal",
    "thf": "Taktikal",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -3160,6 +3317,7 @@
    "score": 6,
    "ef": "Tengis",
    "thf": "Tengi",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3180,6 +3338,7 @@
    "score": 6,
    "ef": "The Cave Víðgelmir",
    "thf": "The Cave Víðgelmir",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3200,6 +3359,7 @@
    "score": 6,
    "ef": "Troll Expeditions",
    "thf": "Troll Expeditions",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3220,6 +3380,7 @@
    "score": 6,
    "ef": "Urðarapóteks",
    "thf": "Urðarapótek",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -3240,6 +3401,7 @@
    "score": 6,
    "ef": "Vista",
    "thf": "Vista",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -3260,6 +3422,7 @@
    "score": 6,
    "ef": "Vörukaupa",
    "thf": "Vörukaup",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3280,6 +3443,7 @@
    "score": 6,
    "ef": "Yoga Shala",
    "thf": "Yoga Shala",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3300,6 +3464,7 @@
    "score": 6,
    "ef": "Búslóð.is",
    "thf": "Búslóð.is",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3320,6 +3485,7 @@
    "score": 6,
    "ef": "Forlagsins",
    "thf": "Forlagið",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3340,6 +3506,7 @@
    "score": 6,
    "ef": "Glerártorgs",
    "thf": "Glerártorg",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3360,6 +3527,7 @@
    "score": 6,
    "ef": "Greifans",
    "thf": "Greifann",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3380,6 +3548,7 @@
    "score": 6,
    "ef": "Smith & Norland",
    "thf": "Smith & Norland",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3400,6 +3569,7 @@
    "score": 6,
    "ef": "Tryggingaréttar",
    "thf": "Tryggingarétt",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3420,6 +3590,7 @@
    "score": 6,
    "ef": "Striksins",
    "thf": "Strikið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3440,6 +3611,7 @@
    "score": 6,
    "ef": "Bernhöftsbakarís",
    "thf": "Bernhöftsbakarí",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3460,6 +3632,7 @@
    "score": 6,
    "ef": "Betri dekkja",
    "thf": "Betri dekk",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3480,6 +3653,7 @@
    "score": 6,
    "ef": "Everest",
    "thf": "Everest",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3500,6 +3674,7 @@
    "score": 6,
    "ef": "Forest Lagoon",
    "thf": "Forest Lagoon",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3520,6 +3695,7 @@
    "score": 6,
    "ef": "Hríms",
    "thf": "Hrím",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3540,6 +3716,7 @@
    "score": 6,
    "ef": "Kjötbúðarinnar",
    "thf": "Kjötbúðina",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3560,6 +3737,7 @@
    "score": 6,
    "ef": "Sjónlínunnar",
    "thf": "Sjónlínuna",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -3580,6 +3758,7 @@
    "score": 5,
    "ef": "Tandurs",
    "thf": "Tandur",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3600,6 +3779,7 @@
    "score": 5,
    "ef": "Garðheima",
    "thf": "Garðheima",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3620,6 +3800,7 @@
    "score": 5,
    "ef": "Hreint",
    "thf": "Hreint",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3640,6 +3821,7 @@
    "score": 5,
    "ef": "Álfaborgar",
    "thf": "Álfaborg",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3660,6 +3842,7 @@
    "score": 5,
    "ef": "Parka",
    "thf": "Parka",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3680,6 +3863,7 @@
    "score": 5,
    "ef": "Tengis",
    "thf": "Tengi",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3700,6 +3884,7 @@
    "score": 5,
    "ef": "Eirvíkur",
    "thf": "Eirvík",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3720,6 +3905,7 @@
    "score": 5,
    "ef": "Byggt og búið",
    "thf": "Byggt og búið",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3740,6 +3926,7 @@
    "score": 5,
    "ef": "Límtrés Vírnets",
    "thf": "Límtré Vírnet",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3760,6 +3947,7 @@
    "score": 5,
    "ef": "Birgissonar",
    "thf": "Birgisson",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3780,6 +3968,7 @@
    "score": 5,
    "ef": "Dorma",
    "thf": "Dorma",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3800,6 +3989,7 @@
    "score": 5,
    "ef": "Módern",
    "thf": "Módern",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3820,6 +4010,7 @@
    "score": 5,
    "ef": "Slippfélagsins",
    "thf": "Slippfélagið",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3840,6 +4031,7 @@
    "score": 5,
    "ef": "Málningar",
    "thf": "Málningu",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -3860,6 +4052,7 @@
    "score": 5,
    "ef": "Brossins tannlæknastofu",
    "thf": "Brosið tannlæknastofu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3880,6 +4073,7 @@
    "score": 5,
    "ef": "Líkamsræktar JSB",
    "thf": "Líkamsrækt JSB",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3900,6 +4094,7 @@
    "score": 5,
    "ef": "Sameindar",
    "thf": "Sameind",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3920,6 +4115,7 @@
    "score": 5,
    "ef": "1984",
    "thf": "1984",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -3940,6 +4136,7 @@
    "score": 5,
    "ef": "4x4 Adventures Iceland",
    "thf": "4x4 Adventures Iceland",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -3960,6 +4157,7 @@
    "score": 5,
    "ef": "Advise",
    "thf": "Advise",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -3980,6 +4178,7 @@
    "score": 5,
    "ef": "ALMA markþjálfa",
    "thf": "ALMA markþjálfa",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4000,6 +4199,7 @@
    "score": 5,
    "ef": "Áltaks",
    "thf": "Áltak",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4020,6 +4220,7 @@
    "score": 5,
    "ef": "Arctic Trucks",
    "thf": "Arctic Trucks",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -4040,6 +4241,7 @@
    "score": 5,
    "ef": "Bakarameistarans",
    "thf": "Bakarameistarann",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4060,6 +4262,7 @@
    "score": 5,
    "ef": "Bílahleðslunnar",
    "thf": "Bílahleðsluna",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -4080,6 +4283,7 @@
    "score": 5,
    "ef": "Bravó",
    "thf": "Bravó",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4100,6 +4304,7 @@
    "score": 5,
    "ef": "BYGG",
    "thf": "BYGG",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4120,6 +4325,7 @@
    "score": 5,
    "ef": "DataLab",
    "thf": "DataLab",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -4140,6 +4346,7 @@
    "score": 5,
    "ef": "Dynjanda",
    "thf": "Dynjanda",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4160,6 +4367,7 @@
    "score": 5,
    "ef": "Earth Lagoon Mývatn",
    "thf": "Earth Lagoon Mývatn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4180,6 +4388,7 @@
    "score": 5,
    "ef": "Eldingar",
    "thf": "Eldingu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4200,6 +4409,7 @@
    "score": 5,
    "ef": "Ferro Zink",
    "thf": "Ferro Zink",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4220,6 +4430,7 @@
    "score": 5,
    "ef": "Laugarvatn Fontana",
    "thf": "Laugarvatn Fontana",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4240,6 +4451,7 @@
    "score": 5,
    "ef": "GeoSea",
    "thf": "GeoSea",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4260,6 +4472,7 @@
    "score": 5,
    "ef": "Godo",
    "thf": "Godo",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -4280,6 +4493,7 @@
    "score": 5,
    "ef": "GreenFish",
    "thf": "GreenFish",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -4300,6 +4514,7 @@
    "score": 5,
    "ef": "Hollt og gott",
    "thf": "Hollt og gott",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4320,6 +4535,7 @@
    "score": 5,
    "ef": "Hópkaupa",
    "thf": "Hópkaup",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4340,6 +4556,7 @@
    "score": 5,
    "ef": "Hótel Önnu",
    "thf": "Hótel Önnu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4360,6 +4577,7 @@
    "score": 5,
    "ef": "Hótel Borgarness",
    "thf": "Hótel Borgarnes",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4380,6 +4598,7 @@
    "score": 5,
    "ef": "Hótel Flateyjar",
    "thf": "Hótel Flatey",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4400,6 +4619,7 @@
    "score": 5,
    "ef": "Hótel Hafnar",
    "thf": "Hótel Höfn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4420,6 +4640,7 @@
    "score": 5,
    "ef": "Hótel Laxár",
    "thf": "Hótel Laxá",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4440,6 +4661,7 @@
    "score": 5,
    "ef": "Hótel Sigluness",
    "thf": "Hótel Siglunes",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4460,6 +4682,7 @@
    "score": 5,
    "ef": "Hreyfils",
    "thf": "Hreyfil",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4480,6 +4703,7 @@
    "score": 5,
    "ef": "Iðnó",
    "thf": "Iðnó",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4500,6 +4724,7 @@
    "score": 5,
    "ef": "Stólpa",
    "thf": "Stólpa",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -4520,6 +4745,7 @@
    "score": 5,
    "ef": "Kjarnafæðis",
    "thf": "Kjarnafæði",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4540,6 +4766,7 @@
    "score": 5,
    "ef": "Krauma",
    "thf": "Krauma",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4560,6 +4787,7 @@
    "score": 5,
    "ef": "KuKu Campers",
    "thf": "KuKu Campers",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4580,6 +4808,7 @@
    "score": 5,
    "ef": "Lagoon Car Rental",
    "thf": "Lagoon Car Rental",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4600,6 +4829,7 @@
    "score": 5,
    "ef": "Laugarás Lagoon",
    "thf": "Laugarás Lagoon",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4620,6 +4850,7 @@
    "score": 5,
    "ef": "Leviosa",
    "thf": "Leviosa",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -4640,6 +4871,7 @@
    "score": 5,
    "ef": "Local Guide",
    "thf": "Local Guide",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4660,6 +4892,7 @@
    "score": 5,
    "ef": "Lotus Car Rental",
    "thf": "Lotus Car Rental",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4680,6 +4913,7 @@
    "score": 5,
    "ef": "Martaks",
    "thf": "Martak",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -4700,6 +4934,7 @@
    "score": 5,
    "ef": "Midgard Adventure",
    "thf": "Midgard Adventure",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4720,6 +4955,7 @@
    "score": 5,
    "ef": "Miklaborgar",
    "thf": "Miklaborg",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4740,6 +4976,7 @@
    "score": 5,
    "ef": "Mjölnis",
    "thf": "Mjölni",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4760,6 +4997,7 @@
    "score": 5,
    "ef": "Mývatn Tours",
    "thf": "Mývatn Tours",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4780,6 +5018,7 @@
    "score": 5,
    "ef": "Naust Marine",
    "thf": "Naust Marine",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4800,6 +5039,7 @@
    "score": 5,
    "ef": "Nauthóls",
    "thf": "Nauthól",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4820,6 +5060,7 @@
    "score": 5,
    "ef": "Netgíró",
    "thf": "Netgíró",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -4840,6 +5081,7 @@
    "score": 5,
    "ef": "North Sailing",
    "thf": "North Sailing",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4860,6 +5102,7 @@
    "score": 5,
    "ef": "Rafeyrar",
    "thf": "Rafeyri",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4880,6 +5123,7 @@
    "score": 5,
    "ef": "Rent.is",
    "thf": "Rent.is",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4900,6 +5144,7 @@
    "score": 5,
    "ef": "Rima Apóteks",
    "thf": "Rima Apótek",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -4920,6 +5165,7 @@
    "score": 5,
    "ef": "Saga Museum",
    "thf": "Saga Museum",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4940,6 +5186,7 @@
    "score": 5,
    "ef": "Saga Travel",
    "thf": "Saga Travel",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -4960,6 +5207,7 @@
    "score": 5,
    "ef": "Samhentra",
    "thf": "Samhenta",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -4980,6 +5228,7 @@
    "score": 5,
    "ef": "Serrano",
    "thf": "Serrano",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5000,6 +5249,7 @@
    "score": 5,
    "ef": "Snerpu",
    "thf": "Snerpu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5020,6 +5270,7 @@
    "score": 5,
    "ef": "Sporthússins",
    "thf": "Sporthúsið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5040,6 +5291,7 @@
    "score": 5,
    "ef": "Straums",
    "thf": "Straum",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5060,6 +5312,7 @@
    "score": 5,
    "ef": "Sushi Social",
    "thf": "Sushi Social",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5080,6 +5333,7 @@
    "score": 5,
    "ef": "Te & Kaffi",
    "thf": "Te & Kaffi",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5100,6 +5354,7 @@
    "score": 5,
    "ef": "Þórs",
    "thf": "Þór",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5120,6 +5375,7 @@
    "score": 5,
    "ef": "Tímon",
    "thf": "Tímon",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5140,6 +5396,7 @@
    "score": 5,
    "ef": "Tölvunar",
    "thf": "Tölvun",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -5160,6 +5417,7 @@
    "score": 5,
    "ef": "Tölvutek",
    "thf": "Tölvutek",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5180,6 +5438,7 @@
    "score": 5,
    "ef": "Vöku",
    "thf": "Vöku",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5200,6 +5459,7 @@
    "score": 5,
    "ef": "Viking Rafting",
    "thf": "Viking Rafting",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5220,6 +5480,7 @@
    "score": 5,
    "ef": "Vinnufatabúðarinnar",
    "thf": "Vinnufatabúðina",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5240,6 +5501,7 @@
    "score": 5,
    "ef": "Vinnvinn",
    "thf": "Vinnvinn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5260,6 +5522,7 @@
    "score": 5,
    "ef": "Vök Baths",
    "thf": "Vök Baths",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5280,6 +5543,7 @@
    "score": 5,
    "ef": "Volcano Express",
    "thf": "Volcano Express",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5300,6 +5564,7 @@
    "score": 5,
    "ef": "West Tours",
    "thf": "West Tours",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5320,6 +5585,7 @@
    "score": 5,
    "ef": "Whales of Iceland",
    "thf": "Whales of Iceland",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5340,6 +5606,7 @@
    "score": 5,
    "ef": "Dýraspítalans í Víðidal",
    "thf": "Dýraspítalann í Víðidal",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5360,6 +5627,7 @@
    "score": 5,
    "ef": "Fjarðarkaupa",
    "thf": "Fjarðarkaup",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5380,6 +5648,7 @@
    "score": 5,
    "ef": "Gæðabaksturs",
    "thf": "Gæðabakstur",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5400,6 +5669,7 @@
    "score": 5,
    "ef": "Lava Show",
    "thf": "Lava Show",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5420,6 +5690,7 @@
    "score": 5,
    "ef": "Kaffivagnsins",
    "thf": "Kaffivagninn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5440,6 +5711,7 @@
    "score": 5,
    "ef": "Matarkjallarans",
    "thf": "Matarkjallarann",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5460,6 +5732,7 @@
    "score": 5,
    "ef": "Snaps Bistro",
    "thf": "Snaps Bistro",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5480,6 +5753,7 @@
    "score": 5,
    "ef": "Augans",
    "thf": "Augað",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -5500,6 +5774,7 @@
    "score": 5,
    "ef": "Bryggjan Boutique Hotel",
    "thf": "Bryggjan Boutique Hotel",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5520,6 +5795,7 @@
    "score": 5,
    "ef": "Fjöruborðsins",
    "thf": "Fjöruborðið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5540,6 +5816,7 @@
    "score": 5,
    "ef": "Hótel Húsavíkur",
    "thf": "Hótel Húsavík",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5560,6 +5837,7 @@
    "score": 5,
    "ef": "Lindabakarís",
    "thf": "Lindabakarí",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5580,6 +5858,7 @@
    "score": 5,
    "ef": "Mjólku",
    "thf": "Mjólku",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5600,6 +5879,7 @@
    "score": 5,
    "ef": "Múlakaffis",
    "thf": "Múlakaffi",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5620,6 +5900,7 @@
    "score": 5,
    "ef": "Okkar bakarís",
    "thf": "Okkar bakarí",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5640,6 +5921,7 @@
    "score": 5,
    "ef": "ORA",
    "thf": "ORA",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -5660,6 +5942,7 @@
    "score": 5,
    "ef": "Sjallans",
    "thf": "Sjallann",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5680,6 +5963,7 @@
    "score": 5,
    "ef": "Tryggvaskála",
    "thf": "Tryggvaskála",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5700,6 +5984,7 @@
    "score": 4,
    "ef": "50skills",
    "thf": "50skills",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5720,6 +6005,7 @@
    "score": 4,
    "ef": "Abler",
    "thf": "Abler",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5740,6 +6026,7 @@
    "score": 4,
    "ef": "Alfreðs",
    "thf": "Alfreð",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5760,6 +6047,7 @@
    "score": 4,
    "ef": "Arctic Heli Skiing",
    "thf": "Arctic Heli Skiing",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5780,6 +6068,7 @@
    "score": 4,
    "ef": "Aurora Reykjavík",
    "thf": "Aurora Reykjavík",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5800,6 +6089,7 @@
    "score": 4,
    "ef": "Bara tala",
    "thf": "Bara tala",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5820,6 +6110,7 @@
    "score": 4,
    "ef": "Bílabúðar Benna",
    "thf": "Bílabúð Benna",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -5840,6 +6131,7 @@
    "score": 4,
    "ef": "Bílorku",
    "thf": "Bílorku",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -5860,6 +6152,7 @@
    "score": 4,
    "ef": "Bílson",
    "thf": "Bílson",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5880,6 +6173,7 @@
    "score": 4,
    "ef": "Blikkáss",
    "thf": "Blikkás",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -5900,6 +6194,7 @@
    "score": 4,
    "ef": "Borea Adventures",
    "thf": "Borea Adventures",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5920,6 +6215,7 @@
    "score": 4,
    "ef": "Camper Iceland",
    "thf": "Camper Iceland",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5940,6 +6236,7 @@
    "score": 4,
    "ef": "Consello",
    "thf": "Consello",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -5960,6 +6257,7 @@
    "score": 4,
    "ef": "CoreData",
    "thf": "CoreData",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -5980,6 +6278,7 @@
    "score": 4,
    "ef": "Cozy Campers",
    "thf": "Cozy Campers",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6000,6 +6299,7 @@
    "score": 4,
    "ef": "Curio",
    "thf": "Curio",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6020,6 +6320,7 @@
    "score": 4,
    "ef": "dk hugbúnaðar",
    "thf": "dk hugbúnað",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6040,6 +6341,7 @@
    "score": 4,
    "ef": "Egersund Íslands",
    "thf": "Egersund Ísland",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -6060,6 +6362,7 @@
    "score": 4,
    "ef": "Eplis",
    "thf": "Epli",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -6080,6 +6383,7 @@
    "score": 4,
    "ef": "Expectus",
    "thf": "Expectus",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6100,6 +6404,7 @@
    "score": 4,
    "ef": "Fjallabaks",
    "thf": "Fjallabak",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6120,6 +6425,7 @@
    "score": 4,
    "ef": "Frosts",
    "thf": "Frost",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -6140,6 +6446,7 @@
    "score": 4,
    "ef": "Gagnavörslunnar",
    "thf": "Gagnavörsluna",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6160,6 +6467,7 @@
    "score": 4,
    "ef": "Garðs Apóteks",
    "thf": "Garðs Apótek",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -6180,6 +6488,7 @@
    "score": 4,
    "ef": "Geo Travel",
    "thf": "Geo Travel",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6200,6 +6509,7 @@
    "score": 4,
    "ef": "Go Car Rental",
    "thf": "Go Car Rental",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6220,6 +6530,7 @@
    "score": 4,
    "ef": "Hidden Iceland",
    "thf": "Hidden Iceland",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6240,6 +6551,7 @@
    "score": 4,
    "ef": "Hótel Bifrastar",
    "thf": "Hótel Bifröst",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6260,6 +6572,7 @@
    "score": 4,
    "ef": "Hótel Húsafells",
    "thf": "Hótel Húsafell",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6280,6 +6593,7 @@
    "score": 4,
    "ef": "Hótel Ísafjarðar",
    "thf": "Hótel Ísafjörð",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6300,6 +6614,7 @@
    "score": 4,
    "ef": "Hótel Kríu",
    "thf": "Hótel Kríu",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6320,6 +6635,7 @@
    "score": 4,
    "ef": "Hótel Laka",
    "thf": "Hótel Laka",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6340,6 +6656,7 @@
    "score": 4,
    "ef": "Hótel Laugarbakka",
    "thf": "Hótel Laugarbakka",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6360,6 +6677,7 @@
    "score": 4,
    "ef": "Hótel Vestmannaeyja",
    "thf": "Hótel Vestmannaeyjar",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6380,6 +6698,7 @@
    "score": 4,
    "ef": "Hugvits",
    "thf": "Hugvit",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6400,6 +6719,7 @@
    "score": 4,
    "ef": "Jökulsárlóns",
    "thf": "Jökulsárlón",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6420,6 +6740,7 @@
    "score": 4,
    "ef": "Iceland Campers",
    "thf": "Iceland Campers",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6440,6 +6761,7 @@
    "score": 4,
    "ef": "Iceland Horizon",
    "thf": "Iceland Horizon",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6460,6 +6782,7 @@
    "score": 4,
    "ef": "Icerental 4x4",
    "thf": "Icerental 4x4",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6480,6 +6803,7 @@
    "score": 4,
    "ef": "Íslenska gámafélagsins",
    "thf": "Íslenska gámafélagið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6500,6 +6824,7 @@
    "score": 4,
    "ef": "indó",
    "thf": "indó",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6520,6 +6845,7 @@
    "score": 4,
    "ef": "Ísfells",
    "thf": "Ísfell",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6540,6 +6866,7 @@
    "score": 4,
    "ef": "Keldunnar",
    "thf": "Kelduna",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6560,6 +6887,7 @@
    "score": 4,
    "ef": "KGG",
    "thf": "KGG",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6580,6 +6908,7 @@
    "score": 4,
    "ef": "Kletts",
    "thf": "Klett",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -6600,6 +6929,7 @@
    "score": 4,
    "ef": "Kraftvéla",
    "thf": "Kraftvélar",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -6620,6 +6950,7 @@
    "score": 4,
    "ef": "Alda",
    "thf": "Aldir",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6640,6 +6971,7 @@
    "score": 4,
    "ef": "Lava Car Rental",
    "thf": "Lava Car Rental",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6660,6 +6992,7 @@
    "score": 4,
    "ef": "Loftmynda",
    "thf": "Loftmyndir",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6680,6 +7013,7 @@
    "score": 4,
    "ef": "Mussila",
    "thf": "Mussila",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6700,6 +7034,7 @@
    "score": 4,
    "ef": "OK",
    "thf": "OK",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6720,6 +7055,7 @@
    "score": 4,
    "ef": "Nóa Síríusar",
    "thf": "Nóa Síríus",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6740,6 +7076,7 @@
    "score": 4,
    "ef": "Nordic Car Rental",
    "thf": "Nordic Car Rental",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6760,6 +7097,7 @@
    "score": 4,
    "ef": "Norðurflugs",
    "thf": "Norðurflug",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6780,6 +7118,7 @@
    "score": 4,
    "ef": "OneSystems",
    "thf": "OneSystems",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6800,6 +7139,7 @@
    "score": 4,
    "ef": "Pólarhesta",
    "thf": "Pólarhesta",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6820,6 +7160,7 @@
    "score": 4,
    "ef": "Primex",
    "thf": "Primex",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6840,6 +7181,7 @@
    "score": 4,
    "ef": "APRÓ",
    "thf": "APRÓ",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -6860,6 +7202,7 @@
    "score": 4,
    "ef": "Raflands",
    "thf": "Rafland",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6880,6 +7223,7 @@
    "score": 4,
    "ef": "RE/MAX",
    "thf": "RE/MAX",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6900,6 +7244,7 @@
    "score": 4,
    "ef": "Rekstrarvara",
    "thf": "Rekstrarvörur",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -6920,6 +7265,7 @@
    "score": 4,
    "ef": "Safari Quads",
    "thf": "Safari Quads",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6940,6 +7286,7 @@
    "score": 4,
    "ef": "Secret Lagoon",
    "thf": "Secret Lagoon",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6960,6 +7307,7 @@
    "score": 4,
    "ef": "Skálakots",
    "thf": "Skálakot",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -6980,6 +7328,7 @@
    "score": 4,
    "ef": "Hótel Fljótshlíðar",
    "thf": "Hótel Fljótshlíð",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7000,6 +7349,7 @@
    "score": 4,
    "ef": "Snjallgagna",
    "thf": "Snjallgögn",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7020,6 +7370,7 @@
    "score": 4,
    "ef": "Sónars",
    "thf": "Sónar",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -7040,6 +7391,7 @@
    "score": 4,
    "ef": "Svarma",
    "thf": "Svarma",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7060,6 +7412,7 @@
    "score": 4,
    "ef": "Tæknivits",
    "thf": "Tæknivit",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7080,6 +7433,7 @@
    "score": 4,
    "ef": "Tiro",
    "thf": "Tiro",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7100,6 +7454,7 @@
    "score": 4,
    "ef": "Tix",
    "thf": "Tix",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7120,6 +7475,7 @@
    "score": 4,
    "ef": "TourDesk",
    "thf": "TourDesk",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7140,6 +7496,7 @@
    "score": 4,
    "ef": "Tvinna",
    "thf": "Tvinna",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7160,6 +7517,7 @@
    "score": 4,
    "ef": "Útilífs",
    "thf": "Útilíf",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -7180,6 +7538,7 @@
    "score": 4,
    "ef": "Vélaborgar",
    "thf": "Vélaborg",
+   "tegund": "baedi",
    "stada": "osent"
   },
   {
@@ -7200,6 +7559,7 @@
    "score": 4,
    "ef": "Viking Heliskiing",
    "thf": "Viking Heliskiing",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7220,6 +7580,7 @@
    "score": 4,
    "ef": "Wapp",
    "thf": "Wapp",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7240,6 +7601,7 @@
    "score": 4,
    "ef": "World Class",
    "thf": "World Class",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7260,6 +7622,7 @@
    "score": 4,
    "ef": "Atlas",
    "thf": "Atlas",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -7280,6 +7643,7 @@
    "score": 4,
    "ef": "Dýralæknaþjónustu Suðurlands",
    "thf": "Dýralæknaþjónustu Suðurlands",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7300,6 +7664,7 @@
    "score": 4,
    "ef": "Apotek",
    "thf": "Apotek",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7320,6 +7685,7 @@
    "score": 4,
    "ef": "Fiskfélagsins",
    "thf": "Fiskfélagið",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7340,6 +7706,7 @@
    "score": 4,
    "ef": "Fiskmarkaðarins",
    "thf": "Fiskmarkaðinn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7360,6 +7727,7 @@
    "score": 4,
    "ef": "Grillmarkaðarins",
    "thf": "Grillmarkaðinn",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7380,6 +7748,7 @@
    "score": 4,
    "ef": "Fjarðar",
    "thf": "Fjörð",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7400,6 +7769,7 @@
    "score": 4,
    "ef": "Hótel Hamars",
    "thf": "Hótel Hamar",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7420,6 +7790,7 @@
    "score": 4,
    "ef": "Mandi",
    "thf": "Mandi",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7440,6 +7811,7 @@
    "score": 4,
    "ef": "Alvogen",
    "thf": "Alvogen",
+   "tegund": "vorur",
    "stada": "osent"
   },
   {
@@ -7460,6 +7832,7 @@
    "score": 4,
    "ef": "Farmer's Guest House",
    "thf": "Farmer's Guest House",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7480,6 +7853,7 @@
    "score": 4,
    "ef": "Fasteignamiðstöðvarinnar",
    "thf": "Fasteignamiðstöðina",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7500,6 +7874,7 @@
    "score": 4,
    "ef": "Gamla Bauks",
    "thf": "Gamla Bauk",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7520,6 +7895,7 @@
    "score": 4,
    "ef": "Meniga",
    "thf": "Meniga",
+   "tegund": "lausnir",
    "stada": "osent"
   },
   {
@@ -7540,6 +7916,7 @@
    "score": 4,
    "ef": "Nonni Travel",
    "thf": "Nonni Travel",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7560,6 +7937,7 @@
    "score": 4,
    "ef": "Noodle Station",
    "thf": "Noodle Station",
+   "tegund": "thjonusta",
    "stada": "osent"
   },
   {
@@ -7580,6 +7958,7 @@
    "score": 4,
    "ef": "Traveo",
    "thf": "Traveo",
+   "tegund": "thjonusta",
    "stada": "osent"
   }
  ],
