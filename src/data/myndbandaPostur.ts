@@ -19,7 +19,7 @@ export interface PostInntak {
 
 const ef = (c: PostInntak) => c.ef || c.name;
 const thf = (c: PostInntak) => c.thf || c.name;
-const synileg = (url: string) => url.replace(/^https:\/\//, "");
+const synileg = (url: string) => url;
 
 export function efnislina(c: PostInntak) {
   return `Frítt auglýsingamyndband fyrir ${thf(c)}`;
@@ -28,7 +28,7 @@ export function efnislina(c: PostInntak) {
 /** Málsgreinarnar; `feitt` er feitletrað í HTML-útgáfunni. */
 function malsgreinar(c: PostInntak) {
   return [
-    { t: "Hæhæ," },
+    { t: "hæhæ" },
     { t: "Helgi Már heiti ég og rek Norðurvef." },
     { t: `Við höfum verið að skoða starfsemi ${ef(c)} og teljum að vörurnar og þjónustan ykkar henti einstaklega vel fyrir þá nýju tegund markaðssetningar sem við höfum verið að vinna með.` },
     { t: "Undanfarið höfum við hjá Norðurvef sérhæft okkur í gerð stuttra auglýsingamyndbanda í 2D og 3D þar sem vörur og þjónusta fyrirtækja eru kynnt á skapandi, sjónrænan og grípandi hátt." },
