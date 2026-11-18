@@ -389,9 +389,24 @@
    "ef": "Betri svefns",
    "thf": "Betri svefn",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "ja",
    "sent": "2026-11-18T14:13:30Z",
-   "threadId": "1a1ef0074f2a7924"
+   "threadId": "1a1ef0074f2a7924",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 15:02",
+     "fra": "Dr. Erla Björnsdóttir, framkvæmdastjóri",
+     "samantekt": "Til í að prófa ef það er alveg án kostnaðar og skuldbindinga. Skilyrði: þau fá myndbandið til frjálsrar notkunar á sínum miðlum, samþykkja það fyrir birtingu, og það fer ekki í kynningarefni Norðurvefs nema með samþykki þeirra.",
+     "tilvitnun": "Ef tilboðið er að fullu án kostnaðar og skuldbindinga, og við fáum myndbandið til frjálsrar notkunar á okkar eigin miðlum, þá væri gaman að prófa þetta."
+    }
+   ],
+   "samantekt": "Já með þremur skilyrðum: frjáls notkun, samþykki fyrir birtingu, ekki notað í kynningu Norðurvefs án leyfis.",
+   "svarandi": {
+    "nafn": "Erla Björnsdóttir",
+    "titill": "sálfræðingur og framkvæmdastjóri",
+    "netfang": "erla@betrisvefn.is"
+   },
+   "naest": "Svara Erlu og staðfesta skilyrðin þrjú, svo hefja vinnu."
   },
   {
    "name": "Húðfegrun",
@@ -1102,9 +1117,23 @@
    "ef": "UltraForm",
    "thf": "UltraForm",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:15:03Z",
-   "threadId": "1a1ef02c279ae4d9"
+   "threadId": "1a1ef02c279ae4d9",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:33",
+     "fra": "Sigurjón, UltraForm",
+     "samantekt": "Fullt hjá þeim og biðlisti; heyra í okkur ef aðstæður breytast.",
+     "tilvitnun": "eins og staðan er núna þá er bara fullt hjá okkur ... Við heyrum í ykkur ef aðstæður breytast."
+    }
+   ],
+   "samantekt": "Nei, fullbókuð.",
+   "svarandi": {
+    "nafn": "Sigurjón",
+    "netfang": "ultraform@ultraform.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Heyrn",
@@ -1309,9 +1338,18 @@
    "ef": "Dineout",
    "thf": "Dineout",
    "tegund": "lausnir",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:15:03Z",
-   "threadId": "1a1ef02c97259320"
+   "threadId": "1a1ef02c97259320",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Sjálfvirkt svar: svarað innan 72 klst."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Meindýravarnir Suðurlands",
@@ -1562,9 +1600,23 @@
    "ef": "Keiluhallarinnar",
    "thf": "Keiluhöllina",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "ja",
    "sent": "2026-11-18T14:16:38Z",
-   "threadId": "1a1ef035fb9243ec"
+   "threadId": "1a1ef035fb9243ec",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:50",
+     "fra": "Kristján, Keiluhöllin",
+     "samantekt": "Segir þetta hljóma skemmtilega og vill gjarnan fá 10 sek. myndbandið. Biður okkur að vera skapandi og koma sér á óvart.",
+     "tilvitnun": "Það væri mjög gaman ef þið útbúið þetta 10 sek myndband. Endilega verið skapandi og komið okkur á óvart!"
+    }
+   ],
+   "samantekt": "Já, án skilyrða. Vill að við ráðum hugmyndinni sjálf.",
+   "svarandi": {
+    "nafn": "Kristján",
+    "netfang": "keiluhollin@keiluhollin.is"
+   },
+   "naest": "Byrja á myndbandinu og senda drög. Hringja og kynna sig ef Helgi vill."
   },
   {
    "name": "LAVA Centre",
@@ -2413,9 +2465,18 @@
    "ef": "Húðlæknastöðvarinnar",
    "thf": "Húðlæknastöðina",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:18:11Z",
-   "threadId": "1a1ef05a6785aa40"
+   "threadId": "1a1ef05a6785aa40",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Sjálfvirkt svar frá móttöku."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Akademias",
@@ -2597,9 +2658,18 @@
    "ef": "Almars bakara",
    "thf": "Almar bakara",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "skopp",
    "sent": "2026-11-18T14:19:53Z",
-   "threadId": "1a1ef0654dca603f"
+   "threadId": "1a1ef0654dca603f",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Mail Delivery Subsystem",
+     "samantekt": "Pósturinn komst ekki til skila: almarbakari@almarbakari.is er ekki til."
+    }
+   ],
+   "samantekt": "Netfangið virkar ekki.",
+   "naest": "Finna annað netfang eða hringja."
   },
   {
    "name": "Ölverk Pizza & Brewery",
@@ -2666,9 +2736,18 @@
    "ef": "Bjarnarins Verktaka",
    "thf": "Björninn Verktaka",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "skopp",
    "sent": "2026-11-18T14:19:53Z",
-   "threadId": "1a1ef06563ef8d43"
+   "threadId": "1a1ef06563ef8d43",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Mail Delivery Subsystem",
+     "samantekt": "Pósturinn komst ekki til skila: bjorninn@bjorninnverktakar.is er ekki til."
+    }
+   ],
+   "samantekt": "Netfangið virkar ekki.",
+   "naest": "Finna annað netfang eða hringja."
   },
   {
    "name": "Bullseye",
@@ -3057,9 +3136,23 @@
    "ef": "Hraunsnefs sveitahótels",
    "thf": "Hraunsnef sveitahótel",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:23:28Z",
-   "threadId": "1a1ef0a8c9b4a129"
+   "threadId": "1a1ef0a8c9b4a129",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 15:39",
+     "fra": "Hera, Hraunsnef sveitahótel",
+     "samantekt": "Hafa ekki fjárhag í markaðsefni að svo stöddu. Hrósaði myndböndunum.",
+     "tilvitnun": "Við höfum því miður ekki fjárhag í að kaupa markaðsefni að svo stöddu."
+    }
+   ],
+   "samantekt": "Nei, enginn fjárhagur núna (misskildi kannski að þetta væri frítt).",
+   "svarandi": {
+    "nafn": "Hera",
+    "netfang": "hraunsnef@hraunsnef.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Hringdu",
@@ -3241,9 +3334,18 @@
    "ef": "Löðurs",
    "thf": "Löður",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:21:18Z",
-   "threadId": "1a1ef087ba60a099"
+   "threadId": "1a1ef087ba60a099",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Málsnúmer 00279504 stofnað."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Lyfjaval",
@@ -3287,9 +3389,18 @@
    "ef": "Lyfjavers",
    "thf": "Lyfjaver",
    "tegund": "baedi",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:21:58Z",
-   "threadId": "1a1ef083f862ba12"
+   "threadId": "1a1ef083f862ba12",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Málsnúmer 00113765 stofnað."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Macland",
@@ -3402,9 +3513,18 @@
    "ef": "Procura",
    "thf": "Procura",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "skopp",
    "sent": "2026-11-18T14:24:45Z",
-   "threadId": "1a1ef0bb81029af8"
+   "threadId": "1a1ef0bb81029af8",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Mail Delivery Subsystem",
+     "samantekt": "Pósturinn komst ekki til skila: procura@procura.is er ekki til."
+    }
+   ],
+   "samantekt": "Netfangið virkar ekki.",
+   "naest": "Finna annað netfang eða hringja."
   },
   {
    "name": "Pure North",
@@ -3494,9 +3614,18 @@
    "ef": "Shake & Pizza",
    "thf": "Shake & Pizza",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "skopp",
    "sent": "2026-11-18T14:23:00Z",
-   "threadId": "1a1ef092e1070391"
+   "threadId": "1a1ef092e1070391",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Mail Delivery Subsystem",
+     "samantekt": "Pósturinn komst ekki til skila: shakepizza@shakepizza.is er ekki til."
+    }
+   ],
+   "samantekt": "Netfangið virkar ekki.",
+   "naest": "Finna annað netfang eða hringja."
   },
   {
    "name": "Sjónlag",
@@ -3816,9 +3945,25 @@
    "ef": "Forlagsins",
    "thf": "Forlagið",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:26:19Z",
-   "threadId": "1a1ef0d2961d51cc"
+   "threadId": "1a1ef0d2961d51cc",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:30",
+     "fra": "Linda Rún, skrifstofa Forlagsins",
+     "samantekt": "Áframsendi póstinn á markaðsstjóra Forlagsins.",
+     "tilvitnun": "Takk fyrir að hafa samband, ég áframsendi þetta á markaðsstjóra."
+    }
+   ],
+   "samantekt": "Komið til markaðsstjóra, ekkert svar þaðan enn.",
+   "svarandi": {
+    "nafn": "Linda Rún",
+    "titill": "skrifstofa",
+    "simi": "575 5600",
+    "netfang": "forlagid@forlagid.is"
+   },
+   "naest": "Bíða eftir markaðsstjóra."
   },
   {
    "name": "Glerártorg",
@@ -4023,9 +4168,23 @@
    "ef": "Forest Lagoon",
    "thf": "Forest Lagoon",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:26:59Z",
-   "threadId": "1a1ef0dc6388c414"
+   "threadId": "1a1ef0dc6388c414",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:39",
+     "fra": "Íris Ósk Gísladóttir",
+     "samantekt": "Voru að taka upp eigin herferð og efni sem fer í dreifingu, svo þetta hentar ekki núna.",
+     "tilvitnun": "Við vorum að taka upp herferð og efni sjálf ... svo þetta hentar því ekki"
+    }
+   ],
+   "samantekt": "Nei, eru með eigin herferð í gangi.",
+   "svarandi": {
+    "nafn": "Íris Ósk Gísladóttir",
+    "netfang": "iris@forestlagoon.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Hrím",
@@ -4161,9 +4320,18 @@
    "ef": "Hreint",
    "thf": "Hreint",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:27:33Z",
-   "threadId": "1a1ef0e489364360"
+   "threadId": "1a1ef0e489364360",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:27",
+     "fra": "Ari Þórðarson (fjarvera)",
+     "samantekt": "Í fríi til 23. nóv. Rúnar Ágúst Svavarsson (runar@hreint.is) svarar á meðan."
+    }
+   ],
+   "samantekt": "Í fríi til 23.11.",
+   "naest": "Bíða til 23.11."
   },
   {
    "name": "Álfaborg",
@@ -4299,9 +4467,18 @@
    "ef": "Límtrés Vírnets",
    "thf": "Límtré Vírnet",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:28:00Z",
-   "threadId": "1a1ef0eb444ae9ca"
+   "threadId": "1a1ef0eb444ae9ca",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:30",
+     "fra": "Sala, Límtré Vírnet",
+     "samantekt": "Bara „Mótt.“ (móttekið), engin afstaða."
+    }
+   ],
+   "samantekt": "Staðfesting á móttöku.",
+   "naest": "Bíða."
   },
   {
    "name": "Birgisson",
@@ -4851,9 +5028,23 @@
    "ef": "Laugarvatn Fontana",
    "thf": "Laugarvatn Fontana",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:30:01Z",
-   "threadId": "1a1ef108abef3804"
+   "threadId": "1a1ef108abef3804",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 15:16",
+     "fra": "Elena, Fontana",
+     "samantekt": "Þetta netfang er ekki fyrir markaðsmál; vísar á markaðsdeild Bláa lónsins (sem á Fontana), marketing@bluelagoon.is.",
+     "tilvitnun": "hafa samband við markaðsdeildina í gegnum marketing@bluelagoon.is"
+    }
+   ],
+   "samantekt": "Vísað á markaðsdeild Bláa lónsins.",
+   "svarandi": {
+    "nafn": "Elena",
+    "netfang": "fontana@fontana.is"
+   },
+   "naest": "Ef Helgi vill: senda sama boð á marketing@bluelagoon.is."
   },
   {
    "name": "GeoSea",
@@ -5196,9 +5387,25 @@
    "ef": "Kjarnafæðis",
    "thf": "Kjarnafæði",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "ja",
    "sent": "2026-11-18T14:31:11Z",
-   "threadId": "1a1ef119d991fc52"
+   "threadId": "1a1ef119d991fc52",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:35",
+     "fra": "Gunnlaugur Eiðsson, aðstoðarforstjóri",
+     "samantekt": "Finnst þetta áhugavert og tengir okkur við markaðsstjórann, Andrés Vilhjálmsson (andres@kn.is), sem tekur boltann.",
+     "tilvitnun": "Þetta hljómar áhugavert, ég tengi þig við markasstjórann okkar sem tekur boltann."
+    }
+   ],
+   "samantekt": "Áhugi hjá aðstoðarforstjóra, málið komið til markaðsstjórans Andrésar Vilhjálmssonar.",
+   "svarandi": {
+    "nafn": "Gunnlaugur Eiðsson",
+    "titill": "aðstoðarforstjóri",
+    "simi": "840 7430",
+    "netfang": "gulli@kn.is"
+   },
+   "naest": "Bíða eftir Andrési (andres@kn.is) eða hafa samband við hann beint."
   },
   {
    "name": "Krauma",
@@ -5380,9 +5587,24 @@
    "ef": "Martaks",
    "thf": "Martak",
    "tegund": "baedi",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:27:35Z",
-   "threadId": "1a1ef0e3d0958a79"
+   "threadId": "1a1ef0e3d0958a79",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:27",
+     "fra": "Ægir Valur Hauksson, rekstrarstjóri",
+     "samantekt": "Tómt svar með undirskrift eingöngu, sennilega sjálfvirkt eða óvart."
+    }
+   ],
+   "samantekt": "Tómt svar.",
+   "svarandi": {
+    "nafn": "Ægir Valur Hauksson",
+    "titill": "rekstrarstjóri",
+    "simi": "775 1551",
+    "netfang": "aegir@martak.com"
+   },
+   "naest": "Bíða."
   },
   {
    "name": "Midgard Adventure",
@@ -5495,9 +5717,23 @@
    "ef": "Naust Marine",
    "thf": "Naust Marine",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:28:15Z",
-   "threadId": "1a1ef0e0155a6d54"
+   "threadId": "1a1ef0e0155a6d54",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:58",
+     "fra": "Hrafnkell Tulinius",
+     "samantekt": "Fyrirtækið er í endurskipulagningu og flest komið til Vigo á Spáni. Hefur klippt myndbönd sjálfur. Efast um að vefsíður séu góður markaðsmiðill í þeirra bransa, orðspor og fundir skipta mestu, en segist opinn.",
+     "tilvitnun": "Besta markaðsefni okkar er ORÐSPOR og face to face fundir.. En ég er opinn."
+    }
+   ],
+   "samantekt": "Opinn en efins. Spyr hvað við séum að hugsa.",
+   "svarandi": {
+    "nafn": "Hrafnkell Tulinius",
+    "netfang": "htul@naust.is"
+   },
+   "naest": "Svara með stuttri hugmynd sem hentar sölufundum og sýningum, ekki vefsíðuumferð."
   },
   {
    "name": "Nauthóll",
@@ -5679,9 +5915,18 @@
    "ef": "Saga Travel",
    "thf": "Saga Travel",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:32:57Z",
-   "threadId": "1a1ef133a2f85769"
+   "threadId": "1a1ef133a2f85769",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Sjálfvirkt svar: svara innan 72 klst."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Samhentir",
@@ -5748,9 +5993,18 @@
    "ef": "Snerpu",
    "thf": "Snerpu",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:33:11Z",
-   "threadId": "1a1ef13705e32552"
+   "threadId": "1a1ef13705e32552",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Þjónustubeiðni 716656 stofnuð."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Sporthúsið",
@@ -6438,9 +6692,22 @@
    "ef": "Múlakaffis",
    "thf": "Múlakaffi",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:35:41Z",
-   "threadId": "1a1ef15bbd2a8a24"
+   "threadId": "1a1ef15bbd2a8a24",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:46",
+     "fra": "Múlakaffi",
+     "samantekt": "Þakka fyrir en afþakka að þessu sinni, ekki eitthvað sem þau horfa til núna.",
+     "tilvitnun": "Við ætlum þó að afþakka boðið að þessu sinni"
+    }
+   ],
+   "samantekt": "Nei, kurteislega.",
+   "svarandi": {
+    "netfang": "mulakaffi@mulakaffi.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Okkar bakarí",
@@ -6714,9 +6981,23 @@
    "ef": "Bílorku",
    "thf": "Bílorku",
    "tegund": "baedi",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:36:35Z",
-   "threadId": "1a1ef168fa97bdfa"
+   "threadId": "1a1ef168fa97bdfa",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:38",
+     "fra": "„Gói“, gervigreindarfulltrúi markaðsdeildar Brimborgar",
+     "samantekt": "Sjálfvirkt svar frá gervigreind Brimborgar: getur ekki metið tilboðið, það þarf yfirferð hjá fólki áður en afstaða er tekin.",
+     "tilvitnun": "Tillagan þarf yfirferð áður en afstaða er tekin."
+    }
+   ],
+   "samantekt": "Fór til markaðsdeildar Brimborgar, bíður yfirferðar.",
+   "svarandi": {
+    "nafn": "Markaðsdeild Brimborgar",
+    "netfang": "markadsdeild@brimborg.is"
+   },
+   "naest": "Bíða eftir svari frá markaðsdeild Brimborgar."
   },
   {
    "name": "Bílson",
@@ -6737,9 +7018,22 @@
    "ef": "Bílson",
    "thf": "Bílson",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:32:30Z",
-   "threadId": "1a1ef11e0f72af3e"
+   "threadId": "1a1ef11e0f72af3e",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 15:14",
+     "fra": "Bílson",
+     "samantekt": "Hafa of mikið að gera og geta ekki tekið við fleiri verkefnum; meiri athygli myndi bara valda vandræðum.",
+     "tilvitnun": "Vandi okkar er að við höfum of mikið að gera og getum illa bætt við okkur fleiri verkefnum."
+    }
+   ],
+   "samantekt": "Nei, fullbókuð.",
+   "svarandi": {
+    "netfang": "bilson@bilson.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Blikkás",
@@ -6921,9 +7215,18 @@
    "ef": "dk hugbúnaðar",
    "thf": "dk hugbúnað",
    "tegund": "lausnir",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:37:21Z",
-   "threadId": "1a1ef1741e6b8c18"
+   "threadId": "1a1ef1741e6b8c18",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Þjónustubeiðni 579162 stofnuð hjá ráðgjafadeild dk."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Egersund Ísland",
@@ -6967,9 +7270,18 @@
    "ef": "Eplis",
    "thf": "Epli",
    "tegund": "baedi",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:32:50Z",
-   "threadId": "1a1ef1306c4c615b"
+   "threadId": "1a1ef1306c4c615b",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Sjálfvirkt svar: svarað eins fljótt og unnt er."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Expectus",
@@ -7519,9 +7831,18 @@
    "ef": "Keldunnar",
    "thf": "Kelduna",
    "tegund": "lausnir",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:33:54Z",
-   "threadId": "1a1ef1403633e047"
+   "threadId": "1a1ef1403633e047",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Mál KELDAN-15924 stofnað."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "KGG",
@@ -7542,9 +7863,22 @@
    "ef": "KGG",
    "thf": "KGG",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:39:26Z",
-   "threadId": "1a1ef192a155615a"
+   "threadId": "1a1ef192a155615a",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 15:08",
+     "fra": "KGG",
+     "samantekt": "Tómas hjá Íshúsinu ehf. sér um þessi mál fyrir KGG.",
+     "tilvitnun": "Tomas i Ishusinu ehf er með þetta hja KGG. Takk samt."
+    }
+   ],
+   "samantekt": "Nei, annar aðili (Íshúsið) sér um markaðsmálin.",
+   "svarandi": {
+    "netfang": "kgg@kgg.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Klettur",
@@ -7703,9 +8037,18 @@
    "ef": "OK",
    "thf": "OK",
    "tegund": "lausnir",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:35:38Z",
-   "threadId": "1a1ef14c002598b8"
+   "threadId": "1a1ef14c002598b8",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Verkbeiðni T20261118.0243 stofnuð hjá OK."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Nói Síríus",
@@ -7749,9 +8092,18 @@
    "ef": "Nordic Car Rental",
    "thf": "Nordic Car Rental",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "skopp",
    "sent": "2026-11-18T14:40:09Z",
-   "threadId": "1a1ef19d39d6d71a"
+   "threadId": "1a1ef19d39d6d71a",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Mail Delivery Subsystem",
+     "samantekt": "Pósturinn komst ekki til skila: info@nordiccarrental.is er ekki til."
+    }
+   ],
+   "samantekt": "Netfangið virkar ekki.",
+   "naest": "Finna annað netfang eða hringja."
   },
   {
    "name": "Norðurflug",
@@ -7956,9 +8308,25 @@
    "ef": "Safari Quads",
    "thf": "Safari Quads",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:40:49Z",
-   "threadId": "1a1ef1a70b03033d"
+   "threadId": "1a1ef1a70b03033d",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 15:00",
+     "fra": "Bryndís Fossdal, sölustjóri",
+     "samantekt": "Finnst hugmyndin skemmtileg en eru í samstarfi við Sahara sem sér um markaðsmálin. Afþakka að sinni, gætu skoðað það síðar.",
+     "tilvitnun": "Við ætlum því að afþakka boðið að sinni, en gætum skoðað það í framtíðinni."
+    }
+   ],
+   "samantekt": "Nei í bili, Sahara sér um markaðsmálin.",
+   "svarandi": {
+    "nafn": "Bryndís Fossdal",
+    "titill": "sölustjóri",
+    "simi": "821 1311",
+    "netfang": "bryndis@safari.is"
+   },
+   "naest": "Ekkert. Mögulega síðar."
   },
   {
    "name": "Secret Lagoon",
@@ -8163,9 +8531,23 @@
    "ef": "Tix",
    "thf": "Tix",
    "tegund": "lausnir",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:41:36Z",
-   "threadId": "1a1ef1b257de534c"
+   "threadId": "1a1ef1b257de534c",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:52",
+     "fra": "Eva, Tix",
+     "samantekt": "Eru ekki að leita eftir aðstoð í markaðsmálum eins og er.",
+     "tilvitnun": "við erum ekki að leitast eftir aðstoð í markaðsmálum eða samstarfi við markaðsfyrirtæki eins og er :)"
+    }
+   ],
+   "samantekt": "Nei í bili.",
+   "svarandi": {
+    "nafn": "Eva",
+    "netfang": "info@tix.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "TourDesk",
@@ -8301,9 +8683,23 @@
    "ef": "Wapp",
    "thf": "Wapp",
    "tegund": "lausnir",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:42:06Z",
-   "threadId": "1a1ef1b9ce252889"
+   "threadId": "1a1ef1b9ce252889",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 14:43",
+     "fra": "Einar Skúlason",
+     "samantekt": "Wappið liggur niðri og því þarf ekki að auglýsa.",
+     "tilvitnun": "Wappið liggur niðri um þessar mundir og því þarf ekki að auglýsa."
+    }
+   ],
+   "samantekt": "Nei, appið liggur niðri.",
+   "svarandi": {
+    "nafn": "Einar Skúlason",
+    "netfang": "einarskula@gmail.com"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "World Class",
@@ -8324,9 +8720,18 @@
    "ef": "World Class",
    "thf": "World Class",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "sjalfvirkt",
    "sent": "2026-11-18T14:37:05Z",
-   "threadId": "1a1ef16d60ed3ca0"
+   "threadId": "1a1ef16d60ed3ca0",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Sjálfvirkt",
+     "samantekt": "Sjálfvirkt svar: erindi móttekið, svarað á skrifstofutíma."
+    }
+   ],
+   "samantekt": "Aðeins sjálfvirkt svar enn.",
+   "naest": "Bíða."
   },
   {
    "name": "Atlas",
@@ -8692,9 +9097,18 @@
    "ef": "Noodle Station",
    "thf": "Noodle Station",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "skopp",
    "sent": "2026-11-18T14:37:18Z",
-   "threadId": "1a1ef1722b4c69c0"
+   "threadId": "1a1ef1722b4c69c0",
+   "svor": [
+    {
+     "dags": "18.11.2026",
+     "fra": "Mail Delivery Subsystem",
+     "samantekt": "Pósturinn komst ekki til skila: noodleststion01@hotmail.com er ekki til."
+    }
+   ],
+   "samantekt": "Netfangið virkar ekki.",
+   "naest": "Finna annað netfang eða hringja."
   },
   {
    "name": "Traveo",
@@ -8720,5 +9134,5 @@
    "threadId": "1a1ef1ce4367b7be"
   }
  ],
- "yfirfarid": "2026-11-17T16:01:00Z"
+ "yfirfarid": "2026-11-18T16:05:00Z"
 }
