@@ -1,0 +1,453 @@
+{
+ "backend": "piper",
+ "voice": "steinn",
+ "duration": 214.106,
+ "series_tag": "Stærðfræði · Brot · 1. þáttur",
+ "title": "Brot: Hvor bitinn er stærri?",
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Ímyndaðu þér að þú megir velja.",
+   "start": 2.2,
+   "end": 4.575,
+   "take": "k1-dfdb8bd000.wav"
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Einn fjórði af súkkulaðiplötunni, eða einn áttundi af henni.",
+   "start": 5.025,
+   "end": 8.801,
+   "take": "k2-f28dbc6572.wav"
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "Hvort brotið er stærra?",
+   "start": 9.251,
+   "end": 10.888,
+   "take": "k3-9c8e08128d.wav"
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "Segðu ágiskun þína upphátt.",
+   "start": 11.338,
+   "end": 13.458,
+   "take": "k4-ddba7aaaba.wav",
+   "think_start": 13.708,
+   "think_end": 17.208
+  },
+  {
+   "id": "h1",
+   "part": "3 Hittu hlutana",
+   "text": "Fyrst þurfum við tvö orð.",
+   "start": 18.458,
+   "end": 20.265,
+   "take": "h1-a32f940966.wav"
+  },
+  {
+   "id": "h2",
+   "part": "3 Hittu hlutana",
+   "text": "Brot hefur tvær tölur, eina uppi og eina niðri.",
+   "start": 20.715,
+   "end": 23.895,
+   "take": "h2-656c341740.wav"
+  },
+  {
+   "id": "h3",
+   "part": "3 Hittu hlutana",
+   "text": "Neðri talan heitir nefnari.",
+   "start": 24.345,
+   "end": 26.435,
+   "take": "h3-65bc9c9c0d.wav"
+  },
+  {
+   "id": "h4",
+   "part": "3 Hittu hlutana",
+   "text": "Hún segir í hve marga jafna hluta við skiptum.",
+   "start": 26.885,
+   "end": 30.012,
+   "take": "h4-827b5703d0.wav"
+  },
+  {
+   "id": "h5",
+   "part": "3 Hittu hlutana",
+   "text": "Efri talan heitir teljari.",
+   "start": 30.462,
+   "end": 32.42,
+   "take": "h5-48256ad77e.wav"
+  },
+  {
+   "id": "h6",
+   "part": "3 Hittu hlutana",
+   "text": "Hún segir hve marga hluta þú færð.",
+   "start": 32.87,
+   "end": 35.225,
+   "take": "h6-e1aea7bd00.wav"
+  },
+  {
+   "id": "e1",
+   "part": "4 Erfiða skrefið",
+   "text": "Margir halda að einn áttundi sé stærri.",
+   "start": 36.475,
+   "end": 39.33,
+   "take": "e1-6b058c063f.wav"
+  },
+  {
+   "id": "e2",
+   "part": "4 Erfiða skrefið",
+   "text": "Átta er jú stærri tala en fjórir.",
+   "start": 39.78,
+   "end": 42.59,
+   "take": "e2-bcf366c26d.wav"
+  },
+  {
+   "id": "e3",
+   "part": "4 Erfiða skrefið",
+   "text": "En skoðum hvað gerist í raun.",
+   "start": 43.04,
+   "end": 44.979,
+   "take": "e3-fa75623550.wav"
+  },
+  {
+   "id": "e4",
+   "part": "4 Erfiða skrefið",
+   "text": "Hér eru fjórir vinir sem deila súkkulaðiplötu.",
+   "start": 45.429,
+   "end": 48.656,
+   "take": "e4-7517e30cd7.wav"
+  },
+  {
+   "id": "e5",
+   "part": "4 Erfiða skrefið",
+   "text": "Hver og einn fær einn fjórða.",
+   "start": 49.106,
+   "end": 50.987,
+   "take": "e5-7bece11d42.wav"
+  },
+  {
+   "id": "e6",
+   "part": "4 Erfiða skrefið",
+   "text": "Nú koma fjórir vinir í viðbót.",
+   "start": 51.437,
+   "end": 53.724,
+   "take": "e6-4e02791e5d.wav"
+  },
+  {
+   "id": "e7",
+   "part": "4 Erfiða skrefið",
+   "text": "Þá eru þeir átta, og platan er sú sama.",
+   "start": 54.174,
+   "end": 57.054,
+   "take": "e7-5ebf689fa5.wav"
+  },
+  {
+   "id": "e8",
+   "part": "4 Erfiða skrefið",
+   "text": "Við skiptum henni í átta jafna hluta.",
+   "start": 57.504,
+   "end": 60.209,
+   "take": "e8-3397427151.wav"
+  },
+  {
+   "id": "e9",
+   "part": "4 Erfiða skrefið",
+   "text": "Hver og einn fær einn áttunda.",
+   "start": 60.659,
+   "end": 62.618,
+   "take": "e9-b810510da1.wav"
+  },
+  {
+   "id": "e10",
+   "part": "4 Erfiða skrefið",
+   "text": "Berum bitana saman.",
+   "start": 63.068,
+   "end": 64.621,
+   "take": "e10-95f34a81f3.wav"
+  },
+  {
+   "id": "e11",
+   "part": "4 Erfiða skrefið",
+   "text": "Einn áttundi er bara helmingurinn af einum fjórða.",
+   "start": 65.071,
+   "end": 68.146,
+   "take": "e11-2491d8a942.wav"
+  },
+  {
+   "id": "e12",
+   "part": "4 Erfiða skrefið",
+   "text": "Því fleiri sem deila, því minni verður hver biti.",
+   "start": 68.596,
+   "end": 71.91,
+   "take": "e12-6b942f49f7.wav"
+  },
+  {
+   "id": "n1",
+   "part": "5 Nú þú",
+   "text": "Nú er komið að þér.",
+   "start": 73.26,
+   "end": 75.019,
+   "take": "n1-5097e1bcd9.wav"
+  },
+  {
+   "id": "n2",
+   "part": "5 Nú þú",
+   "text": "Hvort brotið er stærra: einn þriðji eða einn sjötti?",
+   "start": 75.469,
+   "end": 78.91,
+   "take": "n2-d839c310f7.wav"
+  },
+  {
+   "id": "n3",
+   "part": "5 Nú þú",
+   "text": "Veldu græna spjaldið eða það bláa, og segðu það upphátt.",
+   "start": 79.36,
+   "end": 83.538,
+   "take": "n3-ca13e2eff2.wav"
+  },
+  {
+   "id": "n4",
+   "part": "5 Nú þú",
+   "text": "Þú mátt setja á pásu ef þú vilt hugsa lengur.",
+   "start": 83.988,
+   "end": 87.428,
+   "take": "n4-4091b543bd.wav",
+   "think_start": 87.678,
+   "think_end": 92.178
+  },
+  {
+   "id": "n5",
+   "part": "5 Nú þú",
+   "text": "Einn þriðji, á græna spjaldinu, er stærri.",
+   "start": 92.628,
+   "end": 95.633,
+   "take": "n5-86a68405f5.wav"
+  },
+  {
+   "id": "n6",
+   "part": "5 Nú þú",
+   "text": "Ef þú valdir bláa spjaldið, þá ertu í góðum hópi.",
+   "start": 96.083,
+   "end": 99.57,
+   "take": "n6-da9ed6e431.wav"
+  },
+  {
+   "id": "n7",
+   "part": "5 Nú þú",
+   "text": "Sex er stærri tala, en þegar sex deila verða bitarnir minni.",
+   "start": 100.02,
+   "end": 104.13,
+   "take": "n7-c6fb75270a.wav"
+  },
+  {
+   "id": "r1",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Þetta er reglan.",
+   "start": 105.38,
+   "end": 106.642,
+   "take": "r1-c5f0050b55.wav"
+  },
+  {
+   "id": "r2",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Því stærri sem nefnarinn er, því minni er hver hluti.",
+   "start": 107.092,
+   "end": 110.655,
+   "take": "r2-f7dd5fb6df.wav"
+  },
+  {
+   "id": "r3",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Hún gildir um allt sem við skiptum, líka um pítsu.",
+   "start": 111.105,
+   "end": 114.357,
+   "take": "r3-21699856a6.wav"
+  },
+  {
+   "id": "r4",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Ef tveir deila pítsu fær hvor um sig helminginn.",
+   "start": 114.807,
+   "end": 117.826,
+   "take": "r4-13d9ff7243.wav"
+  },
+  {
+   "id": "r5",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Ef tíu deila henni fær hver og einn bara mjóa sneið.",
+   "start": 118.276,
+   "end": 121.931,
+   "take": "r5-13612e6587.wav"
+  },
+  {
+   "id": "r6",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Súkkulaði eða pítsa, það er sama reglan.",
+   "start": 122.381,
+   "end": 125.604,
+   "take": "r6-fda47afab7.wav"
+  },
+  {
+   "id": "r7",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Og svarið við fyrstu spurningunni?",
+   "start": 126.054,
+   "end": 128.283,
+   "take": "r7-88ce75b2bf.wav"
+  },
+  {
+   "id": "r8",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Einn fjórði er stærri en einn áttundi. Veldu einn fjórða!",
+   "start": 128.733,
+   "end": 133.377,
+   "take": "r8-dd4801b336.wav"
+  },
+  {
+   "id": "m1",
+   "part": "7 Nú þú aftur",
+   "text": "Ein spurning enn, aðeins erfiðari.",
+   "start": 134.727,
+   "end": 136.957,
+   "take": "m1-d336072f2a.wav"
+  },
+  {
+   "id": "m2",
+   "part": "7 Nú þú aftur",
+   "text": "Hvort brotið er stærra: einn tíundi eða einn hundraðasti?",
+   "start": 137.407,
+   "end": 141.535,
+   "take": "m2-713874ff02.wav"
+  },
+  {
+   "id": "m3",
+   "part": "7 Nú þú aftur",
+   "text": "Segðu svarið upphátt.",
+   "start": 141.985,
+   "end": 143.638,
+   "take": "m3-4bc93fe878.wav",
+   "think_start": 143.888,
+   "think_end": 149.388
+  },
+  {
+   "id": "m4",
+   "part": "7 Nú þú aftur",
+   "text": "Einn tíundi er stærri.",
+   "start": 149.838,
+   "end": 151.808,
+   "take": "m4-6c7e8f1226.wav"
+  },
+  {
+   "id": "m5",
+   "part": "7 Nú þú aftur",
+   "text": "Ef hundrað vinir deila plötunni fær hver og einn pínulítinn mola.",
+   "start": 152.258,
+   "end": 156.471,
+   "take": "m5-4a3ba5e8f7.wav"
+  },
+  {
+   "id": "u1",
+   "part": "8 Upprifjun",
+   "text": "Þrjú atriði í dag. Segðu hvert þeirra á undan mér.",
+   "start": 157.821,
+   "end": 161.815,
+   "take": "u1-78ed63ba3c.wav"
+  },
+  {
+   "id": "u2",
+   "part": "8 Upprifjun",
+   "text": "Fyrsta: Hvað heitir neðri talan?",
+   "start": 162.265,
+   "end": 164.678,
+   "take": "u2-1bebdbfd2f.wav",
+   "think_start": 164.928,
+   "think_end": 168.428
+  },
+  {
+   "id": "u3",
+   "part": "8 Upprifjun",
+   "text": "Nefnari. Hún segir í hve marga hluta við skiptum.",
+   "start": 168.878,
+   "end": 172.5,
+   "take": "u3-2f7c186566.wav"
+  },
+  {
+   "id": "u4",
+   "part": "8 Upprifjun",
+   "text": "Annað: Hvað gerist þegar fleiri deila?",
+   "start": 172.95,
+   "end": 175.529,
+   "take": "u4-3251470d6e.wav",
+   "think_start": 175.779,
+   "think_end": 179.279
+  },
+  {
+   "id": "u5",
+   "part": "8 Upprifjun",
+   "text": "Hver biti verður minni.",
+   "start": 179.729,
+   "end": 181.32,
+   "take": "u5-aef3e4a777.wav"
+  },
+  {
+   "id": "u6",
+   "part": "8 Upprifjun",
+   "text": "Þriðja: Hvort brotið er stærra, einn fjórði eða einn áttundi?",
+   "start": 181.77,
+   "end": 186.209,
+   "take": "u6-5eb8bf2482.wav",
+   "think_start": 186.459,
+   "think_end": 189.959
+  },
+  {
+   "id": "u7",
+   "part": "8 Upprifjun",
+   "text": "Einn fjórði.",
+   "start": 190.409,
+   "end": 191.486,
+   "take": "u7-70c5803a8f.wav"
+  },
+  {
+   "id": "a1",
+   "part": "9 Áskorun",
+   "text": "Áskorun fyrir kvöldið.",
+   "start": 192.836,
+   "end": 194.454,
+   "take": "a1-9c96b6ae85.wav"
+  },
+  {
+   "id": "a2",
+   "part": "9 Áskorun",
+   "text": "Brjóttu blað tvisvar saman. Þá færðu fjóra jafna hluta.",
+   "start": 194.904,
+   "end": 198.806,
+   "take": "a2-2debb118c1.wav"
+  },
+  {
+   "id": "a3",
+   "part": "9 Áskorun",
+   "text": "Brjóttu annað blað þrisvar saman. Þá færðu átta hluta.",
+   "start": 199.256,
+   "end": 202.987,
+   "take": "a3-958ae48e81.wav"
+  },
+  {
+   "id": "a4",
+   "part": "9 Áskorun",
+   "text": "Sýndu einhverjum heima hvor bitinn er stærri, og segðu af hverju.",
+   "start": 203.437,
+   "end": 207.593,
+   "take": "a4-f7703b7345.wav"
+  },
+  {
+   "id": "a5",
+   "part": "9 Áskorun",
+   "text": "Sjáumst í næsta þætti!",
+   "start": 208.043,
+   "end": 209.956,
+   "take": "a5-7ff5135ca5.wav"
+  }
+ ]
+}

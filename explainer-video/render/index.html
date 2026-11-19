@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "Atkinson Hyperlegible"; font-weight: 400; src: url(/node_modules/@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-weight: 700; src: url(/node_modules/@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2) format("woff2"); }
+html, body { margin: 0; background: #FBF6EC; }
+svg { display: block; }
+</style></head>
+<body>
+<svg id="stage" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.28  0 0 0 0.07 0"/>
+    </filter>
+  </defs>
+  <rect width="1920" height="1080" fill="#FBF6EC"/>
+  <rect width="1920" height="1080" filter="url(#grain)"/>
+  <g id="root"></g>
+</svg>
+<script type="module">
+import * as scenes from "/scenes.js";
+window.scenes = scenes;
+window.ready = document.fonts.load('700 40px "Atkinson Hyperlegible"').then(() => document.fonts.load('400 40px "Atkinson Hyperlegible"')).then(() => true);
+</script>
+</body></html>

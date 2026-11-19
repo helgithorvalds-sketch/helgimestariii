@@ -1,0 +1,61 @@
+  k1  Ímyndaðu þér að þú megir velja.
+  k2  Einn fjórði af súkkulaðiplötunni, eða einn áttundi af henni.
+  k3  Hvort brotið er stærra?
+  k4  Segðu ágiskun þína upphátt.
+  h1  Fyrst þurfum við tvö orð.
+  h2  Brot hefur tvær tölur, eina uppi og eina niðri.
+  h3  Neðri talan heitir nefnari.
+  h4  Hún segir í hve marga jafna hluta við skiptum.
+  h5  Efri talan heitir teljari.
+  h6  Hún segir hve marga hluta þú færð.
+  e1  Margir halda að einn áttundi sé stærri.
+  e2  Átta er jú stærri tala en fjórir.
+  e3  En skoðum hvað gerist í raun.
+  e4  Hér eru fjórir vinir sem deila súkkulaðiplötu.
+  e5  Hver og einn fær einn fjórða.
+  e6  Nú koma fjórir vinir í viðbót.
+  e7  Þá eru þeir átta, og platan er sú sama.
+  e8  Við skiptum henni í átta jafna hluta.
+  e9  Hver og einn fær einn áttunda.
+ e10  Berum bitana saman.
+ e11  Einn áttundi er bara helmingurinn af einum fjórða.
+ e12  Því fleiri sem deila, því minni verður hver biti.
+  n1  Nú er komið að þér.
+  n2  Hvort brotið er stærra: einn þriðji eða einn sjötti?
+        ! Z002: Orð á að byrja á hástaf: 'einn' -> Einn
+  n3  Veldu græna spjaldið eða það bláa, og segðu það upphátt.
+  n4  Þú mátt setja á pásu ef þú vilt hugsa lengur.
+  n5  Einn þriðji, á græna spjaldinu, er stærri.
+  n6  Ef þú valdir bláa spjaldið, þá gera það margir.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  n7  Sex er stærri tala, en þegar sex deila verða bitarnir minni.
+  r1  Þetta er reglan.
+  r2  Því stærri sem nefnarinn er, því minni er hver hluti.
+  r3  Hún gildir um allt sem við skiptum, líka um pítsu.
+  r4  Ef tveir deila pítsu fær hvor um sig helminginn.
+  r5  Ef tíu deila henni fær hver og einn bara mjóa sneið.
+  r6  Súkkulaði eða pítsa, það er sama reglan.
+  r7  Og svarið við fyrstu spurningunni?
+  r8  Einn fjórði er stærri en einn áttundi. Veldu einn fjórða!
+  m1  Ein spurning enn, aðeins erfiðari.
+  m2  Hvort brotið er stærra: einn tíundi eða einn hundraðasti?
+        ! Z002: Orð á að byrja á hástaf: 'einn' -> Einn
+  m3  Segðu svarið upphátt.
+  m4  Einn tíundi er stærri.
+  m5  Ef hundrað vinir deila plötunni fær hver og einn pínulítinn mola.
+  u1  Þrjú atriði í dag. Segðu hvert þeirra á undan mér.
+  u2  Fyrsta: Hvað heitir neðri talan?
+  u3  Nefnari. Hún segir í hve marga hluta við skiptum.
+  u4  Annað: Hvað gerist þegar fleiri deila?
+  u5  Hver biti verður minni.
+  u6  Þriðja: Hvort brotið er stærra, einn fjórði eða einn áttundi?
+  u7  Einn fjórði.
+  a1  Áskorun fyrir kvöldið.
+  a2  Brjóttu blað tvisvar saman. Þá færðu fjóra jafna hluta.
+  a3  Brjóttu annað blað þrisvar saman. Þá færðu átta hluta.
+  a4  Sýndu einhverjum heima hvor bitinn er stærri, og segðu af hverju.
+  a5  Sjáumst í næsta þætti!
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+        ! E007: Setning inniheldur upphrópunarmerki -> !
+
+4 af 54 setningum með athugasemd.

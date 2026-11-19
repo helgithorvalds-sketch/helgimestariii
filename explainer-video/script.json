@@ -1,0 +1,302 @@
+{
+ "title": "Brot: Hvor bitinn er stærri?",
+ "series_tag": "Stærðfræði · Brot · 1. þáttur",
+ "goal": "Áhorfandinn getur útskýrt af hverju einn fjórði er stærri en einn áttundi: því fleiri hlutar, því minni biti.",
+ "hard_step": "Ranghugmyndin að stærri nefnari þýði stærra brot (8 > 4, svo 1/8 > 1/4).",
+ "terms": [
+  "brot",
+  "nefnari",
+  "teljari"
+ ],
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Ímyndaðu þér að þú megir velja."
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Einn fjórði af súkkulaðiplötunni, eða einn áttundi af henni."
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "Hvort brotið er stærra?"
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "Segðu ágiskun þína upphátt.",
+   "pause": 3.5,
+   "think": true
+  },
+  {
+   "id": "h1",
+   "part": "3 Hittu hlutana",
+   "text": "Fyrst þurfum við tvö orð.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "h2",
+   "part": "3 Hittu hlutana",
+   "text": "Brot hefur tvær tölur, eina uppi og eina niðri."
+  },
+  {
+   "id": "h3",
+   "part": "3 Hittu hlutana",
+   "text": "Neðri talan heitir nefnari."
+  },
+  {
+   "id": "h4",
+   "part": "3 Hittu hlutana",
+   "text": "Hún segir í hve marga jafna hluta við skiptum."
+  },
+  {
+   "id": "h5",
+   "part": "3 Hittu hlutana",
+   "text": "Efri talan heitir teljari."
+  },
+  {
+   "id": "h6",
+   "part": "3 Hittu hlutana",
+   "text": "Hún segir hve marga hluta þú færð."
+  },
+  {
+   "id": "e1",
+   "part": "4 Erfiða skrefið",
+   "text": "Margir halda að einn áttundi sé stærri.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "e2",
+   "part": "4 Erfiða skrefið",
+   "text": "Átta er jú stærri tala en fjórir."
+  },
+  {
+   "id": "e3",
+   "part": "4 Erfiða skrefið",
+   "text": "En skoðum hvað gerist í raun."
+  },
+  {
+   "id": "e4",
+   "part": "4 Erfiða skrefið",
+   "text": "Hér eru fjórir vinir sem deila súkkulaðiplötu."
+  },
+  {
+   "id": "e5",
+   "part": "4 Erfiða skrefið",
+   "text": "Hver og einn fær einn fjórða."
+  },
+  {
+   "id": "e6",
+   "part": "4 Erfiða skrefið",
+   "text": "Nú koma fjórir vinir í viðbót."
+  },
+  {
+   "id": "e7",
+   "part": "4 Erfiða skrefið",
+   "text": "Þá eru þeir átta, og platan er sú sama."
+  },
+  {
+   "id": "e8",
+   "part": "4 Erfiða skrefið",
+   "text": "Við skiptum henni í átta jafna hluta."
+  },
+  {
+   "id": "e9",
+   "part": "4 Erfiða skrefið",
+   "text": "Hver og einn fær einn áttunda."
+  },
+  {
+   "id": "e10",
+   "part": "4 Erfiða skrefið",
+   "text": "Berum bitana saman."
+  },
+  {
+   "id": "e11",
+   "part": "4 Erfiða skrefið",
+   "text": "Einn áttundi er bara helmingurinn af einum fjórða."
+  },
+  {
+   "id": "e12",
+   "part": "4 Erfiða skrefið",
+   "text": "Því fleiri sem deila, því minni verður hver biti."
+  },
+  {
+   "id": "n1",
+   "part": "5 Nú þú",
+   "text": "Nú er komið að þér.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "n2",
+   "part": "5 Nú þú",
+   "text": "Hvort brotið er stærra: einn þriðji eða einn sjötti?"
+  },
+  {
+   "id": "n3",
+   "part": "5 Nú þú",
+   "text": "Veldu græna spjaldið eða það bláa, og segðu það upphátt."
+  },
+  {
+   "id": "n4",
+   "part": "5 Nú þú",
+   "text": "Þú mátt setja á pásu ef þú vilt hugsa lengur.",
+   "pause": 4.5,
+   "think": true
+  },
+  {
+   "id": "n5",
+   "part": "5 Nú þú",
+   "text": "Einn þriðji, á græna spjaldinu, er stærri."
+  },
+  {
+   "id": "n6",
+   "part": "5 Nú þú",
+   "text": "Ef þú valdir bláa spjaldið, þá ertu í góðum hópi."
+  },
+  {
+   "id": "n7",
+   "part": "5 Nú þú",
+   "text": "Sex er stærri tala, en þegar sex deila verða bitarnir minni."
+  },
+  {
+   "id": "r1",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Þetta er reglan.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "r2",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Því stærri sem nefnarinn er, því minni er hver hluti."
+  },
+  {
+   "id": "r3",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Hún gildir um allt sem við skiptum, líka um pítsu."
+  },
+  {
+   "id": "r4",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Ef tveir deila pítsu fær hvor um sig helminginn."
+  },
+  {
+   "id": "r5",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Ef tíu deila henni fær hver og einn bara mjóa sneið."
+  },
+  {
+   "id": "r6",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Súkkulaði eða pítsa, það er sama reglan."
+  },
+  {
+   "id": "r7",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Og svarið við fyrstu spurningunni?"
+  },
+  {
+   "id": "r8",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Einn fjórði er stærri en einn áttundi. Veldu einn fjórða!"
+  },
+  {
+   "id": "m1",
+   "part": "7 Nú þú aftur",
+   "text": "Ein spurning enn, aðeins erfiðari.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "m2",
+   "part": "7 Nú þú aftur",
+   "text": "Hvort brotið er stærra: einn tíundi eða einn hundraðasti?"
+  },
+  {
+   "id": "m3",
+   "part": "7 Nú þú aftur",
+   "text": "Segðu svarið upphátt.",
+   "pause": 5.5,
+   "think": true
+  },
+  {
+   "id": "m4",
+   "part": "7 Nú þú aftur",
+   "text": "Einn tíundi er stærri."
+  },
+  {
+   "id": "m5",
+   "part": "7 Nú þú aftur",
+   "text": "Ef hundrað vinir deila plötunni fær hver og einn pínulítinn mola."
+  },
+  {
+   "id": "u1",
+   "part": "8 Upprifjun",
+   "text": "Þrjú atriði í dag. Segðu hvert þeirra á undan mér.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "u2",
+   "part": "8 Upprifjun",
+   "text": "Fyrsta: Hvað heitir neðri talan?",
+   "pause": 3.5,
+   "think": true
+  },
+  {
+   "id": "u3",
+   "part": "8 Upprifjun",
+   "text": "Nefnari. Hún segir í hve marga hluta við skiptum."
+  },
+  {
+   "id": "u4",
+   "part": "8 Upprifjun",
+   "text": "Annað: Hvað gerist þegar fleiri deila?",
+   "pause": 3.5,
+   "think": true
+  },
+  {
+   "id": "u5",
+   "part": "8 Upprifjun",
+   "text": "Hver biti verður minni."
+  },
+  {
+   "id": "u6",
+   "part": "8 Upprifjun",
+   "text": "Þriðja: Hvort brotið er stærra, einn fjórði eða einn áttundi?",
+   "pause": 3.5,
+   "think": true
+  },
+  {
+   "id": "u7",
+   "part": "8 Upprifjun",
+   "text": "Einn fjórði."
+  },
+  {
+   "id": "a1",
+   "part": "9 Áskorun",
+   "text": "Áskorun fyrir kvöldið.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "a2",
+   "part": "9 Áskorun",
+   "text": "Brjóttu blað tvisvar saman. Þá færðu fjóra jafna hluta."
+  },
+  {
+   "id": "a3",
+   "part": "9 Áskorun",
+   "text": "Brjóttu annað blað þrisvar saman. Þá færðu átta hluta."
+  },
+  {
+   "id": "a4",
+   "part": "9 Áskorun",
+   "text": "Sýndu einhverjum heima hvor bitinn er stærri, og segðu af hverju."
+  },
+  {
+   "id": "a5",
+   "part": "9 Áskorun",
+   "text": "Sjáumst í næsta þætti!"
+  }
+ ]
+}

@@ -1,0 +1,7 @@
+frames/
+render/node_modules/
+audio/
+qa/stills/
+qa/sheet*.png
+qa/primer-*.wav
+qa/asr-run-*.log

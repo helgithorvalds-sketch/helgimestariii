@@ -1,0 +1,157 @@
+ATH   k1  handrit: Ímyndaðu þér að þú megir velja.
+           heyrt:   ímyndaðu þér að þú megir veljar
+           - 'velja' -> 'veljar'
+OK    k2  handrit: Einn fjórði af súkkulaðiplötunni, eða einn áttundi af henni.
+           heyrt:   einn fjórði af súkkulaðiplötunni eða einn áttundi af henni
+OK    k3  handrit: Hvort brotið er stærra?
+           heyrt:   hvort brotið er stærra
+OK    k4  handrit: Segðu ágiskun þína upphátt.
+           heyrt:   segðu ágiskun þína upphátt
+ATH   h1  handrit: Fyrst þurfum við tvö orð.
+           heyrt:   þurfum við tvö orð
+           - 'fyrst' -> ''
+OK    h2  handrit: Brot hefur tvær tölur, eina uppi og eina niðri.
+           heyrt:   brot hefur tvær tölur eina uppi og eina niðri
+OK    h3  handrit: Neðri talan heitir nefnari.
+           heyrt:   neðri talan heitir nefnari
+ATH   h4  handrit: Hún segir í hve marga jafna hluta við skiptum.
+           heyrt:   hún segir í hve marga jafna hluta viðskiptum
+           - 'við skiptum' -> 'viðskiptum'
+ATH   h5  handrit: Efri talan heitir teljari.
+           heyrt:   efri talan heitir teljari hún
+           - '' -> 'hún'
+ATH   h6  handrit: Hún segir hve marga hluta þú færð.
+           heyrt:   segir hve marga hluta þú færði
+           - 'hún' -> ''
+           - 'færð' -> 'færði'
+ATH   e1  handrit: Margir halda að einn áttundi sé stærri.
+           heyrt:   halda að einn áttundi sé stærri
+           - 'margir' -> ''
+OK    e2  handrit: Átta er jú stærri tala en fjórir.
+           heyrt:   átta er jú stærri tala en fjórir
+ATH   e3  handrit: En skoðum hvað gerist í raun.
+           heyrt:   skoðum hvað gerist í raunu
+           - 'en' -> ''
+           - 'raun' -> 'raunu'
+ATH   e4  handrit: Hér eru fjórir vinir sem deila súkkulaðiplötu.
+           heyrt:   hér eru fjórir vinir sem deilasúkkulaðiplötur
+           - 'deila súkkulaðiplötu' -> 'deilasúkkulaðiplötur'
+ATH   e5  handrit: Hver og einn fær einn fjórða.
+           heyrt:   hver og einn fær einn áttunda
+           - 'fjórða' -> 'áttunda'
+ATH   e6  handrit: Nú koma fjórir vinir í viðbót.
+           heyrt:   berum bitana saman inn
+           - 'nú koma fjórir vinir í viðbót' -> 'berum bitana saman inn'
+ATH   e7  handrit: Þá eru þeir átta, og platan er sú sama.
+           heyrt:   
+           - 'þá eru þeir átta og platan er sú sama' -> ''
+ATH   e8  handrit: Við skiptum henni í átta jafna hluta.
+           heyrt:   áttundi
+           - 'við skiptum henni í átta jafna hluta' -> 'áttundi'
+ATH   e9  handrit: Hver og einn fær einn áttunda.
+           heyrt:   
+           - 'hver og einn fær einn áttunda' -> ''
+ATH  e10  handrit: Berum bitana saman.
+           heyrt:   er
+           - 'berum bitana saman' -> 'er'
+ATH  e11  handrit: Einn áttundi er bara helmingurinn af einum fjórða.
+           heyrt:   bara helmingurinn af einum fjórða
+           - 'einn áttundi er' -> ''
+OK   e12  handrit: Því fleiri sem deila, því minni verður hver biti.
+           heyrt:   því fleiri sem deila því minni verður hver biti
+ATH   n1  handrit: Nú er komið að þér.
+           heyrt:   er komið að þér
+           - 'nú' -> ''
+ATH   n2  handrit: Hvort brotið er stærra: einn þriðji eða einn sjötti?
+           heyrt:   hvort brotið er stærrar einn þriðji eða einn sjötti
+           - 'stærra' -> 'stærrar'
+OK    n3  handrit: Veldu græna spjaldið eða það bláa, og segðu það upphátt.
+           heyrt:   veldu græna spjaldið eða það bláa og segðu það upphátt
+ATH   n4  handrit: Þú mátt setja á pásu ef þú vilt hugsa lengur.
+           heyrt:   mátt sitja á pásu ef þú vilt hugsa
+           - 'þú' -> ''
+           - 'setja' -> 'sitja'
+           - 'lengur' -> ''
+ATH   n5  handrit: Einn þriðji, á græna spjaldinu, er stærri.
+           heyrt:   
+           - 'einn þriðji á græna spjaldinu er stærri' -> ''
+ATH   n6  handrit: Ef þú valdir bláa spjaldið, þá ertu í góðum hópi.
+           heyrt:   
+           - 'ef þú valdir bláa spjaldið þá ertu í góðum hópi' -> ''
+ATH   n7  handrit: Sex er stærri tala, en þegar sex deila verða bitarnir minni.
+           heyrt:   
+           - 'sex er stærri tala en þegar sex deila verða bitarnir minni' -> ''
+ATH   r1  handrit: Þetta er reglan.
+           heyrt:   er reglan
+           - 'þetta' -> ''
+OK    r2  handrit: Því stærri sem nefnarinn er, því minni er hver hluti.
+           heyrt:   því stærri sem nefnarinn er því minni er hver hluti
+ATH   r3  handrit: Hún gildir um allt sem við skiptum, líka um pítsu.
+           heyrt:   hún gildir um allt sem við skiptum líka um pizzur
+           - 'pítsu' -> 'pizzur'
+ATH   r4  handrit: Ef tveir deila pítsu fær hvor um sig helminginn.
+           heyrt:   ef tveir deila pizzu fær hvor um sig helminginn
+           - 'pítsu' -> 'pizzu'
+ATH   r5  handrit: Ef tíu deila henni fær hver og einn bara mjóa sneið.
+           heyrt:   tíu deila henni fær hver og einn bara minni mjóasneiði
+           - 'ef' -> ''
+           - 'mjóa sneið' -> 'minni mjóasneiði'
+ATH   r6  handrit: Súkkulaði eða pítsa, það er sama reglan.
+           heyrt:   súkkulaði eða pizza það er sama reglan
+           - 'pítsa' -> 'pizza'
+OK    r7  handrit: Og svarið við fyrstu spurningunni?
+           heyrt:   og svarið við fyrstu spurningunni
+OK    r8  handrit: Einn fjórði er stærri en einn áttundi. Veldu einn fjórða!
+           heyrt:   einn fjórði er stærri en einn áttundi veldu einn fjórða
+ATH   m1  handrit: Ein spurning enn, aðeins erfiðari.
+           heyrt:   spurning en aðeins erfiðari
+           - 'ein' -> ''
+           - 'enn' -> 'en'
+ATH   m2  handrit: Hvort brotið er stærra: einn tíundi eða einn hundraðasti?
+           heyrt:   hvort brotið er stærrar einn tíðundi eða einn hundraðasti
+           - 'stærra' -> 'stærrar'
+           - 'tíundi' -> 'tíðundi'
+OK    m3  handrit: Segðu svarið upphátt.
+           heyrt:   segðu svarið upphátt
+ATH   m4  handrit: Einn tíundi er stærri.
+           heyrt:   fndi er stærri
+           - 'einn tíundi' -> 'fndi'
+ATH   m5  handrit: Ef hundrað vinir deila plötunni fær hver og einn pínulítinn mola.
+           heyrt:   hundrað vinir deila plötunni fær hver og einn pínulítinn mola
+           - 'ef' -> ''
+ATH   u1  handrit: Þrjú atriði í dag. Segðu hvert þeirra á undan mér.
+           heyrt:   atriði í dag segðu hvert þeirra á undan mér
+           - 'þrjú' -> ''
+OK    u2  handrit: Fyrsta: Hvað heitir neðri talan?
+           heyrt:   fyrsta hvað heitir neðri talan
+ATH   u3  handrit: Nefnari. Hún segir í hve marga hluta við skiptum.
+           heyrt:   
+           - 'nefnari hún segir í hve marga hluta við skiptum' -> ''
+ATH   u4  handrit: Annað: Hvað gerist þegar fleiri deila?
+           heyrt:   
+           - 'annað hvað gerist þegar fleiri deila' -> ''
+ATH   u5  handrit: Hver biti verður minni.
+           heyrt:   biti verður minni
+           - 'hver' -> ''
+OK    u6  handrit: Þriðja: Hvort brotið er stærra, einn fjórði eða einn áttundi?
+           heyrt:   þriðja hvort brotið er stærra einn fjórði eða einn áttundi
+ATH   u7  handrit: Einn fjórði.
+           heyrt:   fjórði
+           - 'einn' -> ''
+ATH   a1  handrit: Áskorun fyrir kvöldið.
+           heyrt:   fyrir kvöldiði
+           - 'áskorun' -> ''
+           - 'kvöldið' -> 'kvöldiði'
+ATH   a2  handrit: Brjóttu blað tvisvar saman. Þá færðu fjóra jafna hluta.
+           heyrt:   fndu blað tvisvar saman þá færðu fjóra jafna hluta
+           - 'brjóttu' -> 'fndu'
+OK    a3  handrit: Brjóttu annað blað þrisvar saman. Þá færðu átta hluta.
+           heyrt:   brjóttu annað blað þrisvar saman þá færðu átta hluta
+ATH   a4  handrit: Sýndu einhverjum heima hvor bitinn er stærri, og segðu af hverju.
+           heyrt:   sýndu einhverjum heima hvor bitinn er stærri og segðu af hverjur
+           - 'hverju' -> 'hverjur'
+ATH   a5  handrit: Sjáumst í næsta þætti!
+           heyrt:   sjáumst í næsta þætti fni
+           - '' -> 'fni'
+Rödd ugla: 117 frávik í 383 orðum (30.5%), 39 af 54 setningum með frávik.
+Frávik eru staðir til að hlusta á, ekki sannaðar villur: talgreinirinn gerir sjálfur 7–16% villur á íslensku.
