@@ -2373,9 +2373,25 @@
    "ef": "Optical Studio",
    "thf": "Optical Studio",
    "tegund": "baedi",
-   "stada": "sent",
+   "stada": "ja",
    "sent": "2026-11-18T14:18:50Z",
-   "threadId": "1a1ef0563ed778d6"
+   "threadId": "1a1ef0563ed778d6",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 16:53",
+     "fra": "Hulda Guðný Kjartansdóttir, framkvæmdastjóri",
+     "samantekt": "Segir ekki nei, alltaf gaman að sjá hvað við getum, en vill ekki skuldbinda sig í samstarf eða pakka. Skoða framhaldið eftir á.",
+     "tilvitnun": "hljómar vel, við segjum ekki nei við því en hins vegar er ég ekki tilbúin til að skuldbinda okkur í samstarf eða einhvern pakka"
+    }
+   ],
+   "samantekt": "Já við fría myndbandinu, engin skuldbinding.",
+   "svarandi": {
+    "nafn": "Hulda Guðný Kjartansdóttir",
+    "titill": "framkvæmdastjóri",
+    "simi": "698 5339",
+    "netfang": "huldagudny@opticalstudio.is"
+   },
+   "naest": "Gera myndbandið og senda henni."
   },
   {
    "name": "Sjáðu",
@@ -2929,9 +2945,24 @@
    "ef": "Ginger",
    "thf": "Ginger",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:22:38Z",
-   "threadId": "1a1ef09c863fdddd"
+   "threadId": "1a1ef09c863fdddd",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 16:51",
+     "fra": "Kristofer Fuller, framkvæmdastjóri",
+     "samantekt": "Takk en ekki núna.",
+     "tilvitnun": "takk fyrir að hafa samband en ekki núna."
+    }
+   ],
+   "samantekt": "Nei í bili.",
+   "svarandi": {
+    "nafn": "Kristofer Fuller",
+    "titill": "framkvæmdastjóri",
+    "netfang": "ginger@ginger.is"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Goddi",
@@ -2975,9 +3006,25 @@
    "ef": "Heilsu",
    "thf": "Heilsu",
    "tegund": "vorur",
-   "stada": "sent",
+   "stada": "ja",
    "sent": "2026-11-18T14:20:16Z",
-   "threadId": "1a1ef078813cc69a"
+   "threadId": "1a1ef078813cc69a",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 16:31",
+     "fra": "Margrét Dagbjört Pétursdóttir, markaðs- og viðskiptaþróunarstjóri",
+     "samantekt": "Finnst þetta áhugavert og vill sjá hugmynd fyrir Gula miðann (fæðubótarvörumerki Heilsu). Magnea Ýr Gylfadóttir í cc.",
+     "tilvitnun": "Hljómar áhugavert. Væri gaman að sjá hugmynd fyrir Gula miðann."
+    }
+   ],
+   "samantekt": "Já, vill hugmynd fyrir Gula miðann.",
+   "svarandi": {
+    "nafn": "Margrét Dagbjört Pétursdóttir",
+    "titill": "markaðs- og viðskiptaþróunarstjóri",
+    "simi": "846 3228",
+    "netfang": "margretd@heilsa.is"
+   },
+   "naest": "Senda hugmynd og myndband fyrir Gula miðann."
   },
   {
    "name": "Heyrnarstöðin",
@@ -3113,9 +3160,25 @@
    "ef": "Hótel Selfoss",
    "thf": "Hótel Selfoss",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:20:16Z",
-   "threadId": "1a1ef078ec9793e2"
+   "threadId": "1a1ef078ec9793e2",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 19:09",
+     "fra": "Agnes Ósk Hreinsdóttir, aðstoðarhótelstjóri",
+     "samantekt": "Áframsendi á markaðsdeildina (marketing@hotelselfoss.is). Mikið að gera vegna jólahlaðborða og árshátíða, svo svar kemur ekki strax.",
+     "tilvitnun": "Ég ætla að áframsenda póstinn á markaðsdeildina okkar sem verður í bandi."
+    }
+   ],
+   "samantekt": "Komið til markaðsdeildar, svar seinna.",
+   "svarandi": {
+    "nafn": "Agnes Ósk Hreinsdóttir",
+    "titill": "aðstoðarhótelstjóri",
+    "simi": "480 2500",
+    "netfang": "info@hotelselfoss.is"
+   },
+   "naest": "Bíða eftir markaðsdeild."
   },
   {
    "name": "Hraunsnef sveitahótel",
@@ -3196,9 +3259,24 @@
    "ef": "Húsaskjóls",
    "thf": "Húsaskjól",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "ja",
    "sent": "2026-11-18T14:20:16Z",
-   "threadId": "1a1ef079017863bc"
+   "threadId": "1a1ef079017863bc",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 17:03",
+     "fra": "Ásdís Ósk Valsdóttir",
+     "samantekt": "Já, megum vera skapandi; hlakkar til að sjá hvernig við horfum á Húsaskjól.",
+     "tilvitnun": "Já flott og megið endilega vera skapandi, hlakka til að sjá hvernig þið horfið á Húsaskjól"
+    }
+   ],
+   "samantekt": "Já, frjálsar hendur.",
+   "svarandi": {
+    "nafn": "Ásdís Ósk Valsdóttir",
+    "titill": "fasteignasali",
+    "netfang": "asdis@husaskjol.is"
+   },
+   "naest": "Gera myndbandið og senda."
   },
   {
    "name": "Kælitækni",
@@ -3784,9 +3862,23 @@
    "ef": "The Cave Víðgelmir",
    "thf": "The Cave Víðgelmir",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:22:20Z",
-   "threadId": "1a1ef09711331ff4"
+   "threadId": "1a1ef09711331ff4",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 19:10",
+     "fra": "Hörður, The Cave",
+     "samantekt": "Vill taka stutt símtal fimmtudaginn 19.11. fyrir hádegi.",
+     "tilvitnun": "Heyrumst í síma á morgun fyrir hádegið og tökum stutt spjall."
+    }
+   ],
+   "samantekt": "Vill símtal í dag (19.11.) fyrir hádegi.",
+   "svarandi": {
+    "nafn": "Hörður",
+    "netfang": "info@thecave.is"
+   },
+   "naest": "HRINGJA Í DAG FYRIR HÁDEGI."
   },
   {
    "name": "Troll Expeditions",
@@ -6462,9 +6554,24 @@
    "ef": "Lava Show",
    "thf": "Lava Show",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:29:40Z",
-   "threadId": "1a1ef1029cc3c6b7"
+   "threadId": "1a1ef1029cc3c6b7",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 17:49",
+     "fra": "Jón Heiðar Ragnheiðarson, sölu- og markaðsstjóri",
+     "samantekt": "Eru ágætlega sett í þessum efnum en gott að vita af okkur.",
+     "tilvitnun": "við erum ágætlega sett í þessum efnum en það er gott að vita af ykkur."
+    }
+   ],
+   "samantekt": "Nei í bili.",
+   "svarandi": {
+    "nafn": "Jón Heiðar Ragnheiðarson",
+    "titill": "sölu- og markaðsstjóri",
+    "netfang": "jon@lavashow.com"
+   },
+   "naest": "Ekkert."
   },
   {
    "name": "Kaffivagninn",
@@ -7371,9 +7478,24 @@
    "ef": "Gagnavörslunnar",
    "thf": "Gagnavörsluna",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "spurning",
    "sent": "2026-11-18T14:37:48Z",
-   "threadId": "1a1ef17ac9799d2e"
+   "threadId": "1a1ef17ac9799d2e",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 22:57",
+     "fra": "Davíð Guðmundsson",
+     "samantekt": "Vill heyra betur í okkur og leggur til símtal/fund mánudaginn 23.11. kl. 10:30.",
+     "tilvitnun": "Ég myndi vilja heyra betur í þér. Getum við heyrst í næstu viku? Legg til mánudag kl 1030"
+    }
+   ],
+   "samantekt": "Vill spjall mánudaginn 23.11. kl. 10:30.",
+   "svarandi": {
+    "nafn": "Davíð Guðmundsson",
+    "simi": "860 3990",
+    "netfang": "david@gagnavarslan.is"
+   },
+   "naest": "Staðfesta mánudag 23.11. kl. 10:30."
   },
   {
    "name": "Garðs Apótek",
@@ -7945,9 +8067,25 @@
    "ef": "Alda",
    "thf": "Aldir",
    "tegund": "thjonusta",
-   "stada": "sent",
+   "stada": "nei",
    "sent": "2026-11-18T14:39:42Z",
-   "threadId": "1a1ef1968330cdfc"
+   "threadId": "1a1ef1968330cdfc",
+   "svor": [
+    {
+     "dags": "18.11.2026 kl. 16:14",
+     "fra": "Andri Sigurðsson, eigandi",
+     "samantekt": "Gæti komið til greina en ekki eins og er.",
+     "tilvitnun": "Þetta gæti komið til greina en ekki eins og er."
+    }
+   ],
+   "samantekt": "Nei í bili, kannski síðar.",
+   "svarandi": {
+    "nafn": "Andri Sigurðsson",
+    "titill": "löggiltur fasteignasali og eigandi",
+    "simi": "690 3111",
+    "netfang": "andri@aldirfasteignir.is"
+   },
+   "naest": "Ekkert núna."
   },
   {
    "name": "Lava Car Rental",
@@ -9134,5 +9272,5 @@
    "threadId": "1a1ef1ce4367b7be"
   }
  ],
- "yfirfarid": "2026-11-18T16:05:00Z"
+ "yfirfarid": "2026-11-19T10:05:00Z"
 }
