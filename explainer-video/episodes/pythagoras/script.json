@@ -1,0 +1,358 @@
+{
+ "title": "Regla Pýþagórasar",
+ "series_tag": "Stærðfræði 10. bekkur · Skali 3A bls. 50–55 · Regla Pýþagórasar",
+ "goal": "Áhorfandinn getur notað reglu Pýþagórasar til að finna langhlið og athugað hvort þríhyrningur sé rétthyrndur.",
+ "hard_step": "Af hverju skammhliðarnar leggjast ekki bara saman, og af hverju þarf ferningsrót í lokin.",
+ "source": "Skali 3A (MMS 2016): bls. 50–51 hugtök og könnun, bls. 53 regla og sýnidæmi 1, verkefni 2.3, 2.4a, 2.6, 2.7.",
+ "terms": [
+  "rétthyrndur þríhyrningur",
+  "skammhlið",
+  "langhlið",
+  "ferningur",
+  "ferningsrót",
+  "hornalína"
+ ],
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Smiðir nota einfalt bragð til að athuga hvort horn sé nákvæmlega níutíu gráður."
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Þeir mæla sextíu sentímetra eftir öðrum veggnum og áttatíu eftir hinum."
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "Ef hornið er níutíu gráður á að vera nákvæmlega einn metri á milli punktanna."
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "En sextíu plús áttatíu eru hundrað og fjörutíu."
+  },
+  {
+   "id": "k5",
+   "part": "1 Kveikja",
+   "text": "Hvor leiðin er styttri: beint á milli punktanna, eða fyrir hornið?",
+   "pause": 3.5,
+   "think": true
+  },
+  {
+   "id": "k6",
+   "part": "1 Kveikja",
+   "text": "Beina leiðin er alltaf styttri. En af hverju nákvæmlega einn metri?"
+  },
+  {
+   "id": "k7",
+   "part": "1 Kveikja",
+   "text": "Svarið er regla sem er meira en tvö þúsund og fimm hundruð ára gömul."
+  },
+  {
+   "id": "h1",
+   "part": "3 Hugtökin",
+   "text": "Reglan gildir bara um rétthyrnda þríhyrninga.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "h2",
+   "part": "3 Hugtökin",
+   "text": "Það eru þríhyrningar þar sem eitt hornið er níutíu gráður, eins og hornið milli veggjanna."
+  },
+  {
+   "id": "h3",
+   "part": "3 Hugtökin",
+   "text": "Hliðarnar tvær sem mynda níutíu gráða hornið heita skammhliðar."
+  },
+  {
+   "id": "h4",
+   "part": "3 Hugtökin",
+   "text": "Lengsta hliðin heitir langhlið. Hún er alltaf á móti níutíu gráða horninu."
+  },
+  {
+   "id": "e1",
+   "part": "4 Erfiða skrefið",
+   "text": "Skoðum minni þríhyrning á rúðustrikuðu blaði.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "e2",
+   "part": "4 Erfiða skrefið",
+   "text": "Skammhliðarnar eru þrír og fjórir reitir."
+  },
+  {
+   "id": "e3",
+   "part": "4 Erfiða skrefið",
+   "text": "Nú teiknum við ferning út frá hverri hlið."
+  },
+  {
+   "id": "e4",
+   "part": "4 Erfiða skrefið",
+   "text": "Ferningurinn á styttri skammhliðinni er þrír sinnum þrír, eða níu reitir."
+  },
+  {
+   "id": "e5",
+   "part": "4 Erfiða skrefið",
+   "text": "Á hinni skammhliðinni er hann fjórir sinnum fjórir, eða sextán reitir."
+  },
+  {
+   "id": "e6",
+   "part": "4 Erfiða skrefið",
+   "text": "Á langhliðinni er hann fimm sinnum fimm, eða tuttugu og fimm reitir."
+  },
+  {
+   "id": "e7",
+   "part": "4 Erfiða skrefið",
+   "text": "Færum nú litlu reitina yfir í stóra ferninginn."
+  },
+  {
+   "id": "e8",
+   "part": "4 Erfiða skrefið",
+   "text": "Níu plús sextán eru tuttugu og fimm. Þeir fylla hann nákvæmlega."
+  },
+  {
+   "id": "e9",
+   "part": "4 Erfiða skrefið",
+   "text": "Þetta er regla Pýþagórasar."
+  },
+  {
+   "id": "e10",
+   "part": "4 Erfiða skrefið",
+   "text": "Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni."
+  },
+  {
+   "id": "e11",
+   "part": "4 Erfiða skrefið",
+   "text": "Í bókinni er reglan skrifuð með veldum, svona."
+  },
+  {
+   "id": "b1",
+   "part": "4 Erfiða skrefið",
+   "text": "Prófum þetta á veggina.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "b2",
+   "part": "4 Erfiða skrefið",
+   "text": "Sextíu sinnum sextíu eru þrjú þúsund og sex hundruð."
+  },
+  {
+   "id": "b3",
+   "part": "4 Erfiða skrefið",
+   "text": "Áttatíu sinnum áttatíu eru sex þúsund og fjögur hundruð."
+  },
+  {
+   "id": "b4",
+   "part": "4 Erfiða skrefið",
+   "text": "Samanlagt eru það tíu þúsund."
+  },
+  {
+   "id": "b5",
+   "part": "4 Erfiða skrefið",
+   "text": "Hvaða tala, margfölduð með sjálfri sér, gefur tíu þúsund? Hundrað."
+  },
+  {
+   "id": "b6",
+   "part": "4 Erfiða skrefið",
+   "text": "Hundrað sentímetrar eru einn metri. Þess vegna virkar bragðið."
+  },
+  {
+   "id": "d1",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Nú tökum við sýnidæmi úr Skala þrjú A, á blaðsíðu fimmtíu og þrjú.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "d2",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?"
+  },
+  {
+   "id": "d3",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Fyrst reiknum við ferningana. Tveir sinnum tveir eru fjórir. Fimm sinnum fimm eru tuttugu og fimm."
+  },
+  {
+   "id": "d4",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Samanlagt eru það tuttugu og níu."
+  },
+  {
+   "id": "d5",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Tuttugu og níu er flatarmál stóra ferningsins. En við viljum lengd hliðarinnar, ekki flatarmálið."
+  },
+  {
+   "id": "d6",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Þess vegna tökum við ferningsrótina. Rótin af tuttugu og níu er um það bil fimm komma fjórir."
+  },
+  {
+   "id": "d7",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Langhliðin er um það bil fimm komma fjórir sentímetrar."
+  },
+  {
+   "id": "d8",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Algengasta villan er að gleyma rótinni og svara tuttugu og níu sentímetrar."
+  },
+  {
+   "id": "d9",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Athugaðu því alltaf svarið. Langhliðin á að vera lengsta hliðin, en styttri en hinar tvær samanlagt."
+  },
+  {
+   "id": "d10",
+   "part": "6 Sýnidæmi úr bókinni",
+   "text": "Fimm komma fjórir er meira en fimm og minna en sjö. Það passar."
+  },
+  {
+   "id": "n1",
+   "part": "5 Nú þú",
+   "text": "Nú prófar þú.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "n2",
+   "part": "5 Nú þú",
+   "text": "Bílskúrinn hans Ómars er fjórir metrar á breidd og sex metrar á lengd."
+  },
+  {
+   "id": "n3",
+   "part": "5 Nú þú",
+   "text": "Hvað er hornalínan löng? Hornalínan er beina línan frá einu horni yfir í hornið á móti."
+  },
+  {
+   "id": "n4",
+   "part": "5 Nú þú",
+   "text": "Settu myndbandið á pásu og reiknaðu. Þú mátt nota vasareikni.",
+   "pause": 6,
+   "think": true
+  },
+  {
+   "id": "n5",
+   "part": "5 Nú þú",
+   "text": "Fjórir sinnum fjórir eru sextán. Sex sinnum sex eru þrjátíu og sex."
+  },
+  {
+   "id": "n6",
+   "part": "5 Nú þú",
+   "text": "Samanlagt eru það fimmtíu og tveir. Rótin af fimmtíu og tveimur er um það bil sjö komma tveir."
+  },
+  {
+   "id": "n7",
+   "part": "5 Nú þú",
+   "text": "Hornalínan er um það bil sjö komma tveir metrar."
+  },
+  {
+   "id": "r1",
+   "part": "6 Reglan öfugt",
+   "text": "Reglan virkar líka öfugt.",
+   "gap_before": 0.8
+  },
+  {
+   "id": "r2",
+   "part": "6 Reglan öfugt",
+   "text": "Ef ferningarnir passa saman, þá er hornið níutíu gráður. Það er einmitt það sem smiðirnir nota."
+  },
+  {
+   "id": "m1",
+   "part": "7 Nú þú aftur",
+   "text": "Ein spurning í viðbót.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "m2",
+   "part": "7 Nú þú aftur",
+   "text": "Þríhyrningur hefur hliðarnar fimm, sjö og níu. Er hann rétthyrndur?"
+  },
+  {
+   "id": "m3",
+   "part": "7 Nú þú aftur",
+   "text": "Reiknaðu það. Stoppaðu myndbandið ef þú vilt meiri tíma.",
+   "pause": 6,
+   "think": true
+  },
+  {
+   "id": "m4",
+   "part": "7 Nú þú aftur",
+   "text": "Fimm sinnum fimm eru tuttugu og fimm. Sjö sinnum sjö eru fjörutíu og níu. Samanlagt eru það sjötíu og fjórir."
+  },
+  {
+   "id": "m5",
+   "part": "7 Nú þú aftur",
+   "text": "Níu sinnum níu eru áttatíu og einn. Sjötíu og fjórir eru ekki það sama og áttatíu og einn."
+  },
+  {
+   "id": "m6",
+   "part": "7 Nú þú aftur",
+   "text": "Svarið er nei. Þessi þríhyrningur er ekki rétthyrndur."
+  },
+  {
+   "id": "u1",
+   "part": "8 Upprifjun",
+   "text": "Rifjum upp. Reyndu að svara á undan mér.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "u2",
+   "part": "8 Upprifjun",
+   "text": "Hvaða hlið er langhliðin?",
+   "pause": 4,
+   "think": true
+  },
+  {
+   "id": "u3",
+   "part": "8 Upprifjun",
+   "text": "Lengsta hliðin. Hún er á móti níutíu gráða horninu."
+  },
+  {
+   "id": "u4",
+   "part": "8 Upprifjun",
+   "text": "Hvað segir regla Pýþagórasar?",
+   "pause": 5,
+   "think": true
+  },
+  {
+   "id": "u5",
+   "part": "8 Upprifjun",
+   "text": "Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni."
+  },
+  {
+   "id": "u6",
+   "part": "8 Upprifjun",
+   "text": "Hvað er síðasta skrefið þegar þú finnur langhliðina?",
+   "pause": 4,
+   "think": true
+  },
+  {
+   "id": "u7",
+   "part": "8 Upprifjun",
+   "text": "Að taka ferningsrótina."
+  },
+  {
+   "id": "a1",
+   "part": "9 Verkefni",
+   "text": "Eitt verkefni að lokum, úr sömu bók.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "a2",
+   "part": "9 Verkefni",
+   "text": "Mældu lengd og breidd á skrifborðinu þínu."
+  },
+  {
+   "id": "a3",
+   "part": "9 Verkefni",
+   "text": "Reiknaðu hornalínuna. Mældu hana svo og athugaðu hvort þú hafðir rétt fyrir þér."
+  },
+  {
+   "id": "a4",
+   "part": "9 Verkefni",
+   "text": "Sjónvörp og símar eru líka mæld á ská. Nú veistu hvernig það er reiknað."
+  }
+ ]
+}
