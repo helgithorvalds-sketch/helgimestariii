@@ -1,78 +1,100 @@
-  k1  Smiðir nota einfalt bragð til að athuga hvort horn sé nákvæmlega níutíu gráður.
-  k2  Þeir mæla sextíu sentímetra eftir öðrum veggnum og áttatíu eftir hinum.
-  k3  Ef hornið er níutíu gráður á að vera nákvæmlega einn metri á milli punktanna.
-  k4  En sextíu plús áttatíu eru hundrað og fjörutíu.
-  k5  Hvor leiðin er styttri: beint á milli punktanna, eða fyrir hornið? Segðu það upphátt.
-        ! Z002: Orð á að byrja á hástaf: 'beint' -> Beint
-  k6  Beina leiðin er alltaf styttri. En af hverju nákvæmlega einn metri?
-  k7  Svarið er regla sem er meira en tvö þúsund og fimm hundruð ára gömul.
-  h1  Reglan gildir bara um rétthyrnda þríhyrninga.
-  h2  Það eru þríhyrningar þar sem eitt hornið er níutíu gráður, eins og hornið milli veggjanna.
-  h3  Hliðarnar tvær sem mynda níutíu gráða hornið heita skammhliðar.
-  h4  Lengsta hliðin heitir langhlið. Hún er alltaf á móti níutíu gráða horninu.
-  e1  Skoðum minni þríhyrning á rúðustrikuðu blaði.
-  e2  Skammhliðarnar eru þrír og fjórir reitir.
-  e3  Nú teiknum við ferning út frá hverri hlið.
-  e4  Ferningurinn á styttri skammhliðinni er þrír sinnum þrír, eða níu reitir.
+  k1  Þú þarft að mála gluggann á þessu húsi.
+  k2  Glugginn er í fjögurra metra hæð.
+  k3  Þú setur stigann þrjá metra frá veggnum.
+  k4  Hvað þarf stiginn að vera langur til að ná upp í gluggann?
+  k5  Í lok myndbandsins getur þú reiknað þetta.
+  r1  Sjáðu hornið þar sem veggurinn mætir jörðinni.
+  r2  Veggurinn stendur beint upp. Svona horn heitir rétt horn.
+  r3  Rétt horn er níutíu gráður.
+  r4  Þú sérð rétt horn alls staðar: á horni á bók, á hurð og á símanum þínum.
+        ! Z002: Orð á að byrja á hástaf: 'á' -> Á
+  r5  Rétt horn er merkt með litlum ferningi í horninu.
+  s1  Veggurinn, jörðin og stiginn mynda saman þríhyrning.
+  s2  Hann er með rétt horn, og þess vegna heitir hann rétthyrndur þríhyrningur.
+  s3  Veggurinn og jörðin mynda rétta hornið. Þær hliðar heita skammhliðar.
+  s4  Stiginn er lengsta hliðin. Hún heitir langhlið.
+  s5  Langhliðin er alltaf á móti rétta horninu.
+  p1  Prófaðu. Hér er skábraut fyrir hjólastól.
+  p2  Hvaða hlið er langhliðin: A, B eða C? Segðu stafinn upphátt.
+        ! E006: Skammstafanir ætti að skrifa út -> C
+  p3  C, skábrautin sjálf. Hún er lengst og á móti rétta horninu.
+        ! E006: Skammstafanir ætti að skrifa út -> C
+  v1  Nú lærum við að setja tölu í annað veldi.
+  v2  Það þýðir að margfalda töluna með sjálfri sér.
+  v3  Þrír í öðru veldi er sama og þrír sinnum þrír, sem eru níu.
         ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
-  e5  Á hinni skammhliðinni er hann fjórir sinnum fjórir, eða sextán reitir.
+  v4  Ef þú raðar níu kubbum, þrír sinnum þrír, færðu ferning.
         ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
-  e6  Á langhliðinni er hann fimm sinnum fimm, eða tuttugu og fimm reitir.
-  e7  Færum nú litlu reitina yfir í stóra ferninginn.
-  e8  Níu plús sextán eru tuttugu og fimm. Þeir fylla hann nákvæmlega.
-  e9  Þetta er regla Pýþagórasar.
- e10  Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni.
-        ! W001/w: Orðið 'ferningurinn' gæti átt að vera 'gerningurinn' -> gerningurinn
- e11  Í bókinni er reglan skrifuð með veldum, svona.
-        ! W001/w: Orðið 'veldum' gæti átt að vera 'völdum' -> völdum
-  b1  Prófum þetta á veggina.
-  b2  Sextíu sinnum sextíu eru þrjú þúsund og sex hundruð.
-  b3  Áttatíu sinnum áttatíu eru sex þúsund og fjögur hundruð.
-  b4  Samanlagt eru það tíu þúsund.
-  b5  Hvaða tala, margfölduð með sjálfri sér, gefur tíu þúsund? Hundrað.
-  b6  Hundrað sentímetrar eru einn metri. Þess vegna virkar bragðið.
-  d1  Nú tökum við sýnidæmi úr Skala þrjú A, á blaðsíðu fimmtíu og þrjú.
-  d2  Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?
-  d3  Fyrst reiknum við ferningana. Tveir sinnum tveir eru fjórir. Fimm sinnum fimm eru tuttugu og fimm.
-  d4  Samanlagt eru það tuttugu og níu.
-  d5  Tuttugu og níu er flatarmál stóra ferningsins. En við viljum lengd hliðarinnar, ekki flatarmálið.
-  d6  Þess vegna tökum við ferningsrótina. Rótin af tuttugu og níu er um það bil fimm komma fjórir.
-  d7  Langhliðin er um það bil fimm komma fjórir sentímetrar.
-  d8  Algengasta villan er að gleyma rótinni og svara tuttugu og níu sentímetrar.
-  d9  Athugaðu því alltaf svarið. Langhliðin á að vera lengsta hliðin, en styttri en hinar tvær samanlagt.
- d10  Fimm komma fjórir er meira en fimm og minna en sjö. Það passar.
-  n1  Nú prófar þú.
-  n2  Bílskúrinn hans Ómars er fjórir metrar á breidd og sex metrar á lengd.
-  n3  Hvað er hornalínan löng? Hornalínan er beina línan frá einu horni yfir í hornið á móti.
-  n4  Settu myndbandið á pásu og reiknaðu. Þú mátt nota vasareikni.
-        ! W001/w: Orðið 'reiknaðu' gæti átt að vera 'reiknað' -> reiknað
-  n5  Fjórir sinnum fjórir eru sextán. Sex sinnum sex eru þrjátíu og sex.
+  v5  Á blaði er það skrifað með litlum tvisti fyrir ofan töluna.
+  p4  Prófaðu. Hvað er fjórir í öðru veldi?
+  p5  Fjórir sinnum fjórir eru sextán.
         ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
-  n6  Samanlagt eru það fimmtíu og tveir. Rótin af fimmtíu og tveimur er um það bil sjö komma tveir.
-  n7  Hornalínan er um það bil sjö komma tveir metrar.
-  r1  Reglan virkar líka öfugt.
-  r2  Ef ferningarnir passa saman, þá er hornið níutíu gráður. Það er einmitt það sem smiðirnir nota.
-        ! W001/w: Orðið 'ferningarnir' gæti átt að vera 'gerningarnir' -> gerningarnir
-  m1  Ein spurning í viðbót.
-  m2  Þríhyrningur hefur hliðarnar fimm, sjö og níu. Er hann rétthyrndur?
-  m3  Reiknaðu og svaraðu já eða nei, upphátt.
+  g1  Nú kemur regla Pýþagórasar.
+  g2  Settu skammhliðarnar í annað veldi og leggðu þær saman. Þá færðu langhliðina í öðru veldi.
+  g3  Sjáum hvort þetta passar fyrir stigann.
+  g4  Hliðin eftir jörðinni er þrír metrar. Þrír í öðru veldi eru níu.
+  g5  Hliðin upp vegginn er fjórir metrar. Fjórir í öðru veldi eru sextán.
+  g6  Níu plús sextán eru tuttugu og fimm. Það er stiginn í öðru veldi.
+  f1  En við viljum lengd stigans, ekki stigann í öðru veldi.
+  f2  Þá förum við til baka. Hvaða tala sinnum sjálf sig gefur tuttugu og fimm?
+  f3  Fimm, því fimm sinnum fimm eru tuttugu og fimm.
+  f4  Þetta heitir ferningsrót. Á vasareikni er hún á þessum takka.
+  p6  Prófaðu. Hver er ferningsrótin af fjörutíu og níu?
+  p7  Sjö, því sjö sinnum sjö eru fjörutíu og níu.
+  u1  Nú höfum við allt sem þarf. Reglan er þrjú skref.
+  u2  Eitt: settu skammhliðarnar í annað veldi.
+        ! Z002: Orð á að byrja á hástaf: 'settu' -> Settu
+  u3  Tvö: leggðu þær saman.
         ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
-  m4  Fimm sinnum fimm eru tuttugu og fimm. Sjö sinnum sjö eru fjörutíu og níu. Samanlagt eru það sjötíu og fjórir.
-  m5  Níu sinnum níu eru áttatíu og einn. Sjötíu og fjórir eru ekki það sama og áttatíu og einn.
-  m6  Svarið er nei. Þessi þríhyrningur er ekki rétthyrndur.
-  u1  Rifjum upp. Reyndu að svara á undan mér.
+        ! Z002: Orð á að byrja á hástaf: 'leggðu' -> Leggðu
+  u4  Þrjú: taktu ferningsrótina.
         ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
-  u2  Hvaða hlið er langhliðin?
-  u3  Lengsta hliðin. Hún er á móti níutíu gráða horninu.
-  u4  Hvað segir regla Pýþagórasar?
-  u5  Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni.
-        ! W001/w: Orðið 'ferningurinn' gæti átt að vera 'gerningurinn' -> gerningurinn
-  u6  Hvað er síðasta skrefið þegar þú finnur langhliðina?
-  u7  Að taka ferningsrótina.
+        ! Z002: Orð á að byrja á hástaf: 'taktu' -> Taktu
+  u5  Fyrir stigann: níu plús sextán eru tuttugu og fimm. Ferningsrótin af tuttugu og fimm er fimm.
         ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
-  a1  Eitt verkefni að lokum, úr sömu bók.
-  a2  Mældu lengd og breidd á skrifborðinu þínu.
-  a3  Reiknaðu hornalínuna. Mældu hana svo og athugaðu hvort þú hafðir rétt fyrir þér.
-  a4  Sjónvörp og símar eru líka mæld á ská. Nú veistu hvernig það er reiknað.
+        ! Z002: Orð á að byrja á hástaf: 'níu' -> Níu
+  u6  Stiginn þarf að vera fimm metrar.
+  b1  Nú tökum við dæmi úr bókinni Skala þrjú A, á blaðsíðu fimmtíu og þrjú.
+  b2  Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?
+  b3  Skref eitt: tveir í öðru veldi eru fjórir. Fimm í öðru veldi eru tuttugu og fimm.
+        ! Z002: Orð á að byrja á hástaf: 'tveir' -> Tveir
+  b4  Skref tvö: fjórir plús tuttugu og fimm eru tuttugu og níu.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+        ! Z002: Orð á að byrja á hástaf: 'fjórir' -> Fjórir
+  b5  Skref þrjú: ferningsrótin af tuttugu og níu. Engin heil tala passar, svo við notum vasareikni.
+        ! Z002: Orð á að byrja á hástaf: 'ferningsrótin' -> Ferningsrótin
+  b6  Langhliðin er um það bil fimm komma fjórir sentímetrar.
+  p8  Nú prófar þú. Skábrautin er einn metri á hæð og nær þrjá metra eftir jörðinni.
+  p9  Hvað er skábrautin löng? Notaðu skrefin þrjú. Þú mátt stoppa myndbandið.
+ p10  Einn í öðru veldi er einn. Þrír í öðru veldi eru níu.
+ p11  Einn plús níu eru tíu. Ferningsrótin af tíu er um það bil þrír komma tveir.
+        ! P_NT_ÍTölu: Sögnin á sennilega að vera í eintölu, þ.e. 'er' -> er
+ p12  Skábrautin er um það bil þrír komma tveir metrar.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  h1  Eitt nýtt orð í viðbót: hornalína.
+        ! Z002: Orð á að byrja á hástaf: 'hornalína' -> Hornalína
+  h2  Hornalína er lína frá einu horni yfir í hornið á móti.
+  h3  Hún skiptir sjónvarpinu í tvo rétthyrnda þríhyrninga. Þess vegna virka skrefin þrjú líka hér.
+  h4  Sjónvörp eru mæld eftir hornalínunni. Þetta sjónvarp er áttatíu sentímetrar á breidd og sextíu á hæð.
+  h5  Áttatíu í öðru veldi eru sex þúsund og fjögur hundruð. Sextíu í öðru veldi eru þrjú þúsund og sex hundruð.
+  h6  Samanlagt eru það tíu þúsund. Ferningsrótin af tíu þúsund er hundrað.
+  h7  Hornalínan er hundrað sentímetrar.
+ p13  Nú prófar þú, með dæmi úr bókinni. Gólfið í bílskúr Ómars er fjórir metrar á breidd og sex metrar á lengd.
+ p14  Hvað er hornalínan löng? Þú mátt stoppa myndbandið.
+ p15  Fjórir í öðru veldi eru sextán. Sex í öðru veldi eru þrjátíu og sex.
+ p16  Sextán plús þrjátíu og sex eru fimmtíu og tveir. Ferningsrótin af fimmtíu og tveimur er um það bil sjö komma tveir.
+ p17  Hornalínan er um það bil sjö komma tveir metrar.
+  q1  Rifjum upp. Reyndu að svara á undan mér.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  q2  Hvað heitir lengsta hliðin í rétthyrndum þríhyrningi?
+  q3  Langhlið. Hún er á móti rétta horninu.
+  q4  Hver eru skrefin þrjú?
+  q5  Í annað veldi, leggja saman, ferningsrót.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  q6  Og hvað þarf stiginn að vera langur?
+  q7  Fimm metrar.
+  w1  Verkefni heima, úr Skala þrjú A: mældu breidd og lengd á skrifborðinu þínu.
+        ! Z002: Orð á að byrja á hástaf: 'mældu' -> Mældu
+  w2  Reiknaðu hornalínuna með skrefunum þremur. Mældu hana svo og athugaðu hvort það passar.
 
-12 af 64 setningum með athugasemd.
+19 af 75 setningum með athugasemd.

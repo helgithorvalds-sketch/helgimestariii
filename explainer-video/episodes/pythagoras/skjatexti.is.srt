@@ -1,255 +1,299 @@
 1
-00:00:02,200 --> 00:00:07,700
-Smiðir nota einfalt bragð til að athuga hvort horn sé nákvæmlega níutíu gráður.
+00:00:02,200 --> 00:00:04,820
+Þú þarft að mála gluggann á þessu húsi.
 
 2
-00:00:07,850 --> 00:00:12,630
-Þeir mæla sextíu sentímetra eftir öðrum veggnum og áttatíu eftir hinum.
+00:00:04,970 --> 00:00:07,110
+Glugginn er í fjögurra metra hæð.
 
 3
-00:00:12,780 --> 00:00:17,400
-Ef hornið er níutíu gráður á að vera nákvæmlega einn metri á milli punktanna.
+00:00:07,260 --> 00:00:09,960
+Þú setur stigann þrjá metra frá veggnum.
 
 4
-00:00:17,550 --> 00:00:20,810
-En sextíu plús áttatíu eru hundrað og fjörutíu.
+00:00:10,110 --> 00:00:13,370
+Hvað þarf stiginn að vera langur til að ná upp í gluggann?
 
 5
-00:00:20,960 --> 00:00:25,900
-Hvor leiðin er styttri: beint á milli punktanna, eða fyrir hornið?
+00:00:13,520 --> 00:00:16,140
+Í lok myndbandsins getur þú reiknað þetta.
 
 6
-00:00:29,800 --> 00:00:35,700
-Beina leiðin er alltaf styttri. En af hverju nákvæmlega einn metri?
+00:00:17,090 --> 00:00:19,870
+Sjáðu hornið þar sem veggurinn mætir jörðinni.
 
 7
-00:00:35,850 --> 00:00:40,310
-Svarið er regla sem er meira en tvö þúsund og fimm hundruð ára gömul.
+00:00:20,020 --> 00:00:24,320
+Veggurinn stendur beint upp. Svona horn heitir rétt horn.
 
 8
-00:00:41,260 --> 00:00:44,120
-Reglan gildir bara um rétthyrnda þríhyrninga.
+00:00:24,470 --> 00:00:26,850
+Rétt horn er níutíu gráður.
 
 9
-00:00:44,270 --> 00:00:49,770
-Það eru þríhyrningar þar sem eitt hornið er níutíu gráður, eins og hornið milli veggjanna.
+00:00:27,000 --> 00:00:32,500
+Þú sérð rétt horn alls staðar: á horni á bók, á hurð og á símanum þínum.
 
 10
-00:00:49,920 --> 00:00:54,060
-Hliðarnar tvær sem mynda níutíu gráða hornið heita skammhliðar.
+00:00:32,650 --> 00:00:35,910
+Rétt horn er merkt með litlum ferningi í horninu.
 
 11
-00:00:54,210 --> 00:00:59,470
-Lengsta hliðin heitir langhlið. Hún er alltaf á móti níutíu gráða horninu.
+00:00:36,860 --> 00:00:40,840
+Veggurinn, jörðin og stiginn mynda saman þríhyrning.
 
 12
-00:01:00,420 --> 00:01:03,680
-Skoðum minni þríhyrning á rúðustrikuðu blaði.
+00:00:40,990 --> 00:00:45,530
+Hann er með rétt horn, og þess vegna heitir hann rétthyrndur þríhyrningur.
 
 13
-00:01:03,830 --> 00:01:06,770
-Skammhliðarnar eru þrír og fjórir reitir.
+00:00:45,680 --> 00:00:51,020
+Veggurinn og jörðin mynda rétta hornið. Þær hliðar heita skammhliðar.
 
 14
-00:01:06,920 --> 00:01:09,860
-Nú teiknum við ferning út frá hverri hlið.
+00:00:51,170 --> 00:00:54,510
+Stiginn er lengsta hliðin. Hún heitir langhlið.
 
 15
-00:01:10,010 --> 00:01:14,950
-Ferningurinn á styttri skammhliðinni er þrír sinnum þrír, eða níu reitir.
+00:00:54,660 --> 00:00:57,520
+Langhliðin er alltaf á móti rétta horninu.
 
 16
-00:01:15,100 --> 00:01:19,560
-Á hinni skammhliðinni er hann fjórir sinnum fjórir, eða sextán reitir.
+00:00:58,470 --> 00:01:01,810
+Prófaðu. Hér er skábraut fyrir hjólastól.
 
 17
-00:01:19,710 --> 00:01:23,690
-Á langhliðinni er hann fimm sinnum fimm, eða tuttugu og fimm reitir.
+00:01:01,960 --> 00:01:08,660
+Hvaða hlið er langhliðin: A, B eða C? Segðu stafinn upphátt.
 
 18
-00:01:23,840 --> 00:01:26,860
-Færum nú litlu reitina yfir í stóra ferninginn.
+00:01:14,060 --> 00:01:19,560
+C, skábrautin sjálf. Hún er lengst og á móti rétta horninu.
 
 19
-00:01:27,010 --> 00:01:33,470
-Níu plús sextán eru tuttugu og fimm. Þeir fylla hann nákvæmlega.
+00:01:20,610 --> 00:01:23,550
+Nú lærum við að setja tölu í annað veldi.
 
 20
-00:01:33,620 --> 00:01:35,760
-Þetta er regla Pýþagórasar.
+00:01:23,700 --> 00:01:26,560
+Það þýðir að margfalda töluna með sjálfri sér.
 
 21
-00:01:35,910 --> 00:01:40,770
-Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni.
+00:01:26,710 --> 00:01:31,090
+Þrír í öðru veldi er sama og þrír sinnum þrír, sem eru níu.
 
 22
-00:01:40,920 --> 00:01:44,260
-Í bókinni er reglan skrifuð með veldum, svona.
+00:01:31,240 --> 00:01:35,540
+Ef þú raðar níu kubbum, þrír sinnum þrír, færðu ferning.
 
 23
-00:01:45,210 --> 00:01:46,870
-Prófum þetta á veggina.
+00:01:35,690 --> 00:01:39,430
+Á blaði er það skrifað með litlum tvisti fyrir ofan töluna.
 
 24
-00:01:47,020 --> 00:01:51,000
-Sextíu sinnum sextíu eru þrjú þúsund og sex hundruð.
+00:01:39,580 --> 00:01:42,840
+Prófaðu. Hvað er fjórir í öðru veldi?
 
 25
-00:01:51,150 --> 00:01:54,810
-Áttatíu sinnum áttatíu eru sex þúsund og fjögur hundruð.
+00:01:48,240 --> 00:01:50,780
+Fjórir sinnum fjórir eru sextán.
 
 26
-00:01:54,960 --> 00:01:57,180
-Samanlagt eru það tíu þúsund.
+00:01:51,830 --> 00:01:53,970
+Nú kemur regla Pýþagórasar.
 
 27
-00:01:57,330 --> 00:02:03,710
-Hvaða tala, margfölduð með sjálfri sér, gefur tíu þúsund? Hundrað.
+00:01:54,120 --> 00:02:00,660
+Settu skammhliðarnar í annað veldi og leggðu þær saman. Þá færðu langhliðina í öðru veldi.
 
 28
-00:02:03,860 --> 00:02:08,480
-Hundrað sentímetrar eru einn metri. Þess vegna virkar bragðið.
+00:02:00,810 --> 00:02:03,270
+Sjáum hvort þetta passar fyrir stigann.
 
 29
-00:02:09,530 --> 00:02:14,150
-Nú tökum við sýnidæmi úr Skala þrjú A, á blaðsíðu fimmtíu og þrjú.
+00:02:03,420 --> 00:02:09,000
+Hliðin eftir jörðinni er þrír metrar. Þrír í öðru veldi eru níu.
 
 30
-00:02:14,300 --> 00:02:19,880
-Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?
+00:02:09,150 --> 00:02:15,130
+Hliðin upp vegginn er fjórir metrar. Fjórir í öðru veldi eru sextán.
 
 31
-00:02:20,030 --> 00:02:28,170
-Fyrst reiknum við ferningana. Tveir sinnum tveir eru fjórir. Fimm sinnum fimm eru tuttugu og fimm.
+00:02:15,280 --> 00:02:20,440
+Níu plús sextán eru tuttugu og fimm. Það er stiginn í öðru veldi.
 
 32
-00:02:28,320 --> 00:02:30,620
-Samanlagt eru það tuttugu og níu.
+00:02:21,390 --> 00:02:25,210
+En við viljum lengd stigans, ekki stigann í öðru veldi.
 
 33
-00:02:30,770 --> 00:02:37,630
-Tuttugu og níu er flatarmál stóra ferningsins. En við viljum lengd hliðarinnar, ekki flatarmálið.
+00:02:25,360 --> 00:02:30,700
+Þá förum við til baka. Hvaða tala sinnum sjálf sig gefur tuttugu og fimm?
 
 34
-00:02:37,780 --> 00:02:44,800
-Þess vegna tökum við ferningsrótina. Rótin af tuttugu og níu er um það bil fimm komma fjórir.
+00:02:30,850 --> 00:02:34,430
+Fimm, því fimm sinnum fimm eru tuttugu og fimm.
 
 35
-00:02:44,950 --> 00:02:48,530
-Langhliðin er um það bil fimm komma fjórir sentímetrar.
+00:02:34,580 --> 00:02:39,920
+Þetta heitir ferningsrót. Á vasareikni er hún á þessum takka.
 
 36
-00:02:48,680 --> 00:02:53,140
-Algengasta villan er að gleyma rótinni og svara tuttugu og níu sentímetrar.
+00:02:40,070 --> 00:02:44,610
+Prófaðu. Hver er ferningsrótin af fjörutíu og níu?
 
 37
-00:02:53,290 --> 00:03:01,030
-Athugaðu því alltaf svarið. Langhliðin á að vera lengsta hliðin, en styttri en hinar tvær samanlagt.
+00:02:50,010 --> 00:02:53,670
+Sjö, því sjö sinnum sjö eru fjörutíu og níu.
 
 38
-00:03:01,180 --> 00:03:05,960
-Fimm komma fjórir er meira en fimm og minna en sjö. Það passar.
+00:02:54,720 --> 00:02:59,100
+Nú höfum við allt sem þarf. Reglan er þrjú skref.
 
 39
-00:03:07,010 --> 00:03:08,270
-Nú prófar þú.
+00:02:59,250 --> 00:03:02,990
+Eitt: settu skammhliðarnar í annað veldi.
 
 40
-00:03:08,420 --> 00:03:13,040
-Bílskúrinn hans Ómars er fjórir metrar á breidd og sex metrar á lengd.
+00:03:03,140 --> 00:03:05,680
+Tvö: leggðu þær saman.
 
 41
-00:03:13,190 --> 00:03:20,770
-Hvað er hornalínan löng? Hornalínan er beina línan frá einu horni yfir í hornið á móti.
+00:03:05,830 --> 00:03:08,530
+Þrjú: taktu ferningsrótina.
 
 42
-00:03:20,920 --> 00:03:25,220
-Settu myndbandið á pásu og reiknaðu. Þú mátt nota vasareikni.
+00:03:08,680 --> 00:03:16,420
+Fyrir stigann: níu plús sextán eru tuttugu og fimm. Ferningsrótin af tuttugu og fimm er fimm.
 
 43
-00:03:31,620 --> 00:03:37,760
-Fjórir sinnum fjórir eru sextán. Sex sinnum sex eru þrjátíu og sex.
+00:03:16,570 --> 00:03:18,630
+Stiginn þarf að vera fimm metrar.
 
 44
-00:03:37,910 --> 00:03:45,170
-Samanlagt eru það fimmtíu og tveir. Rótin af fimmtíu og tveimur er um það bil sjö komma tveir.
+00:03:19,680 --> 00:03:24,460
+Nú tökum við dæmi úr bókinni Skala þrjú A, á blaðsíðu fimmtíu og þrjú.
 
 45
-00:03:45,320 --> 00:03:48,740
-Hornalínan er um það bil sjö komma tveir metrar.
+00:03:24,610 --> 00:03:30,430
+Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?
 
 46
-00:03:49,690 --> 00:03:51,750
-Reglan virkar líka öfugt.
+00:03:30,580 --> 00:03:38,160
+Skref eitt: tveir í öðru veldi eru fjórir. Fimm í öðru veldi eru tuttugu og fimm.
 
 47
-00:03:51,900 --> 00:03:58,840
-Ef ferningarnir passa saman, þá er hornið níutíu gráður. Það er einmitt það sem smiðirnir nota.
+00:03:38,310 --> 00:03:42,770
+Skref tvö: fjórir plús tuttugu og fimm eru tuttugu og níu.
 
 48
-00:03:59,890 --> 00:04:01,470
-Ein spurning í viðbót.
+00:03:42,920 --> 00:03:52,100
+Skref þrjú: ferningsrótin af tuttugu og níu. Engin heil tala passar, svo við notum vasareikni.
 
 49
-00:04:01,620 --> 00:04:06,240
-Þríhyrningur hefur hliðarnar fimm, sjö og níu. Er hann rétthyrndur?
+00:03:52,250 --> 00:03:55,590
+Langhliðin er um það bil fimm komma fjórir sentímetrar.
 
 50
-00:04:06,390 --> 00:04:14,210
-Reiknaðu það. Stoppaðu myndbandið ef þú vilt meiri tíma.
+00:03:56,540 --> 00:04:03,480
+Nú prófar þú. Skábrautin er einn metri á hæð og nær þrjá metra eftir jörðinni.
 
 51
-00:04:20,610 --> 00:04:29,710
-Fimm sinnum fimm eru tuttugu og fimm. Sjö sinnum sjö eru fjörutíu og níu. Samanlagt eru það sjötíu og fjórir.
+00:04:03,630 --> 00:04:10,041
+Hvað er skábrautin löng? Notaðu skrefin þrjú. Þú mátt stoppa myndbandið.
 
 52
-00:04:29,860 --> 00:04:36,800
-Níu sinnum níu eru áttatíu og einn. Sjötíu og fjórir eru ekki það sama og áttatíu og einn.
+00:04:18,441 --> 00:04:23,541
+Einn í öðru veldi er einn. Þrír í öðru veldi eru níu.
 
 53
-00:04:36,950 --> 00:04:41,490
-Svarið er nei. Þessi þríhyrningur er ekki rétthyrndur.
+00:04:23,691 --> 00:04:30,071
+Einn plús níu eru tíu. Ferningsrótin af tíu er um það bil þrír komma tveir.
 
 54
-00:04:42,540 --> 00:04:45,640
-Rifjum upp. Reyndu að svara á undan mér.
+00:04:30,221 --> 00:04:33,561
+Skábrautin er um það bil þrír komma tveir metrar.
 
 55
-00:04:45,790 --> 00:04:47,690
-Hvaða hlið er langhliðin?
+00:04:34,611 --> 00:04:37,871
+Eitt nýtt orð í viðbót: hornalína.
 
 56
-00:04:52,090 --> 00:04:55,910
-Lengsta hliðin. Hún er á móti níutíu gráða horninu.
+00:04:38,021 --> 00:04:41,921
+Hornalína er lína frá einu horni yfir í hornið á móti.
 
 57
-00:04:56,060 --> 00:04:58,120
-Hvað segir regla Pýþagórasar?
+00:04:42,071 --> 00:04:48,931
+Hún skiptir sjónvarpinu í tvo rétthyrnda þríhyrninga. Þess vegna virka skrefin þrjú líka hér.
 
 58
-00:05:03,520 --> 00:05:08,460
-Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni.
+00:04:49,081 --> 00:04:56,901
+Sjónvörp eru mæld eftir hornalínunni. Þetta sjónvarp er áttatíu sentímetrar á breidd og sextíu á hæð.
 
 59
-00:05:08,610 --> 00:05:11,470
-Hvað er síðasta skrefið þegar þú finnur langhliðina?
+00:04:57,051 --> 00:05:05,111
+Áttatíu í öðru veldi eru sex þúsund og fjögur hundruð. Sextíu í öðru veldi eru þrjú þúsund og sex hundruð.
 
 60
-00:05:15,870 --> 00:05:17,930
-Að taka ferningsrótina.
+00:05:05,261 --> 00:05:11,161
+Samanlagt eru það tíu þúsund. Ferningsrótin af tíu þúsund er hundrað.
 
 61
-00:05:18,980 --> 00:05:21,520
-Eitt verkefni að lokum, úr sömu bók.
+00:05:11,311 --> 00:05:13,771
+Hornalínan er hundrað sentímetrar.
 
 62
-00:05:21,670 --> 00:05:24,370
-Mældu lengd og breidd á skrifborðinu þínu.
+00:05:14,721 --> 00:05:24,061
+Nú prófar þú, með dæmi úr bókinni. Gólfið í bílskúr Ómars er fjórir metrar á breidd og sex metrar á lengd.
 
 63
-00:05:24,520 --> 00:05:30,260
-Reiknaðu hornalínuna. Mældu hana svo og athugaðu hvort þú hafðir rétt fyrir þér.
+00:05:24,211 --> 00:05:28,351
+Hvað er hornalínan löng? Þú mátt stoppa myndbandið.
 
 64
-00:05:30,410 --> 00:05:36,310
-Sjónvörp og símar eru líka mæld á ská. Nú veistu hvernig það er reiknað.
+00:05:36,751 --> 00:05:43,051
+Fjórir í öðru veldi eru sextán. Sex í öðru veldi eru þrjátíu og sex.
+
+65
+00:05:43,201 --> 00:05:51,661
+Sextán plús þrjátíu og sex eru fimmtíu og tveir. Ferningsrótin af fimmtíu og tveimur er um það bil sjö komma tveir.
+
+66
+00:05:51,811 --> 00:05:55,391
+Hornalínan er um það bil sjö komma tveir metrar.
+
+67
+00:05:56,441 --> 00:05:59,781
+Rifjum upp. Reyndu að svara á undan mér.
+
+68
+00:05:59,931 --> 00:06:03,111
+Hvað heitir lengsta hliðin í rétthyrndum þríhyrningi?
+
+69
+00:06:07,511 --> 00:06:10,531
+Langhlið. Hún er á móti rétta horninu.
+
+70
+00:06:10,681 --> 00:06:12,101
+Hver eru skrefin þrjú?
+
+71
+00:06:17,501 --> 00:06:21,161
+Í annað veldi, leggja saman, ferningsrót.
+
+72
+00:06:21,311 --> 00:06:23,451
+Og hvað þarf stiginn að vera langur?
+
+73
+00:06:27,851 --> 00:06:29,031
+Fimm metrar.
+
+74
+00:06:30,081 --> 00:06:35,981
+Verkefni heima, úr Skala þrjú A: mældu breidd og lengd á skrifborðinu þínu.
+
+75
+00:06:36,131 --> 00:06:42,271
+Reiknaðu hornalínuna með skrefunum þremur. Mældu hana svo og athugaðu hvort það passar.
