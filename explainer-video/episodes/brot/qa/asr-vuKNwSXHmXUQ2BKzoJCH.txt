@@ -1,0 +1,128 @@
+OK    k1  handrit: Segjum að þú megir fá súkkulaði.
+           heyrt:   segjum að þú megir fá súkkulaði
+OK    k2  handrit: Einn fjórða af plötunni, eða einn áttunda.
+           heyrt:   einn fjórða af plötunni eða einn áttunda
+ATH   k3  handrit: Hvort viltu frekar?
+           heyrt:   hvort veistu frekar
+           - 'viltu' -> 'veistu'
+OK    k4  handrit: Segðu það upphátt.
+           heyrt:   segðu það upphátt
+OK    h1  handrit: Sjáðu, brot er bara tvær tölur.
+           heyrt:   sjáðu brot er bara tvær tölur
+OK    h2  handrit: Ein er uppi og ein er niðri.
+           heyrt:   ein er uppi og ein er niðri
+OK    h3  handrit: Talan niðri heitir nefnari.
+           heyrt:   talan niðri heitir nefnari
+OK    h4  handrit: Hún segir hvað bitarnir eru margir.
+           heyrt:   hún segir hvað bitarnir eru margir
+OK    h5  handrit: Talan uppi heitir teljari.
+           heyrt:   talan uppi heitir teljari
+OK    h6  handrit: Hún segir hvað þú færð marga bita.
+           heyrt:   hún segir hvað þú færð marga bita
+OK    e1  handrit: Margir velja einn áttunda.
+           heyrt:   margir velja einn áttunda
+ATH   e2  handrit: Af því að átta er meira en fjórir.
+           heyrt:   af því að átta er meira en fjórus
+           - 'fjórir' -> 'fjórus'
+OK    e3  handrit: En prófum þetta.
+           heyrt:   en prófum þetta
+OK    e4  handrit: Fjórir vinir skipta einni plötu.
+           heyrt:   fjórir vinir skipta einni plötu
+OK    e5  handrit: Hver fær einn fjórða.
+           heyrt:   hver fær einn fjórða
+OK    e6  handrit: Svo koma fjórir í viðbót.
+           heyrt:   svo koma fjórir í viðbót
+OK    e7  handrit: Nú eru þeir átta, en platan er jafn stór.
+           heyrt:   nú eru þeir átta en platan er jafn stór
+OK    e8  handrit: Þá þarf að skipta henni í átta bita.
+           heyrt:   þá þarf að skipta henni í átta bita
+OK    e9  handrit: Og hver fær bara einn áttunda.
+           heyrt:   og hver fær bara einn áttunda
+OK   e10  handrit: Sjáðu muninn.
+           heyrt:   sjáðu muninn
+OK   e11  handrit: Einn áttundi er bara helmingurinn af einum fjórða.
+           heyrt:   einn áttundi er bara helmingurinn af einum fjórða
+OK   e12  handrit: Því fleiri sem skipta, því minni verða bitarnir.
+           heyrt:   því fleiri sem skipta því minni verða bitarnir
+ATH   n1  handrit: Nú mátt þú prófa.
+           heyrt:   
+           - 'nú mátt þú prófa' -> ''
+OK    n2  handrit: Hvort er meira, einn þriðji eða einn sjötti?
+           heyrt:   hvort er meira einn þriðji eða einn sjötti
+OK    n3  handrit: Græna eða bláa? Segðu það upphátt.
+           heyrt:   græna eða bláa segðu það upphátt
+OK    n4  handrit: Þú mátt alveg ýta á pásu.
+           heyrt:   þú mátt alveg ýta á pásu
+ATH   n5  handrit: Græna! Einn þriðji er meira.
+           heyrt:   einn þriðji er meira
+           - 'græna' -> ''
+ATH   n6  handrit: Sagðirðu bláa? Það er allt í lagi, það gera margir.
+           heyrt:   það eru bláa það er afturlagi það gera margir
+           - 'sagðirðu' -> 'það eru'
+           - 'allt í lagi' -> 'afturlagi'
+ATH   n7  handrit: Sex er hærri tala, en þegar sex skipta verða bitarnir minni.
+           heyrt:   sex er herri tala en þegar sex skipta verða bitarnir minni
+           - 'hærri' -> 'herri'
+OK    r1  handrit: Munum þetta.
+           heyrt:   munum þetta
+ATH   r2  handrit: Því hærri sem talan niðri er, því minni er bitinn.
+           heyrt:   því hærri sem talað niðri er því minni er bitinn
+           - 'talan' -> 'talað'
+ATH   r3  handrit: Þetta virkar líka með pítsu.
+           heyrt:   þetta virkar líka með pizzu
+           - 'pítsu' -> 'pizzu'
+ATH   r4  handrit: Ef tveir skipta pítsu fær hvor helminginn.
+           heyrt:   ef tveir skipta pizzu fær hvor helminginn
+           - 'pítsu' -> 'pizzu'
+OK    r5  handrit: Ef tíu skipta henni fær hver bara mjóa sneið.
+           heyrt:   ef tíu skipta henni fær hver bara mjóa sneið
+ATH   r6  handrit: Súkkulaði eða pítsa, alltaf sama reglan.
+           heyrt:   súkkulaði eða pizza alltaf sama reglan
+           - 'pítsa' -> 'pizza'
+OK    r7  handrit: Og manstu fyrstu spurninguna?
+           heyrt:   og manstu fyrstu spurninguna
+ATH   r8  handrit: Einn fjórði er meira. Veldu einn fjórða!
+           heyrt:   a setning einn fjórði er meira veldu einn fjórða
+           - '' -> 'a setning'
+OK    m1  handrit: Ein í viðbót, aðeins erfiðari.
+           heyrt:   ein í viðbót aðeins erfiðari
+ATH   m2  handrit: Hvort er meira, einn tíundi eða einn hundraðasti?
+           heyrt:   er meira einn tíundi eða einn hundraðasti
+           - 'hvort' -> ''
+OK    m3  handrit: Segðu það upphátt.
+           heyrt:   segðu það upphátt
+ATH   m4  handrit: Einn tíundi!
+           heyrt:   einn tíunda
+           - 'tíundi' -> 'tíunda'
+ATH   m5  handrit: Ef hundrað manns skipta plötunni fær hver bara pínulítinn mola.
+           heyrt:   ef hundrað manns skipta prjótunni fær hver bara pínulítinn mola
+           - 'plötunni' -> 'prjótunni'
+OK    u1  handrit: Rifjum upp. Reyndu að svara á undan mér.
+           heyrt:   rifjum upp reyndu að svara á undan mér
+OK    u2  handrit: Hvað heitir talan niðri?
+           heyrt:   hvað heitir talan niðri
+ATH   u3  handrit: Nefnari. Hún segir hvað bitarnir eru margir.
+           heyrt:   fnari hún segir hvað bitarnir eru margir
+           - 'nefnari' -> 'fnari'
+OK    u4  handrit: Hvað gerist þegar fleiri skipta?
+           heyrt:   hvað gerist þegar fleiri skipta
+ATH   u5  handrit: Bitarnir verða minni.
+           heyrt:   bítarnir verða minni
+           - 'bitarnir' -> 'bítarnir'
+ATH   u6  handrit: Hvort er meira, einn fjórði eða einn áttundi?
+           heyrt:   kostar meira einn fjórði eða einn áttundi
+           - 'hvort er' -> 'kostar'
+OK    u7  handrit: Einn fjórði.
+           heyrt:   einn fjórði
+OK    a1  handrit: Smá áskorun fyrir kvöldið.
+           heyrt:   smá áskorun fyrir kvöldið
+OK    a2  handrit: Brjóttu blað tvisvar saman. Þá færðu fjóra bita.
+           heyrt:   brjóttu blað tvisvar saman þá færðu fjóra bita
+OK    a3  handrit: Brjóttu annað blað þrisvar saman. Þá færðu átta.
+           heyrt:   brjóttu annað blað þrisvar saman þá færðu átta
+OK    a4  handrit: Sýndu einhverjum heima hvor bitinn er stærri, og af hverju.
+           heyrt:   sýndu einhverjum heima hvor bitinn er stærri og af hverju
+OK    a5  handrit: Sjáumst!
+           heyrt:   sjáumst
+Rödd vuKNwSXHmXUQ2BKzoJCH: 26 frávik í 319 orðum (8.2%), 17 af 54 setningum með frávik.
+Frávik eru staðir til að hlusta á, ekki sannaðar villur: talgreinirinn gerir sjálfur 7–16% villur á íslensku.
