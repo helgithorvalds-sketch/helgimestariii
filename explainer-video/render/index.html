@@ -19,7 +19,8 @@ svg { display: block; }
   <g id="root"></g>
 </svg>
 <script type="module">
-import * as scenes from "/scenes.js";
+const ep = new URLSearchParams(location.search).get("ep");
+const scenes = await import(`/episodes/${ep}.js`);
 window.scenes = scenes;
 window.ready = document.fonts.load('700 40px "Atkinson Hyperlegible"').then(() => document.fonts.load('400 40px "Atkinson Hyperlegible"')).then(() => true);
 </script>

@@ -9,9 +9,11 @@ const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
-const OUT = path.resolve(HERE, "..");
+const ROOT = path.resolve(HERE, "..");
 const args = Object.fromEntries(process.argv.slice(2).reduce((a, x, i, arr) => (x.startsWith("--") ? [...a, [x.slice(2), arr[i + 1]]] : a), []));
 const FPS = +(args.fps ?? 30), WORKERS = +(args.workers ?? 4);
+const EPISODE = args.episode; if (!EPISODE) throw new Error("--episode <name> is required");
+const OUT = path.join(ROOT, "episodes", EPISODE);
 const timeline = JSON.parse(fs.readFileSync(path.join(OUT, "timeline.json"), "utf8"));
 
 const types = { ".html": "text/html", ".js": "text/javascript", ".woff2": "font/woff2", ".json": "application/json" };
@@ -21,7 +23,7 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": types[path.extname(p)] ?? "application/octet-stream" });
   fs.createReadStream(p).pipe(res);
 }).listen(0);
-const url = `http://127.0.0.1:${server.address().port}/index.html`;
+const url = `http://127.0.0.1:${server.address().port}/index.html?ep=${EPISODE}`;
 
 const browser = await chromium.launch();
 async function newPage() {
@@ -49,7 +51,7 @@ if (args.stills) {
 }
 
 const total = Math.ceil(timeline.duration * FPS);
-const frames = path.join(OUT, "frames"); fs.rmSync(frames, { recursive: true, force: true }); fs.mkdirSync(frames);
+const frames = path.join(ROOT, "frames", EPISODE); fs.rmSync(frames, { recursive: true, force: true }); fs.mkdirSync(frames, { recursive: true });
 let done = 0; const t0 = Date.now();
 await Promise.all(Array.from({ length: WORKERS }, async (_, w) => {
   const page = await newPage();
@@ -60,7 +62,7 @@ await Promise.all(Array.from({ length: WORKERS }, async (_, w) => {
   }
 }));
 await browser.close(); server.close();
-const mp4 = path.join(OUT, args.out ?? "brot-hvor-bitinn-er-staerri.mp4");
+const mp4 = path.join(OUT, args.out ?? `${EPISODE}.mp4`);
 execFileSync("ffmpeg", ["-y", "-v", "error", "-framerate", String(FPS), "-i", path.join(frames, "%05d.jpg"), "-i", path.join(OUT, "audio", "narration.wav"),
   "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", mp4], { stdio: "inherit" });
 console.log("wrote", mp4);

@@ -5,10 +5,10 @@ Backends:
   elevenlabs  eleven_v4 with language_code "is"; needs an API key on api.elevenlabs.io
               (the session's proxy injects it, or set ELEVENLABS_API_KEY)
 
-Usage: python build_audio.py --backend piper --voice ugla
-       python build_audio.py --backend elevenlabs --voice <voice_id>
+Usage: python build_audio.py --episode brot                       (ElevenLabs, default voice)
+       python build_audio.py --episode brot --backend piper --voice steinn
 """
-import argparse, hashlib, json, os, subprocess, urllib.request, wave
+import argparse, hashlib, json, os, shutil, subprocess, urllib.request, wave
 from pathlib import Path
 import numpy as np
 
@@ -51,13 +51,15 @@ def tone(freqs, dur, vol=0.12):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--backend", default="piper", choices=["piper", "elevenlabs"])
-    ap.add_argument("--voice", default="ugla")
+    ap.add_argument("--episode", required=True)
+    ap.add_argument("--backend", default="elevenlabs", choices=["piper", "elevenlabs"])
+    ap.add_argument("--voice", default="nPczCjzI2devNBz1zQrb")  # ElevenLabs "Brian": fewest errors in the Icelandic test
     ap.add_argument("--length-scale", type=float, default=1.08)
     args = ap.parse_args()
 
-    script = json.loads((HERE / "script.json").read_text())
-    take_dir = HERE / "audio" / f"{args.backend}-{args.voice}"
+    EP = HERE / "episodes" / args.episode
+    script = json.loads((EP / "script.json").read_text())
+    take_dir = EP / "audio" / f"{args.backend}-{args.voice}"
     take_dir.mkdir(parents=True, exist_ok=True)
 
     chime = np.concatenate([tone([523.25, 1046.5], 0.35), tone([659.25, 1318.5], 0.9)])
@@ -96,19 +98,22 @@ def main():
 
     audio = np.concatenate(track)
     audio = audio / max(1e-6, np.abs(audio).max()) * 0.89
-    with wave.open(str(HERE / "audio" / "narration.wav"), "wb") as w:
+    with wave.open(str(EP / "audio" / "narration.wav"), "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((audio * 32767).astype("<i2").tobytes())
     meta = {"backend": args.backend, "voice": args.voice, "duration": round(len(audio) / SR, 3),
             "series_tag": script["series_tag"], "title": script["title"], "sentences": timeline}
-    (HERE / "timeline.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+    (EP / "timeline.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1))
     # optional captions (formula: full captions only as a toggle the viewer turns on)
     def ts(x):
         h, r = divmod(x, 3600); m, s = divmod(r, 60)
         return f"{int(h):02}:{int(m):02}:{int(s):02},{int(round((s % 1) * 1000)):03}"
     srt = "\n".join(f"{i}\n{ts(e['start'])} --> {ts(e['end'] + 0.3)}\n{e['text']}\n" for i, e in enumerate(timeline, 1))
-    (HERE / "skjatexti.is.srt").write_text(srt)
-    print(f"{len(timeline)} sentences, {meta['duration']:.1f} s -> audio/narration.wav, timeline.json")
+    (EP / "skjatexti.is.srt").write_text(srt)
+    shutil.copy(EP / "audio" / "narration.wav", EP / "audio" / f"narration-{args.voice}.wav")
+    (EP / "qa").mkdir(exist_ok=True)
+    (EP / "qa" / f"timeline-{args.voice}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+    print(f"{len(timeline)} sentences, {meta['duration']:.1f} s -> {EP}/audio/narration.wav, timeline.json")
 
 if __name__ == "__main__":
     main()

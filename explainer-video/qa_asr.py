@@ -8,18 +8,19 @@ import numpy as np
 from faster_whisper import WhisperModel
 
 HERE = Path(__file__).parent
-voice = sys.argv[1]
-tl = json.loads((HERE / "qa" / f"timeline-{voice}.json").read_text())
+episode, voice = sys.argv[1], sys.argv[2]
+EP = HERE / "episodes" / episode
+tl = json.loads((EP / "qa" / f"timeline-{voice}.json").read_text())
 def pcm16k(path):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "f32le", "-ac", "1", "-ar", "16000", "-"],
                          capture_output=True, check=True).stdout
     return np.frombuffer(raw, np.float32)
-track = pcm16k(HERE / "audio" / f"narration-{voice}.wav")
+track = pcm16k(EP / "audio" / f"narration-{voice}.wav")
 # A fixed primer phrase in the same voice goes before every clip; the recognizer tends to drop the opening
 # of a clip, so it drops part of the primer instead of the sentence's first word. The primer is then removed.
-primer_wav = HERE / "qa" / f"primer-{voice}.wav"
+primer_wav = HERE / "qa-primer.wav"
 if not primer_wav.exists():
-    subprocess.run(["/home/user/tts/venv/bin/piper", "-m", f"/home/user/tts/voices/is_IS-{voice}-medium.onnx", "-f", str(primer_wav)],
+    subprocess.run(["/home/user/tts/venv/bin/piper", "-m", "/home/user/tts/voices/is_IS-steinn-medium.onnx", "-f", str(primer_wav)],
                    input="Næsta setning.".encode(), check=True, capture_output=True)
 primer = pcm16k(primer_wav)
 model = WhisperModel("/home/user/tts/asr-model", device="cpu", compute_type="int8", cpu_threads=4)
@@ -47,5 +48,5 @@ for e in tl["sentences"]:
                  "".join(f"\n           - '{' '.join(a[i1:i2])}' -> '{' '.join(b[j1:j2])}'" for _, i1, i2, j1, j2 in ops))
 summary = (f"\nRödd {voice}: {errs} frávik í {words} orðum ({errs / words:.1%}), {flagged} af {len(tl['sentences'])} setningum með frávik.\n"
            "Frávik eru staðir til að hlusta á, ekki sannaðar villur: talgreinirinn gerir sjálfur 7–16% villur á íslensku.\n")
-(HERE / "qa" / f"asr-{voice}.txt").write_text("\n".join(lines) + summary)
+(EP / "qa" / f"asr-{voice}.txt").write_text("\n".join(lines) + summary)
 print("\n".join(lines) + summary)

@@ -1,0 +1,64 @@
+  k1  Segjum að þú megir fá súkkulaði.
+  k2  Einn fjórða af plötunni, eða einn áttunda.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  k3  Hvort viltu frekar?
+  k4  Segðu það upphátt.
+  h1  Sjáðu, brot er bara tvær tölur.
+  h2  Ein er uppi og ein er niðri.
+  h3  Talan niðri heitir nefnari.
+  h4  Hún segir hvað bitarnir eru margir.
+  h5  Talan uppi heitir teljari.
+  h6  Hún segir hvað þú færð marga bita.
+  e1  Margir velja einn áttunda.
+  e2  Af því að átta er meira en fjórir.
+  e3  En prófum þetta.
+  e4  Fjórir vinir skipta einni plötu.
+        ! ASLSTAFVANTAR: Ásláttarvilla: 'einni' -> 'einnig' -> einnig
+  e5  Hver fær einn fjórða.
+  e6  Svo koma fjórir í viðbót.
+  e7  Nú eru þeir átta, en platan er jafn stór.
+  e8  Þá þarf að skipta henni í átta bita.
+  e9  Og hver fær bara einn áttunda.
+ e10  Sjáðu muninn.
+ e11  Einn áttundi er bara helmingurinn af einum fjórða.
+ e12  Því fleiri sem skipta, því minni verða bitarnir.
+  n1  Nú mátt þú prófa.
+  n2  Hvort er meira, einn þriðji eða einn sjötti?
+  n3  Græna eða bláa? Segðu það upphátt.
+  n4  Þú mátt alveg ýta á pásu.
+  n5  Græna! Einn þriðji er meira.
+        ! E007: Setning inniheldur upphrópunarmerki -> !
+  n6  Sagðirðu bláa? Það er allt í lagi, það gera margir.
+  n7  Sex er hærri tala, en þegar sex skipta verða bitarnir minni.
+  r1  Munum þetta.
+  r2  Því hærri sem talan niðri er, því minni er bitinn.
+  r3  Þetta virkar líka með pítsu.
+  r4  Ef tveir skipta pítsu fær hvor helminginn.
+  r5  Ef tíu skipta henni fær hver bara mjóa sneið.
+  r6  Súkkulaði eða pítsa, alltaf sama reglan.
+  r7  Og manstu fyrstu spurninguna?
+  r8  Einn fjórði er meira. Veldu einn fjórða!
+  m1  Ein í viðbót, aðeins erfiðari.
+  m2  Hvort er meira, einn tíundi eða einn hundraðasti?
+  m3  Segðu það upphátt.
+  m4  Einn tíundi!
+        ! E007: Setning inniheldur upphrópunarmerki -> !
+  m5  Ef hundrað manns skipta plötunni fær hver bara pínulítinn mola.
+        ! P_NT_ÍTölu: Sögnin á sennilega að vera í eintölu, þ.e. 'skiptir' -> skiptir
+  u1  Rifjum upp. Reyndu að svara á undan mér.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  u2  Hvað heitir talan niðri?
+  u3  Nefnari. Hún segir hvað bitarnir eru margir.
+  u4  Hvað gerist þegar fleiri skipta?
+  u5  Bitarnir verða minni.
+  u6  Hvort er meira, einn fjórði eða einn áttundi?
+  u7  Einn fjórði.
+  a1  Smá áskorun fyrir kvöldið.
+  a2  Brjóttu blað tvisvar saman. Þá færðu fjóra bita.
+  a3  Brjóttu annað blað þrisvar saman. Þá færðu átta.
+  a4  Sýndu einhverjum heima hvor bitinn er stærri, og af hverju.
+  a5  Sjáumst!
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+        ! E007: Setning inniheldur upphrópunarmerki -> !
+
+7 af 54 setningum með athugasemd.

@@ -1,7 +1,9 @@
 frames/
 render/node_modules/
-audio/
-qa/stills/
-qa/sheet*.png
-qa/primer-*.wav
-qa/asr-run-*.log
+episodes/*/audio/
+episodes/*/qa/stills/
+episodes/*/qa/sheet*.png
+episodes/*/qa/check/
+episodes/*/qa/primer-*.wav
+episodes/*/qa/asr-run-*.log
+qa-primer.wav

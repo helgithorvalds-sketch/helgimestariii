@@ -1,0 +1,453 @@
+{
+ "backend": "elevenlabs",
+ "voice": "nPczCjzI2devNBz1zQrb",
+ "duration": 201.326,
+ "series_tag": "Stærðfræði · Brot · 1. þáttur",
+ "title": "Brot: Hvor bitinn er stærri?",
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Segjum að þú megir fá súkkulaði.",
+   "start": 2.2,
+   "end": 4.52,
+   "take": "k1-7233ccd489.mp3"
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Einn fjórða af plötunni, eða einn áttunda.",
+   "start": 4.97,
+   "end": 8.071,
+   "take": "k2-e2d2ee8262.mp3"
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "Hvort viltu frekar?",
+   "start": 8.521,
+   "end": 9.819,
+   "take": "k3-dab6a2e926.mp3"
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "Segðu það upphátt.",
+   "start": 10.269,
+   "end": 11.709,
+   "take": "k4-27f7ebd11f.mp3",
+   "think_start": 11.959,
+   "think_end": 15.459
+  },
+  {
+   "id": "h1",
+   "part": "3 Hittu hlutana",
+   "text": "Sjáðu, brot er bara tvær tölur.",
+   "start": 16.709,
+   "end": 19.49,
+   "take": "h1-c06b755bc7.mp3"
+  },
+  {
+   "id": "h2",
+   "part": "3 Hittu hlutana",
+   "text": "Ein er uppi og ein er niðri.",
+   "start": 19.94,
+   "end": 22.239,
+   "take": "h2-9a0b16a5a1.mp3"
+  },
+  {
+   "id": "h3",
+   "part": "3 Hittu hlutana",
+   "text": "Talan niðri heitir nefnari.",
+   "start": 22.689,
+   "end": 24.989,
+   "take": "h3-0b8063830f.mp3"
+  },
+  {
+   "id": "h4",
+   "part": "3 Hittu hlutana",
+   "text": "Hún segir hvað bitarnir eru margir.",
+   "start": 25.439,
+   "end": 28.099,
+   "take": "h4-8309ea83e1.mp3"
+  },
+  {
+   "id": "h5",
+   "part": "3 Hittu hlutana",
+   "text": "Talan uppi heitir teljari.",
+   "start": 28.549,
+   "end": 30.851,
+   "take": "h5-2e23c771c9.mp3"
+  },
+  {
+   "id": "h6",
+   "part": "3 Hittu hlutana",
+   "text": "Hún segir hvað þú færð marga bita.",
+   "start": 31.301,
+   "end": 33.781,
+   "take": "h6-868d615849.mp3"
+  },
+  {
+   "id": "e1",
+   "part": "4 Erfiða skrefið",
+   "text": "Margir velja einn áttunda.",
+   "start": 35.031,
+   "end": 37.061,
+   "take": "e1-2a7d94f31e.mp3"
+  },
+  {
+   "id": "e2",
+   "part": "4 Erfiða skrefið",
+   "text": "Af því að átta er meira en fjórir.",
+   "start": 37.511,
+   "end": 40.418,
+   "take": "e2-4bc04ea172.mp3"
+  },
+  {
+   "id": "e3",
+   "part": "4 Erfiða skrefið",
+   "text": "En prófum þetta.",
+   "start": 40.868,
+   "end": 42.066,
+   "take": "e3-7988b22a0f.mp3"
+  },
+  {
+   "id": "e4",
+   "part": "4 Erfiða skrefið",
+   "text": "Fjórir vinir skipta einni plötu.",
+   "start": 42.516,
+   "end": 45.083,
+   "take": "e4-54ed219541.mp3"
+  },
+  {
+   "id": "e5",
+   "part": "4 Erfiða skrefið",
+   "text": "Hver fær einn fjórða.",
+   "start": 45.533,
+   "end": 47.285,
+   "take": "e5-8f66f2eb34.mp3"
+  },
+  {
+   "id": "e6",
+   "part": "4 Erfiða skrefið",
+   "text": "Svo koma fjórir í viðbót.",
+   "start": 47.735,
+   "end": 49.735,
+   "take": "e6-223c1b0bd0.mp3"
+  },
+  {
+   "id": "e7",
+   "part": "4 Erfiða skrefið",
+   "text": "Nú eru þeir átta, en platan er jafn stór.",
+   "start": 50.185,
+   "end": 53.248,
+   "take": "e7-d6f5ad64f0.mp3"
+  },
+  {
+   "id": "e8",
+   "part": "4 Erfiða skrefið",
+   "text": "Þá þarf að skipta henni í átta bita.",
+   "start": 53.698,
+   "end": 56.418,
+   "take": "e8-7687d5f109.mp3"
+  },
+  {
+   "id": "e9",
+   "part": "4 Erfiða skrefið",
+   "text": "Og hver fær bara einn áttunda.",
+   "start": 56.868,
+   "end": 58.952,
+   "take": "e9-c7b295b477.mp3"
+  },
+  {
+   "id": "e10",
+   "part": "4 Erfiða skrefið",
+   "text": "Sjáðu muninn.",
+   "start": 59.402,
+   "end": 60.624,
+   "take": "e10-2957798126.mp3"
+  },
+  {
+   "id": "e11",
+   "part": "4 Erfiða skrefið",
+   "text": "Einn áttundi er bara helmingurinn af einum fjórða.",
+   "start": 61.074,
+   "end": 64.674,
+   "take": "e11-2491d8a942.mp3"
+  },
+  {
+   "id": "e12",
+   "part": "4 Erfiða skrefið",
+   "text": "Því fleiri sem skipta, því minni verða bitarnir.",
+   "start": 65.124,
+   "end": 68.644,
+   "take": "e12-ff7a8fc177.mp3"
+  },
+  {
+   "id": "n1",
+   "part": "5 Nú þú",
+   "text": "Nú mátt þú prófa.",
+   "start": 69.994,
+   "end": 71.307,
+   "take": "n1-d4b78f0df4.mp3"
+  },
+  {
+   "id": "n2",
+   "part": "5 Nú þú",
+   "text": "Hvort er meira, einn þriðji eða einn sjötti?",
+   "start": 71.757,
+   "end": 75.081,
+   "take": "n2-97ccb9c0f6.mp3"
+  },
+  {
+   "id": "n3",
+   "part": "5 Nú þú",
+   "text": "Græna eða bláa? Segðu það upphátt.",
+   "start": 75.531,
+   "end": 78.56,
+   "take": "n3-d337f373eb.mp3"
+  },
+  {
+   "id": "n4",
+   "part": "5 Nú þú",
+   "text": "Þú mátt alveg ýta á pásu.",
+   "start": 79.01,
+   "end": 81.01,
+   "take": "n4-6906029418.mp3",
+   "think_start": 81.26,
+   "think_end": 85.76
+  },
+  {
+   "id": "n5",
+   "part": "5 Nú þú",
+   "text": "Græna! Einn þriðji er meira.",
+   "start": 86.21,
+   "end": 88.748,
+   "take": "n5-2af443ff6b.mp3"
+  },
+  {
+   "id": "n6",
+   "part": "5 Nú þú",
+   "text": "Sagðirðu bláa? Það er allt í lagi, það gera margir.",
+   "start": 89.198,
+   "end": 93.069,
+   "take": "n6-e002648d4e.mp3"
+  },
+  {
+   "id": "n7",
+   "part": "5 Nú þú",
+   "text": "Sex er hærri tala, en þegar sex skipta verða bitarnir minni.",
+   "start": 93.519,
+   "end": 98.127,
+   "take": "n7-88cd0ee11f.mp3"
+  },
+  {
+   "id": "r1",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Munum þetta.",
+   "start": 99.377,
+   "end": 100.417,
+   "take": "r1-8aa53971e9.mp3"
+  },
+  {
+   "id": "r2",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Því hærri sem talan niðri er, því minni er bitinn.",
+   "start": 100.867,
+   "end": 104.639,
+   "take": "r2-b012b7c454.mp3"
+  },
+  {
+   "id": "r3",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Þetta virkar líka með pítsu.",
+   "start": 105.089,
+   "end": 107.089,
+   "take": "r3-8704e8688c.mp3"
+  },
+  {
+   "id": "r4",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Ef tveir skipta pítsu fær hvor helminginn.",
+   "start": 107.539,
+   "end": 110.739,
+   "take": "r4-618f085e28.mp3"
+  },
+  {
+   "id": "r5",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Ef tíu skipta henni fær hver bara mjóa sneið.",
+   "start": 111.189,
+   "end": 114.772,
+   "take": "r5-5a52c24ce3.mp3"
+  },
+  {
+   "id": "r6",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Súkkulaði eða pítsa, alltaf sama reglan.",
+   "start": 115.222,
+   "end": 118.615,
+   "take": "r6-03745da6ff.mp3"
+  },
+  {
+   "id": "r7",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Og manstu fyrstu spurninguna?",
+   "start": 119.065,
+   "end": 120.703,
+   "take": "r7-51e25c25a9.mp3"
+  },
+  {
+   "id": "r8",
+   "part": "6 Reglan og annað dæmi",
+   "text": "Einn fjórði er meira. Veldu einn fjórða!",
+   "start": 121.153,
+   "end": 124.247,
+   "take": "r8-b0160b976d.mp3"
+  },
+  {
+   "id": "m1",
+   "part": "7 Nú þú aftur",
+   "text": "Ein í viðbót, aðeins erfiðari.",
+   "start": 125.597,
+   "end": 128.195,
+   "take": "m1-e2cd2bebf4.mp3"
+  },
+  {
+   "id": "m2",
+   "part": "7 Nú þú aftur",
+   "text": "Hvort er meira, einn tíundi eða einn hundraðasti?",
+   "start": 128.645,
+   "end": 132.476,
+   "take": "m2-39e4867b3d.mp3"
+  },
+  {
+   "id": "m3",
+   "part": "7 Nú þú aftur",
+   "text": "Segðu það upphátt.",
+   "start": 132.926,
+   "end": 134.386,
+   "take": "m3-27f7ebd11f.mp3",
+   "think_start": 134.636,
+   "think_end": 140.136
+  },
+  {
+   "id": "m4",
+   "part": "7 Nú þú aftur",
+   "text": "Einn tíundi!",
+   "start": 140.586,
+   "end": 141.809,
+   "take": "m4-ac2c92396d.mp3"
+  },
+  {
+   "id": "m5",
+   "part": "7 Nú þú aftur",
+   "text": "Ef hundrað manns skipta plötunni fær hver bara pínulítinn mola.",
+   "start": 142.259,
+   "end": 146.673,
+   "take": "m5-507f0e4629.mp3"
+  },
+  {
+   "id": "u1",
+   "part": "8 Upprifjun",
+   "text": "Rifjum upp. Reyndu að svara á undan mér.",
+   "start": 148.023,
+   "end": 151.205,
+   "take": "u1-84bbe95db8.mp3"
+  },
+  {
+   "id": "u2",
+   "part": "8 Upprifjun",
+   "text": "Hvað heitir talan niðri?",
+   "start": 151.655,
+   "end": 153.489,
+   "take": "u2-0c02832b5a.mp3",
+   "think_start": 153.739,
+   "think_end": 157.239
+  },
+  {
+   "id": "u3",
+   "part": "8 Upprifjun",
+   "text": "Nefnari. Hún segir hvað bitarnir eru margir.",
+   "start": 157.689,
+   "end": 161.369,
+   "take": "u3-a76982dd5c.mp3"
+  },
+  {
+   "id": "u4",
+   "part": "8 Upprifjun",
+   "text": "Hvað gerist þegar fleiri skipta?",
+   "start": 161.819,
+   "end": 164.17,
+   "take": "u4-1e7e5eec80.mp3",
+   "think_start": 164.42,
+   "think_end": 167.92
+  },
+  {
+   "id": "u5",
+   "part": "8 Upprifjun",
+   "text": "Bitarnir verða minni.",
+   "start": 168.37,
+   "end": 170.004,
+   "take": "u5-321425b92e.mp3"
+  },
+  {
+   "id": "u6",
+   "part": "8 Upprifjun",
+   "text": "Hvort er meira, einn fjórði eða einn áttundi?",
+   "start": 170.454,
+   "end": 173.814,
+   "take": "u6-185f547913.mp3",
+   "think_start": 174.064,
+   "think_end": 177.564
+  },
+  {
+   "id": "u7",
+   "part": "8 Upprifjun",
+   "text": "Einn fjórði.",
+   "start": 178.014,
+   "end": 179.068,
+   "take": "u7-70c5803a8f.mp3"
+  },
+  {
+   "id": "a1",
+   "part": "9 Áskorun",
+   "text": "Smá áskorun fyrir kvöldið.",
+   "start": 180.418,
+   "end": 182.446,
+   "take": "a1-550d38ba1d.mp3"
+  },
+  {
+   "id": "a2",
+   "part": "9 Áskorun",
+   "text": "Brjóttu blað tvisvar saman. Þá færðu fjóra bita.",
+   "start": 182.896,
+   "end": 186.74,
+   "take": "a2-664927d843.mp3"
+  },
+  {
+   "id": "a3",
+   "part": "9 Áskorun",
+   "text": "Brjóttu annað blað þrisvar saman. Þá færðu átta.",
+   "start": 187.19,
+   "end": 191.19,
+   "take": "a3-17604592aa.mp3"
+  },
+  {
+   "id": "a4",
+   "part": "9 Áskorun",
+   "text": "Sýndu einhverjum heima hvor bitinn er stærri, og af hverju.",
+   "start": 191.64,
+   "end": 195.8,
+   "take": "a4-de66e29838.mp3"
+  },
+  {
+   "id": "a5",
+   "part": "9 Áskorun",
+   "text": "Sjáumst!",
+   "start": 196.25,
+   "end": 197.176,
+   "take": "a5-35577ce4b6.mp3"
+  }
+ ]
+}
