@@ -1,164 +1,195 @@
-ATH   k1  handrit: Smiðir nota einfalt bragð til að athuga hvort horn sé nákvæmlega níutíu gráður.
-           heyrt:   smiður nota einfalt bragð til að athuga hvort horn sé nákvæmlega níutíu gráður
-           - 'smiðir' -> 'smiður'
-OK    k2  handrit: Þeir mæla sextíu sentímetra eftir öðrum veggnum og áttatíu eftir hinum.
-           heyrt:   þeir mæla sextíu sentímetra eftir öðrum veggnum og áttatíu eftir hinum
-ATH   k3  handrit: Ef hornið er níutíu gráður á að vera nákvæmlega einn metri á milli punktanna.
-           heyrt:   ð er níutíu gráður á að vera nákvæmlega einn metri á milli punktanna
-           - 'ef hornið' -> 'ð'
-OK    k4  handrit: En sextíu plús áttatíu eru hundrað og fjörutíu.
-           heyrt:   en sextíu plús áttatíu eru hundrað og fjörutíu
-OK    k5  handrit: Hvor leiðin er styttri: beint á milli punktanna, eða fyrir hornið?
-           heyrt:   hvor leiðin er styttri beint á milli punktanna eða fyrir hornið
-OK    k6  handrit: Beina leiðin er alltaf styttri. En af hverju nákvæmlega einn metri?
-           heyrt:   beina leiðin er alltaf styttri en af hverju nákvæmlega einn metri
-OK    k7  handrit: Svarið er regla sem er meira en tvö þúsund og fimm hundruð ára gömul.
-           heyrt:   svarið er regla sem er meira en tvö þúsund og fimm hundruð ára gömul
-ATH   h1  handrit: Reglan gildir bara um rétthyrnda þríhyrninga.
-           heyrt:   reglan gildir bara um rétthind þríhyrninga
-           - 'rétthyrnda' -> 'rétthind'
-OK    h2  handrit: Það eru þríhyrningar þar sem eitt hornið er níutíu gráður, eins og hornið milli veggjanna.
-           heyrt:   það eru þríhyrningar þar sem eitt hornið er níutíu gráður eins og hornið milli veggjanna
-ATH   h3  handrit: Hliðarnar tvær sem mynda níutíu gráða hornið heita skammhliðar.
-           heyrt:   hliðarnar tvær sem mynda níutíu gráða hornið hita skammhliðar
-           - 'heita' -> 'hita'
-OK    h4  handrit: Lengsta hliðin heitir langhlið. Hún er alltaf á móti níutíu gráða horninu.
-           heyrt:   lengsta hliðin heitir langhlið hún er alltaf á móti níutíu gráða horninu
-OK    e1  handrit: Skoðum minni þríhyrning á rúðustrikuðu blaði.
-           heyrt:   skoðum minni þríhyrning á rúðustrikuðu blaði
-ATH   e2  handrit: Skammhliðarnar eru þrír og fjórir reitir.
-           heyrt:   hliðarnar eru þrír og fjórir reitir
-           - 'skammhliðarnar' -> 'hliðarnar'
-OK    e3  handrit: Nú teiknum við ferning út frá hverri hlið.
-           heyrt:   nú teiknum við ferning út frá hverri hlið
-OK    e4  handrit: Ferningurinn á styttri skammhliðinni er þrír sinnum þrír, eða níu reitir.
-           heyrt:   ferningurinn á styttri skammhliðinni er þrír sinnum þrír eða níu reitir
-ATH   e5  handrit: Á hinni skammhliðinni er hann fjórir sinnum fjórir, eða sextán reitir.
-           heyrt:   á hinni skammhliðinni er hann fjórum sinnum fjórir eða sextán reitir
-           - 'fjórir' -> 'fjórum'
-OK    e6  handrit: Á langhliðinni er hann fimm sinnum fimm, eða tuttugu og fimm reitir.
-           heyrt:   á langhliðinni er hann fimm sinnum fimm eða tuttugu og fimm reitir
-OK    e7  handrit: Færum nú litlu reitina yfir í stóra ferninginn.
-           heyrt:   færum nú litlu reitina yfir í stóra ferninginn
-OK    e8  handrit: Níu plús sextán eru tuttugu og fimm. Þeir fylla hann nákvæmlega.
-           heyrt:   níu plús sextán eru tuttugu og fimm þeir fylla hann nákvæmlega
-ATH   e9  handrit: Þetta er regla Pýþagórasar.
-           heyrt:   þetta er regla píþagórasar
+OK    k1  handrit: Þú þarft að mála gluggann á þessu húsi.
+           heyrt:   þú þarft að mála gluggann á þessu húsi
+OK    k2  handrit: Glugginn er í fjögurra metra hæð.
+           heyrt:   glugginn er í fjögurra metra hæð
+OK    k3  handrit: Þú setur stigann þrjá metra frá veggnum.
+           heyrt:   þú setur stigann þrjá metra frá veggnum
+ATH   k4  handrit: Hvað þarf stiginn að vera langur til að ná upp í gluggann?
+           heyrt:   hvað þarf stíginn að vera langur til þess að ná upp í gluggann
+           - 'stiginn' -> 'stíginn'
+           - '' -> 'þess'
+ATH   k5  handrit: Í lok myndbandsins getur þú reiknað þetta.
+           heyrt:   í lok myndlandsins getur þú reiknað þetta
+           - 'myndbandsins' -> 'myndlandsins'
+OK    r1  handrit: Sjáðu hornið þar sem veggurinn mætir jörðinni.
+           heyrt:   sjáðu hornið þar sem veggurinn mætir jörðinni
+ATH   r2  handrit: Veggurinn stendur beint upp. Svona horn heitir rétt horn.
+           heyrt:   a setning veggurinn stendur beint upp svona horn heitir rétt horn
+           - '' -> 'a setning'
+OK    r3  handrit: Rétt horn er níutíu gráður.
+           heyrt:   rétt horn er níutíu gráður
+ATH   r4  handrit: Þú sérð rétt horn alls staðar: á horni á bók, á hurð og á símanum þínum.
+           heyrt:   þú sérð rétt horn alls staðar á horni á bók á höruð og á símanum þínum
+           - 'hurð' -> 'höruð'
+OK    r5  handrit: Rétt horn er merkt með litlum ferningi í horninu.
+           heyrt:   rétt horn er merkt með litlum ferningi í horninu
+ATH   s1  handrit: Veggurinn, jörðin og stiginn mynda saman þríhyrning.
+           heyrt:   veggurinn jörðin og stíginn mynda saman þríhyrning
+           - 'stiginn' -> 'stíginn'
+OK    s2  handrit: Hann er með rétt horn, og þess vegna heitir hann rétthyrndur þríhyrningur.
+           heyrt:   hann er með rétt horn og þess vegna heitir hann rétthyrndur þríhyrningur
+ATH   s3  handrit: Veggurinn og jörðin mynda rétta hornið. Þær hliðar heita skammhliðar.
+           heyrt:   a setning veggurinn og jörðin mynda rétta hornið færhliðar heita skammhliðar
+           - '' -> 'a setning'
+           - 'þær hliðar' -> 'færhliðar'
+ATH   s4  handrit: Stiginn er lengsta hliðin. Hún heitir langhlið.
+           heyrt:   stigin er lengsta hliðin hún heitir langhlið
+           - 'stiginn' -> 'stigin'
+OK    s5  handrit: Langhliðin er alltaf á móti rétta horninu.
+           heyrt:   langhliðin er alltaf á móti rétta horninu
+OK    p1  handrit: Prófaðu. Hér er skábraut fyrir hjólastól.
+           heyrt:   prófaðu hér er skábraut fyrir hjólastól
+ATH   p2  handrit: Hvaða hlið er langhliðin: A, B eða C? Segðu stafinn upphátt.
+           heyrt:   hvaða hlið er langhliðin a b eða sj segðu stafinn upphátt
+           - 'c' -> 'sj'
+ATH   p3  handrit: C, skábrautin sjálf. Hún er lengst og á móti rétta horninu.
+           heyrt:   a setning sé skábrautin sjálf hún er lengst og á móti rétta horninu
+           - 'c' -> 'a setning sé'
+ATH   v1  handrit: Nú lærum við að setja tölu í annað veldi.
+           heyrt:   nú lærum við að setja tölu í annan veldi
+           - 'annað' -> 'annan'
+OK    v2  handrit: Það þýðir að margfalda töluna með sjálfri sér.
+           heyrt:   það þýðir að margfalda töluna með sjálfri sér
+OK    v3  handrit: Þrír í öðru veldi er sama og þrír sinnum þrír, sem eru níu.
+           heyrt:   þrír í öðru veldi er sama og þrír sinnum þrír sem eru níu
+OK    v4  handrit: Ef þú raðar níu kubbum, þrír sinnum þrír, færðu ferning.
+           heyrt:   ef þú raðar níu kubbum þrír sinnum þrír færðu ferning
+OK    v5  handrit: Á blaði er það skrifað með litlum tvisti fyrir ofan töluna.
+           heyrt:   á blaði er það skrifað með litlum tvisti fyrir ofan töluna
+OK    p4  handrit: Prófaðu. Hvað er fjórir í öðru veldi?
+           heyrt:   prófaðu hvað er fjórir í öðru veldi
+OK    p5  handrit: Fjórir sinnum fjórir eru sextán.
+           heyrt:   fjórir sinnum fjórir eru sextán
+ATH   g1  handrit: Nú kemur regla Pýþagórasar.
+           heyrt:   nú kemur regla píþagórasar
            - 'pýþagórasar' -> 'píþagórasar'
-ATH  e10  handrit: Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni.
-           heyrt:   fningarnir á skammblöðunum eru samanlagt jafnstórir og ferningurinn á langhliðinni
-           - 'ferningarnir' -> 'fningarnir'
-           - 'skammhliðunum' -> 'skammblöðunum'
-           - 'jafn stórir' -> 'jafnstórir'
-OK   e11  handrit: Í bókinni er reglan skrifuð með veldum, svona.
-           heyrt:   í bókinni er reglan skrifuð með veldum svona
-OK    b1  handrit: Prófum þetta á veggina.
-           heyrt:   prófum þetta á veggina
-OK    b2  handrit: Sextíu sinnum sextíu eru þrjú þúsund og sex hundruð.
-           heyrt:   sextíu sinnum sextíu eru þrjú þúsund og sex hundruð
-OK    b3  handrit: Áttatíu sinnum áttatíu eru sex þúsund og fjögur hundruð.
-           heyrt:   áttatíu sinnum áttatíu eru sex þúsund og fjögur hundruð
-OK    b4  handrit: Samanlagt eru það tíu þúsund.
-           heyrt:   samanlagt eru það tíu þúsund
-OK    b5  handrit: Hvaða tala, margfölduð með sjálfri sér, gefur tíu þúsund? Hundrað.
-           heyrt:   hvaða tala margfölduð með sjálfri sér gefur tíu þúsund hundrað
-OK    b6  handrit: Hundrað sentímetrar eru einn metri. Þess vegna virkar bragðið.
-           heyrt:   hundrað sentímetrar eru einn metri þess vegna virkar bragðið
-ATH   d1  handrit: Nú tökum við sýnidæmi úr Skala þrjú A, á blaðsíðu fimmtíu og þrjú.
-           heyrt:   nú tökum við sýnidæmi úr skala þrjúa á blaðsíðu fimmtíu og þrjú
-           - 'þrjú a' -> 'þrjúa'
-ATH   d2  handrit: Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?
+ATH   g2  handrit: Settu skammhliðarnar í annað veldi og leggðu þær saman. Þá færðu langhliðina í öðru veldi.
+           heyrt:   hliðarnar í annað veldi og legðu þær saman þá færðu langhliðina í öðru veldi
+           - 'settu skammhliðarnar' -> 'hliðarnar'
+           - 'leggðu' -> 'legðu'
+OK    g3  handrit: Sjáum hvort þetta passar fyrir stigann.
+           heyrt:   sjáum hvort þetta passar fyrir stigann
+OK    g4  handrit: Hliðin eftir jörðinni er þrír metrar. Þrír í öðru veldi eru níu.
+           heyrt:   hliðin eftir jörðinni er þrír metrar þrír í öðru veldi eru níu
+ATH   g5  handrit: Hliðin upp vegginn er fjórir metrar. Fjórir í öðru veldi eru sextán.
+           heyrt:   in uppvegginn er fjórir metrar fjórir í öðru veldi eru sextán
+           - 'hliðin upp vegginn' -> 'in uppvegginn'
+ATH   g6  handrit: Níu plús sextán eru tuttugu og fimm. Það er stiginn í öðru veldi.
+           heyrt:   plús sextán eru tuttugu og fimm það er stigin í öðru veldi
+           - 'níu' -> ''
+           - 'stiginn' -> 'stigin'
+OK    f1  handrit: En við viljum lengd stigans, ekki stigann í öðru veldi.
+           heyrt:   en við viljum lengd stigans ekki stigann í öðru veldi
+ATH   f2  handrit: Þá förum við til baka. Hvaða tala sinnum sjálf sig gefur tuttugu og fimm?
+           heyrt:   þá förum við til baka hvaða tala sinn um sjálf sig gefur tuttugu og fimm
+           - 'sinnum' -> 'sinn um'
+OK    f3  handrit: Fimm, því fimm sinnum fimm eru tuttugu og fimm.
+           heyrt:   fimm því fimm sinnum fimm eru tuttugu og fimm
+OK    f4  handrit: Þetta heitir ferningsrót. Á vasareikni er hún á þessum takka.
+           heyrt:   þetta heitir ferningsrót á vasareikni er hún á þessum takka
+OK    p6  handrit: Prófaðu. Hver er ferningsrótin af fjörutíu og níu?
+           heyrt:   prófaðu hver er ferningsrótin af fjörutíu og níu
+OK    p7  handrit: Sjö, því sjö sinnum sjö eru fjörutíu og níu.
+           heyrt:   sjö því sjö sinnum sjö eru fjörutíu og níu
+OK    u1  handrit: Nú höfum við allt sem þarf. Reglan er þrjú skref.
+           heyrt:   nú höfum við allt sem þarf reglan er þrjú skref
+ATH   u2  handrit: Eitt: settu skammhliðarnar í annað veldi.
+           heyrt:   eitt settu skammhljóðarnar í annal veldi
+           - 'skammhliðarnar' -> 'skammhljóðarnar'
+           - 'annað' -> 'annal'
+ATH   u3  handrit: Tvö: leggðu þær saman.
+           heyrt:   tvö lögðu þær saman
+           - 'leggðu' -> 'lögðu'
+OK    u4  handrit: Þrjú: taktu ferningsrótina.
+           heyrt:   þrjú taktu ferningsrótina
+OK    u5  handrit: Fyrir stigann: níu plús sextán eru tuttugu og fimm. Ferningsrótin af tuttugu og fimm er fimm.
+           heyrt:   fyrir stigann níu plús sextán eru tuttugu og fimm ferningsrótin af tuttugu og fimm er fimm
+ATH   u6  handrit: Stiginn þarf að vera fimm metrar.
+           heyrt:   stígin þarf að vera fimm metrar
+           - 'stiginn' -> 'stígin'
+OK    b1  handrit: Nú tökum við dæmi úr bókinni Skala þrjú A, á blaðsíðu fimmtíu og þrjú.
+           heyrt:   nú tökum við dæmi úr bókinni skala þrjú a á blaðsíðu fimmtíu og þrjú
+ATH   b2  handrit: Skammhliðarnar eru tveir og fimm sentímetrar. Hvað er langhliðin löng?
            heyrt:   hliðarnar eru tveir og fimm sentímetrar hvað er langhliðin löng
            - 'skammhliðarnar' -> 'hliðarnar'
-OK    d3  handrit: Fyrst reiknum við ferningana. Tveir sinnum tveir eru fjórir. Fimm sinnum fimm eru tuttugu og fimm.
-           heyrt:   fyrst reiknum við ferningana tveir sinnum tveir eru fjórir fimm sinnum fimm eru tuttugu og fimm
-ATH   d4  handrit: Samanlagt eru það tuttugu og níu.
-           heyrt:   samanlagt er það tuttugu og níu
-           - 'eru' -> 'er'
-OK    d5  handrit: Tuttugu og níu er flatarmál stóra ferningsins. En við viljum lengd hliðarinnar, ekki flatarmálið.
-           heyrt:   tuttugu og níu er flatarmál stóra ferningsins en við viljum lengd hliðarinnar ekki flatarmálið
-ATH   d6  handrit: Þess vegna tökum við ferningsrótina. Rótin af tuttugu og níu er um það bil fimm komma fjórir.
-           heyrt:   þess vegna tökum við ferningsrótina rótin af tuttugu og níu er um það bil fimm koma fjórir
-           - 'komma' -> 'koma'
-ATH   d7  handrit: Langhliðin er um það bil fimm komma fjórir sentímetrar.
+OK    b3  handrit: Skref eitt: tveir í öðru veldi eru fjórir. Fimm í öðru veldi eru tuttugu og fimm.
+           heyrt:   skref eitt tveir í öðru veldi eru fjórir fimm í öðru veldi eru tuttugu og fimm
+ATH   b4  handrit: Skref tvö: fjórir plús tuttugu og fimm eru tuttugu og níu.
+           heyrt:   f tvö fjórir plús tuttugu og fimm eru tuttugu og níu
+           - 'skref' -> 'f'
+OK    b5  handrit: Skref þrjú: ferningsrótin af tuttugu og níu. Engin heil tala passar, svo við notum vasareikni.
+           heyrt:   skref þrjú ferningsrótin af tuttugu og níu engin heil tala passar svo við notum vasareikni
+ATH   b6  handrit: Langhliðin er um það bil fimm komma fjórir sentímetrar.
            heyrt:   langhliðin er um það bil fimm koma fjórir sentímetrar
            - 'komma' -> 'koma'
-OK    d8  handrit: Algengasta villan er að gleyma rótinni og svara tuttugu og níu sentímetrar.
-           heyrt:   algengasta villan er að gleyma rótinni og svara tuttugu og níu sentímetrar
-OK    d9  handrit: Athugaðu því alltaf svarið. Langhliðin á að vera lengsta hliðin, en styttri en hinar tvær samanlagt.
-           heyrt:   athugaðu því alltaf svarið langhliðin á að vera lengsta hliðin en styttri en hinar tvær samanlagt
-ATH  d10  handrit: Fimm komma fjórir er meira en fimm og minna en sjö. Það passar.
-           heyrt:   fimm koma fjórir er meira en fimm og minna en sjö það passar
+OK    p8  handrit: Nú prófar þú. Skábrautin er einn metri á hæð og nær þrjá metra eftir jörðinni.
+           heyrt:   nú prófar þú skábrautin er einn metri á hæð og nær þrjá metra eftir jörðinni
+ATH   p9  handrit: Hvað er skábrautin löng? Notaðu skrefin þrjú. Þú mátt stoppa myndbandið.
+           heyrt:   hvað ef skábrautin löng notaði skrefin þrjú þú mátt stoppa myndbandið
+           - 'er' -> 'ef'
+           - 'notaðu' -> 'notaði'
+OK   p10  handrit: Einn í öðru veldi er einn. Þrír í öðru veldi eru níu.
+           heyrt:   einn í öðru veldi er einn þrír í öðru veldi eru níu
+ATH  p11  handrit: Einn plús níu eru tíu. Ferningsrótin af tíu er um það bil þrír komma tveir.
+           heyrt:   einn plús níu eru tíu ferningsbrotin af tíu er um það bil þrír koma tveir
+           - 'ferningsrótin' -> 'ferningsbrotin'
            - 'komma' -> 'koma'
-OK    n1  handrit: Nú prófar þú.
-           heyrt:   nú prófar þú
-OK    n2  handrit: Bílskúrinn hans Ómars er fjórir metrar á breidd og sex metrar á lengd.
-           heyrt:   bílskúrinn hans ómars er fjórir metrar á breidd og sex metrar á lengd
-ATH   n3  handrit: Hvað er hornalínan löng? Hornalínan er beina línan frá einu horni yfir í hornið á móti.
-           heyrt:   línan er beina línan frá einu horni yfir í hornið á móti
-           - 'hvað er hornalínan löng hornalínan' -> 'línan'
-ATH   n4  handrit: Settu myndbandið á pásu og reiknaðu. Þú mátt nota vasareikni.
-           heyrt:   setti myndbandið að pásu og reiknaði þú mátt nota vasareikni
-           - 'settu' -> 'setti'
-           - 'á' -> 'að'
-           - 'reiknaðu' -> 'reiknaði'
-ATH   n5  handrit: Fjórir sinnum fjórir eru sextán. Sex sinnum sex eru þrjátíu og sex.
-           heyrt:   fjórum sinnum fjórir eru sextán sex sinnum sex eru þrjátíu og sex
-           - 'fjórir' -> 'fjórum'
-ATH   n6  handrit: Samanlagt eru það fimmtíu og tveir. Rótin af fimmtíu og tveimur er um það bil sjö komma tveir.
-           heyrt:   samanlagt eru það fimmtíu og tveir rótin af fimmtíu og tveimur er um það bil sjö koma tveir
+ATH  p12  handrit: Skábrautin er um það bil þrír komma tveir metrar.
+           heyrt:   skábrautin er um það bil þrír koma tveir metrar
            - 'komma' -> 'koma'
-ATH   n7  handrit: Hornalínan er um það bil sjö komma tveir metrar.
+OK    h1  handrit: Eitt nýtt orð í viðbót: hornalína.
+           heyrt:   eitt nýtt orð í viðbót hornalína
+ATH   h2  handrit: Hornalína er lína frá einu horni yfir í hornið á móti.
+           heyrt:   hornalína er lína frá eina horni yfir í hornið á móti
+           - 'einu' -> 'eina'
+OK    h3  handrit: Hún skiptir sjónvarpinu í tvo rétthyrnda þríhyrninga. Þess vegna virka skrefin þrjú líka hér.
+           heyrt:   hún skiptir sjónvarpinu í tvo rétthyrnda þríhyrninga þess vegna virka skrefin þrjú líka hér
+ATH   h4  handrit: Sjónvörp eru mæld eftir hornalínunni. Þetta sjónvarp er áttatíu sentímetrar á breidd og sextíu á hæð.
+           heyrt:   vörp eru mæld eftir hornalínunni þetta sjónvarp er áttatíu sentímetrar á breidd og sextíu á hæð
+           - 'sjónvörp' -> 'vörp'
+ATH   h5  handrit: Áttatíu í öðru veldi eru sex þúsund og fjögur hundruð. Sextíu í öðru veldi eru þrjú þúsund og sex hundruð.
+           heyrt:   tíu í öðru veldi eru sex þúsund og fjögur hundruð sextíu í öðru veldi eru þrjú þúsund og sex hundruð
+           - 'áttatíu' -> 'tíu'
+ATH   h6  handrit: Samanlagt eru það tíu þúsund. Ferningsrótin af tíu þúsund er hundrað.
+           heyrt:   samanlagt er það tíu þúsund ferningsrotin af tíu þúsund er hundrað
+           - 'eru' -> 'er'
+           - 'ferningsrótin' -> 'ferningsrotin'
+ATH   h7  handrit: Hornalínan er hundrað sentímetrar.
+           heyrt:   línan er hundrað sentímetrar
+           - 'hornalínan' -> 'línan'
+OK   p13  handrit: Nú prófar þú, með dæmi úr bókinni. Gólfið í bílskúr Ómars er fjórir metrar á breidd og sex metrar á lengd.
+           heyrt:   nú prófar þú með dæmi úr bókinni gólfið í bílskúr ómars er fjórir metrar á breidd og sex metrar á lengd
+ATH  p14  handrit: Hvað er hornalínan löng? Þú mátt stoppa myndbandið.
+           heyrt:   línan löng þú mátt stoppa myndbandið
+           - 'hvað er hornalínan' -> 'línan'
+OK   p15  handrit: Fjórir í öðru veldi eru sextán. Sex í öðru veldi eru þrjátíu og sex.
+           heyrt:   fjórir í öðru veldi eru sextán sex í öðru veldi eru þrjátíu og sex
+ATH  p16  handrit: Sextán plús þrjátíu og sex eru fimmtíu og tveir. Ferningsrótin af fimmtíu og tveimur er um það bil sjö komma tveir.
+           heyrt:   sextán plús þrjátíu og sex eru fimmtíu og tveir ferningsrótin af fimmtíu og tveimur er um það bil sjö koma tveir
+           - 'komma' -> 'koma'
+ATH  p17  handrit: Hornalínan er um það bil sjö komma tveir metrar.
            heyrt:   línan er um það bil sjö koma tveir metrar
            - 'hornalínan' -> 'línan'
            - 'komma' -> 'koma'
-OK    r1  handrit: Reglan virkar líka öfugt.
-           heyrt:   reglan virkar líka öfugt
-ATH   r2  handrit: Ef ferningarnir passa saman, þá er hornið níutíu gráður. Það er einmitt það sem smiðirnir nota.
-           heyrt:   ef ferningarnir passa saman þá er hornið níutíu gráður það er einmitt það sem smiðurnir nota
-           - 'smiðirnir' -> 'smiðurnir'
-OK    m1  handrit: Ein spurning í viðbót.
-           heyrt:   ein spurning í viðbót
-ATH   m2  handrit: Þríhyrningur hefur hliðarnar fimm, sjö og níu. Er hann rétthyrndur?
-           heyrt:   þríhyrningur hefur hliðarnar fimm sjö og níu er hann rétthyrnur
-           - 'rétthyrndur' -> 'rétthyrnur'
-ATH   m3  handrit: Reiknaðu það. Stoppaðu myndbandið ef þú vilt meiri tíma.
-           heyrt:   breytnaðu það stoppaðu myndbandið ef þú vilt meiri tíma
-           - 'reiknaðu' -> 'breytnaðu'
-OK    m4  handrit: Fimm sinnum fimm eru tuttugu og fimm. Sjö sinnum sjö eru fjörutíu og níu. Samanlagt eru það sjötíu og fjórir.
-           heyrt:   fimm sinnum fimm eru tuttugu og fimm sjö sinnum sjö eru fjörutíu og níu samanlagt eru það sjötíu og fjórir
-OK    m5  handrit: Níu sinnum níu eru áttatíu og einn. Sjötíu og fjórir eru ekki það sama og áttatíu og einn.
-           heyrt:   níu sinnum níu eru áttatíu og einn sjötíu og fjórir eru ekki það sama og áttatíu og einn
-ATH   m6  handrit: Svarið er nei. Þessi þríhyrningur er ekki rétthyrndur.
-           heyrt:   svarið er nei þessi þríhyrningur er ekki rétthyrtur
-           - 'rétthyrndur' -> 'rétthyrtur'
-OK    u1  handrit: Rifjum upp. Reyndu að svara á undan mér.
+OK    q1  handrit: Rifjum upp. Reyndu að svara á undan mér.
            heyrt:   rifjum upp reyndu að svara á undan mér
-OK    u2  handrit: Hvaða hlið er langhliðin?
-           heyrt:   hvaða hlið er langhliðin
-OK    u3  handrit: Lengsta hliðin. Hún er á móti níutíu gráða horninu.
-           heyrt:   lengsta hliðin hún er á móti níutíu gráða horninu
-ATH   u4  handrit: Hvað segir regla Pýþagórasar?
-           heyrt:   hvað segir regla píþagórasar
-           - 'pýþagórasar' -> 'píþagórasar'
-ATH   u5  handrit: Ferningarnir á skammhliðunum eru samanlagt jafn stórir og ferningurinn á langhliðinni.
-           heyrt:   fningarnir á skammhliðunum eru samanlagt jafnstórir og ferningurinn á langhliðunni
-           - 'ferningarnir' -> 'fningarnir'
-           - 'jafn stórir' -> 'jafnstórir'
-           - 'langhliðinni' -> 'langhliðunni'
-OK    u6  handrit: Hvað er síðasta skrefið þegar þú finnur langhliðina?
-           heyrt:   hvað er síðasta skrefið þegar þú finnur langhliðina
-OK    u7  handrit: Að taka ferningsrótina.
-           heyrt:   að taka ferningsrótina
-OK    a1  handrit: Eitt verkefni að lokum, úr sömu bók.
-           heyrt:   eitt verkefni að lokum úr sömu bók
-ATH   a2  handrit: Mældu lengd og breidd á skrifborðinu þínu.
-           heyrt:   veldur lengd og breidd á skrifborðinu þínu
-           - 'mældu' -> 'veldur'
-OK    a3  handrit: Reiknaðu hornalínuna. Mældu hana svo og athugaðu hvort þú hafðir rétt fyrir þér.
-           heyrt:   reiknaðu hornalínuna mældu hana svo og athugaðu hvort þú hafðir rétt fyrir þér
-ATH   a4  handrit: Sjónvörp og símar eru líka mæld á ská. Nú veistu hvernig það er reiknað.
-           heyrt:   vörp og símar eru líka mæld á ská nú veistu hvernig það er reiknað
-           - 'sjónvörp' -> 'vörp'
-Rödd vuKNwSXHmXUQ2BKzoJCH: 42 frávik í 650 orðum (6.5%), 27 af 64 setningum með frávik.
+ATH   q2  handrit: Hvað heitir lengsta hliðin í rétthyrndum þríhyrningi?
+           heyrt:   hvað heitir lengsta hliðin í rétthindum þríhyrningi
+           - 'rétthyrndum' -> 'rétthindum'
+OK    q3  handrit: Langhlið. Hún er á móti rétta horninu.
+           heyrt:   langhlið hún er á móti rétta horninu
+OK    q4  handrit: Hver eru skrefin þrjú?
+           heyrt:   hver eru skrefin þrjú
+OK    q5  handrit: Í annað veldi, leggja saman, ferningsrót.
+           heyrt:   í annað veldi leggja saman ferningsrót
+OK    q6  handrit: Og hvað þarf stiginn að vera langur?
+           heyrt:   og hvað þarf stiginn að vera langur
+OK    q7  handrit: Fimm metrar.
+           heyrt:   fimm metrar
+ATH   w1  handrit: Verkefni heima, úr Skala þrjú A: mældu breidd og lengd á skrifborðinu þínu.
+           heyrt:   fni heima úr skala þrjú a mældu breidd og lengd á skrifborðinu þínu
+           - 'verkefni' -> 'fni'
+OK    w2  handrit: Reiknaðu hornalínuna með skrefunum þremur. Mældu hana svo og athugaðu hvort það passar.
+           heyrt:   reiknaðu hornalínuna með skrefunum þremur mældu hana svo og athugaðu hvort það passar
+Rödd vuKNwSXHmXUQ2BKzoJCH: 54 frávik í 746 orðum (7.2%), 34 af 75 setningum með frávik.
 Frávik eru staðir til að hlusta á, ekki sannaðar villur: talgreinirinn gerir sjálfur 7–16% villur á íslensku.
