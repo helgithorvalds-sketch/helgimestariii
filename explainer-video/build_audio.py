@@ -5,7 +5,7 @@ Backends:
   elevenlabs  eleven_v4 with language_code "is"; needs an API key on api.elevenlabs.io
               (the session's proxy injects it, or set ELEVENLABS_API_KEY)
 
-Usage: python build_audio.py --episode brot                       (ElevenLabs, default voice)
+Usage: python build_audio.py --episode brot                       (ElevenLabs eleven_v3, Icelandic female voice)
        python build_audio.py --episode brot --backend piper --voice steinn
 """
 import argparse, hashlib, json, os, shutil, subprocess, urllib.request, wave
@@ -34,10 +34,11 @@ def synth_piper(text, out, voice, length_scale):
     subprocess.run(["/home/user/tts/venv/bin/piper", "-m", model, "-f", str(out), "--length-scale", str(length_scale)],
                    input=text.encode(), check=True, capture_output=True)
 
-def synth_elevenlabs(text, out, voice, prev_text):
-    body = {"text": text, "model_id": "eleven_v4", "language_code": "is",
-            "previous_text": prev_text or None,
+def synth_elevenlabs(text, out, voice, prev_text, model):
+    body = {"text": text, "model_id": model, "language_code": "is",
             "voice_settings": {"stability": 0.6, "similarity_boost": 0.8}}
+    if model != "eleven_v3":  # v3 does not take request stitching
+        body["previous_text"] = prev_text or None
     req = urllib.request.Request(f"https://api.elevenlabs.io/v1/text-to-speech/{voice}?output_format=mp3_44100_128",
                                  data=json.dumps(body).encode(), method="POST",
                                  headers={"Content-Type": "application/json",
@@ -53,7 +54,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--episode", required=True)
     ap.add_argument("--backend", default="elevenlabs", choices=["piper", "elevenlabs"])
-    ap.add_argument("--voice", default="nPczCjzI2devNBz1zQrb")  # ElevenLabs "Brian": fewest errors in the Icelandic test
+    # "Íslensk kennslurödd (kona)": designed in ElevenLabs Voice Design to speak native Icelandic, chosen by the creator
+    ap.add_argument("--voice", default="vuKNwSXHmXUQ2BKzoJCH")
+    ap.add_argument("--model", default="eleven_v3", help="ElevenLabs model (eleven_v3 or eleven_v4)")
     ap.add_argument("--length-scale", type=float, default=1.08)
     args = ap.parse_args()
 
@@ -70,13 +73,13 @@ def main():
 
     timeline, prev = [], ""
     for s in script["sentences"]:
-        key = hashlib.sha1(f"{s['text']}|{args.length_scale}".encode()).hexdigest()[:10]
+        key = hashlib.sha1(f"{s['text']}|{args.length_scale}|{args.model}".encode()).hexdigest()[:10]
         raw = take_dir / f"{s['id']}-{key}.{'mp3' if args.backend == 'elevenlabs' else 'wav'}"
         if not raw.exists():
             if args.backend == "piper":
                 synth_piper(s["text"], raw, args.voice, args.length_scale)
             else:
-                synth_elevenlabs(s["text"], raw, args.voice, prev)
+                synth_elevenlabs(s["text"], raw, args.voice, prev, args.model)
         prev = s["text"]
         pcm = to_pcm(raw)
         track.append(np.zeros(int(s.get("gap_before", 0) * SR)))
