@@ -59,11 +59,11 @@ export function steps(g, x, y, title, items, active, done, o = 1, w = 520) {
 }
 
 // a timeline along the bottom of the screen; events = [{year, word, at}], at = time it appears
-export function timeline(g, t, events, o = 1, y = 900, x0 = 200, x1 = 1720, hi = -1) {
+export function timeline(g, t, events, o = 1, y = 900, x0 = 200, x1 = 1720, hi = -1, even = false) {
   if (o <= 0) return;
   const gg = el("g", { opacity: o }, g);
   const years = events.map((e) => e.year), y0 = Math.min(...years), y1 = Math.max(...years);
-  const xOf = (yr) => (y1 === y0 ? (x0 + x1) / 2 : x0 + ((yr - y0) / (y1 - y0)) * (x1 - x0));
+  const xOf = (yr) => (even ? x0 + (years.indexOf(yr) / Math.max(1, years.length - 1)) * (x1 - x0) : y1 === y0 ? (x0 + x1) / 2 : x0 + ((yr - y0) / (y1 - y0)) * (x1 - x0));
   el("line", { x1: x0 - 40, y1: y, x2: x1 + 40, y2: y, stroke: C.ink, "stroke-width": 6, "stroke-linecap": "round" }, gg);
   events.forEach((e, i) => {
     const p = prog(t, e.at, 0.5);

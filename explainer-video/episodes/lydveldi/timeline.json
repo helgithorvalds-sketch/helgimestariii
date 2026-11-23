@@ -1,0 +1,471 @@
+{
+ "backend": "elevenlabs",
+ "voice": "vuKNwSXHmXUQ2BKzoJCH",
+ "duration": 355.836,
+ "series_tag": "Saga 10. bekkur · Styrjaldir og kreppa, bls. 37 og 129–137 · Ísland 1918–1944",
+ "title": "Frá hernámi til lýðveldis",
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Það er snemma morguns, tíunda maí árið nítján hundruð og fjörutíu, í Reykjavík.",
+   "start": 2.2,
+   "end": 7.88,
+   "take": "k1-9a462dd9a7.mp3"
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Fólk vaknar við flugvél. Í höfninni liggja herskip, og hermenn ganga upp í miðbæinn.",
+   "start": 8.33,
+   "end": 14.89,
+   "take": "k2-230baa5573.mp3"
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "Hverjir eru þetta, og af hverju eru þeir komnir til Íslands?",
+   "start": 15.34,
+   "end": 18.78,
+   "take": "k3-75d0f1421c.mp3"
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "Fjórum árum seinna varð Ísland lýðveldi. Í lok myndbandsins veistu hvernig þetta tengist.",
+   "start": 19.23,
+   "end": 25.31,
+   "take": "k4-4ed34371bb.mp3"
+  },
+  {
+   "id": "f1",
+   "part": "2 Fullveldi",
+   "text": "Byrjum árið nítján hundruð og átján.",
+   "start": 26.66,
+   "end": 28.98,
+   "take": "f1-9210ad659a.mp3"
+  },
+  {
+   "id": "f2",
+   "part": "2 Fullveldi",
+   "text": "Fyrsta desember það ár varð Ísland fullvalda ríki.",
+   "start": 29.43,
+   "end": 32.63,
+   "take": "f2-de0bff8688.mp3"
+  },
+  {
+   "id": "f3",
+   "part": "2 Fullveldi",
+   "text": "Fullvalda þýðir að Íslendingar ráða sjálfir landinu sínu. Enginn utan landsins getur sagt þeim fyrir verkum.",
+   "start": 33.08,
+   "end": 40.44,
+   "take": "f3-b40500a728.mp3"
+  },
+  {
+   "id": "f4",
+   "part": "2 Fullveldi",
+   "text": "En Ísland hafði áfram sama konung og Danmörk. Konungurinn bjó í Kaupmannahöfn.",
+   "start": 40.89,
+   "end": 46.09,
+   "take": "f4-d920a1be61.mp3"
+  },
+  {
+   "id": "f5",
+   "part": "2 Fullveldi",
+   "text": "Í samningnum við Dani stóð að slíta mætti sambandinu eftir tuttugu og fimm ár.",
+   "start": 46.54,
+   "end": 51.1,
+   "take": "f5-d91ad88ab8.mp3"
+  },
+  {
+   "id": "p1",
+   "part": "2 Prófaðu",
+   "text": "Prófaðu. Samningurinn var gerður nítján hundruð og átján. Hvaða ár mátti slíta sambandinu?",
+   "start": 52.35,
+   "end": 59.15,
+   "take": "p1-c1cf1fd3f1.mp3",
+   "think_start": 59.4,
+   "think_end": 65.4
+  },
+  {
+   "id": "p2",
+   "part": "2 Prófaðu",
+   "text": "Nítján hundruð og átján plús tuttugu og fimm. Það er nítján hundruð fjörutíu og þrjú.",
+   "start": 65.85,
+   "end": 70.81,
+   "take": "p2-ec8271957c.mp3"
+  },
+  {
+   "id": "h1",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Annað orð: hlutleysi.",
+   "start": 72.16,
+   "end": 74.24,
+   "take": "h1-d4c5aff715.mp3"
+  },
+  {
+   "id": "h2",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Ísland hafði engan her. Ríkið lýsti því yfir að það væri hlutlaust í hernaði.",
+   "start": 74.69,
+   "end": 80.61,
+   "take": "h2-61dbde6fc0.mp3"
+  },
+  {
+   "id": "h3",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Hlutlaust land tekur ekki þátt í stríði og stendur ekki með neinum.",
+   "start": 81.06,
+   "end": 84.82,
+   "take": "h3-de738e5534.mp3"
+  },
+  {
+   "id": "h4",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Árið nítján hundruð þrjátíu og níu hófst seinni heimsstyrjöldin.",
+   "start": 85.27,
+   "end": 88.71,
+   "take": "h4-13ea787fad.mp3"
+  },
+  {
+   "id": "h5",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Níunda apríl nítján hundruð og fjörutíu sendu Þjóðverjar her inn í Danmörku og tóku stjórn landsins með valdi.",
+   "start": 89.16,
+   "end": 96.2,
+   "take": "h5-6ea823ad49.mp3"
+  },
+  {
+   "id": "h6",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Það heitir hernám. Danmörk var hernumin.",
+   "start": 96.65,
+   "end": 99.77,
+   "take": "h6-ed73668078.mp3"
+  },
+  {
+   "id": "h7",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Konungurinn gat ekki lengur sinnt Íslandi. Nóttina eftir tók Alþingi sjálft við konungsvaldinu.",
+   "start": 100.22,
+   "end": 106.94,
+   "take": "h7-ca6f3d349f.mp3"
+  },
+  {
+   "id": "h8",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Bretar buðust þá til að verja Ísland, en ríkisstjórnin sagði nei. Íslendingar treystu á hlutleysið.",
+   "start": 107.39,
+   "end": 114.43,
+   "take": "h8-165422108a.mp3"
+  },
+  {
+   "id": "b1",
+   "part": "4 Hernám Breta",
+   "text": "Nú aftur að morgninum tíunda maí.",
+   "start": 115.78,
+   "end": 117.54,
+   "take": "b1-770bfd110e.mp3"
+  },
+  {
+   "id": "b2",
+   "part": "4 Hernám Breta",
+   "text": "Þetta voru breskir hermenn. Bretar hernámu Ísland.",
+   "start": 117.99,
+   "end": 122.31,
+   "take": "b2-e7afd2501f.mp3"
+  },
+  {
+   "id": "b3",
+   "part": "4 Hernám Breta",
+   "text": "Af hverju? Ísland liggur á miðju Norður-Atlantshafi, á milli Ameríku og Evrópu.",
+   "start": 122.76,
+   "end": 129.32,
+   "take": "b3-6ddfdb2a2e.mp3"
+  },
+  {
+   "id": "b4",
+   "part": "4 Hernám Breta",
+   "text": "Bretar vildu verða á undan Þjóðverjum að ná landinu.",
+   "start": 129.77,
+   "end": 132.57,
+   "take": "b4-7692cab0b2.mp3"
+  },
+  {
+   "id": "b5",
+   "part": "4 Hernám Breta",
+   "text": "Enginn veitti mótspyrnu, og ekki var hleypt af einu skoti.",
+   "start": 133.02,
+   "end": 136.3,
+   "take": "b5-6ecf89e1a1.mp3"
+  },
+  {
+   "id": "b6",
+   "part": "4 Hernám Breta",
+   "text": "Um kvöldið bað forsætisráðherrann, Hermann Jónasson, landsmenn í útvarpinu að líta á hermennina sem gesti.",
+   "start": 136.75,
+   "end": 143.47,
+   "take": "b6-e23341fbc1.mp3"
+  },
+  {
+   "id": "p3",
+   "part": "4 Prófaðu",
+   "text": "Prófaðu. Ísland var hlutlaust og hafði engan her. Af hverju komu Bretar samt?",
+   "start": 144.72,
+   "end": 151.28,
+   "take": "p3-ffdadd01cf.mp3",
+   "think_start": 151.53,
+   "think_end": 157.53
+  },
+  {
+   "id": "p4",
+   "part": "4 Prófaðu",
+   "text": "Af því að Ísland liggur á miðju Atlantshafi, og Bretar vildu verða á undan Þjóðverjum.",
+   "start": 157.98,
+   "end": 162.46,
+   "take": "p4-a033683f5b.mp3"
+  },
+  {
+   "id": "l1",
+   "part": "5 Lífið breyttist",
+   "text": "Eitt nýtt atriði: hvernig breyttist lífið á Íslandi?",
+   "start": 163.81,
+   "end": 167.17,
+   "take": "l1-33c96a4f63.mp3"
+  },
+  {
+   "id": "l2",
+   "part": "5 Lífið breyttist",
+   "text": "Breski herinn varð um tuttugu og fimm þúsund manns. Hermennirnir bjuggu í bröggum úr bárujárni.",
+   "start": 167.62,
+   "end": 174.34,
+   "take": "l2-0d2d209fcb.mp3"
+  },
+  {
+   "id": "l3",
+   "part": "5 Lífið breyttist",
+   "text": "Íslendingar fengu vinnu við að reisa bragga, leggja vegi og byggja flugvelli. Atvinnuleysið hvarf.",
+   "start": 174.79,
+   "end": 181.51,
+   "take": "l3-9c01246cf8.mp3"
+  },
+  {
+   "id": "l4",
+   "part": "5 Lífið breyttist",
+   "text": "Verð á fiski margfaldaðist, og margir fengu meiri peninga en áður.",
+   "start": 181.96,
+   "end": 186.2,
+   "take": "l4-f61ff02e49.mp3"
+  },
+  {
+   "id": "l5",
+   "part": "5 Lífið breyttist",
+   "text": "Sumarið nítján hundruð fjörutíu og eitt tóku Bandaríkjamenn að sér varnir landsins.",
+   "start": 186.65,
+   "end": 191.45,
+   "take": "l5-5a39d5714f.mp3"
+  },
+  {
+   "id": "l6",
+   "part": "5 Lífið breyttist",
+   "text": "Það var gert með samningi við Íslendinga. Þess vegna köllum við það ekki hernám.",
+   "start": 191.9,
+   "end": 196.86,
+   "take": "l6-be87ef0eae.mp3"
+  },
+  {
+   "id": "p5",
+   "part": "5 Prófaðu",
+   "text": "Prófaðu. Bretar komu nítján hundruð og fjörutíu og Bandaríkjamenn nítján hundruð fjörutíu og eitt. Hvor koman var hernám?",
+   "start": 198.11,
+   "end": 206.19,
+   "take": "p5-f1638e5e88.mp3",
+   "think_start": 206.44,
+   "think_end": 212.44
+  },
+  {
+   "id": "p6",
+   "part": "5 Prófaðu",
+   "text": "Koma Breta. Þeir komu án samþykkis. Bandaríkjamenn komu með samningi.",
+   "start": 212.89,
+   "end": 219.37,
+   "take": "p6-1ba7d2f54e.mp3"
+  },
+  {
+   "id": "y1",
+   "part": "6 Lýðveldi",
+   "text": "Síðasta orðið: lýðveldi.",
+   "start": 220.72,
+   "end": 223.2,
+   "take": "y1-8b1b4b8cf2.mp3"
+  },
+  {
+   "id": "y2",
+   "part": "6 Lýðveldi",
+   "text": "Í lýðveldi er enginn konungur. Æðsti maður ríkisins er kosinn, venjulega forseti.",
+   "start": 223.65,
+   "end": 229.97,
+   "take": "y2-c51c106df1.mp3"
+  },
+  {
+   "id": "y3",
+   "part": "6 Lýðveldi",
+   "text": "Danmörk var enn hernumin, og sumum fannst ekki rétt að slíta sambandinu á meðan. Niðurstaðan var að bíða til nítján hundruð fjörutíu og fjögur.",
+   "start": 230.42,
+   "end": 240.34,
+   "take": "y3-ae11b4a5a7.mp3"
+  },
+  {
+   "id": "y4",
+   "part": "6 Lýðveldi",
+   "text": "Í maí nítján hundruð fjörutíu og fjögur kusu landsmenn um það hvort slíta ætti sambandinu við Danmörku. Það heitir þjóðaratkvæðagreiðsla.",
+   "start": 240.79,
+   "end": 249.67,
+   "take": "y4-366ac7669a.mp3"
+  },
+  {
+   "id": "y5",
+   "part": "6 Lýðveldi",
+   "text": "Næstum allir sem máttu kjósa mættu. Níutíu og sjö af hverjum hundrað sem kusu sögðu já.",
+   "start": 250.12,
+   "end": 255.96,
+   "take": "y5-78c8223038.mp3"
+  },
+  {
+   "id": "y6",
+   "part": "6 Lýðveldi",
+   "text": "Sautjánda júní nítján hundruð fjörutíu og fjögur var lýðveldið stofnað á Þingvöllum, í mikilli rigningu.",
+   "start": 256.41,
+   "end": 262.49,
+   "take": "y6-34a042e544.mp3"
+  },
+  {
+   "id": "y7",
+   "part": "6 Lýðveldi",
+   "text": "Fyrsti forseti Íslands var Sveinn Björnsson.",
+   "start": 262.94,
+   "end": 265.5,
+   "take": "y7-26e88e62a4.mp3"
+  },
+  {
+   "id": "p7",
+   "part": "6 Prófaðu",
+   "text": "Prófaðu. Hver er munurinn á fullveldinu nítján hundruð og átján og lýðveldinu nítján hundruð fjörutíu og fjögur?",
+   "start": 266.75,
+   "end": 272.91,
+   "take": "p7-c2d4a23109.mp3",
+   "think_start": 273.16,
+   "think_end": 280.16
+  },
+  {
+   "id": "p8",
+   "part": "6 Prófaðu",
+   "text": "Árið nítján hundruð og átján réðu Íslendingar sjálfir, en höfðu enn konung. Árið nítján hundruð fjörutíu og fjögur var konungssambandinu slitið og forseti kosinn.",
+   "start": 280.61,
+   "end": 291.41,
+   "take": "p8-9867490062.mp3"
+  },
+  {
+   "id": "t1",
+   "part": "7 Aftur að morgninum",
+   "text": "Manstu morguninn tíunda maí?",
+   "start": 292.76,
+   "end": 294.52,
+   "take": "t1-1227876cf0.mp3"
+  },
+  {
+   "id": "t2",
+   "part": "7 Aftur að morgninum",
+   "text": "Stríðið skildi Ísland frá Danmörku, og Íslendingar urðu að stjórna öllu sjálfir.",
+   "start": 294.97,
+   "end": 299.85,
+   "take": "t2-b53d994577.mp3"
+  },
+  {
+   "id": "t3",
+   "part": "7 Aftur að morgninum",
+   "text": "Fjórum árum seinna slitu þeir sambandinu við konunginn og stofnuðu lýðveldi.",
+   "start": 300.3,
+   "end": 304.7,
+   "take": "t3-57149f4d01.mp3"
+  },
+  {
+   "id": "q1",
+   "part": "8 Upprifjun",
+   "text": "Rifjum upp. Reyndu að svara á undan mér.",
+   "start": 306.05,
+   "end": 308.37,
+   "take": "q1-ae8ab5d584.mp3"
+  },
+  {
+   "id": "q2",
+   "part": "8 Upprifjun",
+   "text": "Hvaða ár varð Ísland fullvalda?",
+   "start": 308.82,
+   "end": 310.98,
+   "take": "q2-813ff103fa.mp3",
+   "think_start": 311.23,
+   "think_end": 315.23
+  },
+  {
+   "id": "q3",
+   "part": "8 Upprifjun",
+   "text": "Nítján hundruð og átján.",
+   "start": 315.68,
+   "end": 316.96,
+   "take": "q3-48b40fe654.mp3"
+  },
+  {
+   "id": "q4",
+   "part": "8 Upprifjun",
+   "text": "Hvað heitir það þegar ríki sendir her inn í annað land og tekur stjórnina með valdi?",
+   "start": 317.41,
+   "end": 322.29,
+   "take": "q4-752744fc84.mp3",
+   "think_start": 322.54,
+   "think_end": 326.54
+  },
+  {
+   "id": "q5",
+   "part": "8 Upprifjun",
+   "text": "Hernám.",
+   "start": 326.99,
+   "end": 327.816,
+   "take": "q5-52acd5d238.mp3"
+  },
+  {
+   "id": "q6",
+   "part": "8 Upprifjun",
+   "text": "Hvenær var lýðveldið stofnað, og hvar?",
+   "start": 328.266,
+   "end": 330.586,
+   "take": "q6-41b78343af.mp3",
+   "think_start": 330.836,
+   "think_end": 335.836
+  },
+  {
+   "id": "q7",
+   "part": "8 Upprifjun",
+   "text": "Sautjánda júní nítján hundruð fjörutíu og fjögur, á Þingvöllum.",
+   "start": 336.286,
+   "end": 339.806,
+   "take": "q7-91b9961f56.mp3"
+  },
+  {
+   "id": "w1",
+   "part": "9 Verkefni",
+   "text": "Verkefni heima, úr bókinni Styrjaldir og kreppa, á blaðsíðu hundrað þrjátíu og þrjú.",
+   "start": 341.156,
+   "end": 347.076,
+   "take": "w1-d00a63c390.mp3"
+  },
+  {
+   "id": "w2",
+   "part": "9 Verkefni",
+   "text": "Útskýrðu fyrir einhverjum heima muninn á komu Breta og komu Bandaríkjamanna.",
+   "start": 347.526,
+   "end": 351.686,
+   "take": "w2-24826bd779.mp3"
+  }
+ ]
+}

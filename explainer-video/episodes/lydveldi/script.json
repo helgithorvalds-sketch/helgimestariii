@@ -1,0 +1,326 @@
+{
+ "title": "Frá hernámi til lýðveldis",
+ "series_tag": "Saga 10. bekkur · Styrjaldir og kreppa, bls. 37 og 129–137 · Ísland 1918–1944",
+ "goal": "Áhorfandinn getur útskýrt muninn á fullveldi 1918 og lýðveldi 1944, hvað hernám er og af hverju Bretar hernámu Ísland.",
+ "source": "Styrjaldir og kreppa – Saga 20. aldar I (MMS 2011): bls. 37 fullveldi og lýðveldi, bls. 109 hernám, bls. 129–132 hernám Íslands og Bandaríkjamenn, bls. 133 verkefni 42, bls. 137 fullt sjálfstæði. Staðfest í Vísindavefnum (svör 23088, 52321, 75585, 77584, 77585) og Hagstofu (þjóðaratkvæðagreiðslur).",
+ "kept_vague": "Fjöldi herskipa og hermanna fyrsta daginn, fjöldi bandarískra hermanna og nákvæm dagsetning herverndarsamningsins eru ekki nefnd, því heimildum ber ekki saman.",
+ "terms_in_order": [
+  "fullvalda ríki",
+  "konungur",
+  "hlutleysi",
+  "hernám",
+  "Alþingi",
+  "bragginn",
+  "lýðveldi",
+  "þjóðaratkvæðagreiðsla",
+  "sambandsslit"
+ ],
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Það er snemma morguns, tíunda maí árið nítján hundruð og fjörutíu, í Reykjavík."
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Fólk vaknar við flugvél. Í höfninni liggja herskip, og hermenn ganga upp í miðbæinn."
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "Hverjir eru þetta, og af hverju eru þeir komnir til Íslands?"
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "Fjórum árum seinna varð Ísland lýðveldi. Í lok myndbandsins veistu hvernig þetta tengist."
+  },
+  {
+   "id": "f1",
+   "part": "2 Fullveldi",
+   "text": "Byrjum árið nítján hundruð og átján.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "f2",
+   "part": "2 Fullveldi",
+   "text": "Fyrsta desember það ár varð Ísland fullvalda ríki."
+  },
+  {
+   "id": "f3",
+   "part": "2 Fullveldi",
+   "text": "Fullvalda þýðir að Íslendingar ráða sjálfir landinu sínu. Enginn utan landsins getur sagt þeim fyrir verkum."
+  },
+  {
+   "id": "f4",
+   "part": "2 Fullveldi",
+   "text": "En Ísland hafði áfram sama konung og Danmörk. Konungurinn bjó í Kaupmannahöfn."
+  },
+  {
+   "id": "f5",
+   "part": "2 Fullveldi",
+   "text": "Í samningnum við Dani stóð að slíta mætti sambandinu eftir tuttugu og fimm ár."
+  },
+  {
+   "id": "p1",
+   "part": "2 Prófaðu",
+   "text": "Prófaðu. Samningurinn var gerður nítján hundruð og átján. Hvaða ár mátti slíta sambandinu?",
+   "gap_before": 0.8,
+   "pause": 6,
+   "think": true
+  },
+  {
+   "id": "p2",
+   "part": "2 Prófaðu",
+   "text": "Nítján hundruð og átján plús tuttugu og fimm. Það er nítján hundruð fjörutíu og þrjú."
+  },
+  {
+   "id": "h1",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Annað orð: hlutleysi.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "h2",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Ísland hafði engan her. Ríkið lýsti því yfir að það væri hlutlaust í hernaði."
+  },
+  {
+   "id": "h3",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Hlutlaust land tekur ekki þátt í stríði og stendur ekki með neinum."
+  },
+  {
+   "id": "h4",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Árið nítján hundruð þrjátíu og níu hófst seinni heimsstyrjöldin."
+  },
+  {
+   "id": "h5",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Níunda apríl nítján hundruð og fjörutíu sendu Þjóðverjar her inn í Danmörku og tóku stjórn landsins með valdi."
+  },
+  {
+   "id": "h6",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Það heitir hernám. Danmörk var hernumin."
+  },
+  {
+   "id": "h7",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Konungurinn gat ekki lengur sinnt Íslandi. Nóttina eftir tók Alþingi sjálft við konungsvaldinu."
+  },
+  {
+   "id": "h8",
+   "part": "3 Hlutleysi og hernám",
+   "text": "Bretar buðust þá til að verja Ísland, en ríkisstjórnin sagði nei. Íslendingar treystu á hlutleysið."
+  },
+  {
+   "id": "b1",
+   "part": "4 Hernám Breta",
+   "text": "Nú aftur að morgninum tíunda maí.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "b2",
+   "part": "4 Hernám Breta",
+   "text": "Þetta voru breskir hermenn. Bretar hernámu Ísland."
+  },
+  {
+   "id": "b3",
+   "part": "4 Hernám Breta",
+   "text": "Af hverju? Ísland liggur á miðju Norður-Atlantshafi, á milli Ameríku og Evrópu."
+  },
+  {
+   "id": "b4",
+   "part": "4 Hernám Breta",
+   "text": "Bretar vildu verða á undan Þjóðverjum að ná landinu."
+  },
+  {
+   "id": "b5",
+   "part": "4 Hernám Breta",
+   "text": "Enginn veitti mótspyrnu, og ekki var hleypt af einu skoti."
+  },
+  {
+   "id": "b6",
+   "part": "4 Hernám Breta",
+   "text": "Um kvöldið bað forsætisráðherrann, Hermann Jónasson, landsmenn í útvarpinu að líta á hermennina sem gesti."
+  },
+  {
+   "id": "p3",
+   "part": "4 Prófaðu",
+   "text": "Prófaðu. Ísland var hlutlaust og hafði engan her. Af hverju komu Bretar samt?",
+   "gap_before": 0.8,
+   "pause": 6,
+   "think": true
+  },
+  {
+   "id": "p4",
+   "part": "4 Prófaðu",
+   "text": "Af því að Ísland liggur á miðju Atlantshafi, og Bretar vildu verða á undan Þjóðverjum."
+  },
+  {
+   "id": "l1",
+   "part": "5 Lífið breyttist",
+   "text": "Eitt nýtt atriði: hvernig breyttist lífið á Íslandi?",
+   "gap_before": 0.9
+  },
+  {
+   "id": "l2",
+   "part": "5 Lífið breyttist",
+   "text": "Breski herinn varð um tuttugu og fimm þúsund manns. Hermennirnir bjuggu í bröggum úr bárujárni."
+  },
+  {
+   "id": "l3",
+   "part": "5 Lífið breyttist",
+   "text": "Íslendingar fengu vinnu við að reisa bragga, leggja vegi og byggja flugvelli. Atvinnuleysið hvarf."
+  },
+  {
+   "id": "l4",
+   "part": "5 Lífið breyttist",
+   "text": "Verð á fiski margfaldaðist, og margir fengu meiri peninga en áður."
+  },
+  {
+   "id": "l5",
+   "part": "5 Lífið breyttist",
+   "text": "Sumarið nítján hundruð fjörutíu og eitt tóku Bandaríkjamenn að sér varnir landsins."
+  },
+  {
+   "id": "l6",
+   "part": "5 Lífið breyttist",
+   "text": "Það var gert með samningi við Íslendinga. Þess vegna köllum við það ekki hernám."
+  },
+  {
+   "id": "p5",
+   "part": "5 Prófaðu",
+   "text": "Prófaðu. Bretar komu nítján hundruð og fjörutíu og Bandaríkjamenn nítján hundruð fjörutíu og eitt. Hvor koman var hernám?",
+   "gap_before": 0.8,
+   "pause": 6,
+   "think": true
+  },
+  {
+   "id": "p6",
+   "part": "5 Prófaðu",
+   "text": "Koma Breta. Þeir komu án samþykkis. Bandaríkjamenn komu með samningi."
+  },
+  {
+   "id": "y1",
+   "part": "6 Lýðveldi",
+   "text": "Síðasta orðið: lýðveldi.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "y2",
+   "part": "6 Lýðveldi",
+   "text": "Í lýðveldi er enginn konungur. Æðsti maður ríkisins er kosinn, venjulega forseti."
+  },
+  {
+   "id": "y3",
+   "part": "6 Lýðveldi",
+   "text": "Danmörk var enn hernumin, og sumum fannst ekki rétt að slíta sambandinu á meðan. Niðurstaðan var að bíða til nítján hundruð fjörutíu og fjögur."
+  },
+  {
+   "id": "y4",
+   "part": "6 Lýðveldi",
+   "text": "Í maí nítján hundruð fjörutíu og fjögur kusu landsmenn um það hvort slíta ætti sambandinu við Danmörku. Það heitir þjóðaratkvæðagreiðsla."
+  },
+  {
+   "id": "y5",
+   "part": "6 Lýðveldi",
+   "text": "Næstum allir sem máttu kjósa mættu. Níutíu og sjö af hverjum hundrað sem kusu sögðu já."
+  },
+  {
+   "id": "y6",
+   "part": "6 Lýðveldi",
+   "text": "Sautjánda júní nítján hundruð fjörutíu og fjögur var lýðveldið stofnað á Þingvöllum, í mikilli rigningu."
+  },
+  {
+   "id": "y7",
+   "part": "6 Lýðveldi",
+   "text": "Fyrsti forseti Íslands var Sveinn Björnsson."
+  },
+  {
+   "id": "p7",
+   "part": "6 Prófaðu",
+   "text": "Prófaðu. Hver er munurinn á fullveldinu nítján hundruð og átján og lýðveldinu nítján hundruð fjörutíu og fjögur?",
+   "gap_before": 0.8,
+   "pause": 7,
+   "think": true
+  },
+  {
+   "id": "p8",
+   "part": "6 Prófaðu",
+   "text": "Árið nítján hundruð og átján réðu Íslendingar sjálfir, en höfðu enn konung. Árið nítján hundruð fjörutíu og fjögur var konungssambandinu slitið og forseti kosinn."
+  },
+  {
+   "id": "t1",
+   "part": "7 Aftur að morgninum",
+   "text": "Manstu morguninn tíunda maí?",
+   "gap_before": 0.9
+  },
+  {
+   "id": "t2",
+   "part": "7 Aftur að morgninum",
+   "text": "Stríðið skildi Ísland frá Danmörku, og Íslendingar urðu að stjórna öllu sjálfir."
+  },
+  {
+   "id": "t3",
+   "part": "7 Aftur að morgninum",
+   "text": "Fjórum árum seinna slitu þeir sambandinu við konunginn og stofnuðu lýðveldi."
+  },
+  {
+   "id": "q1",
+   "part": "8 Upprifjun",
+   "text": "Rifjum upp. Reyndu að svara á undan mér.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "q2",
+   "part": "8 Upprifjun",
+   "text": "Hvaða ár varð Ísland fullvalda?",
+   "pause": 4,
+   "think": true
+  },
+  {
+   "id": "q3",
+   "part": "8 Upprifjun",
+   "text": "Nítján hundruð og átján."
+  },
+  {
+   "id": "q4",
+   "part": "8 Upprifjun",
+   "text": "Hvað heitir það þegar ríki sendir her inn í annað land og tekur stjórnina með valdi?",
+   "pause": 4,
+   "think": true
+  },
+  {
+   "id": "q5",
+   "part": "8 Upprifjun",
+   "text": "Hernám."
+  },
+  {
+   "id": "q6",
+   "part": "8 Upprifjun",
+   "text": "Hvenær var lýðveldið stofnað, og hvar?",
+   "pause": 5,
+   "think": true
+  },
+  {
+   "id": "q7",
+   "part": "8 Upprifjun",
+   "text": "Sautjánda júní nítján hundruð fjörutíu og fjögur, á Þingvöllum."
+  },
+  {
+   "id": "w1",
+   "part": "9 Verkefni",
+   "text": "Verkefni heima, úr bókinni Styrjaldir og kreppa, á blaðsíðu hundrað þrjátíu og þrjú.",
+   "gap_before": 0.9
+  },
+  {
+   "id": "w2",
+   "part": "9 Verkefni",
+   "text": "Útskýrðu fyrir einhverjum heima muninn á komu Breta og komu Bandaríkjamanna."
+  }
+ ]
+}

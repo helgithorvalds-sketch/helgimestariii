@@ -1,0 +1,601 @@
+{
+ "backend": "elevenlabs",
+ "voice": "vuKNwSXHmXUQ2BKzoJCH",
+ "duration": 392.922,
+ "series_tag": "Náttúrufræði 10. bekkur · Eðlisfræði 3, bls. 42–52 · Orka",
+ "title": "Orkan breytir bara um form",
+ "sentences": [
+  {
+   "id": "k1",
+   "part": "1 Kveikja",
+   "text": "Þú kveikir á katlinum og eftir smástund sýður vatnið.",
+   "start": 2.2,
+   "end": 5.48,
+   "take": "k1-1e9e3cb94c.mp3"
+  },
+  {
+   "id": "k2",
+   "part": "1 Kveikja",
+   "text": "Orkan sem hitar vatnið kemur úr innstungunni.",
+   "start": 5.93,
+   "end": 8.57,
+   "take": "k2-baff325023.mp3"
+  },
+  {
+   "id": "k3",
+   "part": "1 Kveikja",
+   "text": "En hvaðan kemur hún þangað? Og hvert fer hún þegar vatnið kólnar aftur?",
+   "start": 9.02,
+   "end": 13.82,
+   "take": "k3-8be260cde1.mp3"
+  },
+  {
+   "id": "k4",
+   "part": "1 Kveikja",
+   "text": "Í lok myndbandsins getur þú rakið leiðina alla leið upp á hálendið.",
+   "start": 14.27,
+   "end": 18.51,
+   "take": "k4-a1ba094254.mp3"
+  },
+  {
+   "id": "o1",
+   "part": "2 Orka",
+   "text": "Byrjum á orðinu orka.",
+   "start": 19.76,
+   "end": 21.2,
+   "take": "o1-dcf49c2147.mp3"
+  },
+  {
+   "id": "o2",
+   "part": "2 Orka",
+   "text": "Orka er það sem lætur hluti hreyfast, hitna eða lýsa.",
+   "start": 21.65,
+   "end": 25.17,
+   "take": "o2-9fff1ec132.mp3"
+  },
+  {
+   "id": "o3",
+   "part": "2 Orka",
+   "text": "Bolti sem rúllar, heitt vatn og pera sem lýsir hafa öll orku.",
+   "start": 25.62,
+   "end": 29.62,
+   "take": "o3-96395ad45b.mp3"
+  },
+  {
+   "id": "o4",
+   "part": "2 Orka",
+   "text": "Orkan er alltaf í einhverju formi. Í dag lærum við fjögur form.",
+   "start": 30.07,
+   "end": 35.03,
+   "take": "o4-ea6af5b785.mp3"
+  },
+  {
+   "id": "s1",
+   "part": "3 Stöðuorka og hreyfiorka",
+   "text": "Fyrsta formið heitir stöðuorka.",
+   "start": 36.28,
+   "end": 38.12,
+   "take": "s1-a43cf64a0b.mp3"
+  },
+  {
+   "id": "s2",
+   "part": "3 Stöðuorka og hreyfiorka",
+   "text": "Ef þú lyftir tösku upp á borð, þá geymir taskan orku af því að hún er hátt uppi.",
+   "start": 38.57,
+   "end": 43.29,
+   "take": "s2-86db611836.mp3"
+  },
+  {
+   "id": "s3",
+   "part": "3 Stöðuorka og hreyfiorka",
+   "text": "Það er stöðuorka. Því hærra uppi, því meiri stöðuorka.",
+   "start": 43.74,
+   "end": 47.66,
+   "take": "s3-654c186398.mp3"
+  },
+  {
+   "id": "s4",
+   "part": "3 Stöðuorka og hreyfiorka",
+   "text": "Annað formið heitir hreyfiorka.",
+   "start": 48.11,
+   "end": 50.11,
+   "take": "s4-d6835345a1.mp3"
+  },
+  {
+   "id": "s5",
+   "part": "3 Stöðuorka og hreyfiorka",
+   "text": "Ef taskan dettur af borðinu fer hún á hreyfingu. Stöðuorkan breytist í hreyfiorku.",
+   "start": 50.56,
+   "end": 56.16,
+   "take": "s5-8bc04e7a0d.mp3"
+  },
+  {
+   "id": "p1",
+   "part": "3 Prófaðu",
+   "text": "Prófaðu. Hér er róla.",
+   "start": 57.41,
+   "end": 59.09,
+   "take": "p1-e5cc17f6ff.mp3"
+  },
+  {
+   "id": "p2",
+   "part": "3 Prófaðu",
+   "text": "Rólan er efst uppi og stoppar eitt augnablik. Hvort hefur hún þá meira af, stöðuorku eða hreyfiorku?",
+   "start": 59.54,
+   "end": 67.3,
+   "take": "p2-073467d1f0.mp3",
+   "think_start": 67.55,
+   "think_end": 72.55
+  },
+  {
+   "id": "p3",
+   "part": "3 Prófaðu",
+   "text": "Stöðuorku, af því að hún er hátt uppi og stendur kyrr.",
+   "start": 73.0,
+   "end": 77.16,
+   "take": "p3-724589670f.mp3"
+  },
+  {
+   "id": "p4",
+   "part": "3 Prófaðu",
+   "text": "Neðst fer rólan hraðast. Þar hefur hún mest af hreyfiorku.",
+   "start": 77.61,
+   "end": 81.69,
+   "take": "p4-6f25c67b5d.mp3"
+  },
+  {
+   "id": "r1",
+   "part": "4 Raforka og varmaorka",
+   "text": "Þriðja formið heitir raforka. Það er orkan sem rafmagnið ber eftir snúrunni.",
+   "start": 82.94,
+   "end": 88.22,
+   "take": "r1-896e025c68.mp3"
+  },
+  {
+   "id": "r2",
+   "part": "4 Raforka og varmaorka",
+   "text": "Fjórða formið heitir varmaorka. Þegar eitthvað hitnar, fær það varmaorku.",
+   "start": 88.67,
+   "end": 93.87,
+   "take": "r2-c0bdfaeed9.mp3"
+  },
+  {
+   "id": "r3",
+   "part": "4 Raforka og varmaorka",
+   "text": "Í katlinum breytist raforka í varmaorku.",
+   "start": 94.32,
+   "end": 97.2,
+   "take": "r3-5f75aa4198.mp3"
+  },
+  {
+   "id": "p5",
+   "part": "4 Prófaðu",
+   "text": "Prófaðu. Þú setur brauð í brauðrist.",
+   "start": 98.45,
+   "end": 101.73,
+   "take": "p5-85fa644530.mp3"
+  },
+  {
+   "id": "p6",
+   "part": "4 Prófaðu",
+   "text": "Hvaða orkuform fer inn í brauðristina, og hvaða orkuform kemur út?",
+   "start": 102.18,
+   "end": 106.66,
+   "take": "p6-e047f1adad.mp3",
+   "think_start": 106.91,
+   "think_end": 111.91
+  },
+  {
+   "id": "p7",
+   "part": "4 Prófaðu",
+   "text": "Raforka fer inn eftir snúrunni. Varmaorka kemur út og ristar brauðið.",
+   "start": 112.36,
+   "end": 117.4,
+   "take": "p7-807a832119.mp3"
+  },
+  {
+   "id": "l1",
+   "part": "5 Reglan",
+   "text": "Nú kemur mikilvægasta reglan um orku.",
+   "start": 118.75,
+   "end": 120.99,
+   "take": "l1-387ed9679c.mp3"
+  },
+  {
+   "id": "l2",
+   "part": "5 Reglan",
+   "text": "Sýnum orkuna sem kubba. Hver litur er eitt orkuform.",
+   "start": 121.44,
+   "end": 126.08,
+   "take": "l2-42bafd933c.mp3"
+  },
+  {
+   "id": "l3",
+   "part": "5 Reglan",
+   "text": "Taskan uppi á borðinu hefur átta kubba af stöðuorku.",
+   "start": 126.53,
+   "end": 129.57,
+   "take": "l3-1eff09112a.mp3"
+  },
+  {
+   "id": "l4",
+   "part": "5 Reglan",
+   "text": "Þegar hún dettur skipta kubbarnir um lit og verða hreyfiorka. En þeir eru enn átta.",
+   "start": 130.02,
+   "end": 135.7,
+   "take": "l4-c7c2cc6ed6.mp3"
+  },
+  {
+   "id": "l5",
+   "part": "5 Reglan",
+   "text": "Þegar hún lendir á gólfinu verða kubbarnir að varmaorku í töskunni og gólfinu. Enn átta.",
+   "start": 136.15,
+   "end": 142.71,
+   "take": "l5-bee2f24972.mp3"
+  },
+  {
+   "id": "l6",
+   "part": "5 Reglan",
+   "text": "Kubbarnir hverfa aldrei. Þeir skipta bara um lit.",
+   "start": 143.16,
+   "end": 146.36,
+   "take": "l6-f0286381b1.mp3"
+  },
+  {
+   "id": "l7",
+   "part": "5 Reglan",
+   "text": "Þessi regla heitir lögmálið um varðveislu orkunnar. Hún er á blaðsíðu fjörutíu og fjögur í bókinni Eðlisfræði þrjú.",
+   "start": 146.81,
+   "end": 154.57,
+   "take": "l7-277bdfe465.mp3"
+  },
+  {
+   "id": "l8",
+   "part": "5 Reglan",
+   "text": "Orka getur hvorki myndast né eyðst, heldur getur hún eingöngu breyst úr einu formi í annað.",
+   "start": 155.02,
+   "end": 160.54,
+   "take": "l8-1dfb670ce0.mp3"
+  },
+  {
+   "id": "p8",
+   "part": "5 Prófaðu",
+   "text": "Prófaðu. Bolti dettur á gólfið, skoppar nokkrum sinnum og stoppar.",
+   "start": 161.79,
+   "end": 166.83,
+   "take": "p8-427a475597.mp3"
+  },
+  {
+   "id": "p9",
+   "part": "5 Prófaðu",
+   "text": "Er orkan hans horfin?",
+   "start": 167.28,
+   "end": 168.72,
+   "take": "p9-3d805584ff.mp3",
+   "think_start": 168.97,
+   "think_end": 172.97
+  },
+  {
+   "id": "p10",
+   "part": "5 Prófaðu",
+   "text": "Nei. Hún breyttist í varmaorku í boltanum og gólfinu. Hún er enn til, bara dreifð.",
+   "start": 173.42,
+   "end": 180.46,
+   "take": "p10-fe34d8b8c8.mp3"
+  },
+  {
+   "id": "v1",
+   "part": "6 Vatnsorkuver",
+   "text": "Nú eltum við orkuna í katlinum, alla leið að upphafinu.",
+   "start": 181.81,
+   "end": 184.93,
+   "take": "v1-be81f84a0f.mp3"
+  },
+  {
+   "id": "v2",
+   "part": "6 Vatnsorkuver",
+   "text": "Um sjö af hverjum tíu hlutum rafmagnsins á Íslandi koma frá vatnsorkuverum. Eitt þeirra er Búrfellsvirkjun í Þjórsá.",
+   "start": 185.38,
+   "end": 193.46,
+   "take": "v2-d0c945324b.mp3"
+  },
+  {
+   "id": "v3",
+   "part": "6 Vatnsorkuver",
+   "text": "Uppi á hálendinu er stífla. Á bak við hana safnast vatn í stórt lón.",
+   "start": 193.91,
+   "end": 199.43,
+   "take": "v3-18a1188d9a.mp3"
+  },
+  {
+   "id": "v4",
+   "part": "6 Vatnsorkuver",
+   "text": "Vatnið í lóninu er hátt uppi. Þess vegna hefur það stöðuorku.",
+   "start": 199.88,
+   "end": 204.68,
+   "take": "v4-3efed694a8.mp3"
+  },
+  {
+   "id": "v5",
+   "part": "6 Vatnsorkuver",
+   "text": "Vatnið rennur niður í gegnum pípu og fer hratt. Stöðuorkan verður að hreyfiorku.",
+   "start": 205.13,
+   "end": 210.81,
+   "take": "v5-5e2f91a34b.mp3"
+  },
+  {
+   "id": "v6",
+   "part": "6 Vatnsorkuver",
+   "text": "Neðst lendir vatnið á hverfli. Hverfill er hjól með spöðum sem vatnið snýr.",
+   "start": 211.26,
+   "end": 217.58,
+   "take": "v6-99f2673199.mp3"
+  },
+  {
+   "id": "v7",
+   "part": "6 Vatnsorkuver",
+   "text": "Hverfillinn snýr rafal. Rafall er vél sem breytir snúningi í rafmagn.",
+   "start": 218.03,
+   "end": 223.63,
+   "take": "v7-3ae9bb1513.mp3"
+  },
+  {
+   "id": "v8",
+   "part": "6 Vatnsorkuver",
+   "text": "Þar verður hreyfiorkan að raforku.",
+   "start": 224.08,
+   "end": 226.08,
+   "take": "v8-31963fbe5c.mp3"
+  },
+  {
+   "id": "v9",
+   "part": "6 Vatnsorkuver",
+   "text": "Raforkan fer eftir háspennulínum alla leið heim í innstunguna.",
+   "start": 226.53,
+   "end": 230.13,
+   "take": "v9-cd8d441227.mp3"
+  },
+  {
+   "id": "v10",
+   "part": "6 Vatnsorkuver",
+   "text": "Og í katlinum verður hún að varmaorku.",
+   "start": 230.58,
+   "end": 232.74,
+   "take": "v10-02428ce304.mp3"
+  },
+  {
+   "id": "v11",
+   "part": "6 Vatnsorkuver",
+   "text": "En hvernig komst vatnið upp í lónið? Sólin hitar sjóinn, vatn gufar upp og það rignir á hálendinu.",
+   "start": 233.19,
+   "end": 241.27,
+   "take": "v11-0d7d4f478a.mp3"
+  },
+  {
+   "id": "p11",
+   "part": "6 Prófaðu",
+   "text": "Prófaðu. Hér eru fjögur spjöld í vitlausri röð.",
+   "start": 242.52,
+   "end": 246.12,
+   "take": "p11-8183f2cdf7.mp3"
+  },
+  {
+   "id": "p12",
+   "part": "6 Prófaðu",
+   "text": "Raðaðu þeim í rétta röð og segðu röðina upphátt.",
+   "start": 246.57,
+   "end": 249.69,
+   "take": "p12-f1dbfdd6b1.mp3",
+   "think_start": 249.94,
+   "think_end": 256.94
+  },
+  {
+   "id": "p13",
+   "part": "6 Prófaðu",
+   "text": "Lón, hverfill, rafall, ketill.",
+   "start": 257.39,
+   "end": 260.91,
+   "take": "p13-459d32bdcb.mp3"
+  },
+  {
+   "id": "p14",
+   "part": "6 Prófaðu",
+   "text": "Stöðuorka verður að hreyfiorku, hreyfiorkan verður að raforku, og raforkan verður að varmaorku.",
+   "start": 261.36,
+   "end": 268.64,
+   "take": "p14-e8595f6ab2.mp3"
+  },
+  {
+   "id": "j1",
+   "part": "7 Jarðhiti",
+   "text": "Eitt nýtt atriði í viðbót: heita vatnið í sturtunni.",
+   "start": 269.99,
+   "end": 273.75,
+   "take": "j1-a1df1697d9.mp3"
+  },
+  {
+   "id": "j2",
+   "part": "7 Jarðhiti",
+   "text": "Það kemur aðra leið, og þar kemur ekkert rafmagn við sögu.",
+   "start": 274.2,
+   "end": 277.72,
+   "take": "j2-efda3f83f2.mp3"
+  },
+  {
+   "id": "j3",
+   "part": "7 Jarðhiti",
+   "text": "Djúpt niðri í jörðinni er bergið mjög heitt.",
+   "start": 278.17,
+   "end": 281.05,
+   "take": "j3-a8845b1ff7.mp3"
+  },
+  {
+   "id": "j4",
+   "part": "7 Jarðhiti",
+   "text": "Regnvatn sígur niður um sprungur, hitnar við heita bergið og leitar upp aftur.",
+   "start": 281.5,
+   "end": 286.38,
+   "take": "j4-a9f0075562.mp3"
+  },
+  {
+   "id": "j5",
+   "part": "7 Jarðhiti",
+   "text": "Þetta heitir jarðhiti, öðru nafni jarðvarmi.",
+   "start": 286.83,
+   "end": 290.19,
+   "take": "j5-4804aa0835.mp3"
+  },
+  {
+   "id": "j6",
+   "part": "7 Jarðhiti",
+   "text": "Heita vatnið er sótt með borholum og leitt í pípum heim í hús. Það heitir hitaveita.",
+   "start": 290.64,
+   "end": 296.582,
+   "take": "j6-332a257891.mp3"
+  },
+  {
+   "id": "j7",
+   "part": "7 Jarðhiti",
+   "text": "Um níu af hverjum tíu húsum á Íslandi eru hituð með jarðhita.",
+   "start": 297.032,
+   "end": 301.192,
+   "take": "j7-e07ff7dcba.mp3"
+  },
+  {
+   "id": "p15",
+   "part": "7 Prófaðu",
+   "text": "Prófaðu. Ofninn í stofunni er heitur.",
+   "start": 302.442,
+   "end": 305.562,
+   "take": "p15-a386f35f02.mp3"
+  },
+  {
+   "id": "p16",
+   "part": "7 Prófaðu",
+   "text": "Hvaðan kemur orkan í ofninum í flestum húsum á Íslandi: frá vatnsorkuveri eða frá jarðhita?",
+   "start": 306.012,
+   "end": 312.572,
+   "take": "p16-ab1ab51473.mp3",
+   "think_start": 312.822,
+   "think_end": 317.822
+  },
+  {
+   "id": "p17",
+   "part": "7 Prófaðu",
+   "text": "Frá jarðhita. Heita vatnið rennur í gegnum ofninn og varmaorkan fer út í stofuna.",
+   "start": 318.272,
+   "end": 324.192,
+   "take": "p17-e09068ff9d.mp3"
+  },
+  {
+   "id": "b1",
+   "part": "8 Aftur í ketilinn",
+   "text": "Manstu ketilinn?",
+   "start": 325.542,
+   "end": 326.422,
+   "take": "b1-4f386418b3.mp3"
+  },
+  {
+   "id": "b2",
+   "part": "8 Aftur í ketilinn",
+   "text": "Þegar vatnið kólnar fer varmaorkan út í loftið í eldhúsinu. Hún hverfur ekki.",
+   "start": 326.872,
+   "end": 332.072,
+   "take": "b2-a1fb2245ce.mp3"
+  },
+  {
+   "id": "b3",
+   "part": "8 Aftur í ketilinn",
+   "text": "Þess vegna segir bókin að orðið orkunotkun sé eiginlega órökrétt. Við notum orkuna ekki upp. Við breytum henni.",
+   "start": 332.522,
+   "end": 340.202,
+   "take": "b3-146d284b79.mp3"
+  },
+  {
+   "id": "q1",
+   "part": "9 Upprifjun",
+   "text": "Rifjum upp. Reyndu að svara á undan mér.",
+   "start": 341.552,
+   "end": 344.112,
+   "take": "q1-ae8ab5d584.mp3"
+  },
+  {
+   "id": "q2",
+   "part": "9 Upprifjun",
+   "text": "Vatnið í lóninu er hátt uppi. Hvaða orkuform hefur það?",
+   "start": 344.562,
+   "end": 349.202,
+   "take": "q2-d723418d01.mp3",
+   "think_start": 349.452,
+   "think_end": 353.452
+  },
+  {
+   "id": "q3",
+   "part": "9 Upprifjun",
+   "text": "Stöðuorku.",
+   "start": 353.902,
+   "end": 354.862,
+   "take": "q3-832a3bce00.mp3"
+  },
+  {
+   "id": "q4",
+   "part": "9 Upprifjun",
+   "text": "Hvaða vél breytir snúningi í rafmagn?",
+   "start": 355.312,
+   "end": 357.872,
+   "take": "q4-b890996809.mp3",
+   "think_start": 358.122,
+   "think_end": 362.122
+  },
+  {
+   "id": "q5",
+   "part": "9 Upprifjun",
+   "text": "Rafall.",
+   "start": 362.572,
+   "end": 364.412,
+   "take": "q5-c28c219fea.mp3"
+  },
+  {
+   "id": "q6",
+   "part": "9 Upprifjun",
+   "text": "Getur orka eyðst?",
+   "start": 364.862,
+   "end": 366.462,
+   "take": "q6-2f0479736c.mp3",
+   "think_start": 366.712,
+   "think_end": 370.712
+  },
+  {
+   "id": "q7",
+   "part": "9 Upprifjun",
+   "text": "Nei. Hún breytist bara úr einu formi í annað.",
+   "start": 371.162,
+   "end": 374.682,
+   "take": "q7-a9f4af3a80.mp3"
+  },
+  {
+   "id": "w1",
+   "part": "10 Verkefni",
+   "text": "Verkefni heima: finndu þrjú tæki sem nota rafmagn.",
+   "start": 376.032,
+   "end": 380.112,
+   "take": "w1-cf11ca7af3.mp3"
+  },
+  {
+   "id": "w2",
+   "part": "10 Verkefni",
+   "text": "Segðu hvort hvert þeirra breytir raforku í varmaorku eða í hreyfiorku.",
+   "start": 380.562,
+   "end": 384.802,
+   "take": "w2-589fc557cf.mp3"
+  },
+  {
+   "id": "w3",
+   "part": "10 Verkefni",
+   "text": "Ábending: hárblásari gerir hvort tveggja.",
+   "start": 385.252,
+   "end": 388.772,
+   "take": "w3-fe4aad9959.mp3"
+  }
+ ]
+}

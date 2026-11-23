@@ -1,0 +1,69 @@
+  k1  Það er snemma morguns, tíunda maí árið nítján hundruð og fjörutíu, í Reykjavík.
+  k2  Fólk vaknar við flugvél. Í höfninni liggja herskip, og hermenn ganga upp í miðbæinn.
+  k3  Hverjir eru þetta, og af hverju eru þeir komnir til Íslands?
+  k4  Fjórum árum seinna varð Ísland lýðveldi. Í lok myndbandsins veistu hvernig þetta tengist.
+  f1  Byrjum árið nítján hundruð og átján.
+  f2  Fyrsta desember það ár varð Ísland fullvalda ríki.
+  f3  Fullvalda þýðir að Íslendingar ráða sjálfir landinu sínu. Enginn utan landsins getur sagt þeim fyrir verkum.
+  f4  En Ísland hafði áfram sama konung og Danmörk. Konungurinn bjó í Kaupmannahöfn.
+  f5  Í samningnum við Dani stóð að slíta mætti sambandinu eftir tuttugu og fimm ár.
+  p1  Prófaðu. Samningurinn var gerður nítján hundruð og átján. Hvaða ár mátti slíta sambandinu?
+  p2  Nítján hundruð og átján plús tuttugu og fimm. Það er nítján hundruð fjörutíu og þrjú.
+  h1  Annað orð: hlutleysi.
+        ! Z002: Orð á að byrja á hástaf: 'hlutleysi' -> Hlutleysi
+  h2  Ísland hafði engan her. Ríkið lýsti því yfir að það væri hlutlaust í hernaði.
+  h3  Hlutlaust land tekur ekki þátt í stríði og stendur ekki með neinum.
+  h4  Árið nítján hundruð þrjátíu og níu hófst seinni heimsstyrjöldin.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  h5  Níunda apríl nítján hundruð og fjörutíu sendu Þjóðverjar her inn í Danmörku og tóku stjórn landsins með valdi.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  h6  Það heitir hernám. Danmörk var hernumin.
+  h7  Konungurinn gat ekki lengur sinnt Íslandi. Nóttina eftir tók Alþingi sjálft við konungsvaldinu.
+  h8  Bretar buðust þá til að verja Ísland, en ríkisstjórnin sagði nei. Íslendingar treystu á hlutleysið.
+  b1  Nú aftur að morgninum tíunda maí.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  b2  Þetta voru breskir hermenn. Bretar hernámu Ísland.
+  b3  Af hverju? Ísland liggur á miðju Norður-Atlantshafi, á milli Ameríku og Evrópu.
+  b4  Bretar vildu verða á undan Þjóðverjum að ná landinu.
+  b5  Enginn veitti mótspyrnu, og ekki var hleypt af einu skoti.
+  b6  Um kvöldið bað forsætisráðherrann, Hermann Jónasson, landsmenn í útvarpinu að líta á hermennina sem gesti.
+  p3  Prófaðu. Ísland var hlutlaust og hafði engan her. Af hverju komu Bretar samt?
+  p4  Af því að Ísland liggur á miðju Atlantshafi, og Bretar vildu verða á undan Þjóðverjum.
+  l1  Eitt nýtt atriði: hvernig breyttist lífið á Íslandi?
+        ! Z002: Orð á að byrja á hástaf: 'hvernig' -> Hvernig
+  l2  Breski herinn varð um tuttugu og fimm þúsund manns. Hermennirnir bjuggu í bröggum úr bárujárni.
+  l3  Íslendingar fengu vinnu við að reisa bragga, leggja vegi og byggja flugvelli. Atvinnuleysið hvarf.
+  l4  Verð á fiski margfaldaðist, og margir fengu meiri peninga en áður.
+  l5  Sumarið nítján hundruð fjörutíu og eitt tóku Bandaríkjamenn að sér varnir landsins.
+  l6  Það var gert með samningi við Íslendinga. Þess vegna köllum við það ekki hernám.
+  p5  Prófaðu. Bretar komu nítján hundruð og fjörutíu og Bandaríkjamenn nítján hundruð fjörutíu og eitt. Hvor koman var hernám?
+  p6  Koma Breta. Þeir komu án samþykkis. Bandaríkjamenn komu með samningi.
+  y1  Síðasta orðið: lýðveldi.
+        ! Z002: Orð á að byrja á hástaf: 'lýðveldi' -> Lýðveldi
+  y2  Í lýðveldi er enginn konungur. Æðsti maður ríkisins er kosinn, venjulega forseti.
+  y3  Danmörk var enn hernumin, og sumum fannst ekki rétt að slíta sambandinu á meðan. Niðurstaðan var að bíða til nítján hundruð fjörutíu og fjögur.
+  y4  Í maí nítján hundruð fjörutíu og fjögur kusu landsmenn um það hvort slíta ætti sambandinu við Danmörku. Það heitir þjóðaratkvæðagreiðsla.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  y5  Næstum allir sem máttu kjósa mættu. Níutíu og sjö af hverjum hundrað sem kusu sögðu já.
+  y6  Sautjánda júní nítján hundruð fjörutíu og fjögur var lýðveldið stofnað á Þingvöllum, í mikilli rigningu.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  y7  Fyrsti forseti Íslands var Sveinn Björnsson.
+  p7  Prófaðu. Hver er munurinn á fullveldinu nítján hundruð og átján og lýðveldinu nítján hundruð fjörutíu og fjögur?
+  p8  Árið nítján hundruð og átján réðu Íslendingar sjálfir, en höfðu enn konung. Árið nítján hundruð fjörutíu og fjögur var konungssambandinu slitið og forseti kosinn.
+  t1  Manstu morguninn tíunda maí?
+  t2  Stríðið skildi Ísland frá Danmörku, og Íslendingar urðu að stjórna öllu sjálfir.
+  t3  Fjórum árum seinna slitu þeir sambandinu við konunginn og stofnuðu lýðveldi.
+  q1  Rifjum upp. Reyndu að svara á undan mér.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  q2  Hvaða ár varð Ísland fullvalda?
+  q3  Nítján hundruð og átján.
+  q4  Hvað heitir það þegar ríki sendir her inn í annað land og tekur stjórnina með valdi?
+  q5  Hernám.
+  q6  Hvenær var lýðveldið stofnað, og hvar?
+  q7  Sautjánda júní nítján hundruð fjörutíu og fjögur, á Þingvöllum.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  w1  Verkefni heima, úr bókinni Styrjaldir og kreppa, á blaðsíðu hundrað þrjátíu og þrjú.
+        ! P_NT_ÍTölu: Sögnin á sennilega að vera í fleirtölu, þ.e. 'eiga' -> eiga
+  w2  Útskýrðu fyrir einhverjum heima muninn á komu Breta og komu Bandaríkjamanna.
+
+11 af 56 setningum með athugasemd.

@@ -1,0 +1,86 @@
+  k1  Þú kveikir á katlinum og eftir smástund sýður vatnið.
+  k2  Orkan sem hitar vatnið kemur úr innstungunni.
+  k3  En hvaðan kemur hún þangað? Og hvert fer hún þegar vatnið kólnar aftur?
+  k4  Í lok myndbandsins getur þú rakið leiðina alla leið upp á hálendið.
+  o1  Byrjum á orðinu orka.
+  o2  Orka er það sem lætur hluti hreyfast, hitna eða lýsa.
+  o3  Bolti sem rúllar, heitt vatn og pera sem lýsir hafa öll orku.
+  o4  Orkan er alltaf í einhverju formi. Í dag lærum við fjögur form.
+  s1  Fyrsta formið heitir stöðuorka.
+  s2  Ef þú lyftir tösku upp á borð, þá geymir taskan orku af því að hún er hátt uppi.
+  s3  Það er stöðuorka. Því hærra uppi, því meiri stöðuorka.
+  s4  Annað formið heitir hreyfiorka.
+  s5  Ef taskan dettur af borðinu fer hún á hreyfingu. Stöðuorkan breytist í hreyfiorku.
+  p1  Prófaðu. Hér er róla.
+  p2  Rólan er efst uppi og stoppar eitt augnablik. Hvort hefur hún þá meira af, stöðuorku eða hreyfiorku?
+  p3  Stöðuorku, af því að hún er hátt uppi og stendur kyrr.
+  p4  Neðst fer rólan hraðast. Þar hefur hún mest af hreyfiorku.
+        ! W001/w: Orðið 'rólan' gæti átt að vera 'bólan' -> bólan
+  r1  Þriðja formið heitir raforka. Það er orkan sem rafmagnið ber eftir snúrunni.
+  r2  Fjórða formið heitir varmaorka. Þegar eitthvað hitnar, fær það varmaorku.
+  r3  Í katlinum breytist raforka í varmaorku.
+  p5  Prófaðu. Þú setur brauð í brauðrist.
+  p6  Hvaða orkuform fer inn í brauðristina, og hvaða orkuform kemur út?
+  p7  Raforka fer inn eftir snúrunni. Varmaorka kemur út og ristar brauðið.
+  l1  Nú kemur mikilvægasta reglan um orku.
+  l2  Sýnum orkuna sem kubba. Hver litur er eitt orkuform.
+  l3  Taskan uppi á borðinu hefur átta kubba af stöðuorku.
+  l4  Þegar hún dettur skipta kubbarnir um lit og verða hreyfiorka. En þeir eru enn átta.
+  l5  Þegar hún lendir á gólfinu verða kubbarnir að varmaorku í töskunni og gólfinu. Enn átta.
+  l6  Kubbarnir hverfa aldrei. Þeir skipta bara um lit.
+  l7  Þessi regla heitir lögmálið um varðveislu orkunnar. Hún er á blaðsíðu fjörutíu og fjögur í bókinni Eðlisfræði þrjú.
+  l8  Orka getur hvorki myndast né eyðst, heldur getur hún eingöngu breyst úr einu formi í annað.
+  p8  Prófaðu. Bolti dettur á gólfið, skoppar nokkrum sinnum og stoppar.
+  p9  Er orkan hans horfin?
+ p10  Nei. Hún breyttist í varmaorku í boltanum og gólfinu. Hún er enn til, bara dreifð.
+  v1  Nú eltum við orkuna í katlinum, alla leið að upphafinu.
+  v2  Um sjö af hverjum tíu hlutum rafmagnsins á Íslandi koma frá vatnsorkuverum. Eitt þeirra er Búrfellsvirkjun í Þjórsá.
+  v3  Uppi á hálendinu er stífla. Á bak við hana safnast vatn í stórt lón.
+  v4  Vatnið í lóninu er hátt uppi. Þess vegna hefur það stöðuorku.
+  v5  Vatnið rennur niður í gegnum pípu og fer hratt. Stöðuorkan verður að hreyfiorku.
+  v6  Neðst lendir vatnið á hverfli. Hverfill er hjól með spöðum sem vatnið snýr.
+        ! W001/w: Orðið 'hverfli' gæti átt að vera 'hvirfli' -> hvirfli
+  v7  Hverfillinn snýr rafal. Rafall er vél sem breytir snúningi í rafmagn.
+  v8  Þar verður hreyfiorkan að raforku.
+  v9  Raforkan fer eftir háspennulínum alla leið heim í innstunguna.
+ v10  Og í katlinum verður hún að varmaorku.
+ v11  En hvernig komst vatnið upp í lónið? Sólin hitar sjóinn, vatn gufar upp og það rignir á hálendinu.
+ p11  Prófaðu. Hér eru fjögur spjöld í vitlausri röð.
+ p12  Raðaðu þeim í rétta röð og segðu röðina upphátt.
+ p13  Lón, hverfill, rafall, ketill.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+ p14  Stöðuorka verður að hreyfiorku, hreyfiorkan verður að raforku, og raforkan verður að varmaorku.
+  j1  Eitt nýtt atriði í viðbót: heita vatnið í sturtunni.
+        ! Z002: Orð á að byrja á hástaf: 'heita' -> Heita
+  j2  Það kemur aðra leið, og þar kemur ekkert rafmagn við sögu.
+  j3  Djúpt niðri í jörðinni er bergið mjög heitt.
+  j4  Regnvatn sígur niður um sprungur, hitnar við heita bergið og leitar upp aftur.
+  j5  Þetta heitir jarðhiti, öðru nafni jarðvarmi.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  j6  Heita vatnið er sótt með borholum og leitt í pípum heim í hús. Það heitir hitaveita.
+  j7  Um níu af hverjum tíu húsum á Íslandi eru hituð með jarðhita.
+ p15  Prófaðu. Ofninn í stofunni er heitur.
+ p16  Hvaðan kemur orkan í ofninum í flestum húsum á Íslandi: frá vatnsorkuveri eða frá jarðhita?
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+        ! Z002: Orð á að byrja á hástaf: 'frá' -> Frá
+ p17  Frá jarðhita. Heita vatnið rennur í gegnum ofninn og varmaorkan fer út í stofuna.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  b1  Manstu ketilinn?
+  b2  Þegar vatnið kólnar fer varmaorkan út í loftið í eldhúsinu. Hún hverfur ekki.
+  b3  Þess vegna segir bókin að orðið orkunotkun sé eiginlega órökrétt. Við notum orkuna ekki upp. Við breytum henni.
+  q1  Rifjum upp. Reyndu að svara á undan mér.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  q2  Vatnið í lóninu er hátt uppi. Hvaða orkuform hefur það?
+  q3  Stöðuorku.
+        ! E001: Ekki tókst að þátta setningu; mögulega felst villa í henni
+  q4  Hvaða vél breytir snúningi í rafmagn?
+  q5  Rafall.
+  q6  Getur orka eyðst?
+  q7  Nei. Hún breytist bara úr einu formi í annað.
+  w1  Verkefni heima: finndu þrjú tæki sem nota rafmagn.
+        ! Z002: Orð á að byrja á hástaf: 'finndu' -> Finndu
+  w2  Segðu hvort hvert þeirra breytir raforku í varmaorku eða í hreyfiorku.
+  w3  Ábending: hárblásari gerir hvort tveggja.
+        ! Z002: Orð á að byrja á hástaf: 'hárblásari' -> Hárblásari
+
+11 af 72 setningum með athugasemd.
