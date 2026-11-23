@@ -199,7 +199,7 @@
   {
    "id": "p9",
    "part": "5 Prófaðu",
-   "text": "Er orkan hans horfin?",
+   "text": "Er orkan alveg horfin?",
    "pause": 4,
    "think": true
   },
@@ -211,7 +211,7 @@
   {
    "id": "v1",
    "part": "6 Vatnsorkuver",
-   "text": "Nú eltum við orkuna í katlinum, alla leið að upphafinu.",
+   "text": "Nú fylgjum við orkunni í katlinum, alla leið að upphafinu.",
    "gap_before": 0.9
   },
   {
@@ -280,7 +280,7 @@
   {
    "id": "p13",
    "part": "6 Prófaðu",
-   "text": "Lón, hverfill, rafall, ketill."
+   "text": "Lón, svo hverfill, svo rafall, og síðast ketill."
   },
   {
    "id": "p14",

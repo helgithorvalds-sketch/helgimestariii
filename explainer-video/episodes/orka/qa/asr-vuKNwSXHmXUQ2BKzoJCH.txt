@@ -1,0 +1,182 @@
+ATH   k1  handrit: Þú kveikir á katlinum og eftir smástund sýður vatnið.
+           heyrt:   linum og eftir smástund sýður vatnið
+           - 'þú kveikir á katlinum' -> 'linum'
+OK    k2  handrit: Orkan sem hitar vatnið kemur úr innstungunni.
+           heyrt:   orkan sem hitar vatnið kemur úr innstungunni
+OK    k3  handrit: En hvaðan kemur hún þangað? Og hvert fer hún þegar vatnið kólnar aftur?
+           heyrt:   en hvaðan kemur hún þangað og hvert fer hún þegar vatnið kólnar aftur
+ATH   k4  handrit: Í lok myndbandsins getur þú rakið leiðina alla leið upp á hálendið.
+           heyrt:   í lok myndlandsins getur þú rakið leiðina alla leið upp á hálendið
+           - 'myndbandsins' -> 'myndlandsins'
+OK    o1  handrit: Byrjum á orðinu orka.
+           heyrt:   byrjum á orðinu orka
+ATH   o2  handrit: Orka er það sem lætur hluti hreyfast, hitna eða lýsa.
+           heyrt:   er það sem lætur hluti hreyfast hitna eða lýsa
+           - 'orka' -> ''
+OK    o3  handrit: Bolti sem rúllar, heitt vatn og pera sem lýsir hafa öll orku.
+           heyrt:   bolti sem rúllar heitt vatn og pera sem lýsir hafa öll orku
+OK    o4  handrit: Orkan er alltaf í einhverju formi. Í dag lærum við fjögur form.
+           heyrt:   orkan er alltaf í einhverju formi í dag lærum við fjögur form
+OK    s1  handrit: Fyrsta formið heitir stöðuorka.
+           heyrt:   fyrsta formið heitir stöðuorka
+ATH   s2  handrit: Ef þú lyftir tösku upp á borð, þá geymir taskan orku af því að hún er hátt uppi.
+           heyrt:   ef þú lyftir tasku upp á borð þá geymir taskan orku af því að hún er hátt uppi
+           - 'tösku' -> 'tasku'
+OK    s3  handrit: Það er stöðuorka. Því hærra uppi, því meiri stöðuorka.
+           heyrt:   það er stöðuorka því hærra uppi því meiri stöðuorka
+ATH   s4  handrit: Annað formið heitir hreyfiorka.
+           heyrt:   yfi orka
+           - 'annað formið heitir hreyfiorka' -> 'yfi orka'
+OK    s5  handrit: Ef taskan dettur af borðinu fer hún á hreyfingu. Stöðuorkan breytist í hreyfiorku.
+           heyrt:   ef taskan dettur af borðinu fer hún á hreyfingu stöðuorkan breytist í hreyfiorku
+ATH   p1  handrit: Prófaðu. Hér er róla.
+           heyrt:   prófaðu hér er rólegt
+           - 'róla' -> 'rólegt'
+OK    p2  handrit: Rólan er efst uppi og stoppar eitt augnablik. Hvort hefur hún þá meira af, stöðuorku eða hreyfiorku?
+           heyrt:   rólan er efst uppi og stoppar eitt augnablik hvort hefur hún þá meira af stöðuorku eða hreyfiorku
+ATH   p3  handrit: Stöðuorku, af því að hún er hátt uppi og stendur kyrr.
+           heyrt:   stöðu orku af því að hún er hátt uppi og stendur kyrr
+           - 'stöðuorku' -> 'stöðu orku'
+ATH   p4  handrit: Neðst fer rólan hraðast. Þar hefur hún mest af hreyfiorku.
+           heyrt:   ðst fer rólan hlaðast þar hefur hún mest af hreyfiorku
+           - 'neðst' -> 'ðst'
+           - 'hraðast' -> 'hlaðast'
+OK    r1  handrit: Þriðja formið heitir raforka. Það er orkan sem rafmagnið ber eftir snúrunni.
+           heyrt:   þriðja formið heitir raforka það er orkan sem rafmagnið ber eftir snúrunni
+ATH   r2  handrit: Fjórða formið heitir varmaorka. Þegar eitthvað hitnar, fær það varmaorku.
+           heyrt:   a setning fjórða formið heitir varmaorka þegar eitthvað hitnar fær það varmaorku
+           - '' -> 'a setning'
+OK    r3  handrit: Í katlinum breytist raforka í varmaorku.
+           heyrt:   í katlinum breytist raforka í varmaorku
+OK    p5  handrit: Prófaðu. Þú setur brauð í brauðrist.
+           heyrt:   prófaðu þú setur brauð í brauðrist
+OK    p6  handrit: Hvaða orkuform fer inn í brauðristina, og hvaða orkuform kemur út?
+           heyrt:   hvaða orkuform fer inn í brauðristina og hvaða orkuform kemur út
+ATH   p7  handrit: Raforka fer inn eftir snúrunni. Varmaorka kemur út og ristar brauðið.
+           heyrt:   orka fer inn eftir snúrunni varmaorka kemur út og ristar brauðið
+           - 'raforka' -> 'orka'
+OK    l1  handrit: Nú kemur mikilvægasta reglan um orku.
+           heyrt:   nú kemur mikilvægasta reglan um orku
+OK    l2  handrit: Sýnum orkuna sem kubba. Hver litur er eitt orkuform.
+           heyrt:   sýnum orkuna sem kubba hver litur er eitt orkuform
+OK    l3  handrit: Taskan uppi á borðinu hefur átta kubba af stöðuorku.
+           heyrt:   taskan uppi á borðinu hefur átta kubba af stöðuorku
+ATH   l4  handrit: Þegar hún dettur skipta kubbarnir um lit og verða hreyfiorka. En þeir eru enn átta.
+           heyrt:   þegar hún dettur skipta kubbarnir um lit og verða hreyfiorka en þeir eru enn ótta
+           - 'átta' -> 'ótta'
+ATH   l5  handrit: Þegar hún lendir á gólfinu verða kubbarnir að varmaorku í töskunni og gólfinu. Enn átta.
+           heyrt:   þegar hún lendir á gólfinu verða kubbarnir að varmaorku í töskunni á gólfinu en átta
+           - 'og' -> 'á'
+           - 'enn' -> 'en'
+ATH   l6  handrit: Kubbarnir hverfa aldrei. Þeir skipta bara um lit.
+           heyrt:   a setning kubbarnir hverfa aldrei þeir skipta bara um lit
+           - '' -> 'a setning'
+OK    l7  handrit: Þessi regla heitir lögmálið um varðveislu orkunnar. Hún er á blaðsíðu fjörutíu og fjögur í bókinni Eðlisfræði þrjú.
+           heyrt:   þessi regla heitir lögmálið um varðveislu orkunnar hún er á blaðsíðu fjörutíu og fjögur í bókinni eðlisfræði þrjú
+ATH   l8  handrit: Orka getur hvorki myndast né eyðst, heldur getur hún eingöngu breyst úr einu formi í annað.
+           heyrt:   getur hvorki myndast né eyðst heldur getur hún eingöngu breyst úr einu formi í annað
+           - 'orka' -> ''
+OK    p8  handrit: Prófaðu. Bolti dettur á gólfið, skoppar nokkrum sinnum og stoppar.
+           heyrt:   prófaðu bolti dettur á gólfið skoppar nokkrum sinnum og stoppar
+ATH   p9  handrit: Er orkan hans horfin?
+           heyrt:   er úr kon hans orð fimm
+           - 'orkan' -> 'úr kon'
+           - 'horfin' -> 'orð fimm'
+ATH  p10  handrit: Nei. Hún breyttist í varmaorku í boltanum og gólfinu. Hún er enn til, bara dreifð.
+           heyrt:   nei hún breyttist í varmaorku í boltanum á gólfinu hún er enn til bara dreifð
+           - 'og' -> 'á'
+ATH   v1  handrit: Nú eltum við orkuna í katlinum, alla leið að upphafinu.
+           heyrt:   nú ertu með orkuna í katlinum alla leið að upphafinu
+           - 'eltum við' -> 'ertu með'
+OK    v2  handrit: Um sjö af hverjum tíu hlutum rafmagnsins á Íslandi koma frá vatnsorkuverum. Eitt þeirra er Búrfellsvirkjun í Þjórsá.
+           heyrt:   um sjö af hverjum tíu hlutum rafmagnsins á íslandi koma frá vatnsorkuverum eitt þeirra er búrfellsvirkjun í þjórsá
+OK    v3  handrit: Uppi á hálendinu er stífla. Á bak við hana safnast vatn í stórt lón.
+           heyrt:   uppi á hálendinu er stífla á bak við hana safnast vatn í stórt lón
+OK    v4  handrit: Vatnið í lóninu er hátt uppi. Þess vegna hefur það stöðuorku.
+           heyrt:   vatnið í lóninu er hátt uppi þess vegna hefur það stöðuorku
+OK    v5  handrit: Vatnið rennur niður í gegnum pípu og fer hratt. Stöðuorkan verður að hreyfiorku.
+           heyrt:   vatnið rennur niður í gegnum pípu og fer hratt stöðuorkan verður að hreyfiorku
+OK    v6  handrit: Neðst lendir vatnið á hverfli. Hverfill er hjól með spöðum sem vatnið snýr.
+           heyrt:   neðst lendir vatnið á hverfli hverfill er hjól með spöðum sem vatnið snýr
+ATH   v7  handrit: Hverfillinn snýr rafal. Rafall er vél sem breytir snúningi í rafmagn.
+           heyrt:   fjallinn snýr rafal rafall er vél sem breytir snúningi í rafmagn
+           - 'hverfillinn' -> 'fjallinn'
+ATH   v8  handrit: Þar verður hreyfiorkan að raforku.
+           heyrt:   fing þar verður hreyfiorkan að raforku
+           - '' -> 'fing'
+OK    v9  handrit: Raforkan fer eftir háspennulínum alla leið heim í innstunguna.
+           heyrt:   raforkan fer eftir háspennulínum alla leið heim í innstunguna
+ATH  v10  handrit: Og í katlinum verður hún að varmaorku.
+           heyrt:   og í katlinum verður hún á varmaorku
+           - 'að' -> 'á'
+OK   v11  handrit: En hvernig komst vatnið upp í lónið? Sólin hitar sjóinn, vatn gufar upp og það rignir á hálendinu.
+           heyrt:   en hvernig komst vatnið upp í lónið sólin hitar sjóinn vatn gufar upp og það rignir á hálendinu
+OK   p11  handrit: Prófaðu. Hér eru fjögur spjöld í vitlausri röð.
+           heyrt:   prófaðu hér eru fjögur spjöld í vitlausri röð
+ATH  p12  handrit: Raðaðu þeim í rétta röð og segðu röðina upphátt.
+           heyrt:   raðaði þeim í rétta röð og segðu röðina upphátt
+           - 'raðaðu' -> 'raðaði'
+ATH  p13  handrit: Lón, hverfill, rafall, ketill.
+           heyrt:   lón hvert vill ravatn ketillý
+           - 'hverfill rafall ketill' -> 'hvert vill ravatn ketillý'
+ATH  p14  handrit: Stöðuorka verður að hreyfiorku, hreyfiorkan verður að raforku, og raforkan verður að varmaorku.
+           heyrt:   iorka verður á hreyfiorku hreyfiorkan verður að raforku og raforkan verður að varmaorku
+           - 'stöðuorka' -> 'iorka'
+           - 'að' -> 'á'
+OK    j1  handrit: Eitt nýtt atriði í viðbót: heita vatnið í sturtunni.
+           heyrt:   eitt nýtt atriði í viðbót heita vatnið í sturtunni
+ATH   j2  handrit: Það kemur aðra leið, og þar kemur ekkert rafmagn við sögu.
+           heyrt:   það kemur aðra leið og þar kemur ekkert rafmagn með sögu
+           - 'við' -> 'með'
+ATH   j3  handrit: Djúpt niðri í jörðinni er bergið mjög heitt.
+           heyrt:   djúpt niður í jörðinni er bergið mjög heitt
+           - 'niðri' -> 'niður'
+ATH   j4  handrit: Regnvatn sígur niður um sprungur, hitnar við heita bergið og leitar upp aftur.
+           heyrt:   vatn sígur niður um sprungur hitnar við heita bergið og leitar upp aftur
+           - 'regnvatn' -> 'vatn'
+OK    j5  handrit: Þetta heitir jarðhiti, öðru nafni jarðvarmi.
+           heyrt:   þetta heitir jarðhiti öðru nafni jarðvarmi
+ATH   j6  handrit: Heita vatnið er sótt með borholum og leitt í pípum heim í hús. Það heitir hitaveita.
+           heyrt:   a setning heita vatnið er sótt með borholum og leitt í pípum heim í hús það heitir hitaveita
+           - '' -> 'a setning'
+OK    j7  handrit: Um níu af hverjum tíu húsum á Íslandi eru hituð með jarðhita.
+           heyrt:   um níu af hverjum tíu húsum á íslandi eru hituð með jarðhita
+OK   p15  handrit: Prófaðu. Ofninn í stofunni er heitur.
+           heyrt:   prófaðu ofninn í stofunni er heitur
+OK   p16  handrit: Hvaðan kemur orkan í ofninum í flestum húsum á Íslandi: frá vatnsorkuveri eða frá jarðhita?
+           heyrt:   hvaðan kemur orkan í ofninum í flestum húsum á íslandi frá vatnsorkuveri eða frá jarðhita
+ATH  p17  handrit: Frá jarðhita. Heita vatnið rennur í gegnum ofninn og varmaorkan fer út í stofuna.
+           heyrt:   a setning frá jarðhita heita vatnið rennur í gegnum ofninn og varmaorkan fer út í stofuna
+           - '' -> 'a setning'
+OK    b1  handrit: Manstu ketilinn?
+           heyrt:   manstu ketilinn
+OK    b2  handrit: Þegar vatnið kólnar fer varmaorkan út í loftið í eldhúsinu. Hún hverfur ekki.
+           heyrt:   þegar vatnið kólnar fer varmaorkan út í loftið í eldhúsinu hún hverfur ekki
+OK    b3  handrit: Þess vegna segir bókin að orðið orkunotkun sé eiginlega órökrétt. Við notum orkuna ekki upp. Við breytum henni.
+           heyrt:   þess vegna segir bókin að orðið orkunotkun sé eiginlega órökrétt við notum orkuna ekki upp við breytum henni
+ATH   q1  handrit: Rifjum upp. Reyndu að svara á undan mér.
+           heyrt:   rifji mitt reyndu að svara á undan mér
+           - 'rifjum upp' -> 'rifji mitt'
+OK    q2  handrit: Vatnið í lóninu er hátt uppi. Hvaða orkuform hefur það?
+           heyrt:   vatnið í lóninu er hátt uppi hvaða orkuform hefur það
+OK    q3  handrit: Stöðuorku.
+           heyrt:   stöðuorku
+OK    q4  handrit: Hvaða vél breytir snúningi í rafmagn?
+           heyrt:   hvaða vél breytir snúningi í rafmagn
+ATH   q5  handrit: Rafall.
+           heyrt:   a setning hrafnfall
+           - 'rafall' -> 'a setning hrafnfall'
+OK    q6  handrit: Getur orka eyðst?
+           heyrt:   getur orka eyðst
+OK    q7  handrit: Nei. Hún breytist bara úr einu formi í annað.
+           heyrt:   nei hún breytist bara úr einu formi í annað
+ATH   w1  handrit: Verkefni heima: finndu þrjú tæki sem nota rafmagn.
+           heyrt:   fni heima finndu þrjú tæki sem nota rafmagn
+           - 'verkefni' -> 'fni'
+OK    w2  handrit: Segðu hvort hvert þeirra breytir raforku í varmaorku eða í hreyfiorku.
+           heyrt:   segðu hvort hvert þeirra breytir raforku í varmaorku eða í hreyfiorku
+ATH   w3  handrit: Ábending: hárblásari gerir hvort tveggja.
+           heyrt:   ábending hárblasari gerir hvort tveggja
+           - 'hárblásari' -> 'hárblasari'
+Rödd vuKNwSXHmXUQ2BKzoJCH: 56 frávik í 718 orðum (7.8%), 32 af 72 setningum með frávik.
+Frávik eru staðir til að hlusta á, ekki sannaðar villur: talgreinirinn gerir sjálfur 7–16% villur á íslensku.

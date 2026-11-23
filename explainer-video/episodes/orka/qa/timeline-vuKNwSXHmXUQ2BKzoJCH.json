@@ -1,7 +1,7 @@
 {
  "backend": "elevenlabs",
  "voice": "vuKNwSXHmXUQ2BKzoJCH",
- "duration": 392.922,
+ "duration": 393.722,
  "series_tag": "Náttúrufræði 10. bekkur · Eðlisfræði 3, bls. 42–52 · Orka",
  "title": "Orkan breytir bara um form",
  "sentences": [
@@ -268,333 +268,333 @@
   {
    "id": "p9",
    "part": "5 Prófaðu",
-   "text": "Er orkan hans horfin?",
+   "text": "Er orkan alveg horfin?",
    "start": 167.28,
-   "end": 168.72,
-   "take": "p9-3d805584ff.mp3",
-   "think_start": 168.97,
-   "think_end": 172.97
+   "end": 168.56,
+   "take": "p9-72fcc709fc.mp3",
+   "think_start": 168.81,
+   "think_end": 172.81
   },
   {
    "id": "p10",
    "part": "5 Prófaðu",
    "text": "Nei. Hún breyttist í varmaorku í boltanum og gólfinu. Hún er enn til, bara dreifð.",
-   "start": 173.42,
-   "end": 180.46,
+   "start": 173.26,
+   "end": 180.3,
    "take": "p10-fe34d8b8c8.mp3"
   },
   {
    "id": "v1",
    "part": "6 Vatnsorkuver",
-   "text": "Nú eltum við orkuna í katlinum, alla leið að upphafinu.",
-   "start": 181.81,
-   "end": 184.93,
-   "take": "v1-be81f84a0f.mp3"
+   "text": "Nú fylgjum við orkunni í katlinum, alla leið að upphafinu.",
+   "start": 181.65,
+   "end": 185.01,
+   "take": "v1-ea32b0cd36.mp3"
   },
   {
    "id": "v2",
    "part": "6 Vatnsorkuver",
    "text": "Um sjö af hverjum tíu hlutum rafmagnsins á Íslandi koma frá vatnsorkuverum. Eitt þeirra er Búrfellsvirkjun í Þjórsá.",
-   "start": 185.38,
-   "end": 193.46,
+   "start": 185.46,
+   "end": 193.54,
    "take": "v2-d0c945324b.mp3"
   },
   {
    "id": "v3",
    "part": "6 Vatnsorkuver",
    "text": "Uppi á hálendinu er stífla. Á bak við hana safnast vatn í stórt lón.",
-   "start": 193.91,
-   "end": 199.43,
+   "start": 193.99,
+   "end": 199.51,
    "take": "v3-18a1188d9a.mp3"
   },
   {
    "id": "v4",
    "part": "6 Vatnsorkuver",
    "text": "Vatnið í lóninu er hátt uppi. Þess vegna hefur það stöðuorku.",
-   "start": 199.88,
-   "end": 204.68,
+   "start": 199.96,
+   "end": 204.76,
    "take": "v4-3efed694a8.mp3"
   },
   {
    "id": "v5",
    "part": "6 Vatnsorkuver",
    "text": "Vatnið rennur niður í gegnum pípu og fer hratt. Stöðuorkan verður að hreyfiorku.",
-   "start": 205.13,
-   "end": 210.81,
+   "start": 205.21,
+   "end": 210.89,
    "take": "v5-5e2f91a34b.mp3"
   },
   {
    "id": "v6",
    "part": "6 Vatnsorkuver",
    "text": "Neðst lendir vatnið á hverfli. Hverfill er hjól með spöðum sem vatnið snýr.",
-   "start": 211.26,
-   "end": 217.58,
+   "start": 211.34,
+   "end": 217.66,
    "take": "v6-99f2673199.mp3"
   },
   {
    "id": "v7",
    "part": "6 Vatnsorkuver",
    "text": "Hverfillinn snýr rafal. Rafall er vél sem breytir snúningi í rafmagn.",
-   "start": 218.03,
-   "end": 223.63,
+   "start": 218.11,
+   "end": 223.71,
    "take": "v7-3ae9bb1513.mp3"
   },
   {
    "id": "v8",
    "part": "6 Vatnsorkuver",
    "text": "Þar verður hreyfiorkan að raforku.",
-   "start": 224.08,
-   "end": 226.08,
+   "start": 224.16,
+   "end": 226.16,
    "take": "v8-31963fbe5c.mp3"
   },
   {
    "id": "v9",
    "part": "6 Vatnsorkuver",
    "text": "Raforkan fer eftir háspennulínum alla leið heim í innstunguna.",
-   "start": 226.53,
-   "end": 230.13,
+   "start": 226.61,
+   "end": 230.21,
    "take": "v9-cd8d441227.mp3"
   },
   {
    "id": "v10",
    "part": "6 Vatnsorkuver",
    "text": "Og í katlinum verður hún að varmaorku.",
-   "start": 230.58,
-   "end": 232.74,
+   "start": 230.66,
+   "end": 232.82,
    "take": "v10-02428ce304.mp3"
   },
   {
    "id": "v11",
    "part": "6 Vatnsorkuver",
    "text": "En hvernig komst vatnið upp í lónið? Sólin hitar sjóinn, vatn gufar upp og það rignir á hálendinu.",
-   "start": 233.19,
-   "end": 241.27,
+   "start": 233.27,
+   "end": 241.35,
    "take": "v11-0d7d4f478a.mp3"
   },
   {
    "id": "p11",
    "part": "6 Prófaðu",
    "text": "Prófaðu. Hér eru fjögur spjöld í vitlausri röð.",
-   "start": 242.52,
-   "end": 246.12,
+   "start": 242.6,
+   "end": 246.2,
    "take": "p11-8183f2cdf7.mp3"
   },
   {
    "id": "p12",
    "part": "6 Prófaðu",
    "text": "Raðaðu þeim í rétta röð og segðu röðina upphátt.",
-   "start": 246.57,
-   "end": 249.69,
+   "start": 246.65,
+   "end": 249.77,
    "take": "p12-f1dbfdd6b1.mp3",
-   "think_start": 249.94,
-   "think_end": 256.94
+   "think_start": 250.02,
+   "think_end": 257.02
   },
   {
    "id": "p13",
    "part": "6 Prófaðu",
-   "text": "Lón, hverfill, rafall, ketill.",
-   "start": 257.39,
-   "end": 260.91,
-   "take": "p13-459d32bdcb.mp3"
+   "text": "Lón, svo hverfill, svo rafall, og síðast ketill.",
+   "start": 257.47,
+   "end": 261.71,
+   "take": "p13-0061ccd1cb.mp3"
   },
   {
    "id": "p14",
    "part": "6 Prófaðu",
    "text": "Stöðuorka verður að hreyfiorku, hreyfiorkan verður að raforku, og raforkan verður að varmaorku.",
-   "start": 261.36,
-   "end": 268.64,
+   "start": 262.16,
+   "end": 269.44,
    "take": "p14-e8595f6ab2.mp3"
   },
   {
    "id": "j1",
    "part": "7 Jarðhiti",
    "text": "Eitt nýtt atriði í viðbót: heita vatnið í sturtunni.",
-   "start": 269.99,
-   "end": 273.75,
+   "start": 270.79,
+   "end": 274.55,
    "take": "j1-a1df1697d9.mp3"
   },
   {
    "id": "j2",
    "part": "7 Jarðhiti",
    "text": "Það kemur aðra leið, og þar kemur ekkert rafmagn við sögu.",
-   "start": 274.2,
-   "end": 277.72,
+   "start": 275.0,
+   "end": 278.52,
    "take": "j2-efda3f83f2.mp3"
   },
   {
    "id": "j3",
    "part": "7 Jarðhiti",
    "text": "Djúpt niðri í jörðinni er bergið mjög heitt.",
-   "start": 278.17,
-   "end": 281.05,
+   "start": 278.97,
+   "end": 281.85,
    "take": "j3-a8845b1ff7.mp3"
   },
   {
    "id": "j4",
    "part": "7 Jarðhiti",
    "text": "Regnvatn sígur niður um sprungur, hitnar við heita bergið og leitar upp aftur.",
-   "start": 281.5,
-   "end": 286.38,
+   "start": 282.3,
+   "end": 287.18,
    "take": "j4-a9f0075562.mp3"
   },
   {
    "id": "j5",
    "part": "7 Jarðhiti",
    "text": "Þetta heitir jarðhiti, öðru nafni jarðvarmi.",
-   "start": 286.83,
-   "end": 290.19,
+   "start": 287.63,
+   "end": 290.99,
    "take": "j5-4804aa0835.mp3"
   },
   {
    "id": "j6",
    "part": "7 Jarðhiti",
    "text": "Heita vatnið er sótt með borholum og leitt í pípum heim í hús. Það heitir hitaveita.",
-   "start": 290.64,
-   "end": 296.582,
+   "start": 291.44,
+   "end": 297.382,
    "take": "j6-332a257891.mp3"
   },
   {
    "id": "j7",
    "part": "7 Jarðhiti",
    "text": "Um níu af hverjum tíu húsum á Íslandi eru hituð með jarðhita.",
-   "start": 297.032,
-   "end": 301.192,
+   "start": 297.832,
+   "end": 301.992,
    "take": "j7-e07ff7dcba.mp3"
   },
   {
    "id": "p15",
    "part": "7 Prófaðu",
    "text": "Prófaðu. Ofninn í stofunni er heitur.",
-   "start": 302.442,
-   "end": 305.562,
+   "start": 303.242,
+   "end": 306.362,
    "take": "p15-a386f35f02.mp3"
   },
   {
    "id": "p16",
    "part": "7 Prófaðu",
    "text": "Hvaðan kemur orkan í ofninum í flestum húsum á Íslandi: frá vatnsorkuveri eða frá jarðhita?",
-   "start": 306.012,
-   "end": 312.572,
+   "start": 306.812,
+   "end": 313.372,
    "take": "p16-ab1ab51473.mp3",
-   "think_start": 312.822,
-   "think_end": 317.822
+   "think_start": 313.622,
+   "think_end": 318.622
   },
   {
    "id": "p17",
    "part": "7 Prófaðu",
    "text": "Frá jarðhita. Heita vatnið rennur í gegnum ofninn og varmaorkan fer út í stofuna.",
-   "start": 318.272,
-   "end": 324.192,
+   "start": 319.072,
+   "end": 324.992,
    "take": "p17-e09068ff9d.mp3"
   },
   {
    "id": "b1",
    "part": "8 Aftur í ketilinn",
    "text": "Manstu ketilinn?",
-   "start": 325.542,
-   "end": 326.422,
+   "start": 326.342,
+   "end": 327.222,
    "take": "b1-4f386418b3.mp3"
   },
   {
    "id": "b2",
    "part": "8 Aftur í ketilinn",
    "text": "Þegar vatnið kólnar fer varmaorkan út í loftið í eldhúsinu. Hún hverfur ekki.",
-   "start": 326.872,
-   "end": 332.072,
+   "start": 327.672,
+   "end": 332.872,
    "take": "b2-a1fb2245ce.mp3"
   },
   {
    "id": "b3",
    "part": "8 Aftur í ketilinn",
    "text": "Þess vegna segir bókin að orðið orkunotkun sé eiginlega órökrétt. Við notum orkuna ekki upp. Við breytum henni.",
-   "start": 332.522,
-   "end": 340.202,
+   "start": 333.322,
+   "end": 341.002,
    "take": "b3-146d284b79.mp3"
   },
   {
    "id": "q1",
    "part": "9 Upprifjun",
    "text": "Rifjum upp. Reyndu að svara á undan mér.",
-   "start": 341.552,
-   "end": 344.112,
+   "start": 342.352,
+   "end": 344.912,
    "take": "q1-ae8ab5d584.mp3"
   },
   {
    "id": "q2",
    "part": "9 Upprifjun",
    "text": "Vatnið í lóninu er hátt uppi. Hvaða orkuform hefur það?",
-   "start": 344.562,
-   "end": 349.202,
+   "start": 345.362,
+   "end": 350.002,
    "take": "q2-d723418d01.mp3",
-   "think_start": 349.452,
-   "think_end": 353.452
+   "think_start": 350.252,
+   "think_end": 354.252
   },
   {
    "id": "q3",
    "part": "9 Upprifjun",
    "text": "Stöðuorku.",
-   "start": 353.902,
-   "end": 354.862,
+   "start": 354.702,
+   "end": 355.662,
    "take": "q3-832a3bce00.mp3"
   },
   {
    "id": "q4",
    "part": "9 Upprifjun",
    "text": "Hvaða vél breytir snúningi í rafmagn?",
-   "start": 355.312,
-   "end": 357.872,
+   "start": 356.112,
+   "end": 358.672,
    "take": "q4-b890996809.mp3",
-   "think_start": 358.122,
-   "think_end": 362.122
+   "think_start": 358.922,
+   "think_end": 362.922
   },
   {
    "id": "q5",
    "part": "9 Upprifjun",
    "text": "Rafall.",
-   "start": 362.572,
-   "end": 364.412,
+   "start": 363.372,
+   "end": 365.212,
    "take": "q5-c28c219fea.mp3"
   },
   {
    "id": "q6",
    "part": "9 Upprifjun",
    "text": "Getur orka eyðst?",
-   "start": 364.862,
-   "end": 366.462,
+   "start": 365.662,
+   "end": 367.262,
    "take": "q6-2f0479736c.mp3",
-   "think_start": 366.712,
-   "think_end": 370.712
+   "think_start": 367.512,
+   "think_end": 371.512
   },
   {
    "id": "q7",
    "part": "9 Upprifjun",
    "text": "Nei. Hún breytist bara úr einu formi í annað.",
-   "start": 371.162,
-   "end": 374.682,
+   "start": 371.962,
+   "end": 375.482,
    "take": "q7-a9f4af3a80.mp3"
   },
   {
    "id": "w1",
    "part": "10 Verkefni",
    "text": "Verkefni heima: finndu þrjú tæki sem nota rafmagn.",
-   "start": 376.032,
-   "end": 380.112,
+   "start": 376.832,
+   "end": 380.912,
    "take": "w1-cf11ca7af3.mp3"
   },
   {
    "id": "w2",
    "part": "10 Verkefni",
    "text": "Segðu hvort hvert þeirra breytir raforku í varmaorku eða í hreyfiorku.",
-   "start": 380.562,
-   "end": 384.802,
+   "start": 381.362,
+   "end": 385.602,
    "take": "w2-589fc557cf.mp3"
   },
   {
    "id": "w3",
    "part": "10 Verkefni",
    "text": "Ábending: hárblásari gerir hvort tveggja.",
-   "start": 385.252,
-   "end": 388.772,
+   "start": 386.052,
+   "end": 389.572,
    "take": "w3-fe4aad9959.mp3"
   }
  ]

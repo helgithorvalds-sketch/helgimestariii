@@ -127,161 +127,161 @@ Orka getur hvorki myndast né eyðst, heldur getur hún eingöngu breyst úr ein
 Prófaðu. Bolti dettur á gólfið, skoppar nokkrum sinnum og stoppar.
 
 33
-00:02:47,280 --> 00:02:49,020
-Er orkan hans horfin?
+00:02:47,280 --> 00:02:48,860
+Er orkan alveg horfin?
 
 34
-00:02:53,420 --> 00:03:00,760
+00:02:53,260 --> 00:03:00,600
 Nei. Hún breyttist í varmaorku í boltanum og gólfinu. Hún er enn til, bara dreifð.
 
 35
-00:03:01,810 --> 00:03:05,230
-Nú eltum við orkuna í katlinum, alla leið að upphafinu.
+00:03:01,650 --> 00:03:05,310
+Nú fylgjum við orkunni í katlinum, alla leið að upphafinu.
 
 36
-00:03:05,380 --> 00:03:13,760
+00:03:05,460 --> 00:03:13,840
 Um sjö af hverjum tíu hlutum rafmagnsins á Íslandi koma frá vatnsorkuverum. Eitt þeirra er Búrfellsvirkjun í Þjórsá.
 
 37
-00:03:13,910 --> 00:03:19,730
+00:03:13,990 --> 00:03:19,810
 Uppi á hálendinu er stífla. Á bak við hana safnast vatn í stórt lón.
 
 38
-00:03:19,880 --> 00:03:24,980
+00:03:19,960 --> 00:03:25,060
 Vatnið í lóninu er hátt uppi. Þess vegna hefur það stöðuorku.
 
 39
-00:03:25,130 --> 00:03:31,110
+00:03:25,210 --> 00:03:31,190
 Vatnið rennur niður í gegnum pípu og fer hratt. Stöðuorkan verður að hreyfiorku.
 
 40
-00:03:31,260 --> 00:03:37,880
+00:03:31,340 --> 00:03:37,960
 Neðst lendir vatnið á hverfli. Hverfill er hjól með spöðum sem vatnið snýr.
 
 41
-00:03:38,030 --> 00:03:43,930
+00:03:38,110 --> 00:03:44,010
 Hverfillinn snýr rafal. Rafall er vél sem breytir snúningi í rafmagn.
 
 42
-00:03:44,080 --> 00:03:46,380
+00:03:44,160 --> 00:03:46,460
 Þar verður hreyfiorkan að raforku.
 
 43
-00:03:46,530 --> 00:03:50,430
+00:03:46,610 --> 00:03:50,510
 Raforkan fer eftir háspennulínum alla leið heim í innstunguna.
 
 44
-00:03:50,580 --> 00:03:53,040
+00:03:50,660 --> 00:03:53,120
 Og í katlinum verður hún að varmaorku.
 
 45
-00:03:53,190 --> 00:04:01,570
+00:03:53,270 --> 00:04:01,650
 En hvernig komst vatnið upp í lónið? Sólin hitar sjóinn, vatn gufar upp og það rignir á hálendinu.
 
 46
-00:04:02,520 --> 00:04:06,420
+00:04:02,600 --> 00:04:06,500
 Prófaðu. Hér eru fjögur spjöld í vitlausri röð.
 
 47
-00:04:06,570 --> 00:04:09,990
+00:04:06,650 --> 00:04:10,070
 Raðaðu þeim í rétta röð og segðu röðina upphátt.
 
 48
-00:04:17,390 --> 00:04:21,210
-Lón, hverfill, rafall, ketill.
+00:04:17,470 --> 00:04:22,010
+Lón, svo hverfill, svo rafall, og síðast ketill.
 
 49
-00:04:21,360 --> 00:04:28,940
+00:04:22,160 --> 00:04:29,740
 Stöðuorka verður að hreyfiorku, hreyfiorkan verður að raforku, og raforkan verður að varmaorku.
 
 50
-00:04:29,990 --> 00:04:34,050
+00:04:30,790 --> 00:04:34,850
 Eitt nýtt atriði í viðbót: heita vatnið í sturtunni.
 
 51
-00:04:34,200 --> 00:04:38,020
+00:04:35,000 --> 00:04:38,820
 Það kemur aðra leið, og þar kemur ekkert rafmagn við sögu.
 
 52
-00:04:38,170 --> 00:04:41,350
+00:04:38,970 --> 00:04:42,150
 Djúpt niðri í jörðinni er bergið mjög heitt.
 
 53
-00:04:41,500 --> 00:04:46,680
+00:04:42,300 --> 00:04:47,480
 Regnvatn sígur niður um sprungur, hitnar við heita bergið og leitar upp aftur.
 
 54
-00:04:46,830 --> 00:04:50,490
+00:04:47,630 --> 00:04:51,290
 Þetta heitir jarðhiti, öðru nafni jarðvarmi.
 
 55
-00:04:50,640 --> 00:04:56,882
+00:04:51,440 --> 00:04:57,682
 Heita vatnið er sótt með borholum og leitt í pípum heim í hús. Það heitir hitaveita.
 
 56
-00:04:57,032 --> 00:05:01,492
+00:04:57,832 --> 00:05:02,292
 Um níu af hverjum tíu húsum á Íslandi eru hituð með jarðhita.
 
 57
-00:05:02,442 --> 00:05:05,862
+00:05:03,242 --> 00:05:06,662
 Prófaðu. Ofninn í stofunni er heitur.
 
 58
-00:05:06,012 --> 00:05:12,872
+00:05:06,812 --> 00:05:13,672
 Hvaðan kemur orkan í ofninum í flestum húsum á Íslandi: frá vatnsorkuveri eða frá jarðhita?
 
 59
-00:05:18,272 --> 00:05:24,492
+00:05:19,072 --> 00:05:25,292
 Frá jarðhita. Heita vatnið rennur í gegnum ofninn og varmaorkan fer út í stofuna.
 
 60
-00:05:25,542 --> 00:05:26,722
+00:05:26,342 --> 00:05:27,522
 Manstu ketilinn?
 
 61
-00:05:26,872 --> 00:05:32,372
+00:05:27,672 --> 00:05:33,172
 Þegar vatnið kólnar fer varmaorkan út í loftið í eldhúsinu. Hún hverfur ekki.
 
 62
-00:05:32,522 --> 00:05:40,502
+00:05:33,322 --> 00:05:41,302
 Þess vegna segir bókin að orðið orkunotkun sé eiginlega órökrétt. Við notum orkuna ekki upp. Við breytum henni.
 
 63
-00:05:41,552 --> 00:05:44,412
+00:05:42,352 --> 00:05:45,212
 Rifjum upp. Reyndu að svara á undan mér.
 
 64
-00:05:44,562 --> 00:05:49,502
+00:05:45,362 --> 00:05:50,302
 Vatnið í lóninu er hátt uppi. Hvaða orkuform hefur það?
 
 65
-00:05:53,902 --> 00:05:55,162
+00:05:54,702 --> 00:05:55,962
 Stöðuorku.
 
 66
-00:05:55,312 --> 00:05:58,172
+00:05:56,112 --> 00:05:58,972
 Hvaða vél breytir snúningi í rafmagn?
 
 67
-00:06:02,572 --> 00:06:04,712
+00:06:03,372 --> 00:06:05,512
 Rafall.
 
 68
-00:06:04,862 --> 00:06:06,762
+00:06:05,662 --> 00:06:07,562
 Getur orka eyðst?
 
 69
-00:06:11,162 --> 00:06:14,982
+00:06:11,962 --> 00:06:15,782
 Nei. Hún breytist bara úr einu formi í annað.
 
 70
-00:06:16,032 --> 00:06:20,412
+00:06:16,832 --> 00:06:21,212
 Verkefni heima: finndu þrjú tæki sem nota rafmagn.
 
 71
-00:06:20,562 --> 00:06:25,102
+00:06:21,362 --> 00:06:25,902
 Segðu hvort hvert þeirra breytir raforku í varmaorku eða í hreyfiorku.
 
 72
-00:06:25,252 --> 00:06:29,072
+00:06:26,052 --> 00:06:29,872
 Ábending: hárblásari gerir hvort tveggja.

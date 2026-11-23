@@ -1,0 +1,134 @@
+OK    k1  handrit: Það er snemma morguns, tíunda maí árið nítján hundruð og fjörutíu, í Reykjavík.
+           heyrt:   það er snemma morguns tíunda maí árið nítján hundruð og fjörutíu í reykjavík
+ATH   k2  handrit: Fólk vaknar við flugvél. Í höfninni liggja herskip, og hermenn ganga upp í miðbæinn.
+           heyrt:   fólk vaknar við flugvél í hafninu liggja herskip og hermenn ganga upp í miðbæinn
+           - 'höfninni' -> 'hafninu'
+OK    k3  handrit: Hverjir eru þetta, og af hverju eru þeir komnir til Íslands?
+           heyrt:   hverjir eru þetta og af hverju eru þeir komnir til íslands
+ATH   k4  handrit: Fjórum árum seinna varð Ísland lýðveldi. Í lok myndbandsins veistu hvernig þetta tengist.
+           heyrt:   fjórum árum seinna varð ísland lýðveldi í lok myndlandsins veistu hvernig þetta tengist
+           - 'myndbandsins' -> 'myndlandsins'
+OK    f1  handrit: Byrjum árið nítján hundruð og átján.
+           heyrt:   byrjum árið nítján hundruð og átján
+ATH   f2  handrit: Fyrsta desember það ár varð Ísland fullvalda ríki.
+           heyrt:   fyrsta desember það ár var ísland fullvaldaríki
+           - 'varð' -> 'var'
+           - 'fullvalda ríki' -> 'fullvaldaríki'
+ATH   f3  handrit: Fullvalda þýðir að Íslendingar ráða sjálfir landinu sínu. Enginn utan landsins getur sagt þeim fyrir verkum.
+           heyrt:   valda þýðir að íslendingar ráða sjálfir landinu sínu enginn utanlandsins getur sagt þeim fyrir verkum
+           - 'fullvalda' -> 'valda'
+           - 'utan landsins' -> 'utanlandsins'
+OK    f4  handrit: En Ísland hafði áfram sama konung og Danmörk. Konungurinn bjó í Kaupmannahöfn.
+           heyrt:   en ísland hafði áfram sama konung og danmörk konungurinn bjó í kaupmannahöfn
+OK    f5  handrit: Í samningnum við Dani stóð að slíta mætti sambandinu eftir tuttugu og fimm ár.
+           heyrt:   í samningnum við dani stóð að slíta mætti sambandinu eftir tuttugu og fimm ár
+ATH   p1  handrit: Prófaðu. Samningurinn var gerður nítján hundruð og átján. Hvaða ár mátti slíta sambandinu?
+           heyrt:   prófaðu samningurinn var gerður nítanendur og átján hvaða ár mátti slíta sambandinu
+           - 'nítján hundruð' -> 'nítanendur'
+ATH   p2  handrit: Nítján hundruð og átján plús tuttugu og fimm. Það er nítján hundruð fjörutíu og þrjú.
+           heyrt:   hundruð og átján plús tuttugu og fimm það er nítján hundruð fjörutíu og þrjú
+           - 'nítján' -> ''
+OK    h1  handrit: Annað orð: hlutleysi.
+           heyrt:   annað orð hlutleysi
+ATH   h2  handrit: Ísland hafði engan her. Ríkið lýsti því yfir að það væri hlutlaust í hernaði.
+           heyrt:   ísland hafi engan her ríkið lýsti því yfir að það væri hlutlaust í hernaði
+           - 'hafði' -> 'hafi'
+OK    h3  handrit: Hlutlaust land tekur ekki þátt í stríði og stendur ekki með neinum.
+           heyrt:   hlutlaust land tekur ekki þátt í stríði og stendur ekki með neinum
+OK    h4  handrit: Árið nítján hundruð þrjátíu og níu hófst seinni heimsstyrjöldin.
+           heyrt:   árið nítján hundruð þrjátíu og níu hófst seinni heimsstyrjöldin
+ATH   h5  handrit: Níunda apríl nítján hundruð og fjörutíu sendu Þjóðverjar her inn í Danmörku og tóku stjórn landsins með valdi.
+           heyrt:   níunda apríl nítján hundruð og fjörutíu sendu þjóðverjarher inn í danmörku og tóku stjórn landsins með valdi
+           - 'þjóðverjar her' -> 'þjóðverjarher'
+ATH   h6  handrit: Það heitir hernám. Danmörk var hernumin.
+           heyrt:   það heitir hernám danmörk var hernúmin
+           - 'hernumin' -> 'hernúmin'
+OK    h7  handrit: Konungurinn gat ekki lengur sinnt Íslandi. Nóttina eftir tók Alþingi sjálft við konungsvaldinu.
+           heyrt:   konungurinn gat ekki lengur sinnt íslandi nóttina eftir tók alþingi sjálft við konungsvaldinu
+OK    h8  handrit: Bretar buðust þá til að verja Ísland, en ríkisstjórnin sagði nei. Íslendingar treystu á hlutleysið.
+           heyrt:   bretar buðust þá til að verja ísland en ríkisstjórnin sagði nei íslendingar treystu á hlutleysið
+OK    b1  handrit: Nú aftur að morgninum tíunda maí.
+           heyrt:   nú aftur að morgninum tíunda maí
+OK    b2  handrit: Þetta voru breskir hermenn. Bretar hernámu Ísland.
+           heyrt:   þetta voru breskir hermenn bretar hernámu ísland
+OK    b3  handrit: Af hverju? Ísland liggur á miðju Norður-Atlantshafi, á milli Ameríku og Evrópu.
+           heyrt:   af hverju ísland liggur á miðju norður atlantshafi á milli ameríku og evrópu
+OK    b4  handrit: Bretar vildu verða á undan Þjóðverjum að ná landinu.
+           heyrt:   bretar vildu verða á undan þjóðverjum að ná landinu
+OK    b5  handrit: Enginn veitti mótspyrnu, og ekki var hleypt af einu skoti.
+           heyrt:   enginn veitti mótspyrnu og ekki var hleypt af einu skoti
+OK    b6  handrit: Um kvöldið bað forsætisráðherrann, Hermann Jónasson, landsmenn í útvarpinu að líta á hermennina sem gesti.
+           heyrt:   um kvöldið bað forsætisráðherrann hermann jónasson landsmenn í útvarpinu að líta á hermennina sem gesti
+OK    p3  handrit: Prófaðu. Ísland var hlutlaust og hafði engan her. Af hverju komu Bretar samt?
+           heyrt:   prófaðu ísland var hlutlaust og hafði engan her af hverju komu bretar samt
+OK    p4  handrit: Af því að Ísland liggur á miðju Atlantshafi, og Bretar vildu verða á undan Þjóðverjum.
+           heyrt:   af því að ísland liggur á miðju atlantshafi og bretar vildu verða á undan þjóðverjum
+OK    l1  handrit: Eitt nýtt atriði: hvernig breyttist lífið á Íslandi?
+           heyrt:   eitt nýtt atriði hvernig breyttist lífið á íslandi
+OK    l2  handrit: Breski herinn varð um tuttugu og fimm þúsund manns. Hermennirnir bjuggu í bröggum úr bárujárni.
+           heyrt:   breski herinn varð um tuttugu og fimm þúsund manns hermennirnir bjuggu í bröggum úr bárujárni
+OK    l3  handrit: Íslendingar fengu vinnu við að reisa bragga, leggja vegi og byggja flugvelli. Atvinnuleysið hvarf.
+           heyrt:   íslendingar fengu vinnu við að reisa bragga leggja vegi og byggja flugvelli atvinnuleysið hvarf
+OK    l4  handrit: Verð á fiski margfaldaðist, og margir fengu meiri peninga en áður.
+           heyrt:   verð á fiski margfaldaðist og margir fengu meiri peninga en áður
+OK    l5  handrit: Sumarið nítján hundruð fjörutíu og eitt tóku Bandaríkjamenn að sér varnir landsins.
+           heyrt:   sumarið nítján hundruð fjörutíu og eitt tóku bandaríkjamenn að sér varnir landsins
+ATH   l6  handrit: Það var gert með samningi við Íslendinga. Þess vegna köllum við það ekki hernám.
+           heyrt:   það var gert með samningi við íslendinga þess vegna kollum við það ekki hernám
+           - 'köllum' -> 'kollum'
+OK    p5  handrit: Prófaðu. Bretar komu nítján hundruð og fjörutíu og Bandaríkjamenn nítján hundruð fjörutíu og eitt. Hvor koman var hernám?
+           heyrt:   prófaðu bretar komu nítján hundruð og fjörutíu og bandaríkjamenn nítján hundruð fjörutíu og eitt hvor koman var hernám
+ATH   p6  handrit: Koma Breta. Þeir komu án samþykkis. Bandaríkjamenn komu með samningi.
+           heyrt:   breta þeir komu án samþykkis bandaríkjamenn komu með samningi
+           - 'koma' -> ''
+OK    y1  handrit: Síðasta orðið: lýðveldi.
+           heyrt:   síðasta orðið lýðveldi
+OK    y2  handrit: Í lýðveldi er enginn konungur. Æðsti maður ríkisins er kosinn, venjulega forseti.
+           heyrt:   í lýðveldi er enginn konungur æðsti maður ríkisins er kosinn venjulega forseti
+OK    y3  handrit: Danmörk var enn hernumin, og sumum fannst ekki rétt að slíta sambandinu á meðan. Niðurstaðan var að bíða til nítján hundruð fjörutíu og fjögur.
+           heyrt:   danmörk var enn hernumin og sumum fannst ekki rétt að slíta sambandinu á meðan niðurstaðan var að bíða til nítján hundruð fjörutíu og fjögur
+OK    y4  handrit: Í maí nítján hundruð fjörutíu og fjögur kusu landsmenn um það hvort slíta ætti sambandinu við Danmörku. Það heitir þjóðaratkvæðagreiðsla.
+           heyrt:   í maí nítján hundruð fjörutíu og fjögur kusu landsmenn um það hvort slíta ætti sambandinu við danmörku það heitir þjóðaratkvæðagreiðsla
+ATH   y5  handrit: Næstum allir sem máttu kjósa mættu. Níutíu og sjö af hverjum hundrað sem kusu sögðu já.
+           heyrt:   næstum allri sem máttu kjósa mættu níutíu og sjö af hverjum hundrað sem kusu sögðu já
+           - 'allir' -> 'allri'
+ATH   y6  handrit: Sautjánda júní nítján hundruð fjörutíu og fjögur var lýðveldið stofnað á Þingvöllum, í mikilli rigningu.
+           heyrt:   sautjánda júní nítjándri fjörutíu og fjögur var lýðveldið stofnað á þingvöllum í mikilli rigningu
+           - 'nítján hundruð' -> 'nítjándri'
+OK    y7  handrit: Fyrsti forseti Íslands var Sveinn Björnsson.
+           heyrt:   fyrsti forseti íslands var sveinn björnsson
+OK    p7  handrit: Prófaðu. Hver er munurinn á fullveldinu nítján hundruð og átján og lýðveldinu nítján hundruð fjörutíu og fjögur?
+           heyrt:   prófaðu hver er munurinn á fullveldinu nítján hundruð og átján og lýðveldinu nítján hundruð fjörutíu og fjögur
+ATH   p8  handrit: Árið nítján hundruð og átján réðu Íslendingar sjálfir, en höfðu enn konung. Árið nítján hundruð fjörutíu og fjögur var konungssambandinu slitið og forseti kosinn.
+           heyrt:   ð nítján hundruð fjörutíu og fjögur var konungssambandinu slitið og forseti kosinn
+           - 'árið nítján hundruð og átján réðu íslendingar sjálfir en höfðu enn konung árið' -> 'ð'
+OK    t1  handrit: Manstu morguninn tíunda maí?
+           heyrt:   manstu morguninn tíunda maí
+OK    t2  handrit: Stríðið skildi Ísland frá Danmörku, og Íslendingar urðu að stjórna öllu sjálfir.
+           heyrt:   stríðið skildi ísland frá danmörku og íslendingar urðu að stjórna öllu sjálfir
+OK    t3  handrit: Fjórum árum seinna slitu þeir sambandinu við konunginn og stofnuðu lýðveldi.
+           heyrt:   fjórum árum seinna slitu þeir sambandinu við konunginn og stofnuðu lýðveldi
+OK    q1  handrit: Rifjum upp. Reyndu að svara á undan mér.
+           heyrt:   rifjum upp reyndu að svara á undan mér
+ATH   q2  handrit: Hvaða ár varð Ísland fullvalda?
+           heyrt:   a setning hvaða ár varð ísland fullvalda
+           - '' -> 'a setning'
+OK    q3  handrit: Nítján hundruð og átján.
+           heyrt:   nítján hundruð og átján
+ATH   q4  handrit: Hvað heitir það þegar ríki sendir her inn í annað land og tekur stjórnina með valdi?
+           heyrt:   hvað heitir það þegar ríkið sendir her inn í annað land og tekur stjórnina með valdi
+           - 'ríki' -> 'ríkið'
+ATH   q5  handrit: Hernám.
+           heyrt:   hernam
+           - 'hernám' -> 'hernam'
+OK    q6  handrit: Hvenær var lýðveldið stofnað, og hvar?
+           heyrt:   hvenær var lýðveldið stofnað og hvar
+OK    q7  handrit: Sautjánda júní nítján hundruð fjörutíu og fjögur, á Þingvöllum.
+           heyrt:   sautjánda júní nítján hundruð fjörutíu og fjögur á þingvöllum
+ATH   w1  handrit: Verkefni heima, úr bókinni Styrjaldir og kreppa, á blaðsíðu hundrað þrjátíu og þrjú.
+           heyrt:   fni heima úr bókinni styrjaldir og kreppa á blaðsíðu hundrað þrjátíu og þrjú
+           - 'verkefni' -> 'fni'
+OK    w2  handrit: Útskýrðu fyrir einhverjum heima muninn á komu Breta og komu Bandaríkjamanna.
+           heyrt:   útskýrðu fyrir einhverjum heima muninn á komu breta og komu bandaríkjamanna
+Rödd vuKNwSXHmXUQ2BKzoJCH: 38 frávik í 652 orðum (5.8%), 18 af 56 setningum með frávik.
+Frávik eru staðir til að hlusta á, ekki sannaðar villur: talgreinirinn gerir sjálfur 7–16% villur á íslensku.
