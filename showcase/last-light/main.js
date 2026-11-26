@@ -9,6 +9,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+import { makeKeeper, makeLighthouse, makeBoat } from './procedural.js';
 
 export const DURATION = 48;
 export const FPS = 24;
@@ -62,7 +63,7 @@ export function keeperState(t) {
 
 // boat: drifts toward the sea stacks, turns away once the beam finds it
 export function boatState(t) {
-  const a = V(-48, 0, -120), b = V(-8, 0, -62);
+  const a = V(-52, 0, -118), b = V(-16, 0, -58);
   let p, heading;
   if (t < 35.5) { p = a.clone().lerp(b, clamp(t / 35.5)); heading = Math.atan2(b.x - a.x, b.z - a.z); }
   else {
@@ -137,8 +138,9 @@ export class Film {
     this.doorLight = new THREE.PointLight(0xffb060, 0, 9, 2); this.doorLight.position.copy(LH).add(V(-1.6, 1.4, -1.2)); S.add(this.doorLight);
     this.keeperLight = new THREE.PointLight(0xffc68a, 0, 7, 1.6); S.add(this.keeperLight);
 
-    this.buildSky(); this.buildOcean(); this.buildShore(); this.buildRain(); this.buildBeam();
     this.placeholders();
+    this.lampLight.position.copy(this.U.uLampPos.value); this.beamSpot.position.copy(this.U.uLampPos.value);
+    this.buildSky(); this.buildOcean(); this.buildShore(); this.buildRain(); this.buildBeam();
   }
 
   buildSky() {
@@ -263,7 +265,7 @@ export class Film {
     for (let i = 0; i < p.count; i++) {
       const x = p.getX(i), z = p.getZ(i);
       let y = 0.11 * z + 0.25 * Math.sin(x * .07 + z * .05) + 0.08 * Math.sin(x * .9 + z * .4) * sstep(0, 10, z);
-      y += sstep(14, 40, z) * 6 * (0.6 + 0.4 * Math.sin(x * .05));
+      y += sstep(22, 60, z) * 3.2 * (0.6 + 0.4 * Math.sin(x * .05));
       p.setY(i, y - 0.35);
     }
     g.computeVertexNormals();
@@ -303,7 +305,7 @@ export class Film {
 
     // sea stacks (Reynisdrangar)
     const stackMat = new THREE.MeshStandardMaterial({ color: 0x101216, roughness: 0.85, flatShading: true });
-    [[4, -46, 26, 5.5], [11, -53, 34, 6.5], [17.5, -47, 21, 4.5], [-3, -58, 15, 4]].forEach(([x, z, hh, r], si) => {
+    [[4, -46, 26, 5.5], [11, -53, 34, 6.5], [17.5, -47, 21, 4.5], [30, -40, 15, 4]].forEach(([x, z, hh, r], si) => {
       const sg = new THREE.CylinderGeometry(r * .25, r, hh, 9, 14); const pp = sg.attributes.position;
       for (let i = 0; i < pp.count; i++) {
         const X = pp.getX(i), Y = pp.getY(i), Z = pp.getZ(i);
@@ -360,19 +362,21 @@ export class Film {
   }
 
   placeholders() {
-    // simple stand-ins so the film runs before the Meshy assets arrive
-    const mat = new THREE.MeshStandardMaterial({ color: 0x8a8f99, roughness: .6 });
-    this.lighthouse = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 2.4, LH_HEIGHT, 24), mat);
-    this.lighthouse.geometry.translate(0, LH_HEIGHT / 2, 0); this.lighthouse.position.copy(LH); this.scene.add(this.lighthouse);
-    this.boat = new THREE.Mesh(new THREE.BoxGeometry(2, 1.2, 6), mat); this.scene.add(this.boat);
-    this.keeper = new THREE.Group(); const kb = new THREE.Mesh(new THREE.CapsuleGeometry(.3, .6, 4, 8), mat); kb.position.y = .6; this.keeper.add(kb); this.scene.add(this.keeper);
-    this.keeperRoot = this.keeper;
+    // hand-built assets; Meshy GLBs replace them in load() when present
+    const lh = makeLighthouse(LH_HEIGHT); this.lighthouse = lh.root; this.lighthouse.position.copy(LH); this.scene.add(this.lighthouse);
+    this.U.uLampPos.value.copy(LH).add(V(0, lh.root.userData.lampY, 0));
+    const bt = makeBoat(); this.boat = new THREE.Group(); bt.root.scale.setScalar(.75); this.boat.add(bt.root); this.scene.add(this.boat);
+    const kp = makeKeeper(); this.keeper = kp.root; this.keeperAnim = kp.animate; this.scene.add(this.keeper);
+    this.assets = { keeper: kp.root, lighthouse: lh.root, boat: bt.root };
+    this.assetSource = { keeper: 'procedural', lighthouse: 'procedural', boat: 'procedural' };
   }
 
   // ---------------------------------------------------------- assets
-  async load(base = './') {
+  async load(base = './', files = null) {
+    // `files` lists the Meshy GLBs that exist; anything not listed keeps its hand-built stand-in
+    const want = f => !files || files.includes(f);
     const loader = new GLTFLoader();
-    const get = f => loader.loadAsync(base + f).catch(e => { console.warn('missing', f, e); return null; });
+    const get = f => want(f) ? loader.loadAsync(base + f).catch(e => { console.warn('missing', f, e); return null; }) : Promise.resolve(null);
     const [lh, boat, rig, walk, run, wave] = await Promise.all(['lighthouse.glb', 'boat.glb', 'keeper_rigged.glb', 'keeper_walk.glb', 'keeper_run.glb', 'keeper_wave.glb'].map(get));
     const fit = (obj, height) => {
       const box = new THREE.Box3().setFromObject(obj), size = box.getSize(V()), s = height / size.y;
@@ -380,13 +384,12 @@ export class Film {
       obj.position.sub(V(c.x, b2.min.y, c.z)); const wrap = new THREE.Group(); wrap.add(obj); return wrap;
     };
     const shadows = o => o.traverse(m => { if (m.isMesh) { m.castShadow = m.receiveShadow = true; if (m.material) { m.material.envMapIntensity = 1; } } });
-    this.assets = {};
-    if (lh) { this.scene.remove(this.lighthouse); this.lighthouse = fit(lh.scene, LH_HEIGHT); shadows(this.lighthouse); this.lighthouse.position.copy(LH); this.lighthouse.rotation.y = -0.6; this.scene.add(this.lighthouse); this.assets.lighthouse = lh.scene; }
-    if (boat) { this.scene.remove(this.boat); this.boat = fit(boat.scene, 3.2); shadows(this.boat); this.scene.add(this.boat); this.assets.boat = boat.scene; }
+    if (lh) { this.scene.remove(this.lighthouse); this.lighthouse = fit(lh.scene, LH_HEIGHT); shadows(this.lighthouse); this.lighthouse.position.copy(LH); this.lighthouse.rotation.y = -0.6; this.scene.add(this.lighthouse); this.assets.lighthouse = lh.scene; this.assetSource.lighthouse = 'meshy'; }
+    if (boat) { this.scene.remove(this.boat); this.boat = fit(boat.scene, 3.2); shadows(this.boat); this.scene.add(this.boat); this.assets.boat = boat.scene; this.assetSource.boat = 'meshy'; }
     if (rig) {
       this.scene.remove(this.keeper);
       this.keeper = fit(rig.scene, 1.35); shadows(this.keeper); this.scene.add(this.keeper);
-      this.assets.keeper = rig.scene;
+      this.assets.keeper = rig.scene; this.assetSource.keeper = 'meshy'; this.keeperAnim = null;
       this.mixer = new THREE.AnimationMixer(rig.scene);
       const clip = g => g && g.animations && g.animations[0];
       this.actions = {};
@@ -415,7 +418,10 @@ export class Film {
   showAsset(name) {
     const src = this.assets && this.assets[name]; this.studioSlot.clear(); this.skelHelper = null; this.studioMixer = null;
     if (!src) return null;
-    const clone = name === 'keeper' ? SkeletonUtils.clone(src) : src.clone(true);
+    const procKeeper = name === 'keeper' && this.assetSource.keeper === 'procedural';
+    let clone;
+    if (procKeeper) { const k = makeKeeper(); clone = k.root; this.studioAnim = k.animate; }
+    else { clone = name === 'keeper' ? SkeletonUtils.clone(src) : src.clone(true); this.studioAnim = null; }
     clone.position.set(0, 0, 0); clone.rotation.set(0, 0, 0); clone.scale.set(1, 1, 1);
     const box = new THREE.Box3().setFromObject(clone), size = box.getSize(V()), s = 2.4 / Math.max(size.x, size.y, size.z);
     clone.scale.setScalar(s); const b2 = new THREE.Box3().setFromObject(clone), c = b2.getCenter(V());
@@ -430,16 +436,18 @@ export class Film {
       mm.forEach(x => ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap'].forEach(k => { if (x[k] && !stats.textures.has(x[k])) { stats.textures.add(x[k]); stats.maps.push(`${k.replace('Map', '').replace('map', 'albedo')} ${x[k].image?.width || '?'}²`); } }));
     });
     if (name === 'keeper') {
-      this.skelHelper = new THREE.SkeletonHelper(clone); this.skelHelper.visible = false; this.studioSlot.add(this.skelHelper);
-      this.studioMixer = new THREE.AnimationMixer(clone);
-      const a = this.actions && (this.actions.walk || Object.values(this.actions)[0]);
-      if (a) this.studioMixer.clipAction(a.getClip()).play();
-      let bones = 0; clone.traverse(o => { if (o.isBone) bones++; }); stats.bones = bones;
+      this.skelHelper = procKeeper ? jointHelper(clone) : new THREE.SkeletonHelper(clone); this.skelHelper.visible = false; this.studioSlot.add(this.skelHelper);
+      if (!procKeeper) {
+        this.studioMixer = new THREE.AnimationMixer(clone);
+        const a = this.actions && (this.actions.walk || Object.values(this.actions)[0]);
+        if (a) this.studioMixer.clipAction(a.getClip()).play();
+      }
+      let bones = 0; clone.traverse(o => { if (o.isBone) bones++; }); stats.bones = bones || 14;
     }
     const h = 2.4 * size.y / Math.max(size.x, size.y, size.z);
     this.studioCam.position.set(3.6, h * .75 + .6, 4.6); this.controls.target.set(0, h * .48, 0); this.controls.update();
     this.applyPass(this.pass);
-    return { tris: Math.round(stats.tris), verts: stats.verts, maps: stats.maps, bones: stats.bones };
+    return { tris: Math.round(stats.tris), verts: stats.verts, maps: stats.maps, bones: stats.bones, source: this.assetSource[name] };
   }
 
   applyPass(pass) {
@@ -524,9 +532,11 @@ export class Film {
     this.beam.rotation.set(0, ang, -0.045);
     const dir = V(Math.cos(ang), -0.045, -Math.sin(ang)); U.uBeamDir.value.copy(dir);
     this.beam.visible = lamp > 0;
-    this.glow.material.opacity = lamp; this.glow.scale.setScalar(4 + 3 * lamp);
-    this.lampLight.intensity = lamp * 140;
+    this.glow.material.opacity = lamp; this.glow.scale.setScalar(2.5 + 2 * lamp);
+    this.lampLight.intensity = lamp * 45;
     this.beamSpot.intensity = lamp * 2600 * (0.4 + 0.6 * (1 - story.aurora(t) * .5)); this.beamSpot.target.position.copy(U.uLampPos.value).addScaledVector(dir, 80);
+    const ud = this.lighthouse.children[0]?.userData || this.lighthouse.userData;
+    if (this.lighthouse.userData.glass) { this.lighthouse.userData.glass.emissiveIntensity = lamp * 1.2; this.lighthouse.userData.windows.emissiveIntensity = sstep(29.6, 30.4, t) * 2.5; }
     this.doorLight.intensity = sstep(29.5, 30.5, t) * 6 + lamp * 4;
     this.flash.intensity = fl * 9;
     this.moon.intensity = 0.55 + 0.6 * (1 - storm);
@@ -545,7 +555,9 @@ export class Film {
     const kNext = keeperState(t + 0.05).pos; let face = ks.face;
     if (ks.mode === 'walk' || ks.mode === 'run') face = Math.atan2(kNext.x - ks.pos.x, kNext.z - ks.pos.z);
     this.keeper.rotation.y = face;
-    this.keeperLight.position.copy(ks.pos).add(V(0, 1.1, 0)); this.keeperLight.intensity = 5 * (1 - 0.6 * story.aurora(t));
+    this.keeperLight.position.copy(ks.pos).add(V(-.6, 2.3, -1.4)); this.keeperLight.intensity = 2.2 * (1 - 0.5 * story.aurora(t));
+    const cross = (a, b) => sstep(a - .25, a + .25, t) * (1 - sstep(b - .25, b + .25, t));
+    if (this.keeperAnim) this.keeperAnim(t, { walk: cross(4, 22.5), run: cross(22.5, 29.2), wave: cross(39.5, 99) });
     if (this.mixer) {
       const want = { walk: ks.mode === 'walk' ? 1 : 0, run: ks.mode === 'run' ? 1 : 0, wave: ks.mode === 'wave' ? 1 : 0 };
       // smooth crossfades from the timeline itself (stateless)
@@ -574,6 +586,7 @@ export class Film {
   render(dt = 0) {
     if (this.mode === 'breakdown') {
       this.controls.update(); if (this.studioMixer) this.studioMixer.update(dt);
+      if (this.studioAnim) { this._st = (this._st || 0) + dt; const ph = (this._st % 12); this.studioAnim(this._st, { walk: ph < 4 ? 1 : 0, run: ph >= 4 && ph < 8 ? 1 : 0, wave: ph >= 8 ? 1 : 0 }); }
       this.grade.uniforms.uBars.value = 0; this.grade.uniforms.uFade.value = 1;
     } else { this.grade.uniforms.uBars.value = 1; }
     this.composer.render();
@@ -587,7 +600,7 @@ export const SHOTS = [
   { id: 'SH02', name: 'The shore', t0: 6, t1: 13, note: 'Wide from the sea stacks. The keeper sets out; the light is dark.',
     cam: ({ e, kp }) => ({ pos: V(lerp(-6, -2, e), lerp(5.5, 6.2, e), -24), look: V(lerp(4, 9, e), 3.2, 10), fov: 36 }) },
   { id: 'SH03', name: 'Tracking', t0: 13, t1: 19, note: 'Side track at hip height. Rain catches the rim light.', shake: 1.4,
-    cam: ({ kp, e }) => ({ pos: kp.clone().add(V(lerp(-1.6, .6, e), .85, -3.4)), look: kp.clone().add(V(.9, .75, 0)), fov: 32 }) },
+    cam: ({ kp, e }) => ({ pos: kp.clone().add(V(lerp(-1.6, 1.4, e), 1.25, 5.4)), look: kp.clone().add(V(1.1, .75, 0)), fov: 34 }) },
   { id: 'SH04', name: 'The boat', t0: 19, t1: 23, note: 'Out on the swell, a boat drifts blind toward the stacks.', shake: 2,
     cam: ({ b, e }) => ({ pos: b.clone().add(V(lerp(9, 6, e), 2.6, lerp(10, 7, e))), look: b.clone().add(V(0, .9, 0)), fov: 30, roll: .03 }) },
   { id: 'SH05', name: 'The run', t0: 23, t1: 28.5, note: 'Low and ahead of the keeper, pulling back as they sprint.', shake: 1.8,
@@ -595,7 +608,23 @@ export const SHOTS = [
   { id: 'SH06', name: 'The tower', t0: 28.5, t1: 33.5, note: 'Worm’s-eye crane up the tower. The lamp stutters and catches.',
     cam: ({ e, lamp }) => ({ pos: V(LH.x - 9, LH.y + lerp(.6, 2.2, e), LH.z - 11), look: V(LH.x, lerp(LH.y + 3, lamp.y, easeInOut(sstep(.25, 1, e))), LH.z), fov: 40 }) },
   { id: 'SH07', name: 'Found', t0: 33.5, t1: 40, note: 'Over the lamp’s shoulder; the beam sweeps, finds the boat and holds.',
-    cam: ({ e, lamp, b }) => ({ pos: lamp.clone().add(V(lerp(5, 4, e), lerp(2.4, 1.6, e), lerp(5, 3, e))), look: b.clone().lerp(lamp, .05).add(V(0, 2, 0)), fov: lerp(32, 26, e) }) },
+    cam: ({ e, lamp, b }) => ({ pos: lamp.clone().add(V(lerp(9, 6, e), lerp(7, 5, e), lerp(14, 11, e))), look: b.clone().lerp(lamp, lerp(.55, .3, e)), fov: lerp(42, 36, e) }) },
   { id: 'SH08', name: 'Aurora', t0: 40, t1: 48, note: 'The storm breaks. Long pull-back under the aurora; the keeper waves.',
-    cam: ({ e, kp }) => ({ pos: V(lerp(20, -8, e), lerp(3, 9, e), lerp(-6, -30, e)), look: V(lerp(28, 20, e), lerp(3, 10, e), lerp(8, 12, e)), fov: lerp(30, 42, e) }) },
+    cam: ({ e, kp }) => ({ pos: V(lerp(16, -8, e), lerp(9, 12, e), lerp(-10, -32, e)), look: V(lerp(28, 20, e), lerp(3, 10, e), lerp(8, 12, e)), fov: lerp(30, 42, e) }) },
 ];
+
+// joint gizmo for the hand-built rig: a dot per pivot group + bone lines to its parent
+function jointHelper(root) {
+  const g = new THREE.Group(); const pts = []; const lines = [];
+  root.traverse(o => { if (o.isGroup && o !== root && o.parent) { pts.push(o); } });
+  const dotGeo = new THREE.SphereGeometry(.035, 8, 6), dotMat = new THREE.MeshBasicMaterial({ color: 0xffb85c, depthTest: false });
+  const lineGeo = new THREE.BufferGeometry(); lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts.length * 6), 3));
+  const ln = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({ color: 0x7fd6ff, depthTest: false })); ln.renderOrder = 10; g.add(ln);
+  const dots = pts.map(() => { const d = new THREE.Mesh(dotGeo, dotMat); d.renderOrder = 11; g.add(d); return d; });
+  g.updateMatrixWorld = function (force) {
+    const a = lineGeo.attributes.position, w = V(), pw = V(), inv = new THREE.Matrix4().copy(this.parent ? this.parent.matrixWorld : new THREE.Matrix4()).invert();
+    pts.forEach((o, i) => { o.getWorldPosition(w).applyMatrix4(inv); dots[i].position.copy(w); o.parent.getWorldPosition(pw).applyMatrix4(inv); a.setXYZ(i * 2, w.x, w.y, w.z); a.setXYZ(i * 2 + 1, pw.x, pw.y, pw.z); });
+    a.needsUpdate = true; THREE.Group.prototype.updateMatrixWorld.call(this, force);
+  };
+  return g;
+}

@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Last Light</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +21,7 @@
   color-scheme:dark;
 }
 html,body{background:var(--ink);color:var(--text)}
+[hidden]{display:none!important}
 body{font:15px/1.55 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
 .wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 
@@ -91,7 +93,7 @@ dd{margin:0;font-variant-numeric:tabular-nums}
 <div class="wrap">
   <header>
     <h1 class="mark">Last <span>Light</span></h1>
-    <div class="sub">Animation test · <b>48 s</b> · real-time WebGL · 3D assets generated, rigged &amp; animated with <b>Meshy</b></div>
+    <div class="sub">Animation test · <b>48 s</b> · <b>real-time</b> WebGL · scored with ElevenLabs</div>
   </header>
 
   <div class="stage" id="stage">
@@ -123,13 +125,13 @@ dd{margin:0;font-variant-numeric:tabular-nums}
       <div class="assets" id="assetBtns"></div>
       <div class="passes" id="passBtns"></div>
       <dl id="stats"></dl>
-      <p class="hint" id="bdHint">Breakdown swaps the film for a turntable studio. Drag to orbit, scroll to zoom. Passes show the beauty render, clay, wireframe topology, normals and, for the keeper, the auto-rigged skeleton playing its walk cycle.</p>
+      <p class="hint" id="bdHint">Breakdown swaps the film for a turntable studio. Drag to orbit, scroll to zoom. Passes show the beauty render, clay, wireframe topology, normals and, for the keeper, the keeper's joints as it cycles through walk, run and wave.</p>
     </section>
   </div>
 
   <div class="credits">
     <span>Story, layout, shaders, camera, lighting <b>hand-built in three.js</b></span>
-    <span>Models, textures, rig, walk / run / wave <b>Meshy</b></span>
+    <span>Keeper, lighthouse, boat, rig, walk / run / wave <b>modelled &amp; keyed in code</b> · Meshy GLB slots ready</span>
     <span>Score &amp; sound design <b>ElevenLabs</b></span>
     <span>Ocean <b>5-band Gerstner</b> · Sky <b>ray-marched aurora</b></span>
   </div>
@@ -184,7 +186,11 @@ track.addEventListener('pointerup', () => { track.onpointermove = null; });
 track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') seek(film.T + 1); if (e.key === 'ArrowLeft') seek(film.T - 1); if (e.key === ' ') { e.preventDefault(); setPlaying(!playing); } });
 
 // ------- breakdown
-const ASSETS = window.LL_ASSETS || {};
+const ASSETS = {
+  keeper: { label: 'The keeper · 1.35 m robot', prompt: 'A lantern-room head with an amber visor band, enamel shell, oilskin cape. Gait is phase-driven: one sine per joint, offset per limb, so the timeline can scrub it frame-exact.', pipeline: ['blockout', 'hierarchy rig', 'walk 1.05 Hz', 'run 1.75 Hz', 'wave', 'blend by timeline'] },
+  lighthouse: { label: 'Lighthouse · 15 m', prompt: 'Five tapered red/white bands, iron gallery with 32 balusters, lantern glass that glows with the lamp, door and windows that light at 30 s.', pipeline: ['lathe bands', 'gallery', 'lantern', 'emissive hooks'] },
+  boat: { label: 'Fishing boat · 4.8 m', prompt: 'Hull lofted from one cross-section, tapered to the bow; wheelhouse, mast lamp. Rides the same Gerstner function the ocean shader uses.', pipeline: ['lofted hull', 'wheelhouse', 'mast lamp', 'wave-sampled float'] },
+};
 let currentAsset = 'keeper';
 const PASSES = ['beauty', 'clay', 'wire', 'normals', 'skeleton'];
 function setMode(m) {
@@ -201,12 +207,13 @@ function showAsset(name) {
   if (film.pass === 'skeleton' && name !== 'keeper') setPass('beauty');
   $('stats').innerHTML = `
     <dt>Asset</dt><dd>${meta.label || name}</dd>
+    <dt>Source</dt><dd>${st.source === 'meshy' ? 'Meshy GLB' : 'Hand-built in three.js'}</dd>
     <dt>Pipeline</dt><dd><div class="pipe">${(meta.pipeline || []).map(s => `<span>${s}</span>`).join('<i>→</i>')}</div></dd>
     <dt>Triangles</dt><dd>${(st.tris || 0).toLocaleString('en')}</dd>
     <dt>Vertices</dt><dd>${(st.verts || 0).toLocaleString('en')}</dd>
     <dt>Maps</dt><dd>${(st.maps || []).join(' · ') || '—'}</dd>
-    ${st.bones ? `<dt>Bones</dt><dd>${st.bones} · clips: walk, run, wave</dd>` : ''}
-    <dt>Prompt</dt><dd style="color:var(--mute)">${meta.prompt || ''}</dd>`;
+    ${st.bones ? `<dt>Joints</dt><dd>${st.bones} · walk, run, wave cycle in the studio</dd>` : ''}
+    <dt>Notes</dt><dd style="color:var(--mute)">${meta.prompt || ''}</dd>`;
   ui();
 }
 function setPass(p) { film.applyPass(p); document.querySelectorAll('#passBtns button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p === p)); ui(); }
@@ -215,7 +222,7 @@ PASSES.forEach(p => { const b = document.createElement('button'); b.dataset.p = 
 
 // ------- loop
 film.setTime(14.2); ui();
-film.load('./').then(() => { $('loading').hidden = true; film.setTime(14.2); $('bigplay').hidden = false; ui(); });
+film.load('./', window.LL_MESHY || []).then(() => { $('loading').hidden = true; film.setTime(14.2); $('bigplay').hidden = false; ui(); });
 function loop(now) {
   const dt = Math.min(.1, (now - last) / 1000); last = now;
   if (playing && film.mode === 'film') {
