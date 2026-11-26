@@ -1,0 +1,7 @@
+*.mp4
+*.wav
+*.png
+events.json
+segs.txt
+log_*.txt
+st*/

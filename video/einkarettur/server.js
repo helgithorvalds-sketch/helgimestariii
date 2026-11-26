@@ -1,0 +1,2 @@
+const http=require('http'),fs=require('fs'),path=require('path');
+module.exports=(root,port)=>http.createServer((q,s)=>{const p=path.join(root,decodeURIComponent(q.url.split('?')[0]));fs.readFile(p,(e,d)=>{if(e){s.writeHead(404);s.end();return}const ext=path.extname(p);s.writeHead(200,{'Content-Type':{'.html':'text/html; charset=utf-8','.js':'text/javascript','.woff2':'font/woff2','.css':'text/css','.json':'application/json'}[ext]||'application/octet-stream'});s.end(d)})}).listen(port);

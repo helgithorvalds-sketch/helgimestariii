@@ -1,0 +1,13 @@
+{
+  "name": "einkarettur-video",
+  "private": true,
+  "version": "1.0.0",
+  "description": "3D explainer video for Foreldrab\u00f3k exclusivity pricing",
+  "scripts": {
+    "render": "./render_all.sh"
+  },
+  "dependencies": {
+    "three": "0.169.0",
+    "@fontsource/plus-jakarta-sans": "5.1.0"
+  }
+}
