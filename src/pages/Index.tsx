@@ -12,7 +12,7 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin } from "lucide-react";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin, Baby } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -551,6 +551,10 @@ export default function Index() {
                 </span>
               )}
             </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-foreldrar")} className="gap-2 shadow-sm relative">
+              <Baby className="w-4 h-4" />
+              Svif foreldrar
+            </Button>
             <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
               Akureyri hringilisti
@@ -564,7 +568,6 @@ export default function Index() {
               <Building2 className="w-4 h-4" />
               Fyrirtækjabókin
             </Button>
-
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
