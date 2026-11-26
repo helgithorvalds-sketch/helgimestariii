@@ -6,17 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  ArrowLeft, Search, Phone, ChevronDown, ChevronRight, StickyNote, Baby, Check, ExternalLink, User, MapPin, Gift, BadgeCheck, CircleDashed,
+  ArrowLeft, Search, Phone, ChevronDown, ChevronRight, StickyNote, Baby, Check, ExternalLink, User, MapPin, Gift, BadgeCheck, CircleDashed, Info,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import type { ForeldrarFlokkur } from "@/data/svifForeldrarFlokkar";
 
 /**
- * Foreldrabók: fyrirtæki sem gætu keypt pláss í bæklingi fyrir nýbakaða foreldra.
+ * Svif foreldrar: fyrirtæki sem gætu keypt pláss í bæklingi fyrir nýbakaða foreldra.
  * Hver röð í `companies` (lead_source = "foreldrabok") er eitt fyrirtæki í einum flokki.
  * Sama fyrirtæki getur verið í mörgum flokkum; hringingar og glósur fylgja fyrirtækinu í alla flokka þess.
  * industry = „G7 · Heilsa barna“, category = „G7-09 · Barnatannlæknar“, address = svæði,
- * pitch = lýsing (lína 1) og svo línur eins og „Afsláttur: …“, „Tegund: …“, „Staðfest: já“, „Lykill: …“.
+ * pitch = lýsing (lína 1) og svo línur eins og „Afsláttur: …“, „Athugasemd: …“, „Tegund: …“, „Staðfest: já“, „Lykill: …“.
+ * Upplýsingar um hvern flokk (vandamál foreldra, stig, markaðsyfirlit) eru í src/data/svifForeldrarFlokkar.ts.
  */
 const LEAD_SOURCE = "foreldrabok";
 
@@ -39,6 +41,7 @@ interface Row {
 interface Info {
   desc: string;
   offer: string;
+  note: string;
   type: string;
   verified: boolean;
   phone2: string;
@@ -56,6 +59,9 @@ const OUTCOMES: { value: string; label: string; cls: string }[] = [
 ];
 const outcomeLabel = (v?: string | null) => OUTCOMES.find((o) => o.value === v)?.label || null;
 
+const STIG_ROD = ["Meðganga", "0–3 mán", "3–12 mán", "1–3 ár", "Allt tímabilið", "Foreldrarnir"];
+const THORF: Record<string, string> = { Allir: "allir foreldrar", Margir: "margir foreldrar", Sumir: "sumir foreldrar" };
+
 const fold = (s: string) =>
   (s || "").toLowerCase().replace(/þ/g, "th").replace(/ð/g, "d").replace(/æ/g, "ae").replace(/ö/g, "o")
     .normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -63,13 +69,14 @@ const fold = (s: string) =>
 const NORTH = /akureyri|norðurland|nordurland|húsavík|husavik|siglufj|dalvík|dalvik|ólafsfj|olafsfj/i;
 
 function parsePitch(p: string | null, fallbackKey: string): Info {
-  const info: Info = { desc: "", offer: "", type: "", verified: false, phone2: "", phoneSrc: "", ownerSrc: "", key: fallbackKey };
+  const info: Info = { desc: "", offer: "", note: "", type: "", verified: false, phone2: "", phoneSrc: "", ownerSrc: "", key: fallbackKey };
   (p || "").split("\n").forEach((line, i) => {
     if (i === 0) { info.desc = line.trim(); return; }
-    const m = line.match(/^(Afsláttur|Tegund|Staðfest|Sími 2|Sími frá|Eigandi frá|Lykill):\s*(.*)$/);
+    const m = line.match(/^(Afsláttur|Athugasemd|Tegund|Staðfest|Sími 2|Sími frá|Eigandi frá|Lykill):\s*(.*)$/);
     if (!m) return;
     const v = m[2].trim();
     if (m[1] === "Afsláttur") info.offer = v;
+    else if (m[1] === "Athugasemd") info.note = v;
     else if (m[1] === "Tegund") info.type = v;
     else if (m[1] === "Staðfest") info.verified = v.toLowerCase().startsWith("já");
     else if (m[1] === "Sími 2") info.phone2 = v;
@@ -89,12 +96,14 @@ function splitLabel(s: string | null) {
 const telHref = (p: string) => `tel:+354${p.replace(/\D/g, "")}`;
 const natural = (a: string, b: string) => a.localeCompare(b, "is", { numeric: true });
 
-export default function Foreldrabok() {
+export default function SvifForeldrar() {
   const navigate = useNavigate();
   const [rows, setRows] = useState<Row[]>([]);
+  const [flokkar, setFlokkar] = useState<Record<string, ForeldrarFlokkur>>({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [sector, setSector] = useState("");
+  const [stig, setStig] = useState("");
   const [onlyPhone, setOnlyPhone] = useState(false);
   const [onlyNorth, setOnlyNorth] = useState(false);
   const [onlyOffer, setOnlyOffer] = useState(false);
@@ -128,6 +137,13 @@ export default function Foreldrabok() {
   };
   useEffect(() => { load(); }, []);
 
+  // Flokkaupplýsingarnar eru stór textaskrá; þær hlaðast í sérstökum bút svo aðrar síður þyngist ekki.
+  useEffect(() => {
+    let alive = true;
+    import("@/data/svifForeldrarFlokkar").then((m) => { if (alive) setFlokkar(m.FLOKKAR); });
+    return () => { alive = false; };
+  }, []);
+
   const infoById = useMemo(() => {
     const m = new Map<string, Info>();
     rows.forEach((r) => m.set(r.id, parsePitch(r.pitch, "n:" + fold(r.name))));
@@ -135,30 +151,41 @@ export default function Foreldrabok() {
   }, [rows]);
   const infoOf = (r: Row) => infoById.get(r.id) as Info;
 
-  const siblingIds = (r: Row) => {
-    const key = infoOf(r).key;
-    return rows.filter((x) => infoOf(x).key === key).map((x) => x.id);
-  };
+  /** Allar raðir sama fyrirtækis (eitt pláss í hverjum flokki) eftir lyklinum. */
+  const idsByKey = useMemo(() => {
+    const m = new Map<string, string[]>();
+    rows.forEach((r) => {
+      const k = (infoById.get(r.id) as Info).key;
+      const list = m.get(k);
+      if (list) list.push(r.id); else m.set(k, [r.id]);
+    });
+    return m;
+  }, [rows, infoById]);
+  const rowById = useMemo(() => new Map(rows.map((r) => [r.id, r])), [rows]);
+  const siblingIds = (r: Row) => idsByKey.get(infoOf(r).key) || [r.id];
+  const flokkurOf = (category: string | null) => flokkar[splitLabel(category).id] as ForeldrarFlokkur | undefined;
 
-  const hasFilter = !!search.trim() || !!sector || onlyPhone || onlyNorth || onlyOffer || onlyVerified || onlyChosen;
+  const hasFilter = !!search.trim() || !!sector || !!stig || onlyPhone || onlyNorth || onlyOffer || onlyVerified || onlyChosen;
 
   const filtered = useMemo(() => {
     const q = fold(search).trim().split(/\s+/).filter(Boolean);
     return rows.filter((r) => {
       const i = infoById.get(r.id) as Info;
+      const f = flokkar[splitLabel(r.category).id];
       if (sector && r.industry !== sector) return false;
+      if (stig && f?.stig !== stig) return false;
       if (onlyPhone && !r.phone) return false;
       if (onlyNorth && !NORTH.test(r.address || "")) return false;
       if (onlyOffer && !i.offer) return false;
       if (onlyVerified && !i.verified) return false;
       if (onlyChosen && !r.svif_valid) return false;
       if (q.length) {
-        const hay = fold([r.name, r.owner, r.phone, r.category, r.industry, i.desc, i.offer, r.address, r.notes].join(" "));
+        const hay = fold([r.name, r.owner, r.phone, r.category, r.industry, f?.vandamal, i.desc, i.offer, i.note, r.address, r.notes].join(" "));
         return q.every((t) => hay.includes(t));
       }
       return true;
     });
-  }, [rows, infoById, search, sector, onlyPhone, onlyNorth, onlyOffer, onlyVerified, onlyChosen]);
+  }, [rows, infoById, flokkar, search, sector, stig, onlyPhone, onlyNorth, onlyOffer, onlyVerified, onlyChosen]);
 
   const sectors = useMemo(
     () => [...new Set(rows.map((r) => r.industry || "Óflokkað"))].sort(natural),
@@ -191,7 +218,7 @@ export default function Foreldrabok() {
   const catCount = groups.reduce((n, g) => n + g.cats.length, 0);
   const autoOpen = hasFilter && catCount <= 40;
 
-  const companies = useMemo(() => new Set(rows.map((r) => infoById.get(r.id)?.key)).size, [rows, infoById]);
+  const companies = idsByKey.size;
   const chosenCount = rows.filter((r) => r.svif_valid).length;
   const calledCount = useMemo(
     () => new Set(rows.filter((r) => r.last_call_outcome).map((r) => infoById.get(r.id)?.key)).size,
@@ -253,7 +280,7 @@ export default function Foreldrabok() {
   };
 
   const clearFilters = () => {
-    setSearch(""); setSector(""); setOnlyPhone(false); setOnlyNorth(false); setOnlyOffer(false); setOnlyVerified(false); setOnlyChosen(false);
+    setSearch(""); setSector(""); setStig(""); setOnlyPhone(false); setOnlyNorth(false); setOnlyOffer(false); setOnlyVerified(false); setOnlyChosen(false);
   };
 
   const toggles: { label: string; value: boolean; set: (v: boolean) => void }[] = [
@@ -266,7 +293,7 @@ export default function Foreldrabok() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-20 border-b bg-card/80 backdrop-blur-xl">
+      <header className="sm:sticky sm:top-0 z-20 border-b bg-card/80 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-4 py-4 space-y-3">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate("/")} aria-label="Til baka">
@@ -275,7 +302,7 @@ export default function Foreldrabok() {
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center gap-2">
                 <Baby className="w-6 h-6 text-primary" />
-                FORELDRABÓK
+                SVIF FORELDRAR
               </h1>
               <p className="text-sm text-muted-foreground">Fyrirtæki fyrir nýbakaða foreldra, flokkuð eftir vandamáli foreldra</p>
             </div>
@@ -293,7 +320,7 @@ export default function Foreldrabok() {
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Leita eftir fyrirtæki, eiganda, númeri, flokki, lýsingu…"
+                placeholder="Leita eftir fyrirtæki, eiganda, númeri, flokki, vandamáli, lýsingu…"
                 className="pl-9"
               />
             </div>
@@ -305,6 +332,17 @@ export default function Foreldrabok() {
             >
               <option value="">Allir geirar</option>
               {sectors.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <select
+              value={stig}
+              onChange={(e) => setStig(e.target.value)}
+              className="h-10 rounded-md border bg-background px-3 text-sm sm:max-w-[11rem]"
+              aria-label="Stig"
+            >
+              <option value="">Öll stig</option>
+              {STIG_ROD.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
@@ -329,7 +367,7 @@ export default function Foreldrabok() {
         {loading ? (
           <p className="text-muted-foreground">Hleð…</p>
         ) : rows.length === 0 ? (
-          <p className="text-muted-foreground">Engin fyrirtæki hafa verið flutt inn í Foreldrabók ennþá.</p>
+          <p className="text-muted-foreground">Engin fyrirtæki hafa verið flutt inn í Svif foreldra ennþá.</p>
         ) : groups.length === 0 ? (
           <p className="text-muted-foreground">Ekkert passar við leitina. Prófaðu færri orð eða hreinsaðu síurnar.</p>
         ) : (
@@ -349,6 +387,7 @@ export default function Foreldrabok() {
 
                 {!sectorClosed && g.cats.map((c) => {
                   const lab = splitLabel(c.category);
+                  const f = flokkurOf(c.category);
                   const isOpen = openCats.has(c.category) !== autoOpen;
                   const chosen = c.rows.filter((r) => r.svif_valid).length;
                   return (
@@ -357,19 +396,45 @@ export default function Foreldrabok() {
                         onClick={() => toggleIn(openCats, c.category, setOpenCats)}
                         className="w-full flex items-center gap-2 px-4 py-3 bg-muted/40 hover:bg-muted/60 transition-colors text-left"
                       >
-                        {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                        {lab.id && <span className="text-xs font-mono text-muted-foreground">{lab.id}</span>}
-                        <h3 className="font-bold text-base flex-1">{lab.title}</h3>
-                        <span className="text-sm font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">
+                        {isOpen ? <ChevronDown className="w-4 h-4 shrink-0" /> : <ChevronRight className="w-4 h-4 shrink-0" />}
+                        {lab.id && <span className="text-xs font-mono text-muted-foreground shrink-0">{lab.id}</span>}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-base">{lab.title}</h3>
+                          {f?.vandamal && <p className="text-xs text-muted-foreground">{f.vandamal}</p>}
+                        </div>
+                        {f && <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-muted whitespace-nowrap">{f.stig}</span>}
+                        <span className="text-sm font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary shrink-0">
                           {chosen}/{c.rows.length}
                         </span>
                       </button>
+
+                      {isOpen && f && (
+                        <div className="px-4 py-3 border-b bg-primary/5 space-y-2 text-sm">
+                          <div className="flex flex-wrap gap-1.5 text-xs font-semibold">
+                            <span className="px-2 py-0.5 rounded-full bg-muted" title="Hvenær á barnsævinni flokkurinn skiptir mestu máli">Stig: {f.stig}</span>
+                            <span className="px-2 py-0.5 rounded-full bg-muted" title="Sterk = er til vegna barna. Miðlungs = allir nota það en foreldrar þurfa meira eða annað. Veik = almennt heimilishald.">
+                              Tengsl við barn: {f.tenging}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full bg-muted" title="Hve stór hluti foreldra þarf þetta">Þörf: {THORF[f.eftirspurn] || f.eftirspurn}</span>
+                            {f.fair && (
+                              <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300" title="Fá fyrirtæki fundust í leitinni; gott að kanna fleiri">
+                                Fá fyrirtæki fundin
+                              </span>
+                            )}
+                          </div>
+                          {f.markadur && (
+                            <p className="text-muted-foreground"><b className="text-foreground">Markaðurinn:</b> {f.markadur}</p>
+                          )}
+                        </div>
+                      )}
 
                       {isOpen && (
                         <ul className="divide-y">
                           {c.rows.map((r) => {
                             const i = infoOf(r);
-                            const siblings = siblingIds(r).length - 1;
+                            const siblingList = siblingIds(r).filter((id) => id !== r.id);
+                            const siblings = siblingList.length;
+                            const siblingTitle = siblingList.map((id) => rowById.get(id)?.category).filter(Boolean).join("\n");
                             const notesOpen = openNotes.has(r.id);
                             return (
                               <li key={r.id} className={cn("px-4 py-3 space-y-2 transition-colors", r.svif_valid && "bg-emerald-50/60 dark:bg-emerald-950/20")}>
@@ -406,7 +471,9 @@ export default function Foreldrabok() {
                                         </span>
                                       )}
                                       {siblings > 0 && (
-                                        <span className="text-xs text-muted-foreground">Líka í {siblings} {siblings === 1 ? "öðrum flokki" : "öðrum flokkum"}</span>
+                                        <span className="text-xs text-muted-foreground" title={siblingTitle}>
+                                          Líka í {siblings} {siblings === 1 ? "öðrum flokki" : "öðrum flokkum"}
+                                        </span>
                                       )}
                                     </div>
 
@@ -439,6 +506,11 @@ export default function Foreldrabok() {
                                     {i.offer && (
                                       <p className="text-sm rounded-lg bg-primary/10 text-primary px-2.5 py-1.5 inline-flex items-start gap-1.5">
                                         <Gift className="w-4 h-4 mt-0.5 shrink-0" /> <span><b>Afsláttur:</b> {i.offer}</span>
+                                      </p>
+                                    )}
+                                    {i.note && (
+                                      <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                                        <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" /> <span>{i.note}</span>
                                       </p>
                                     )}
                                   </div>

@@ -551,6 +551,10 @@ export default function Index() {
                 </span>
               )}
             </Button>
+            <Button variant="outline" onClick={() => navigate("/svif-foreldrar")} className="gap-2 shadow-sm relative">
+              <Baby className="w-4 h-4" />
+              Svif foreldrar
+            </Button>
             <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
               <MapPin className="w-4 h-4" />
               Akureyri hringilisti
@@ -564,11 +568,6 @@ export default function Index() {
               <Building2 className="w-4 h-4" />
               Fyrirtækjabókin
             </Button>
-            <Button variant="outline" onClick={() => navigate("/foreldrabok")} className="gap-2 shadow-sm relative">
-              <Baby className="w-4 h-4" />
-              Foreldrabók
-            </Button>
-
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur

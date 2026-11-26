@@ -103,7 +103,7 @@ export async function fetchCompanies(): Promise<Company[]> {
   const PAGE = 1000;
   const rows: any[] = [];
   for (let from = 0; ; from += PAGE) {
-    // Foreldrabók-raðirnar (lead_source = foreldrabok) hafa sína eigin síðu og eru ekki hlaðnar hér,
+    // Raðirnar í „Svif foreldrar“ (lead_source = foreldrabok) hafa sína eigin síðu og eru ekki hlaðnar hér,
     // svo aðrar síður verði ekki hægari og talningar (t.d. á Leads) breytist ekki.
     const { data, error } = await supabase
       .from("companies")
