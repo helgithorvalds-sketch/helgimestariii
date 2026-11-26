@@ -12,7 +12,8 @@ import { AddCompanyModal } from "@/components/AddCompanyModal";
 import { CallSchedule } from "@/components/CallSchedule";
 import { CompanyModal } from "@/components/CompanyModal";
 import { Button } from "@/components/ui/button";
-import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin, Baby } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Plus, GripVertical, TrendingUp, ChevronDown, ChevronUp, Globe, AlertTriangle, ExternalLink, Phone, Pencil, Mail, Search, X, ClipboardList, PhoneCall, Plane, BookOpen, Building2, MapPin, Baby, Menu } from "lucide-react";
 import { AIAssistant } from "@/components/AIAssistant";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -473,26 +474,58 @@ export default function Index() {
 
   const mainStages: CompanyStage[] = ["email_sent"];
 
+  // Kaflarnir sem eru í valmyndinni (hamborgaranum) efst til vinstri, svo hausinn verði ekki of breiður.
+  const sections = [
+    { path: "/svif", label: "Svif", icon: Plane, count: companies.filter((c) => c.stage === "svif").length },
+    { path: "/svif-fyrirtæki", label: "Svif Akureyri", icon: Plane, count: companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length },
+    { path: "/svif-listi", label: "Svif fyrirtæki", icon: BookOpen, count: companies.filter((c) => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length },
+    { path: "/svif-foreldrar", label: "Svif foreldrar", icon: Baby, count: 0 },
+    { path: "/svif-akureyri", label: "Akureyri hringilisti", icon: MapPin, count: companies.filter((c) => c.leadSource === "svif_akureyri").length },
+    { path: "/fyrirtaekjabok", label: "Fyrirtækjabókin", icon: Building2, count: 0 },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm px-6 py-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
+      <header className="border-b bg-card shadow-sm px-4 sm:px-6 py-4 sm:py-6">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="shadow-sm shrink-0" aria-label="Valmynd">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-64">
+                <DropdownMenuLabel>Kaflar</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {sections.map((s) => (
+                  <DropdownMenuItem key={s.path} onClick={() => navigate(s.path)} className="gap-2.5 py-2 cursor-pointer">
+                    <s.icon className="w-4 h-4" />
+                    <span className="flex-1">{s.label}</span>
+                    {s.count > 0 && (
+                      <span className="min-w-5 h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
+                        {s.count}
+                      </span>
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <img src={logo} alt="Logo" className="w-14 h-14 rounded-xl shadow-sm" />
-            <div>
-              <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">Verkefnastjórnun</h1>
               <p className="text-sm text-muted-foreground mt-0.5">{companies.filter(c => c.stage !== "lead" && c.stage !== "svif" && c.stage !== "svif_fyrirtæki").length} fyrirtæki samtals</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative w-full sm:w-56">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Leita að fyrirtæki..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-8 w-56 h-9 text-sm"
+                className="pl-9 pr-8 w-full h-9 text-sm"
               />
               {searchQuery && (
                 <button
@@ -524,50 +557,6 @@ export default function Index() {
                 </span>
               )}
             </Button>
-            <Button variant="outline" onClick={() => navigate("/svif")} className="gap-2 shadow-sm relative">
-              <Plane className="w-4 h-4" />
-              Svif
-              {companies.filter(c => c.stage === "svif").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-fyrirtæki")} className="gap-2 shadow-sm relative">
-              <Plane className="w-4 h-4" />
-              Svif Akureyri
-              {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource !== "svif_fyrirtæki").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-listi")} className="gap-2 shadow-sm relative">
-              <BookOpen className="w-4 h-4" />
-              Svif fyrirtæki
-              {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter(c => c.stage === "svif_fyrirtæki" && c.leadSource === "svif_fyrirtæki").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-foreldrar")} className="gap-2 shadow-sm relative">
-              <Baby className="w-4 h-4" />
-              Svif foreldrar
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/svif-akureyri")} className="gap-2 shadow-sm relative">
-              <MapPin className="w-4 h-4" />
-              Akureyri hringilisti
-              {companies.filter((c) => c.leadSource === "svif_akureyri").length > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center text-white bg-primary">
-                  {companies.filter((c) => c.leadSource === "svif_akureyri").length}
-                </span>
-              )}
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/fyrirtaekjabok")} className="gap-2 shadow-sm relative">
-              <Building2 className="w-4 h-4" />
-              Fyrirtækjabókin
-            </Button>
             <Button variant="outline" onClick={() => navigate("/finances")} className="gap-2 shadow-sm">
               <TrendingUp className="w-4 h-4" />
               Fjárhagur
@@ -577,7 +566,6 @@ export default function Index() {
               Nýtt fyrirtæki
             </Button>
           </div>
-
         </div>
       </header>
 
