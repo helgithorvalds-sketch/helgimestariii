@@ -1,0 +1,232 @@
+<title>Last Light</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@300;700;900&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a projection booth — the film fills the stage; a slate rail beneath it carries timecode, shot list and the asset breakdown. Single dark look by design (it is a cinema). */
+:root{
+  --ink:#06080c;            /* booth black, faint blue bias */
+  --stage:#0b0f15;
+  --rail:#10151d;
+  --line:#1f2834;
+  --text:#d7dde6;
+  --mute:#7d8899;
+  --lamp:#ffb85c;           /* sodium lamp amber: the only accent */
+  --lamp-dim:#5c4325;
+  --aur:#7ee0b4;            /* used for exactly one thing: the aurora beat */
+  --f-display:"Big Shoulders Display", "Oswald", Impact, sans-serif;
+  --f-body:"Figtree", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--ink);color:var(--text)}
+body{font:15px/1.55 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.mark{font:900 clamp(40px,6vw,72px)/.82 var(--f-display);letter-spacing:.04em;text-transform:uppercase;margin:0}
+.mark span{color:var(--lamp)}
+.sub{font:500 12px/1.4 var(--f-mono);color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+.sub b{color:var(--text);font-weight:500}
+
+.stage{position:relative;background:#000;border:1px solid var(--line);aspect-ratio:16/9;max-width:100%;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.title-card{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .3s}
+.title-card h2{font:300 clamp(28px,7vw,92px)/1 var(--f-display);letter-spacing:.5em;margin:0 0 0 .5em;text-transform:uppercase;color:#f3ead9;text-shadow:0 0 30px rgba(255,184,92,.25)}
+.title-card p{font:400 clamp(10px,1.1vw,13px)/1 var(--f-mono);letter-spacing:.35em;text-transform:uppercase;color:#b9a98f;margin:14px 0 0;text-align:center}
+.end-card h2{letter-spacing:.32em}
+.slate{position:absolute;left:14px;top:12px;font:500 11px/1.5 var(--f-mono);letter-spacing:.06em;color:rgba(230,236,245,.72);pointer-events:none;text-transform:uppercase}
+.slate em{font-style:normal;color:var(--lamp)}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font:500 12px var(--f-mono);letter-spacing:.2em;color:var(--mute);text-transform:uppercase;background:var(--stage)}
+.play-big{position:absolute;inset:0;margin:auto;width:84px;height:84px;border-radius:50%;border:1px solid rgba(255,184,92,.6);background:rgba(6,8,12,.55);color:var(--lamp);display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(4px)}
+.play-big:hover{background:rgba(255,184,92,.14)}
+.play-big svg{width:28px;height:28px;margin-left:4px}
+
+/* transport */
+.transport{display:grid;grid-template-columns:auto auto 1fr auto;align-items:center;gap:14px;background:var(--rail);border:1px solid var(--line);padding:10px 14px}
+button{font:500 12px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--text);background:transparent;border:1px solid var(--line);padding:9px 12px;cursor:pointer}
+button:hover{border-color:var(--mute)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+button[aria-pressed="true"]{border-color:var(--lamp);color:var(--lamp)}
+.tc{font:500 15px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--lamp);min-width:11ch}
+.track{position:relative;height:42px;cursor:pointer;touch-action:none}
+.seg{position:absolute;top:0;bottom:12px;border-left:1px solid var(--line);font:500 10px/1 var(--f-mono);color:var(--mute);padding:5px 0 0 5px;overflow:hidden;white-space:nowrap}
+.seg.on{color:var(--text);background:linear-gradient(180deg,rgba(255,184,92,.10),transparent)}
+.beat{position:absolute;bottom:0;width:1px;height:9px;background:var(--mute)}
+.beat.lamp{background:var(--lamp);height:12px}.beat.aur{background:var(--aur);height:12px}
+.bar{position:absolute;left:0;right:0;bottom:4px;height:2px;background:var(--line)}
+.fill{position:absolute;left:0;bottom:4px;height:2px;background:var(--lamp)}
+.head{position:absolute;top:0;bottom:0;width:2px;background:var(--lamp);box-shadow:0 0 10px var(--lamp)}
+
+/* below the film */
+.cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px}
+@media (max-width:860px){.cols{grid-template-columns:1fr}.transport{grid-template-columns:auto 1fr;}.transport .track{grid-column:1/-1;order:5}}
+section{background:var(--stage);border:1px solid var(--line);padding:18px 20px;min-width:0}
+h3{font:700 22px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;margin:0 0 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+h3 small{font:400 11px var(--f-mono);color:var(--mute);letter-spacing:.06em}
+.shots{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.shots li{display:grid;grid-template-columns:4.2ch 9.5ch minmax(0,1fr);gap:12px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer;align-items:baseline}
+.shots li:hover .nm{color:var(--lamp)}
+.shots li.on{background:linear-gradient(90deg,rgba(255,184,92,.08),transparent 70%)}
+.shots .id{font:500 11px var(--f-mono);color:var(--lamp)}
+.shots .tm{font:400 11px var(--f-mono);color:var(--mute);font-variant-numeric:tabular-nums}
+.shots .nm{font-weight:600}
+.shots .nt{display:block;color:var(--mute);font-size:13px;line-height:1.45}
+
+.assets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.passes{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.passes button{padding:7px 9px;font-size:11px}
+dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;font-size:13px}
+dt{font:400 11px/1.9 var(--f-mono);color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+dd{margin:0;font-variant-numeric:tabular-nums}
+.pipe{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font:400 11px var(--f-mono)}
+.pipe span{border:1px solid var(--line);padding:3px 6px}
+.pipe i{color:var(--mute);font-style:normal}
+.hint{color:var(--mute);font-size:13px;margin:14px 0 0}
+.credits{display:flex;flex-wrap:wrap;gap:6px 22px;font:400 11px/1.6 var(--f-mono);color:var(--mute);letter-spacing:.04em;text-transform:uppercase}
+.credits b{color:var(--text);font-weight:500}
+@media (prefers-reduced-motion:reduce){.title-card{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1 class="mark">Last <span>Light</span></h1>
+    <div class="sub">Animation test · <b>48 s</b> · real-time WebGL · 3D assets generated, rigged &amp; animated with <b>Meshy</b></div>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="c" aria-label="Last Light, a 48-second animated short"></canvas>
+    <div class="slate" id="slate"></div>
+    <div class="title-card" id="title"><div><h2>Last Light</h2><p>Reynisfjara · Iceland · 03:12</p></div></div>
+    <div class="title-card end-card" id="endcard"><div><h2>Last Light</h2><p>Every storm ends · keep the light on</p></div></div>
+    <div class="loading" id="loading">Loading the coast…</div>
+    <button class="play-big" id="bigplay" hidden aria-label="Play film with sound"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg></button>
+  </div>
+
+  <div class="transport">
+    <button id="play" aria-label="Play">Play</button>
+    <span class="tc" id="tc">00:00:00:00</span>
+    <div class="track" id="track" role="slider" aria-label="Timeline" aria-valuemin="0" aria-valuemax="48" tabindex="0"></div>
+    <div style="display:flex;gap:6px">
+      <button id="sound" aria-pressed="true">Sound</button>
+      <button id="modeBtn" aria-pressed="false">Breakdown</button>
+    </div>
+  </div>
+
+  <div class="cols">
+    <section>
+      <h3>Shot list <small>8 shots · 24 fps · 2.39:1</small></h3>
+      <ol class="shots" id="shots"></ol>
+    </section>
+    <section id="breakdown">
+      <h3>Asset breakdown <small id="bdState">open to inspect</small></h3>
+      <div class="assets" id="assetBtns"></div>
+      <div class="passes" id="passBtns"></div>
+      <dl id="stats"></dl>
+      <p class="hint" id="bdHint">Breakdown swaps the film for a turntable studio. Drag to orbit, scroll to zoom. Passes show the beauty render, clay, wireframe topology, normals and, for the keeper, the auto-rigged skeleton playing its walk cycle.</p>
+    </section>
+  </div>
+
+  <div class="credits">
+    <span>Story, layout, shaders, camera, lighting <b>hand-built in three.js</b></span>
+    <span>Models, textures, rig, walk / run / wave <b>Meshy</b></span>
+    <span>Score &amp; sound design <b>ElevenLabs</b></span>
+    <span>Ocean <b>5-band Gerstner</b> · Sky <b>ray-marched aurora</b></span>
+  </div>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<script type="module">
+import { Film, SHOTS, DURATION, FPS } from './main.js';
+const $ = id => document.getElementById(id);
+const film = new Film($('c'));
+const stage = $('stage');
+const fit = () => { const r = stage.getBoundingClientRect(); film.resize(Math.round(r.width), Math.round(r.height)); };
+new ResizeObserver(fit).observe(stage); fit();
+
+// ------- audio (starts only from a click)
+const audio = new Audio('./soundtrack.mp3'); audio.preload = 'auto';
+let soundOn = true;
+
+// ------- timeline UI
+const track = $('track');
+SHOTS.forEach(s => { const d = document.createElement('div'); d.className = 'seg'; d.style.left = (s.t0 / DURATION * 100) + '%'; d.style.width = ((s.t1 - s.t0) / DURATION * 100) + '%'; d.textContent = s.id.replace('SH', ''); d.dataset.id = s.id; track.appendChild(d); });
+[[10.2, ''], [20.4, ''], [31, 'lamp'], [35.5, 'lamp'], [40, 'aur']].forEach(([t, c]) => { const b = document.createElement('div'); b.className = 'beat ' + c; b.style.left = (t / DURATION * 100) + '%'; track.appendChild(b); });
+track.insertAdjacentHTML('beforeend', '<div class="bar"></div><div class="fill" id="fill"></div><div class="head" id="head"></div>');
+const list = $('shots');
+const fmt = t => { const f = Math.floor(t * FPS + 1e-6); return `00:00:${String(Math.floor(f / FPS)).padStart(2, '0')}:${String(f % FPS).padStart(2, '0')}`; };
+SHOTS.forEach(s => { const li = document.createElement('li'); li.dataset.id = s.id; li.innerHTML = `<span class="id">${s.id}</span><span class="tm">${fmt(s.t0).slice(6)}</span><span><span class="nm">${s.name}</span><span class="nt">${s.note}</span></span>`; li.onclick = () => { setMode('film'); seek(s.t0 + .01); }; list.appendChild(li); });
+
+let playing = false, last = performance.now();
+function seek(t) { film.setTime(t); if (playing && soundOn) audio.currentTime = t; ui(); }
+function ui() {
+  const t = film.T, p = t / DURATION * 100;
+  $('head').style.left = `calc(${p}% - 1px)`; $('fill').style.width = p + '%';
+  $('tc').textContent = fmt(t); track.setAttribute('aria-valuenow', t.toFixed(1));
+  const s = film.currentShot;
+  document.querySelectorAll('.seg,.shots li').forEach(el => el.classList.toggle('on', el.dataset.id === s.id));
+  $('slate').innerHTML = film.mode === 'film' ? `<em>${s.id}</em> ${s.name} &nbsp;·&nbsp; ${fmt(t)}` : `Studio · ${currentAsset} · <em>${film.pass}</em>`;
+  $('title').style.opacity = film.mode === 'film' ? (t > 1.2 && t < 5.2 ? 1 : 0) : 0;
+  $('endcard').style.opacity = film.mode === 'film' ? (t > 44.2 && t < 47.5 ? 1 : 0) : 0;
+}
+function setPlaying(v) {
+  playing = v; $('play').textContent = v ? 'Pause' : 'Play'; $('play').setAttribute('aria-label', v ? 'Pause' : 'Play');
+  $('bigplay').hidden = true;
+  if (v && film.T >= DURATION - .05) film.setTime(0);
+  if (v && soundOn) { audio.currentTime = film.T; audio.play().catch(() => {}); } else audio.pause();
+}
+$('play').onclick = () => { if (film.mode !== 'film') setMode('film'); setPlaying(!playing); };
+$('bigplay').onclick = () => setPlaying(true);
+$('sound').onclick = () => { soundOn = !soundOn; $('sound').setAttribute('aria-pressed', soundOn); if (!soundOn) audio.pause(); else if (playing) { audio.currentTime = film.T; audio.play().catch(() => {}); } };
+const scrub = e => { const r = track.getBoundingClientRect(); seek(Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * DURATION); };
+track.addEventListener('pointerdown', e => { track.setPointerCapture(e.pointerId); scrub(e); track.onpointermove = scrub; });
+track.addEventListener('pointerup', () => { track.onpointermove = null; });
+track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') seek(film.T + 1); if (e.key === 'ArrowLeft') seek(film.T - 1); if (e.key === ' ') { e.preventDefault(); setPlaying(!playing); } });
+
+// ------- breakdown
+const ASSETS = window.LL_ASSETS || {};
+let currentAsset = 'keeper';
+const PASSES = ['beauty', 'clay', 'wire', 'normals', 'skeleton'];
+function setMode(m) {
+  film.setMode(m); $('modeBtn').setAttribute('aria-pressed', m === 'breakdown'); $('modeBtn').textContent = m === 'breakdown' ? 'Back to film' : 'Breakdown';
+  if (m === 'breakdown') { setPlaying(false); showAsset(currentAsset); $('bdState').textContent = 'live in the viewer'; } else $('bdState').textContent = 'open to inspect';
+  ui();
+}
+$('modeBtn').onclick = () => setMode(film.mode === 'film' ? 'breakdown' : 'film');
+function showAsset(name) {
+  currentAsset = name; if (film.mode !== 'breakdown') setMode('breakdown');
+  const st = film.showAsset(name) || {}; const meta = ASSETS[name] || {};
+  document.querySelectorAll('#assetBtns button').forEach(b => b.setAttribute('aria-pressed', b.dataset.a === name));
+  document.querySelectorAll('#passBtns button').forEach(b => { b.hidden = b.dataset.p === 'skeleton' && name !== 'keeper'; });
+  if (film.pass === 'skeleton' && name !== 'keeper') setPass('beauty');
+  $('stats').innerHTML = `
+    <dt>Asset</dt><dd>${meta.label || name}</dd>
+    <dt>Pipeline</dt><dd><div class="pipe">${(meta.pipeline || []).map(s => `<span>${s}</span>`).join('<i>→</i>')}</div></dd>
+    <dt>Triangles</dt><dd>${(st.tris || 0).toLocaleString('en')}</dd>
+    <dt>Vertices</dt><dd>${(st.verts || 0).toLocaleString('en')}</dd>
+    <dt>Maps</dt><dd>${(st.maps || []).join(' · ') || '—'}</dd>
+    ${st.bones ? `<dt>Bones</dt><dd>${st.bones} · clips: walk, run, wave</dd>` : ''}
+    <dt>Prompt</dt><dd style="color:var(--mute)">${meta.prompt || ''}</dd>`;
+  ui();
+}
+function setPass(p) { film.applyPass(p); document.querySelectorAll('#passBtns button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p === p)); ui(); }
+[['keeper', 'Keeper'], ['lighthouse', 'Lighthouse'], ['boat', 'Boat']].forEach(([k, l]) => { const b = document.createElement('button'); b.dataset.a = k; b.textContent = l; b.onclick = () => showAsset(k); $('assetBtns').appendChild(b); });
+PASSES.forEach(p => { const b = document.createElement('button'); b.dataset.p = p; b.textContent = p; b.onclick = () => setPass(p); b.setAttribute('aria-pressed', p === 'beauty'); $('passBtns').appendChild(b); });
+
+// ------- loop
+film.setTime(14.2); ui();
+film.load('./').then(() => { $('loading').hidden = true; film.setTime(14.2); $('bigplay').hidden = false; ui(); });
+function loop(now) {
+  const dt = Math.min(.1, (now - last) / 1000); last = now;
+  if (playing && film.mode === 'film') {
+    let t = film.T + dt;
+    if (soundOn && !audio.paused && Math.abs(audio.currentTime - t) > .12) t = audio.currentTime; // audio is master clock
+    if (t >= DURATION) { t = DURATION; setPlaying(false); }
+    film.setTime(t); ui();
+  }
+  film.render(dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+addEventListener('keydown', e => { if (e.target === document.body && e.key === ' ') { e.preventDefault(); setPlaying(!playing); } });
+</script>
