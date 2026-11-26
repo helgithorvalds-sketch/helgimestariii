@@ -540,7 +540,7 @@ export function coverTex() {
     c.fillStyle = '#ffe7a1'; c.beginPath(); c.arc(250, 270, 36, 0, Math.PI * 2); c.fill();
     c.fillStyle = '#c2ecd6'; c.beginPath(); c.arc(330, 230, 26, 0, Math.PI * 2); c.fill();
     c.fillStyle = '#ffffff'; c.font = '800 150px PJS'; c.fillText('SVIF', 52, 500);
-    c.font = '700 30px PJS'; c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillText('Fyrir verðandi og', 60, 570); c.fillText('nýbakaða foreldra', 60, 610);
+    c.font = '700 32px PJS'; c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillText('Fyrir verðandi foreldra', 60, 575);
   });
   return coverTexCache;
 }
@@ -639,12 +639,18 @@ export function shop(color = '#7b4cf6', letter = 'A') {
   const door = mesh(rbox(0.2, 0.32, 0.03, 0.03), doorM, [0, 0.16, 0.305]);
   const w1 = mesh(rbox(0.17, 0.15, 0.03, 0.03), winM, [-0.26, 0.3, 0.305]), w2 = mesh(rbox(0.17, 0.15, 0.03, 0.03), winM, [0.26, 0.3, 0.305]);
   g.add(walls, roof, sign, awning, door, w1, w2, blob(1.25, 1.0, 0.32));
+  const lineM = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 });
+  const edges = new THREE.Group();
+  for (const m of [walls, roof]) { const l = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 40), lineM); l.position.copy(m.position); edges.add(l); }
+  const sgl = new THREE.LineSegments(new THREE.EdgesGeometry(sign.children[0].geometry, 40), lineM); sgl.position.copy(sign.position); edges.add(sgl);
+  edges.visible = false; g.add(edges);
   const tintMats = [roofM, awnM, dotM], base = tintMats.map((m) => m.color.clone()), gold = new THREE.Color('#ffc23c');
   const all = [wallM, roofM, awnM, signM, doorM, winM, dotM, logoM];
   g.userData = {
     parts: { walls, roof, sign, awning, door, w1, w2 },
     tint: (k) => { tintMats.forEach((m, i) => m.color.copy(base[i]).lerp(gold, k)); wallM.color.set('#fffaf3').lerp(new THREE.Color('#fff0c4'), k); },
     setOpacity: (o) => all.forEach((m) => { m.transparent = o < 0.999; m.opacity = o; m.depthWrite = o > 0.9; }),
+    setHollow: (k) => { all.forEach((m) => { m.transparent = k > 0.001; m.opacity = 1 - 0.9 * k; m.depthWrite = k < 0.1; }); edges.visible = k > 0.01; lineM.opacity = 0.95 * k; },
   };
   return g;
 }

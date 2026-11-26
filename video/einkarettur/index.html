@@ -30,7 +30,7 @@ em.gold{color:var(--gold)}
 .pill.gold{background:#ffc23c;color:var(--ink)}
 .pill.ink{background:var(--ink)}
 .pill.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 3px var(--ink)}
-.chapter{position:absolute;inset:0;display:none}
+.chapter{position:absolute;inset:0;display:none;z-index:20}
 .cin{position:absolute;left:150px;top:390px}
 .ch-title{font-weight:800;font-size:132px;line-height:1.02;letter-spacing:-.04em;margin-top:14px}
 .ch-num{position:absolute;right:120px;top:60px;font-weight:800;font-size:820px;line-height:.82;letter-spacing:-.06em}
@@ -77,7 +77,7 @@ em.gold{color:var(--gold)}
 .dealchip.v{background:var(--violet);box-shadow:0 10px 26px rgba(107,61,245,.3)}
 .dealchip.g{background:#ffc23c;color:var(--ink);box-shadow:0 10px 26px rgba(232,161,15,.3)}
 .dealchip.m{background:#20bf85;box-shadow:0 10px 26px rgba(32,191,133,.3)}
-.fade{position:absolute;inset:0;background:var(--c1);opacity:0;pointer-events:none}
+.fade{position:absolute;inset:0;z-index:30;background:var(--c1);opacity:0;pointer-events:none}
 </style>
 <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
 </head>
