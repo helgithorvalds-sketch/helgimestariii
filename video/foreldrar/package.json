@@ -1,0 +1,17 @@
+{
+  "name": "svif-foreldrar-video",
+  "private": true,
+  "type": "module",
+  "description": "SVIF · Fyrir nýbakaða foreldra – 3D explainer video (three.js rendered frame by frame in headless Chromium)",
+  "scripts": {
+    "still": "node render.mjs --still",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@fontsource/archivo-black": "^5.1.0",
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/inter-tight": "^5.1.0",
+    "lucide-static": "^0.460.0",
+    "three": "^0.169.0"
+  }
+}
