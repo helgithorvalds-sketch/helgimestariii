@@ -140,15 +140,18 @@ K, CL, HC, HO, CR = kick(), clap(), hat(), hat(True), crash()
 pad = np.zeros(N); pl = np.zeros(N); bass = np.zeros(N); drums = np.zeros(N)
 kicks = []
 NBARS = int(np.ceil(DUR / BAR))
-CHAPTERS = [8, 18, 30, 50]
+MU = ev.get("music", {"drumsFrom": 4, "cards": [8, 18, 30, 50], "brk": [50, 51], "light": [52, 72], "outro": 78})
+CARDS = set()
+for c in MU["cards"]:
+    CARDS.update((c, c + 1))
 
 
 def section(bar):
-    if bar < 4: return "intro"
-    if bar >= 78: return "outro"
-    if bar in (50, 51): return "break"
-    if 52 <= bar < 72: return "light"
-    if bar in (8, 9, 18, 19, 30, 31): return "card"
+    if bar < MU["drumsFrom"]: return "intro"
+    if bar >= MU["outro"]: return "outro"
+    if bar in MU["brk"]: return "break"
+    if MU["light"][0] <= bar < MU["light"][1]: return "light"
+    if bar in CARDS: return "card"
     return "full"
 
 
@@ -189,13 +192,13 @@ for bar in range(NBARS + 1):
         for b in range(4):
             add(drums, HC, t0 + b * BEAT + BEAT / 2, 0.13)
         add(drums, CL, t0 + 3 * BEAT, 0.16)
-    if bar in (4, 10, 20, 32, 52, 72):
+    if bar == MU['drumsFrom'] or (bar - 2) in MU['cards'] or bar == MU['light'][1]:
         add(drums, CR, t0, 0.22)
 
 # intro riser into bar 4
 rt = T(BAR)
 riser = tilt(rng.standard_normal(len(rt)), 500, 9000) * (rt / BAR) ** 2.2
-add(drums, riser / np.max(np.abs(riser)), 3 * BAR, 0.12)
+add(drums, riser / np.max(np.abs(riser)), (MU['drumsFrom'] - 1) * BAR, 0.12)
 
 # sidechain on music
 sc = np.ones(N)

@@ -1,5 +1,5 @@
 import { THREE, W, H, anims, sfxEvents, updatePins } from './lib.js';
-import { build, END_BAR } from './story.js';
+import { build, END_BAR, MUSIC } from './story.js';
 import { B } from './lib.js';
 
 await Promise.all([600, 700, 800].map((w) => document.fonts.load(`${w} 40px PJS`, 'Þaðáéíóúýæö')));
@@ -18,5 +18,6 @@ window.renderAt = (t) => {
   renderer.render(scene, camera);
 };
 window.getEvents = () => sfxEvents;
+window.MUSIC = MUSIC;
 window.renderAt(0);
 window.ready = true;

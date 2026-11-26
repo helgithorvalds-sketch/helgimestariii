@@ -133,12 +133,19 @@ export function mat(color, kind = 'soft', extra = {}) {
 let shadowTex = null;
 export function blob(w = 1, d = 1, opacity = 0.32) {
   if (!shadowTex) {
-    const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
-    const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = gr; g.fillRect(0, 0, 128, 128); shadowTex = new THREE.CanvasTexture(c);
+    const S = 256, c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+    const img = g.createImageData(S, S); const r = rng(5);
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+      const dx = (x + 0.5) / S * 2 - 1, dy = (y + 0.5) / S * 2 - 1, rr = Math.sqrt(dx * dx + dy * dy);
+      // soft gaussian falloff that reaches exactly zero at the edge, with dithering against banding
+      const v = rr >= 1 ? 0 : Math.exp(-rr * rr * 3.2) * Math.pow(1 - rr * rr, 1.5);
+      const a = clamp(v * 255 + (r() - 0.5) * 2.2, 0, 255);
+      const i = (y * S + x) * 4; img.data[i] = img.data[i + 1] = img.data[i + 2] = a; img.data[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0); shadowTex = new THREE.CanvasTexture(c);
+    shadowTex.generateMipmaps = true; shadowTex.minFilter = THREE.LinearMipmapLinearFilter; shadowTex.anisotropy = 4;
   }
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ color: 0x3b2470, alphaMap: shadowTex, transparent: true, opacity, depthWrite: false }));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ color: 0x4a2f86, alphaMap: shadowTex, transparent: true, opacity: opacity * 1.15, depthWrite: false }));
   m.rotation.x = -Math.PI / 2; m.position.y = 0.003; m.renderOrder = -1;
   return m;
 }
@@ -169,19 +176,20 @@ export const C = {
 // ---------- 3D factories (origin at floor, facing +z) ----------
 export function tile(color, size = 1.6, h = 0.16, d = size) {
   const g = group(mesh(rbox(size, h, d, 0.08), mat(color, 'soft'), [0, h / 2, 0]));
-  const sh = blob(size * 1.3, d * 1.3, 0.22); sh.position.set(0.06, 0.002, 0.08); g.add(sh);
+  const sh = blob(size * 1.6, d * 1.6, 0.34); sh.position.set(0.06, 0.002, 0.08); g.add(sh);
   g.userData.top = h; return g;
 }
 
 export function person(color, { skin = '#f5cfb2', hair = '#3b2a4f', scale = 1, ghost = false } = {}) {
   const ex = ghost ? { transparent: true, opacity: 0.32, depthWrite: false } : {};
+  const bodyMat = new THREE.MeshMatcapMaterial({ color: new THREE.Color(color), matcap: mat(color, 'gloss').matcap, ...ex });
   const body = group(
-    mesh(new THREE.CapsuleGeometry(0.2, 0.3, 8, 20), mat(color, 'gloss', ex), [0, 0.35, 0]),
+    mesh(new THREE.CapsuleGeometry(0.2, 0.3, 8, 20), bodyMat, [0, 0.35, 0]),
     mesh(sph(0.165), mat(ghost ? color : skin, 'soft', ex), [0, 0.86, 0]),
     mesh(new THREE.SphereGeometry(0.172, 28, 14, 0, Math.PI * 2, 0, Math.PI * 0.52), mat(ghost ? color : hair, 'gloss', ex), [0, 0.875, -0.012], [-0.25, 0, 0]),
   );
   const g = group(blob(0.75, 0.75, ghost ? 0.12 : 0.35), body);
-  g.userData.body = body; g.scale.setScalar(scale); g.userData.baseScale = g.scale.clone();
+  g.userData.body = body; g.userData.bodyMat = bodyMat; g.scale.setScalar(scale); g.userData.baseScale = g.scale.clone();
   return g;
 }
 
@@ -438,6 +446,175 @@ export function toy(kind, color) {
     g.add(mesh(new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSize: 0.02, bevelThickness: 0.02, bevelSegments: 2 }), m, [0, 0.26, -0.05])); }
   g.add(blob(0.7, 0.7, 0.3));
   return g;
+}
+
+
+/** Baby onesie (clothing). */
+export function onesie(color = '#7ad3ff') {
+  const s = new THREE.Shape();
+  const P = [[-0.12, 0.42], [-0.3, 0.36], [-0.44, 0.2], [-0.34, 0.1], [-0.22, 0.18], [-0.22, -0.18], [-0.1, -0.36], [0.1, -0.36], [0.22, -0.18], [0.22, 0.18], [0.34, 0.1], [0.44, 0.2], [0.3, 0.36], [0.12, 0.42]];
+  s.moveTo(...P[0]); P.slice(1).forEach((p) => s.lineTo(...p)); s.quadraticCurveTo(0, 0.3, -0.12, 0.42);
+  const geo = new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSize: 0.035, bevelThickness: 0.035, bevelSegments: 4, curveSegments: 12 });
+  const g = new THREE.Group();
+  const body = mesh(geo, mat(color, 'gloss'), [0, 0.5, -0.04]); g.add(body);
+  for (let i = 0; i < 3; i++) g.add(mesh(sph(0.028, 10, 8), mat('#ffffff', 'gloss'), [0, 0.6 - i * 0.12, 0.085]));
+  g.add(mesh(new THREE.TorusGeometry(0.11, 0.022, 8, 24, Math.PI), mat('#ffffff', 'gloss'), [0, 0.9, 0.03], [0, 0, Math.PI]));
+  g.add(blob(0.95, 0.6, 0.28));
+  return g;
+}
+
+/** Baby food jar with spoon and an apple (food). */
+export function foodJar() {
+  const g = new THREE.Group();
+  g.add(mesh(cyl(0.2, 0.2, 0.36, 32), mat('#ffb36b', 'gloss'), [0, 0.18, 0]));
+  g.add(mesh(cyl(0.205, 0.205, 0.16, 32), mat('#ffffff', 'soft'), [0, 0.17, 0]));
+  g.add(mesh(cyl(0.215, 0.215, 0.08, 32), mat('#20bf85', 'gloss'), [0, 0.4, 0]));
+  g.add(mesh(sph(0.03, 10, 8), mat('#ff5a6e', 'gloss'), [0, 0.17, 0.205]));
+  const apple = group(mesh(sph(0.16, 24, 16), mat('#ff5a6e', 'gloss'), [0, 0.16, 0], [0, 0, 0], [1, 0.92, 1]),
+    mesh(cyl(0.012, 0.012, 0.08, 6), mat('#7a4a2a', 'soft'), [0, 0.33, 0]), mesh(sph(0.05, 10, 6), mat('#20bf85', 'gloss'), [0.05, 0.34, 0], [0, 0, 0.6], [1.4, 0.4, 0.8]));
+  apple.position.set(0.38, 0, 0.12); g.add(apple);
+  g.add(blob(1.0, 0.7, 0.3));
+  return g;
+}
+
+/** Baby monitor (electronics). */
+export function monitor() {
+  const g = new THREE.Group();
+  g.add(mesh(rbox(0.62, 0.46, 0.14, 0.07), mat('#ffffff', 'gloss'), [0, 0.3, 0]));
+  g.add(mesh(rbox(0.46, 0.32, 0.02, 0.04), mat('#3d3358', 'gloss'), [0, 0.31, 0.07]));
+  g.add(mesh(sph(0.06, 14, 10), mat('#ffd23f', 'gloss'), [0, 0.32, 0.08], [0, 0, 0], [1, 1, 0.3]));
+  g.add(mesh(cyl(0.02, 0.02, 0.24, 8), mat('#3d3358', 'gloss'), [0.22, 0.62, 0]));
+  g.add(mesh(sph(0.035, 10, 8), mat('#ff5a6e', 'gloss'), [0.22, 0.75, 0]));
+  g.add(mesh(rbox(0.36, 0.08, 0.2, 0.03), mat('#cbb8ff', 'gloss'), [0, 0.04, 0]));
+  g.add(blob(0.9, 0.6, 0.3));
+  return g;
+}
+
+/** Teddy bear (toys). */
+export function teddy(color = '#e9a66b') {
+  const g = new THREE.Group(); const m = mat(color, 'soft'), l = mat('#ffe1c2', 'soft');
+  g.add(mesh(sph(0.2, 24, 16), m, [0, 0.22, 0], [0, 0, 0], [1, 1.1, 0.9]));
+  g.add(mesh(sph(0.1, 16, 10), l, [0, 0.2, 0.15], [0, 0, 0], [1, 1.1, 0.5]));
+  g.add(mesh(sph(0.16, 24, 16), m, [0, 0.52, 0]));
+  g.add(mesh(sph(0.065, 14, 10), l, [0, 0.49, 0.14]));
+  g.add(mesh(sph(0.02, 8, 6), mat('#1c1035', 'gloss'), [0, 0.51, 0.2]));
+  for (const x of [-0.06, 0.06]) g.add(mesh(sph(0.018, 8, 6), mat('#1c1035', 'gloss'), [x, 0.57, 0.14]));
+  for (const x of [-0.12, 0.12]) { g.add(mesh(sph(0.06, 12, 8), m, [x, 0.66, 0])); g.add(mesh(sph(0.07, 12, 8), m, [x * 1.5, 0.08, 0.1])); g.add(mesh(sph(0.06, 12, 8), m, [x * 1.9, 0.3, 0.02])); }
+  g.add(blob(0.8, 0.7, 0.3));
+  return g;
+}
+
+/** First-aid box (health). */
+export function firstAid() {
+  const g = new THREE.Group();
+  g.add(mesh(rbox(0.62, 0.42, 0.36, 0.08), mat('#ffffff', 'gloss'), [0, 0.21, 0]));
+  g.add(mesh(rbox(0.26, 0.07, 0.03, 0.02), mat('#ff5a6e', 'gloss'), [0, 0.23, 0.18]));
+  g.add(mesh(rbox(0.07, 0.26, 0.03, 0.02), mat('#ff5a6e', 'gloss'), [0, 0.23, 0.18]));
+  g.add(mesh(new THREE.TorusGeometry(0.09, 0.025, 8, 20, Math.PI), mat('#ff5a6e', 'gloss'), [0, 0.42, 0]));
+  g.add(blob(0.9, 0.7, 0.3));
+  return g;
+}
+
+/** Rain boot (outdoor wear). */
+export function boot(color = '#ffd23f') {
+  const g = new THREE.Group(); const m = mat(color, 'gloss');
+  g.add(mesh(rbox(0.22, 0.46, 0.24, 0.08), m, [0, 0.27, -0.04]));
+  g.add(mesh(rbox(0.24, 0.16, 0.42, 0.07), m, [0, 0.08, 0.05]));
+  g.add(mesh(rbox(0.25, 0.05, 0.43, 0.02), mat('#3d3358', 'gloss'), [0, 0.02, 0.05]));
+  const b2 = g.clone(); b2.position.set(0.3, 0, 0.08); b2.rotation.y = -0.3; g.add(b2);
+  g.add(blob(0.9, 0.8, 0.3));
+  return g;
+}
+
+/** Cover texture shared by the books. */
+let coverTexCache = null;
+export function coverTex() {
+  if (coverTexCache) return coverTexCache;
+  coverTexCache = canvasTex(560, 760, (c, W2, H2) => {
+    const gr = c.createLinearGradient(0, 0, W2, H2); gr.addColorStop(0, '#7b4cf6'); gr.addColorStop(1, '#5a2fe0');
+    c.fillStyle = gr; c.fillRect(0, 0, W2, H2);
+    c.fillStyle = 'rgba(255,255,255,0.12)'; c.beginPath(); c.arc(W2 - 60, 120, 170, 0, Math.PI * 2); c.fill();
+    c.beginPath(); c.arc(80, H2 - 70, 120, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#ffc3d3'; c.beginPath(); c.arc(140, 250, 52, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#ffe7a1'; c.beginPath(); c.arc(250, 270, 36, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#c2ecd6'; c.beginPath(); c.arc(330, 230, 26, 0, Math.PI * 2); c.fill();
+    c.fillStyle = 'rgba(255,255,255,0.75)'; c.font = '800 26px PJS'; c.fillText('SVIF', 60, 92);
+    c.fillStyle = '#ffffff'; c.font = '800 78px PJS'; c.fillText('Foreldra', 56, 430); c.fillText('bók', 56, 510);
+    c.font = '700 28px PJS'; c.fillStyle = 'rgba(255,255,255,0.85)'; c.fillText('Fyrir nýbakaða foreldra', 60, 580);
+  });
+  return coverTexCache;
+}
+
+/**
+ * Book that really opens on a hinge. Origin at the spine on the floor; the right half lies on x in [0,w].
+ * userData.setOpen(f): 0 = closed (left half on top), 1 = open flat. The left half rotates about the spine's top edge,
+ * so it can never pass through the pages.
+ */
+export function book({ w = 1.4, d = 1.9, inside = null } = {}) {
+  const tc = 0.035, tp = 0.15, Hh = tc + tp;
+  const g = new THREE.Group();
+  const coverM = mat('#6b3df5', 'gloss'), pageM = mat('#fffaf2', 'soft');
+  g.add(mesh(rbox(w, tc, d, 0.015), coverM, [w / 2, tc / 2, 0]));
+  g.add(mesh(rbox(w - 0.05, tp, d - 0.06, 0.02), pageM, [w / 2 - 0.01, tc + tp / 2, 0]));
+  const rightTex = inside || canvasTex(512, 700, (c, W2, H2) => {
+    c.fillStyle = '#fffdf8'; c.fillRect(0, 0, W2, H2);
+    const cols = [C.pink, C.butter, C.mint, C.sky, C.peach, C.lilac];
+    for (let r = 0; r < 4; r++) for (let k = 0; k < 3; k++) { c.fillStyle = cols[(r * 3 + k) % 6]; roundRect(c, 30 + k * 160, 40 + r * 165, 140, 145, 16); c.fill(); }
+  });
+  g.add(mesh(new THREE.PlaneGeometry(w - 0.12, d - 0.14), mat('#ffffff', 'soft', { map: rightTex }), [w / 2 - 0.01, Hh + 0.003, 0], [-Math.PI / 2, 0, 0]));
+  const L = new THREE.Group(); L.position.set(0, Hh, 0); g.add(L);
+  L.add(mesh(rbox(w - 0.05, tp, d - 0.06, 0.02), pageM, [w / 2 - 0.01, tp / 2, 0]));
+  L.add(mesh(rbox(w, tc, d, 0.015), coverM, [w / 2, tp + tc / 2, 0]));
+  L.add(mesh(new THREE.PlaneGeometry(w - 0.02, d - 0.02), mat('#ffffff', 'soft', { map: coverTex() }), [w / 2, tp + tc + 0.003, 0], [-Math.PI / 2, 0, 0]));
+  const leftTex = canvasTex(512, 700, (c, W2, H2) => {
+    c.fillStyle = '#fffdf8'; c.fillRect(0, 0, W2, H2);
+    c.fillStyle = '#6b3df5'; c.font = '800 46px PJS'; c.fillText('Foreldrabók', 40, 90);
+    const items = ['Föt', 'Matur', 'Raftæki', 'Barnavagnar', 'Svefn', 'Leikföng', 'Heilsa', 'Myndatökur'];
+    c.font = '700 34px PJS';
+    items.forEach((t, i) => { c.fillStyle = [C.pink, C.butter, C.mint, C.sky, C.peach, C.lilac][i % 6]; roundRect(c, 40, 140 + i * 66, 34, 34, 9); c.fill(); c.fillStyle = '#1c1035'; c.fillText(t, 92, 168 + i * 66); });
+  });
+  leftTex.center.set(0.5, 0.5); leftTex.rotation = Math.PI;
+  L.add(mesh(new THREE.PlaneGeometry(w - 0.12, d - 0.14), mat('#ffffff', 'soft', { map: leftTex }), [w / 2 - 0.01, -0.003, 0], [Math.PI / 2, 0, 0]));
+  g.add(mesh(cyl(0.03, 0.03, d - 0.01, 12), mat('#5a2fe0', 'gloss'), [0, Hh, 0], [Math.PI / 2, 0, 0]));
+  const sh = blob(w * 2.5, d * 1.35, 0.22); sh.position.set(0, -0.002, 0.06); g.add(sh);
+  g.userData = { L, H: Hh, w, d, shadow: sh, setOpen: (f) => { L.rotation.z = clamp(f) * Math.PI; sh.scale.x = 0.55 + 0.45 * clamp(f); sh.position.x = (1 - clamp(f)) * w * 0.5; } };
+  g.userData.setOpen(0);
+  return g;
+}
+
+/** Small closed book for "sending" animations. */
+export function miniBook() {
+  const g = new THREE.Group();
+  g.add(mesh(rbox(1.4, 0.32, 1.9, 0.04), mat('#6b3df5', 'gloss'), [0, 0.16, 0]));
+  g.add(mesh(rbox(1.36, 0.26, 1.84, 0.02), mat('#fffaf2', 'soft'), [0.03, 0.16, 0]));
+  g.add(mesh(rbox(1.4, 0.04, 1.9, 0.015), mat('#6b3df5', 'gloss'), [0, 0.3, 0]));
+  g.add(mesh(new THREE.PlaneGeometry(1.38, 1.88), mat('#ffffff', 'soft', { map: coverTex() }), [0, 0.323, 0], [-Math.PI / 2, 0, 0]));
+  return g;
+}
+
+/** Smooth arc line that draws itself: userData.setDraw(f). */
+export function arcTube(a, b, { h = 0.6, r = 0.03, color = '#ffffff' } = {}) {
+  const A = new THREE.Vector3(...a), Bv = new THREE.Vector3(...b);
+  const mid = A.clone().lerp(Bv, 0.5); mid.y += h * 2;
+  const curve = new THREE.QuadraticBezierCurve3(A, mid, Bv);
+  const geo = new THREE.TubeGeometry(curve, 64, r, 10, false);
+  const m = new THREE.MeshMatcapMaterial({ color: new THREE.Color(color), matcap: mat(color, 'gloss').matcap });
+  const tube = mesh(geo, m); const end = mesh(sph(r * 2.2, 14, 10), m, [Bv.x, Bv.y, Bv.z]);
+  const g = group(tube, end); const total = geo.index.count;
+  g.userData.setDraw = (f) => { f = clamp(f); geo.setDrawRange(0, Math.floor((total * f) / 6) * 6); tube.visible = f > 0.001; end.visible = f > 0.98; };
+  g.userData.setDraw(0);
+  return g;
+}
+
+/** Dotted arc between two points; returns {group, dots}. */
+export function dotArc(a, b, { n = 9, h = 0.6, r = 0.045, color = '#ffffff' } = {}) {
+  const g = new THREE.Group(); const dots = [];
+  const A = new THREE.Vector3(...a), Bv = new THREE.Vector3(...b);
+  for (let i = 1; i < n; i++) {
+    const k = i / n; const p = A.clone().lerp(Bv, k); p.y += Math.sin(Math.PI * k) * h;
+    const d = mesh(sph(r, 12, 8), mat(color, 'gloss'), [p.x, p.y, p.z]); g.add(d); dots.push(d);
+  }
+  return { group: g, dots };
 }
 
 // ---------- DOM UI ----------
