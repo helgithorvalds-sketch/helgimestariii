@@ -17,7 +17,8 @@ import type { ForeldrarFlokkur } from "@/data/svifForeldrarFlokkar";
  * Hver röð í `companies` (lead_source = "foreldrabok") er eitt fyrirtæki í einum flokki.
  * Sama fyrirtæki getur verið í mörgum flokkum; hringingar og glósur fylgja fyrirtækinu í alla flokka þess.
  * industry = „G7 · Heilsa barna“, category = „G7-09 · Barnatannlæknar“, address = svæði,
- * pitch = lýsing (lína 1) og svo línur eins og „Afsláttur: …“, „Athugasemd: …“, „Tegund: …“, „Staðfest: já“, „Lykill: …“.
+ * pitch = lýsing (lína 1) og svo línur eins og „Afsláttur: …“, „Athugasemd: …“, „Tegund: …“, „Staðfest: já“,
+ * „Sími 2: …“, „Sími frá: …“, „Um númer: …“, „Eigandi frá: …“ og „Lykill: …“ (lykill fyrirtækisins, eins í öllum flokkum þess).
  * Upplýsingar um hvern flokk (vandamál foreldra, stig, markaðsyfirlit) eru í src/data/svifForeldrarFlokkar.ts.
  */
 const LEAD_SOURCE = "foreldrabok";
@@ -46,6 +47,7 @@ interface Info {
   verified: boolean;
   phone2: string;
   phoneSrc: string;
+  phoneNote: string;
   ownerSrc: string;
   key: string;
 }
@@ -69,10 +71,10 @@ const fold = (s: string) =>
 const NORTH = /akureyri|norðurland|nordurland|húsavík|husavik|siglufj|dalvík|dalvik|ólafsfj|olafsfj/i;
 
 function parsePitch(p: string | null, fallbackKey: string): Info {
-  const info: Info = { desc: "", offer: "", note: "", type: "", verified: false, phone2: "", phoneSrc: "", ownerSrc: "", key: fallbackKey };
+  const info: Info = { desc: "", offer: "", note: "", type: "", verified: false, phone2: "", phoneSrc: "", phoneNote: "", ownerSrc: "", key: fallbackKey };
   (p || "").split("\n").forEach((line, i) => {
     if (i === 0) { info.desc = line.trim(); return; }
-    const m = line.match(/^(Afsláttur|Athugasemd|Tegund|Staðfest|Sími 2|Sími frá|Eigandi frá|Lykill):\s*(.*)$/);
+    const m = line.match(/^(Afsláttur|Athugasemd|Tegund|Staðfest|Sími 2|Sími frá|Um númer|Eigandi frá|Lykill):\s*(.*)$/);
     if (!m) return;
     const v = m[2].trim();
     if (m[1] === "Afsláttur") info.offer = v;
@@ -81,6 +83,7 @@ function parsePitch(p: string | null, fallbackKey: string): Info {
     else if (m[1] === "Staðfest") info.verified = v.toLowerCase().startsWith("já");
     else if (m[1] === "Sími 2") info.phone2 = v;
     else if (m[1] === "Sími frá") info.phoneSrc = v;
+    else if (m[1] === "Um númer") info.phoneNote = v;
     else if (m[1] === "Eigandi frá") info.ownerSrc = v;
     else if (m[1] === "Lykill" && v) info.key = v;
   });
@@ -502,6 +505,11 @@ export default function SvifForeldrar() {
                                       )}
                                     </div>
 
+                                    {i.phoneNote && (
+                                      <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                                        <Phone className="w-3.5 h-3.5 mt-0.5 shrink-0" /> <span><b className="font-semibold">Um númer:</b> {i.phoneNote}</span>
+                                      </p>
+                                    )}
                                     {i.desc && <p className="text-sm">{i.desc}</p>}
                                     {i.offer && (
                                       <p className="text-sm rounded-lg bg-primary/10 text-primary px-2.5 py-1.5 inline-flex items-start gap-1.5">
