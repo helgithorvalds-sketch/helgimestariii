@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  ArrowLeft, Search, Phone, ChevronDown, ChevronRight, StickyNote, Baby, Check, ExternalLink, User, MapPin, Gift, BadgeCheck, CircleDashed, Info,
+  ArrowLeft, Search, Phone, ChevronDown, ChevronRight, StickyNote, Baby, Check, ExternalLink, User, MapPin, Gift, BadgeCheck, CircleDashed, Info, Mail, Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,8 @@ import type { ForeldrarFlokkur } from "@/data/svifForeldrarFlokkar";
  * Sama fyrirtæki getur verið í mörgum flokkum; hringingar og glósur fylgja fyrirtækinu í alla flokka þess.
  * industry = „G7 · Heilsa barna“, category = „G7-09 · Barnatannlæknar“, address = svæði,
  * pitch = lýsing (lína 1) og svo línur eins og „Afsláttur: …“, „Athugasemd: …“, „Tegund: …“, „Staðfest: já“,
- * „Sími 2: …“, „Sími frá: …“, „Um númer: …“, „Eigandi frá: …“ og „Lykill: …“ (lykill fyrirtækisins, eins í öllum flokkum þess).
+ * „Sími 2: …“, „Sími frá: …“, „Um númer: …“, „Netfang 2: …“, „Um netfang: …“, „Eigandi frá: …“ og „Lykill: …“
+ * (lykill fyrirtækisins, eins í öllum flokkum þess). Fyrsta netfangið er í `email` dálknum.
  * Upplýsingar um hvern flokk (vandamál foreldra, stig, markaðsyfirlit) eru í src/data/svifForeldrarFlokkar.ts.
  */
 const LEAD_SOURCE = "foreldrabok";
@@ -28,6 +29,7 @@ interface Row {
   name: string;
   owner: string;
   phone: string | null;
+  email: string | null;
   website_url: string | null;
   ja_url: string | null;
   industry: string | null;
@@ -48,6 +50,8 @@ interface Info {
   phone2: string;
   phoneSrc: string;
   phoneNote: string;
+  email2: string;
+  emailNote: string;
   ownerSrc: string;
   key: string;
 }
@@ -71,10 +75,10 @@ const fold = (s: string) =>
 const NORTH = /akureyri|norðurland|nordurland|húsavík|husavik|siglufj|dalvík|dalvik|ólafsfj|olafsfj/i;
 
 function parsePitch(p: string | null, fallbackKey: string): Info {
-  const info: Info = { desc: "", offer: "", note: "", type: "", verified: false, phone2: "", phoneSrc: "", phoneNote: "", ownerSrc: "", key: fallbackKey };
+  const info: Info = { desc: "", offer: "", note: "", type: "", verified: false, phone2: "", phoneSrc: "", phoneNote: "", email2: "", emailNote: "", ownerSrc: "", key: fallbackKey };
   (p || "").split("\n").forEach((line, i) => {
     if (i === 0) { info.desc = line.trim(); return; }
-    const m = line.match(/^(Afsláttur|Athugasemd|Tegund|Staðfest|Sími 2|Sími frá|Um númer|Eigandi frá|Lykill):\s*(.*)$/);
+    const m = line.match(/^(Afsláttur|Athugasemd|Tegund|Staðfest|Sími 2|Sími frá|Um númer|Netfang 2|Um netfang|Eigandi frá|Lykill):\s*(.*)$/);
     if (!m) return;
     const v = m[2].trim();
     if (m[1] === "Afsláttur") info.offer = v;
@@ -84,6 +88,8 @@ function parsePitch(p: string | null, fallbackKey: string): Info {
     else if (m[1] === "Sími 2") info.phone2 = v;
     else if (m[1] === "Sími frá") info.phoneSrc = v;
     else if (m[1] === "Um númer") info.phoneNote = v;
+    else if (m[1] === "Netfang 2") info.email2 = v;
+    else if (m[1] === "Um netfang") info.emailNote = v;
     else if (m[1] === "Eigandi frá") info.ownerSrc = v;
     else if (m[1] === "Lykill" && v) info.key = v;
   });
@@ -108,6 +114,7 @@ export default function SvifForeldrar() {
   const [sector, setSector] = useState("");
   const [stig, setStig] = useState("");
   const [onlyPhone, setOnlyPhone] = useState(false);
+  const [onlyEmail, setOnlyEmail] = useState(false);
   const [onlyNorth, setOnlyNorth] = useState(false);
   const [onlyOffer, setOnlyOffer] = useState(false);
   const [onlyVerified, setOnlyVerified] = useState(false);
@@ -122,7 +129,7 @@ export default function SvifForeldrar() {
     for (let from = 0; ; from += 1000) {
       const { data, error } = await supabase
         .from("companies")
-        .select("id,name,owner,phone,website_url,ja_url,industry,category,address,pitch,notes,svif_valid,last_call_outcome")
+        .select("id,name,owner,phone,email,website_url,ja_url,industry,category,address,pitch,notes,svif_valid,last_call_outcome")
         .eq("lead_source", LEAD_SOURCE)
         .order("category", { ascending: true })
         .order("name", { ascending: true })
@@ -168,7 +175,7 @@ export default function SvifForeldrar() {
   const siblingIds = (r: Row) => idsByKey.get(infoOf(r).key) || [r.id];
   const flokkurOf = (category: string | null) => flokkar[splitLabel(category).id] as ForeldrarFlokkur | undefined;
 
-  const hasFilter = !!search.trim() || !!sector || !!stig || onlyPhone || onlyNorth || onlyOffer || onlyVerified || onlyChosen;
+  const hasFilter = !!search.trim() || !!sector || !!stig || onlyPhone || onlyEmail || onlyNorth || onlyOffer || onlyVerified || onlyChosen;
 
   const filtered = useMemo(() => {
     const q = fold(search).trim().split(/\s+/).filter(Boolean);
@@ -178,17 +185,18 @@ export default function SvifForeldrar() {
       if (sector && r.industry !== sector) return false;
       if (stig && f?.stig !== stig) return false;
       if (onlyPhone && !r.phone) return false;
+      if (onlyEmail && !r.email) return false;
       if (onlyNorth && !NORTH.test(r.address || "")) return false;
       if (onlyOffer && !i.offer) return false;
       if (onlyVerified && !i.verified) return false;
       if (onlyChosen && !r.svif_valid) return false;
       if (q.length) {
-        const hay = fold([r.name, r.owner, r.phone, r.category, r.industry, f?.vandamal, i.desc, i.offer, i.note, r.address, r.notes].join(" "));
+        const hay = fold([r.name, r.owner, r.phone, r.email, i.email2, r.category, r.industry, f?.vandamal, i.desc, i.offer, i.note, r.address, r.notes].join(" "));
         return q.every((t) => hay.includes(t));
       }
       return true;
     });
-  }, [rows, infoById, flokkar, search, sector, stig, onlyPhone, onlyNorth, onlyOffer, onlyVerified, onlyChosen]);
+  }, [rows, infoById, flokkar, search, sector, stig, onlyPhone, onlyEmail, onlyNorth, onlyOffer, onlyVerified, onlyChosen]);
 
   const sectors = useMemo(
     () => [...new Set(rows.map((r) => r.industry || "Óflokkað"))].sort(natural),
@@ -222,6 +230,11 @@ export default function SvifForeldrar() {
   const autoOpen = hasFilter && catCount <= 40;
 
   const companies = idsByKey.size;
+  const withEmail = useMemo(() => {
+    const keys = new Set<string>();
+    rows.forEach((r) => { if (r.email) keys.add((infoById.get(r.id) as Info).key); });
+    return keys.size;
+  }, [rows, infoById]);
   const chosenCount = rows.filter((r) => r.svif_valid).length;
   const calledCount = useMemo(
     () => new Set(rows.filter((r) => r.last_call_outcome).map((r) => infoById.get(r.id)?.key)).size,
@@ -283,11 +296,33 @@ export default function SvifForeldrar() {
   };
 
   const clearFilters = () => {
-    setSearch(""); setSector(""); setStig(""); setOnlyPhone(false); setOnlyNorth(false); setOnlyOffer(false); setOnlyVerified(false); setOnlyChosen(false);
+    setSearch(""); setSector(""); setStig(""); setOnlyPhone(false); setOnlyEmail(false); setOnlyNorth(false); setOnlyOffer(false); setOnlyVerified(false); setOnlyChosen(false);
+  };
+
+  /** Netföng fyrirtækjanna sem eru í núverandi síu, hvert netfang einu sinni (sama fyrirtæki er oft í mörgum flokkum). */
+  const emailsInView = useMemo(() => {
+    const seen = new Set<string>();
+    for (const r of filtered) {
+      for (const e of [r.email, infoById.get(r.id)?.email2]) {
+        const v = (e || "").trim().toLowerCase();
+        if (v) seen.add(v);
+      }
+    }
+    return [...seen];
+  }, [filtered, infoById]);
+
+  const copyText = async (text: string, okMsg: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(okMsg);
+    } catch {
+      toast.error("Tókst ekki að afrita");
+    }
   };
 
   const toggles: { label: string; value: boolean; set: (v: boolean) => void }[] = [
     { label: "Með númeri", value: onlyPhone, set: setOnlyPhone },
+    { label: "Með netfangi", value: onlyEmail, set: setOnlyEmail },
     { label: "Akureyri / Norðurland", value: onlyNorth, set: setOnlyNorth },
     { label: "Með afslætti", value: onlyOffer, set: setOnlyOffer },
     { label: "Staðfest á vef", value: onlyVerified, set: setOnlyVerified },
@@ -314,6 +349,7 @@ export default function SvifForeldrar() {
           <div className="flex flex-wrap items-center gap-2 text-sm font-semibold">
             <span className="px-3 py-1 rounded-full bg-primary/10 text-primary">{chosenCount} valin af {rows.length} plássum</span>
             <span className="px-3 py-1 rounded-full bg-muted">{companies} fyrirtæki</span>
+            <span className="px-3 py-1 rounded-full bg-muted">{withEmail} með netfang</span>
             <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">{calledCount} hringd</span>
           </div>
 
@@ -361,7 +397,19 @@ export default function SvifForeldrar() {
             {hasFilter && (
               <button onClick={clearFilters} className="text-primary font-semibold hover:underline">Hreinsa síur</button>
             )}
-            <span className="ml-auto text-muted-foreground">{filtered.length} pláss · {catCount} flokkar</span>
+            <div className="ml-auto flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5 h-8"
+                disabled={emailsInView.length === 0}
+                onClick={() => copyText(emailsInView.join("; "), `Afritaði ${emailsInView.length} netföng`)}
+                title="Afritar netföng fyrirtækjanna sem eru í síunni, hvert einu sinni"
+              >
+                <Copy className="w-3.5 h-3.5" /> Afrita netföng ({emailsInView.length})
+              </Button>
+              <span className="text-muted-foreground">{filtered.length} pláss · {catCount} flokkar</span>
+            </div>
           </div>
         </div>
       </header>
@@ -500,6 +548,28 @@ export default function SvifForeldrar() {
                                           <Phone className="w-3.5 h-3.5" /> {i.phone2}
                                         </a>
                                       )}
+                                      {r.email ? (
+                                        <span className="inline-flex items-center gap-1">
+                                          <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 text-primary font-semibold hover:underline break-all">
+                                            <Mail className="w-3.5 h-3.5" /> {r.email}
+                                          </a>
+                                          <button
+                                            onClick={() => copyText(r.email as string, "Netfang afritað")}
+                                            className="text-muted-foreground hover:text-foreground"
+                                            aria-label="Afrita netfang"
+                                            title="Afrita netfang"
+                                          >
+                                            <Copy className="w-3.5 h-3.5" />
+                                          </button>
+                                        </span>
+                                      ) : (
+                                        <span className="inline-flex items-center gap-1 text-muted-foreground/70 italic"><Mail className="w-3.5 h-3.5" /> netfang ekki fundið</span>
+                                      )}
+                                      {i.email2 && (
+                                        <a href={`mailto:${i.email2}`} className="inline-flex items-center gap-1 text-primary hover:underline break-all">
+                                          <Mail className="w-3.5 h-3.5" /> {i.email2}
+                                        </a>
+                                      )}
                                       {r.ja_url && (
                                         <a href={r.ja_url} target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:underline self-center">skráning</a>
                                       )}
@@ -508,6 +578,11 @@ export default function SvifForeldrar() {
                                     {i.phoneNote && (
                                       <p className="text-xs text-muted-foreground flex items-start gap-1.5">
                                         <Phone className="w-3.5 h-3.5 mt-0.5 shrink-0" /> <span><b className="font-semibold">Um númer:</b> {i.phoneNote}</span>
+                                      </p>
+                                    )}
+                                    {i.emailNote && (
+                                      <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                                        <Mail className="w-3.5 h-3.5 mt-0.5 shrink-0" /> <span><b className="font-semibold">Um netfang:</b> {i.emailNote}</span>
                                       </p>
                                     )}
                                     {i.desc && <p className="text-sm">{i.desc}</p>}
