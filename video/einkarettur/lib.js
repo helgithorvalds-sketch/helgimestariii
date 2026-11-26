@@ -180,7 +180,7 @@ export function tile(color, size = 1.6, h = 0.16, d = size) {
   g.userData.top = h; return g;
 }
 
-export function person(color, { skin = '#f5cfb2', hair = '#3b2a4f', scale = 1, ghost = false } = {}) {
+export function person(color, { skin = '#f5cfb2', hair = '#3b2a4f', scale = 1, ghost = false, belly = false } = {}) {
   const ex = ghost ? { transparent: true, opacity: 0.32, depthWrite: false } : {};
   const bodyMat = new THREE.MeshMatcapMaterial({ color: new THREE.Color(color), matcap: mat(color, 'gloss').matcap, ...ex });
   const body = group(
@@ -188,6 +188,7 @@ export function person(color, { skin = '#f5cfb2', hair = '#3b2a4f', scale = 1, g
     mesh(sph(0.165), mat(ghost ? color : skin, 'soft', ex), [0, 0.86, 0]),
     mesh(new THREE.SphereGeometry(0.172, 28, 14, 0, Math.PI * 2, 0, Math.PI * 0.52), mat(ghost ? color : hair, 'gloss', ex), [0, 0.875, -0.012], [-0.25, 0, 0]),
   );
+  if (belly) body.add(mesh(sph(0.16, 24, 16), bodyMat, [0, 0.33, 0.13], [0, 0, 0], [1, 1, 0.9]));
   const g = group(blob(0.75, 0.75, ghost ? 0.12 : 0.35), body);
   g.userData.body = body; g.userData.bodyMat = bodyMat; g.scale.setScalar(scale); g.userData.baseScale = g.scale.clone();
   return g;
@@ -538,9 +539,8 @@ export function coverTex() {
     c.fillStyle = '#ffc3d3'; c.beginPath(); c.arc(140, 250, 52, 0, Math.PI * 2); c.fill();
     c.fillStyle = '#ffe7a1'; c.beginPath(); c.arc(250, 270, 36, 0, Math.PI * 2); c.fill();
     c.fillStyle = '#c2ecd6'; c.beginPath(); c.arc(330, 230, 26, 0, Math.PI * 2); c.fill();
-    c.fillStyle = 'rgba(255,255,255,0.75)'; c.font = '800 26px PJS'; c.fillText('SVIF', 60, 92);
-    c.fillStyle = '#ffffff'; c.font = '800 78px PJS'; c.fillText('Foreldra', 56, 430); c.fillText('bók', 56, 510);
-    c.font = '700 28px PJS'; c.fillStyle = 'rgba(255,255,255,0.85)'; c.fillText('Fyrir nýbakaða foreldra', 60, 580);
+    c.fillStyle = '#ffffff'; c.font = '800 150px PJS'; c.fillText('SVIF', 52, 500);
+    c.font = '700 30px PJS'; c.fillStyle = 'rgba(255,255,255,0.9)'; c.fillText('Fyrir verðandi og', 60, 570); c.fillText('nýbakaða foreldra', 60, 610);
   });
   return coverTexCache;
 }
@@ -568,8 +568,8 @@ export function book({ w = 1.4, d = 1.9, inside = null } = {}) {
   L.add(mesh(new THREE.PlaneGeometry(w - 0.02, d - 0.02), mat('#ffffff', 'soft', { map: coverTex() }), [w / 2, tp + tc + 0.003, 0], [-Math.PI / 2, 0, 0]));
   const leftTex = canvasTex(512, 700, (c, W2, H2) => {
     c.fillStyle = '#fffdf8'; c.fillRect(0, 0, W2, H2);
-    c.fillStyle = '#6b3df5'; c.font = '800 46px PJS'; c.fillText('Foreldrabók', 40, 90);
-    const items = ['Föt', 'Matur', 'Raftæki', 'Barnavagnar', 'Svefn', 'Leikföng', 'Heilsa', 'Myndatökur'];
+    c.fillStyle = '#6b3df5'; c.font = '800 54px PJS'; c.fillText('SVIF', 40, 90);
+    const items = ['Barnaföt', 'Barnamatur', 'Barnavagnar', 'Bílstólar', 'Svefn', 'Leikföng', 'Ungbarnasund', 'Myndatökur'];
     c.font = '700 34px PJS';
     items.forEach((t, i) => { c.fillStyle = [C.pink, C.butter, C.mint, C.sky, C.peach, C.lilac][i % 6]; roundRect(c, 40, 140 + i * 66, 34, 34, 9); c.fill(); c.fillStyle = '#1c1035'; c.fillText(t, 92, 168 + i * 66); });
   });
@@ -615,6 +615,97 @@ export function dotArc(a, b, { n = 9, h = 0.6, r = 0.045, color = '#ffffff' } = 
     const d = mesh(sph(r, 12, 8), mat(color, 'gloss'), [p.x, p.y, p.z]); g.add(d); dots.push(d);
   }
   return { group: g, dots };
+}
+
+
+/** Little company building with striped awning and a letter logo. userData: parts for build-up, tint(color, k), setOpacity(o). */
+export function shop(color = '#7b4cf6', letter = 'A') {
+  const g = new THREE.Group();
+  const M = (c, kind = 'gloss', extra = {}) => new THREE.MeshMatcapMaterial({ color: new THREE.Color(c), matcap: mat(c, kind).matcap, ...extra });
+  const wallM = M('#fffaf3', 'soft'), roofM = M(color), awnM = M(color, 'soft'), signM = M('#ffffff'), doorM = M('#3d3358'), winM = M('#bfe3ff'), dotM = M(color);
+  const stripes = canvasTex(256, 64, (c, w, h) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? '#ffffff' : '#c8c8c8'; c.fillRect(i * w / 8, 0, w / 8, h); } });
+  awnM.map = stripes;
+  const logo = canvasTex(128, 128, (c) => { c.fillStyle = '#ffffff'; c.fillRect(0, 0, 128, 128); c.fillStyle = color; c.beginPath(); c.arc(64, 64, 52, 0, Math.PI * 2); c.fill(); c.fillStyle = '#ffffff'; c.font = '800 64px PJS'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(letter, 64, 70); });
+  const logoM = new THREE.MeshMatcapMaterial({ color: 0xffffff, matcap: mat('#fff', 'soft').matcap, map: logo });
+  const walls = mesh(rbox(0.82, 0.56, 0.6, 0.06), wallM, [0, 0.28, 0]);
+  const roof = mesh(rbox(0.92, 0.09, 0.7, 0.04), roofM, [0, 0.6, 0]);
+  const sign = group(mesh(rbox(0.36, 0.3, 0.06, 0.05), signM, [0, 0, 0]), mesh(new THREE.CircleGeometry(0.11, 32), logoM, [0, 0, 0.032]));
+  sign.position.set(0, 0.8, 0.12);
+  const awning = new THREE.Group(); awning.position.set(0, 0.5, 0.3);
+  const awn = mesh(new THREE.PlaneGeometry(0.86, 0.26), awnM, [0, -0.13, 0], [0, 0, 0]);
+  awn.material.side = THREE.DoubleSide; awning.add(awn);
+  for (let i = 0; i < 8; i++) awning.add(mesh(sph(0.054, 12, 8), i % 2 ? M('#ffffff', 'soft') : dotM, [-0.38 + i * 0.108, -0.26, 0], [0, 0, 0], [1, 0.7, 0.6]));
+  awning.rotation.x = 0.85;
+  const door = mesh(rbox(0.2, 0.32, 0.03, 0.03), doorM, [0, 0.16, 0.305]);
+  const w1 = mesh(rbox(0.17, 0.15, 0.03, 0.03), winM, [-0.26, 0.3, 0.305]), w2 = mesh(rbox(0.17, 0.15, 0.03, 0.03), winM, [0.26, 0.3, 0.305]);
+  g.add(walls, roof, sign, awning, door, w1, w2, blob(1.25, 1.0, 0.32));
+  const tintMats = [roofM, awnM, dotM], base = tintMats.map((m) => m.color.clone()), gold = new THREE.Color('#ffc23c');
+  const all = [wallM, roofM, awnM, signM, doorM, winM, dotM, logoM];
+  g.userData = {
+    parts: { walls, roof, sign, awning, door, w1, w2 },
+    tint: (k) => { tintMats.forEach((m, i) => m.color.copy(base[i]).lerp(gold, k)); wallM.color.set('#fffaf3').lerp(new THREE.Color('#fff0c4'), k); },
+    setOpacity: (o) => all.forEach((m) => { m.transparent = o < 0.999; m.opacity = o; m.depthWrite = o > 0.9; }),
+  };
+  return g;
+}
+
+/** Simple house for "delivered to every home". */
+export function house(color = '#ffc3d3', roof = '#7b4cf6') {
+  const g = new THREE.Group();
+  const walls = mesh(rbox(0.7, 0.5, 0.6, 0.05), mat(color, 'soft'), [0, 0.25, 0]);
+  const s = new THREE.Shape(); s.moveTo(-0.44, 0); s.lineTo(0.44, 0); s.lineTo(0, 0.34); s.lineTo(-0.44, 0);
+  const rf = mesh(new THREE.ExtrudeGeometry(s, { depth: 0.68, bevelEnabled: true, bevelSize: 0.02, bevelThickness: 0.02, bevelSegments: 2 }), mat(roof, 'gloss'), [0, 0.5, -0.34]);
+  const door = mesh(rbox(0.16, 0.26, 0.03, 0.03), mat('#3d3358', 'gloss'), [0, 0.13, 0.3]);
+  const win = mesh(rbox(0.14, 0.13, 0.03, 0.03), mat('#bfe3ff', 'gloss'), [0.2, 0.3, 0.3]);
+  g.add(walls, rf, door, win, blob(1.1, 1.0, 0.3));
+  g.userData.parts = { walls, roof: rf };
+  return g;
+}
+
+/** Printer with a sheet that can slide out (userData.sheet). */
+export function printer() {
+  const g = new THREE.Group();
+  g.add(mesh(rbox(0.95, 0.42, 0.66, 0.1), mat('#ffffff', 'gloss'), [0, 0.21, 0]));
+  g.add(mesh(rbox(0.7, 0.05, 0.12, 0.02), mat('#3d3358', 'gloss'), [0, 0.4, 0.15]));
+  g.add(mesh(sph(0.035, 10, 8), mat('#20bf85', 'gloss'), [0.36, 0.43, 0.2]));
+  g.add(mesh(rbox(0.6, 0.03, 0.3, 0.01), mat('#e3dcf2', 'soft'), [0, 0.12, 0.42]));
+  const sheet = mesh(rbox(0.5, 0.012, 0.55, 0.004), mat('#ffffff', 'soft'), [0, 0.16, 0.2]); g.add(sheet);
+  g.add(blob(1.4, 1.1, 0.3)); g.userData.sheet = sheet;
+  return g;
+}
+
+/** Delivery van. */
+export function van(color = '#6b3df5') {
+  const g = new THREE.Group();
+  g.add(mesh(rbox(1.05, 0.58, 0.6, 0.1), mat('#ffffff', 'gloss'), [-0.12, 0.42, 0]));
+  g.add(mesh(rbox(0.42, 0.42, 0.58, 0.1), mat(color, 'gloss'), [0.55, 0.34, 0]));
+  g.add(mesh(rbox(0.04, 0.2, 0.46, 0.03), mat('#bfe3ff', 'gloss'), [0.76, 0.42, 0]));
+  g.add(mesh(rbox(1.06, 0.08, 0.61, 0.03), mat(color, 'gloss'), [-0.12, 0.34, 0]));
+  for (const [x, z] of [[-0.42, 0.3], [0.45, 0.3], [-0.42, -0.3], [0.45, -0.3]]) { g.add(mesh(new THREE.TorusGeometry(0.1, 0.05, 10, 24), mat('#3d3358', 'gloss'), [x, 0.13, z])); g.add(mesh(sph(0.045, 10, 8), mat('#ffffff', 'gloss'), [x, 0.13, z])); }
+  g.add(blob(1.7, 1.0, 0.3));
+  return g;
+}
+
+/** Pencil drawing on a page (design). */
+export function pencil() {
+  const g = new THREE.Group();
+  g.add(mesh(rbox(0.62, 0.02, 0.82, 0.01), mat('#ffffff', 'soft'), [0, 0.01, 0]));
+  for (let i = 0; i < 4; i++) g.add(mesh(rbox(i === 0 ? 0.4 : 0.46 - i * 0.06, 0.012, 0.05, 0.01), mat(i === 0 ? '#9d7dff' : '#e3dcf2', 'soft'), [-0.04, 0.025, -0.25 + i * 0.13]));
+  const p = group(mesh(cyl(0.045, 0.045, 0.6, 6), mat('#ffd23f', 'gloss'), [0, 0, 0]), mesh(new THREE.ConeGeometry(0.045, 0.12, 6), mat('#f5d1a4', 'soft'), [0, -0.36, 0], [Math.PI, 0, 0]), mesh(cyl(0.046, 0.046, 0.08, 10), mat('#ff8fb1', 'gloss'), [0, 0.34, 0]));
+  p.position.set(0.18, 0.34, 0.1); p.rotation.set(0.5, 0, -0.6); g.add(p); g.userData.pen = p;
+  g.add(blob(1.0, 1.1, 0.25));
+  return g;
+}
+
+/** Shield with a check mark (trust). */
+export function shield(color = '#20bf85') {
+  const s = new THREE.Shape(); s.moveTo(0, 0.42); s.quadraticCurveTo(0.2, 0.36, 0.32, 0.36); s.lineTo(0.3, 0.05); s.quadraticCurveTo(0.24, -0.25, 0, -0.38); s.quadraticCurveTo(-0.24, -0.25, -0.3, 0.05); s.lineTo(-0.32, 0.36); s.quadraticCurveTo(-0.2, 0.36, 0, 0.42);
+  const g = new THREE.Group();
+  g.add(mesh(new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03, bevelSegments: 3, curveSegments: 16 }), mat(color, 'gloss'), [0, 0.45, -0.04]));
+  const c = new THREE.Shape(); c.moveTo(-0.14, 0.02); c.lineTo(-0.04, -0.08); c.lineTo(0.16, 0.14); c.lineTo(0.12, 0.18); c.lineTo(-0.04, 0.01); c.lineTo(-0.1, 0.07); c.lineTo(-0.14, 0.02);
+  g.add(mesh(new THREE.ExtrudeGeometry(c, { depth: 0.04, bevelEnabled: true, bevelSize: 0.01, bevelThickness: 0.01, bevelSegments: 1 }), mat('#ffffff', 'gloss'), [0, 0.47, 0.07]));
+  g.add(blob(0.8, 0.6, 0.25));
+  return g;
 }
 
 // ---------- DOM UI ----------

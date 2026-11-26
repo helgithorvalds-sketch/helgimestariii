@@ -53,6 +53,7 @@ em.gold{color:var(--gold)}
 .br-track{height:40px;border-radius:20px;background:rgba(107,61,245,.1);overflow:hidden;width:100%}
 .br-fill{height:100%;border-radius:20px;width:5%}
 .br-val{position:absolute;right:0;top:-6px;font-weight:800;font-size:44px;letter-spacing:-.02em}
+.scrim.strong{background:linear-gradient(90deg,rgba(246,242,253,1) 0%,rgba(246,242,253,.97) 42%,rgba(246,242,253,0) 60%)}
 .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(246,242,253,.97) 0%,rgba(246,242,253,.9) 30%,rgba(246,242,253,0) 52%);display:none}
 .track{position:absolute;height:22px;border-radius:11px;background:rgba(28,16,53,.08)}
 .track .fill{position:absolute;left:0;top:0;bottom:0;border-radius:11px;background:var(--violet)}
@@ -70,6 +71,12 @@ em.gold{color:var(--gold)}
 .store{display:flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:6px 18px 6px 6px;font-weight:800;font-size:22px;color:var(--ink);box-shadow:0 8px 24px rgba(60,30,120,.16)}
 .store i{width:34px;height:34px;border-radius:50%;color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
 .daylbl{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);background:var(--ink);color:#fff;font-weight:800;font-size:22px;padding:6px 14px;border-radius:12px;white-space:nowrap}
+.cat{background:#fff;color:var(--ink);font-weight:800;font-size:40px;letter-spacing:-.02em;padding:10px 28px;border-radius:20px;box-shadow:0 12px 34px rgba(60,30,120,.16)}
+.cat.sm{font-size:28px;padding:8px 20px;border-radius:16px}
+.dealchip{background:#ff5f9e;color:#fff;font-weight:800;font-size:24px;padding:8px 16px;border-radius:14px;box-shadow:0 10px 26px rgba(255,95,158,.35);transform:rotate(-4deg)}
+.dealchip.v{background:var(--violet);box-shadow:0 10px 26px rgba(107,61,245,.3)}
+.dealchip.g{background:#ffc23c;color:var(--ink);box-shadow:0 10px 26px rgba(232,161,15,.3)}
+.dealchip.m{background:#20bf85;box-shadow:0 10px 26px rgba(32,191,133,.3)}
 .fade{position:absolute;inset:0;background:var(--c1);opacity:0;pointer-events:none}
 </style>
 <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>

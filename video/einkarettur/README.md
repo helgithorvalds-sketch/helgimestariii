@@ -1,8 +1,9 @@
 # Einkaréttur í Foreldrabók – útskýringarmyndband
 
-3D explainer video (Icelandic, 1920×1080, 30 fps, ~2:48) that walks advertisers through
-how pages and category exclusivity (einkaréttur) are sold in Foreldrabók: what exclusivity is,
-why it pays off, how the 2-week bidding works, common questions, and what we believe.
+3D explainer video (Icelandic, 1920×1080, 30 fps, ~3:14) for companies about SVIF, the book for
+expecting and new parents: who we are (the problem, the book, deals, your company's spot, design /
+print / delivery), what exclusivity (einkaréttur) is, why it pays off, how bidding works, common
+questions, and what we believe. "SVIF" on the cover is a placeholder name.
 
 Built with three.js (rendered headless in Chromium via Playwright) plus an HTML text layer.
 Everything is timed to a 110 BPM grid (`B(bar, beat)` in `lib.js`), and the soundtrack
@@ -13,6 +14,7 @@ Everything is timed to a 110 BPM grid (`B(bar, beat)` in `lib.js`), and the soun
 | File | What it is |
 | --- | --- |
 | `story.js` | The whole script: every scene, text line, price and camera move. Edit this. |
+| `intro.js` | The opening: pregnant couple, 54 category tiles, accordion fold into the book, deals. |
 | `lib.js` | Engine: easing, keyframes, text animation, 3D models (pram, crown, coins…). |
 | `index.html` | Fonts and text styles. |
 | `audio.py` | Original music + sound effects, generated from `events.json` (arrangement hints come from `MUSIC` in `story.js`). |
@@ -27,5 +29,5 @@ npm install
 ```
 
 Prices live in the text of `story.js`: page 40.000 kr./month, exclusivity bidding starts at 40.000 kr.
-on top of the page, same 2-week window for everyone, exclusivity lasts 3 months.
+on top of the page, highest bid after the deadline wins, exclusivity lasts 3 months.
 Companies are anonymous (A, B, C, D); categories come from the Foreldrabók research.
