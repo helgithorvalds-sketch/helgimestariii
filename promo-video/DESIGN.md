@@ -72,3 +72,10 @@ holds/rests only (hero +5 f, title +4 f, deal +12 f, call stack +15 f rest) so e
 | 6 | 605–750 (b41) | outro-group-photo-launch | Starts on the call-stack's last framing (continuous move); nav, hero card, paid/finished/registered/e-mail cards, a call row and the VILL SÝNISHORN badge fly in around the mark + wordmark (impact on b44), rule, tagline, fade to navy | Verkefnastjórnun · SÖLUFERLIÐ Á EINUM STAÐ | swoosh, riser → impact → shimmer |
 
 No tagline repeats: kicker, hero note, title card, deal title and outro tagline are all different lines.
+
+## 4 · Audio pipeline
+
+Picture is rendered by Remotion; the soundtrack is mixed separately (`scripts/mix-audio.py`) from the same cue table
+(`src/sfx.ts` + `src/timeline.ts`, exported by `scripts/export-cues.ts`). Reason: Remotion frame retries during the render
+shifted every later SFX by 4 frames; the offline mix is sample-exact (measured ≤0.07 f on all cues with
+`scripts/check-sfx.py`). Both versions share one gain (music version mastered to −16 LUFS, −1.5 dBFS peak).

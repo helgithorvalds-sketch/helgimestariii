@@ -13,8 +13,7 @@ visual tokens, shot mapping and storyboard.
 ```bash
 npm install
 npx remotion studio src/index.ts          # preview / tweak
-npx remotion render src/index.ts Promo out/promo.mp4
-npx remotion render src/index.ts Promo out/promo-nobgm.mp4 --props=props-nobgm.json
+./scripts/build-final.sh                  # picture + sample-exact audio mix (-16 LUFS) → final/promo.mp4, final/promo-nobgm.mp4
 ```
 
 Re-capturing (app dev server must run against the fake backend):
