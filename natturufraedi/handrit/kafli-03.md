@@ -47,7 +47,7 @@ beina ræðu.
 | Vendipunktur | Málið er nefnilega að koltvíoxíð er gróðurhúsalofttegund. Sólin hitar jörðina og jörðin sendir varmann út í geim. En gróðurhúsalofttegundir halda hluta hans eftir. Þetta kallast gróðurhúsaáhrif. |
 | Vendipunktur – líking | Þær virka eins og sængin þín. Sængin býr ekki til varma, hún heldur bara í hann. Jörðin er þú, lofttegundirnar eru sængin og meira koltvíoxíð er þykkari sæng. |
 | Vendipunktur – spá | Hvað heldurðu að myndi gerast ef jörðin hefði enga sæng? ... Hún yrði eins og frystikista: átján stiga frost að meðaltali! |
-| Afleiðing | Sængin er því góð. En við erum að gera hana of þykka, og jöklarnir bráðna. |
+| Afleiðing | Sængin er þá góð. En við erum að gera hana of þykka, og jöklarnir bráðna. |
 | Bakhlaup | Síðasta setningin á skildinum er skrifuð til þín: „Aðeins þú veist hvort við gerðum eitthvað.“ |
 
 English gist, beat by beat:
@@ -108,7 +108,7 @@ sínu.
 | 25 | `bord` – „Hvað heldurðu að myndi gerast ef jörðin hefði enga sæng?“ Sængurlagið er dregið af jörðinni eins og teppi. Ein sekúnda af þögn (spáhlé). | – | myndatexti „HVAÐ HELDURÐU?“ |
 | 26 | `bord` – „...Hún yrði eins og frystikista:“ Jörðin hvítnar af ís á augabragði; hún breytist í kistu með loki. | Kári (innskot) – skelfur (`nervous`) | sprenging „FRYSTIKISTA!“ |
 | 27 | `bord` – „átján stiga frost að meðaltali!“ Hitamælir hrapar í −18; við hliðina opnast frystikista með sama hita. | – | slam „−18 °C“, undir: „EINS OG Í FRYSTIKISTU“ |
-| 28 | `herbergi` – „Sængin er því góð.“ Sóley kúrir sig undir sænginni. | Sóley – sæl (`relief`) | myndatexti; GÓÐ gult |
+| 28 | `herbergi` – „Sængin er þá góð.“ Sóley kúrir sig undir sænginni. | Sóley – sæl (`relief`) | myndatexti; GÓÐ gult |
 | 29 | `herbergi` – „En við erum að gera hana of þykka,“ Sóley situr á rúminu í lopapeysunni, vafin í sæng; Kári hrúgar fleiri og fleiri sængum utan um hana. | Sóley – sveitt og pirruð (`pained`); Kári – hlær (`laugh`) | myndatexti; OF ÞYKKA gult |
 | 30 | `ok` – „og jöklarnir bráðna.“ Bráðnandi ísjaðar; vatn drýpur og rennur burt. | – | myndatexti; BRÁÐNA gult |
 | 31 | `skjoldur` – „Síðasta setningin á skildinum er skrifuð til þín:“ Myndavélin rennur niður skjöldinn að síðustu setningunni. | – | myndatexti; TIL ÞÍN gult |
@@ -126,5 +126,5 @@ Af hverri milljón sameinda í loftinu voru fjögur hundruð og fimmtán koltví
 Málið er nefnilega að koltvíoxíð er gróðurhúsalofttegund. Sólin hitar jörðina og jörðin sendir varmann út í geim. En gróðurhúsalofttegundir halda hluta hans eftir. Þetta kallast gróðurhúsaáhrif.
 Þær virka eins og sængin þín. Sængin býr ekki til varma, hún heldur bara í hann. Jörðin er þú, lofttegundirnar eru sængin og meira koltvíoxíð er þykkari sæng.
 Hvað heldurðu að myndi gerast ef jörðin hefði enga sæng? ... [excited] Hún yrði eins og frystikista: átján stiga frost að meðaltali!
-Sængin er því góð. En við erum að gera hana of þykka, og jöklarnir bráðna.
+Sængin er þá góð. En við erum að gera hana of þykka, og jöklarnir bráðna.
 Síðasta setningin á skildinum er skrifuð til þín: „Aðeins þú veist hvort við gerðum eitthvað.“
