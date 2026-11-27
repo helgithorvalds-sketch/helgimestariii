@@ -1,12 +1,15 @@
 # Náttúrufræði fyrir 7. bekk – animated iPhone shorts (design)
 
-Date: 2026-11-27 · Status: ready for approval
+Date: 2026-11-27 · Status: **approved** by the user, with one direction: "like you made this". That points at the
+Geysir short ("Sápan í Geysi", `geysir-short/` on branch `claude/blissful-mayer-7dzw09`), which another session of this
+user's made. So the series is built on that short's pipeline and look: word-by-word captions, slams, bursts and
+explainer boards, and the user's own narrator voice. Sections 4, 5, 7.3, 7.4, 7.6 and 8 below are updated for this.
 
 Calls made by Claude (not decided by the user; check these while reading):
 - Approach A, the repo's three.js + Remotion pipeline (§4).
 - The 10 chapters and their order, and one core idea per chapter (§6).
 - The recurring cast: Sóley, Kári and Amma, with one narrator voicing every line (§7.3).
-- Key-term labels on screen, but no running captions (§7.4).
+- ~~Key-term labels, no running captions~~ → replaced by the user's direction: captions and overlays as in the Geysir short (§7.4).
 - Chapter 9's tone follows the school book (§6).
 - The video project lives in `natturufraedi/` in this repo (§8).
 - Pilot first; chapters 2–10 are produced after the pilot is approved (§5).
@@ -67,7 +70,9 @@ the chapter in their own words using the correct Icelandic term, and still remem
 | C | Plain 2D motion graphics | Renders fast, but loses the 2D-in-3D look that makes the style stand out. |
 
 The user pointed at the `claude-animated-shorts` repo for the look and handed over the how, so A was my call
-(stated in chat, open to override).
+(stated in chat, open to override). The user then pointed at the Geysir short as the target. That short is approach A
+already working in this environment: the animated-shorts look modules plus a flat overlay layer (`Overlays.tsx`) for
+captions, slams and explainer boards. **We start from its code**, not from the bare template.
 
 ## 5. Scope of this round
 
@@ -80,7 +85,7 @@ The user pointed at the `claude-animated-shorts` repo for the look and handed ov
 
 Gates the user passes (Claude cannot hear audio here, so every judgement by ear is the user's):
 - (a) this design;
-- (b) the Chapter 1 script, plus 3–4 short voice samples to pick the narrator from;
+- (b) the Chapter 1 script (the narrator is already chosen: the user's own voice from the Geysir short, §7.3);
 - (c) the **full Chapter 1 narration, by ear**, before any animation is timed to it (a mispronunciation found later
   means new voice, re-timing, new sound and hours of re-rendering);
 - (d) the finished pilot.
@@ -157,10 +162,12 @@ Rules:
 ### 7.3 Cast (recurring, for emotion)
 - **Sögumaður (narrator):**
   - One warm, curious, slightly cheeky Icelandic voice. One steady tone, fast but clear.
-  - 3–4 ElevenLabs voices read the same sample paragraph full of hard words; the user picks by ear (gate b).
-    A transcribe-back check (ElevenLabs speech-to-text) catches gross errors before the samples are sent.
-  - Fallback if no voice sounds native enough (user's decision): **use the best ElevenLabs voice anyway**, fixing
-    problem words with phonetic respellings in the voice copy. No human recording.
+  - **The user's own ElevenLabs voice "Íslensk kennslurödd (kona)"** (`vuKNwSXHmXUQ2BKzoJCH`), model `eleven_v4`,
+    sped up about 1.12×, exactly as in the Geysir short. This keeps one voice across the user's videos, and it replaces
+    the planned A/B voice test.
+  - A transcribe-back check (ElevenLabs speech-to-text) catches gross errors before the user listens (gate c).
+  - Problem words (user's decision): keep this voice and fix them with phonetic respellings in the voice copy.
+    No human recording.
   - The narrator also says the characters' short lines as quoted speech, so the whole series has one voice.
 - **Sóley (12):** curious and brave, asks the questions; the viewer's stand-in. Wears a lopapeysa.
 - **Kári (12):** her friend, a sceptical joker who believes the myths. His wrong guesses are what gets busted.
@@ -175,12 +182,17 @@ Rules:
   - Each chapter gives one character a clear emotional arc (fear → relief, doubt → wonder, loss → hope).
   - Every reaction lands 0–3 frames before its word.
 
-### 7.4 On-screen text
-- No running captions, as in the reference style.
-- **Key-term labels (my call, for learning):** when a key íðorð is first said, it appears as a bold label in the
-  scene (e.g. **KVIKA** with an arrow). Three to five per chapter, on the word, gone after about 1.5 s.
-- Spelled correctly with á, ð, þ, æ, ö, in a font that has them.
-- Burned-in captions can be added later if the user wants them.
+### 7.4 On-screen text (user's direction: as in the Geysir short)
+- **Word-by-word captions**, from the Geysir short's `Overlays.tsx`:
+  - one to three words at a time, lower-middle of the screen;
+  - bold uppercase Plus Jakarta Sans, white with a thick plum ink stroke;
+  - key words in yellow; a small pop on each new chunk.
+  - The key íðorð of the chapter are always yellow, so captions double as the term labels.
+- **Slams:** the hook word ("SÁPA?!"-style), numbers with units (e.g. "1000 °C"), and the punch word ("BÚMM!").
+- **Badges and stamps** where they carry the story: a day/time counter, "BANNAÐ"-style stamps.
+- **Explainer boards** for the science: flat diagram panels such as the Geysir short's depth ruler + thermometer.
+  For Chapter 1: Earth layers, plates pulling apart, kvika rising, and lava cooling into rock.
+- Everything is spelled correctly with á, ð, þ, æ, ö, in fonts that have them (Inter, Plus Jakarta Sans).
 
 ### 7.5 Look
 - Follow the repo's final look values: lights day/golden, ink, lens blur, bloom, grade, camera grammar of creeping
@@ -208,9 +220,12 @@ Rules:
   - ElevenLabs `eleven_v3` or `eleven_v4`, whichever sounds more natural in Icelandic in the test.
   - Word timings come from the ElevenLabs with-timestamps output, saved as `words.json` and hand-fixed.
   - Every visual is timed to these words.
-- **Score and effects:**
-  - An original synthesized score in a fresh, playful mood per chapter, adapted from the repo's audio code.
-  - Synthesized SFX.
+- **Score and effects (as in the Geysir short):**
+  - Music generated with ElevenLabs Music, one fresh, playful cue per chapter, with a mood shift for the
+    explanation beat.
+  - CC0 sound effects from Freesound, starting from the Geysir short's library and its credits file, plus new ones
+    where a chapter needs them (lava hiss, boat horn, rumble…).
+  - The mix uses the Geysir short's `audio/mix.py`.
 - **Mix:**
   - Voice on top, music and SFX ducked under it.
   - −14 LUFS integrated.
@@ -229,6 +244,14 @@ natturufraedi/                  own package.json (Remotion + three + @remotion/t
 docs/natturufraedi/rannsokn/    curriculum + Mark Rober research notes
 ```
 
+- `natturufraedi/` is **seeded by copying `geysir-short/`** from the latest pushed version of branch
+  `claude/blissful-mayer-7dzw09`: Remotion setup, fonts, look modules, `Overlays.tsx`, voice/mix scripts, the SFX
+  library, the QA scripts.
+  - It is copied, not moved: the Geysir session keeps owning `geysir-short/`, and nothing in it is edited from here.
+  - The Geysir short's own world, cast and story become Chapter 1's starting point and are then rewritten.
+  - Shared pieces (look modules, overlays, Icelandic world kit, cast) go in a shared folder, so chapters 2–10 reuse them.
+- Render time: the Geysir short's 2,000-frame render runs on one software-WebGL process, so extra browser tabs don't
+  help. Plan on roughly 1–1.5 h per chapter render.
 - The app's ESLint gets `natturufraedi` added to its ignores. Nothing else in the app changes.
 - **Delivery:**
   - The final pilot mp4 is sent to the user directly.
