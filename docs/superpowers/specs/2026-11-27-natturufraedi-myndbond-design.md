@@ -1,6 +1,15 @@
 # Náttúrufræði fyrir 7. bekk – animated iPhone shorts (design)
 
-Date: 2026-11-27 · Status: draft for approval
+Date: 2026-11-27 · Status: ready for approval
+
+Calls made by Claude (not decided by the user; check these while reading):
+- Approach A, the repo's three.js + Remotion pipeline (§4).
+- The 10 chapters and their order, and one core idea per chapter (§6).
+- The recurring cast: Sóley, Kári and Amma, with one narrator voicing every line (§7.3).
+- Key-term labels on screen, but no running captions (§7.4).
+- Chapter 9's tone follows the school book (§6).
+- The video project lives in `natturufraedi/` in this repo (§8).
+- Pilot first; chapters 2–10 are produced after the pilot is approved (§5).
 
 ## 1. Intent and why
 
@@ -150,7 +159,8 @@ Rules:
   - One warm, curious, slightly cheeky Icelandic voice. One steady tone, fast but clear.
   - 3–4 ElevenLabs voices read the same sample paragraph full of hard words; the user picks by ear (gate b).
     A transcribe-back check (ElevenLabs speech-to-text) catches gross errors before the samples are sent.
-  - Fallback if no voice sounds native enough: **[open — user's answer]**.
+  - Fallback if no voice sounds native enough (user's decision): **use the best ElevenLabs voice anyway**, fixing
+    problem words with phonetic respellings in the voice copy. No human recording.
   - The narrator also says the characters' short lines as quoted speech, so the whole series has one voice.
 - **Sóley (12):** curious and brave, asks the questions; the viewer's stand-in. Wears a lopapeysa.
 - **Kári (12):** her friend, a sceptical joker who believes the myths. His wrong guesses are what gets busted.
