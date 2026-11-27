@@ -1,0 +1,890 @@
+{
+ "1": {
+  "ref": "Einn frægasti útlagi Íslands heitir eftir súrri mysu. Þetta er Gísli, og sagan hans byrjar á bænum Stokkum í Noregi.",
+  "heard": "Einn frægasti útlagi Íslands heitir eftir súrri mysu. Þetta er Gísli, og sagan hans byrjar á bænum Stokkum í Noregi.",
+  "words": [
+   {
+    "w": "Einn",
+    "s": 0.0,
+    "e": 0.22
+   },
+   {
+    "w": "frægasti",
+    "s": 0.22,
+    "e": 0.82
+   },
+   {
+    "w": "útlagi",
+    "s": 0.82,
+    "e": 1.3
+   },
+   {
+    "w": "Íslands",
+    "s": 1.3,
+    "e": 1.78
+   },
+   {
+    "w": "heitir",
+    "s": 1.78,
+    "e": 2.34
+   },
+   {
+    "w": "eftir",
+    "s": 2.34,
+    "e": 2.66
+   },
+   {
+    "w": "súrri",
+    "s": 2.66,
+    "e": 3.16
+   },
+   {
+    "w": "mysu.",
+    "s": 3.16,
+    "e": 3.56
+   },
+   {
+    "w": "Þetta",
+    "s": 3.8,
+    "e": 4.56
+   },
+   {
+    "w": "er",
+    "s": 4.56,
+    "e": 4.74
+   },
+   {
+    "w": "Gísli,",
+    "s": 4.74,
+    "e": 5.18
+   },
+   {
+    "w": "og",
+    "s": 5.32,
+    "e": 5.68
+   },
+   {
+    "w": "sagan",
+    "s": 5.68,
+    "e": 6.08
+   },
+   {
+    "w": "hans",
+    "s": 6.08,
+    "e": 6.42
+   },
+   {
+    "w": "byrjar",
+    "s": 6.42,
+    "e": 6.8
+   },
+   {
+    "w": "á",
+    "s": 6.8,
+    "e": 6.92
+   },
+   {
+    "w": "bænum",
+    "s": 6.92,
+    "e": 7.22
+   },
+   {
+    "w": "Stokkum",
+    "s": 7.22,
+    "e": 7.84
+   },
+   {
+    "w": "í",
+    "s": 7.84,
+    "e": 8.08
+   },
+   {
+    "w": "Noregi.",
+    "s": 8.08,
+    "e": 8.46
+   }
+  ]
+ },
+ "2": {
+  "ref": "Gísli býr þar með pabba sínum, systurinni Þórdísi og bróðurnum Þorkeli, en þegar Bárður eltist við Þórdísi drepur Gísli hann.",
+  "heard": "Gísli býr þar með pabba sínum, systurinni Þórdísi og bróðurnum Þorkeli, en þegar Bárður eltist við Þórdísi drepur Gísli hann.",
+  "words": [
+   {
+    "w": "Gísli",
+    "s": 0.0,
+    "e": 0.34
+   },
+   {
+    "w": "býr",
+    "s": 0.34,
+    "e": 0.64
+   },
+   {
+    "w": "þar",
+    "s": 0.64,
+    "e": 0.9
+   },
+   {
+    "w": "með",
+    "s": 0.9,
+    "e": 1.08
+   },
+   {
+    "w": "pabba",
+    "s": 1.08,
+    "e": 1.44
+   },
+   {
+    "w": "sínum,",
+    "s": 1.44,
+    "e": 1.76
+   },
+   {
+    "w": "systurinni",
+    "s": 1.84,
+    "e": 2.6
+   },
+   {
+    "w": "Þórdísi",
+    "s": 2.6,
+    "e": 3.06
+   },
+   {
+    "w": "og",
+    "s": 3.06,
+    "e": 3.34
+   },
+   {
+    "w": "bróðurnum",
+    "s": 3.34,
+    "e": 4.0
+   },
+   {
+    "w": "Þorkeli,",
+    "s": 4.0,
+    "e": 4.46
+   },
+   {
+    "w": "en",
+    "s": 4.6,
+    "e": 5.02
+   },
+   {
+    "w": "þegar",
+    "s": 5.02,
+    "e": 5.28
+   },
+   {
+    "w": "Bárður",
+    "s": 5.28,
+    "e": 5.74
+   },
+   {
+    "w": "eltist",
+    "s": 5.74,
+    "e": 6.22
+   },
+   {
+    "w": "við",
+    "s": 6.22,
+    "e": 6.4
+   },
+   {
+    "w": "Þórdísi",
+    "s": 6.4,
+    "e": 6.9
+   },
+   {
+    "w": "drepur",
+    "s": 6.9,
+    "e": 7.8
+   },
+   {
+    "w": "Gísli",
+    "s": 7.8,
+    "e": 8.22
+   },
+   {
+    "w": "hann.",
+    "s": 8.22,
+    "e": 8.38
+   }
+  ]
+ },
+ "3": {
+  "ref": "Þorkell var vinur Bárðar og fer í fússi til Hólmgöngu-Skeggja, sem lætur skera út dónalegar tréstyttur af Gísla honum til háðungar.",
+  "heard": "Þorkell var vinur Bárðar og fer í fússi til Hólmgöngu -Skeggja, sem lætur skera út dónalegar tréstyttur af Gísla honum til háðungar.",
+  "words": [
+   {
+    "w": "Þorkell",
+    "s": 0.0,
+    "e": 0.42
+   },
+   {
+    "w": "var",
+    "s": 0.42,
+    "e": 0.66
+   },
+   {
+    "w": "vinur",
+    "s": 0.66,
+    "e": 1.08
+   },
+   {
+    "w": "Bárðar",
+    "s": 1.08,
+    "e": 1.52
+   },
+   {
+    "w": "og",
+    "s": 1.52,
+    "e": 1.82
+   },
+   {
+    "w": "fer",
+    "s": 1.82,
+    "e": 2.02
+   },
+   {
+    "w": "í",
+    "s": 2.02,
+    "e": 2.12
+   },
+   {
+    "w": "fússi",
+    "s": 2.12,
+    "e": 2.56
+   },
+   {
+    "w": "til",
+    "s": 2.56,
+    "e": 2.7
+   },
+   {
+    "w": "Hólmgöngu",
+    "s": 2.7,
+    "e": 3.44
+   },
+   {
+    "w": "-Skeggja,",
+    "s": 3.44,
+    "e": 3.78
+   },
+   {
+    "w": "sem",
+    "s": 3.88,
+    "e": 4.28
+   },
+   {
+    "w": "lætur",
+    "s": 4.28,
+    "e": 4.56
+   },
+   {
+    "w": "skera",
+    "s": 4.56,
+    "e": 5.02
+   },
+   {
+    "w": "út",
+    "s": 5.02,
+    "e": 5.26
+   },
+   {
+    "w": "dónalegar",
+    "s": 5.26,
+    "e": 5.96
+   },
+   {
+    "w": "tréstyttur",
+    "s": 5.96,
+    "e": 6.7
+   },
+   {
+    "w": "af",
+    "s": 6.7,
+    "e": 6.78
+   },
+   {
+    "w": "Gísla",
+    "s": 6.78,
+    "e": 7.22
+   },
+   {
+    "w": "honum",
+    "s": 7.22,
+    "e": 7.58
+   },
+   {
+    "w": "til",
+    "s": 7.58,
+    "e": 7.68
+   },
+   {
+    "w": "háðungar.",
+    "s": 7.68,
+    "e": 8.42
+   }
+  ]
+ },
+ "4": {
+  "ref": "Í einvíginu montar Skeggi sig af sverðinu sínu, Gunnloga, en Gísli heggur af honum fótinn. Skeggi gengur á tréfæti upp frá því.",
+  "heard": "Í einvíginu montar Skeggi sig af sverðinu sínu, Gunnloga, en Gísli heggur af honum fótinn. Skeggi gengur á tréfæti upp frá því.",
+  "words": [
+   {
+    "w": "Í",
+    "s": 0.0,
+    "e": 0.12
+   },
+   {
+    "w": "einvíginu",
+    "s": 0.12,
+    "e": 0.76
+   },
+   {
+    "w": "montar",
+    "s": 0.76,
+    "e": 1.36
+   },
+   {
+    "w": "Skeggi",
+    "s": 1.36,
+    "e": 1.76
+   },
+   {
+    "w": "sig",
+    "s": 1.76,
+    "e": 1.94
+   },
+   {
+    "w": "af",
+    "s": 1.94,
+    "e": 2.08
+   },
+   {
+    "w": "sverðinu",
+    "s": 2.08,
+    "e": 2.56
+   },
+   {
+    "w": "sínu,",
+    "s": 2.56,
+    "e": 2.84
+   },
+   {
+    "w": "Gunnloga,",
+    "s": 2.84,
+    "e": 3.3
+   },
+   {
+    "w": "en",
+    "s": 3.3,
+    "e": 3.66
+   },
+   {
+    "w": "Gísli",
+    "s": 3.66,
+    "e": 4.18
+   },
+   {
+    "w": "heggur",
+    "s": 4.18,
+    "e": 4.78
+   },
+   {
+    "w": "af",
+    "s": 4.78,
+    "e": 4.92
+   },
+   {
+    "w": "honum",
+    "s": 4.92,
+    "e": 5.14
+   },
+   {
+    "w": "fótinn.",
+    "s": 5.14,
+    "e": 5.58
+   },
+   {
+    "w": "Skeggi",
+    "s": 6.06,
+    "e": 6.7
+   },
+   {
+    "w": "gengur",
+    "s": 6.7,
+    "e": 7.14
+   },
+   {
+    "w": "á",
+    "s": 7.14,
+    "e": 7.24
+   },
+   {
+    "w": "tréfæti",
+    "s": 7.24,
+    "e": 7.92
+   },
+   {
+    "w": "upp",
+    "s": 7.92,
+    "e": 8.12
+   },
+   {
+    "w": "frá",
+    "s": 8.12,
+    "e": 8.38
+   },
+   {
+    "w": "því.",
+    "s": 8.38,
+    "e": 8.56
+   }
+  ]
+ },
+ "5": {
+  "ref": "En synir Skeggja hefna sín, og um miðja nótt koma sextíu menn að Stokkum og kveikja í húsinu þar sem fjölskyldan sefur.",
+  "heard": "En sínir Skeggja hefna sín, og um miðja nótt koma sextíu menn að Stokkum og kveikja í húsinu þar sem fjölskyldan sefur.",
+  "words": [
+   {
+    "w": "En",
+    "s": 0.0,
+    "e": 0.22
+   },
+   {
+    "w": "sínir",
+    "s": 0.22,
+    "e": 0.66
+   },
+   {
+    "w": "Skeggja",
+    "s": 0.66,
+    "e": 1.18
+   },
+   {
+    "w": "hefna",
+    "s": 1.18,
+    "e": 1.52
+   },
+   {
+    "w": "sín,",
+    "s": 1.52,
+    "e": 1.94
+   },
+   {
+    "w": "og",
+    "s": 1.94,
+    "e": 2.36
+   },
+   {
+    "w": "um",
+    "s": 2.36,
+    "e": 2.54
+   },
+   {
+    "w": "miðja",
+    "s": 2.54,
+    "e": 2.86
+   },
+   {
+    "w": "nótt",
+    "s": 2.86,
+    "e": 3.24
+   },
+   {
+    "w": "koma",
+    "s": 3.24,
+    "e": 3.64
+   },
+   {
+    "w": "sextíu",
+    "s": 3.64,
+    "e": 4.32
+   },
+   {
+    "w": "menn",
+    "s": 4.32,
+    "e": 4.66
+   },
+   {
+    "w": "að",
+    "s": 4.66,
+    "e": 4.74
+   },
+   {
+    "w": "Stokkum",
+    "s": 4.74,
+    "e": 5.2
+   },
+   {
+    "w": "og",
+    "s": 5.2,
+    "e": 5.62
+   },
+   {
+    "w": "kveikja",
+    "s": 5.62,
+    "e": 6.14
+   },
+   {
+    "w": "í",
+    "s": 6.14,
+    "e": 6.26
+   },
+   {
+    "w": "húsinu",
+    "s": 6.26,
+    "e": 6.8
+   },
+   {
+    "w": "þar",
+    "s": 6.8,
+    "e": 7.0
+   },
+   {
+    "w": "sem",
+    "s": 7.0,
+    "e": 7.08
+   },
+   {
+    "w": "fjölskyldan",
+    "s": 7.08,
+    "e": 7.7
+   },
+   {
+    "w": "sefur.",
+    "s": 7.7,
+    "e": 8.08
+   }
+  ]
+ },
+ "6": {
+  "ref": "Inni standa tvö ker af súrri mysu, svo þau dýfa geitaskinnum í kerin og slökkva eldinn, ekki einu sinni heldur þrisvar.",
+  "heard": "Innistanda tvö ker af súrri mysu, svo þau dýfa geitaskinnum í kerin og slökkva eldinn, ekki einu sinni heldur þrisvar.",
+  "words": [
+   {
+    "w": "Innistanda",
+    "s": 0.0,
+    "e": 0.54
+   },
+   {
+    "w": "tvö",
+    "s": 0.54,
+    "e": 1.1
+   },
+   {
+    "w": "ker",
+    "s": 1.1,
+    "e": 1.32
+   },
+   {
+    "w": "af",
+    "s": 1.32,
+    "e": 1.66
+   },
+   {
+    "w": "súrri",
+    "s": 1.66,
+    "e": 2.34
+   },
+   {
+    "w": "mysu,",
+    "s": 2.34,
+    "e": 2.8
+   },
+   {
+    "w": "svo",
+    "s": 2.92,
+    "e": 3.38
+   },
+   {
+    "w": "þau",
+    "s": 3.38,
+    "e": 3.56
+   },
+   {
+    "w": "dýfa",
+    "s": 3.56,
+    "e": 3.92
+   },
+   {
+    "w": "geitaskinnum",
+    "s": 3.92,
+    "e": 4.62
+   },
+   {
+    "w": "í",
+    "s": 4.62,
+    "e": 4.72
+   },
+   {
+    "w": "kerin",
+    "s": 4.72,
+    "e": 5.1
+   },
+   {
+    "w": "og",
+    "s": 5.1,
+    "e": 5.3
+   },
+   {
+    "w": "slökkva",
+    "s": 5.3,
+    "e": 5.84
+   },
+   {
+    "w": "eldinn,",
+    "s": 5.84,
+    "e": 6.28
+   },
+   {
+    "w": "ekki",
+    "s": 6.34,
+    "e": 6.82
+   },
+   {
+    "w": "einu",
+    "s": 6.82,
+    "e": 7.3
+   },
+   {
+    "w": "sinni",
+    "s": 7.3,
+    "e": 7.56
+   },
+   {
+    "w": "heldur",
+    "s": 7.56,
+    "e": 7.82
+   },
+   {
+    "w": "þrisvar.",
+    "s": 7.82,
+    "e": 8.36
+   }
+  ]
+ },
+ "7": {
+  "ref": "Þau brjóta gat á vegginn og sleppa. Síðan er pabbinn kallaður Þorbjörn súr, og þess vegna heitir hetjan okkar Gísli Súrsson.",
+  "heard": "Þau brjóta gat á vegginn og sleppa. Síðan er pabbinn kallaður Þorbjörn súr, og þess vegna heitir hetjan okkar Gísli Súrsson.",
+  "words": [
+   {
+    "w": "Þau",
+    "s": 0.0,
+    "e": 0.18
+   },
+   {
+    "w": "brjóta",
+    "s": 0.18,
+    "e": 0.68
+   },
+   {
+    "w": "gat",
+    "s": 0.68,
+    "e": 0.94
+   },
+   {
+    "w": "á",
+    "s": 0.94,
+    "e": 1.26
+   },
+   {
+    "w": "vegginn",
+    "s": 1.26,
+    "e": 1.72
+   },
+   {
+    "w": "og",
+    "s": 1.72,
+    "e": 1.9
+   },
+   {
+    "w": "sleppa.",
+    "s": 1.9,
+    "e": 2.46
+   },
+   {
+    "w": "Síðan",
+    "s": 3.02,
+    "e": 3.66
+   },
+   {
+    "w": "er",
+    "s": 3.66,
+    "e": 3.74
+   },
+   {
+    "w": "pabbinn",
+    "s": 3.74,
+    "e": 4.14
+   },
+   {
+    "w": "kallaður",
+    "s": 4.14,
+    "e": 4.62
+   },
+   {
+    "w": "Þorbjörn",
+    "s": 4.62,
+    "e": 5.28
+   },
+   {
+    "w": "súr,",
+    "s": 5.28,
+    "e": 5.8
+   },
+   {
+    "w": "og",
+    "s": 5.82,
+    "e": 6.14
+   },
+   {
+    "w": "þess",
+    "s": 6.14,
+    "e": 6.42
+   },
+   {
+    "w": "vegna",
+    "s": 6.42,
+    "e": 6.7
+   },
+   {
+    "w": "heitir",
+    "s": 6.7,
+    "e": 6.96
+   },
+   {
+    "w": "hetjan",
+    "s": 6.96,
+    "e": 7.36
+   },
+   {
+    "w": "okkar",
+    "s": 7.36,
+    "e": 7.66
+   },
+   {
+    "w": "Gísli",
+    "s": 7.66,
+    "e": 8.2
+   },
+   {
+    "w": "Súrsson.",
+    "s": 8.2,
+    "e": 8.76
+   }
+  ]
+ },
+ "8": {
+  "ref": "Þau hefna sín og sigla til Íslands. Þar ætla fjórir menn að sverjast í fóstbræðralag, en einn kippir að sér hendinni.",
+  "heard": "Þau hefna sín og sigla til Íslands. Þar ætla fjórir menn að sverjast í fóstbræðralag, en einn kippir að sér hendinni.",
+  "words": [
+   {
+    "w": "Þau",
+    "s": 0.0,
+    "e": 0.18
+   },
+   {
+    "w": "hefna",
+    "s": 0.18,
+    "e": 0.56
+   },
+   {
+    "w": "sín",
+    "s": 0.56,
+    "e": 0.96
+   },
+   {
+    "w": "og",
+    "s": 0.96,
+    "e": 1.04
+   },
+   {
+    "w": "sigla",
+    "s": 1.04,
+    "e": 1.62
+   },
+   {
+    "w": "til",
+    "s": 1.62,
+    "e": 1.74
+   },
+   {
+    "w": "Íslands.",
+    "s": 1.74,
+    "e": 2.14
+   },
+   {
+    "w": "Þar",
+    "s": 2.56,
+    "e": 3.32
+   },
+   {
+    "w": "ætla",
+    "s": 3.32,
+    "e": 3.54
+   },
+   {
+    "w": "fjórir",
+    "s": 3.54,
+    "e": 4.02
+   },
+   {
+    "w": "menn",
+    "s": 4.02,
+    "e": 4.4
+   },
+   {
+    "w": "að",
+    "s": 4.4,
+    "e": 4.56
+   },
+   {
+    "w": "sverjast",
+    "s": 4.56,
+    "e": 5.0
+   },
+   {
+    "w": "í",
+    "s": 5.0,
+    "e": 5.2
+   },
+   {
+    "w": "fóstbræðralag,",
+    "s": 5.2,
+    "e": 6.02
+   },
+   {
+    "w": "en",
+    "s": 6.14,
+    "e": 6.54
+   },
+   {
+    "w": "einn",
+    "s": 6.54,
+    "e": 7.08
+   },
+   {
+    "w": "kippir",
+    "s": 7.08,
+    "e": 7.56
+   },
+   {
+    "w": "að",
+    "s": 7.56,
+    "e": 7.66
+   },
+   {
+    "w": "sér",
+    "s": 7.66,
+    "e": 7.86
+   },
+   {
+    "w": "hendinni.",
+    "s": 7.86,
+    "e": 8.3
+   }
+  ]
+ }
+}
