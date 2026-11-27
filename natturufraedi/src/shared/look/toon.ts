@@ -457,7 +457,7 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
     p.clip(bandPts, () => { for (let x = x0 + 4 * u; x < x1; x += 7 * u) p.stroke(R([[x, cut - 0.11 * HH], [x, cut + 0.01 * HH]]), 1.3 * u, shade(band, 0.78)); });
   } else if (o.hat === "sowester") {
     // sjóhattur: yellow oilskin dome and a wide drooping brim
-    const yb = crown + 0.2 * HH, col = o.cap ?? "#f2c230", deg = (a * 180) / Math.PI;
+    const yb = crown + 0.2 * HH, col = o.cap ?? "#f2c230";
     const dome = R(ellPts(cx, yb, 0.43 * W, 0.3 * HH, 180, 360));
     p.shadedFill(dome, col, mul(col, SH_FELT), light, 0.43 * W, 0.35);
     p.poly(dome, null, ow);
@@ -467,7 +467,6 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
         [cx - 0.48 * W, yb + 0.44 * HH], [cx - 0.6 * W, yb + 0.4 * HH], [cx - 0.55 * W, yb + 0.08 * HH], [cx - 0.42 * W, yb - 0.03 * HH]]
       : [...ellPts(cx, yb - 0.01 * HH, 0.55 * W, 0.15 * HH, 0, 180), ...ellPts(cx, yb - 0.01 * HH, 0.45 * W, 0.04 * HH, 180, 0)];
     p.poly(R(brimPts), shade(col, 0.92), ow);
-    void deg;
   } else if (o.hat === "tophat") {
     const yb = crown + 0.22 * HH, ht = 0.8 * HH, wb = 0.31 * W, wt = 0.33 * W, col = "#2e2a36";
     const body = R([...sag(yb, wb).reverse(), [cx - wt, yb - ht], [cx + wt, yb - ht]]);

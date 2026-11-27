@@ -10,7 +10,7 @@ import { Batch, kmat, box, slab, quad, tri, V } from "./batch";
 export type HouseOpts = { w: number; d: number; h: number; wall: string; roof: string; trim?: string; seed: number };
 
 /** the classic palette: wall colours and roof colours (on-screen targets before light) */
-export const WALLS = { red: "#c4473a", blue: "#3f6fa8", yellow: "#e9bf4c", white: "#efe9dc" } as const;
+export const WALLS = { red: "#c94a2c", blue: "#3f6fa8", yellow: "#e9bf4c", white: "#efe9dc" } as const;
 export const ROOFS = { red: "#b33a2e", green: "#3f7a4e" } as const;
 const DOORS = ["#2f5d3a", "#8c2f2a", "#2f4470", "#efe9dc", "#6b4a35"];
 

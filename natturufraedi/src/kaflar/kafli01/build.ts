@@ -7,7 +7,7 @@ import { Batch, kmat, box, quad, V } from "../../shared/kit/batch";
 import { barujarnshus, WALLS, ROOFS, concreteMat } from "../../shared/kit/houses";
 import { ctex, rng } from "../../shared/look/paint";
 import { Pen } from "../../shared/look/toon";
-import { LAND_Y, QUAY, HARBOUR_MOUTH, ELDFELL, ELDFELL_R, ELDFELL_H, FISSURE, HELGAFELL, HEIMAKLETTUR, STOFA, lavaLobe } from "./story";
+import { LAND_Y, QUAY, ELDFELL, ELDFELL_R, ELDFELL_H, FISSURE, HELGAFELL, HEIMAKLETTUR, STOFA, lavaLobe } from "./story";
 import { fxWindowView } from "./fx";
 
 const rp = (t: THREE.Texture) => { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 16; return t; };
@@ -534,4 +534,3 @@ export const buildSea = (root: THREE.Object3D) => {
   root.add(m);
   return m;
 };
-export { HARBOUR_MOUTH };

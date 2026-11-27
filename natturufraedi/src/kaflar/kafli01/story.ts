@@ -25,6 +25,8 @@ export const FISSURE = { x: 520, z0: -55, z1: 450 };
 export const HELGAFELL: V3 = [170, LAND_Y, 440];
 /** Heimaklettur: the massif north of the harbour (footprint centre, half extents, height) */
 export const HEIMAKLETTUR = { x: 20, z: -335, ax: 330, az: 100, h: 190 };
+/** where young Amma stands in the street the night the ground tears (the sampler's nott shot) */
+export const AMMA_STREET: V3 = [44, LAND_Y, 50.82];
 /** Amma's living room today: a set far off the island (the window shows a painted Heimaey) */
 export const STOFA: V3 = [0, 0, 4000];
 
@@ -106,7 +108,7 @@ const SAMPLES: Sample[] = [
   { scene: "stofa", light: "day", sunAz: 120, sunEl: 40 },
   { scene: "nott", light: "eruption", fissureAt: -60, ash: 0.4, cone: 0 },
   { scene: "hofn", light: "eruption", fissureAt: -3000, ash: 0.6, cone: 0 },
-  { scene: "hraun", light: "night", fissureAt: -1e6, lava: [0.84, 0.86], ash: 1, cone: 1 },
+  { scene: "hraun", light: "night", fissureAt: -1e6, lava: [0.84, 0.86], ash: 1, cone: 1, sunAz: -140, sunEl: 34 },
   { scene: "slongur", light: "golden", fissureAt: -1e6, lava: [0.99, 1], cool: 0.25, ash: 1, cone: 1, sunAz: -70, sunEl: 14 },
   { scene: "idag", light: "day", sunAz: 100, sunEl: 35 },
   { scene: "bord", light: "day" },
@@ -150,7 +152,7 @@ const at = (p: V3, d: V3): V3 => [p[0] + d[0], p[1] + d[1], p[2] + d[2]];
 /** one creeping framing per scene (the sampler's cameras; Task 7 writes the real ones) */
 const FRAMING: Record<Exclude<Scene, "bord">, (f: number, a: number) => Shot> = {
   stofa: (f, a) => dolly(at(STOFA, [-0.15, 1.2, 6.4]), at(STOFA, [-0.15, 1.0, -0.8]), pushK(f, a, 0.002), { fov: 40 }),
-  nott: (f, a) => zoom([36, LAND_Y + 1.6, 50.5], [420, LAND_Y + 34, 52], 42, pushK(f, a, 0.0015)),
+  nott: (f, a) => zoom([39.5, LAND_Y + 1.45, 50.35], [420, LAND_Y + 40, 51.5], 42, pushK(f, a, 0.0015)),
   hofn: (f, a) => { // telephoto past boat 3 toward the fissure: the fire looms behind the crowded deck
     const b = boatsAt("hofn", (a + 10) / FPS)[3], dx = FISSURE.x - b.x, dz = ELDFELL[2] + 120 - b.z, l = Math.hypot(dx, dz);
     return zoom([b.x - (dx / l) * 92, 6.5, b.z - (dz / l) * 92], [b.x + (dx / l) * 40, 15, b.z + (dz / l) * 40], 21, pushK(f, a, 0.0012), { roll: -0.02 });
@@ -172,7 +174,7 @@ export const camAt = (id: number, f: number): Cam => {
 export type Dof = { cInf: number; focus?: (f: number) => V3 };
 const DOF: Record<Scene, Dof> = {
   stofa: { cInf: 6, focus: () => at(STOFA, [-0.2, 1.1, 0.4]) },
-  nott: { cInf: 3, focus: () => [44, LAND_Y + 1.3, 51.6] },
+  nott: { cInf: 4, focus: () => [AMMA_STREET[0], LAND_Y + 1.3, AMMA_STREET[2]] },
   hofn: { cInf: 0 }, hraun: { cInf: 0 }, slongur: { cInf: 0 }, idag: { cInf: 0 }, bord: { cInf: 0 },
 };
 export const dofAt = (f: number): Dof => DOF[shotAt(f).scene];

@@ -1,15 +1,14 @@
 // Kafli 1's people and effects per scene, as card placements (shared/cast/cards.ts): Amma, Sóley and Kári in the
 // living room; young Amma and her neighbours in the street as the ground tears; islanders crowding the boats; the hose
 // men in pollagallar spraying the lava front. Effects: fire fountains (HDR kvika, bloom), lava bombs, the glow over the
-// fissure, the ash plume, steam where sea meets kvika, hose water arcs, boat wakes, the moon.
+// fissure, the ash plume, steam where sea meets kvika, hose water jets, white water at the boats, the moon.
 import * as THREE from "three";
 import { bodyFront, bodySide, Expr, sideHoseTip } from "../../shared/look/toon";
-import { fxSteam } from "../../shared/look/fx";
 import { drawAmma, drawKari, drawSoley } from "../../shared/cast/recurring";
 import { Stage, CamInfo, card, blob, lidAt, hh, q, SU } from "../../shared/cast/cards";
 import { EYJAMADUR, FLOTTAFOLK } from "./folk";
 import { fxFountain, fxBomb, fxGlow, fxSpray, fxWake, fxMoon, fxPuff } from "./fx";
-import { FPS, LAND_Y, STOFA, ELDFELL, ELDFELL_H, FISSURE, HARBOUR_MOUTH, ShotDef, stateAt, lavaLobe, flankAt, boatsAt, BoatPose, V3 } from "./story";
+import { FPS, LAND_Y, STOFA, ELDFELL, ELDFELL_H, FISSURE, AMMA_STREET, ShotDef, stateAt, lavaLobe, flankAt, boatsAt, BoatPose, V3 } from "./story";
 export { boatsAt, N_BOATS } from "./story";
 import { fissureX, groundAt } from "./build";
 import { Fleet } from "../../shared/kit/boats";
@@ -55,12 +54,6 @@ const plume = (c: Ctx, x: number, y: number, z: number, n: number, H: number, si
       y: y + H * u + 0.12 * size * Math.sin(k * 2.3), z: z + c.cam.right.z * (spread + lean) + (c.cam.pos.z - z) * 0.002 * toward, w: sz, h: sz * 0.875, tint, rot: side * 0.2 });
   }
 };
-const steamPuffs = (c: Ctx, x: number, y: number, z: number, n: number, H: number, size: number, tint: [number, number, number], seed: number) => {
-  for (let k = 0; k < n; k++) {
-    const u = (c.t * 0.16 + k / n + hh(k, seed)) % 1, a = hh(k, seed + 2) * Math.PI * 2, sz = size * (0.5 + 1.2 * u);
-    c.out.fx.push({ key: `steam${k % 3}`, cw: 256, ch: 256, draw: (p) => fxSteam(p, (k % 3) / 3), mode: "soft", tint, x: x + Math.cos(a) * size * 0.4 + u * size * 0.3, y: y + H * u, z: z + Math.sin(a) * size * 0.4, w: sz, h: sz * 0.85, opacity: Math.min(1, (1 - u) * 2.5) });
-  }
-};
 /** the fissure: a curtain of overlapping fountains (tallest near Eldfell's vent; once the cone stands, the fire is
  *  mostly in its crater), glows hugging the curtain, and the ash plume leaning away over it */
 const fissureFx = (c: Ctx, fis: number, cone: number) => {
@@ -76,11 +69,15 @@ const fissureFx = (c: Ctx, fis: number, cone: number) => {
     fountain(c, ELDFELL[0], top, ELDFELL[2], Math.max(45, fis * 0.9), 77);
     glow(c, ELDFELL[0], top + 25, ELDFELL[2], 180, T3(0.85, 0.32, 0.08), 0.8);
   }
-  const mz = early ? ELDFELL[2] : ELDFELL[2];
+  // the plume rises over Eldfell's vent once the cone stands; on the first night over the stretch of fissure the lens
+  // is looking at (where the view ray crosses the fissure line), so it stands above the fountains in frame
+  const fwd = new THREE.Vector3().crossVectors(c.up, c.cam.right);
+  const mz = !early || Math.abs(fwd.x) < 0.2 ? ELDFELL[2]
+    : Math.max(FISSURE.z0 + 60, Math.min(FISSURE.z1 - 60, c.cam.pos.z + ((FISSURE.x - c.cam.pos.x) * fwd.z) / fwd.x));
   glow(c, FISSURE.x, LAND_Y + 20, mz, 420, T3(0.42, 0.14, 0.04), 0.8);
   // the plume stands a little behind the fire (away from the lens), so the crater fountain stays in front of it
   const bx = c.cam.pos.x - FISSURE.x, bz = c.cam.pos.z - mz, bl = Math.hypot(bx, bz) || 1;
-  plume(c, FISSURE.x + 30 - (bx / bl) * 40, LAND_Y + (early ? 70 : 150) + fis * 0.3, mz + 20 - (bz / bl) * 40, 18, 360, 120, 0, T3(1.3, 0.62, 0.42), T3(0.48, 0.5, 0.68), 11, 0.025);
+  plume(c, FISSURE.x + 30 - (bx / bl) * 40, LAND_Y + (early ? 45 : 150) + fis * 0.3, mz + 20 - (bz / bl) * 40, 18, 360, 120, 0, T3(1.3, 0.62, 0.42), T3(0.48, 0.5, 0.68), 11, 0.025);
 };
 
 // ---------------- people ----------------
@@ -95,8 +92,7 @@ const stofa = (c: Ctx) => {
   out.places.push(card(cam, "kari", { e: "grin", b: lidAt(f, 34) }, (p, light) => drawKari(p, "grin", { facing: -1, look: -1, light, blink: lidAt(f, 34) }), ...KARI_SPOT));
   blob(out, KARI_SPOT[0], KARI_SPOT[1], KARI_SPOT[2], c.contact);
 };
-export const AMMA_STREET: V3 = [44, LAND_Y, 51.6];
-const nott = (c: Ctx, s: ReturnType<typeof stateAt>) => {
+const nott = (c: Ctx) => {
   const { cam, f, out } = c;
   const [x, y, z] = AMMA_STREET;
   out.places.push(card(cam, "amma-u", { e: "shock", b: lidAt(f, 47) }, (p, light) => drawAmma(p, "shock", "ung", { light, blink: lidAt(f, 47), facing: -1, look: 1 }), x, y, z));
@@ -114,7 +110,6 @@ const nott = (c: Ctx, s: ReturnType<typeof stateAt>) => {
     out.fx.push({ key: "ashflake", cw: 64, ch: 64, draw: (p) => p.ell(32, 32, 18, 14, "#2a2428", 0), x: cam.pos.x + (fwdx / l) * d + cam.right.x * side, y: LAND_Y + 12 - 13 * u + 2 * Math.sin(k + c.t),
       z: cam.pos.z + (fwdz / l) * d + cam.right.z * side, w: 0.09 + 0.05 * hh(k, 6), h: 0.07 + 0.04 * hh(k, 6), rot: c.t * 2 + k });
   }
-  void s;
 };
 const hofn = (c: Ctx, boats: BoatPose[]) => {
   const { cam, f, out, t } = c;
@@ -127,16 +122,18 @@ const hofn = (c: Ctx, boats: BoatPose[]) => {
       out.fx.push({ key: `wake${i % 3}`, cw: 400, ch: 400, draw: (p) => fxWake(p, i % 3), x: wx, y: 0.5, z: wz, w: 7 * s2, h: 3.2 * s2, mode: "cut", tint: T3(0.75, 0.78, 0.95) });
     }
     // people crowded on deck (fore deck and around the wheelhouse)
-    const spots: [number, number][] = [[2.5, -1.2], [3.6, 0.9], [5.0, -0.4], [1.2, 1.1], [6.2, 0.8], [0.2, -1.4]];
+    const spots: [number, number][] = [[2.5, -1.2], [3.6, 0.9], [5.0, -0.4], [1.2, 1.1], [6.2, 0.8], [0.2, -1.4], [3.0, 0.1], [4.3, -1.5], [7.2, -0.6],
+      [-0.9, 0.3], [-5.6, -1.4], [-6.6, 1.2]];
     spots.forEach(([lx, lz], k) => {
       const [x, z] = loc(lx, lz), o = FLOTTAFOLK[(i + k) % FLOTTAFOLK.length], e: Expr = (["nervous", "shock", "nervous", "pained"] as Expr[])[(i + k) % 4];
       const bob = 0.05 * Math.sin(t * 1.3 + i * 1.7);
-      out.places.push(card(cam, `deck${(i + k) % 6}`, { e, b: lidAt(f, i * 7 + k) }, (p, light) => bodyFront(p, o, { mode: "stand", expr: e, light, blink: lidAt(f, i * 7 + k), seed: 3 + ((i + k) % 7) }), x, Fleet.DECK - 0.1 + bob, z, 1));
+      const seed = 3 + ((i + k) % 7); // the card key must name everything the drawing depends on (outfit, head seed)
+      out.places.push(card(cam, `deck${(i + k) % FLOTTAFOLK.length}|${seed}`, { e, b: lidAt(f, i * 7 + k) }, (p, light) => bodyFront(p, o, { mode: "stand", expr: e, light, blink: lidAt(f, i * 7 + k), seed }), x, Fleet.DECK - 0.1 + bob, z, 1));
     });
   });
 };
 /** hose men in a row facing the lava (side views), water arcs onto the front, steam where it lands */
-const slongur = (c: Ctx, D: number, cool: number) => {
+const slongur = (c: Ctx, D: number) => {
   const { cam, f, out, t } = c;
   for (let i = 0; i < 6; i++) {
     const fl = flankAt(D, 0.52 + 0.045 * i), back = 14 + 3 * hh(i, 2), mx = fl.x + fl.ox * back, mz = fl.z + fl.oz * back;
@@ -164,14 +161,13 @@ const slongur = (c: Ctx, D: number, cool: number) => {
   // the big steam wall rising off the hosed flank
   const m = flankAt(D, 0.6);
   plume(c, m.x - m.ox * 6, LAND_Y + 16, m.z - m.oz * 6, 10, 120, 40, 1, T3(1.15, 0.88, 0.74), T3(1.0, 0.95, 0.95), 31, 0.05);
-  void cool;
 };
 /** the lava tongue at the harbour: steam where it enters the sea, glow along the front */
 const hraun = (c: Ctx, D: number) => {
   const { ax, az, len, half } = lavaLobe(D), px = -az, pz = ax;
   for (let i = -2; i <= 2; i++) {
     const w = (i / 2) * half * 0.85, s = len - 45 * (w / half) ** 2 + 4, x = ELDFELL[0] + ax * s + px * w, z = ELDFELL[2] + az * s + pz * w;
-    steamPuffs(c, x, 2, z, 6, 40, 22, T3(0.55, 0.6, 0.85), 40 + i);
+    if (i % 2 === 0) plume(c, x, 3, z, 4, 34, 10, 1, T3(1.2, 0.66, 0.46), T3(0.42, 0.46, 0.7), 40 + i, 0.08); // steam where kvika meets the sea
     glow(c, x, 8, z, 70, T3(0.7, 0.26, 0.06), 0.9);
   }
 };
@@ -182,10 +178,9 @@ export const stage = (s: ShotDef, id: number, f: number, cam: CamInfo, up: THREE
   if (s.scene === "stofa") { stofa(c); return out; }
   if (!st.today && st.open) fissureFx(c, st.fis, st.cone);
   if (s.light === "night") out.fx.push({ key: "moon", cw: 128, ch: 128, draw: fxMoon, x: cam.pos.x - 900, y: 520, z: cam.pos.z - 700, w: 46, h: 46, tint: T3(1.4, 1.4, 1.35) });
-  if (s.scene === "nott") nott(c, st);
+  if (s.scene === "nott") nott(c);
   if (s.scene === "hofn") hofn(c, boats);
   if (s.scene === "hraun" && st.D !== null) hraun(c, st.D);
-  if (s.scene === "slongur" && st.D !== null) slongur(c, st.D, st.cool);
-  void HARBOUR_MOUTH;
+  if (s.scene === "slongur" && st.D !== null) slongur(c, st.D); // the front's cooling (st.cool) dims the lava in world.ts
   return out;
 };

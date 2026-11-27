@@ -177,7 +177,6 @@ export class World {
     su.e.value.set(e[1], e[2], e[3], e[4]);
     this.sky.position.copy(cam.position); this.stars.position.copy(cam.position);
     this.stars.visible = lit && !indoors;
-    (this.stars.material as THREE.PointsMaterial).opacity = 1;
     untone(L.fog, this.fog.color); [this.fog.near, this.fog.far] = FOG[s.light];
     scene.fog = this.fog; scene.background = null;
     untone(SEA[s.light], (this.sea.material as THREE.MeshBasicMaterial).color);

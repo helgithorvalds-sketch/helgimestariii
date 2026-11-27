@@ -1,7 +1,7 @@
 // 2D effect drawings for the Heimaey eruption, drawn with the cast's Pen (plum ink, flat fills) so fire, steam and
 // water sit in the same inked cartoon world. Fire and kvika are painted in plain colours: the cards are tinted HDR
 // (> 1) by cast.ts, so the bloom (threshold 1.0) catches them. Every drawing is a pure function of its arguments.
-import { Pen, INK } from "../../shared/look/toon";
+import { Pen } from "../../shared/look/toon";
 
 type P2 = [number, number];
 const r1 = (s: number) => { const x = Math.sin(s * 127.1) * 43758.5453; return x - Math.floor(x); };
@@ -30,18 +30,6 @@ export const fxFountain = (p: Pen, ph: number) => {
 
 /** a glowing lava bomb (96 x 96) */
 export const fxBomb = (p: Pen) => { p.ell(48, 48, 30, 34, "#ff8a1e", 6); p.ell(42, 42, 14, 16, "#fff0a0", 0); };
-
-/** an ash / steam billow (256 x 256), soft-edged; tone 0 = dark ash, 1 = white steam */
-export const fxBillow = (p: Pen, tone: number) => {
-  const g = p.g, c = (k: number) => Math.round(70 + 185 * tone * k);
-  for (const [x, y, r, a] of [[128, 150, 96, 0.8], [86, 122, 62, 0.75], [172, 116, 68, 0.72], [128, 86, 64, 0.8], [60, 168, 44, 0.5], [196, 170, 46, 0.5]] as const) {
-    const gr = g.createRadialGradient(x, y - r * 0.25, 0, x, y, r);
-    gr.addColorStop(0, `rgba(${c(1)},${c(0.98)},${c(1.02) > 255 ? 255 : c(1.02)},${a})`);
-    gr.addColorStop(0.7, `rgba(${c(0.85)},${c(0.84)},${c(0.9)},${a * 0.8})`);
-    gr.addColorStop(1, `rgba(${c(0.8)},${c(0.8)},${c(0.85)},0)`);
-    g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
-  }
-};
 
 /** a soft round glow (256 x 256) for additive halos: white core, smooth fall-off */
 export const fxGlow = (p: Pen) => {
@@ -98,13 +86,12 @@ export const fxWindowView = (p: Pen) => {
   g.fillStyle = "#2f5d8f"; g.fillRect(0, 560, W, 6);
   p.poly([[300, 600], [520, 596], [522, 606], [300, 610]], "#b9b4aa", 3);                                          // breakwater
   for (const [x, y, c] of [[420, 640, "#2f5d8f"], [620, 680, "#b8402e"]] as const) { p.poly([[x, y], [x + 70, y], [x + 60, y + 16], [x + 8, y + 16]], c, 4); p.poly([[x + 12, y - 16], [x + 34, y - 16], [x + 34, y], [x + 12, y]], "#f2eee4", 3); }
-  void INK;
 };
 
 /** an inked cartoon cloud puff (256 x 224): 4-5 overlapping lobes, flat fill with a lighter crown and a plum outline.
  *  tone 0 = ash (dark grey-violet), 1 = steam (white); the card tint lights it (orange near the fire). */
 export const fxPuff = (p: Pen, tone: number, seed: number) => {
-  const base = tone > 0.5 ? "#f2f2f6" : "#5d5462", top = tone > 0.5 ? "#ffffff" : "#776c7c", low = tone > 0.5 ? "#d9dce8" : "#4a4250";
+  const base = tone > 0.5 ? "#f2f2f6" : "#5d5462", top = tone > 0.5 ? "#ffffff" : "#776c7c";
   const lobes: [number, number, number][] = [];
   for (let i = 0; i < 5; i++) {
     const a = Math.PI * (0.95 + 1.1 * (i / 4)), d = 52 + 14 * r1(seed + i);
@@ -113,6 +100,5 @@ export const fxPuff = (p: Pen, tone: number, seed: number) => {
   lobes.push([128, 140, 66]);
   for (const [x, y, r] of lobes) p.ell(x, y, r, r * 0.9, base, 8);
   for (const [x, y, r] of lobes) p.ell(x, y, r - 5, r * 0.9 - 5, base, 0);
-  void low;
   for (const [x, y, r] of lobes.slice(0, 3)) p.arc(x, y, r * 0.62, r * 0.55, 200, 290, 7, top); // a light crescent on the upper lobes
 };

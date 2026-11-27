@@ -36,9 +36,8 @@ export const tri = (a: THREE.Vector3, b: THREE.Vector3, c: THREE.Vector3, tile =
   g.setAttribute("position", new THREE.Float32BufferAttribute([a, b, c].flatMap((v) => [v.x, v.y, v.z]), 3));
   g.setAttribute("normal", new THREE.Float32BufferAttribute([0, 1, 2].flatMap(() => [n.x, n.y, n.z]), 3));
   if (tile) {
-    const ab = b.clone().sub(a), L = ab.length(), e = ab.normalize(), up = n.clone().cross(e);
+    const e = b.clone().sub(a).normalize(), up = n.clone().cross(e);
     const uv = [a, b, c].flatMap((p) => { const d = p.clone().sub(a); return [d.dot(e) / tile, d.dot(up) / tile]; });
-    void L;
     g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
   } else g.setAttribute("uv", new THREE.Float32BufferAttribute([0, 0, 1, 0, 0.5, 1], 2));
   return g;
