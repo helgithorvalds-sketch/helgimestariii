@@ -1,0 +1,704 @@
+[
+ {
+  "text": "Einu",
+  "a": 0,
+  "b": 9,
+  "hl": false
+ },
+ {
+  "text": "sinni",
+  "a": 9,
+  "b": 18,
+  "hl": false
+ },
+ {
+  "text": "helltu",
+  "a": 18,
+  "b": 28,
+  "hl": false
+ },
+ {
+  "text": "Íslendingar",
+  "a": 28,
+  "b": 46,
+  "hl": false
+ },
+ {
+  "text": "sápu",
+  "a": 46,
+  "b": 60,
+  "hl": true
+ },
+ {
+  "text": "ofan",
+  "a": 60,
+  "b": 67,
+  "hl": false
+ },
+ {
+  "text": "í Geysi",
+  "a": 67,
+  "b": 97,
+  "hl": true
+ },
+ {
+  "text": "bara",
+  "a": 97,
+  "b": 103,
+  "hl": false
+ },
+ {
+  "text": "til að láta",
+  "a": 102,
+  "b": 114,
+  "hl": false
+ },
+ {
+  "text": "hann",
+  "a": 114,
+  "b": 120,
+  "hl": false
+ },
+ {
+  "text": "gjósa!",
+  "a": 119,
+  "b": 152,
+  "hl": false
+ },
+ {
+  "text": "Geysir",
+  "a": 152,
+  "b": 166,
+  "hl": true
+ },
+ {
+  "text": "var frægasti",
+  "a": 166,
+  "b": 190,
+  "hl": false
+ },
+ {
+  "text": "goshver",
+  "a": 190,
+  "b": 202,
+  "hl": false
+ },
+ {
+  "text": "í heimi",
+  "a": 202,
+  "b": 218,
+  "hl": false
+ },
+ {
+  "text": "og skaut",
+  "a": 218,
+  "b": 232,
+  "hl": false
+ },
+ {
+  "text": "sjóðandi",
+  "a": 232,
+  "b": 247,
+  "hl": false
+ },
+ {
+  "text": "vatni",
+  "a": 247,
+  "b": 263,
+  "hl": false
+ },
+ {
+  "text": "sextíu",
+  "a": 263,
+  "b": 274,
+  "hl": true
+ },
+ {
+  "text": "metra",
+  "a": 274,
+  "b": 285,
+  "hl": true
+ },
+ {
+  "text": "upp í loftið",
+  "a": 285,
+  "b": 316,
+  "hl": false
+ },
+ {
+  "text": "En hann",
+  "a": 316,
+  "b": 324,
+  "hl": false
+ },
+ {
+  "text": "var latur",
+  "a": 324,
+  "b": 356,
+  "hl": true
+ },
+ {
+  "text": "Stundum",
+  "a": 356,
+  "b": 368,
+  "hl": false
+ },
+ {
+  "text": "gaus",
+  "a": 368,
+  "b": 374,
+  "hl": false
+ },
+ {
+  "text": "hann",
+  "a": 374,
+  "b": 380,
+  "hl": false
+ },
+ {
+  "text": "ekki",
+  "a": 377,
+  "b": 385,
+  "hl": false
+ },
+ {
+  "text": "dögum",
+  "a": 385,
+  "b": 397,
+  "hl": true
+ },
+ {
+  "text": "saman",
+  "a": 397,
+  "b": 424,
+  "hl": false
+ },
+ {
+  "text": "Fínir",
+  "a": 424,
+  "b": 437,
+  "hl": false
+ },
+ {
+  "text": "gestir",
+  "a": 437,
+  "b": 447,
+  "hl": false
+ },
+ {
+  "text": "mættu",
+  "a": 447,
+  "b": 456,
+  "hl": false
+ },
+ {
+  "text": "með myndavélarnar",
+  "a": 456,
+  "b": 499,
+  "hl": false
+ },
+ {
+  "text": "og biðu",
+  "a": 499,
+  "b": 546,
+  "hl": true
+ },
+ {
+  "text": "og biðu",
+  "a": 546,
+  "b": 582,
+  "hl": true
+ },
+ {
+  "text": "Þá kom einhver",
+  "a": 582,
+  "b": 601,
+  "hl": false
+ },
+ {
+  "text": "með kassa",
+  "a": 601,
+  "b": 615,
+  "hl": false
+ },
+ {
+  "text": "af sápu",
+  "a": 615,
+  "b": 632,
+  "hl": true
+ },
+ {
+  "text": "og sturtaði",
+  "a": 632,
+  "b": 654,
+  "hl": false
+ },
+ {
+  "text": "honum",
+  "a": 654,
+  "b": 660,
+  "hl": false
+ },
+ {
+  "text": "ofan",
+  "a": 660,
+  "b": 668,
+  "hl": false
+ },
+ {
+  "text": "í",
+  "a": 668,
+  "b": 686,
+  "hl": false
+ },
+ {
+  "text": "Fimm",
+  "a": 686,
+  "b": 692,
+  "hl": false
+ },
+ {
+  "text": "mínútur",
+  "a": 692,
+  "b": 723,
+  "hl": false
+ },
+ {
+  "text": "tíu mínútur",
+  "a": 723,
+  "b": 761,
+  "hl": false
+ },
+ {
+  "text": "og BÚMM!",
+  "a": 761,
+  "b": 805,
+  "hl": true
+ },
+ {
+  "text": "Bíddu",
+  "a": 809,
+  "b": 828,
+  "hl": false
+ },
+ {
+  "text": "sápa?",
+  "a": 828,
+  "b": 857,
+  "hl": true
+ },
+ {
+  "text": "Af hverju",
+  "a": 857,
+  "b": 867,
+  "hl": false
+ },
+ {
+  "text": "virkar",
+  "a": 867,
+  "b": 878,
+  "hl": false
+ },
+ {
+  "text": "það?",
+  "a": 878,
+  "b": 902,
+  "hl": false
+ },
+ {
+  "text": "Sjáðu",
+  "a": 902,
+  "b": 911,
+  "hl": false
+ },
+ {
+  "text": "til",
+  "a": 911,
+  "b": 932,
+  "hl": false
+ },
+ {
+  "text": "djúpt",
+  "a": 932,
+  "b": 943,
+  "hl": false
+ },
+ {
+  "text": "niðri",
+  "a": 943,
+  "b": 949,
+  "hl": false
+ },
+ {
+  "text": "í holunni",
+  "a": 948,
+  "b": 967,
+  "hl": false
+ },
+ {
+  "text": "er vatnið",
+  "a": 967,
+  "b": 986,
+  "hl": false
+ },
+ {
+  "text": "um hundrað",
+  "a": 986,
+  "b": 1003,
+  "hl": true
+ },
+ {
+  "text": "og tuttugu",
+  "a": 1003,
+  "b": 1022,
+  "hl": true
+ },
+ {
+  "text": "stiga",
+  "a": 1022,
+  "b": 1032,
+  "hl": true
+ },
+ {
+  "text": "heitt",
+  "a": 1032,
+  "b": 1055,
+  "hl": false
+ },
+ {
+  "text": "Það ætti",
+  "a": 1055,
+  "b": 1069,
+  "hl": false
+ },
+ {
+  "text": "að sjóða",
+  "a": 1069,
+  "b": 1093,
+  "hl": true
+ },
+ {
+  "text": "en þunginn",
+  "a": 1093,
+  "b": 1109,
+  "hl": false
+ },
+ {
+  "text": "af vatninu",
+  "a": 1109,
+  "b": 1124,
+  "hl": false
+ },
+ {
+  "text": "fyrir",
+  "a": 1124,
+  "b": 1130,
+  "hl": false
+ },
+ {
+  "text": "ofan",
+  "a": 1129,
+  "b": 1142,
+  "hl": false
+ },
+ {
+  "text": "heldur",
+  "a": 1142,
+  "b": 1152,
+  "hl": false
+ },
+ {
+  "text": "því niðri",
+  "a": 1152,
+  "b": 1180,
+  "hl": false
+ },
+ {
+  "text": "Eins",
+  "a": 1180,
+  "b": 1186,
+  "hl": false
+ },
+ {
+  "text": "og hrist",
+  "a": 1184,
+  "b": 1196,
+  "hl": false
+ },
+ {
+  "text": "gosflaska",
+  "a": 1196,
+  "b": 1224,
+  "hl": true
+ },
+ {
+  "text": "um leið",
+  "a": 1224,
+  "b": 1234,
+  "hl": false
+ },
+ {
+  "text": "og tappinn",
+  "a": 1234,
+  "b": 1251,
+  "hl": true
+ },
+ {
+  "text": "fer",
+  "a": 1251,
+  "b": 1266,
+  "hl": false
+ },
+ {
+  "text": "springur",
+  "a": 1266,
+  "b": 1275,
+  "hl": true
+ },
+ {
+  "text": "allt",
+  "a": 1275,
+  "b": 1281,
+  "hl": false
+ },
+ {
+  "text": "upp úr!",
+  "a": 1279,
+  "b": 1309,
+  "hl": false
+ },
+ {
+  "text": "Sápan",
+  "a": 1309,
+  "b": 1323,
+  "hl": true
+ },
+ {
+  "text": "hjálpar",
+  "a": 1323,
+  "b": 1336,
+  "hl": false
+ },
+ {
+  "text": "fyrstu",
+  "a": 1336,
+  "b": 1347,
+  "hl": false
+ },
+ {
+  "text": "bólunum",
+  "a": 1347,
+  "b": 1358,
+  "hl": true
+ },
+ {
+  "text": "að myndast",
+  "a": 1358,
+  "b": 1388,
+  "hl": false
+ },
+ {
+  "text": "Vatn",
+  "a": 1388,
+  "b": 1399,
+  "hl": false
+ },
+ {
+  "text": "skvettist",
+  "a": 1399,
+  "b": 1414,
+  "hl": false
+ },
+ {
+  "text": "upp",
+  "a": 1414,
+  "b": 1432,
+  "hl": false
+ },
+ {
+  "text": "þrýstingurinn",
+  "a": 1432,
+  "b": 1452,
+  "hl": false
+ },
+ {
+  "text": "fellur",
+  "a": 1452,
+  "b": 1471,
+  "hl": false
+ },
+ {
+  "text": "og allt",
+  "a": 1471,
+  "b": 1485,
+  "hl": false
+ },
+ {
+  "text": "breytist",
+  "a": 1485,
+  "b": 1499,
+  "hl": false
+ },
+ {
+  "text": "í gufu",
+  "a": 1499,
+  "b": 1517,
+  "hl": true
+ },
+ {
+  "text": "á augabragði",
+  "a": 1517,
+  "b": 1556,
+  "hl": true
+ },
+ {
+  "text": "Sápan",
+  "a": 1556,
+  "b": 1569,
+  "hl": true
+ },
+ {
+  "text": "fór samt",
+  "a": 1569,
+  "b": 1584,
+  "hl": false
+ },
+ {
+  "text": "illa",
+  "a": 1584,
+  "b": 1590,
+  "hl": false
+ },
+ {
+  "text": "með náttúruna",
+  "a": 1589,
+  "b": 1616,
+  "hl": true
+ },
+ {
+  "text": "svo því var",
+  "a": 1616,
+  "b": 1630,
+  "hl": false
+ },
+ {
+  "text": "hætt",
+  "a": 1630,
+  "b": 1659,
+  "hl": true
+ },
+ {
+  "text": "Í dag gýs",
+  "a": 1659,
+  "b": 1684,
+  "hl": false
+ },
+ {
+  "text": "Geysir",
+  "a": 1684,
+  "b": 1695,
+  "hl": true
+ },
+ {
+  "text": "varla",
+  "a": 1695,
+  "b": 1716,
+  "hl": false
+ },
+ {
+  "text": "og litli",
+  "a": 1716,
+  "b": 1728,
+  "hl": false
+ },
+ {
+  "text": "bróðir",
+  "a": 1728,
+  "b": 1738,
+  "hl": false
+ },
+ {
+  "text": "hans",
+  "a": 1738,
+  "b": 1749,
+  "hl": false
+ },
+ {
+  "text": "Strokkur",
+  "a": 1749,
+  "b": 1767,
+  "hl": true
+ },
+ {
+  "text": "sér um sýninguna",
+  "a": 1767,
+  "b": 1804,
+  "hl": false
+ },
+ {
+  "text": "En nafnið",
+  "a": 1804,
+  "b": 1819,
+  "hl": true
+ },
+ {
+  "text": "á hann",
+  "a": 1819,
+  "b": 1826,
+  "hl": false
+ },
+ {
+  "text": "ennþá",
+  "a": 1826,
+  "b": 1849,
+  "hl": false
+ },
+ {
+  "text": "Latasti",
+  "a": 1849,
+  "b": 1866,
+  "hl": true
+ },
+ {
+  "text": "hverinn",
+  "a": 1866,
+  "b": 1875,
+  "hl": false
+ },
+ {
+  "text": "á Íslandi",
+  "a": 1875,
+  "b": 1894,
+  "hl": false
+ },
+ {
+  "text": "gaf öllum",
+  "a": 1894,
+  "b": 1914,
+  "hl": true
+ },
+ {
+  "text": "goshverum",
+  "a": 1914,
+  "b": 1929,
+  "hl": true
+ },
+ {
+  "text": "heimsins",
+  "a": 1929,
+  "b": 1943,
+  "hl": true
+ },
+ {
+  "text": "nafnið",
+  "a": 1943,
+  "b": 1953,
+  "hl": true
+ },
+ {
+  "text": "sitt",
+  "a": 1953,
+  "b": 1987,
+  "hl": false
+ }
+]

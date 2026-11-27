@@ -4,11 +4,11 @@
 // the sun, painted crescent in the drawing); standing ones get a soft multiply contact blob. Effects are unlit cards.
 // Cards, effects and blobs live on the NOINK layer so the world ink pass never outlines their quads.
 import * as THREE from "three";
-import { Pen, bodyFront, bodySide, townsfolk, KID, fxShadow, fxContact, fxSplash, fxBurst, Outfit, Expr, FrontOpts, SideOpts } from "./toon";
+import { Pen, bodyFront, bodySide, townsfolk, KID, fxShadow, fxContact, fxSplash, fxBurst, Outfit, Expr, FrontOpts, SideOpts } from "../../shared/look/toon";
 import { FPS, clamp01 } from "./story";
-import { LIGHTS } from "./lights";
-import { NOINK } from "./ink";
-import { cardShade, blobMaterial, CARD_K } from "./cardshade";
+import { LIGHTS } from "../../shared/look/lights";
+import { NOINK } from "../../shared/look/ink";
+import { cardShade, blobMaterial, CARD_K } from "../../shared/look/cardshade";
 
 // ---------------- canvas pool ----------------
 type Entry = { cv: HTMLCanvasElement; tex: THREE.CanvasTexture; w: number; h: number };
@@ -215,7 +215,7 @@ export const blob = (out: Stage, x: number, y: number, z: number, sc = 1, k = 1)
 
 // ---------------- the Geysir cast ----------------
 export type Stage = { places: Place[]; fx: FxPlace[] };
-import { fxColumn, fxCrown, fxSteam, fxFoam, fxBubble, fxZ, fxDrop, fxQuestion, fxTopHat, fxCap, fxSoda, fxFlakes, fxCrownGold } from "./fx";
+import { fxColumn, fxCrown, fxSteam, fxFoam, fxBubble, fxZ, fxDrop, fxQuestion, fxTopHat, fxCap, fxSoda, fxFlakes, fxCrownGold } from "../../shared/look/fx";
 import { SHOTS, POOL_Y, STROKKUR, GUESTS, KID_AT, ERUPT_BOOM, ERUPT_STROKKUR, geysirH, strokkurH, foamAt, boilAt, rangerAt, smooth, V3 } from "./story";
 
 export const RANGER: Outfit = { jacket: "#efe4cc", pants: "#3c4f3f", boots: "#5a3b2a", hat: "cap", cap: "#2d5f93", yoke: "#3a4a63", build: "stout", moustache: "#8a5a32", skin: "#f5c9a0" };

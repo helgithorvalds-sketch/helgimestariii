@@ -6,78 +6,20 @@ import { AbsoluteFill, interpolate, useCurrentFrame, Easing } from "remotion";
 import words from "./words.json";
 import { DISPLAY, SANS } from "../../fonts";
 import { SHOTS, shotAt } from "./story";
+import { captionChunks, type Word } from "../../shared/timing";
+import { Captions } from "../../shared/overlays/Captions";
+import { Slam } from "../../shared/overlays/Slam";
+import { Burst } from "../../shared/overlays/Burst";
+import { Stamp } from "../../shared/overlays/Stamp";
+import { Badge } from "../../shared/overlays/Badge";
+import { INK, YEL, cl, ease, lin } from "../../shared/overlays/util";
 
-const INK = "#241726";
-const YEL = "#ffd23f";
-const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const ease = (f: number, a: number, b: number, e = Easing.bezier(0.2, 1.3, 0.3, 1)) => interpolate(f, [a, b], [0, 1], { ...cl, easing: e });
-const lin = (f: number, a: number, b: number) => interpolate(f, [a, b], [0, 1], cl);
-const W = words as { i: number; word: string; start: number; end: number }[];
+const W = words as Word[];
 
 // ---------------- captions ----------------
-const HL = new Set(["sápu", "sápa", "sápan", "geysi", "geysir", "sextíu", "metra", "latur", "dögum", "biðu", "búmm", "hundrað", "tuttugu", "stiga",
+export const GEYSIR_HL: ReadonlySet<string> = new Set(["sápu", "sápa", "sápan", "geysi", "geysir", "sextíu", "metra", "latur", "dögum", "biðu", "búmm", "hundrað", "tuttugu", "stiga",
   "sjóða", "gosflaska", "tappinn", "springur", "bólunum", "gufu", "augabragði", "náttúruna", "hætt", "strokkur", "nafnið", "latasti", "öllum", "goshverum", "heimsins"]);
-const norm = (w: string) => w.toLowerCase().replace(/[^a-záéíóúýþæöð0-9]/g, "");
-type Chunk = { text: string; a: number; b: number; hl: boolean };
-const CHUNKS: Chunk[] = (() => {
-  const out: Chunk[] = [];
-  let cur: { ws: string[]; a: number } | null = null;
-  W.forEach((w, k) => {
-    const fA = Math.round(w.start * 30) - 2, nxt = W[k + 1], short = norm(w.word).length <= 3 && !/[.!?,:]$/.test(w.word);
-    if (!cur) cur = { ws: [], a: fA };
-    cur.ws.push(w.word);
-    const len = cur.ws.join(" ").length;
-    if (!(short && len < 9 && nxt)) {
-      const end = nxt ? Math.min(Math.round(nxt.start * 30) - 2, Math.round(w.end * 30) + 10) : Math.round(w.end * 30) + 18;
-      const text = cur.ws.join(" ").replace(/[.,:]+$/g, "").replace(/\.\.\.$/, "…");
-      out.push({ text, a: cur.a, b: Math.max(end, cur.a + 6), hl: cur.ws.some((x) => HL.has(norm(x))) });
-      cur = null;
-    }
-  });
-  return out;
-})();
-
-const Captions: React.FC<{ f: number }> = ({ f }) => {
-  const c = CHUNKS.find((x) => f >= x.a && f < x.b);
-  if (!c) return null;
-  const board = shotAt(f).scene === "board";
-  const pop = 1 + 0.22 * (1 - ease(f, c.a, c.a + 5, Easing.out(Easing.cubic)));
-  const size = c.text.length > 13 ? 86 : c.text.length > 9 ? 98 : 112;
-  return (
-    <div style={{ position: "absolute", left: 40, right: 40, top: board ? 1610 : 1390, textAlign: "center", transform: `scale(${pop})` }}>
-      <span style={{
-        fontFamily: DISPLAY, fontWeight: 800, fontSize: size, letterSpacing: "-0.01em", textTransform: "uppercase", lineHeight: 1.05,
-        color: c.hl ? YEL : "#ffffff", WebkitTextStroke: `${size * 0.11}px ${INK}`, paintOrder: "stroke fill",
-        textShadow: "0 8px 0 rgba(36,23,38,0.55)",
-      }}>{c.text}</span>
-    </div>
-  );
-};
-
-// ---------------- slams ----------------
-const Slam: React.FC<{ f: number; a: number; b: number; text: string; top: number; size: number; rot?: number; col?: string; sub?: string }> = ({ f, a, b, text, top, size, rot = -5, col = YEL, sub }) => {
-  if (f < a || f >= b) return null;
-  const k = ease(f, a, a + 7), out = lin(f, b - 5, b), shake = f - a < 6 ? ((f - a) % 2 ? -1 : 1) * (6 - (f - a)) * 2.2 : 0;
-  return (
-    <div style={{ position: "absolute", left: 0, right: 0, top, textAlign: "center", opacity: 1 - out, transform: `translate(${shake}px, ${-shake}px) rotate(${rot}deg) scale(${(2.1 - 1.1 * k) * (1 - 0.2 * out)})` }}>
-      <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: size, lineHeight: 0.95, color: col, WebkitTextStroke: `${size * 0.09}px ${INK}`, paintOrder: "stroke fill", textShadow: `0 ${size * 0.08}px 0 ${INK}` }}>{text}</div>
-      {sub ? <div style={{ marginTop: 18, fontFamily: SANS, fontWeight: 800, fontSize: size * 0.28, letterSpacing: "0.12em", color: "#fff", WebkitTextStroke: `8px ${INK}`, paintOrder: "stroke fill" }}>{sub}</div> : null}
-    </div>
-  );
-};
-
-const DayCounter: React.FC<{ f: number }> = ({ f }) => {
-  if (f < 360 || f >= 426) return null;
-  const k = ease(f, 360, 368), day = Math.min(4, 1 + Math.floor(Math.max(0, f - 372) / 12));
-  return (
-    <div style={{ position: "absolute", top: 210, left: 0, right: 0, display: "flex", justifyContent: "center", transform: `scale(${k})`, opacity: 1 - lin(f, 420, 426) }}>
-      <div style={{ background: "#fff", border: `10px solid ${INK}`, borderRadius: 34, padding: "18px 44px", display: "flex", alignItems: "center", gap: 26, boxShadow: `0 12px 0 ${INK}` }}>
-        <svg width={92} height={92} viewBox="0 0 92 92"><rect x={6} y={14} width={80} height={72} rx={12} fill="#fff" stroke={INK} strokeWidth={8} /><rect x={6} y={14} width={80} height={24} rx={10} fill="#e8473f" stroke={INK} strokeWidth={8} /><text x={46} y={76} fontFamily={DISPLAY} fontWeight={800} fontSize={36} textAnchor="middle" fill={INK}>{day}</text></svg>
-        <span style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 86, color: INK }}>DAGUR {day}</span>
-      </div>
-    </div>
-  );
-};
+const CHUNKS = captionChunks(W, GEYSIR_HL);
 
 const Timer: React.FC<{ f: number }> = ({ f }) => {
   if (f < 686 || f >= 779) return null;
@@ -91,32 +33,6 @@ const Timer: React.FC<{ f: number }> = ({ f }) => {
           <circle cx={55} cy={55} r={7} fill={INK} /></svg>
         <span style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 96, color: INK }}>{ten ? "10" : "5"} MÍN</span>
       </div>
-    </div>
-  );
-};
-
-const Boom: React.FC<{ f: number }> = ({ f }) => {
-  if (f < 777 || f >= 812) return null;
-  const k = ease(f, 777, 784), out = lin(f, 805, 812), sh = f < 786 ? ((f % 2) ? -1 : 1) * (786 - f) * 3 : 0;
-  const pts: string[] = [];
-  for (let i = 0; i < 28; i++) { const a = (i / 28) * Math.PI * 2, r = i % 2 ? 250 : 420; pts.push(`${540 + Math.cos(a) * r},${420 + Math.sin(a) * r * 0.62}`); }
-  return (
-    <AbsoluteFill style={{ opacity: 1 - out, transform: `translate(${sh}px, ${-sh}px) scale(${0.4 + 0.6 * k}) rotate(-6deg)`, transformOrigin: "540px 420px" }}>
-      <svg width={1080} height={900} style={{ position: "absolute", top: 80 }}>
-        <polygon points={pts.join(" ")} fill="#ff9f1c" stroke={INK} strokeWidth={14} strokeLinejoin="round" />
-        <polygon points={pts.map((p) => { const [x, y] = p.split(",").map(Number); return `${540 + (x - 540) * 0.78},${420 + (y - 420) * 0.78}`; }).join(" ")} fill={YEL} />
-      </svg>
-      <div style={{ position: "absolute", top: 380, left: 0, right: 0, textAlign: "center", fontFamily: DISPLAY, fontWeight: 800, fontSize: 220, color: "#e8473f", WebkitTextStroke: `20px ${INK}`, paintOrder: "stroke fill" }}>BÚMM!</div>
-    </AbsoluteFill>
-  );
-};
-
-const Stamp: React.FC<{ f: number }> = ({ f }) => {
-  if (f < 1630 || f >= 1661) return null;
-  const k = ease(f, 1630, 1636, Easing.bezier(0.3, 1.6, 0.4, 1));
-  return (
-    <div style={{ position: "absolute", top: 330, left: 0, right: 0, display: "flex", justifyContent: "center", transform: `rotate(-12deg) scale(${2.2 - 1.2 * k})`, opacity: Math.min(1, k * 2) }}>
-      <div style={{ border: "18px solid #d62f2f", borderRadius: 24, padding: "10px 46px", fontFamily: DISPLAY, fontWeight: 800, fontSize: 170, color: "#d62f2f", background: "rgba(255,255,255,0.82)", letterSpacing: "0.04em" }}>BANNAÐ!</div>
     </div>
   );
 };
@@ -309,11 +225,11 @@ export const Overlays: React.FC = () => {
       {s.id === 16 && <BoardWorld f={f} />}
       <Slam f={f} a={46} b={112} text="SÁPA?!" top={150} size={230} rot={-6} />
       <Slam f={f} a={263} b={318} text="60 M" top={300} size={260} rot={4} col="#ffffff" sub="UPP Í LOFTIÐ" />
-      <DayCounter f={f} />
+      <Badge f={f} a={360} b={426} text={`DAGUR ${Math.min(4, 1 + Math.floor(Math.max(0, f - 372) / 12))}`} icon="calendar" />
       <Timer f={f} />
-      <Boom f={f} />
-      <Stamp f={f} />
-      <Captions f={f} />
+      <Burst f={f} a={777} text="BÚMM!" />
+      <Stamp f={f} a={1630} b={1661} text="BANNAÐ!" />
+      <Captions f={f} chunks={CHUNKS} top={s.scene === "board" ? 1610 : 1390} />
     </AbsoluteFill>
   );
 };

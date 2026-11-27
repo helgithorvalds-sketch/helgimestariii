@@ -3,13 +3,13 @@
 // the far hills, plus the cast (cast.ts). update(id, f, camera) poses everything for shot `id` at frame f.
 import * as THREE from "three";
 import { Batch, boxGeo, V, lam } from "./build";
-import { ctex, rng, cloudHD } from "./paint";
-import { Pen } from "./toon";
-import { LIGHTS, LOOK, LightPreset } from "./lights";
-import { TONE, CHAR, untone } from "./shade";
-import { NOINK } from "./ink";
+import { ctex, rng, cloudHD } from "../../shared/look/paint";
+import { Pen } from "../../shared/look/toon";
+import { LIGHTS, LOOK, LightPreset } from "../../shared/look/lights";
+import { TONE, CHAR, untone } from "../../shared/look/shade";
+import { NOINK } from "../../shared/look/ink";
 import { Pool, Actor, Fx, stage } from "./cast";
-import { fxSignFace } from "./fx";
+import { fxSignFace } from "../../shared/look/fx";
 import { FPS, SHOTS, ShotDef, camAt, POOL_R, MOUND_R, POOL_Y, RIM_Y, STROKKUR, FENCE_R, SIGN, domeAt, boilAt } from "./story";
 
 // ---------------- painted textures ----------------
