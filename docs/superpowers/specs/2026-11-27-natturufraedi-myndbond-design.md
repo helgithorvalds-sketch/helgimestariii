@@ -69,8 +69,15 @@ The user pointed at the `claude-animated-shorts` repo for the look and handed ov
 4. **Chapters 2–10** are produced after the pilot is approved, in later rounds, on the same pipeline, reusing the
    cast, the Icelandic world kit and the sound.
 
-Gates the user passes: (a) this design, (b) the Chapter 1 script (and the chosen narrator voice) before any voice is
-generated, (c) the finished pilot.
+Gates the user passes (Claude cannot hear audio here, so every judgement by ear is the user's):
+- (a) this design;
+- (b) the Chapter 1 script, plus 3–4 short voice samples to pick the narrator from;
+- (c) the **full Chapter 1 narration, by ear**, before any animation is timed to it (a mispronunciation found later
+  means new voice, re-timing, new sound and hours of re-rendering);
+- (d) the finished pilot.
+
+Schedule versus look: the user asked for high quality and expects it to take time, so **the look wins**. No effect is
+cut to save render time; long renders are split into chunks that survive a container restart (my call).
 
 ## 6. The 10 chapters
 
@@ -88,6 +95,10 @@ Order follows the strongest hooks first; each is mapped to the 2024 criteria. Fa
 | 7 | **Hafið og lífríki þess** | Food chain and ecosystem: frumframleiðendur → neytendur → rotverur | The kids of Vestmannaeyjar who rescue puffin chicks (pysjur) | Umhverfið: vistkerfi |
 | 8 | **Ljóstillífun og líf á landi** | Plants make their own food from light, water and CO₂ | Birch once covered 25–40 % of Iceland, now ~1.5 %; the mink that escaped | Lífið: ljóstillífun; Umhverfið: nýjar tegundir |
 | 9 | **Líkaminn, kynþroski og erfðir** | Genes come half from each parent; hormones start puberty | Everyday hook (no strong Icelandic event) | Lífið: kynþroski, erfðir |
+
+Chapter 9 tone (my call): it follows Náttúrulega 3's "Kynþroski og erfðafræði": matter-of-fact, the book's own terms,
+centred on hormones and genes; body changes named the way the book names them; characters always clothed, nothing
+shown that a 12-year-old would be embarrassed to watch in class. The user reads this script like the others.
 | 10 | **Sólkerfið, tunglið og árstíðir** | Seasons come from Earth's tilt, not its distance from the sun | The total solar eclipse of 12 Aug 2026; Apollo astronauts trained in Iceland | Alheimurinn |
 
 ## 7. Series bible
@@ -137,8 +148,9 @@ Rules:
 ### 7.3 Cast (recurring, for emotion)
 - **Sögumaður (narrator):**
   - One warm, curious, slightly cheeky Icelandic voice. One steady tone, fast but clear.
-  - Chosen by A/B-testing 3–4 ElevenLabs voices on a sample paragraph full of hard words. The pick is sent to the
-    user with the script; they can swap it.
+  - 3–4 ElevenLabs voices read the same sample paragraph full of hard words; the user picks by ear (gate b).
+    A transcribe-back check (ElevenLabs speech-to-text) catches gross errors before the samples are sent.
+  - Fallback if no voice sounds native enough: **[open — user's answer]**.
   - The narrator also says the characters' short lines as quoted speech, so the whole series has one voice.
 - **Sóley (12):** curious and brave, asks the questions; the viewer's stand-in. Wears a lopapeysa.
 - **Kári (12):** her friend, a sceptical joker who believes the myths. His wrong guesses are what gets busted.
