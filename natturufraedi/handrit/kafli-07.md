@@ -7,7 +7,7 @@ ofar skort: þegar sílið brást urðu pysjurnar fáar. Þess vegna eru pysjurn
 
 Persónur: sögumaður (les allar línur), Sóley (12) og Kári (12) í heimsókn hjá Ömmu Sóleyjar á Heimaey í dag (Amma úr
 kafla 1, sem var tólf ára í gosinu 1973). Tilfinningabogi Sóleyjar: áhyggjur (pysjan á götunni) → forvitni („af
-hverju?“) → gleði (hún sleppir pysjunni við sjóinn). Kári: ojbara (rotnun) → skilningur.
+hverju?“) → gleði (hún sleppir pysjunni við sjóinn). Kári: ojbara („hann rotnar bara og hverfur“) → skilningur (ekkert hverfur).
 
 Ný íðorð (3): **frumframleiðandi**, **neytandi**, **rotvera**. (Fæðukeðja er rammaorðið úr Náttúrulega 1 og er ekki
 talið nýtt. Svifþörungar, dýrasvif, síli, lundi og pysja eru heiti lífvera, hvert skýrt um leið og það kemur fyrir; þau
@@ -21,7 +21,7 @@ eru ekki talin íðorð kaflans.)
 - Hætturnar: „Það eru margar hættur sem leynast í bænum fyrir litlar pysjur s.s. hundar, kettir og bílar. Stærsta ógnin sem að pysjunum steðjar er þó að finna ekki leiðina að sjónum og að endingu drepast úr hungri“ — <https://www.lundi.is/pysjueftirlit/upplysingar/>
 - Rétt meðferð (Skotlistinn fylgir henni): pappakassi og vasaljós; „Best er að hafa aðeins eina pysju í hverjum kassa“; „Mikilvægt er að meðhöndla pysjurnar ekki mikið“ (fitan í fiðrinu heldur vatni frá); engin stór loftgöt; enginn matur í kassann; „Það er mjög mikilvægt að sleppa pysjum strax daginn eftir að þær finnast“; „Aldrei skal sleppa pysjum í höfnina“; „MUNUM eftir endurskinsmerkjunum á kvöldin og förum varlega við sjóinn“; „Gott er að vera tveir eða fleiri saman“. Sleppt „með því að halda með báðum höndum utan um pysjuna án þess að halda um vængina“ og kasta henni „upp á við“; Höfðavík er „nokkuð öruggt fyrir börn“ — <https://www.lundi.is/pysjueftirlit/upplysingar/> ; <https://www.lundi.is/pysjueftirlit/information/>
 - Vigtunin: daginn eftir fara pysjurnar í Pysjueftirlitið, „where they are weighed, measured and marked. Then, later that same day, they are brought to the ocean and released“. Pysjueftirlitið hefur starfað síðan 2003, af því að „Árin á undan höfðu verið óvenju fáar pysjur að fljúga í bæinn“, og „Markmið pysjueftirlitsins er að meta ástand og fjölda þeirra pysja sem lenda í bænum ár hvert“ — <https://www.lundi.is/pysjueftirlit/information/> ; <https://lundi.is>
-- „Sum haustin eru pysjurnar fleiri en fólkið í bænum“: haustið 2025 var „more than 7,000 pufflings … rescued and released“ (Sea Life Trust); haustið 2024 „more than 4,200 pufflings … slightly more than the human population of Heimaey“ (SnExplores). Íbúar Vestmannaeyja voru 4.518 þann 1. janúar 2026 (Hagstofan, eftir citypopulation.de). Heimildum ber ekki saman um 2024: 4.200 eru færri en 4.518, svo raddtextinn segir „sum haustin“ og styðst við 2025. Talning Pysjueftirlitsins haustið 2026 sýndi 4.772 skráðar pysjur (1.119 vigtaðar, meðalþyngd 302 g). Fjöldinn sveiflast milli ára, svo raddtextinn nefnir enga tölu — <https://belugasanctuary.sealifetrust.org/en/puffin-rescue/puffling-season/> ; <https://www.snexplores.org/article/baby-puffins-rescue-iceland> ; <https://citypopulation.de/en/iceland/admin/su%C3%B0urland/8000__vestmannaeyjar> ; <https://lundi.is>
+- „Sum haustin eru pysjurnar fleiri en fólkið í bænum“: haustið 2025 var „more than 7,000 pufflings … rescued and released“ (Sea Life Trust); haustið 2024 „more than 4,200 pufflings … slightly more than the human population of Heimaey“ (SnExplores). Íbúar Vestmannaeyja voru 4.518 þann 1. janúar 2026 (Hagstofan, eftir citypopulation.de). Annað ár: árið 2019 „The Puffling Patrol rescued 7,627 pufflings over the year“ (HuffPost), en íbúar voru 4.264 þann 1. janúar 2020 (citypopulation.de). Heimildum ber ekki saman um 2024: 4.200 eru færri en 4.518, svo raddtextinn segir „sum haustin“ og styðst við 2019 og 2025. Talning Pysjueftirlitsins haustið 2026 sýndi 4.772 skráðar pysjur (1.119 vigtaðar, meðalþyngd 302 g). Fjöldinn sveiflast milli ára, svo raddtextinn nefnir enga tölu — <https://belugasanctuary.sealifetrust.org/en/puffin-rescue/puffling-season/> ; <https://www.yahoo.com/huffpost/puffins-climate-change-iceland-104500779.html> ; <https://www.snexplores.org/article/baby-puffins-rescue-iceland> ; <https://citypopulation.de/en/iceland/admin/su%C3%B0urland/8000__vestmannaeyjar> ; <https://lundi.is>
 - Fæðukeðja: „Orka flyst frá einni lífveru til annarrar í vistkerfinu. Þetta kallast fæðukeðja og byrjar hún í sólinni sem er uppspretta orku í lífríkinu“; „Plöntur geta bundið orku sólarinnar með ljóstillífun sem er ferlið þegar plöntur búa til sína eigin næringu“ og „kallast … frumframleiðendur því þeir framleiða fyrstu orkuna“; „Neytendur eru lífverur sem fá orku með því að neyta annarra lífvera“; „sveppir og bakteríur … brjóta niður lífverur eftir að þær deyja og skila næringarefnum aftur í vistkerfið“ (Náttúrulega 1, bls. 23, kallar þær sundrendur). Náttúrulega 2 notar orðið rotvera: sveppir „eru rotverur sem stuðla að rotnun dauðra plantna og dýra“ — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_1/25/> ; <https://vefir.mms.is/flettibaekur/namsefni/natturulega_2/17/>
 - Svifþörungar eru frumframleiðendur hafsins: þörungar í yfirborðslögum sjávar „kallast plöntusvif (svifþörungar)“; „Plöntusvif, þ e litlir þörungar, er grunnurinn að fæðuvef hafsins. Það framleiðir orku með ljóstillífun“ (Náttúrulega 2, bls. 18 og 113) — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_2/20/> ; <https://vefir.mms.is/flettibaekur/namsefni/natturulega_2/115/>
 - Dýrasvif: „Næsti hlekkur fæðuvefsins er dýrasvif. Það ljóstillífar ekki en fær næringu með því að éta plöntusvifið. Dýrasvif eru agnarlítil krabbadýr“ (Náttúrulega 2, bls. 113) — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_2/115/>
@@ -41,15 +41,15 @@ beina ræðu.
 | Taktur | Lína |
 |---|---|
 | Krókur | Í Vestmannaeyjum fara krakkar út á nóttunni með pappakassa... til að bjarga fuglum! |
-| Sögusvið | Heimaey, september. Sóley og Kári eru hjá ömmu. Í myrkrinu flýgur lundapysja úr holunni í fyrsta sinn. |
+| Sögusvið | Heimaey, september. Sóley og Kári eru hjá ömmu. Í myrkrinu flýgur lundapysja úr holunni. |
 | Stigmögnun 1 | Pysjan á að rata á sjóinn eftir tunglsljósinu. En ljósin í bænum rugla hana, og hún lendir á götunni. |
 | Stigmögnun 2 | Þar bíða kettir og bílar. Þannig að Sóley og amma setja pysjuna varlega í pappakassa. |
-| Stigmögnun 3 – tala | Sum haustin eru pysjurnar fleiri en fólkið í bænum! En sum ár koma óvenju fáar. |
+| Stigmögnun 3 – tala | Sum haustin eru pysjurnar fleiri en fólkið í bænum! En önnur haust koma óvenju fáar. |
 | Spurningin (Sóley) | „Bíddu... af hverju?“ spyr Sóley. |
 | Vendipunktur | Málið er nefnilega að pysjan er hlekkur í fæðukeðju. |
 | Vendipunktur – frumframleiðendur | Neðst eru örsmáir svifþörungar. Þeir nota sólarljós til að búa til fæðu. Þeir eru frumframleiðendur. |
 | Vendipunktur – neytendur | Dýrasvif, agnarlítil krabbadýr, étur þörungana. Sílið, lítill fiskur, étur dýrasvifið og lundinn sílið. Þau eru öll neytendur. |
-| Vendipunktur – rotverur (Kári) | En hvað verður um dauðan fisk? „Hann rotnar bara. Oj!“ segir Kári. Já, sem betur fer! Rotverur, eins og örsmáar bakteríur, brjóta fiskinn niður og skila næringarefnunum aftur til þörunganna. |
+| Vendipunktur – rotverur (Kári) | En hvað verður um dauðan fisk? „Hann rotnar bara og hverfur. Oj!“ segir Kári. Nei, Kári, hann hverfur ekki! Rotverur, eins og bakteríur, brjóta fiskinn niður og skila næringarefnunum aftur til þörunganna. |
 | Vendipunktur – líking | Fæðukeðjan er eins og pýramídi í íþróttatíma. Frumframleiðendurnir eru neðsta röðin og bera alla hina. Neytendurnir standa ofan á, og lundinn efstur. |
 | Vendipunktur – spá | Hvað heldurðu að gerist ef ein röðin gefur sig? ... Allir fyrir ofan detta! |
 | Vendipunktur – sílið | Upp úr aldamótum brást sílið, og árum saman komust fáar pysjur upp. |
@@ -59,17 +59,17 @@ beina ræðu.
 English gist, beat by beat:
 - **Krókur:** In Vestmannaeyjar, kids go out at night with cardboard boxes… to rescue birds!
 - **Sögusvið:** Heimaey, September. Sóley and Kári are staying with Grandma. In the dark, a puffin chick leaves its
-  burrow for the first time.
+  burrow.
 - **Stigmögnun:** The chick is meant to find its way out to sea by the moonlight. But the town lights confuse it, and
   it lands on the street. Cats and cars are waiting there. So Sóley and Grandma gently put the chick in a cardboard
-  box. Some autumns there are more chicks than people in town! But some years unusually few come.
+  box. Some autumns there are more chicks than people in town! But other autumns unusually few come.
 - **Spurningin:** (Sóley) "Wait… why?"
 - **Vendipunktur:** The thing is, the chick is a link in a food chain. At the bottom are tiny floating algae
   (*svifþörungar*). They use sunlight to make food. They are *frumframleiðendur* (producers). Zooplankton, tiny
   crustaceans, eat the algae. The sandeel, a small fish, eats the zooplankton, and the puffin eats the sandeel. They
   are all *neytendur* (consumers).
-- **Rotverur:** But what happens to a dead fish? (Kári) "It just rots. Yuck!" Yes, luckily!
-  *Rotverur* (decomposers), such as tiny bacteria, break the fish down and return the nutrients to the algae.
+- **Rotverur:** But what happens to a dead fish? (Kári) "It just rots and disappears. Yuck!" No, Kári, it
+  doesn't disappear! *Rotverur* (decomposers), such as bacteria, break the fish down and return the nutrients to the algae.
 - **Líking:** The food chain is like a human pyramid in gym class. The producers are the bottom row and carry everyone
   else. The consumers stand on top, with the puffin at the very top.
 - **Prediction:** What do you think happens if one row gives way? … Everyone above falls!
@@ -97,14 +97,14 @@ teiknaður mildur (krossar í augum), án sára.
 | 2 | `nott` – „til að bjarga fuglum!“ Vasaljósgeisli finnur dúnmjúka, gráa pysju undir kyrrstæðum bíl; hún blikkar augunum. | – | slam „BJARGA FUGLUM?!“ |
 | 3 | `nott` – „Heimaey, september.“ Loftmynd í ljósaskiptunum: Heimaklettur, höfnin og bæjarljósin að kvikna. | – | merki (dagatal) „SEPTEMBER“ |
 | 4 | `stofa` – „Sóley og Kári eru hjá ömmu.“ Amma (úr kafla 1) prjónar í stólnum sínum; Sóley og Kári horfa út um gluggann á ljósin. | Amma – hlý (`smile_closed`); Sóley – forvitin (`smile`) | myndatexti; ÖMMU gult |
-| 5 | `idag` – „Í myrkrinu flýgur lundapysja úr holunni í fyrsta sinn.“ Grasbrekka í Heimakletti í rökkri: pysja vaggar út úr holu, blakar vængjunum og tekur flugið. | – | myndatexti; LUNDAPYSJA gult |
+| 5 | `idag` – „Í myrkrinu flýgur lundapysja úr holunni.“ Grasbrekka í Heimakletti í rökkri: pysja vaggar út úr holu, blakar vængjunum og tekur flugið. | – | myndatexti; LUNDAPYSJA gult |
 | 6 | `nott` – „Pysjan á að rata á sjóinn eftir tunglsljósinu.“ Pysjan flýgur yfir dimman sjó; tunglið speglast í glitrandi rák á haffletinum. | – | myndatexti; TUNGLSLJÓSINU gult |
 | 7 | `nott` – „En ljósin í bænum rugla hana,“ Götuljósin og hafnarljósin skína skærar en tunglið; pysjan beygir í átt að bænum. | – | myndatexti; LJÓSIN gult |
 | 8 | `nott` – „og hún lendir á götunni.“ Pysjan lendir mjúklega á blautri götu undir ljósastaur, ringluð en ómeidd. | – | myndatexti; GÖTUNNI gult |
 | 9 | `nott` – „Þar bíða kettir og bílar.“ Kattaraugu glóa á girðingu; bílljós sveipa hægt yfir götuna í fjarska. | – | myndatexti; KETTIR, BÍLAR hvít |
 | 10 | `nott` – „Þannig að Sóley og amma setja pysjuna varlega í pappakassa.“ Sóley í endurskinsvesti tekur pysjuna mjúklega upp með báðum höndum, án þess að halda um vængina, og leggur hana í pappakassa með litlum loftgötum; amma lýsir með vasaljósi; Kári heldur á öðrum tómum kassa. | Sóley – blíð (`smile`); Amma – stolt (`relief`) | myndatexti; VARLEGA gult |
 | 11 | `bord` – „Sum haustin eru pysjurnar fleiri en fólkið í bænum!“ Teiknuð mynd af bænum: pysjutákn hrúgast upp við hlið mannatákna og verða fleiri. | Kári (innskot) – gapir (`shock`) | slam „FLEIRI PYSJUR EN FÓLK!“ |
-| 12 | `stofa` – „En sum ár koma óvenju fáar.“ Amma flettir gamalli myndabók: á einni síðu er bara ein pysja. | Amma – alvarleg (`neutral`) | myndatexti; ÓVENJU FÁAR gult |
+| 12 | `stofa` – „En önnur haust koma óvenju fáar.“ Amma flettir gamalli myndabók: á einni síðu er bara ein pysja. | Amma – alvarleg (`neutral`) | myndatexti; ÓVENJU FÁAR gult |
 | 13 | `stofa` – „„Bíddu... af hverju?“ spyr Sóley.“ Sóley situr á gólfinu við lokaða kassann í dimmu horni og hvíslar. | Sóley – forvitin (`whistle`) | myndatexti „AF HVERJU?“ á lituðum fleti |
 | 14 | `bord` – „Málið er nefnilega að pysjan er hlekkur í fæðukeðju.“ Keðja teiknast; pysjan verður einn hlekkurinn. Tónlistin skiptir um gír hér. | – | spjald; FÆÐUKEÐJU gult |
 | 15 | `haf` – „Neðst eru örsmáir svifþörungar.“ Sólbjart yfirborð sjávar; grænar agnir svífa í vatninu. | – | myndatexti; SVIFÞÖRUNGAR gult |
@@ -114,11 +114,11 @@ teiknaður mildur (krossar í augum), án sára.
 | 19 | `haf` – „og lundinn sílið.“ Fullorðinn lundi „flýgur“ neðansjávar og kemur upp með röð af sílum í goggnum. | – | myndatexti; LUNDINN gult |
 | 20 | `bord` – „Þau eru öll neytendur.“ Keðjan á spjaldi: SVIFÞÖRUNGAR → DÝRASVIF → SÍLI → LUNDI; svigi utan um þrjá síðustu hlekkina. | – | spjald; NEYTENDUR gult |
 | 21 | `haf` – „En hvað verður um dauðan fisk?“ Teiknaður fiskur með krossa í augum sígur hægt niður á sandbotninn. | – | myndatexti |
-| 22 | `stofa` – „„Hann rotnar bara. Oj!“ segir Kári.“ Kári heldur fyrir nefið og grettir sig. | Kári – ojbara (`pained`) | myndatexti; OJ! hvítt |
-| 23 | `haf` – „Já, sem betur fer! Rotverur, eins og örsmáar bakteríur,“ Á botninum safnast örsmáir, ljómandi punktar utan um fiskinn. | Sóley (innskot) – glettin (`smile`) | spjald; ROTVERUR gult |
+| 22 | `stofa` – „„Hann rotnar bara og hverfur. Oj!“ segir Kári.“ Kári heldur fyrir nefið og grettir sig. | Kári – ojbara (`pained`) | myndatexti; OJ! hvítt |
+| 23 | `haf` – „Nei, Kári, hann hverfur ekki! Rotverur, eins og bakteríur,“ Á botninum safnast örsmáir, ljómandi punktar utan um fiskinn. | Sóley (innskot) – glettin (`smile`) | spjald; HVERFUR EKKI hvítt; ROTVERUR gult |
 | 24 | `haf` – „brjóta fiskinn niður og skila næringarefnunum aftur til þörunganna.“ Fiskurinn leysist upp í glitrandi agnir sem straumur ber upp að sólbjörtu yfirborðinu, og grænu þörungarnir blómstra. | – | myndatexti; NÆRINGAREFNUNUM gult |
 | 25 | `bord` – „Fæðukeðjan er eins og pýramídi í íþróttatíma.“ Teikning úr íþróttasal: krakkar í íþróttafötum byggja pýramída á þykkum dýnum og kennari stendur hjá og passar. | – | myndatexti; PÝRAMÍDI gult |
-| 26 | `bord` – „Frumframleiðendurnir eru neðsta röðin og bera alla hina. Neytendurnir standa ofan á, og lundinn efstur.“ Tvískipt spjald: pýramídinn vinstra megin, fæðukeðjan sem pýramídi hægra megin; örvar á milli: NEÐSTA RÖÐIN = FRUMFRAMLEIÐENDUR (svifþörungar), RAÐIRNAR OFAN Á = NEYTENDUR (dýrasvif, síli), EFSTUR = LUNDINN. | – | spjald (líking); FRUMFRAMLEIÐENDURNIR, NEYTENDURNIR gul |
+| 26 | `bord` – „Frumframleiðendurnir eru neðsta röðin og bera alla hina. Neytendurnir standa ofan á, og lundinn efstur.“ Tvískipt spjald: pýramídinn vinstra megin, fæðukeðjan sem pýramídi hægra megin; örvar á milli: NEÐSTA RÖÐIN = FRUMFRAMLEIÐENDUR (svifþörungar), RAÐIRNAR OFAN Á = NEYTENDUR (dýrasvif, síli, lundi); LUNDINN merktur efstur í neytendaröðinni. | – | spjald (líking); FRUMFRAMLEIÐENDURNIR, NEYTENDURNIR gul |
 | 27 | `bord` – „Hvað heldurðu að gerist ef ein röðin gefur sig?“ Sílaröðin í pýramídanum fer að riða. Ein sekúnda af þögn (spáhlé). | – | myndatexti „HVAÐ HELDURÐU?“ |
 | 28 | `bord` – „...Allir fyrir ofan detta!“ Pýramídinn hrynur mjúklega ofan á dýnuna; allir hlæja ómeiddir; hægra megin dettur lundinn með sílaröðinni. | – | sprenging „DETTA!“ |
 | 29 | `bord` – „Upp úr aldamótum brást sílið,“ Lína sem sýnir sílið fellur niður skömmu eftir aldamót. | – | myndatexti; SÍLIÐ gult |
@@ -131,15 +131,15 @@ teiknaður mildur (krossar í augum), án sára.
 ## Raddtexti
 
 [excited] Í Vestmannaeyjum fara krakkar út á nóttunni með pappakassa... til að bjarga fuglum!
-Heimaey, september. Sóley og Kári eru hjá ömmu. Í myrkrinu flýgur lundapysja úr holunni í fyrsta sinn.
+Heimaey, september. Sóley og Kári eru hjá ömmu. Í myrkrinu flýgur lundapysja úr holunni.
 Pysjan á að rata á sjóinn eftir tunglsljósinu. En ljósin í bænum rugla hana, og hún lendir á götunni.
 Þar bíða kettir og bílar. Þannig að Sóley og amma setja pysjuna varlega í pappakassa.
-Sum haustin eru pysjurnar fleiri en fólkið í bænum! En sum ár koma óvenju fáar.
+Sum haustin eru pysjurnar fleiri en fólkið í bænum! En önnur haust koma óvenju fáar.
 [curious] „Bíddu... af hverju?“ spyr Sóley.
 Málið er nefnilega að pysjan er hlekkur í fæðukeðju.
 Neðst eru örsmáir svifþörungar. Þeir nota sólarljós til að búa til fæðu. Þeir eru frumframleiðendur.
 Dýrasvif, agnarlítil krabbadýr, étur þörungana. Sílið, lítill fiskur, étur dýrasvifið og lundinn sílið. Þau eru öll neytendur.
-En hvað verður um dauðan fisk? „Hann rotnar bara. Oj!“ segir Kári. Já, sem betur fer! Rotverur, eins og örsmáar bakteríur, brjóta fiskinn niður og skila næringarefnunum aftur til þörunganna.
+En hvað verður um dauðan fisk? „Hann rotnar bara og hverfur. Oj!“ segir Kári. Nei, Kári, hann hverfur ekki! Rotverur, eins og bakteríur, brjóta fiskinn niður og skila næringarefnunum aftur til þörunganna.
 Fæðukeðjan er eins og pýramídi í íþróttatíma. Frumframleiðendurnir eru neðsta röðin og bera alla hina. Neytendurnir standa ofan á, og lundinn efstur.
 Hvað heldurðu að gerist ef ein röðin gefur sig? ... [excited] Allir fyrir ofan detta!
 Upp úr aldamótum brást sílið, og árum saman komust fáar pysjur upp.
