@@ -17,7 +17,7 @@ Ný íðorð (3): **veðrun**, **rof**, **set**. (Hlaup, jökulá, ísjaki, skaf
 - Vatn er um 1 g/ml, svo einn rúmmetri vatns vegur um eitt tonn; 50.000 m³/s eru því um 50.000 tonn á sekúndu — <https://www.usgs.gov/special-topics/water-science-school/science/water-density>
 - Ólympíulaug (50 × 25 m, 2 m djúp) er um 2.500 m³; 50.000 m³ eru 20 slíkar laugar (18–24 eftir því hvaða mat á hámarkinu er notað) — <https://en.wikipedia.org/wiki/Olympic-size_swimming_pool>
 - Margir ísjakar bárust með flóðvatninu út á sandinn og til sjávar — <https://www.geo.mtu.edu/volcanoes/iceland/vatnajokull/nvi/update9.html>
-- Brúin yfir Gígjukvísl á hringveginum hvarf í hlaupinu, vegurinn yfir sandinn rofnaði á mörgum stöðum og Skeiðarárbrú skemmdist — <https://www.usgs.gov/media/images/vatnajokull-jokulhlaup> ; <https://www.geo.mtu.edu/volcanoes/iceland/vatnajokull/nvi/update9.html> ; <https://www.visindavefur.is/svar.php?id=6660>
+- Brúin yfir Gígjukvísl á hringveginum hvarf í hlaupinu og vegurinn yfir sandinn rofnaði á mörgum stöðum. Heimildum ber ekki saman um Skeiðarárbrú: USGS segir að hún hafi „also [been] carried away“, en MTU-yfirlitið („badly damaged but not destroyed“) og Vísindavefurinn („skemmdist“) að hún hafi skemmst. Raddtextinn nefnir aðeins Gígjukvísl — <https://www.usgs.gov/media/images/vatnajokull-jokulhlaup> ; <https://www.geo.mtu.edu/volcanoes/iceland/vatnajokull/nvi/update9.html> ; <https://www.visindavefur.is/svar.php?id=6660>
 - Tvöfaldist straumhraði vex flutningsgetan um 2⁶ = 64 sinnum: á sem veltir 20 g völu í meðalrennsli veltir 1.280 g hnullungi í vatnavöxtum; jakar ýta líka til stórgrýti — <https://www.visindavefur.is/svar.php?id=78183>
 - Rof af völdum rennandi vatns er áhrifamest útrænu aflanna og straumhraði skiptir þar mestu; jöklar og vindur flytja líka bergmylsnu — <https://www.visindavefur.is/svar.php?id=3815>
 - Skilgreiningar Náttúrulega 3 (Ytri öfl): efni sem brotnar niður úr bergi er veðrun; „þegar einhver náttúruöfl flytja síðan þessa mola til kallast það rof“; set er samansafn lausra bergbrota sem „flyst til vegna rofs og síðan safnast saman“ — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_3/140/>
@@ -39,14 +39,14 @@ beina ræðu.
 | Krókur | Einu sinni kom flóð undan jökli og hrifsaði brú af hringveginum! |
 | Sögusvið | Skeiðarársandur, nóvember nítján hundruð níutíu og sex. |
 | Stigmögnun 1 | Eldgos undir Vatnajökli hefur brætt ísinn. Í fimm vikur safnast vatnið fyrir undir jöklinum. |
-| Stigmögnun 2 – tala | Svo brýst það fram. Þegar mest lætur streyma um fimmtíu þúsund tonn af vatni á sekúndu. Það eru tuttugu Ólympíulaugar á sekúndu! |
+| Stigmögnun 2 – tala | En jökullinn heldur því ekki lengur. Það brýst fram! Þegar mest lætur streyma um fimmtíu þúsund tonn á sekúndu. Það eru tuttugu Ólympíulaugar á sekúndu! |
 | Stigmögnun 3 | Stórir ísjakar berast með flaumnum. Brúin yfir Gígjukvísl hverfur. |
 | Spurningin – misskilningur (Kári) | „Bíddu... vatn er mjúkt! Hvernig brýtur það brú?“ spyr Kári. |
 | Vendipunktur | Málið er nefnilega að hratt vatn ber með sér ís, grjót og sand. Ef það rennur tvöfalt hraðar getur það velt sextíu og fjórum sinnum þyngri steinum! |
 | Vendipunktur – rof | Þegar vatn, ís eða vindur flytur efni burt heitir það rof. |
 | Vendipunktur – veðrun (Sóley) | „En hvaðan kemur allt grjótið?“ spyr Sóley. Úr berginu. Vatn í sprungum frýs, þenst út og brýtur bergið í mola. Það heitir veðrun. |
 | Vendipunktur – spá | Hvað heldurðu að gerist þegar flóðið hægir á sér? ... Það missir farminn! Grjótið og sandurinn setjast. Það sem sest heitir set. |
-| Vendipunktur – líking | Eins og skafrenningur. Vindurinn ber snjóinn, en í skjóli við húsið hægir hann á sér og snjórinn sest í skafl. Vindurinn er flóðið, snjórinn er sandurinn og skaflinn er setið. |
+| Vendipunktur – líking | Þetta þekkirðu úr skafrenningi. Vindurinn ber snjóinn, en í skjóli við húsið hægir hann á sér og snjórinn sest í skafl. Vindurinn er flóðið, snjórinn er sandurinn og skaflinn er setið. |
 | Afleiðing | Og sandurinn sem þú ferð yfir? Hann er úr seti frá jökulám og hlaupum. |
 | Bakhlaup | Þannig að flóð tók brúna... en það voru flóð sem bjuggu til landið sem vegurinn liggur á. |
 
@@ -54,7 +54,8 @@ English gist, beat by beat:
 - **Krókur:** Once, a flood burst out from under a glacier and snatched a bridge off the Ring Road!
 - **Sögusvið:** Skeiðarársandur, November 1996.
 - **Stigmögnun:** An eruption under Vatnajökull has melted the ice; for five weeks the water collects under the glacier.
-  Then it bursts out: at its peak about 50,000 tonnes of water per second. That is twenty Olympic pools a second!
+  But the glacier can't hold it any longer. It bursts out! At its peak about 50,000 tonnes a second. That is twenty
+  Olympic pools a second!
   Big icebergs ride the flood. The bridge over Gígjukvísl disappears.
 - **Spurningin:** (Kári) "Wait… water is soft! How does it break a bridge?"
 - **Vendipunktur:** The thing is, fast water carries ice, rock and sand with it. If it flows twice as fast it can roll
@@ -63,7 +64,7 @@ English gist, beat by beat:
   That is *veðrun* (weathering).
 - **Prediction:** What do you think happens when the flood slows down? … It drops its load!
   The rock and sand settle. What settles is called *set* (sediment).
-- **Líking:** Like drifting snow: the wind carries the snow, but in the shelter of the house it slows and the snow
+- **Líking:** You know this from drifting snow: the wind carries the snow, but in the shelter of the house it slows and the snow
   settles in a drift. The wind is the flood, the snow is the sand, the drift is the sediment.
 - **Afleiðing:** And the sandur you travel across? It is made of sediment from glacial rivers and floods.
 - **Bakhlaup:** So a flood took the bridge… but it was floods that built the land the road lies on.
@@ -84,36 +85,37 @@ yfirlag lendir 0–3 römmum á undan orðinu sínu.
 | 3 | `jokull` – „Skeiðarársandur, nóvember nítján hundruð níutíu og sex.“ Loftmynd: Vatnajökull hvítur efst, svartur sandurinn fyrir neðan, hringvegurinn sem mjó lína þvert yfir með litlum brúm. | – | merki (dagatal) „NÓVEMBER 1996“ |
 | 4 | `jokull` – „Eldgos undir Vatnajökli hefur brætt ísinn.“ Sneiðmynd: glóandi gos undir ísnum, gufa stígur upp úr sigkatli á yfirborðinu. | – | myndatexti; ELDGOS gult |
 | 5 | `jokull` – „Í fimm vikur safnast vatnið fyrir undir jöklinum.“ Sneiðmynd: blátt vatn fyllist undir íshellu sem lyftist hægt; dagatal flettist. | – | merki (dagatal) „5 VIKUR“ |
-| 6 | `hlaup` – „Svo brýst það fram.“ Vatnið ryðst undan jökulsporðinum; ísveggur brotnar. | – | sprenging „BÚMM!“ |
-| 7 | `bord` – „Þegar mest lætur streyma um fimmtíu þúsund tonn af vatni á sekúndu.“ Teljari rúllar upp; skeiðklukka telur eina sekúndu. | – | slam „50.000 TONN Á SEKÚNDU“ |
-| 8 | `bord` – „Það eru tuttugu Ólympíulaugar á sekúndu!“ Tuttugu sundlaugar í röð tæmast á einu tifi klukkunnar, aftur og aftur. | – | slam „≈ 20 ÓLYMPÍULAUGAR Á SEKÚNDU“ |
-| 9 | `hlaup` – „Stórir ísjakar berast með flaumnum.“ Ísjakar velta og rekast á í brúnum flaumnum. | – | myndatexti; ÍSJAKAR gult |
-| 10 | `hlaup` – „Brúin yfir Gígjukvísl hverfur.“ Brúin brestur og hverfur í flauminn; aðeins vatn þar sem hún var. | – | stimpill „HORFIN“ |
-| 11 | `bill` – „„Bíddu... vatn er mjúkt! Hvernig brýtur það brú?“ spyr Kári.“ Í dag: Kári skvettir vatni úr brúsa í lófann og lætur það leka. | Kári – vantrúaður (`grin`) | myndatexti „VATN ER MJÚKT?“ á lituðum fleti |
-| 12 | `bord` – „Málið er nefnilega að hratt vatn ber með sér ís, grjót og sand.“ Sneiðmynd af árfarvegi: straumörvar; ísjaki, steinar og sandkorn á ferð með vatninu. Tónlistin skiptir um gír hér. | – | spjald; ÍS, GRJÓT, SAND hvít |
-| 13 | `bord` – „Ef það rennur tvöfalt hraðar“ Hraðamælir fer úr 1× í 2×; straumörvarnar lengjast. | – | slam „2× HRAÐAR“ |
-| 14 | `bord` – „getur það velt sextíu og fjórum sinnum þyngri steinum!“ Lítil vala veltur; við hlið hennar birtist risahnullungur á vog. | Kári (innskot) – gapir (`shock`) | slam „64× ÞYNGRI“ |
-| 15 | `bord` – „Þegar vatn, ís eða vindur flytur efni burt heitir það rof.“ Þrjú tákn (vatnsdropi, jökull, vindhviða) bera mola til hægri yfir spjaldið. | – | spjald; ROF gult |
-| 16 | `bill` – „„En hvaðan kemur allt grjótið?“ spyr Sóley.“ Sóley horfir út um gluggann á fjöllin og jökulinn. | Sóley – forvitin (`whistle`) | myndatexti „HVAÐAN?“ á lituðum fleti |
-| 17 | `berg` – „Úr berginu. Vatn í sprungum frýs, þenst út“ Nærmynd: vatn lekur inn í sprungu í kletti; hrím læðist yfir; ísinn bólgnar og sprungan gliðnar. | – | myndatexti; FRÝS gult |
-| 18 | `berg` – „og brýtur bergið í mola. Það heitir veðrun.“ Steinflaga springur frá og skoppar niður hlíðina í mörgum molum. | – | sprenging „KRAKK!“; VEÐRUN gult |
-| 19 | `hlaup` – „Hvað heldurðu að gerist þegar flóðið hægir á sér?“ Flóðið breiðir úr sér á sléttum sandinum; straumörvarnar styttast. Ein sekúnda af þögn (spáhlé). | – | myndatexti „HVAÐ HELDURÐU?“ |
-| 20 | `hlaup` – „...Það missir farminn!“ Steinar og sandkorn falla til botns úr hægu vatninu. | – | sprenging „MISSIR FARMINN!“ |
-| 21 | `bord` – „Grjótið og sandurinn setjast. Það sem sest heitir set.“ Korn falla og hlaðast í lag á botninum. | – | spjald; SET gult |
-| 22 | `skafl` – „Eins og skafrenningur. Vindurinn ber snjóinn,“ Vetur: hvítt kóf fýkur þvert yfir garð að rauðu bárujárnshúsi. | – | myndatexti; SKAFRENNINGUR hvítt |
-| 23 | `skafl` – „en í skjóli við húsið hægir hann á sér og snjórinn sest í skafl.“ Hlémegin við húsið hægja snjókornin á sér og hlaðast í stóran skafl. | Sóley (innskot) – kinkar kolli (`smile`) | myndatexti; SKAFL gult |
-| 24 | `bord` – „Vindurinn er flóðið, snjórinn er sandurinn og skaflinn er setið.“ Tvískipt spjald: skaflinn vinstra megin, sandurinn hægra megin; örvar á milli: VINDUR = FLÓÐ, SNJÓR = SANDUR, SKAFL = SET. | – | spjald (líking); SET gult |
-| 25 | `sandur` – „Og sandurinn sem þú ferð yfir?“ Í dag: bíllinn ekur yfir víðan svartan sandinn; jökullinn hvítur í fjarska. | – | myndatexti |
-| 26 | `sandur` – „Hann er úr seti frá jökulám og hlaupum.“ Myndavélin sígur niður í gegnum veginn: sneiðmynd af lögum á lögum af seti undir malbikinu. | – | myndatexti; SETI gult |
-| 27 | `bill` – „Þannig að flóð tók brúna...“ Kári lítur niður á veginn út um gluggann. | Kári – hugsi (`whistle` → `shock`) | myndatexti |
-| 28 | `sandur` – „en það voru flóð sem bjuggu til landið sem vegurinn liggur á.“ Loftmynd: vegurinn sem þunn lína yfir sandinum sem jökulárnar fléttast um; myndin endar á orðinu „á“. | – | myndatexti; FLÓÐ gult |
+| 6 | `jokull` – „En jökullinn heldur því ekki lengur.“ Sneiðmynd: vatnið lyftir íshellunni; sprungur hlaupa um ísinn. | – | myndatexti; HELDUR gult |
+| 7 | `hlaup` – „Það brýst fram!“ Vatnið ryðst undan jökulsporðinum; ísveggur brotnar. | – | sprenging „BÚMM!“ |
+| 8 | `bord` – „Þegar mest lætur streyma um fimmtíu þúsund tonn á sekúndu.“ Teljari rúllar upp; skeiðklukka telur eina sekúndu. | – | slam „50.000 TONN Á SEKÚNDU“ |
+| 9 | `bord` – „Það eru tuttugu Ólympíulaugar á sekúndu!“ Tuttugu sundlaugar í röð tæmast á einu tifi klukkunnar, aftur og aftur. | – | slam „≈ 20 ÓLYMPÍULAUGAR Á SEKÚNDU“ |
+| 10 | `hlaup` – „Stórir ísjakar berast með flaumnum.“ Ísjakar velta og rekast á í brúnum flaumnum. | – | myndatexti; ÍSJAKAR gult |
+| 11 | `hlaup` – „Brúin yfir Gígjukvísl hverfur.“ Brúin brestur og hverfur í flauminn; aðeins vatn þar sem hún var. | – | stimpill „HORFIN“ |
+| 12 | `bill` – „„Bíddu... vatn er mjúkt! Hvernig brýtur það brú?“ spyr Kári.“ Í dag: Kári í aftursætinu, með bílbelti, skvettir vatni úr brúsa í lófann og lætur það leka. | Kári – vantrúaður (`grin`) | myndatexti „VATN ER MJÚKT?“ á lituðum fleti |
+| 13 | `bord` – „Málið er nefnilega að hratt vatn ber með sér ís, grjót og sand.“ Sneiðmynd af árfarvegi: straumörvar; ísjaki, steinar og sandkorn á ferð með vatninu. Tónlistin skiptir um gír hér. | – | spjald; ÍS, GRJÓT, SAND hvít |
+| 14 | `bord` – „Ef það rennur tvöfalt hraðar“ Hraðamælir fer úr 1× í 2×; straumörvarnar lengjast. | – | slam „2× HRAÐAR“ |
+| 15 | `bord` – „getur það velt sextíu og fjórum sinnum þyngri steinum!“ Lítil vala veltur; við hlið hennar birtist hnefastór hnullungur á vog (um 64 sinnum þyngri). | Kári (innskot) – gapir (`shock`) | slam „64× ÞYNGRI“ |
+| 16 | `bord` – „Þegar vatn, ís eða vindur flytur efni burt heitir það rof.“ Þrjú tákn (vatnsdropi, jökull, vindhviða) bera mola til hægri yfir spjaldið. | – | spjald; ROF gult |
+| 17 | `bill` – „„En hvaðan kemur allt grjótið?“ spyr Sóley.“ Sóley, með bílbelti í aftursætinu, horfir út um gluggann á fjöllin og jökulinn. | Sóley – forvitin (`whistle`) | myndatexti „HVAÐAN?“ á lituðum fleti |
+| 18 | `berg` – „Úr berginu. Vatn í sprungum frýs, þenst út“ Nærmynd: vatn lekur inn í sprungu í kletti; hrím læðist yfir; ísinn bólgnar og sprungan gliðnar. | – | myndatexti; FRÝS gult |
+| 19 | `berg` – „og brýtur bergið í mola. Það heitir veðrun.“ Steinflaga springur frá og skoppar niður hlíðina í mörgum molum. | – | sprenging „KRAKK!“; VEÐRUN gult |
+| 20 | `hlaup` – „Hvað heldurðu að gerist þegar flóðið hægir á sér?“ Flóðið breiðir úr sér á sléttum sandinum; straumörvarnar styttast. Ein sekúnda af þögn (spáhlé). | – | myndatexti „HVAÐ HELDURÐU?“ |
+| 21 | `hlaup` – „...Það missir farminn!“ Steinar og sandkorn falla til botns úr hægu vatninu. | – | sprenging „MISSIR FARMINN!“ |
+| 22 | `bord` – „Grjótið og sandurinn setjast. Það sem sest heitir set.“ Korn falla og hlaðast í lag á botninum. | – | spjald; SET gult |
+| 23 | `skafl` – „Þetta þekkirðu úr skafrenningi. Vindurinn ber snjóinn,“ Vetur: hvítt kóf fýkur þvert yfir garð að rauðu bárujárnshúsi. | – | myndatexti; SKAFRENNINGI hvítt |
+| 24 | `skafl` – „en í skjóli við húsið hægir hann á sér og snjórinn sest í skafl.“ Hlémegin við húsið hægja snjókornin á sér og hlaðast í stóran skafl. | Sóley (innskot) – kinkar kolli (`smile`) | myndatexti; SKAFL gult |
+| 25 | `bord` – „Vindurinn er flóðið, snjórinn er sandurinn og skaflinn er setið.“ Tvískipt spjald: skaflinn vinstra megin, sandurinn hægra megin; örvar á milli: VINDUR = FLÓÐ, SNJÓR = SANDUR, SKAFL = SET. | – | spjald (líking); SET gult |
+| 26 | `sandur` – „Og sandurinn sem þú ferð yfir?“ Í dag: bíllinn ekur yfir víðan svartan sandinn; jökullinn hvítur í fjarska. | – | myndatexti |
+| 27 | `sandur` – „Hann er úr seti frá jökulám og hlaupum.“ Myndavélin sígur niður í gegnum veginn: sneiðmynd af lögum á lögum af seti undir malbikinu. | – | myndatexti; SETI gult |
+| 28 | `bill` – „Þannig að flóð tók brúna...“ Kári, með bílbelti í aftursætinu, lítur niður á veginn út um gluggann. | Kári – hugsi (`whistle` → `shock`) | myndatexti |
+| 29 | `sandur` – „en það voru flóð sem bjuggu til landið sem vegurinn liggur á.“ Loftmynd: vegurinn sem þunn lína yfir sandinum sem jökulárnar fléttast um; myndin endar á orðinu „á“. | – | myndatexti; FLÓÐ gult |
 
 ## Raddtexti
 
 [excited] Einu sinni kom flóð undan jökli og hrifsaði brú af hringveginum!
 Skeiðarársandur, nóvember nítján hundruð níutíu og sex.
 Eldgos undir Vatnajökli hefur brætt ísinn. Í fimm vikur safnast vatnið fyrir undir jöklinum.
-Svo brýst það fram. Þegar mest lætur streyma um fimmtíu þúsund tonn af vatni á sekúndu. Það eru tuttugu Ólympíulaugar á sekúndu!
+En jökullinn heldur því ekki lengur. Það brýst fram! Þegar mest lætur streyma um fimmtíu þúsund tonn á sekúndu. Það eru tuttugu Ólympíulaugar á sekúndu!
 Stórir ísjakar berast með flaumnum. Brúin yfir Gígjukvísl hverfur.
 „Bíddu... vatn er mjúkt! Hvernig brýtur það brú?“ spyr Kári.
 Málið er nefnilega að hratt vatn ber með sér ís, grjót og sand. Ef það rennur tvöfalt hraðar getur það velt sextíu og fjórum sinnum þyngri steinum!
@@ -121,6 +123,6 @@ Málið er nefnilega að hratt vatn ber með sér ís, grjót og sand. Ef það 
 [curious] „En hvaðan kemur allt grjótið?“ spyr Sóley.
 Úr berginu. Vatn í sprungum frýs, þenst út og brýtur bergið í mola. Það heitir veðrun.
 Hvað heldurðu að gerist þegar flóðið hægir á sér? ... [excited] Það missir farminn! Grjótið og sandurinn setjast. Það sem sest heitir set.
-Eins og skafrenningur. Vindurinn ber snjóinn, en í skjóli við húsið hægir hann á sér og snjórinn sest í skafl. Vindurinn er flóðið, snjórinn er sandurinn og skaflinn er setið.
+Þetta þekkirðu úr skafrenningi. Vindurinn ber snjóinn, en í skjóli við húsið hægir hann á sér og snjórinn sest í skafl. Vindurinn er flóðið, snjórinn er sandurinn og skaflinn er setið.
 Og sandurinn sem þú ferð yfir? Hann er úr seti frá jökulám og hlaupum.
 Þannig að flóð tók brúna... en það voru flóð sem bjuggu til landið sem vegurinn liggur á.
