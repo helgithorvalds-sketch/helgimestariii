@@ -67,12 +67,36 @@ def test_one_error_per_fault(tmp_path, mutate, word):
     assert word in errs[0]
 
 
-@pytest.mark.parametrize("abbr", ["t.d.", "o.s.frv.", "þ.e.", "km", "m.", "°C", "%", "ca.", "u.þ.b."])
+@pytest.mark.parametrize(
+    "abbr", ["t.d.", "o.s.frv.", "þ.e.", "km", "m.", "°C", "%", "ca.", "u.þ.b.", "kl.", "o.fl.", "skv.", "nr.", "ppm", "℃"]
+)
 def test_every_listed_abbreviation_is_caught(tmp_path, abbr):
     from handrit_check import check
     errs = check(write(tmp_path, append_voice(f"Hraunið fór hundrað {abbr} á dag.")(GOOD)))
     assert len(errs) == 1, errs
     assert "skammstöfun" in errs[0]
+
+
+def test_subscript_digit_is_a_digit(tmp_path):
+    from handrit_check import check
+    errs = check(write(tmp_path, append_voice("Plöntur nota CO₂ og vatn.")(GOOD)))
+    assert len(errs) == 1, errs
+    assert "tölustaf" in errs[0]
+
+
+def test_km_squared_is_digit_and_abbreviation(tmp_path):
+    from handrit_check import check
+    errs = check(write(tmp_path, append_voice("Eyjan stækkaði um tveir komma tveir km².")(GOOD)))
+    assert len(errs) == 2, errs
+    assert any("tölustaf" in e for e in errs)
+    assert any("skammstöfun" in e and "km" in e for e in errs)
+
+
+def test_ppm_is_an_abbreviation(tmp_path):
+    from handrit_check import check
+    errs = check(write(tmp_path, append_voice("Á skiltinu stendur fjögur hundruð og fimmtán ppm.")(GOOD)))
+    assert len(errs) == 1, errs
+    assert "skammstöfun" in errs[0] and "ppm" in errs[0]
 
 
 def test_word_endings_are_not_abbreviations(tmp_path):

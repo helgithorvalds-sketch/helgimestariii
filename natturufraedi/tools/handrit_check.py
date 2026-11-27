@@ -12,10 +12,12 @@ File format, headings in this order:
 """
 import re
 import sys
+import unicodedata
 
 SECTIONS = ["Staðreyndir og heimildir", "Handrit", "Skotlisti", "Raddtexti"]
 BEATS = ["Krókur", "Sögusvið", "Stigmögnun", "Spurningin", "Vendipunktur", "Afleiðing", "Bakhlaup"]
-ABBREVIATIONS = ["t.d.", "o.s.frv.", "þ.e.", "km", "m.", "°C", "%", "ca.", "u.þ.b."]
+ABBREVIATIONS = ["t.d.", "o.s.frv.", "þ.e.", "km", "m.", "°C", "%", "ca.", "u.þ.b.",
+                 "kl.", "o.fl.", "skv.", "nr.", "ppm", "℃"]
 SKOTLISTI_COLS = ["#", "Á skjá", "Persóna – tilfinning", "Yfirlag"]
 MIN_WORDS, MAX_WORDS = 150, 230  # 60–90 s at the measured 2.56 words/s
 WORDS_PER_S = 2.56
@@ -25,14 +27,23 @@ TAG = re.compile(r"\[[^\]]*\]")
 URL = re.compile(r"https?://\S+")
 
 
-def _abbr_pattern(a: str) -> re.Pattern:
-    """A listed abbreviation as a word of its own ('m.' must not match the end of 'straum.')."""
-    left = r"(?<!\w)" if a[0].isalnum() else ""
-    right = r"(?!\w)" if a[-1].isalnum() else ""
-    return re.compile(left + re.escape(a) + right, re.IGNORECASE)
+def _is_digit(c: str) -> bool:
+    """Any number character: 0-9 and other decimal digits (Nd), and ², ₂, ½ (No)."""
+    return unicodedata.category(c) in ("Nd", "No")
 
 
-ABBR_PATTERNS = [(a, _abbr_pattern(a)) for a in ABBREVIATIONS]
+def _abbreviations(text: str) -> list[str]:
+    """Listed abbreviations that stand as words of their own: a letter at either edge must not touch
+    another letter, so 'm.' does not match the end of 'straum.', but 'km' matches inside 'km²'."""
+    found = []
+    for a in ABBREVIATIONS:
+        for m in re.finditer(re.escape(a), text, re.IGNORECASE):
+            before = text[m.start() - 1] if m.start() > 0 else " "
+            after = text[m.end()] if m.end() < len(text) else " "
+            if not (a[0].isalpha() and before.isalpha()) and not (a[-1].isalpha() and after.isalpha()):
+                found.append(a)
+                break
+    return found
 
 
 def _sections(text: str) -> tuple[list[str], dict[str, str]]:
@@ -118,10 +129,10 @@ def check(path: str) -> list[str]:
 
     if "Raddtexti" in body:
         voice = TAG.sub(" ", raddtexti(path))
-        digits = re.findall(r"\S*\d\S*", voice)
+        digits = [tok for tok in voice.split() if any(_is_digit(c) for c in tok)]
         if digits:
             errs.append("Raddtexti má ekki innihalda tölustafi (skrifaðu tölur með orðum): " + ", ".join(digits))
-        abbrs = [a for a, p in ABBR_PATTERNS if p.search(voice)]
+        abbrs = _abbreviations(voice)
         if abbrs:
             errs.append("Raddtexti má ekki innihalda skammstöfun (skrifaðu fullum stöfum): " + ", ".join(abbrs))
         n = word_count(voice)
