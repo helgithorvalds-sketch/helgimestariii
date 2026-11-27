@@ -298,7 +298,7 @@ const guests = (c: Ctx, mood: "wait" | "bored" | "eager" | "boom" | "soaked" | "
 export const stage = (id: number, f: number, cam: CamInfo): Stage => {
   const out: Stage = { places: [], fx: [] };
   const s = SHOTS[id - 1], t = f / FPS, c: Ctx = { cam, t, f, out };
-  LNAME = s.light;
+  LNAME = s.light === "golden" ? "golden" : "day"; // the Geysir cast only knows day and golden
   findSun(cam, SUN);
   // ---- the springs ----
   const gh = geysirH(t);

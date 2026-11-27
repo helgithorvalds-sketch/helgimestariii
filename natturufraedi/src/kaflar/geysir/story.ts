@@ -57,7 +57,7 @@ export const domeAt = (t: number) => lin([[700 / FPS, 0], [760 / FPS, 0.25], [77
 export const boilAt = (t: number) => lin([[600 / FPS, 0], [641 / FPS, 0.15], [688 / FPS, 0.35], [725 / FPS, 0.6], [763 / FPS, 1], [ERUPT_BOOM, 1], [ERUPT_BOOM + 0.2, 0]], t);
 
 // ---------------- shots ----------------
-export type Light = "day" | "golden";
+import type { Light } from "../../shared/look/lights";
 export type Scene = "pour" | "wide" | "lazy" | "guests" | "walk" | "boom" | "soaked" | "kid" | "shame" | "strokkur" | "sign" | "board";
 export type ShotDef = { id: number; a: number; b: number; light: Light; scene: Scene; sunAz?: number; sunEl?: number };
 export const SHOTS: ShotDef[] = [

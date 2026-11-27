@@ -292,7 +292,7 @@ export class World {
     for (let i = 0; i < this.clouds.length; i++) {
       const m = this.clouds[i], mat = m.material as THREE.MeshBasicMaterial;
       m.lookAt(cam.position.x, m.position.y, cam.position.z);
-      mat.map = this.cloudMaps[s.light][i % 4];
+      mat.map = this.cloudMaps[s.light === "golden" ? "golden" : "day"][i % 4]; // Geysir paints day and golden only
     }
     // ---- the pool: dome bulge before the BÚMM + boiling wobble ----
     const dome = domeAt(t), boil = boilAt(t), P = this.water.geometry.attributes.position as THREE.BufferAttribute, B = this.waterBase;
