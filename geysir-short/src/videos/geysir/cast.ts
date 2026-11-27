@@ -368,7 +368,7 @@ export const stage = (id: number, f: number, cam: CamInfo): Stage => {
     out.places.push(pl);
     blob(out, x, 0, z, 0.72);
     // bottle mouth in world space: the card faces the camera, the bottle is right of centre at ~0.95 m
-    const bx = x + cam.right.x * 0.12, bz = z + cam.right.z * 0.12, by = 0.74;
+    const bx = x + cam.right.x * 0.13, bz = z + cam.right.z * 0.13, by = 0.6;
     if (f >= pop) {
       const u = clamp01((f - pop) / 14);
       out.fx.push({ key: "cap", cw: 100, ch: 100, draw: fxCap, x: bx + cam.right.x * 0.5 * u, y: by + 1.6 * u - 0.6 * u * u, z: bz + cam.right.z * 0.5 * u, w: 0.09, h: 0.09, rot: 9 * u });

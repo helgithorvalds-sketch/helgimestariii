@@ -30,7 +30,7 @@ export const SIGN: V3 = [-6.2, 0, 15.2];
 /** the ranger's walk with the soap (shot 5) and his pouring spot on the rim */
 export const POUR_AT: V3 = [2.75, RIM_Y - 0.05, 1.95];
 export const WALK_FROM: V3 = [8.6, 0, 9.4];
-export const KID_AT: V3 = [6.2, 0, 12.6];
+export const KID_AT: V3 = [6.2, 0, 15.7]; // outside the rope, so no rope crosses his shot
 
 /** the guests behind the rope (x, z) */
 export const GUESTS: [number, number][] = [[-3.6, 12.9], [-2.3, 12.6], [-1.1, 12.75], [0.2, 12.55], [1.5, 12.8], [2.8, 12.6], [4.0, 12.9], [-0.5, 13.7], [1.0, 13.8], [2.3, 13.75]];
@@ -155,8 +155,8 @@ const S7c = (f: number) => dolly([0.1, 1.9, 4.6], [0, 0.65, 0], pushK(f, 763, 0.
 const S8a = (f: number) => zoom([2.6, 1.3, 19.5], [0, 10, 0], 50, pushK(f, 779, 0.0015));
 const S9a = (f: number) => dolly([0.85, 1.55, 10.0], [0.25, 1.45, 12.6], pushK(f, 811, 0.0025, 0.006, 30), { fov: 36, roll: 0.03 });
 const S9b = (f: number) => dolly([0.6, 1.55, 10.6], [0.25, 1.5, 12.6], pushK(f, 859, 0.002), { fov: 34, roll: -0.04 });
-const S11a = (f: number) => dolly([5.4, 0.95, 9.4], [6.2, 0.8, 12.6], pushK(f, 1182, 0.0025), { fov: 38 });
-const S11b = (f: number) => dolly([5.6, 0.95, 9.9], [6.15, 0.9, 12.6], pushK(f, 1241, 0.002, 0.007, 30), { fov: 40, roll: 0.045 });
+const S11a = (f: number) => dolly([5.4, 0.95, 12.5], [6.2, 0.8, 15.7], pushK(f, 1182, 0.0025), { fov: 38 });
+const S11b = (f: number) => dolly([5.6, 0.95, 13.0], [6.15, 0.9, 15.7], pushK(f, 1241, 0.002, 0.007, 30), { fov: 40, roll: 0.045 });
 const S13a = (f: number) => dolly([7.8, 1.75, 9.4], [4.4, 1.2, 5.3], pushK(f, 1558, 0.0025), { fov: 38 });
 const S14a = (f: number) => zoom([9.5, 3.0, 13.5], [-11, 3.2, -5.5], 48, pushK(f, 1661, 0.0015));
 const S14b = (f: number) => zoom([4, 2.4, 6], [STROKKUR[0], 6, STROKKUR[2]], 40, pushK(f, 1740, 0.002, 0.005, 30), { roll: 0.035 });
@@ -213,7 +213,7 @@ export const DOF: Dof[] = [
   { f: 725, cInf: 9, focus: () => [0, 0.55, 0] },
   { f: 779, cInf: 0 },
   { f: 811, cInf: 13, focus: () => [0.2, 1.6, 12.55] },
-  { f: 1182, cInf: 13, focus: () => [6.2, 0.95, 12.6] },
+  { f: 1182, cInf: 13, focus: () => [6.2, 0.95, 15.7] },
   { f: 1558, cInf: 11, focus: () => [4.6, 1.3, 5.4] },
   { f: 1661, cInf: 0 },
   { f: 1806, cInf: 8, focus: () => [SIGN[0], 1.4, SIGN[2]] },

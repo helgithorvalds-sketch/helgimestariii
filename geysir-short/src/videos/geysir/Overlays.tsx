@@ -187,8 +187,10 @@ const BoardInside: React.FC<{ f: number }> = ({ f }) => {
   const val = interpolate(f, [990, 1036], [0.15, 1], { ...cl, easing: Easing.out(Easing.cubic) });
   const bub = interpolate(f, [1060, 1080], [0, 1], cl), squash = interpolate(f, [1140, 1160], [0, 1], cl);
   const arrows = interpolate(f, [1110, 1140], [0, 1], cl);
+  const creep = 1 + 0.0008 * (f - 904);
   return (
     <AbsoluteFill style={{ background: "#4d3b33", overflow: "hidden" }}>
+      <AbsoluteFill style={{ transform: `scale(${creep})`, transformOrigin: "540px 960px" }}>
       <div style={{ position: "absolute", left: 0, top: 0, width: 1080, height: 3000, transform: `translate(${tx}px, ${ty}px) scale(${sc})`, transformOrigin: "0 0" }}>
         <Section f={f} bubbles={bub} squash={squash} />
         <svg width={1080} height={3000} style={{ position: "absolute", left: 0, top: 0 }}>
@@ -205,6 +207,7 @@ const BoardInside: React.FC<{ f: number }> = ({ f }) => {
           })}
         </svg>
       </div>
+      </AbsoluteFill>
       <Slam f={f} a={998} b={1095} text="120°C" top={300} size={230} rot={4} col="#ff6a2a" sub="DJÚPT NIÐRI" />
       <Slam f={f} a={904} b={934} text="INNI Í GEYSI" top={220} size={120} rot={-3} />
     </AbsoluteFill>
@@ -235,10 +238,12 @@ const BoardSoap: React.FC<{ f: number }> = ({ f }) => {
   const sc = 0.64, tx = 540 * (1 - sc) / sc * sc;
   const sh = f >= 1508 && f < 1518 ? ((f % 2) ? -1 : 1) * (1518 - f) * 2.5 : 0;
   return (
-    <AbsoluteFill style={{ background: "#4d3b33", overflow: "hidden", transform: `translate(${sh}px, ${-sh}px)` }}>
+    <AbsoluteFill style={{ background: "#4d3b33", overflow: "hidden" }}>
+      <AbsoluteFill style={{ transform: `translate(${sh}px, ${-sh}px) scale(${1.02 + 0.0008 * (f - 1311)})`, transformOrigin: "540px 960px" }}>
       <div style={{ position: "absolute", left: 0, top: 0, width: 1080, height: 3000, transform: `translate(${tx}px, 0px) scale(${sc})`, transformOrigin: "0 0" }}>
         <Section f={f} soap={soap} splash={splash} steam={steam} erupt={erupt} />
       </div>
+      </AbsoluteFill>
       <Gauge v={gauge} />
       <Slam f={f} a={1311} b={1388} text="SÁPAN" top={150} size={170} rot={-4} sub="BÓLUR MYNDAST" />
       <Slam f={f} a={1480} b={1558} text="GUFA!" top={150} size={200} rot={5} col="#ffffff" />
