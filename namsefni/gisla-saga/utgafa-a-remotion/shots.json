@@ -1,0 +1,375 @@
+{
+ "fps": 30,
+ "width": 1080,
+ "height": 1920,
+ "frames": 2400,
+ "flash_at": 126,
+ "impact_flashes": [
+  1040,
+  1817
+ ],
+ "freeze_from": 2356,
+ "cuts": [
+  126,
+  300,
+  476,
+  525,
+  546,
+  600,
+  680,
+  698,
+  745,
+  900,
+  937,
+  1024,
+  1046,
+  1096,
+  1170,
+  1245,
+  1306,
+  1329,
+  1389,
+  1433,
+  1500,
+  1533,
+  1624,
+  1676,
+  1800,
+  1869,
+  1902,
+  1924,
+  1990,
+  2040,
+  2100,
+  2149,
+  2170,
+  2224,
+  2302
+ ],
+ "shots": [
+  {
+   "id": "s01",
+   "start": 0,
+   "end": 126,
+   "block": 1,
+   "set": "skemma",
+   "light": "fire",
+   "what": "flash-forward: whey vat in firelight"
+  },
+  {
+   "id": "s02",
+   "start": 126,
+   "end": 300,
+   "block": 1,
+   "set": "stokkar",
+   "light": "day",
+   "what": "Gísli turns to camera, crane up to Stokkar"
+  },
+  {
+   "id": "s03",
+   "start": 300,
+   "end": 476,
+   "block": 2,
+   "set": "stokkar",
+   "light": "day",
+   "what": "family line-up: Gísli, pabbi, Þórdís, Þorkell"
+  },
+  {
+   "id": "s04",
+   "start": 476,
+   "end": 525,
+   "block": 2,
+   "set": "stokkar",
+   "light": "day",
+   "what": "Bárður leans on the fence, winks at Þórdís"
+  },
+  {
+   "id": "s05",
+   "start": 525,
+   "end": 546,
+   "block": 2,
+   "set": "stokkar",
+   "light": "day",
+   "what": "Gísli's spear thrust (cut before contact)"
+  },
+  {
+   "id": "s06",
+   "start": 546,
+   "end": 600,
+   "block": 2,
+   "set": "stokkar",
+   "light": "day",
+   "what": "Bárður drops behind the stone wall"
+  },
+  {
+   "id": "s07",
+   "start": 600,
+   "end": 680,
+   "block": 3,
+   "set": "stokkar",
+   "light": "day",
+   "what": "Þorkell sulks by the vats, stomps off"
+  },
+  {
+   "id": "s08",
+   "start": 680,
+   "end": 698,
+   "block": 3,
+   "set": "stokkar",
+   "light": "day",
+   "what": "gate slams"
+  },
+  {
+   "id": "s09",
+   "start": 698,
+   "end": 745,
+   "block": 3,
+   "set": "saxa",
+   "light": "grey",
+   "what": "Hólmgöngu-Skeggi laughs on Saxa, Þorkell beside him"
+  },
+  {
+   "id": "s10",
+   "start": 745,
+   "end": 900,
+   "block": 3,
+   "set": "saxa",
+   "light": "grey",
+   "what": "woodcarver chops two silly wooden Gíslis"
+  },
+  {
+   "id": "s11",
+   "start": 900,
+   "end": 937,
+   "block": 4,
+   "set": "saxa",
+   "light": "grey",
+   "what": "duel square of hazel poles"
+  },
+  {
+   "id": "s12",
+   "start": 937,
+   "end": 1024,
+   "block": 4,
+   "set": "saxa",
+   "light": "grey",
+   "what": "Skeggi brags with Gunnlogi"
+  },
+  {
+   "id": "s13",
+   "start": 1024,
+   "end": 1046,
+   "block": 4,
+   "set": "saxa",
+   "light": "grey",
+   "what": "Gísli swings: whip-pan, flash"
+  },
+  {
+   "id": "s14",
+   "start": 1046,
+   "end": 1096,
+   "block": 4,
+   "set": "saxa",
+   "light": "grey",
+   "what": "cutaway: Skeggi dazed"
+  },
+  {
+   "id": "s15",
+   "start": 1096,
+   "end": 1170,
+   "block": 4,
+   "set": "saxa",
+   "light": "grey",
+   "what": "Skeggi hops on a peg leg"
+  },
+  {
+   "id": "s16",
+   "start": 1170,
+   "end": 1245,
+   "block": 4,
+   "set": "skemma",
+   "light": "night",
+   "what": "insert: the vats in the dark"
+  },
+  {
+   "id": "s17",
+   "start": 1245,
+   "end": 1306,
+   "block": 5,
+   "set": "saxa",
+   "light": "night",
+   "what": "Skeggi's sons light torches"
+  },
+  {
+   "id": "s18",
+   "start": 1306,
+   "end": 1329,
+   "block": 5,
+   "set": "stokkar",
+   "light": "night",
+   "what": "night over Stokkar"
+  },
+  {
+   "id": "s19",
+   "start": 1329,
+   "end": 1389,
+   "block": 5,
+   "set": "stokkar",
+   "light": "night",
+   "what": "sixty torches down the valley"
+  },
+  {
+   "id": "s20",
+   "start": 1389,
+   "end": 1433,
+   "block": 5,
+   "set": "stokkar",
+   "light": "night",
+   "what": "torches to the turf wall"
+  },
+  {
+   "id": "s21",
+   "start": 1433,
+   "end": 1500,
+   "block": 5,
+   "set": "skemma",
+   "light": "fire",
+   "what": "family asleep beside the vats"
+  },
+  {
+   "id": "s22",
+   "start": 1500,
+   "end": 1533,
+   "block": 6,
+   "set": "skemma",
+   "light": "fire",
+   "what": "Gísli wakes"
+  },
+  {
+   "id": "s23",
+   "start": 1533,
+   "end": 1624,
+   "block": 6,
+   "set": "skemma",
+   "light": "fire",
+   "what": "the two vats"
+  },
+  {
+   "id": "s24",
+   "start": 1624,
+   "end": 1676,
+   "block": 6,
+   "set": "skemma",
+   "light": "fire",
+   "what": "goat skin dunked in the whey"
+  },
+  {
+   "id": "s25",
+   "start": 1676,
+   "end": 1800,
+   "block": 6,
+   "set": "skemma",
+   "light": "fire",
+   "what": "three knock-downs of the flames"
+  },
+  {
+   "id": "s26",
+   "start": 1800,
+   "end": 1869,
+   "block": 7,
+   "set": "skemma",
+   "light": "fire",
+   "what": "Gísli kicks through the back wall"
+  },
+  {
+   "id": "s27",
+   "start": 1869,
+   "end": 1902,
+   "block": 7,
+   "set": "stokkar",
+   "light": "night",
+   "what": "family runs up the mountainside"
+  },
+  {
+   "id": "s28",
+   "start": 1902,
+   "end": 1924,
+   "block": 7,
+   "set": "stokkar",
+   "light": "golden",
+   "what": "dawn: the empty vat steams"
+  },
+  {
+   "id": "s29",
+   "start": 1924,
+   "end": 1990,
+   "block": 7,
+   "set": "stokkar",
+   "light": "golden",
+   "what": "Þorbjörn SÚR close-up"
+  },
+  {
+   "id": "s30",
+   "start": 1990,
+   "end": 2040,
+   "block": 7,
+   "set": "stokkar",
+   "light": "golden",
+   "what": "family at the ruins"
+  },
+  {
+   "id": "s31",
+   "start": 2040,
+   "end": 2100,
+   "block": 7,
+   "set": "stokkar",
+   "light": "golden",
+   "what": "Gísli SÚRSSON hero pose"
+  },
+  {
+   "id": "s32",
+   "start": 2100,
+   "end": 2149,
+   "block": 8,
+   "set": "saxa",
+   "light": "golden",
+   "what": "revenge: the wooden figures burn"
+  },
+  {
+   "id": "s33",
+   "start": 2149,
+   "end": 2170,
+   "block": 8,
+   "set": "sea",
+   "light": "grey",
+   "what": "knörr under a striped sail"
+  },
+  {
+   "id": "s34",
+   "start": 2170,
+   "end": 2224,
+   "block": 8,
+   "set": "iceland",
+   "light": "day",
+   "what": "Iceland: flat-topped Westfjords mountains"
+  },
+  {
+   "id": "s35",
+   "start": 2224,
+   "end": 2302,
+   "block": 8,
+   "set": "iceland",
+   "light": "day",
+   "what": "four men kneel under the turf arch"
+  },
+  {
+   "id": "s36",
+   "start": 2302,
+   "end": 2400,
+   "block": 8,
+   "set": "iceland",
+   "light": "day",
+   "what": "four hands; the dark-red hand yanks back; freeze"
+  }
+ ]
+}
