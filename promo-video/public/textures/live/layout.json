@@ -1,0 +1,600 @@
+{
+ "pageW": 1920,
+ "board": {
+  "pageH": 4953,
+  "cards": [
+   {
+    "file": "card-1.png",
+    "x": 361,
+    "y": 770,
+    "w": 1198,
+    "h": 42,
+    "title": "Bakarí Bjarkar",
+    "zone": "129,000 kr."
+   },
+   {
+    "file": "card-2.png",
+    "x": 361,
+    "y": 824,
+    "w": 1198,
+    "h": 42,
+    "title": "Kaffi Kría",
+    "zone": "149,000 kr."
+   },
+   {
+    "file": "card-3.png",
+    "x": 361,
+    "y": 878,
+    "w": 1198,
+    "h": 42,
+    "title": "Hárstofa Hlínar",
+    "zone": "99,000 kr."
+   },
+   {
+    "file": "card-4.png",
+    "x": 361,
+    "y": 932,
+    "w": 1198,
+    "h": 42,
+    "title": "Vélaverk Ármanns",
+    "zone": "189,000 kr."
+   },
+   {
+    "file": "card-5.png",
+    "x": 361,
+    "y": 986,
+    "w": 1198,
+    "h": 42,
+    "title": "Kertagerð Kolbrúnar",
+    "zone": "119,000 kr."
+   },
+   {
+    "file": "card-6.png",
+    "x": 374,
+    "y": 1175,
+    "w": 362.66,
+    "h": 42,
+    "title": "Hestaleiga Heklu",
+    "zone": "Vildi forskoðun"
+   },
+   {
+    "file": "card-7.png",
+    "x": 374,
+    "y": 1225,
+    "w": 362.66,
+    "h": 42,
+    "title": "Lopabúðin Ull",
+    "zone": "Vildi forskoðun"
+   },
+   {
+    "file": "card-8.png",
+    "x": 374,
+    "y": 1275,
+    "w": 362.66,
+    "h": 42,
+    "title": "Sjósund Selvogs",
+    "zone": "Vildi forskoðun"
+   },
+   {
+    "file": "card-9.png",
+    "x": 778.66,
+    "y": 1175,
+    "w": 362.67,
+    "h": 42,
+    "title": "Garðyrkja Grímu",
+    "zone": "Selt sýnishorn"
+   },
+   {
+    "file": "card-10.png",
+    "x": 778.66,
+    "y": 1225,
+    "w": 362.67,
+    "h": 42,
+    "title": "Ljósmyndastofa Lóu",
+    "zone": "Selt sýnishorn"
+   },
+   {
+    "file": "card-11.png",
+    "x": 1183.33,
+    "y": 1175,
+    "w": 362.66,
+    "h": 42,
+    "title": "Prjónastofa Péturs",
+    "zone": "50/50"
+   },
+   {
+    "file": "card-12.png",
+    "x": 1183.33,
+    "y": 1225,
+    "w": 362.66,
+    "h": 42,
+    "title": "Hjólaverkstæðið Hvel",
+    "zone": "50/50"
+   },
+   {
+    "file": "card-13.png",
+    "x": 374,
+    "y": 1391,
+    "w": 362.66,
+    "h": 42,
+    "title": "Tannstofa Eyju",
+    "zone": "Þarf vefsíðu"
+   },
+   {
+    "file": "card-14.png",
+    "x": 374,
+    "y": 1693,
+    "w": 261.5,
+    "h": 42,
+    "title": "Bílaþjónusta Bárðar",
+    "zone": "Ekki haft samband"
+   },
+   {
+    "file": "card-15.png",
+    "x": 374,
+    "y": 1743,
+    "w": 261.5,
+    "h": 42,
+    "title": "Jógastöð Jöklu",
+    "zone": "Ekki haft samband"
+   },
+   {
+    "file": "card-16.png",
+    "x": 677.5,
+    "y": 1693,
+    "w": 261.5,
+    "h": 42,
+    "title": "Fiskbúð Fróða",
+    "zone": "Haft samband"
+   },
+   {
+    "file": "card-17.png",
+    "x": 677.5,
+    "y": 1743,
+    "w": 261.5,
+    "h": 42,
+    "title": "Sútunarstofan Skinn",
+    "zone": "Haft samband"
+   },
+   {
+    "file": "card-18.png",
+    "x": 981,
+    "y": 1693,
+    "w": 261.5,
+    "h": 42,
+    "title": "Brugghús Bjargs",
+    "zone": "Vefsíða breytt"
+   },
+   {
+    "file": "card-19.png",
+    "x": 1284.5,
+    "y": 1693,
+    "w": 261.5,
+    "h": 42,
+    "title": "Steinsmiðja Stapa",
+    "zone": "Krafa"
+   },
+   {
+    "file": "card-20.png",
+    "x": 374,
+    "y": 1995,
+    "w": 565,
+    "h": 42,
+    "title": "Ísbúð Unnar",
+    "zone": "Greitt X"
+   },
+   {
+    "file": "card-21.png",
+    "x": 374,
+    "y": 2045,
+    "w": 565,
+    "h": 42,
+    "title": "Hundasnyrting Heiðu",
+    "zone": "Greitt X"
+   },
+   {
+    "file": "card-22.png",
+    "x": 981,
+    "y": 1995,
+    "w": 565,
+    "h": 42,
+    "title": "Gistiheimilið Lind",
+    "zone": "Greitt að fullu"
+   },
+   {
+    "file": "card-23.png",
+    "x": 981,
+    "y": 2045,
+    "w": 565,
+    "h": 42,
+    "title": "Rafverk Röðuls",
+    "zone": "Greitt að fullu"
+   },
+   {
+    "file": "card-24.png",
+    "x": 981,
+    "y": 2095,
+    "w": 565,
+    "h": 42,
+    "title": "Kökuhús Kötlu",
+    "zone": "Greitt að fullu"
+   }
+  ],
+  "sections": [
+   {
+    "label": "Vill sýnishorn",
+    "x": 345,
+    "y": 1066,
+    "w": 1230,
+    "h": 64,
+    "badge": {
+     "x": 361,
+     "y": 1082,
+     "w": 150,
+     "h": 32
+    }
+   },
+   {
+    "label": "Lokið",
+    "x": 345,
+    "y": 1584,
+    "w": 1230,
+    "h": 64,
+    "badge": {
+     "x": 361,
+     "y": 1600,
+     "w": 72.75,
+     "h": 32
+    }
+   },
+   {
+    "label": "Greitt",
+    "x": 345,
+    "y": 1886,
+    "w": 1230,
+    "h": 64,
+    "badge": {
+     "x": 361,
+     "y": 1902,
+     "w": 80.56,
+     "h": 32
+    }
+   }
+  ],
+  "callRows": [
+   {
+    "file": "call-1.png",
+    "x": 361,
+    "y": 188,
+    "w": 570,
+    "h": 54,
+    "title": "Bakarí Bjarkar"
+   },
+   {
+    "file": "call-2.png",
+    "x": 361,
+    "y": 250,
+    "w": 570,
+    "h": 54,
+    "title": "Kaffi Kría"
+   },
+   {
+    "file": "call-3.png",
+    "x": 361,
+    "y": 312,
+    "w": 570,
+    "h": 54,
+    "title": "Hárstofa Hlínar"
+   },
+   {
+    "file": "call-4.png",
+    "x": 361,
+    "y": 374,
+    "w": 570,
+    "h": 54,
+    "title": "Vélaverk Ármanns"
+   },
+   {
+    "file": "call-5.png",
+    "x": 361,
+    "y": 436,
+    "w": 570,
+    "h": 54,
+    "title": "Kertagerð Kolbrúnar"
+   },
+   {
+    "file": "call-6.png",
+    "x": 361,
+    "y": 498,
+    "w": 570,
+    "h": 54,
+    "title": "Blómabúðin Sóley"
+   },
+   {
+    "file": "call-7.png",
+    "x": 361,
+    "y": 560,
+    "w": 570,
+    "h": 54,
+    "title": "Smiðja Sigga"
+   },
+   {
+    "file": "call-8.png",
+    "x": 361,
+    "y": 622,
+    "w": 570,
+    "h": 54,
+    "title": "Lopabúðin Ull"
+   },
+   {
+    "file": "call-9.png",
+    "x": 361,
+    "y": 684,
+    "w": 570,
+    "h": 54,
+    "title": "Sjósund Selvogs"
+   },
+   {
+    "file": "call-10.png",
+    "x": 361,
+    "y": 746,
+    "w": 570,
+    "h": 54,
+    "title": "Hjólaverkstæðið Hvel"
+   },
+   {
+    "file": "call-11.png",
+    "x": 361,
+    "y": 808,
+    "w": 570,
+    "h": 54,
+    "title": "Tannstofa Eyju"
+   }
+  ],
+  "sched": [
+   {
+    "file": "sched-1.png",
+    "x": 361,
+    "y": 2248,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Hestaleiga Heklu"
+   },
+   {
+    "file": "sched-2.png",
+    "x": 361,
+    "y": 2378.5,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Garðyrkja Grímu"
+   },
+   {
+    "file": "sched-3.png",
+    "x": 361,
+    "y": 2509,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Ljósmyndastofa Lóu"
+   },
+   {
+    "file": "sched-4.png",
+    "x": 361,
+    "y": 2639.5,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Prjónastofa Péturs"
+   },
+   {
+    "file": "sched-5.png",
+    "x": 361,
+    "y": 2770,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Bílaþjónusta Bárðar"
+   },
+   {
+    "file": "sched-6.png",
+    "x": 361,
+    "y": 2900.5,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Fjallakaffi"
+   },
+   {
+    "file": "sched-7.png",
+    "x": 361,
+    "y": 3031,
+    "w": 779.33,
+    "h": 122.5,
+    "title": "Jógastöð Jöklu"
+   },
+   {
+    "file": "sched-8.png",
+    "x": 1198.33,
+    "y": 2248,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Bakarí Bjarkar"
+   },
+   {
+    "file": "sched-9.png",
+    "x": 1198.33,
+    "y": 2370.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Kaffi Kría"
+   },
+   {
+    "file": "sched-10.png",
+    "x": 1198.33,
+    "y": 2493,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Hárstofa Hlínar"
+   },
+   {
+    "file": "sched-11.png",
+    "x": 1198.33,
+    "y": 2615.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Vélaverk Ármanns"
+   },
+   {
+    "file": "sched-12.png",
+    "x": 1198.33,
+    "y": 2738,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Kertagerð Kolbrúnar"
+   },
+   {
+    "file": "sched-13.png",
+    "x": 1198.33,
+    "y": 2860.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Blómabúðin Sóley"
+   },
+   {
+    "file": "sched-14.png",
+    "x": 1198.33,
+    "y": 2983,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Smiðja Sigga"
+   },
+   {
+    "file": "sched-15.png",
+    "x": 1198.33,
+    "y": 3105.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Lopabúðin Ull"
+   },
+   {
+    "file": "sched-16.png",
+    "x": 1198.33,
+    "y": 3228,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Sjósund Selvogs"
+   },
+   {
+    "file": "sched-17.png",
+    "x": 1198.33,
+    "y": 3350.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Hjólaverkstæðið Hvel"
+   },
+   {
+    "file": "sched-18.png",
+    "x": 1198.33,
+    "y": 3473,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Tannstofa Eyju"
+   },
+   {
+    "file": "sched-19.png",
+    "x": 1198.33,
+    "y": 3595.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Fiskbúð Fróða"
+   },
+   {
+    "file": "sched-20.png",
+    "x": 1198.33,
+    "y": 3718,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Sútunarstofan Skinn"
+   },
+   {
+    "file": "sched-21.png",
+    "x": 1198.33,
+    "y": 3840.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Brugghús Bjargs"
+   },
+   {
+    "file": "sched-22.png",
+    "x": 1198.33,
+    "y": 3963,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Steinsmiðja Stapa"
+   },
+   {
+    "file": "sched-23.png",
+    "x": 1198.33,
+    "y": 4085.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Gistiheimilið Lind"
+   },
+   {
+    "file": "sched-24.png",
+    "x": 1198.33,
+    "y": 4208,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Rafverk Röðuls"
+   },
+   {
+    "file": "sched-25.png",
+    "x": 1198.33,
+    "y": 4330.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Kökuhús Kötlu"
+   },
+   {
+    "file": "sched-26.png",
+    "x": 1198.33,
+    "y": 4453,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Ísbúð Unnar"
+   },
+   {
+    "file": "sched-27.png",
+    "x": 1198.33,
+    "y": 4575.5,
+    "w": 360.66,
+    "h": 114.5,
+    "title": "Hundasnyrting Heiðu"
+   }
+  ],
+  "callPanel": {
+   "x": 344,
+   "y": 131,
+   "w": 608,
+   "h": 554
+  },
+  "header": {
+   "x": -195,
+   "y": 0,
+   "w": 2310,
+   "h": 107
+  },
+  "brand": {
+   "x": 312,
+   "y": 16,
+   "w": 332.75,
+   "h": 74
+  }
+ },
+ "heroPage": {
+  "pageH": 5095,
+  "card": {
+   "x": 778.66,
+   "y": 1225,
+   "w": 362.67,
+   "h": 234
+  }
+ }
+}

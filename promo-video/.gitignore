@@ -1,0 +1,4 @@
+node_modules/
+out/
+# Mixkit BGM: licensed for use in the film, not for standalone redistribution — copy from the video-shotcraft repo (assets/audio/bgm/house-vibez.mp3)
+public/audio/bgm/
