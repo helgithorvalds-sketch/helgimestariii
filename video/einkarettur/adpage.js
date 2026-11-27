@@ -1,5 +1,6 @@
-// Company A's ad page (baby clothes) drawn on a canvas, plus the page texture that turns gold into it.
+// Your company's ad page (baby clothes) drawn on a canvas, plus the page texture that turns gold into it.
 import { THREE, C } from './lib.js';
+import { drawIcon } from './icons.js';
 
 const W = 1024, H = 1400;
 const rr = (c, x, y, w, h, r) => { c.beginPath(); c.roundRect(x, y, w, h, r); };
@@ -68,9 +69,9 @@ export function drawAd(c) {
   const lg = c.createLinearGradient(64, 64, 156, 156); lg.addColorStop(0, '#ffd45c'); lg.addColorStop(1, '#f5a623');
   c.fillStyle = lg; c.beginPath(); c.arc(110, 110, 48, 0, Math.PI * 2); c.fill();
   c.strokeStyle = '#ffffff'; c.lineWidth = 6; c.beginPath(); c.arc(110, 110, 38, 0, Math.PI * 2); c.stroke();
-  c.fillStyle = '#1c1035'; c.font = '800 46px PJS'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('A', 110, 113);
+  drawIcon(c, 'clothes', 110, 112, 52, '#1c1035');
   c.textAlign = 'left'; c.textBaseline = 'alphabetic';
-  c.font = '800 46px PJS'; c.fillText('Fataverslun A', 184, 104);
+  c.fillStyle = '#1c1035'; c.font = '800 46px PJS'; c.fillText('Barnafataverslun', 184, 104);
   c.fillStyle = '#7a6f99'; c.font = '700 26px PJS'; c.fillText('Barnaföt · 0–3 ára', 186, 146);
   c.fillStyle = '#ffc23c'; rr(c, 714, 76, 246, 64, 32); c.fill();
   c.fillStyle = '#1c1035'; c.font = '800 26px PJS'; c.fillText('★  Einkaréttur', 742, 118);
@@ -103,7 +104,7 @@ export function drawAd(c) {
   c.fillStyle = '#7a6f99'; c.font = '600 24px PJS'; c.fillText('Í verslun og á netinu', 470, cy + 104);
   c.fillStyle = '#1c1035'; for (let i = 0; i < 22; i++) { const w = [3, 6, 2, 4][i % 4]; c.fillRect(760 + i * 7.5, cy + 46, w, 70); }
   // footer
-  c.fillStyle = '#7a6f99'; c.font = '700 26px PJS'; c.fillText('Laugavegi 1, Reykjavík  ·  fataverslun-a.is', 64, 1330);
+  c.fillStyle = '#7a6f99'; c.font = '700 26px PJS'; c.fillText('Opið alla daga  ·  Í verslun og á netinu', 64, 1330);
   c.fillStyle = '#6b3df5'; c.font = '800 30px PJS'; c.textAlign = 'right'; c.fillText('SVIF', 960, 1330); c.textAlign = 'left';
 }
 

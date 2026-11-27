@@ -1,6 +1,7 @@
 // Engine: timing, easing, animation registry, materials, DOM text, 3D factories.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { drawIcon, ICON_KINDS } from './icons.js';
 
 export { THREE };
 export const W = 1920, H = 1080, FPS = 30;
@@ -625,12 +626,18 @@ export function shop(color = '#7b4cf6', letter = 'A') {
   const wallM = M('#fffaf3', 'soft'), roofM = M(color), awnM = M(color, 'soft'), signM = M('#ffffff'), doorM = M('#3d3358'), winM = M('#bfe3ff'), dotM = M(color);
   const stripes = canvasTex(256, 64, (c, w, h) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? '#ffffff' : '#c8c8c8'; c.fillRect(i * w / 8, 0, w / 8, h); } });
   awnM.map = stripes;
-  const logo = canvasTex(128, 128, (c) => { c.fillStyle = '#ffffff'; c.fillRect(0, 0, 128, 128); c.fillStyle = color; c.beginPath(); c.arc(64, 64, 52, 0, Math.PI * 2); c.fill(); c.fillStyle = '#ffffff'; c.font = '800 64px PJS'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(letter, 64, 70); });
+  const isIcon = ICON_KINDS.includes(letter);
+  const logo = canvasTex(256, 256, (c) => {
+    c.fillStyle = '#ffffff'; c.fillRect(0, 0, 256, 256);
+    if (isIcon) { c.fillStyle = color; c.globalAlpha = 0.18; c.beginPath(); c.arc(128, 128, 120, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1; drawIcon(c, letter, 128, 132, 172, color); return; }
+    c.fillStyle = color; c.beginPath(); c.arc(128, 128, 104, 0, Math.PI * 2); c.fill(); c.fillStyle = '#ffffff'; c.font = '800 128px PJS'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(letter, 128, 140);
+  });
   const logoM = new THREE.MeshMatcapMaterial({ color: 0xffffff, matcap: mat('#fff', 'soft').matcap, map: logo });
   const walls = mesh(rbox(0.82, 0.56, 0.6, 0.06), wallM, [0, 0.28, 0]);
   const roof = mesh(rbox(0.92, 0.09, 0.7, 0.04), roofM, [0, 0.6, 0]);
-  const sign = group(mesh(rbox(0.36, 0.3, 0.06, 0.05), signM, [0, 0, 0]), mesh(new THREE.CircleGeometry(0.11, 32), logoM, [0, 0, 0.032]));
-  sign.position.set(0, 0.8, 0.12);
+  const sign = isIcon ? group(mesh(rbox(0.56, 0.5, 0.06, 0.09), signM, [0, 0, 0]), mesh(new THREE.CircleGeometry(0.22, 48), logoM, [0, 0, 0.032]))
+    : group(mesh(rbox(0.36, 0.3, 0.06, 0.05), signM, [0, 0, 0]), mesh(new THREE.CircleGeometry(0.11, 32), logoM, [0, 0, 0.032]));
+  sign.position.set(0, isIcon ? 0.9 : 0.8, 0.12);
   const awning = new THREE.Group(); awning.position.set(0, 0.5, 0.3);
   const awn = mesh(new THREE.PlaneGeometry(0.86, 0.26), awnM, [0, -0.13, 0], [0, 0, 0]);
   awn.material.side = THREE.DoubleSide; awning.add(awn);
@@ -800,8 +807,9 @@ export function updatePins(t, camera) {
 function isVisible(o) { while (o) { if (!o.visible) return false; o = o.parent; } return true; }
 
 /** Full-screen chapter card with circle wipe in and hole wipe out. */
-export function chapter({ t0, t1, num, eyebrow, title, bg, fg = '#ffffff', numColor, cx = 1400, cy = 540 }) {
-  const d = el(`<div class="cin"><div class="eyebrow" style="color:${fg};opacity:.8">${eyebrow}</div><div class="ch-title" style="color:${fg}">${title}</div></div><div class="ch-num" style="color:${numColor || fg}">${num}</div>`, 'chapter', { background: bg });
+export function chapter({ t0, t1, num, eyebrow, title, sub = '', bg, fg = '#ffffff', numColor, cx = 1400, cy = 540 }) {
+  const d = el(`<div class="cin"${sub ? ' style="top:340px"' : ''}><div class="eyebrow" style="color:${fg};opacity:.8">${eyebrow}</div><div class="ch-title" style="color:${fg}">${title}</div>${sub ? `<div class="ch-sub" style="color:${fg}">${sub}</div>` : ''}</div><div class="ch-num" style="color:${numColor || fg}">${num}</div>`, 'chapter', { background: bg });
+  const subEl = d.querySelector('.ch-sub');
   const inner = d.querySelector('.cin'), numEl = d.querySelector('.ch-num');
   const tl = d.querySelector('.ch-title'); const chars = []; splitChars(tl, chars);
   const R = 2400;
@@ -815,6 +823,7 @@ export function chapter({ t0, t1, num, eyebrow, title, bg, fg = '#ffffff', numCo
     const k = ease.outCubic(prog(t, t0 + 0.3, 0.6));
     inner.style.transform = `translateY(${(1 - k) * 40}px)`; inner.style.opacity = k;
     chars.forEach((c, i) => { c.style.opacity = prog(t, t0 + 0.35 + i * 0.03, 0.12); });
+    if (subEl) { const ks = ease.outCubic(prog(t, t0 + 0.6, 0.5)); subEl.style.opacity = ks * 0.9; subEl.style.transform = `translateY(${(1 - ks) * 24}px)`; }
     const kn = ease.outBack(prog(t, t0 + 0.25, 0.9));
     numEl.style.transform = `translateY(${(1 - kn) * 160}px) scale(${0.6 + 0.4 * kn})`; numEl.style.opacity = clamp(kn) * 0.16;
   });

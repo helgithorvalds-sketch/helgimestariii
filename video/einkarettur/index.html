@@ -2,7 +2,7 @@
 <html lang="is">
 <head>
 <meta charset="utf-8">
-<title>Einkaréttur í Foreldrabók</title>
+<title>SVIF einkaréttur</title>
 <style>
 @font-face{font-family:PJS;font-weight:600;src:url(node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2) format('woff2')}
 @font-face{font-family:PJS;font-weight:700;src:url(node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2) format('woff2')}
@@ -33,6 +33,7 @@ em.gold{color:var(--gold)}
 .chapter{position:absolute;inset:0;display:none;z-index:20}
 .cin{position:absolute;left:150px;top:390px}
 .ch-title{font-weight:800;font-size:132px;line-height:1.02;letter-spacing:-.04em;margin-top:14px}
+.ch-sub{font-weight:700;font-size:60px;letter-spacing:-.02em;margin-top:18px;opacity:0}
 .ch-num{position:absolute;right:120px;top:60px;font-weight:800;font-size:820px;line-height:.82;letter-spacing:-.06em}
 .pin{position:absolute;left:0;top:0;transform-origin:50% 100%;white-space:nowrap;display:none}
 .pin.below{transform-origin:50% 0%}
@@ -77,6 +78,10 @@ em.gold{color:var(--gold)}
 .dealchip.v{background:var(--violet);box-shadow:0 10px 26px rgba(107,61,245,.3)}
 .dealchip.g{background:#ffc23c;color:var(--ink);box-shadow:0 10px 26px rgba(232,161,15,.3)}
 .dealchip.m{background:#20bf85;box-shadow:0 10px 26px rgba(32,191,133,.3)}
+.slots{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:8px 16px 8px 20px;box-shadow:0 8px 22px rgba(60,30,120,.14)}
+.slots b{font-weight:800;font-size:24px;color:var(--ink);margin-right:8px;letter-spacing:-.01em}
+.slots i{width:18px;height:18px;border-radius:50%;background:#e6e0f1;display:block}
+.ora{background:var(--ink);color:#fff;font-weight:800;font-size:34px;padding:12px 30px;border-radius:999px}
 .fade{position:absolute;inset:0;z-index:30;background:var(--c1);opacity:0;pointer-events:none}
 </style>
 <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
