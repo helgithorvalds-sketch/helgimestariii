@@ -31,7 +31,7 @@ bókinni (bls. 56–58) en ekki í raddtexta, til að halda kaflanum í þremur 
 - Krókurinn (buxurnar á einu sumri) er saga Kára, en hraðinn stenst: „Eitt helsta einkenni kynþroska er vaxtarkippur“; „Vaxtarkippurinn hefst um 9 ára aldur hjá stelpum en 11 ára hjá strákum. Hámarks vaxtarhraði hjá stelpum er að meðaltali 9 cm á ári … við 12 ára aldur“, og strákar ná „hámarks vaxtarhraðanum 10,3 cm á ári … tveimur árum síðar en stelpur“ (Vísindavefurinn). Ályktun mín: nokkrir sentímetrar á einu sumri duga til að gallabuxur verði of stuttar; þess vegna stækkaði Sóley (12) á undan Kára (12) — <https://www.visindavefur.is/svar.php?id=63077>
 - Gen og erfðaefni: „Það sem ákvarðar hver við erum er blanda af umhverfi okkar og því sem kallast erfðir“; „Erfðaefnið geymir meðal annars upplýsingar um augnlit, húðlit, blóðflokk og jafnvel hvernig eyrun líta út“ (Náttúrulega 3, bls. 55). Raddtextinn: „Gen eru upplýsingar um líkamann, geymdar í erfðaefninu“ — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_3/57/>
 - Helmingur frá hvoru foreldri: „Typically, people have two copies of each gene, one inherited from each parent“ (MedlinePlus); „Í mannslíkamanum hefur hver fruma 46 litninga eða 23 pör“ (Náttúrulega 3, bls. 56). Bókin segir á bls. 55 að erfðaefnið sé „byggt úr tveimur þráðum“ og að „annar erfðaefnaþráðurinn [komi] frá sáðfrumunni og hinn frá eggfrumunni“; það blandar saman tveimur þráðum DNA-sameindarinnar og litningapörunum, svo raddtextinn notar ekki þá mynd heldur segir aðeins „helminginn“ — <https://medlineplus.gov/genetics/understanding/basics/gene/> ; <https://vefir.mms.is/flettibaekur/namsefni/natturulega_3/58/> ; <https://vefir.mms.is/flettibaekur/namsefni/natturulega_3/57/>
-- Talan: „if all of the DNA molecules in a single human cell were unwound from their histones and placed end-to-end, they would stretch 6 feet“ (Genome.gov, NHGRI). Ályktun mín: sex fet eru um 1,83 m, svo „næstum tveggja metra þráður“; „þráður“ á við sameindirnar lagðar enda við enda. Samanburðurinn er pabbi Kára (skálduð persóna, um tveir metrar) — <https://www.genome.gov/genetics-glossary/Chromosome>
+- Talan: „if all of the DNA molecules in a single human cell were unwound from their histones and placed end-to-end, they would stretch 6 feet“ (Genome.gov, NHGRI). Ályktun mín: sex fet eru um 1,83 m, svo „næstum tveir metrar“. Erfðaefnið í frumunni er 46 sameindir, ekki einn þráður, svo raddtextinn segir „Ef þú rekur upp erfðaefnið“ (allar sameindirnar lagðar enda við enda) og notar ekki orð bókarinnar „þráður“. Samanburðurinn er pabbi Kára (skálduð persóna, um tveir metrar) — <https://www.genome.gov/genetics-glossary/Chromosome>
 - Spáin um systkini: „Systkini geta verið ólík“ (Náttúrulega 3, bls. 55); „Identical twins share the same genomes“ og „Like most other siblings, fraternal twins share half of their genomes“ (Genome.gov); „different combinations of variants can cause siblings to be of different heights“ (MedlinePlus). Ályktun mín: „Nánast aldrei“ af því að tvö systkini (önnur en eineggja tvíburar) fá í raun aldrei sömu blöndu — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_3/57/> ; <https://www.genome.gov/genetics-glossary/Identical-Twins> ; <https://medlineplus.gov/genetics/understanding/traits/height/>
 - Misskilningur Kára („alveg eins og pabbi“) og svarið: „about 80 percent of an individual’s height is determined by the DNA sequence variations they have inherited“; „height is controlled largely by a combination of genetic variants that each have more modest effects on height, plus a smaller contribution from environmental factors (such as nutrition)“; „children usually grow to be approximately as tall as their parents“ (MedlinePlus). Miðforeldrahæð fyrir stráka: bæta 12,5 cm við hæð móður og taka meðaltal með hæð föður, og hæðin lendir líklega „innan við um 7,5 cm frá þessari hæð“ (Vísindavefurinn). Ályktun mín: með tveggja metra pabba og lágvaxnari mömmu lendir Kári líklega á milli, svo „ekki endilega eins og pabbi“; „mat“ = næring — <https://medlineplus.gov/genetics/understanding/traits/height/> ; <https://www.visindavefur.is/svar.php?id=30538>
 - Ekki „eitt gen = einn eiginleiki“: bókin segir að „stundum ráðast eiginleikar af einu geni … en annað ræðst af fleiri en einu geni. … Húðlitur og augnlitur ræðst af tveimur eða fleiri genum“ (Náttúrulega 3, bls. 57). Raddtextinn: „Hæðin ræðst af mörgum genum“; ekkert dæmi um freknur eða augnlit — <https://vefir.mms.is/flettibaekur/namsefni/natturulega_3/59/>
@@ -52,11 +52,11 @@ beina ræðu.
 | Vendipunktur – hormón | Málið er nefnilega að neðan í heilanum er lítill kirtill, heiladingullinn. Hann sendir hormón, boðefni sem berast með blóðinu. |
 | Vendipunktur – kynþroskaskeið | Þegar unglingsárin nálgast koma hormónin af stað breytingum sem kallast kynþroskaskeið. Flestir stækka, hárvöxtur eykst og röddin breytist. Stelpur byrja oft fyrr. Þess vegna stækkaði Sóley á undan. |
 | Vendipunktur – gen | En hvað verður Kári hár? Það fer að hluta eftir genunum. Gen eru upplýsingar um líkamann, geymdar í erfðaefninu. |
-| Vendipunktur – tala | Í einni frumu er erfðaefnið næstum tveggja metra þráður, eins og pabbi Kára! |
+| Vendipunktur – tala | Ef þú rekur upp erfðaefnið í einni frumu, er það næstum tveir metrar, eins og pabbi Kára! |
 | Vendipunktur – líking | Erfðir eru eins og að stokka og gefa spil. Mamma Kára gaf honum helminginn af spilunum sínum og pabbi hans helminginn af sínum. Spilin eru genin. |
 | Vendipunktur – spá | Hvað heldurðu: fá systkini sömu spil? ... Nánast aldrei! Nema eineggja tvíburar. |
 | Vendipunktur – misskilningurinn | Nei, Kári, ekki endilega eins og pabbi. Hæðin ræðst af mörgum genum frá báðum foreldrum, og líka af mat. |
-| Afleiðing | Og þú? Kynþroskaskeiðið þitt byrjar þegar þinn líkami er tilbúinn, fyrr eða seinna en hjá vinunum. Það er alveg eðlilegt. |
+| Afleiðing | Og þú? Kynþroskaskeiðið þitt byrjar þegar líkaminn þinn er tilbúinn, á undan eða á eftir vinunum. Það er alveg eðlilegt. |
 | Bakhlaup | Það voru sem sagt ekki buxurnar sem minnkuðu... heiladingullinn sendi bara skilaboð! |
 
 English gist, beat by beat:
@@ -70,13 +70,13 @@ English gist, beat by beat:
   off changes called *kynþroskaskeið* (puberty). Most people grow, hair growth increases and the voice changes. Girls
   often start earlier. That's why Sóley grew first.
 - **Gen:** But how tall will Kári be? That depends partly on his *gen* (genes). Genes are information about the body,
-  stored in the *erfðaefni* (genetic material, DNA). In a single cell the DNA is a thread almost two metres long, like
-  Kári's dad!
+  stored in the *erfðaefni* (genetic material, DNA). If you unravel the DNA in a single cell, it's almost two metres,
+  like Kári's dad!
 - **Líking:** Inheritance is like shuffling and dealing cards. Kári's mum gave him half of her cards and his dad half of
   his. The cards are the genes.
 - **Prediction:** What do you think: do siblings get the same cards? … Almost never! Except identical twins.
 - **Misconception:** No, Kári, not necessarily like Dad. Height depends on many genes from both parents, and on food too.
-- **Afleiðing:** And you? Your puberty starts when your body is ready, earlier or later than your friends'. That's
+- **Afleiðing:** And you? Your puberty starts when your body is ready, before or after your friends. That's
   completely normal.
 - **Bakhlaup:** So it wasn't the trousers that shrank… the pituitary just sent a message!
 
@@ -105,22 +105,22 @@ strítt eða gert grín að.
 | 10 | `bord` – „Hann sendir hormón, boðefni sem berast með blóðinu.“ Lítil umslagslaga tákn (hormónin) fara úr kirtlinum og berast með rauðum straumi (blóðinu) niður eftir teiknaðri æð. | – | spjald; HORMÓN gult; BOÐEFNI hvítt |
 | 11 | `bord` – „Þegar unglingsárin nálgast koma hormónin af stað breytingum sem kallast kynþroskaskeið.“ Tímalína frá barni til fullorðins; hluti hennar lýsist upp þegar umslögin koma. | – | spjald; KYNÞROSKASKEIÐ gult |
 | 12 | `bord` – „Flestir stækka, hárvöxtur eykst og röddin breytist.“ Þrjú tákn skjótast upp: málband sem lengist, greiða, hljóðbylgja sem dýpkar. Engin líkamsmynd. | – | myndatexti; STÆKKA, HÁRVÖXTUR, RÖDDIN gul |
-| 13 | `bord` – „Stelpur byrja oft fyrr.“ Tvær breiðar, mjúkar litarendur á tímalínunni, merktar STELPUR og STRÁKAR; stelpurendan byrjar aðeins fyrr og þær skarast mikið. | – | myndatexti; OFT FYRR gult |
+| 13 | `bord` – „Stelpur byrja oft fyrr.“ Tvær breiðar, mjúkar litarendur á tímalínunni, merktar með litlum fígúrum af Sóleyju og Kára (enginn texti); rendan hennar Sóleyjar byrjar aðeins fyrr og þær skarast mikið. | – | myndatexti; OFT FYRR gult |
 | 14 | `eldhus` – „Þess vegna stækkaði Sóley á undan.“ Karmurinn: stóra stökkið á strikum Sóleyjar í fyrra; hún yppir öxlum og brosir. | Sóley – sátt (`smile_closed`) | myndatexti; Á UNDAN gult |
-| 15 | `eldhus` – „En hvað verður Kári hár?“ Kári horfir upp á efsta strikið á karminum, merkt PABBI. | Kári – hugsi (`whistle`) | myndatexti; HÁR gult |
+| 15 | `eldhus` – „En hvað verður Kári hár?“ Kári horfir upp á efsta strikið á karminum, merkt PABBI. | Kári – hugsi (`whistle`) | myndatexti; HVAÐ VERÐUR KÁRI HÁR? allt gult |
 | 16 | `bord` – „Það fer að hluta eftir genunum.“ Aðdráttur ofan í hönd Kára: fruma, og inni í henni kjarni. | – | spjald; GENUNUM gult |
 | 17 | `bord` – „Gen eru upplýsingar um líkamann, geymdar í erfðaefninu.“ Í kjarnanum er hnyklaður þráður; stuttir bútar á honum lýsast upp eins og línur í bók. | – | spjald; GEN, ERFÐAEFNINU gul |
-| 18 | `bord` – „Í einni frumu er erfðaefnið næstum tveggja metra þráður,“ Þráðurinn raknar upp úr frumunni og teygir sig upp eftir málbandi. | – | slam „NÆSTUM 2 METRAR“ |
+| 18 | `bord` – „Ef þú rekur upp erfðaefnið í einni frumu, er það næstum tveir metrar,“ Þráðurinn raknar upp úr frumunni og teygir sig upp eftir málbandi. | – | slam „NÆSTUM 2 METRAR“ |
 | 19 | `eldhus` – „eins og pabbi Kára!“ Endi þráðarins nær næstum upp í PABBA-strikið á karminum; pabbi hlær. | Pabbi – hlær (`laugh`) | myndatexti; PABBI gult |
 | 20 | `eldhus` – „Erfðir eru eins og að stokka og gefa spil.“ Fjölskyldan við eldhúsborðið með spilastokka; mamma Kára stokkar. | Mamma – glöð (`smile`) | myndatexti; ERFÐIR gult |
-| 21 | `bord` – „Mamma Kára gaf honum helminginn af spilunum sínum og pabbi hans helminginn af sínum.“ Tveir stokkar, bláir og grænir að aftan; helmingur af hvorum rennur yfir í hendi Kára, sem verður blönduð. | – | spjald; HELMINGINN gult |
+| 21 | `bord` – „Mamma Kára gaf honum helminginn af spilunum sínum og pabbi hans helminginn af sínum.“ Tveir stokkar, bláir og grænir að aftan; helmingur af hvorum rennur yfir í hönd Kára, sem verður blönduð. | – | spjald; HELMINGINN gult |
 | 22 | `bord` – „Spilin eru genin.“ Líkingarspjald: SPILIN = GENIN, með ör frá spilunum í hendi Kára yfir í genin í frumunni. | – | spjald (líking); SPILIN, GENIN gul |
 | 23 | `bord` – „Hvað heldurðu: fá systkini sömu spil?“ Tvær teiknaðar systkinahendur fá spil úr sömu tveimur stokkunum. Ein sekúnda af þögn (spáhlé). | – | myndatexti „HVAÐ HELDURÐU?“ |
 | 24 | `bord` – „...Nánast aldrei! Nema eineggja tvíburar.“ Systkinahendurnar eru ólíkar; svo birtast tvær tvíburahendur sem eru nákvæmlega eins. | – | sprenging „NÁNAST ALDREI!“; EINEGGJA TVÍBURAR gult |
 | 25 | `eldhus` – „Nei, Kári, ekki endilega eins og pabbi.“ Mamma Kára (lægri en pabbinn) leggur handlegginn utan um hann; Kári lítur á bæði. | Kári – hugsi (`neutral`) | myndatexti; EKKI ENDILEGA gult |
 | 26 | `bord` – „Hæðin ræðst af mörgum genum frá báðum foreldrum, og líka af mat.“ Mörg lítil spil úr báðum stokkum fylla hæðarsúlu; diskur með mat bætir við smá. | – | spjald; MÖRGUM GENUM, MAT gul |
 | 27 | `bord` – „Og þú?“ Teiknuð bekkjarmynd: röð af misháum krökkum, öll í fötum, snúa að áhorfandanum. | – | myndatexti; ÞÚ gult |
-| 28 | `bord` – „Kynþroskaskeiðið þitt byrjar þegar þinn líkami er tilbúinn, fyrr eða seinna en hjá vinunum.“ Yfir hverjum krakka kviknar lítil ljóstýra, á sínum tíma, hver af annarri. | – | myndatexti; ÞINN LÍKAMI gult |
+| 28 | `bord` – „Kynþroskaskeiðið þitt byrjar þegar líkaminn þinn er tilbúinn, á undan eða á eftir vinunum.“ Yfir hverjum krakka kviknar lítil ljóstýra, á sínum tíma, hver af annarri. | – | myndatexti; LÍKAMINN ÞINN gult |
 | 29 | `eldhus` – „Það er alveg eðlilegt.“ Sóley og Kári skella saman hnefum. | Sóley og Kári – sátt (`smile_closed`) | stimpill „ALVEG EÐLILEGT“ |
 | 30 | `eldhus` – „Það voru sem sagt ekki buxurnar sem minnkuðu...“ Kári heldur stuttu gallabuxunum upp að sér og lítur á þær. | Kári – glottir (`grin`) | myndatexti; BUXURNAR gult |
 | 31 | `eldhus` – „heiladingullinn sendi bara skilaboð!“ Lítið umslagstákn skýst upp yfir höfði Kára; hann hlær og Sóley líka; myndin endar á orðinu „skilaboð“. | Kári – hlær (`laugh`); Sóley – hlær (`laugh`) | myndatexti; SKILABOÐ gult |
@@ -136,9 +136,9 @@ Málið er nefnilega að neðan í heilanum er lítill kirtill, heiladingullinn.
 Þegar unglingsárin nálgast koma hormónin af stað breytingum sem kallast kynþroskaskeið. Flestir stækka, hárvöxtur eykst og röddin breytist.
 Stelpur byrja oft fyrr. Þess vegna stækkaði Sóley á undan.
 En hvað verður Kári hár? Það fer að hluta eftir genunum. Gen eru upplýsingar um líkamann, geymdar í erfðaefninu.
-Í einni frumu er erfðaefnið næstum tveggja metra þráður, eins og pabbi Kára!
+Ef þú rekur upp erfðaefnið í einni frumu, er það næstum tveir metrar, eins og pabbi Kára!
 Erfðir eru eins og að stokka og gefa spil. Mamma Kára gaf honum helminginn af spilunum sínum og pabbi hans helminginn af sínum. Spilin eru genin.
 Hvað heldurðu: fá systkini sömu spil? ... [excited] Nánast aldrei! Nema eineggja tvíburar.
 Nei, Kári, ekki endilega eins og pabbi. Hæðin ræðst af mörgum genum frá báðum foreldrum, og líka af mat.
-Og þú? Kynþroskaskeiðið þitt byrjar þegar þinn líkami er tilbúinn, fyrr eða seinna en hjá vinunum. Það er alveg eðlilegt.
+Og þú? Kynþroskaskeiðið þitt byrjar þegar líkaminn þinn er tilbúinn, á undan eða á eftir vinunum. Það er alveg eðlilegt.
 Það voru sem sagt ekki buxurnar sem minnkuðu... heiladingullinn sendi bara skilaboð!
