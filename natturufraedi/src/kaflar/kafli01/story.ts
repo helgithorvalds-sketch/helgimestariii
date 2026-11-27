@@ -61,6 +61,42 @@ export const flankAt = (D: number, k: number) => {
   return { x: ELDFELL[0] + ax * s + ox * half, z: ELDFELL[2] + az * s + oz * half, ox, oz, ax, az };
 };
 
+/** the lava's thickness above the land, and its edge profile: height (m, from -3 under the sea / ground) at distance
+ *  dEdge inside the lobe's edge; the front and flanks rise steeply over ~26 m (build.ts LavaLobe uses this) */
+export const LAVA_T = 20;
+export const lavaHeight = (dEdge: number) => -3 + (LAND_Y + 3 + LAVA_T) * Math.min(1, Math.max(0, dEdge) / 26) ** 0.55;
+/** how far inside the edge the wall reaches (absolute) height y (inverse of lavaHeight) */
+export const lavaInset = (y: number) => 26 * clamp01((y + 3) / (LAND_Y + 3 + LAVA_T)) ** (1 / 0.55);
+/** points along the lobe's front and flanks (x, z), front first: for steam and glow where the edge meets the sea */
+export const lobeEdge = (D: number, n = 24): [number, number][] => {
+  const { ax, az, len, half } = lavaLobe(D), px = -az, pz = ax, out: [number, number][] = [];
+  for (let i = 0; i <= n; i++) { const w = (i / n) * 2 - 1, s = len - 45 * w * w; out.push([ELDFELL[0] + ax * s + px * w * half, ELDFELL[2] + az * s + pz * w * half]); }
+  for (let i = 1; i <= n / 2; i++) for (const sd of [-1, 1]) { const s = len - 45 - (i / (n / 2)) * (len - 45 + 40); out.push([ELDFELL[0] + ax * s + px * sd * half, ELDFELL[2] + az * s + pz * sd * half]); }
+  return out;
+};
+
+// ---------------- the hose crew (slongur) ----------------
+/** where the camera stands for the hose shots: on the town side of the west flank, at hose height */
+const CREW_K = 0.56;
+/** the hose crew for front distance D, laid out in the flank's frame (u along the lobe axis from flankAt(D, CREW_K),
+ *  v out from the wall's foot toward the town): each man's feet (x, z), the way he faces (toward the wall) and the point
+ *  on the wall face his jet hits, 3-8 m up. world.ts cools the crust around the hits (storknun). */
+export const hoseCrew = (D: number) => {
+  const f = flankAt(D, CREW_K);
+  const W = (u: number, v: number): [number, number] => [f.x + f.ax * u + f.ox * v, f.z + f.az * u + f.oz * v];
+  // [u, v, hit height above the land, hit u]: the men spray diagonally ahead along the wall, so every jet lands in frame
+  return ([[-2.0, 13.9, 4.0, 8], [2.4, 10.8, 6.8, 13], [6.0, 8.6, 3.8, 18.5], [9.8, 7.4, 7.2, 24]] as const).map(([u, v, hy, hu]) => {
+    const [x, z] = W(u, v), [hx, hz] = W(hu, -lavaInset(LAND_Y + hy)); // on the wall face at that height
+    return { x, z, face: [-f.ox, -f.oz] as [number, number], hit: [hx, LAND_Y + hy, hz] as V3 };
+  });
+};
+/** the hose shot's camera: behind the crew at hose height, the wall rising on the right */
+export const hoseCam = (D: number): { pos: V3; look: V3 } => {
+  const f = flankAt(D, CREW_K);
+  const W = (u: number, v: number, y: number): V3 => [f.x + f.ax * u + f.ox * v, y, f.z + f.az * u + f.oz * v];
+  return { pos: W(-6.8, 19.0, LAND_Y + 1.15), look: W(10, 2, LAND_Y + 7.3) };
+};
+
 // ---------------- boats (pure: World poses the fleet, the cast boards it, cameras follow it) ----------------
 export type BoatPose = { x: number; z: number; yaw: number; moving: boolean };
 export const N_BOATS = 10;
@@ -71,6 +107,12 @@ const along = (u: number): [number, number, number] => {
   const [x0, z0] = ROUTE[i], [x1, z1] = ROUTE[i + 1];
   return [x0 + (x1 - x0) * k, z0 + (z1 - z0) * k, Math.atan2(-(z1 - z0), x1 - x0)];
 };
+/** how boat i rides the water: waterline height, roll and pitch (radians) */
+export const boatMotion = (b: BoatPose, i: number, t: number) => ({
+  y: b.moving ? -0.1 : 0.05,
+  roll: (b.moving ? 0.05 : 0.015) * Math.sin(t * 1.3 + i * 1.7),
+  pitch: (b.moving ? 0.03 : 0.008) * Math.sin(t * 0.9 + i * 2.3),
+});
 /** where boat i is in a scene at film time t: moored along the quay, or under way out of the harbour (hofn) */
 export const boatsAt = (scene: Scene, t: number): BoatPose[] => {
   const out: BoatPose[] = [];
@@ -78,8 +120,9 @@ export const boatsAt = (scene: Scene, t: number): BoatPose[] => {
     if (scene === "hofn") {
       const [x, z, yaw] = along(0.18 + 0.075 * i + t * 0.0045);
       out.push({ x: x + 6 * Math.sin(i * 2.1), z: z + 5 * Math.cos(i * 1.7), yaw, moving: true });
-    } else if (scene === "hraun" && i < 5) { // at anchor in the basin, in front of the lava
-      out.push({ x: 282 + i * 9 + 4 * Math.sin(i), z: -158 + i * 15, yaw: 0.4 + 0.5 * Math.sin(i * 2.7), moving: false });
+    } else if (scene === "hraun" && i < 5) { // at anchor in the basin, between the lens and the harbour mouth
+      const [x, z, yaw] = ([[257, -188, 0.6], [283, -177, 0.25], [292, -158, 0.95], [303, -196, 0.45], [268, -146, 1.25]] as const)[i];
+      out.push({ x, z, yaw, moving: false });
     } else {
       const row = i % 3 === 2 ? 1 : 0, x = -250 + i * 46 + 6 * Math.sin(i * 1.3);
       out.push({ x, z: QUAY.z - 3.3 - row * 5.6, yaw: i % 2 ? Math.PI : 0, moving: false });
@@ -91,13 +134,17 @@ export const boatsAt = (scene: Scene, t: number): BoatPose[] => {
 export type Scene = "stofa" | "nott" | "hofn" | "hraun" | "slongur" | "idag" | "bord";
 export type ShotDef = {
   id: number; a: number; b: number; light: Light; scene: Scene; sunAz?: number; sunEl?: number;
+  /** eruption light: the world point the fire key comes from (default: the fissure level with the look target, or
+   *  Eldfell's vent once the cone stands). Put it off the lens axis for an orange rim / back light. */
+  keyFrom?: V3;
   /** film frame the fissure tears open (fountains = fissure((f - fissureAt) / FPS)); omitted = no fissure */
   fissureAt?: number;
   /** lava advance u (lavaFront) at the shot's first and last frame; omitted = no 1973 lava */
   lava?: [number, number];
   /** how far the hosed front has cooled and darkened, 0..1 */
   cool?: number;
-  /** ash on roofs and ground, 0..1 */
+  /** ash fall, 0..1. world.ts: above 0.05 the ash layer lies on every roof; above 0.5 the island ground turns to black
+   *  tephra too (the streets and fields of the weeks after the first night). Today's scenes never show ash. */
   ash?: number;
   /** Eldfell's 1973 cone: 0 (the first night, none yet) .. 1 (full height) */
   cone?: number;
@@ -107,9 +154,9 @@ const LEN = 20;
 const SAMPLES: Sample[] = [
   { scene: "stofa", light: "day", sunAz: 120, sunEl: 40 },
   { scene: "nott", light: "eruption", fissureAt: -60, ash: 0.4, cone: 0 },
-  { scene: "hofn", light: "eruption", fissureAt: -3000, ash: 0.6, cone: 0 },
+  { scene: "hofn", light: "eruption", fissureAt: -3000, ash: 0.6, cone: 0, keyFrom: [FISSURE.x, LAND_Y + 60, FISSURE.z0 + 20] },
   { scene: "hraun", light: "night", fissureAt: -1e6, lava: [0.84, 0.86], ash: 1, cone: 1, sunAz: -140, sunEl: 34 },
-  { scene: "slongur", light: "golden", fissureAt: -1e6, lava: [0.99, 1], cool: 0.25, ash: 1, cone: 1, sunAz: -70, sunEl: 14 },
+  { scene: "slongur", light: "golden", fissureAt: -1e6, lava: [0.99, 1], cool: 0, ash: 1, cone: 1, sunAz: -70, sunEl: 14 },
   { scene: "idag", light: "day", sunAz: 100, sunEl: 35 },
   { scene: "bord", light: "day" },
 ];
@@ -125,9 +172,9 @@ export const shotAt = (f: number) => SHOTS.find((s) => f >= s.a && f < s.b) ?? S
 export const layersAt = (f: number): { id: number; alpha: number }[] => [{ id: shotAt(f).id, alpha: 1 }];
 export const is3D = (id: number) => SHOTS[id - 1].scene !== "bord";
 
-/** story state of shot `id` at frame f */
-export const stateAt = (id: number, f: number) => {
-  const s = SHOTS[id - 1], k = clamp01((f - s.a) / Math.max(1, s.b - s.a - 1));
+/** story state of shot s at frame f */
+export const stateOf = (s: ShotDef, f: number) => {
+  const k = clamp01((f - s.a) / Math.max(1, s.b - s.a - 1));
   const u = s.lava ? s.lava[0] + (s.lava[1] - s.lava[0]) * k : -1;
   return {
     fis: s.fissureAt === undefined ? 0 : fissure((f - s.fissureAt) / FPS),
@@ -137,6 +184,8 @@ export const stateAt = (id: number, f: number) => {
     today: s.scene === "idag" || s.scene === "stofa",
   };
 };
+/** story state of shot `id` at frame f */
+export const stateAt = (id: number, f: number) => stateOf(SHOTS[id - 1], f);
 
 // ---------------- camera ----------------
 export type Cam = { pos: V3; look: V3; fov: number; roll: number };
@@ -151,19 +200,21 @@ const at = (p: V3, d: V3): V3 => [p[0] + d[0], p[1] + d[1], p[2] + d[2]];
 
 /** one creeping framing per scene (the sampler's cameras; Task 7 writes the real ones) */
 const FRAMING: Record<Exclude<Scene, "bord">, (f: number, a: number) => Shot> = {
-  stofa: (f, a) => dolly(at(STOFA, [-0.15, 1.2, 6.4]), at(STOFA, [-0.15, 1.0, -0.8]), pushK(f, a, 0.002), { fov: 40 }),
+  stofa: (f, a) => dolly(at(STOFA, [0, 1.0, 5.05]), at(STOFA, [0, 0.98, 0.6]), pushK(f, a, 0.002), { fov: 40 }),
   nott: (f, a) => zoom([39.5, LAND_Y + 1.45, 50.35], [420, LAND_Y + 40, 51.5], 42, pushK(f, a, 0.0015)),
-  hofn: (f, a) => { // telephoto past boat 3 toward the fissure: the fire looms behind the crowded deck
-    const b = boatsAt("hofn", (a + 10) / FPS)[3], dx = FISSURE.x - b.x, dz = ELDFELL[2] + 120 - b.z, l = Math.hypot(dx, dz);
-    return zoom([b.x - (dx / l) * 92, 6.5, b.z - (dz / l) * 92], [b.x + (dx / l) * 40, 15, b.z + (dz / l) * 40], 21, pushK(f, a, 0.0012), { roll: -0.02 });
+  hofn: (f, a) => { // tight on boat 3's crowded foredeck, the fissure looming behind (long lens)
+    const b = boatsAt("hofn", (a + 10) / FPS)[3], cs = Math.cos(b.yaw), sn = Math.sin(b.yaw);
+    const cx = b.x + 3.6 * cs, cz = b.z - 3.6 * sn; // foredeck centre (boat-local x 3.6)
+    const dx = FISSURE.x - cx, dz = ELDFELL[2] + 120 - cz, l = Math.hypot(dx, dz);
+    return zoom([cx - (dx / l) * 13.2, 3.5, cz - (dz / l) * 13.2], [cx + (dx / l) * 30, 5.4, cz + (dz / l) * 30], 30, pushK(f, a, 0.0012), { roll: -0.02 });
   },
-  hraun: (f, a) => zoom([190, 27, -165], [392, 12, -86], 34, pushK(f, a, 0.0012)),
+  hraun: (f, a) => zoom([228, 21, -212], [402, 10, -84], 38, pushK(f, a, 0.0012)),
   slongur: (f, a) => {
-    // three-quarter view past the hose men's line: the glowing flank towers on one side, arcs flying into it
-    const c0 = flankAt(lavaFront(1), 0.47), c1 = flankAt(lavaFront(1), 0.64);
-    return zoom([c0.x + c0.ox * 27, LAND_Y + 1.8, c0.z + c0.oz * 27], [c1.x, LAND_Y + 11, c1.z], 50, pushK(f, a, 0.0012), { roll: 0.03 });
+    // behind the hose crew at hose height: the nearest men big in the lower third, the glowing wall on the right
+    const c = hoseCam(lavaFront(1));
+    return zoom(c.pos, c.look, 50, pushK(f, a, 0.0012), { roll: 0.02 });
   },
-  idag: (f, a) => zoom([-170, 120, -150], [390, 40, 60], 40, pushK(f, a, 0.001)),
+  idag: (f, a) => zoom([-330, 112, 86], [300, 22, 58], 40, pushK(f, a, 0.001)),
 };
 export const camAt = (id: number, f: number): Cam => {
   const s = SHOTS[id - 1], fr = FRAMING[s.scene === "bord" ? "idag" : s.scene](f, s.a);
@@ -173,7 +224,7 @@ export const camAt = (id: number, f: number): Cam => {
 // ---------------- lens ----------------
 export type Dof = { cInf: number; focus?: (f: number) => V3 };
 const DOF: Record<Scene, Dof> = {
-  stofa: { cInf: 6, focus: () => at(STOFA, [-0.2, 1.1, 0.4]) },
+  stofa: { cInf: 9, focus: () => at(STOFA, [0, 1.0, 1.1]) },
   nott: { cInf: 4, focus: () => [AMMA_STREET[0], LAND_Y + 1.3, AMMA_STREET[2]] },
   hofn: { cInf: 0 }, hraun: { cInf: 0 }, slongur: { cInf: 0 }, idag: { cInf: 0 }, bord: { cInf: 0 },
 };

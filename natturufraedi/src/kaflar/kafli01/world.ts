@@ -13,9 +13,9 @@ import { TONE, CHAR, untone } from "../../shared/look/shade";
 import { CARD_K } from "../../shared/look/cardshade";
 import { NOINK } from "../../shared/look/ink";
 import { Cards, CamInfo } from "../../shared/cast/cards";
-import { FPS, SHOTS, ShotDef, camAt, stateAt, LAND_Y, ELDFELL, FISSURE, LAVA_STOP, Scene } from "./story";
+import { FPS, SHOTS, ShotDef, camAt, stateAt, LAND_Y, ELDFELL, FISSURE, LAVA_STOP, Scene, V3, hoseCrew } from "./story";
 import { buildIsland, buildTown, buildHarbour, buildMountains, buildEldfell1973, buildEldfellToday, buildFissure, buildStofa, buildSea,
-  LavaLobe, lavaMat, lavaTodayMat, GROUND_MAPS } from "./build";
+  LavaLobe, lavaMat, lavaTodayMat, GROUND_MAPS, COOL_SPOTS } from "./build";
 import { stage, poseFleet, boatsAt, N_BOATS } from "./cast";
 
 /** the sea's on-screen colour per light */
@@ -35,7 +35,8 @@ export class World {
   private sea: THREE.Mesh;
   private eld73: THREE.Group; private eldNow: THREE.Mesh; private fissureG: THREE.Group;
   private lava: LavaLobe;
-  private fleet = new Fleet(N_BOATS);
+  // boat 3 (the hofn close-up) gets a teal hull: it stays teal under the eruption's blue shade
+  private fleet = new Fleet(N_BOATS, ["#2f5d8f", "#3f7a4e", "#f2eee4", "#2f8a86", "#b8402e", "#2a2a30"]);
   private cards: Cards;
   private hemi = new THREE.HemisphereLight("#cfe6ff", "#6c5c8c", 0.5);
   private sun = new THREE.DirectionalLight("#fff0d6", 2.6);
@@ -123,7 +124,8 @@ export class World {
   }
   /** eruption: the key comes from the fire (Eldfell's vent once the cone stands, else the fissure point level with the
    *  look target), raised to the fountains' middle */
-  private fireDir(focus: THREE.Vector3, cone: number, fis: number) {
+  private fireDir(focus: THREE.Vector3, cone: number, fis: number, from?: V3) {
+    if (from) return V(...from).sub(focus).normalize();
     const z = cone > 0.3 ? ELDFELL[2] : Math.max(FISSURE.z0, Math.min(FISSURE.z1, focus.z));
     const src = V(FISSURE.x, LAND_Y + Math.max(60, fis * 1.2) + (cone > 0.3 ? 60 : 0), z);
     return src.sub(focus).normalize();
@@ -151,13 +153,16 @@ export class World {
     setWindowGlow(lit ? 1.6 : 0);
     if (st.D !== null) {
       this.lava.set(st.D); this.lava.mesh.visible = true; this.lava.mesh.material = lavaMat();
-      lavaMat().emissiveIntensity = (1 - 0.8 * st.cool) * (lit ? 1.0 : 0.75);
+      lavaMat().emissiveIntensity = 1 - 0.8 * st.cool;
+      // where the hoses hit, the crust cools to grey-black (storknun): the hose crew's impact points, ~5 m across
+      const hits = s.scene === "slongur" ? hoseCrew(st.D).map((m) => m.hit) : [];
+      COOL_SPOTS.value.forEach((v, i) => (hits[i] ? v.set(hits[i][0], hits[i][1], hits[i][2], 8) : v.set(0, 0, 0, 0)));
     } else if (s.scene === "idag") {
       this.lava.set(LAVA_STOP); this.lava.mesh.visible = true; this.lava.mesh.material = lavaTodayMat();
     } else this.lava.mesh.visible = false;
     poseFleet(this.fleet, s.scene, t);
     // ---- light rig ----
-    const sunDir = s.light === "eruption" ? this.fireDir(focus, st.cone, Math.max(st.fis, 40)) : this.shotSun(id, s, L);
+    const sunDir = s.light === "eruption" ? this.fireDir(focus, st.cone, Math.max(st.fis, 40), s.keyFrom) : this.shotSun(id, s, L);
     this.hemi.color.set(L.sky); this.hemi.groundColor.set(L.ground); this.hemi.intensity = L.hemiI;
     this.sun.color.set(L.sunCol); this.sun.intensity = L.sunI;
     const Rr = indoors ? 7 : THREE.MathUtils.clamp(dist * 1.1 + 10, 14, 320);
@@ -190,7 +195,7 @@ export class World {
     // ---- cast + effects ----
     const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0), up = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 1);
     const info: CamInfo = { pos: cam.position, right, sun: sunDir };
-    const st2 = stage(s, id, f, info, up, CONTACT[s.light], boatsAt(s.scene as Scene, t));
+    const st2 = stage(s, id, f, info, up, CONTACT[s.light], boatsAt(s.scene as Scene, t), cam.fov);
     this.cards.render(st2, cam, L.actorShadow);
     return focus;
   }

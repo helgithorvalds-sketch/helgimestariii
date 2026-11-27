@@ -89,8 +89,9 @@ export const fxWindowView = (p: Pen) => {
 };
 
 /** an inked cartoon cloud puff (256 x 224): 4-5 overlapping lobes, flat fill with a lighter crown and a plum outline.
- *  tone 0 = ash (dark grey-violet), 1 = steam (white); the card tint lights it (orange near the fire). */
-export const fxPuff = (p: Pen, tone: number, seed: number) => {
+ *  tone 0 = ash (dark grey-violet), 1 = steam (white); the card tint lights it (orange near the fire). `ink` is the
+ *  outline width in canvas px: cast.ts sets it from the card's size on screen, so the line weight stays constant. */
+export const fxPuff = (p: Pen, tone: number, seed: number, ink = 8) => {
   const base = tone > 0.5 ? "#f2f2f6" : "#5d5462", top = tone > 0.5 ? "#ffffff" : "#776c7c";
   const lobes: [number, number, number][] = [];
   for (let i = 0; i < 5; i++) {
@@ -98,7 +99,35 @@ export const fxPuff = (p: Pen, tone: number, seed: number) => {
     lobes.push([128 + Math.cos(a) * d * 1.15, 128 + Math.sin(a) * d * 0.75, 40 + 18 * r1(seed + i + 7)]);
   }
   lobes.push([128, 140, 66]);
-  for (const [x, y, r] of lobes) p.ell(x, y, r, r * 0.9, base, 8);
-  for (const [x, y, r] of lobes) p.ell(x, y, r - 5, r * 0.9 - 5, base, 0);
-  for (const [x, y, r] of lobes.slice(0, 3)) p.arc(x, y, r * 0.62, r * 0.55, 200, 290, 7, top); // a light crescent on the upper lobes
+  for (const [x, y, r] of lobes) p.ell(x, y, r, r * 0.9, base, ink);
+  for (const [x, y, r] of lobes) p.ell(x, y, r - ink * 0.6, r * 0.9 - ink * 0.6, base, 0);
+  for (const [x, y, r] of lobes.slice(0, 3)) p.arc(x, y, r * 0.62, r * 0.55, 200, 290, Math.max(3, ink * 0.8), top); // a light crescent on the upper lobes
+};
+
+/** a length of fire hose lying on the ground (256 x 32), seen from above: dull canvas khaki with dark edges */
+export const fxHose = (p: Pen) => {
+  p.g.fillStyle = "#3b3226"; p.g.fillRect(0, 4, 256, 24);
+  p.g.fillStyle = "#b9a675"; p.g.fillRect(0, 8, 256, 16);
+  p.g.fillStyle = "rgba(255,245,215,0.35)"; p.g.fillRect(0, 10, 256, 4);
+};
+
+/** where a jet hits the wall (200 x 200): a white splash crown with flying drops, inked thin */
+export const fxImpact = (p: Pen, ph: number) => {
+  const pts: P2[] = [];
+  for (let i = 0; i <= 14; i++) {
+    const a = Math.PI * (1.05 + 0.9 * (i / 14)), r = (i % 2 ? 60 : 88) * (0.85 + 0.25 * r1(i + ph * 7));
+    pts.push([100 + Math.cos(a) * r, 150 + Math.sin(a) * r * 0.9]);
+  }
+  pts.push([170, 160], [30, 160]);
+  p.poly(pts, "#e9f6fd", 5);
+  p.poly(pts.map(([x, y]) => [100 + (x - 100) * 0.6, 150 + (y - 150) * 0.6] as P2), "#ffffff", 0);
+  for (let i = 0; i < 6; i++) p.ell(20 + 160 * r1(i + ph * 3), 20 + 60 * r1(i + 11 + ph), 6 + 5 * r1(i + 5), 8 + 5 * r1(i + 5), "#e9f6fd", 3);
+};
+
+/** fire reflected on rippled water (128 x 256, lying flat): stacked horizontal glints, longer near the middle */
+export const fxGlints = (p: Pen, seed: number) => {
+  for (let i = 0; i < 22; i++) {
+    const y = 6 + i * 11.4 + 4 * r1(seed + i), w = 20 + 80 * r1(seed + i + 30) * Math.sin(Math.PI * (0.2 + 0.6 * (i / 22))), x = 64 + (r1(seed + i + 60) - 0.5) * 40;
+    p.stroke([[x - w / 2, y], [x - w / 6, y - 1.5], [x + w / 6, y + 1.5], [x + w / 2, y]], 3.5 + 2 * r1(seed + i + 90), "#ffffff");
+  }
 };

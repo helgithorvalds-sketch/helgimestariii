@@ -99,6 +99,13 @@ const whTex = () => ctex("kit:wheelhouse", 256, 128, (g) => {
 });
 
 const WH = { x: -L * 0.27, w: 4.2, d: 3.4, h: 2.3 };
+/** deck surface height at boat-local x (the deck rises toward the bow) */
+export const deckAt = (x: number) => sheer(x) - 0.05;
+/** the cargo hatch on the foredeck (boat-local x0..x1, half width, top height): people sit on it */
+export const HATCH = { x0: 1.2, x1: 4.4, hz: 1.1, top: deckAt(4.4) + 0.55 };
+/** the wheelhouse roof (people sit up there too when the boat is overloaded), x range and top height */
+export const ROOF_Y = sheer(WH.x) + WH.h + 0.24;
+export const ROOF_X: [number, number] = [WH.x - WH.w / 2 + 0.3, WH.x + WH.w / 2 - 0.3];
 /** the parts of one boat, each with its material key: [geometry, material, takes the per-boat hull colour] */
 const parts = (): [THREE.BufferGeometry, THREE.Material, boolean][] => {
   const yd = sheer(WH.x);
@@ -115,6 +122,8 @@ const parts = (): [THREE.BufferGeometry, THREE.Material, boolean][] => {
     [merge([bulwark(0.12, 0.06)]), black, false],
     [deck(), kmat("kit:boatDeck", () => ({ color: "#8f8a80" })), false],
     [merge([boxAt(WH.x, yd + WH.h + 0.12, 0, WH.w + 0.5, 0.24, WH.d + 0.5), boxAt(WH.x + 0.6, yd + WH.h + 0.6, 0, 1.0, 0.7, 1.0)]), kmat("kit:boatRoof", () => ({ color: "#b8402e" })), false],
+    // cargo hatch on the foredeck: a coaming box from the deck up to HATCH.top
+    [boxAt((HATCH.x0 + HATCH.x1) / 2, (deckAt(HATCH.x0) - 0.2 + HATCH.top) / 2, 0, HATCH.x1 - HATCH.x0, HATCH.top - deckAt(HATCH.x0) + 0.2, 2 * HATCH.hz), kmat("kit:boatHatch", () => ({ color: "#6b5a4a" })), false],
     [merge([rod(mast, mast.clone().add(new THREE.Vector3(0, 8.5, 0)), 0.12), rod(mizzen, mizzen.clone().add(new THREE.Vector3(0, 5.5, 0)), 0.09),
       rod(mast.clone().add(new THREE.Vector3(0, 1.2, 0)), new THREE.Vector3(L * 0.0, sheer(0) + 4.2, 0), 0.07),
       boxAt(mast.x, mast.y + 7.2, 0, 0.12, 0.12, 2.2)]), white, false],
@@ -143,6 +152,8 @@ export class Fleet {
     this.m.compose(this.p.set(x, y, z), this.q.setFromEuler(this.e.set(roll, yaw, pitch, "YXZ")), this.s.set(scale, scale, scale));
     for (const im of this.meshes) im.setMatrixAt(i, this.m);
   }
+  /** boat i placed by a full matrix (the chapter composes pose + motion once and reuses it for the passengers) */
+  setMatrix(i: number, m: THREE.Matrix4) { for (const im of this.meshes) im.setMatrixAt(i, m); }
   hide(i: number) { this.m.makeScale(0, 0, 0); for (const im of this.meshes) im.setMatrixAt(i, this.m); }
   commit() { for (const im of this.meshes) { im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; } }
   static readonly LENGTH = L;

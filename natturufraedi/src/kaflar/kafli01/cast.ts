@@ -7,21 +7,21 @@ import { bodyFront, bodySide, Expr, sideHoseTip } from "../../shared/look/toon";
 import { drawAmma, drawKari, drawSoley } from "../../shared/cast/recurring";
 import { Stage, CamInfo, card, blob, lidAt, hh, q, SU } from "../../shared/cast/cards";
 import { EYJAMADUR, FLOTTAFOLK } from "./folk";
-import { fxFountain, fxBomb, fxGlow, fxSpray, fxWake, fxMoon, fxPuff } from "./fx";
-import { FPS, LAND_Y, STOFA, ELDFELL, ELDFELL_H, FISSURE, AMMA_STREET, ShotDef, stateAt, lavaLobe, flankAt, boatsAt, BoatPose, V3 } from "./story";
+import { fxFountain, fxBomb, fxGlow, fxSpray, fxWake, fxMoon, fxPuff, fxHose, fxImpact, fxGlints } from "./fx";
+import { FPS, LAND_Y, STOFA, ELDFELL, ELDFELL_H, FISSURE, AMMA_STREET, ShotDef, stateAt, hoseCrew, lobeEdge, boatsAt, BoatPose, V3 } from "./story";
 export { boatsAt, N_BOATS } from "./story";
-import { fissureX, groundAt } from "./build";
+import { fissureX, groundAt, coastDist } from "./build";
 import { Fleet } from "../../shared/kit/boats";
+import { boatMatrix, passengers, SPOTS } from "./deck";
 
-type Ctx = { cam: CamInfo; up: THREE.Vector3; t: number; f: number; out: Stage; contact: [number, number, number] };
+/** kpx: screen pixels (at the 1920-px-tall full frame) per metre at 1 m from the lens = 1920 / (2 tan(fov / 2)) */
+type Ctx = { cam: CamInfo; up: THREE.Vector3; t: number; f: number; out: Stage; contact: [number, number, number]; kpx: number };
 const T3 = (a: number, b: number, c: number): [number, number, number] => [a, b, c];
 
 // ---------------- boats ----------------
+/** every boat by the same matrix its passengers use (deck.ts), so they ride its roll and pitch */
 export const poseFleet = (fleet: Fleet, scene: ShotDef["scene"], t: number) => {
-  boatsAt(scene, t).forEach((b, i) => {
-    const roll = (b.moving ? 0.05 : 0.015) * Math.sin(t * 1.3 + i * 1.7), pitch = (b.moving ? 0.03 : 0.008) * Math.sin(t * 0.9 + i * 2.3);
-    fleet.set(i, b.x, b.moving ? -0.1 : 0.05, b.z, b.yaw, roll, pitch);
-  });
+  boatsAt(scene, t).forEach((b, i) => fleet.setMatrix(i, boatMatrix(b, i, t)));
   fleet.commit();
 };
 
@@ -40,18 +40,27 @@ const fountain = (c: Ctx, x: number, y: number, z: number, H: number, seed: numb
 /** additive glow halo (tint linear, kept < 1 at the core so it does not bloom by itself) */
 const glow = (c: Ctx, x: number, y: number, z: number, s: number, tint: [number, number, number], opacity = 1) =>
   c.out.fx.push({ key: "glow", cw: 256, ch: 256, draw: fxGlow, x, y, z, w: s, h: s * 0.8, mode: "add", tint, opacity });
+/** outline width (canvas px) that draws ~`target` px on the full frame for a card `size` m wide drawn on `canvas` px */
+const inkPx = (c: Ctx, x: number, y: number, z: number, size: number, canvas: number, target = 3.2) => {
+  const d = Math.max(1, Math.hypot(x - c.cam.pos.x, y - c.cam.pos.y, z - c.cam.pos.z)), screen = (size * c.kpx) / d;
+  return Math.round(Math.max(1.5, Math.min(18, (target * canvas) / Math.max(1, screen))) * 2) / 2;
+};
+type PlumeOpts = { soft?: number; spread?: number; lean?: number };
 /** a column of inked cartoon puffs rising from (x, y, z): ash plume (tone 0) or steam (tone 1); bot / top = tint at the
- *  foot (lit by the fire) and the head of the column. Puffs are drawn back to front so the column reads as one cloud. */
-const plume = (c: Ctx, x: number, y: number, z: number, n: number, H: number, size: number, tone: number, bot: [number, number, number], top: [number, number, number], seed: number, rate = 0.05) => {
+ *  foot (lit by the fire) and the head of the column. Puffs are drawn back to front so the column reads as one cloud.
+ *  The outline keeps one weight on screen whatever the puff's size or distance. opts.soft = see-through opacity. */
+const plume = (c: Ctx, x: number, y: number, z: number, n: number, H: number, size: number, tone: number, bot: [number, number, number], top: [number, number, number], seed: number, rate = 0.05, opts: PlumeOpts = {}) => {
   const ps: { u: number; k: number }[] = [];
   for (let k = 0; k < n; k++) ps.push({ u: (c.t * rate + k / n + hh(k, seed) * 0.3) % 1, k });
   ps.sort((a, b) => b.u - a.u);
   for (const { u, k } of ps) {
     const side = (hh(k, seed + 1) - 0.5) * 2, sz = size * (0.55 + 1.1 * u) * (0.8 + 0.4 * hh(k, seed + 3)), tint = bot.map((v, i) => v + (top[i] - v) * Math.min(1, u * 1.6)) as [number, number, number];
-    const toward = 0.4 + 0.02 * k, spread = size * (0.25 + 0.85 * u) * side, lean = H * 0.28 * u * u; // wind leans the head of the column
+    const toward = 0.4 + 0.02 * k, spread = size * (0.25 + 0.85 * u) * side * (opts.spread ?? 1), lean = H * 0.28 * u * u * (opts.lean ?? 1); // wind leans the head
     const big = size > 30, cw = big ? 512 : 256, ch = big ? 448 : 224;
-    c.out.fx.push({ key: `puff${tone > 0.5 ? 1 : 0}|${k % 4}`, cw, ch, draw: (p) => { if (big) p.g.scale(2, 2); fxPuff(p, tone, k % 4); }, x: x + c.cam.right.x * (spread + lean) + (c.cam.pos.x - x) * 0.002 * toward,
-      y: y + H * u + 0.12 * size * Math.sin(k * 2.3), z: z + c.cam.right.z * (spread + lean) + (c.cam.pos.z - z) * 0.002 * toward, w: sz, h: sz * 0.875, tint, rot: side * 0.2 });
+    const px = x + c.cam.right.x * (spread + lean) + (c.cam.pos.x - x) * 0.002 * toward, py = y + H * u + 0.12 * size * Math.sin(k * 2.3);
+    const pz = z + c.cam.right.z * (spread + lean) + (c.cam.pos.z - z) * 0.002 * toward, ink = inkPx(c, px, py, pz, sz, 256);
+    c.out.fx.push({ key: `puff${tone > 0.5 ? 1 : 0}|${k % 4}|${ink}`, cw, ch, draw: (p) => { if (big) p.g.scale(2, 2); fxPuff(p, tone, k % 4, ink); }, x: px, y: py, z: pz,
+      w: sz, h: sz * 0.875, tint, rot: side * 0.2, ...(opts.soft ? { mode: "soft" as const, opacity: opts.soft * Math.min(1, (1 - u) * 4) } : {}) });
   }
 };
 /** the fissure: a curtain of overlapping fountains (tallest near Eldfell's vent; once the cone stands, the fire is
@@ -81,9 +90,11 @@ const fissureFx = (c: Ctx, fis: number, cone: number) => {
 };
 
 // ---------------- people ----------------
-const SOLEY_SPOT: V3 = [STOFA[0] - 1.0, STOFA[1], STOFA[2] + 0.35];
-const KARI_SPOT: V3 = [STOFA[0] + 0.52, STOFA[1], STOFA[2] + 1.25];
-const AMMA_SOFA: V3 = [STOFA[0] - 0.25, STOFA[1] + 0.355, STOFA[2] - 1.8];
+/** Amma in her armchair front and centre (seat 0.42 m; the sitting card's torso sits 0.095 m above its soles), the kids
+ *  standing either side just behind her */
+const SOLEY_SPOT: V3 = [STOFA[0] - 0.6, STOFA[1], STOFA[2] + 0.78];
+const KARI_SPOT: V3 = [STOFA[0] + 0.6, STOFA[1], STOFA[2] + 0.88];
+const AMMA_SOFA: V3 = [STOFA[0], STOFA[1] + 0.42 - 0.095, STOFA[2] + 1.27];
 const stofa = (c: Ctx) => {
   const { cam, f, out } = c;
   out.places.push(card(cam, "amma-g", { e: "smile_closed", b: lidAt(f, 47) }, (p, light) => drawAmma(p, "smile_closed", "gomul", { mode: "sit", prop: "photo", light, blink: lidAt(f, 47) }), ...AMMA_SOFA, 0.97));
@@ -111,6 +122,15 @@ const nott = (c: Ctx) => {
       z: cam.pos.z + (fwdz / l) * d + cam.right.z * side, w: 0.09 + 0.05 * hh(k, 6), h: 0.07 + 0.04 * hh(k, 6), rot: c.t * 2 + k });
   }
 };
+/** fire light on rippled water: flat additive glint cards from (x, z) toward the lens, `len` m long, `w` wide */
+const seaPath = (c: Ctx, x: number, z: number, len: number, w: number, tint: [number, number, number], seed: number, opacity = 0.9) => {
+  const dx = c.cam.pos.x - x, dz = c.cam.pos.z - z, l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, n = Math.max(2, Math.round(len / 9));
+  for (let k = 0; k < n; k++) {
+    const s0 = (len * (k + 0.5)) / n;
+    c.out.fx.push({ key: `glints${(seed + k) % 3}`, cw: 128, ch: 256, draw: (p) => fxGlints(p, (seed + k) % 3), x: x + ux * s0, y: 0.06, z: z + uz * s0,
+      w: w * (1 - 0.35 * (k / n)), h: len / n + 1, flat: true, rot: Math.atan2(-ux, -uz), mode: "add", tint, opacity: opacity * (1 - 0.5 * (k / n)) });
+  }
+};
 const hofn = (c: Ctx, boats: BoatPose[]) => {
   const { cam, f, out, t } = c;
   boats.forEach((b, i) => {
@@ -121,60 +141,77 @@ const hofn = (c: Ctx, boats: BoatPose[]) => {
       const [wx, wz] = loc(lx, 0);
       out.fx.push({ key: `wake${i % 3}`, cw: 400, ch: 400, draw: (p) => fxWake(p, i % 3), x: wx, y: 0.5, z: wz, w: 7 * s2, h: 3.2 * s2, mode: "cut", tint: T3(0.75, 0.78, 0.95) });
     }
-    // people crowded on deck (fore deck and around the wheelhouse)
-    const spots: [number, number][] = [[2.5, -1.2], [3.6, 0.9], [5.0, -0.4], [1.2, 1.1], [6.2, 0.8], [0.2, -1.4], [3.0, 0.1], [4.3, -1.5], [7.2, -0.6],
-      [-0.9, 0.3], [-5.6, -1.4], [-6.6, 1.2]];
-    spots.forEach(([lx, lz], k) => {
-      const [x, z] = loc(lx, lz), o = FLOTTAFOLK[(i + k) % FLOTTAFOLK.length], e: Expr = (["nervous", "shock", "nervous", "pained"] as Expr[])[(i + k) % 4];
-      const bob = 0.05 * Math.sin(t * 1.3 + i * 1.7);
-      const seed = 3 + ((i + k) % 7); // the card key must name everything the drawing depends on (outfit, head seed)
-      out.places.push(card(cam, `deck${(i + k) % FLOTTAFOLK.length}|${seed}`, { e, b: lidAt(f, i * 7 + k) }, (p, light) => bodyFront(p, o, { mode: "stand", expr: e, light, blink: lidAt(f, i * 7 + k), seed }), x, Fleet.DECK - 0.1 + bob, z, 1));
-    });
+    // an overloaded boat: islanders standing on the deck (it rises toward the bow), sitting on the hatch and the
+    // wheelhouse roof; all ride the boat's roll and pitch (deck.ts)
+    for (const ps of passengers(b, i, t)) {
+      const k = ps.k, sit = ps.on !== "deck", o = FLOTTAFOLK[(i + k) % FLOTTAFOLK.length], seed = 3 + ((i + k) % 7);
+      const e: Expr = (["nervous", "shock", "nervous", "pained", "dazed"] as Expr[])[(i + k) % 5], lid = lidAt(f, i * 17 + k);
+      // the card key names everything the drawing depends on (outfit, head seed, pose)
+      out.places.push(card(cam, `deck${(i + k) % FLOTTAFOLK.length}|${seed}|${sit ? "s" : "t"}`, { e, b: lid }, (p, light) => bodyFront(p, o, { mode: sit ? "sit" : "stand", expr: e, light, blink: lid, seed, facing: SPOTS[k].lz > 0 ? -1 : 1 }),
+        ps.seat[0], ps.seat[1] - (sit ? 0.095 : 0), ps.seat[2], 1));
+    }
   });
+  // the fire's light on the water, running from behind the nearest boat toward the lens
+  const near = boats.reduce((m, b) => (Math.hypot(b.x - cam.pos.x, b.z - cam.pos.z) < Math.hypot(m.x - cam.pos.x, m.z - cam.pos.z) ? b : m), boats[0]);
+  const fx0 = near.x + (FISSURE.x - near.x) * 0.06, fz0 = near.z + (ELDFELL[2] + 120 - near.z) * 0.06;
+  seaPath(c, fx0, fz0, Math.hypot(fx0 - cam.pos.x, fz0 - cam.pos.z) - 4, 9, T3(1.1, 0.42, 0.1), 3, 0.85);
+  // the fire's glow just behind the crowd: an orange halo that backlights the silhouettes on deck
+  const bx = near.x + (FISSURE.x - near.x) * 0.03, bz = near.z + (ELDFELL[2] + 120 - near.z) * 0.03;
+  glow(c, bx, Fleet.DECK + 2.2, bz, 26, T3(0.55, 0.22, 0.06), 0.8);
 };
-/** hose men in a row facing the lava (side views), water arcs onto the front, steam where it lands */
+/** the hose crew (story.hoseCrew): side views facing the wall, each jet from his nozzle in an arc that stays below
+ *  the wall top onto the wall 3-8 m up, a splash where it hits, steam rising from the hit along the wall face (world.ts
+ *  cools the crust there), and the hose lying on the ground behind him, back toward the pumps */
 const slongur = (c: Ctx, D: number) => {
   const { cam, f, out, t } = c;
-  for (let i = 0; i < 6; i++) {
-    const fl = flankAt(D, 0.52 + 0.045 * i), back = 14 + 3 * hh(i, 2), mx = fl.x + fl.ox * back, mz = fl.z + fl.oz * back;
-    // the man faces the flank (-o): +x of his side view must point that way on screen
-    const mirror = -fl.ox * cam.right.x - fl.oz * cam.right.z < 0;
-    const o = EYJAMADUR[i % EYJAMADUR.length], seed = 3 + i, e: Expr = i % 3 ? "stern" : "grin";
-    const gy = groundAt(mx, mz);
-    out.places.push(card(cam, `hose${i}`, { e, b: lidAt(f, 80 + i), m: mirror }, (p, light) => bodySide(p, o, { mode: "stand", prop: "hose", expr: e, light, seed, blink: lidAt(f, 80 + i) }), mx, gy, mz, 1, mirror));
-    blob(out, mx, gy, mz, c.contact);
+  hoseCrew(D).forEach((m, i) => {
+    const mirror = m.face[0] * cam.right.x + m.face[1] * cam.right.z < 0; // +x of the side view points at the wall
+    const o = EYJAMADUR[i % EYJAMADUR.length], seed = 3 + i, e: Expr = i % 3 ? "stern" : "grin", gy = groundAt(m.x, m.z);
+    out.places.push(card(cam, `hose${i}`, { e, b: lidAt(f, 80 + i), m: mirror }, (p, light) => bodySide(p, o, { mode: "stand", prop: "hose", expr: e, light, seed, blink: lidAt(f, 80 + i) }), m.x, gy, m.z, 1, mirror));
+    blob(out, m.x, gy, m.z, c.contact);
+    // the hose on the ground: from his heels away from the wall, in a lazy S
+    let hx = m.x, hz = m.z;
+    for (let k = 1; k <= 7; k++) {
+      const back = 2.6 * k, wig = 1.2 * Math.sin(k * 0.9 + i), nx = m.x - m.face[0] * back - m.face[1] * wig, nz = m.z - m.face[1] * back + m.face[0] * wig;
+      const dx = nx - hx, dz = nz - hz, l = Math.hypot(dx, dz);
+      out.fx.push({ key: "hose", cw: 256, ch: 32, draw: fxHose, x: (hx + nx) / 2, y: groundAt(hx, hz) + 0.035, z: (hz + nz) / 2, w: l + 0.12, h: 0.16, flat: true, rot: Math.atan2(-dz, dx) });
+      hx = nx; hz = nz;
+    }
     // nozzle mouth in the world: the side card faces the camera; design x right of centre = +cam.right (or - mirrored)
     const tip = sideHoseTip(o, seed), sx = (tip[0] - 300) * SU * (mirror ? -1 : 1), sy = (975 - tip[1]) * SU;
-    const n0 = new THREE.Vector3(mx + cam.right.x * sx, gy + sy, mz + cam.right.z * sx);
-    // ballistic arc to a point high on the flank wall
-    const hit = new THREE.Vector3(fl.x + fl.ox * 2, LAND_Y + 10 + 3 * hh(i, 4), fl.z + fl.oz * 2), N = 26, arc = 5;
-    for (let k = 1; k <= N; k++) { // a continuous jet: long overlapping streaks along the arc, fanning out toward the wall
-      const u = k / N, jit = 0.08 * Math.sin(t * 9 + k + i);
-      const P = n0.clone().lerp(hit, u).add(new THREE.Vector3(0, arc * 4 * u * (1 - u) + jit, 0));
-      const u2 = u + 0.02, Pn = n0.clone().lerp(hit, u2).add(new THREE.Vector3(0, arc * 4 * u2 * (1 - u2), 0));
-      const dir = Pn.sub(P), rot = Math.atan2(dir.dot(c.up), dir.dot(cam.right));
-      const seg = n0.distanceTo(hit) / N, sz = seg * 2.4;
-      out.fx.push({ key: `spray${(k + i) % 3}`, cw: 160, ch: 64, draw: (p) => fxSpray(p, (k + i) % 3), x: P.x, y: P.y, z: P.z, w: sz, h: 0.22 + 0.5 * u, rot, mode: "cut" });
+    const n0 = new THREE.Vector3(m.x + cam.right.x * sx, gy + sy, m.z + cam.right.z * sx), hit = new THREE.Vector3(...m.hit);
+    // the jet: a flat arc (apex well below the wall top) drawn as lengths laid out in SCREEN space (both ends projected
+    // through the lens), so a jet running away into depth still reads as one clean continuous stroke
+    const N = 22, arc = 0.8 + 0.05 * n0.distanceTo(hit), fwd = new THREE.Vector3().crossVectors(c.up, cam.right);
+    const at = (u: number) => n0.clone().lerp(hit, u).add(new THREE.Vector3(0, arc * 4 * u * (1 - u) + 0.05 * Math.sin(t * 9 + u * 20 + i), 0));
+    const scr = (P: THREE.Vector3) => { const r = P.clone().sub(cam.pos), z = r.dot(fwd); return [r.dot(cam.right) / z, r.dot(c.up) / z, z] as const; };
+    for (let k = 0; k < N - 2; k++) {
+      const A = at(k / N), B = at((k + 1) / N), [ax, ay, az] = scr(A), [bx, by, bz] = scr(B), M = A.clone().add(B).multiplyScalar(0.5), zm = (az + bz) / 2;
+      const L = Math.hypot(bx - ax, by - ay), thick = 0.004 + 0.007 * Math.sin(Math.PI * Math.min(1, (k + 1) / N + 0.15));
+      out.fx.push({ key: `spray${(k + i) % 3}`, cw: 160, ch: 64, draw: (p) => fxSpray(p, (k + i) % 3), x: M.x, y: M.y, z: M.z, w: L * zm * 1.7, h: thick * zm * 2.2, rot: Math.atan2(by - ay, bx - ax), mode: "cut" });
     }
-    plume(c, hit.x + fl.ox * 1.5, hit.y - 2, hit.z + fl.oz * 1.5, 4, 22, 6, 1, T3(1.1, 0.95, 0.85), T3(1.0, 0.97, 0.97), 20 + i, 0.18);
-  }
-  // the big steam wall rising off the hosed flank
-  const m = flankAt(D, 0.6);
-  plume(c, m.x - m.ox * 6, LAND_Y + 16, m.z - m.oz * 6, 10, 120, 40, 1, T3(1.15, 0.88, 0.74), T3(1.0, 0.95, 0.95), 31, 0.05);
+    // splash where the water hits the hot rock, nudged off the wall toward the lens
+    const ph = q((t * 3 + i * 0.37) % 1, 3), off = hit.clone().add(new THREE.Vector3(cam.pos.x - hit.x, 0, cam.pos.z - hit.z).normalize().multiplyScalar(1.2));
+    out.fx.push({ key: `impact${ph}`, cw: 200, ch: 200, draw: (p) => fxImpact(p, ph), x: off.x, y: off.y + 0.3, z: off.z, w: 2.6, h: 2.6 });
+    // steam boiling off the impact and climbing the wall face (see-through, fire-lit at its foot)
+    plume(c, hit.x - m.face[0] * 1.6, hit.y + 2.2, hit.z - m.face[1] * 1.6, 5, 13, 3.2, 1, T3(1.2, 0.9, 0.74), T3(1.0, 0.97, 0.98), 20 + i, 0.14, { soft: 0.68, spread: 0.4, lean: 0.35 });
+  });
 };
-/** the lava tongue at the harbour: steam where it enters the sea, glow along the front */
+/** where the lava front meets the sea: steam boiling off the waterline, fire-lit from below, and the front's glow on the
+ *  water running toward the lens */
 const hraun = (c: Ctx, D: number) => {
-  const { ax, az, len, half } = lavaLobe(D), px = -az, pz = ax;
-  for (let i = -2; i <= 2; i++) {
-    const w = (i / 2) * half * 0.85, s = len - 45 * (w / half) ** 2 + 4, x = ELDFELL[0] + ax * s + px * w, z = ELDFELL[2] + az * s + pz * w;
-    if (i % 2 === 0) plume(c, x, 3, z, 4, 34, 10, 1, T3(1.2, 0.66, 0.46), T3(0.42, 0.46, 0.7), 40 + i, 0.08); // steam where kvika meets the sea
-    glow(c, x, 8, z, 70, T3(0.7, 0.26, 0.06), 0.9);
-  }
+  const wet = lobeEdge(D, 30).filter(([x, z]) => coastDist(x, z) < -3);
+  wet.forEach(([x, z], i) => {
+    if (i % 4 === 0) plume(c, x, 0.5, z, 6, 34, 9, 1, T3(1.4, 0.72, 0.44), T3(0.5, 0.55, 0.82), 40 + i, 0.07, { soft: 0.72, spread: 0.4, lean: 0.6 });
+    if (i % 3 === 0) glow(c, x, 5, z, 40, T3(0.75, 0.28, 0.06), 0.85);
+    if (i % 4 === 1) seaPath(c, x, z, 70, 14, T3(1.1, 0.38, 0.08), i, 0.8);
+  });
 };
 
 /** everything on stage for shot s at frame f */
-export const stage = (s: ShotDef, id: number, f: number, cam: CamInfo, up: THREE.Vector3, contact: [number, number, number], boats: BoatPose[]): Stage => {
-  const out: Stage = { places: [], fx: [] }, st = stateAt(id, f), t = f / FPS, c: Ctx = { cam, up, t, f, out, contact };
+export const stage = (s: ShotDef, id: number, f: number, cam: CamInfo, up: THREE.Vector3, contact: [number, number, number], boats: BoatPose[], fov: number): Stage => {
+  const out: Stage = { places: [], fx: [] }, st = stateAt(id, f), t = f / FPS, kpx = 1920 / (2 * Math.tan((fov * Math.PI) / 360));
+  const c: Ctx = { cam, up, t, f, out, contact, kpx };
   if (s.scene === "stofa") { stofa(c); return out; }
   if (!st.today && st.open) fissureFx(c, st.fis, st.cone);
   if (s.light === "night") out.fx.push({ key: "moon", cw: 128, ch: 128, draw: fxMoon, x: cam.pos.x - 900, y: 520, z: cam.pos.z - 700, w: 46, h: 46, tint: T3(1.4, 1.4, 1.35) });

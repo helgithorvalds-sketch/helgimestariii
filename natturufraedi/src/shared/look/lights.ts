@@ -98,7 +98,8 @@ export const LOOK: Record<Light, WorldLook> = {
     sky: { c: ["#45386c", "#33356a", "#22305e", "#15244a", "#0d1b3d"], e: [0, 4, 10, 22, 45] },
     water: { near: "#1d2652", mid: "#182248", far: "#4a2c4a", crest: "#ff9a52", trough: "#0b1230", glint: "#ffc47a", shade: [0.4, 0.42, 0.68] },
     cloud: { lit: "#d07a52", mid: "#6a4566", shade: "#262a52" },
-    bounce: [0.03, 0.01, 0.0],
+    // shaded faces turned to the lens keep their own colour (a hull stays red, a wall blue) instead of all going violet
+    bounce: [0.24, 0.15, 0.1],
     sat: 1.05,
   },
 };

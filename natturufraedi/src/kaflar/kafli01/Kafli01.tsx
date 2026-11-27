@@ -13,6 +13,7 @@ import { World } from "./world";
 import { InkPass, noInkFallback } from "../../shared/look/ink";
 import { LensBlur } from "../../shared/look/lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeFor } from "../../shared/look/grade";
+import { CARD_K } from "../../shared/look/cardshade";
 import { TOTAL, FLASHES, SHOTS, layersAt, dofAt, is3D } from "./story";
 import "../../fonts";
 
@@ -32,13 +33,17 @@ const Inner: React.FC<{ id: number }> = ({ id }) => {
   const { camera, scene } = useThree();
   const world = useMemo(() => new World(), []);
   const fx = useMemo(() => ({
-    ink: new InkPass(scene, camera as THREE.PerspectiveCamera),
+    // the island is ~1.5 km across: keep the ink on far silhouettes (cones, terrain) longer than the Geysir valley does
+    ink: new InkPass(scene, camera as THREE.PerspectiveCamera, { fadeNear: 450, fadeFar: 1500 }),
     lens: new LensBlur({ maxCoC: 24, nearScale: 1.2 }),
     bloom: makeBloom(),
     tone: new ToneMappingEffect({ mode: ToneMappingMode.NEUTRAL }),
     grade: new GradeEffect(GRADES.day, GRADE_STRENGTH.day),
   }), [camera, scene]);
   useEffect(() => () => fx.ink.dispose(), [fx]);
+  // world.ts sets the shared card gain per light (night faces dimmer); give the Geysir default back on unmount so it
+  // never leaks into another composition in the same page (Remotion Studio)
+  useEffect(() => () => { CARD_K.uGain.value = 1.03; }, []);
   const post = useMemo(() => (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore — postprocessing child typing

@@ -7,7 +7,7 @@ import { Batch, kmat, box, quad, V } from "../../shared/kit/batch";
 import { barujarnshus, WALLS, ROOFS, concreteMat } from "../../shared/kit/houses";
 import { ctex, rng } from "../../shared/look/paint";
 import { Pen } from "../../shared/look/toon";
-import { LAND_Y, QUAY, ELDFELL, ELDFELL_R, ELDFELL_H, FISSURE, HELGAFELL, HEIMAKLETTUR, STOFA, lavaLobe } from "./story";
+import { LAND_Y, QUAY, ELDFELL, ELDFELL_R, ELDFELL_H, FISSURE, HELGAFELL, HEIMAKLETTUR, STOFA, lavaLobe, lavaHeight } from "./story";
 import { fxWindowView } from "./fx";
 
 const rp = (t: THREE.Texture) => { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 16; return t; };
@@ -21,8 +21,8 @@ const noise = (x: number, z: number, s = 1) =>
 
 // ---------------- painted textures ----------------
 /** Icelandic grass: cool yellow-green with moss blotches and tufts (8 m per repeat) */
-const grassTex = () => ctex("k1:grass", 512, 512, (g, r) => {
-  g.fillStyle = "#79a04a"; g.fillRect(0, 0, 512, 512);
+const grassTex = () => ctex("k1:grass2", 512, 512, (g, r) => {
+  g.fillStyle = "#7a8d52"; g.fillRect(0, 0, 512, 512);
   const wrap = (x: number, y: number, fn: (x: number, y: number) => void) => { for (const ox of [-512, 0, 512]) for (const oy of [-512, 0, 512]) fn(x + ox, y + oy); };
   for (let i = 0; i < 30; i++) { const x = r() * 512, y = r() * 512, rad = 50 + r() * 120, col = r() > 0.5 ? "140,170,84" : "88,122,54"; wrap(x, y, (a, b) => blotch(g, a, b, rad, col, 0.3)); }
   g.lineWidth = 2; g.lineCap = "round";
@@ -30,6 +30,13 @@ const grassTex = () => ctex("k1:grass", 512, 512, (g, r) => {
     const x = r() * 512, y = r() * 512, h = 4 + r() * 7;
     g.strokeStyle = r() < 0.4 ? "rgba(190,214,110,0.35)" : "rgba(62,96,34,0.4)";
     wrap(x, y, (a, b) => { g.beginPath(); g.moveTo(a - 2, b - h); g.lineTo(a, b); g.lineTo(a + 2, b - h * 0.8); g.stroke(); });
+  }
+  for (let i = 0; i < 90; i++) { // þúfur: tussocks, a dark foot and a pale sunlit cap
+    const x = r() * 512, y = r() * 512, rad = 5 + r() * 7;
+    wrap(x, y, (a, b) => {
+      g.fillStyle = "rgba(58,78,36,0.55)"; g.beginPath(); g.ellipse(a, b + rad * 0.3, rad * 1.2, rad * 0.8, 0, 0, 7); g.fill();
+      g.fillStyle = "rgba(176,186,112,0.5)"; g.beginPath(); g.ellipse(a - rad * 0.2, b - rad * 0.2, rad * 0.8, rad * 0.5, 0, 0, 7); g.fill();
+    });
   }
 });
 /** tephra: black-grey ash with cinder speckles */
@@ -70,37 +77,56 @@ const scoriaTex = () => ctex("k1:scoria", 512, 512, (g, r) => {
   for (let i = 0; i < 40; i++) blotch(g, r() * 512, r() * 512, 30 + r() * 90, r() > 0.5 ? "150,110,90" : "90,86,90", 0.35);
   for (let i = 0; i < 3000; i++) { g.fillStyle = r() > 0.5 ? "rgba(255,255,255,0.35)" : "rgba(40,36,40,0.35)"; g.fillRect(r() * 512, r() * 512, 3, 3); }
 });
-/** lava crust: dark blocky plates with grey highlights (map) and the glowing crack network (emissive mask) */
-const crustCells = (r: () => number) => { const c: [number, number][] = []; for (let i = 0; i < 70; i++) c.push([r() * 512, r() * 512]); return c; };
-const lavaTex = () => ctex("k1:lavaCrust", 512, 512, (g, r) => {
-  g.fillStyle = "#2c2629"; g.fillRect(0, 0, 512, 512);
-  for (const [x, y] of crustCells(r)) {
-    const c = 40 + r() * 34; g.fillStyle = `rgb(${c},${c - 6},${c - 4})`;
-    g.beginPath(); for (let k = 0; k < 7; k++) { const a = (k / 7) * 6.28 + r() * 0.5, d = 18 + r() * 16; g.lineTo(x + Math.cos(a) * d, y + Math.sin(a) * d); } g.closePath(); g.fill();
-    g.fillStyle = "rgba(170,160,160,0.25)"; g.fillRect(x - 6, y - 8, 10, 4);
-  }
-});
-/** glowing cracks between the crust plates: the edges of a tiling Voronoi pattern (width varies cell to cell) */
-const lavaGlowTex = () => ctex("k1:lavaGlow", 256, 256, (g, r) => {
-  const S = 256, pts: [number, number][] = [];
-  for (let i = 0; i < 34; i++) pts.push([r() * S, r() * S]);
-  const img = g.createImageData(S, S);
-  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
-    let d1 = 1e9, d2 = 1e9;
-    for (const [px, py] of pts) for (const ox of [-S, 0, S]) for (const oy of [-S, 0, S]) {
-      const d = (x - px - ox) ** 2 + (y - py - oy) ** 2;
-      if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) d2 = d;
+/** the lava's crust plates: a tiling weighted Voronoi (big slabs and small blocks), computed once and shared by the
+ *  crust map, the crack mask and today's mossy field, so plates and cracks line up. Per pixel: nearest plate id, the
+ *  second-nearest (the edge's other side) and the distance to the edge in pixels. */
+const CRUST_S = 256;
+const crustField = (() => {
+  let f: { id: Int16Array; id2: Int16Array; edge: Float32Array; n: number } | null = null;
+  return () => {
+    if (f) return f;
+    const r = rng(4321), S = CRUST_S, n = 44, pts: [number, number, number][] = [];
+    for (let i = 0; i < n; i++) pts.push([r() * S, r() * S, 0.55 + 1.3 * r() ** 1.5]);
+    const id = new Int16Array(S * S), id2 = new Int16Array(S * S), edge = new Float32Array(S * S);
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+      let d1 = 1e9, d2 = 1e9, i1 = 0, i2 = 0;
+      pts.forEach(([px, py, w], i) => {
+        for (const ox of [-S, 0, S]) for (const oy of [-S, 0, S]) {
+          const d = Math.hypot(x - px - ox, y - py - oy) / w;
+          if (d < d1) { d2 = d1; i2 = i1; d1 = d; i1 = i; } else if (d < d2) { d2 = d; i2 = i; }
+        }
+      });
+      const k = y * S + x;
+      id[k] = i1; id2[k] = i2; edge[k] = (d2 - d1) * 0.5 * (pts[i1][2] + pts[i2][2]);
     }
-    const e = Math.sqrt(d2) - Math.sqrt(d1), k = Math.max(0, 1 - e / 3.2), i = (y * S + x) * 4;
-    img.data[i] = 255 * k; img.data[i + 1] = 200 * k ** 1.5; img.data[i + 2] = 120 * k ** 3; img.data[i + 3] = 255;
-  }
+    f = { id, id2, edge, n };
+    return f;
+  };
+})();
+const hash2 = (a: number, b: number) => { const v = Math.sin(Math.min(a, b) * 91.7 + Math.max(a, b) * 47.3) * 43758.5453; return v - Math.floor(v); };
+const fieldTex = (key: string, paint: (k: number, id: number, id2: number, e: number) => [number, number, number]) => ctex(key, CRUST_S, CRUST_S, (g) => {
+  const F = crustField(), img = g.createImageData(CRUST_S, CRUST_S);
+  for (let k = 0; k < CRUST_S * CRUST_S; k++) { const [rr, gg, bb] = paint(k, F.id[k], F.id2[k], F.edge[k]); img.data.set([rr, gg, bb, 255], k * 4); }
   g.putImageData(img, 0, 0);
 });
-/** today's lava field: dark grey-brown blocks under grey-green moss */
-const lavaTodayTex = () => ctex("k1:lavaToday", 512, 512, (g, r) => {
-  g.fillStyle = "#5a5450"; g.fillRect(0, 0, 512, 512);
-  for (let i = 0; i < 60; i++) blotch(g, r() * 512, r() * 512, 30 + r() * 80, r() > 0.45 ? "122,140,92" : "60,52,50", 0.55);
-  for (let i = 0; i < 1500; i++) { g.fillStyle = r() > 0.5 ? "rgba(150,160,120,0.5)" : "rgba(40,36,36,0.5)"; g.fillRect(r() * 512, r() * 512, 3, 3); }
+/** lava crust: charcoal plates of uneven grey with dark gaps between them */
+const lavaTex = () => fieldTex("k1:lavaCrust2", (_k, id, _id2, e) => {
+  const c = 38 + 30 * hash2(id, id), gap = Math.min(1, e / 2.2);
+  const v = c * (0.35 + 0.65 * gap);
+  return [v, v * 0.92, v * 0.95];
+});
+/** the glowing cracks: thin and sparse (about half the plate edges glow, at uneven widths) */
+const lavaGlowTex = () => fieldTex("k1:lavaGlow2", (_k, id, id2, e) => {
+  const h = hash2(id, id2), w = h < 0.45 ? 0 : 0.7 + 1.8 * (h - 0.45) / 0.55, k = w ? Math.max(0, 1 - e / w) : 0;
+  return [255 * k, 205 * k ** 1.4, 120 * k ** 3];
+});
+/** today's lava field (the new land): charcoal-brown plates under patchy grey-green moss */
+const lavaTodayTex = () => fieldTex("k1:lavaToday2", (k, id, _id2, e) => {
+  const x = k % CRUST_S, y = Math.floor(k / CRUST_S), moss = Math.max(0, Math.min(1, 0.45 + 0.8 * hash2(id, 3) - 0.35 + 0.35 * Math.sin(x * 0.05) * Math.sin(y * 0.043)));
+  const gap = Math.min(1, e / 2), dark = 46 + 22 * hash2(id, id);
+  const rr = dark + (112 - dark) * moss, gg = dark * 0.94 + (124 - dark * 0.94) * moss, bb = dark * 0.92 + (92 - dark * 0.92) * moss;
+  const g2 = 0.45 + 0.55 * gap;
+  return [rr * g2, gg * g2, bb * g2];
 });
 
 // ---------------- materials ----------------
@@ -110,8 +136,12 @@ const rockMat = () => kmat("k1:rock", () => ({ map: rp(rockTex()) }));
 const scoriaMat = (key: string, col: string) => kmat("k1:scoria" + key, () => ({ map: rp(scoriaTex()), color: col }));
 const vcolMat = (key: string, map?: THREE.Texture) => kmat("k1:vcol" + key, () => ({ vertexColors: true, map: map ?? null }));
 
-/** two-tone lava: the crust map, plus the crack network as HDR emissive scaled by a per-vertex `glow` (front wall hot,
- *  top crust dim); World sets emissiveIntensity per frame (cooling front, night vs golden) */
+/** hose impacts on the lava (xyz + radius, w = 0: unused): around them the crust cools to grey-black and the cracks go
+ *  dark (storknun). World sets them per frame. */
+export const COOL_SPOTS = { value: Array.from({ length: 6 }, () => new THREE.Vector4(0, 0, 0, 0)) };
+/** two-tone lava: the crust map, plus the crack mask as HDR emissive. A per-vertex `glow` (1 on the front wall and the
+ *  lower flanks, ~0.05 on the top crust) keeps the bright orange at the edge: the top is charcoal with thin cracks.
+ *  World sets emissiveIntensity per frame (cooling front, night vs golden). */
 export const lavaMat = (() => {
   let m: THREE.MeshLambertMaterial | null = null;
   return () => {
@@ -120,12 +150,17 @@ export const lavaMat = (() => {
     const prev = m.onBeforeCompile;
     m.onBeforeCompile = (sh, r) => {
       prev(sh, r);
-      sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nattribute float glow; varying float vGlow;")
-        .replace("#include <begin_vertex>", "#include <begin_vertex>\nvGlow = glow;");
-      sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying float vGlow;")
-        .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance = (totalEmissiveRadiance + emissive * 0.1 * vGlow * vGlow) * vGlow;");
+      sh.uniforms.coolSpots = COOL_SPOTS;
+      sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nattribute float glow; varying float vGlow; varying vec3 vLavaW;")
+        .replace("#include <begin_vertex>", "#include <begin_vertex>\nvGlow = glow; vLavaW = (modelMatrix * vec4(transformed, 1.0)).xyz;");
+      sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying float vGlow; varying vec3 vLavaW; uniform vec4 coolSpots[6];")
+        .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+float cooled = 0.0;
+for (int i = 0; i < 6; i++) { float rr = coolSpots[i].w; if (rr > 0.0) cooled = max(cooled, 1.0 - smoothstep(0.5 * rr, rr, distance(vLavaW, coolSpots[i].xyz))); }
+totalEmissiveRadiance = (totalEmissiveRadiance * (0.35 + 0.65 * vGlow) + emissive * 0.7 * vGlow * vGlow * vGlow * vGlow) * (1.0 - 0.97 * cooled);
+diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.035, 0.034, 0.038), 0.88 * cooled);`);
     };
-    m.customProgramCacheKey = () => "k1lava2";
+    m.customProgramCacheKey = () => "k1lava4";
     return m;
   };
 })();
@@ -209,7 +244,16 @@ export const buildIsland = (root: THREE.Object3D) => {
   for (const z of zs) for (const x of xs) {
     const d = coastDist(x, z), y = groundY(x, z, d);
     pos.push(x, y, z); uv.push(x / 24, z / 24);
-    const g = d < 7 ? mixC("#5a524c", "#6e6a52", 0.5 + 0.5 * noise(x, z, 4)) : mixC("#e4ecd8", "#b8c8a0", 0.5 + 0.5 * noise(x * 0.5, z * 0.5, 1)).lerp(C("#d8d4a8"), Math.max(0, noise(z, x, 0.7)) * 0.45);
+    // outside town: a patchwork of fields (pasture, hay, rough grazing, heath) instead of one lawn
+    const fid = Math.floor((x + 0.3 * z) / 46) * 7 + Math.floor((z - 0.2 * x) / 34), fh = (Math.sin(fid * 12.9898) * 43758.5453) % 1;
+    const field = [C("#c9cfa6"), C("#ddd2a2"), C("#aab88f"), C("#c2b28e"), C("#b8c49a"), C("#a9a48a")][Math.floor(Math.abs(fh) * 6) % 6];
+    const inTown = Math.abs(x) < 230 && z > -40 && z < 195;
+    const base = mixC("#cfd6ba", "#a9b48f", 0.5 + 0.5 * noise(x * 0.5, z * 0.5, 1));
+    // in town: garden plots of uneven green between the streets (every 20 x 25 m patch its own shade)
+    const gid = Math.floor(x / 20) * 31 + Math.floor(z / 25), gh = Math.abs((Math.sin(gid * 78.233) * 43758.5453) % 1);
+    const garden = base.clone().lerp([C("#c4cca4"), C("#9fae84"), C("#d2cca0"), C("#b5bd96")][Math.floor(gh * 4) % 4], 0.55);
+    const heath = Math.max(0, noise(x * 0.7, z * 0.7, 1.3) - 0.55) * 1.6; // patches of brown heath / moss
+    const g = d < 7 ? mixC("#5a524c", "#6e6a52", 0.5 + 0.5 * noise(x, z, 4)) : inTown ? garden : base.clone().lerp(field, 0.85).lerp(C("#9a8e74"), Math.min(0.6, heath));
     col.push(g.r, g.g, g.b);
   }
   const nx = xs.length;
@@ -421,7 +465,7 @@ export class LavaLobe {
   set(D: number) {
     if (Math.abs(D - this.lastD) < 0.01) return;
     this.lastD = D;
-    const { ax, az, len, half } = lavaLobe(D), px = -az, pz = ax, s0 = -60, T = 20;
+    const { ax, az, len, half } = lavaLobe(D), px = -az, pz = ax, s0 = -60;
     const uv = this.mesh.geometry.attributes.uv as THREE.BufferAttribute;
     for (let i = 0; i <= this.NS; i++) for (let j = 0; j <= this.NW; j++) {
       const k = i * (this.NW + 1) + j, sg = i / this.NS, wg = (j / this.NW) * 2 - 1;
@@ -430,9 +474,9 @@ export class LavaLobe {
       const x = ELDFELL[0] + ax * s + px * w, z = ELDFELL[2] + az * s + pz * w;
       const dEdge = Math.min((Math.max(sf, s0 + 1) - s0) * (1 - ef), half * (1 - ew));
       const rise = Math.min(1, dEdge / 26) ** 0.55, bump = dEdge > 6 ? 2.2 * noise(x, z, 3) + 1.2 * noise(z, x, 7) : 0;
-      this.pos[k * 3] = x; this.pos[k * 3 + 1] = -3 + (LAND_Y + 3 + T) * rise + bump * rise; this.pos[k * 3 + 2] = z;
-      this.glow[k] = 0.22 + 0.78 * Math.max(0, 1 - dEdge / 30) ** 1.2;
-      uv.setXY(k, x / 16, (z + this.pos[k * 3 + 1] * 0.6) / 16);
+      this.pos[k * 3] = x; this.pos[k * 3 + 1] = lavaHeight(dEdge) + bump * rise; this.pos[k * 3 + 2] = z;
+      this.glow[k] = 0.05 + 0.95 * Math.max(0, 1 - dEdge / 30) ** 1.2;
+      uv.setXY(k, x / 20, (z + this.pos[k * 3 + 1] * 0.6) / 20);
     }
     const g = this.mesh.geometry;
     g.attributes.position.needsUpdate = true; g.attributes.glow.needsUpdate = true; uv.needsUpdate = true;
@@ -496,6 +540,12 @@ export const buildStofa = (root: THREE.Object3D) => {
   b.add(box(V(-1.2, 0.38, -1.05), V(0.4, 0.45, -0.45)), dark);
   for (const [x, z] of [[-1.15, -1.0], [0.3, -1.0], [-1.15, -0.55], [0.3, -0.55]]) b.add(box(V(x, 0, z), V(x + 0.06, 0.38, z + 0.06)), dark);
   b.add(quad(V(-2.4, 0.01, 0.6), V(1.4, 0.01, 0.6), V(1.4, 0.01, -1.6), V(-2.4, 0.01, -1.6)), kmat("k1:rug", () => ({ map: rugTex() })));
+  // Amma's armchair, front and centre (teal wool against the mustard sofa): seat top 0.42 m
+  const chair = kmat("k1:armchair", () => ({ color: "#2f7a7a" })), chairD = kmat("k1:armchairD", () => ({ color: "#24605f" }));
+  b.add(box(V(-0.42, 0.12, 0.98), V(0.42, 0.42, 1.62)), chair);
+  b.add(box(V(-0.44, 0.42, 0.86), V(0.44, 0.86, 1.0)), chairD); // a low back: it never hides the kids beside it
+  for (const x of [-0.54, 0.42]) b.add(box(V(x, 0.12, 0.9), V(x + 0.12, 0.6, 1.62)), chairD);
+  for (const [x, z] of [[-0.5, 0.94], [0.42, 0.94], [-0.5, 1.54], [0.42, 1.54]]) b.add(box(V(x, 0, z), V(x + 0.08, 0.12, z + 0.08)), dark);
   b.add(new THREE.CylinderGeometry(0.025, 0.025, 1.5, 8).translate(-2.75, 0.75, -2.0), dark);
   b.add(new THREE.CylinderGeometry(0.2, 0.2, 0.04, 16).translate(-2.75, 0.02, -2.0), dark);
   b.add(new THREE.CylinderGeometry(0.17, 0.3, 0.36, 18, 1, true).translate(-2.75, 1.62, -2.0), kmat("k1:lampshade", () => ({ color: "#f2dca6", emissive: new THREE.Color(0.9, 0.7, 0.4), emissiveIntensity: 0.6, side: THREE.DoubleSide })));

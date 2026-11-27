@@ -418,7 +418,10 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
     }
     p.shadedFill(arc, col, mul(col, SH_FELT), light, H.a, 0.35);
     p.poly(arc, null, ow);
-    if (hairy) {
+    if (hairy && o.braids && !side) { // braids: a centre parting from the crown, not a strand over the brow
+      const [ax, ay] = R([[cx, crown + 3 * u]])[0], [bx, by] = R([[cx + 1.5 * u, crown + 16 * u]])[0];
+      p.stroke([[ax, ay], [bx, by]], 1.6 * u, shade(col, 0.7));
+    } else if (hairy) {
       const s = side ? -1 : facing || 1;
       p.stroke([[cx + s * 10 * u, cut - 30 * u], [cx + s * 2 * u, cut - 12 * u]], 1.2 * u);
     }
@@ -432,7 +435,7 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
     }
   } else if (o.hat === "beanie") {
     // húfa: knitted dome over the crown, a ribbed fold band just above the brows, optional pompom
-    const cut = crown + 0.29 * HH, col = o.cap ?? "#c8402f", band = o.hatBand ?? shade(col, 0.82);
+    const cut = crown + 0.24 * HH, col = o.cap ?? "#c8402f", band = o.hatBand ?? shade(col, 0.82);
     const n = hp.length, start = Math.max(0, hp.findIndex(([, y], i) => y < cut && !(hp[(i + n - 1) % n][1] < cut)));
     const dome = [...hp.slice(start), ...hp.slice(0, start)].filter(([, y]) => y < cut)
       .map(([x, y]) => [cx + (x - cx) * 1.07, hc + (y - hc) * 1.07 - 0.03 * HH * Math.max(0, (cut - y) / (cut - crown))] as P2);
@@ -452,9 +455,9 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
     p.poly(dome, null, ow);
     let x0 = Infinity, x1 = -Infinity;
     for (const [x, y] of dome) if (y > cut - 0.16 * HH) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
-    const bandPts = R(rrect(x0 - 2 * u, cut - 0.12 * HH, x1 + 2 * u, cut + 0.02 * HH, 5 * u));
+    const bandPts = R(rrect(x0 - 2 * u, cut - 0.1 * HH, x1 + 2 * u, cut + 0.01 * HH, 5 * u));
     p.poly(bandPts, band, ow * 0.85);
-    p.clip(bandPts, () => { for (let x = x0 + 4 * u; x < x1; x += 7 * u) p.stroke(R([[x, cut - 0.11 * HH], [x, cut + 0.01 * HH]]), 1.3 * u, shade(band, 0.78)); });
+    p.clip(bandPts, () => { for (let x = x0 + 4 * u; x < x1; x += 7 * u) p.stroke(R([[x, cut - 0.09 * HH], [x, cut]]), 1.3 * u, shade(band, 0.78)); });
   } else if (o.hat === "sowester") {
     // sjóhattur: yellow oilskin dome and a wide drooping brim
     const yb = crown + 0.2 * HH, col = o.cap ?? "#f2c230";
@@ -801,7 +804,7 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
   p.shadedFill(hp, skin, mul(skin, SH_SKIN), light, H.a);
   p.inkRing(hp, ow, thick);
   hatOn(p, o, hp, H, 300, hc, light, seed, facing, false, thick);
-  const brim = !!o.hat && o.hat !== "hair" && o.hat !== "bonnet" && o.hat !== "cap" && o.hat !== "beanie" && o.hat !== "bun";
+  const brim = !!o.hat && o.hat !== "hair" && o.hat !== "bonnet" && o.hat !== "cap" && o.hat !== "bun"; // a beanie sits low like a brim: brows 3u lower, clear of its band
   faceFront(p, 300, hc, W, expr, facing, look, lid, brim, skin, o.moustache, o.build === "stout");
   faceExtras(p, o, 300, hc, W, facing, false);
   p.rot = null;
@@ -928,10 +931,7 @@ export const bodySide = (p: Pen, o: Outfit, opts: SideOpts) => {
     const { hN, hF } = hoseHands(S, HH);
     near = [S, [S[0] + 0.2 * HH, S[1] + 0.34 * HH], hN];
     far = [S, [S[0] + 0.05 * HH, S[1] + 0.42 * HH], hF];
-    // the hose runs back from the rear hand behind the body at hand height, then sags to the ground well behind the feet
-    const back = curve(hF, [300 - 0.2 * HH, hF[1] - 0.02 * HH], [300 - 0.55 * HH, hF[1] + 0.12 * HH], 10);
-    const drop = curve([300 - 0.55 * HH, hF[1] + 0.12 * HH], [300 - 0.85 * HH, 975 - 0.3 * HH], [300 - 1.05 * HH, 975 - 6 * u], 10);
-    p.line([...back, ...drop.slice(1), [300 - 1.3 * HH, 975 - 6 * u]], "#b8432f", 10 * u);
+
   } else if (rifle) { near = [S, [S[0] - 4 * u, S[1] + 0.42 * HH], B0]; far = mode === "march" ? swingArm(rad(30) * nearFwd) : swingArm(0); }
   else { near = swingArm(rad(-30) * nearFwd); far = mode === "march" ? swingArm(rad(30) * nearFwd) : null; }
   if (far) { p.stroke(curve(far[0], far[1], far[2]), 5.2 * u, farArm); p.dot(far[2][0], far[2][1], 5.5 * u); }
@@ -948,6 +948,17 @@ export const bodySide = (p: Pen, o: Outfit, opts: SideOpts) => {
   }
   if (hose) { // brass nozzle in front of the body, held by both hands
     const { hF, tip } = hoseHands(S, HH);
+    // the hose (dull canvas khaki, never leg-coloured), in front of the body: it hangs almost straight down from the
+    // rear hand in front of the knees, bends onto the ground ahead of the toes and runs back flat under the feet (the
+    // world carries it on toward the pumps). Drawn upright (outside the lean) so the ground run stays level.
+    const keep = p.rot, hA = rotAbout(hF, rad(lean), [300, hipY]), gx = Math.max(hA[0], 300 + 0.3 * HH), gy = 975 - 5 * u;
+    p.rot = null;
+    const drop: P2[] = curve(hA, [gx + 0.22 * HH, (hA[1] + gy) / 2 + 0.05 * HH], [gx + 0.02 * HH, gy - 0.08 * HH], 14); // a slack belly
+    const bend = curve([gx + 0.02 * HH, gy - 0.08 * HH], [gx - 0.02 * HH, gy], [gx - 0.14 * HH, gy], 6);
+    p.line([...drop, ...bend.slice(1), [300 - 0.6 * HH, gy]], "#b9a675", 7 * u);
+    p.stroke([...drop, ...bend.slice(1), [300 - 0.6 * HH, gy]].map(([x, y]) => [x - 1.6 * u, y - 1.2 * u] as P2), 1.6 * u, "#e2d6ad"); // canvas sheen
+    p.rot = keep;
+    p.band([hF, lerp2(hF, tip, 0.12)], "#c9a24e", 9.5 * u, 1.6 * u, "butt"); // coupling at the hand
     p.band([hF, tip], "#c9a24e", 8.5 * u, 1.8 * u, "round");
     p.band([lerp2(hF, tip, 0.8), tip], "#8d6a2c", 10 * u, 1.6 * u, "butt");
     if (far) p.dot(far[2][0], far[2][1], 5.5 * u);
@@ -961,7 +972,7 @@ export const bodySide = (p: Pen, o: Outfit, opts: SideOpts) => {
   p.shadedFill(hp, skin, mul(skin, SH_SKIN), light, H.a);
   p.inkRing(hp, ow, thick);
   hatOn(p, o, hp, H, hx, hc, light, seed, 1, true, thick);
-  const brim = !!o.hat && o.hat !== "hair" && o.hat !== "bonnet" && o.hat !== "cap" && o.hat !== "beanie" && o.hat !== "bun";
+  const brim = !!o.hat && o.hat !== "hair" && o.hat !== "bonnet" && o.hat !== "cap" && o.hat !== "bun"; // a beanie sits low like a brim: brows 3u lower, clear of its band
   faceSide(p, hx, hc, W, expr, lid, brim, skin, o.moustache, o.build === "stout");
   faceExtras(p, o, hx, hc, W, 1, true);
   p.rot = null;
