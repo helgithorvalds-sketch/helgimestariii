@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { SHOTS, TOTAL, is3D, lavaFront, fissure, LAVA_STOP } from "../src/kaflar/kafli01/story";
+import { SHOTS, TOTAL, is3D } from "../src/kaflar/kafli01/story";
+// the world contract (lavaFront, fissure, lavaLobe, stateOf) lives in kafli01.world.test.ts: Task 7 deletes this file
 
 // Task 3's scene set (handrit/kafli-01.md, Skotlisti)
 const SCENES = ["stofa", "nott", "hofn", "hraun", "slongur", "idag", "bord"] as const;
@@ -30,18 +31,5 @@ describe("kafli01 sampler", () => {
   it("one 20-frame shot per scene", () => {
     for (const s of SHOTS) expect(s.b - s.a).toBe(20);
     expect(new Set(SHOTS.map((s) => s.scene)).size).toBe(SHOTS.length);
-  });
-  it("lavaFront creeps toward the harbour mouth and stops 100 m short", () => {
-    expect(LAVA_STOP).toBe(100);
-    expect(lavaFront(1)).toBeCloseTo(LAVA_STOP, 6);
-    expect(lavaFront(0)).toBeGreaterThan(300);
-    let prev = Infinity;
-    for (let u = -0.2; u <= 1.2; u += 0.05) { const d = lavaFront(u); expect(d).toBeLessThanOrEqual(prev + 1e-9); prev = d; }
-    expect(lavaFront(2)).toBeCloseTo(LAVA_STOP, 6); // it never passes the stop
-  });
-  it("fissure fountains are 0 before the ground tears and tall once it has", () => {
-    expect(fissure(-1)).toBe(0);
-    expect(fissure(0)).toBe(0);
-    for (const t of [1.5, 3, 10, 40]) expect(fissure(t)).toBeGreaterThan(40);
   });
 });
