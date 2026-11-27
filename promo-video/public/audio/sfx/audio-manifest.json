@@ -130,7 +130,15 @@
       "is_preview": true,
       "downloaded_at": "2026-11-27T14:18:27.581703+00:00",
       "license_checked_at": "2026-11-27T14:18:27.581717+00:00",
-      "changes": [],
+      "changes": [
+        {
+          "output_file": "fs-648387-norm.mp3",
+          "sha256": "460b38a2a913885023b135eb58bfa4e1319e7558c60eedfa72c2e834a28e2b66",
+          "date": "2026-11-27",
+          "tool": "ffmpeg -af \"volume=31dB,alimiter=limit=0.5\" (re-encoded MP3)",
+          "reason": "source preview peaks at -41 dBFS; raised to about -6 dBFS so the paper slides are audible under the BGM"
+        }
+      ],
       "analysis": {
         "codec": "mp3",
         "sample_rate": 48000,

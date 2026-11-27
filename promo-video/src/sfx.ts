@@ -33,7 +33,7 @@ export const SFX: Sfx[] = [
   ...[28, 40, 52, 64, 76].map((f, i) => ({ from: at('calls', f, 0.335), src: SLIDE, volume: [0.5, 0.38, 0.46, 0.34, 0.42][i], dur: 16, note: `call row ${i + 1} lands` })),
   // outro: elements fly in, riser → impact on the mark/wordmark (f42–46) → shimmer on the rule + tagline (f58–68)
   { from: at('outro', 6, 0.075), src: SWOOSH_LONG, volume: 0.26, dur: 45, note: 'group photo fly-in' },
-  { from: at('outro', 40, 0.335), src: RISER, volume: 0.45, dur: 16, note: 'riser into wordmark' },
+  { from: at('outro', 40, 0.335), src: RISER, volume: 0.6, dur: 16, note: 'riser into wordmark' },
   { from: at('outro', 44, 0.605), src: IMPACT, volume: 0.42, dur: 82, note: 'wordmark impact' },
-  { from: at('outro', 62, 0.735), src: SHIMMER, volume: 0.28, dur: 81, note: 'rule + tagline shimmer' },
+  { from: at('outro', 62, 0.735), src: SHIMMER, volume: 0.5, dur: 81, note: 'rule + tagline shimmer' },
 ];

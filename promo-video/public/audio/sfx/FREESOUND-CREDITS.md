@@ -31,7 +31,7 @@ Edits: None recorded; update if edited.
 fs-648387.mp3 — SlidePaperOnPaper.mp3 by Korczu
 https://freesound.org/people/Korczu/sounds/648387/
 CC0-1.0: http://creativecommons.org/publicdomain/zero/1.0/
-Edits: None recorded; update if edited.
+Edits: fs-648387-norm.mp3 — gain +31 dB with a limiter at 0.5 (ffmpeg), sha256 460b38a2a913885023b135eb58bfa4e1319e7558c60eedfa72c2e834a28e2b66; the film uses this file.
 ~~~
 
 ~~~text

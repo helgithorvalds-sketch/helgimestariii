@@ -27,6 +27,7 @@ const DARK = '6,10,22'; // multiply colour ≈ app .dark background, keeps the p
 const PATCH = '#f8fafc';
 
 const PAGE_H = layout.heroPage.pageH;
+const TEX = { x: layout.texture.offsetX, w: layout.texture.width };
 const CARD = { ...layout.heroPage.card, file: 'hero-card.png' };
 const MCX = CARD.x + CARD.w / 2; // ≈ 960
 const MCY = CARD.y + CARD.h / 2;
@@ -140,21 +141,21 @@ export const SpotlightHero: React.FC<{ line1?: string; line2?: string }> = ({ li
 
   return (
     <AbsoluteFill style={{ backgroundColor: L.bg[2] }}>
-      <PageCam2D src="textures/live/hero-page.png" pageH={PAGE_H} keys={CAM_KEYS} ease={PUSH_EASE} bg={L.bg[1]}>
+      <PageCam2D src="textures/live/hero-page.png" pageH={PAGE_H} keys={CAM_KEYS} ease={PUSH_EASE} bg={L.bg[1]} tex={TEX}>
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 8, background: 'rgba(225,236,255,0.8)', filter: 'blur(6px)', opacity: rimOn, pointerEvents: 'none' }} />
 
         {cardLight > 0.001 ? (
-          <svg width={1920} height={PAGE_H} style={{ position: 'absolute', left: 0, top: 0, transform: 'translateZ(1px)', opacity: cardLight, pointerEvents: 'none' }}>
+          <svg width={TEX.w} height={PAGE_H} viewBox={`${-TEX.x} 0 ${TEX.w} ${PAGE_H}`} style={{ position: 'absolute', left: -TEX.x, top: 0, transform: 'translateZ(1px)', opacity: cardLight, pointerEvents: 'none' }}>
             <defs>
               <filter id="shc-tight" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22" /></filter>
               <filter id="shc-wide" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="60" /></filter>
-              <mask id="shc-hole" maskUnits="userSpaceOnUse" x={0} y={0} width={1920} height={PAGE_H}>
-                <rect x={0} y={0} width={1920} height={PAGE_H} fill="white" />
+              <mask id="shc-hole" maskUnits="userSpaceOnUse" x={-TEX.x} y={0} width={TEX.w} height={PAGE_H}>
+                <rect x={-TEX.x} y={0} width={TEX.w} height={PAGE_H} fill="white" />
                 <rect x={CARD.x - 60} y={CARD.y - 50} width={CARD.w + 120} height={CARD.h + 100} rx={70} fill="#262626" filter="url(#shc-wide)" />
                 <rect x={CARD.x - 14} y={CARD.y - 14} width={CARD.w + 28} height={CARD.h + 28} rx={RADIUS + 14} fill="black" filter="url(#shc-tight)" />
               </mask>
             </defs>
-            <rect x={0} y={0} width={1920} height={PAGE_H} fill={`rgb(${DARK})`} fillOpacity={Math.min(0.97, 0.94 * holdBreath)} mask="url(#shc-hole)" />
+            <rect x={-TEX.x} y={0} width={TEX.w} height={PAGE_H} fill={`rgb(${DARK})`} fillOpacity={Math.min(0.97, 0.94 * holdBreath)} mask="url(#shc-hole)" />
           </svg>
         ) : null}
 

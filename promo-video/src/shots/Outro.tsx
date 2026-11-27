@@ -17,7 +17,8 @@ import { C, FONTS } from '../brand';
 export const OUTRO_DURATION = 145;
 
 const WORD = 'Verkefnastjórnun';
-const PAGE_H = layout.board.pageH;
+const PAGE_H = layout.texture.height;
+const TEX = { x: layout.texture.offsetX, w: layout.texture.width };
 const FLY_EASE = Easing.bezier(0.34, 1.4, 0.44, 1);
 const CRANE_EASE = Easing.bezier(0.3, 0, 0.2, 1);
 const sched = (title: string) => layout.board.sched.find((s) => s.title === title)!;
@@ -25,7 +26,7 @@ const sched = (title: string) => layout.board.sched.find((s) => s.title === titl
 type FlyEl = { key: string; file: string; w: number; h: number; cx: number; cy: number; scale: number; rot: number; dx: number; dy: number; radius: number; cue: number };
 const S = (title: string) => { const s = sched(title); return { file: s.file, w: s.w, h: s.h }; };
 const ELS: FlyEl[] = [
-  { key: 'nav', file: 'nav.png', w: 1920, h: layout.board.header.h, cx: 960, cy: 84, scale: 0.62, rot: 0, dx: 0, dy: -120, radius: 10, cue: 4 },
+  { key: 'nav', file: 'nav.png', w: layout.texture.width, h: layout.board.header.h, cx: 960, cy: 84, scale: 0.52, rot: 0, dx: 0, dy: -120, radius: 10, cue: 4 },
   { key: 'hero', file: 'hero-card-hires.png', w: layout.heroPage.card.w, h: layout.heroPage.card.h, cx: 300, cy: 300, scale: 0.92, rot: -5, dx: -500, dy: 0, radius: 12, cue: 7 },
   { key: 'paid', ...S('Gistiheimilið Lind'), cx: 1630, cy: 318, scale: 1.18, rot: 4, dx: 500, dy: 0, radius: 12, cue: 10 },
   { key: 'scheduled', ...S('Hestaleiga Heklu'), cx: 1440, cy: 760, scale: 0.72, rot: -3, dx: 450, dy: 260, radius: 12, cue: 13 },
@@ -33,7 +34,7 @@ const ELS: FlyEl[] = [
   { key: 'call', file: layout.board.callRows[0].file, w: layout.board.callRows[0].w, h: layout.board.callRows[0].h, cx: 640, cy: 935, scale: 0.9, rot: 2, dx: 0, dy: 320, radius: 8, cue: 19 },
   { key: 'badge', file: 'badge-preview.png', w: layout.board.sections.find((s) => s.label === 'Vill sýnishorn')!.badge.w + 4, h: layout.board.sections.find((s) => s.label === 'Vill sýnishorn')!.badge.h + 4, cx: 760, cy: 196, scale: 1.6, rot: -1.5, dx: 0, dy: -240, radius: 18, cue: 22 },
   { key: 'registered', ...S('Blómabúðin Sóley'), cx: 1560, cy: 960, scale: 1.0, rot: -2, dx: 380, dy: 0, radius: 12, cue: 25 },
-  { key: 'email', ...S('Bakarí Bjarkar'), cx: 1250, cy: 178, scale: 0.9, rot: 2.5, dx: 360, dy: -200, radius: 12, cue: 28 },
+  { key: 'email', ...S('Kaffi Kría'), cx: 1250, cy: 178, scale: 0.9, rot: 2.5, dx: 360, dy: -200, radius: 12, cue: 28 },
 ];
 
 const DUST = Array.from({ length: 20 }, (_, i) => ({
@@ -54,8 +55,10 @@ export const Outro: React.FC<{ tagline?: string }> = ({ tagline = 'Söluferlið 
   const recede = interpolate(frame, [42, 50], [0, 1], clamp);
   const craneT = interpolate(frame, [0, 40], [0, 1], { ...clamp, easing: CRANE_EASE });
   const pushT = ramp(frame, 36, duration - 36, EASE.smooth);
-  const camScale = 1.06 - 0.06 * craneT + 0.035 * pushT;
-  const camTilt = 4 * (1 - craneT);
+  // crane eases in from rest (scale 1, no tilt) so f0 matches the previous shot's last frame exactly
+  const craneIn = interpolate(frame, [0, 6], [0, 1], { ...clamp, easing: Easing.bezier(0.4, 0, 0.6, 1) });
+  const camScale = 1 + (0.06 - 0.06 * craneT) * craneIn + 0.035 * pushT;
+  const camTilt = 4 * (1 - craneT) * craneIn;
   const sweepX = interpolate(frame, [2, 14], [-700, 2020], { ...clamp, easing: Easing.bezier(0.4, 0, 0.6, 1) });
   const sweepOpacity = interpolate(frame, [2, 5, 11, 14], [0, 0.12, 0.12, 0], clamp);
   const stageLight = interpolate(frame, [42, 50, 58], [0, 0.55, 0.32], clamp);
@@ -68,8 +71,8 @@ export const Outro: React.FC<{ tagline?: string }> = ({ tagline = 'Söluferlið 
     <AbsoluteFill style={{ background: C.darkBg }}>
       <AbsoluteFill style={{ opacity: fadeOut }}>
         <AbsoluteFill style={{ transform: `perspective(1400px) rotateX(${camTilt}deg) scale(${camScale})`, transformOrigin: '50% 45%' }}>
-          <PageCam2D src="textures/live/board-full.png" pageH={PAGE_H} keys={[{ frame: 0, cx: 960, cy: 700, zoom: 0.75 }]} blur={blur} bg={C.bg} />
-          <AbsoluteFill style={{ background: 'radial-gradient(1200px 800px at 50% 48%, rgba(250,251,253,0.84), rgba(250,251,253,0.58) 60%, rgba(250,251,253,0.38))', pointerEvents: 'none' }} />
+          <PageCam2D src="textures/live/board-full.png" pageH={PAGE_H} keys={[{ frame: 0, cx: 960, cy: 640, zoom: 0.86 }, { frame: 40, cx: 960, cy: 700, zoom: 0.75 }]} blur={blur} bg={C.bg} tex={TEX} />
+          <AbsoluteFill style={{ background: 'radial-gradient(1200px 800px at 50% 48%, rgba(250,251,253,0.84), rgba(250,251,253,0.58) 60%, rgba(250,251,253,0.38))', pointerEvents: 'none', opacity: interpolate(frame, [0, 16], [0, 1], clamp) }} />
 
           <AbsoluteFill style={{ pointerEvents: 'none' }}>
             {ELS.map((el) => {

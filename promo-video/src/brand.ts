@@ -1,17 +1,17 @@
 // Verkefnastjórnun design spec → video tokens.
 // Source of truth: the product's own src/index.css + tailwind.config.ts (light + .dark tokens),
 // fonts from index.html (Inter for body, Plus Jakarta Sans for headings).
-import { continueRender, delayRender, staticFile } from 'remotion';
+import { continueRender, delayRender } from 'remotion';
 import type { Look } from './fixtures/Look';
-import faces from './fonts.json';
+import { FONT_FACES } from './fonts-data';
 
-// Self-hosted variable fonts (public/fonts, from Google Fonts: OFL) — deterministic renders, no network.
+// Fonts are embedded (src/fonts-data.ts) and registered once per tab; frames wait until they are decoded.
 if (typeof document !== 'undefined' && !(window as unknown as { __vfFonts?: boolean }).__vfFonts) {
   (window as unknown as { __vfFonts?: boolean }).__vfFonts = true;
   const handle = delayRender('Loading Inter + Plus Jakarta Sans', { timeoutInMilliseconds: 120000, retries: 2 });
   Promise.all(
-    faces.map((f) => {
-      const ff = new FontFace(f.family, `url(${staticFile(`fonts/${f.file}`)}) format('woff2')`, { style: f.style, weight: f.weight, unicodeRange: f.unicodeRange, display: 'block' });
+    FONT_FACES.map((f) => {
+      const ff = new FontFace(f.family, `url(${f.data}) format('woff2')`, { style: f.style, weight: f.weight, unicodeRange: f.unicodeRange, display: 'block' });
       document.fonts.add(ff);
       return ff.load();
     }),

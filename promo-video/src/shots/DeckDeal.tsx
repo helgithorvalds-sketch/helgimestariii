@@ -16,7 +16,7 @@ import { Stage, TextReveal, alpha, type } from '../fixtures/Look';
 import layout from '../../public/textures/live/layout.json';
 import { C, FONTS, NAVY } from '../brand';
 
-export const DECK_DEAL_DURATION = 148; // full-board hold 108→148 (40f ≥ 0.5s) → cut on a BGM beat
+export const DECK_DEAL_DURATION = 162; // demo 150 + 12f longer full-board hold (title reads ≥1s) → 11 beats, cut on a BGM beat
 
 const L = NAVY;
 const all = layout.board.cards;
@@ -32,7 +32,7 @@ const PILE = { x: 1660, y: 1175 };
 const PILE_CX = PILE.x + 182;
 const PILE_CY = PILE.y + 21;
 const DEAL_START = 36;
-const STACK_STEP = 3;
+const STACK_STEP = 5; // thin 42px rows → a little more height per card so the deck reads as a deck
 
 const grid = DEALT.map((c) => ({ file: c.file, x: c.x, y: c.y, w: c.w, h: c.h }))
   .sort((a, b) => a.y - b.y || a.x - b.x)
@@ -57,8 +57,8 @@ const ANCHORS: Key[] = [
   { frame: 30, cx: PILE_CX + 20, cy: PILE_CY + 20, zoom: 1.8, rotX: 42, rotY: 24, rotZ: -6, persp: 1100, sx: 0 },
   { frame: 62, cx: 1100, cy: 1420, zoom: 0.8, rotX: 22, rotY: 0, rotZ: 2, persp: 1700, sx: 0 },
   { frame: 86, cx: 990, cy: 1600, zoom: 0.64, rotX: 38, rotY: -4, rotZ: -9, persp: 2500, sx: 200 },
-  { frame: 110, cx: 960, cy: 1640, zoom: 0.6, rotX: 50, rotY: -6, rotZ: -20, persp: 3000, sx: 470 },
-  { frame: 150, cx: 960, cy: 1644, zoom: 0.609, rotX: 50, rotY: -6, rotZ: -20, persp: 3000, sx: 470 },
+  { frame: 110, cx: 960, cy: 1640, zoom: 0.6, rotX: 50, rotY: -6, rotZ: -20, persp: 3000, sx: 540 },
+  { frame: 162, cx: 960, cy: 1645, zoom: 0.612, rotX: 50, rotY: -6, rotZ: -20, persp: 3000, sx: 540 },
 ];
 const PARAMS: (keyof Cam)[] = ['cx', 'cy', 'zoom', 'rotX', 'rotY', 'rotZ', 'persp', 'sx'];
 const hermite = (xs: number[], ys: number[]) => {
@@ -97,7 +97,7 @@ const BRUSH_TILE = (() => {
 const T = 4000;
 
 export const DeckDeal: React.FC<{ line1?: string; line2?: string; countLabel?: string }> = ({
-  line1 = 'Hvert fyrirtæki,', line2 = 'á sínum stað.', countLabel = 'flokkuð fyrirtæki',
+  line1 = 'Sýnishorn. Lokið.', line2 = 'Greitt.', countLabel = 'flokkuð fyrirtæki',
 }) => {
   const frame = useCurrentFrame();
   const cam = camAt(frame);
@@ -140,7 +140,7 @@ export const DeckDeal: React.FC<{ line1?: string; line2?: string; countLabel?: s
               position: 'absolute', left: BOARD.x, top: 0, width: BOARD.w, height: BOARD_H, overflow: 'hidden', borderRadius: 18, background: PAPER,
               boxShadow: '0 0 0 1px rgba(255,255,255,0.08), 0 60px 160px rgba(0,0,0,0.7), 0 12px 40px rgba(0,0,0,0.5)',
             }}>
-              <Img src={staticFile('textures/live/board-empty.png')} style={{ position: 'absolute', left: -BOARD.x, top: 0, width: 1920, height: layout.board.pageH }} />
+              <Img src={staticFile('textures/live/board-empty.png')} style={{ position: 'absolute', left: -BOARD.x - layout.texture.offsetX, top: 0, width: layout.texture.width, height: layout.texture.height }} />
               {PRINTED.map((c) => (
                 <Img key={c.file} src={staticFile(`textures/live/${c.file}`)} style={{ position: 'absolute', left: c.x - BOARD.x, top: c.y, width: c.w, height: c.h }} />
               ))}
@@ -219,14 +219,14 @@ export const DeckDeal: React.FC<{ line1?: string; line2?: string; countLabel?: s
       <AbsoluteFill style={{ pointerEvents: 'none', background: `radial-gradient(ellipse 75% 75% at 58% 46%, transparent 45%, ${alpha('#03060e', 0.55)} 100%)` }} />
 
       <div style={{ position: 'absolute', left: 120, top: 664, color: L.ink }}>
-        <div style={{ ...type(120, 800), fontFamily: FONTS.display, letterSpacing: '-0.035em' }}>
+        <div style={{ ...type(108, 800), fontFamily: FONTS.display, letterSpacing: '-0.035em' }}>
           <TextReveal text={line1} by="word" variant="rise" start={100} each={16} gap={4} />
         </div>
-        <div style={{ ...type(120, 300), fontFamily: FONTS.display, letterSpacing: '-0.035em', color: L.ink2, marginTop: 4 }}>
+        <div style={{ ...type(108, 300), fontFamily: FONTS.display, letterSpacing: '-0.035em', color: L.ink2, marginTop: 4 }}>
           <TextReveal text={line2} by="word" variant="rise" start={106} each={16} gap={4} />
         </div>
       </div>
-      <div style={{ position: 'absolute', left: 124, top: 606, display: 'flex', alignItems: 'center', gap: 16, opacity: statIn, ...type(28, 600, { caps: true }), letterSpacing: '0.14em', color: L.ink2 }}>
+      <div style={{ position: 'absolute', left: 124, top: 598, display: 'flex', alignItems: 'center', gap: 16, opacity: statIn, ...type(32, 600, { caps: true }), letterSpacing: '0.14em', color: L.ink2 }}>
         <Img src={staticFile('brand/logo-icon.png')} style={{ width: 40, height: 38, margin: '-6px 0', filter: 'brightness(1.25)' }} />
         <span style={{ color: L.ink, fontVariantNumeric: 'tabular-nums', minWidth: '2.2ch' }}>{String(landed).padStart(2, '0')}</span>
         {countLabel}

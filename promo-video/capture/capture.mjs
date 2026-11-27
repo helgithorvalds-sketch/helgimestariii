@@ -10,11 +10,20 @@ const BASE = process.env.BASE || 'http://127.0.0.1:8080';
 const OUT = path.resolve(process.argv[2] || '../public/textures/live');
 fs.mkdirSync(OUT, { recursive: true });
 const DOC_W = 2310;           // the real page is 2310px wide at a 1920 viewport (header overflows)
-const OX = (DOC_W - 1920) / 2; // crop a centred 1920 window so the content column is centred
+const OX = (DOC_W - 1920) / 2; // layout coords are in a centred 1920 window (content column centred at x=960)
+const TEX_H = 2300;            // page textures only need the top of the board (header → end of the Greitt stage)
 
 const browser = await chromium.launch();
 async function openBoard(dsf) {
-  const page = await browser.newPage({ viewport: { width: DOC_W, height: 1080 }, deviceScaleFactor: dsf });
+  // Icelandic locale so prices format like the real app (219.000 kr.)
+  const ctx = await browser.newContext({ viewport: { width: DOC_W, height: 1080 }, deviceScaleFactor: dsf, locale: 'is-IS', timezoneId: 'Atlantic/Reykjavik' });
+  // Playwright's bundled Chromium ships reduced ICU data: is-IS resolves but groups like en ("219,000").
+  // Real Chrome/Node render "219.000"; Icelandic uses the same separators as de-DE, so map it for the capture.
+  await ctx.addInitScript(() => {
+    const orig = Number.prototype.toLocaleString;
+    Number.prototype.toLocaleString = function (loc, opts) { return orig.call(this, loc === 'is-IS' ? 'de-DE' : loc, opts); };
+  });
+  const page = await ctx.newPage();
   await page.route('**/*', async (r) => {
     const u = new URL(r.request().url());
     if (u.hostname === 'mock-supabase.invalid') {
@@ -31,7 +40,7 @@ async function openBoard(dsf) {
     await btn.click();
   }
   // hide floating AI assistant pill and toasts (not part of the board)
-  await page.addStyleTag({ content: `[data-sonner-toaster]{display:none!important} header .flex.items-center.gap-4{flex-shrink:0}` });
+  await page.addStyleTag({ content: `[data-sonner-toaster]{display:none!important} header .flex.items-center.gap-4{flex-shrink:0} *,*::before,*::after{transition:none!important;animation:none!important}` });
   await page.evaluate(() => {
     for (const el of document.querySelectorAll('body *')) {
       const s = getComputedStyle(el);
@@ -49,10 +58,10 @@ const rectOf = (el) => el.evaluate((e) => { const r = e.getBoundingClientRect();
 
 const page = await openBoard(2);
 const pageH = await page.evaluate(() => document.documentElement.scrollHeight);
-const clipFull = { x: OX, y: 0, width: 1920, height: pageH };
+const clipFull = { x: 0, y: 0, width: DOC_W, height: Math.min(pageH, TEX_H) }; // full document width: no cut header
 await page.screenshot({ path: path.join(OUT, 'board-full.png'), clip: clipFull, fullPage: true });
 
-const layout = { pageW: 1920, board: { pageH, cards: [], sections: [], callRows: [], sched: [] } };
+const layout = { pageW: 1920, texture: { offsetX: OX, width: DOC_W, height: Math.min(pageH, TEX_H) }, board: { pageH, cards: [], sections: [], callRows: [], sched: [] } };
 const toLocal = (r) => ({ x: +(r.x - OX).toFixed(2), y: +r.y.toFixed(2), w: +r.w.toFixed(2), h: +r.h.toFixed(2) });
 
 // company cards in the expanded stage grids (draggable rows)
@@ -118,7 +127,7 @@ const brand = header.locator('div.flex.items-center.gap-4').first();
 const brr = await rectOf(brand);
 await page.screenshot({ path: path.join(OUT, 'brand.png'), clip: { x: brr.x - 8, y: brr.y - 8, width: brr.w + 16, height: brr.h + 16 }, fullPage: true });
 layout.board.brand = toLocal({ x: brr.x - 8, y: brr.y - 8, w: brr.w + 16, h: brr.h + 16 });
-await page.screenshot({ path: path.join(OUT, 'nav.png'), clip: { x: OX, y: hr.y, width: 1920, height: hr.h }, fullPage: true });
+await page.screenshot({ path: path.join(OUT, 'nav.png'), clip: { x: 0, y: hr.y, width: DOC_W, height: hr.h }, fullPage: true });
 
 // badges (section-header size)
 const BADGE_FILE = { 'Tölvupóstur sendur': 'badge-email.png', 'Vill sýnishorn': 'badge-preview.png', 'Lokið': 'badge-finished.png', 'Greitt': 'badge-paid.png' };
@@ -131,12 +140,14 @@ for (const [s, file] of secs.map((s) => [s, BADGE_FILE[s.label]])) {
 await page.evaluate(() => {
   document.querySelectorAll('div[draggable="true"]').forEach((e) => (e.style.visibility = 'hidden'));
 });
+await page.waitForTimeout(400);
 await page.screenshot({ path: path.join(OUT, 'board-empty.png'), clip: clipFull, fullPage: true });
 await page.evaluate(() => {
   document.querySelectorAll('div[draggable="true"]').forEach((e) => (e.style.visibility = ''));
   const h = [...document.querySelectorAll('h2')].find((h) => h.textContent.includes('Á eftir að hringja'));
   h.closest('div.rounded-2xl').querySelectorAll('button.text-left').forEach((e) => (e.style.visibility = 'hidden'));
 });
+await page.waitForTimeout(400);
 await page.screenshot({ path: path.join(OUT, 'board-nocalls.png'), clip: clipFull, fullPage: true });
 await page.close();
 
@@ -153,8 +164,8 @@ for (const dsf of [2, 4]) {
   const r = await rectOf(card);
   if (dsf === 2) {
     const ph = await hp.evaluate(() => document.documentElement.scrollHeight);
-    await hp.screenshot({ path: path.join(OUT, 'hero-page.png'), clip: { x: OX, y: 0, width: 1920, height: ph }, fullPage: true });
-    layout.heroPage = { pageH: ph, card: toLocal(r) };
+    await hp.screenshot({ path: path.join(OUT, 'hero-page.png'), clip: { x: 0, y: 0, width: DOC_W, height: Math.min(ph, TEX_H) }, fullPage: true });
+    layout.heroPage = { pageH: Math.min(ph, TEX_H), card: toLocal(r) };
   }
   await hp.screenshot({ path: path.join(OUT, dsf === 2 ? 'hero-card.png' : 'hero-card-hires.png'), clip: { x: r.x, y: r.y, width: r.w, height: r.h }, fullPage: true, omitBackground: true });
   await hp.close();

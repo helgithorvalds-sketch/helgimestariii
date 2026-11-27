@@ -15,10 +15,10 @@ import { SpeedBlur, bezier, softShadow, velocity } from '../fixtures/Polish';
 import layout from '../../public/textures/live/layout.json';
 import { C, FONTS } from '../brand';
 
-export const CALL_STACK_DURATION = 88;
+export const CALL_STACK_DURATION = 103; // demo 88 + 15f still rest after the glaze (batch move ends ≥0.5s still) → 7 beats
 
 const cards = layout.board.callRows.slice(0, 5);
-const PAGE_H = layout.board.pageH;
+const PAGE_H = layout.texture.height;
 const PANEL_BG = '#fefeff';
 const RADIUS = 8; // rounded-lg rows
 // measured from the cutouts: the company-name line of each row (row-local px)
@@ -38,6 +38,7 @@ const camAt = (f: number) => {
   return { cx: 720 + (960 - 720) * CY_EASE(u), cy: 400 + (640 - 400) * CY_EASE(u), zoom: 1.35 + (0.86 - 1.35) * Z_EASE(u) };
 };
 const CAM_KEYS: CamKey2D[] = Array.from({ length: CALL_STACK_DURATION }, (_, f) => ({ frame: f, ...camAt(f) }));
+const TEX = { x: layout.texture.offsetX, w: layout.texture.width };
 const LINEAR = (t: number) => t;
 
 const DIGITS = '0123456789';
@@ -63,7 +64,7 @@ const DigitRoll: React.FC<{ pos: number; lineH: number; color: string; blur: num
 const flyT = (i: number, f: number) => interpolate(f, [CUES[i], CUES[i] + DUR], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: FLY_EASE });
 const flyY = (i: number, f: number) => 600 * (1 - flyT(i, f));
 
-export const CallStack: React.FC<{ label?: string; sub?: string }> = ({ label = 'Á eftir að hringja', sub = 'af 11 á listanum' }) => {
+export const CallStack: React.FC<{ label1?: string; label2?: string; sub?: string }> = ({ label1 = 'Á eftir', label2 = 'að hringja', sub = 'af 11 á listanum' }) => {
   const frame = useCurrentFrame();
   const rollPos = rollAt(frame);
   const rollV = Math.abs(velocity(rollAt, frame));
@@ -83,7 +84,7 @@ export const CallStack: React.FC<{ label?: string; sub?: string }> = ({ label = 
 
   return (
     <AbsoluteFill style={{ backgroundColor: C.bg }}>
-      <PageCam2D src="textures/live/board-full.png" pageH={PAGE_H} keys={CAM_KEYS} ease={LINEAR} bg={C.bg}>
+      <PageCam2D src="textures/live/board-full.png" pageH={PAGE_H} keys={CAM_KEYS} ease={LINEAR} bg={C.bg} tex={TEX}>
         {cards.map((c, i) => (
           <div key={`slot-${i}`} style={{ position: 'absolute', left: c.x - 4, top: c.y - 3, width: c.w + 8, height: c.h + 6, background: PANEL_BG, opacity: frame >= CUES[i] + DUR - 2 ? 0 : 1 }} />
         ))}
@@ -134,16 +135,15 @@ export const CallStack: React.FC<{ label?: string; sub?: string }> = ({ label = 
         })}
       </PageCam2D>
 
-      {/* frosted backing so the counter reads cleanly over the page it floats above */}
-      <div style={{ position: 'absolute', top: 120, right: 30, width: 520, height: 330, pointerEvents: 'none', opacity: 0.3 + 0.7 * antT,
-        background: 'radial-gradient(ellipse 50% 50% at 62% 50%, rgba(250,251,253,0.96) 0%, rgba(250,251,253,0.9) 55%, rgba(250,251,253,0) 100%)', filter: 'blur(4px)' }} />
-      <div style={{ position: 'absolute', top: 170, right: 96, textAlign: 'right', pointerEvents: 'none', opacity: 0.3 + 0.7 * antT, transform: `scale(${0.96 + 0.04 * antT})`, transformOrigin: 'top right' }}>
-        <div style={{ fontFamily: FONTS.sans, fontSize: 22, fontWeight: 600, letterSpacing: '0.18em', color: C.muted, textTransform: 'uppercase' }}>{label}</div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
+      {/* counter lives in the page's empty left margin (screen x < ~430 for the whole camera move),
+          so it never covers the "Áætluð símtöl" panel */}
+      <div style={{ position: 'absolute', top: 210, left: 64, textAlign: 'left', pointerEvents: 'none', opacity: 0.3 + 0.7 * antT, transform: `scale(${0.96 + 0.04 * antT})`, transformOrigin: 'top left' }}>
+        <div style={{ fontFamily: FONTS.sans, fontSize: 32, fontWeight: 600, letterSpacing: '0.12em', lineHeight: 1.15, color: C.muted, textTransform: 'uppercase' }}>{label1}<br />{label2}</div>
+        <div style={{ display: 'flex', marginTop: 6 }}>
           <DigitRoll pos={rollPos} lineH={104 * 1.12} color={C.primary} blur={Math.min(6, rollV * 30)} />
         </div>
-        <div style={{ height: 1, background: C.border, margin: '8px 0 10px auto', width: 220 }} />
-        <div style={{ fontFamily: FONTS.sans, fontSize: 19, fontWeight: 600, letterSpacing: '0.14em', color: C.muted, textTransform: 'uppercase' }}>{sub}</div>
+        <div style={{ height: 2, background: C.border, margin: '8px 0 14px', width: 300 }} />
+        <div style={{ fontFamily: FONTS.sans, fontSize: 32, fontWeight: 600, letterSpacing: '0.12em', color: C.muted, textTransform: 'uppercase' }}>{sub}</div>
       </div>
     </AbsoluteFill>
   );

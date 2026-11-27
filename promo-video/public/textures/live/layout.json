@@ -1,5 +1,10 @@
 {
  "pageW": 1920,
+ "texture": {
+  "offsetX": 195,
+  "width": 2310,
+  "height": 2300
+ },
  "board": {
   "pageH": 4953,
   "cards": [
@@ -10,7 +15,7 @@
     "w": 1198,
     "h": 42,
     "title": "Bakarí Bjarkar",
-    "zone": "129,000 kr."
+    "zone": "129.000 kr."
    },
    {
     "file": "card-2.png",
@@ -19,7 +24,7 @@
     "w": 1198,
     "h": 42,
     "title": "Kaffi Kría",
-    "zone": "149,000 kr."
+    "zone": "149.000 kr."
    },
    {
     "file": "card-3.png",
@@ -28,7 +33,7 @@
     "w": 1198,
     "h": 42,
     "title": "Hárstofa Hlínar",
-    "zone": "99,000 kr."
+    "zone": "99.000 kr."
    },
    {
     "file": "card-4.png",
@@ -37,7 +42,7 @@
     "w": 1198,
     "h": 42,
     "title": "Vélaverk Ármanns",
-    "zone": "189,000 kr."
+    "zone": "189.000 kr."
    },
    {
     "file": "card-5.png",
@@ -46,7 +51,7 @@
     "w": 1198,
     "h": 42,
     "title": "Kertagerð Kolbrúnar",
-    "zone": "119,000 kr."
+    "zone": "119.000 kr."
    },
    {
     "file": "card-6.png",
@@ -589,7 +594,7 @@
   }
  },
  "heroPage": {
-  "pageH": 5095,
+  "pageH": 2300,
   "card": {
    "x": 778.66,
    "y": 1225,

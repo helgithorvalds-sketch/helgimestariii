@@ -21,7 +21,7 @@ const DigitColumn: React.FC<{ ch: string; delay: number; lineH: number }> = ({ c
     <span style={{ display: 'inline-block', height: lineH }}>
       <span style={{ display: 'block', transform: `translateY(${-(10 + target) * t * lineH}px)` }}>
         {(DIGITS + DIGITS).split('').map((d, j) => (
-          <span key={j} style={{ display: 'block', fontSize: 28, fontWeight: 800, lineHeight: `${lineH}px`, color: C.primary, fontVariantNumeric: 'tabular-nums' }}>{d}</span>
+          <span key={j} style={{ display: 'block', fontSize: 36, fontWeight: 800, lineHeight: `${lineH}px`, color: C.primary, fontVariantNumeric: 'tabular-nums' }}>{d}</span>
         ))}
       </span>
     </span>
@@ -33,7 +33,7 @@ export const TitleCard: React.FC<{ words?: W[]; sub?: string; subDigits?: string
   const fadeOut = interpolate(frame, [TITLE_CARD_DURATION - 8, TITLE_CARD_DURATION], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   const underline = interpolate(frame, [16, 34], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(0.3, 0, 0.2, 1) });
   const subT = interpolate(frame, [10, 22], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const lineH = 28 * 1.15;
+  const lineH = 36 * 1.15;
 
   return (
     <AbsoluteFill style={{ background: APP_BG, justifyContent: 'center', alignItems: 'center', opacity: fadeOut }}>
@@ -53,7 +53,7 @@ export const TitleCard: React.FC<{ words?: W[]; sub?: string; subDigits?: string
           })}
         </div>
         <div style={{ height: 6, width: 220, margin: '38px auto 0', borderRadius: 3, background: C.primary, transform: `scaleX(${underline})` }} />
-        <div style={{ fontFamily: FONTS.sans, fontSize: 26, fontWeight: 600, letterSpacing: '0.14em', color: C.muted, marginTop: 34, opacity: subT, textTransform: 'uppercase', display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '0.5em' }}>
+        <div style={{ fontFamily: FONTS.sans, fontSize: 32, fontWeight: 600, letterSpacing: '0.14em', color: C.muted, marginTop: 34, opacity: subT, textTransform: 'uppercase', display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '0.5em' }}>
           <span style={{ display: 'inline-flex', overflow: 'hidden', height: lineH, verticalAlign: 'bottom' }}>
             {subDigits.split('').map((c, i) => <DigitColumn key={i} ch={c} delay={12 + i * 4} lineH={lineH} />)}
           </span>

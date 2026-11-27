@@ -68,9 +68,9 @@ export const BrandOpen: React.FC<{ kicker?: string }> = ({ kicker = KICKER }) =>
           })}
         </div>
 
-        <div style={{ fontFamily: FONTS.sans, fontSize: 26, fontWeight: 600, letterSpacing: '0.16em', color: C.muted, marginTop: 30, textTransform: 'uppercase', height: 30, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ fontFamily: FONTS.sans, fontSize: 32, fontWeight: 600, letterSpacing: '0.16em', color: C.muted, marginTop: 30, textTransform: 'uppercase', height: 38, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <span style={{ whiteSpace: 'pre' }}>{kicker.slice(0, kickChars)}</span>
-          <span style={{ display: 'inline-block', width: 14, height: 24, marginLeft: 4, background: C.primary, opacity: cursorOn ? 0.85 : 0, borderRadius: 2 }} />
+          <span style={{ display: 'inline-block', width: 16, height: 30, marginLeft: 6, background: C.primary, opacity: cursorOn ? 0.85 : 0, borderRadius: 2 }} />
         </div>
       </div>
     </AbsoluteFill>
