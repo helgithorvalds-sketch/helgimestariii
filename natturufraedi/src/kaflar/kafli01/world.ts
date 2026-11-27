@@ -121,8 +121,8 @@ export class World {
     this.sunCache.set(id, v);
     return v;
   }
-  /** eruption: the key comes from the fire (Eldfell's vent once the cone stands, else the fissure point nearest the
-   *  lens), raised to the fountains' middle */
+  /** eruption: the key comes from the fire (Eldfell's vent once the cone stands, else the fissure point level with the
+   *  look target), raised to the fountains' middle */
   private fireDir(focus: THREE.Vector3, cone: number, fis: number) {
     const z = cone > 0.3 ? ELDFELL[2] : Math.max(FISSURE.z0, Math.min(FISSURE.z1, focus.z));
     const src = V(FISSURE.x, LAND_Y + Math.max(60, fis * 1.2) + (cone > 0.3 ? 60 : 0), z);
